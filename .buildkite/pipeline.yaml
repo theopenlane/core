@@ -13,35 +13,46 @@ env:
   GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
 
 steps:
-  - group: ":knife: Pre-check"
-    key: "precheck"
-    steps:
-      - label: ":golang: go generate"
-        key: "generate"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-        cancel_on_build_failing: true
-        plugins:
-          - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["task", "ci"]
-              environment:
-                - "GOTOOLCHAIN=auto"
-      - label: ":yaml: generate config"
-        key: "generate_config"
-        cancel_on_build_failing: true
-        plugins:
-          - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["task", "config:ci"]
-              environment:
-                - "GOTOOLCHAIN=auto"
+  # - group: ":knife: Pre-check"
+  #   key: "precheck"
+  #   steps:
+  #     - label: ":golang: go generate"
+  #       key: "generate"
+  #       agents:
+  #         queue: $LARGE_RUNNER_QUEUE
+  #         size: $RUNNER_LARGE
+  #       cancel_on_build_failing: true
+  #       plugins:
+  #         - docker#v5.12.0:
+  #             image: "ghcr.io/theopenlane/build-image:latest"
+  #             always_pull: true
+  #             command: ["task", "ci"]
+  #             environment:
+  #               - "GOTOOLCHAIN=auto"
+  #     - label: ":yaml: generate config"
+  #       key: "generate_config"
+  #       cancel_on_build_failing: true
+  #       plugins:
+  #         - docker#v5.12.0:
+  #             image: "ghcr.io/theopenlane/build-image:latest"
+  #             always_pull: true
+  #             command: ["task", "config:ci"]
+  #             environment:
+  #               - "GOTOOLCHAIN=auto"
   - group: ":test_tube: Tests"
     key: "tests"
     steps:
+      - label: ":golangci-lint: lint 2 :lint-roller:"
+        if: build.branch !~ /^renovate\//
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: "NYC"
+        cancel_on_build_failing: true
+        timeout_in_minutes: 20
+        key: "lint2"
+        command:
+          - task go:lint:ci
       - label: ":golangci-lint: lint :lint-roller:"
         if: build.branch !~ /^renovate\//
         agents:
@@ -96,252 +107,252 @@ steps:
           - docker#v5.12.0:
               image: openfga/cli:v0.5.1
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
-  - group: ":closed_lock_with_key: Security Checks"
-    key: "security"
-    if: build.branch !~ /^renovate\//
-    steps:
-      - label: ":github: upload PR reports"
-        key: "scan-upload-pr"
-        cancel_on_build_failing: true
-        if: build.pull_request.id != null
-        depends_on: ["go_test"]
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                SONAR_TOKEN: SONAR_TOKEN
-          - artifacts#v1.9.4:
-              download: "coverage.out"
-              step: "go_test"
-          - docker#v5.12.0:
-              image: "sonarsource/sonar-scanner-cli:11.2"
-              environment:
-                - "SONAR_TOKEN"
-                - "SONAR_HOST_URL=$SONAR_HOST"
-                - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
-      - label: ":github: upload reports"
-        key: "scan-upload"
-        cancel_on_build_failing: true
-        if: build.branch == "main" && build.tag == null
-        depends_on: ["go_test"]
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                SONAR_TOKEN: SONAR_TOKEN
-          - artifacts#v1.9.4:
-              download: coverage.out
-              step: "go_test"
-          - docker#v5.12.0:
-              image: "sonarsource/sonar-scanner-cli:11.2"
-              environment:
-                - "SONAR_TOKEN"
-                - "SONAR_HOST_URL=$SONAR_HOST"
-  - group: ":golang: Builds"
-    key: "go-builds"
-    if: build.branch !~ /^renovate\//
-    steps:
-      - label: ":golang: build"
-        key: "gobuild-server"
-        cancel_on_build_failing: true
-        artifact_paths: "bin/${APP_NAME}"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-        plugins:
-          - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              environment:
-                - CGO_ENABLED=0
-                - GOOS=linux
-              command: ["task", "go:build:ci"]
-      - label: ":terminal: build cli"
-        key: "gobuild-cli"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-        cancel_on_build_failing: true
-        artifact_paths: "bin/openlane-cli"
-        plugins:
-          - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              environment:
-                - GOOS=darwin
-                - GOARCH=arm64
-              command: ["task", "go:build-cli:ci"]
-  - group: ":database: schema lint"
-    key: "database"
-    if: build.branch !~ /^renovate\//
-    steps:
-      - label: ":postgres: atlas lint"
-        key: "atlas_lint"
-        soft_fail:
-          - exit_status: 1
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.2.0:
-              project: core
-              atlas-env: dev
-              config: "file://db/atlas.hcl"
-              dir: "file://db/migrations"
-              step: lint
-      - label: ":graphql: lint graphql schema"
-        key: "apollo-lint-schema"
-        skip: "true" # skip until plugin is fixed
-        soft_fail:
-          - exit_status: 1
-        cancel_on_build_failing: true
-        command: |
-          #!/bin/sh
-          lint_result_file=$$(mktemp)
+# - group: ":closed_lock_with_key: Security Checks"
+#   key: "security"
+#   if: build.branch !~ /^renovate\//
+#   steps:
+#     - label: ":github: upload PR reports"
+#       key: "scan-upload-pr"
+#       cancel_on_build_failing: true
+#       if: build.pull_request.id != null
+#       depends_on: ["go_test"]
+#       plugins:
+#         - cluster-secrets#v1.0.0:
+#             variables:
+#               SONAR_TOKEN: SONAR_TOKEN
+#         - artifacts#v1.9.4:
+#             download: "coverage.out"
+#             step: "go_test"
+#         - docker#v5.12.0:
+#             image: "sonarsource/sonar-scanner-cli:11.2"
+#             environment:
+#               - "SONAR_TOKEN"
+#               - "SONAR_HOST_URL=$SONAR_HOST"
+#               - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
+#     - label: ":github: upload reports"
+#       key: "scan-upload"
+#       cancel_on_build_failing: true
+#       if: build.branch == "main" && build.tag == null
+#       depends_on: ["go_test"]
+#       plugins:
+#         - cluster-secrets#v1.0.0:
+#             variables:
+#               SONAR_TOKEN: SONAR_TOKEN
+#         - artifacts#v1.9.4:
+#             download: coverage.out
+#             step: "go_test"
+#         - docker#v5.12.0:
+#             image: "sonarsource/sonar-scanner-cli:11.2"
+#             environment:
+#               - "SONAR_TOKEN"
+#               - "SONAR_HOST_URL=$SONAR_HOST"
+# - group: ":golang: Builds"
+#   key: "go-builds"
+#   if: build.branch !~ /^renovate\//
+#   steps:
+#     - label: ":golang: build"
+#       key: "gobuild-server"
+#       cancel_on_build_failing: true
+#       artifact_paths: "bin/${APP_NAME}"
+#       agents:
+#         queue: $LARGE_RUNNER_QUEUE
+#         size: $RUNNER_LARGE
+#       plugins:
+#         - docker#v5.12.0:
+#             image: "ghcr.io/theopenlane/build-image:latest"
+#             always_pull: true
+#             environment:
+#               - CGO_ENABLED=0
+#               - GOOS=linux
+#             command: ["task", "go:build:ci"]
+#     - label: ":terminal: build cli"
+#       key: "gobuild-cli"
+#       agents:
+#         queue: $LARGE_RUNNER_QUEUE
+#         size: $RUNNER_LARGE
+#       cancel_on_build_failing: true
+#       artifact_paths: "bin/openlane-cli"
+#       plugins:
+#         - docker#v5.12.0:
+#             image: "ghcr.io/theopenlane/build-image:latest"
+#             always_pull: true
+#             environment:
+#               - GOOS=darwin
+#               - GOARCH=arm64
+#             command: ["task", "go:build-cli:ci"]
+# - group: ":database: schema lint"
+#   key: "database"
+#   if: build.branch !~ /^renovate\//
+#   steps:
+#     - label: ":postgres: atlas lint"
+#       key: "atlas_lint"
+#       soft_fail:
+#         - exit_status: 1
+#       plugins:
+#         - cluster-secrets#v1.0.0:
+#             variables:
+#               ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
+#         - theopenlane/atlas#v1.2.0:
+#             project: core
+#             atlas-env: dev
+#             config: "file://db/atlas.hcl"
+#             dir: "file://db/migrations"
+#             step: lint
+#     - label: ":graphql: lint graphql schema"
+#       key: "apollo-lint-schema"
+#       skip: "true" # skip until plugin is fixed
+#       soft_fail:
+#         - exit_status: 1
+#       cancel_on_build_failing: true
+#       command: |
+#         #!/bin/sh
+#         lint_result_file=$$(mktemp)
 
-          # ignore exit code for now
-          set +e
-          result=$(rover graph check --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME --format plain -o $$lint_result_file 2>&1 > /dev/null)
-          set -e
+#         # ignore exit code for now
+#         set +e
+#         result=$(rover graph check --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME --format plain -o $$lint_result_file 2>&1 > /dev/null)
+#         set -e
 
-          output=$$(cat $$lint_result_file)
+#         output=$$(cat $$lint_result_file)
 
-          if [[ "$$output" = "" ]]; then
-              echo ""
-              echo "Linting Failed:"
-              echo "$${result#*error\[E043\]: }"
+#         if [[ "$$output" = "" ]]; then
+#             echo ""
+#             echo "Linting Failed:"
+#             echo "$${result#*error\[E043\]: }"
 
-              echo -e ":graphql: **Graphql Lint Failure**   <br /> $${result#*error\[E043\]: }" |  buildkite-agent annotate --context apollo-lint-schema --style error
+#             echo -e ":graphql: **Graphql Lint Failure**   <br /> $${result#*error\[E043\]: }" |  buildkite-agent annotate --context apollo-lint-schema --style error
 
-              exit 1
-          else
-              echo ""
-              echo "Linting Passed. See annotation for details."
+#             exit 1
+#         else
+#             echo ""
+#             echo "Linting Passed. See annotation for details."
 
-              echo -e ":graphql: **Graphql Lint Results** \n <details><summary> Linter Result </summary><code>$$output</code></details>" |  buildkite-agent annotate --context apollo-lint-schema --style success
+#             echo -e ":graphql: **Graphql Lint Results** \n <details><summary> Linter Result </summary><code>$$output</code></details>" |  buildkite-agent annotate --context apollo-lint-schema --style success
 
-              exit 0
-          fi
-        artifact_paths: linter-result.txt
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                APOLLO_KEY: APOLLO_KEY
-          - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              propagate-environment: true
-              environment:
-                - "APOLLO_KEY"
-                - "BUILDKITE_AGENT_ACCESS_TOKEN"
-  - group: ":docker: Image Build"
-    depends_on: "go-builds"
-    if: build.branch !~ /^renovate\//
-    key: "image-build"
-    steps:
-      - label: ":docker: docker pr build"
-        key: "docker-pr-build"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-        cancel_on_build_failing: true
-        if: build.branch != "main" && build.tag == null
-        commands: |
-          #!/bin/bash
-          chmod +x ${APP_NAME}
-        plugins:
-          - artifacts#v1.9.4:
-              download:
-                - from: "bin/${APP_NAME}"
-                  to: "${APP_NAME}"
-              step: "gobuild-server"
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-          - docker-login#v3.0.0: # we need to login for the image to be accessible on the host
-              username: openlane-bender
-              password-env: SECRET_GHCR_PUBLISH_TOKEN
-              server: ghcr.io
-          - theopenlane/docker-metadata#v1.0.1:
-              images:
-                - "${IMAGE_REPO}"
-              extra_tags:
-                - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.1.1:
-              dockerfile: docker/Dockerfile
-              push: false
-              build-args:
-                - NAME=${APP_NAME}
-          - equinixmetal-buildkite/trivy#v1.19.0:
-              severity: CRITICAL,HIGH
-              ignore-unfixed: true
-              scanners: misconfig,secret,vuln
-              skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.57.1"
-      - label: ":docker: docker build and publish"
-        key: "docker-build-and-tag"
-        cancel_on_build_failing: true
-        if: build.tag != null
-        commands: |
-          #!/bin/bash
-          chmod +x ${APP_NAME}
-        plugins:
-          - artifacts#v1.9.4:
-              download:
-                - from: "bin/${APP_NAME}"
-                  to: "${APP_NAME}"
-              step: "gobuild-server"
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-          - docker-login#v3.0.0:
-              username: openlane-bender
-              password-env: SECRET_GHCR_PUBLISH_TOKEN
-              server: ghcr.io
-          - theopenlane/docker-metadata#v1.0.1:
-              images:
-                - "${IMAGE_REPO}"
-              extra_tags:
-                - "${BUILDKITE_TAG}"
-                - "latest"
-          - theopenlane/container-build#v1.1.1:
-              dockerfile: docker/Dockerfile
-              push: true
-              build-args:
-                - NAME=${APP_NAME}
-      - trigger: "core-deploy"
-        depends_on: "docker-build-and-tag"
-        label: ":rocket: trigger core-deploy"
-        if: build.tag != null
-        build:
-          env:
-            CORE_TAG: "${BUILDKITE_TAG}"
-  - group: ":rocket: Publish"
-    key: "publish"
-    steps:
-      - label: ":graphql: publish graphql schema"
-        key: "apollo-publish-schema"
-        if: build.tag != null
-        cancel_on_build_failing: true
-        command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                APOLLO_KEY: APOLLO_KEY
-          - docker#v5.12.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              propagate-environment: true
-              environment:
-                - "APOLLO_KEY"
-      - label: ":rocket: atlas push"
-        if: build.branch == "main" && build.tag == null
-        key: "atlas_migrate"
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.2.0:
-              project: core
-              dir: "file://db/migrations"
-              step: migrate
-              atlas-env: dev
-              config: "file://db/atlas.hcl"
+#             exit 0
+#         fi
+#       artifact_paths: linter-result.txt
+#       plugins:
+#         - cluster-secrets#v1.0.0:
+#             variables:
+#               APOLLO_KEY: APOLLO_KEY
+#         - docker#v5.12.0:
+#             image: "ghcr.io/theopenlane/build-image:latest"
+#             always_pull: true
+#             propagate-environment: true
+#             environment:
+#               - "APOLLO_KEY"
+#               - "BUILDKITE_AGENT_ACCESS_TOKEN"
+# - group: ":docker: Image Build"
+#   depends_on: "go-builds"
+#   if: build.branch !~ /^renovate\//
+#   key: "image-build"
+#   steps:
+#     - label: ":docker: docker pr build"
+#       key: "docker-pr-build"
+#       agents:
+#         queue: $LARGE_RUNNER_QUEUE
+#         size: $RUNNER_LARGE
+#       cancel_on_build_failing: true
+#       if: build.branch != "main" && build.tag == null
+#       commands: |
+#         #!/bin/bash
+#         chmod +x ${APP_NAME}
+#       plugins:
+#         - artifacts#v1.9.4:
+#             download:
+#               - from: "bin/${APP_NAME}"
+#                 to: "${APP_NAME}"
+#             step: "gobuild-server"
+#         - cluster-secrets#v1.0.0:
+#             variables:
+#               SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+#         - docker-login#v3.0.0: # we need to login for the image to be accessible on the host
+#             username: openlane-bender
+#             password-env: SECRET_GHCR_PUBLISH_TOKEN
+#             server: ghcr.io
+#         - theopenlane/docker-metadata#v1.0.1:
+#             images:
+#               - "${IMAGE_REPO}"
+#             extra_tags:
+#               - "${IMAGE_TAG}"
+#         - theopenlane/container-build#v1.1.1:
+#             dockerfile: docker/Dockerfile
+#             push: false
+#             build-args:
+#               - NAME=${APP_NAME}
+#         - equinixmetal-buildkite/trivy#v1.19.0:
+#             severity: CRITICAL,HIGH
+#             ignore-unfixed: true
+#             scanners: misconfig,secret,vuln
+#             skip-files: "cosign.key,Dockerfile.dev"
+#             trivy-version: "0.57.1"
+#     - label: ":docker: docker build and publish"
+#       key: "docker-build-and-tag"
+#       cancel_on_build_failing: true
+#       if: build.tag != null
+#       commands: |
+#         #!/bin/bash
+#         chmod +x ${APP_NAME}
+#       plugins:
+#         - artifacts#v1.9.4:
+#             download:
+#               - from: "bin/${APP_NAME}"
+#                 to: "${APP_NAME}"
+#             step: "gobuild-server"
+#         - cluster-secrets#v1.0.0:
+#             variables:
+#               SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+#         - docker-login#v3.0.0:
+#             username: openlane-bender
+#             password-env: SECRET_GHCR_PUBLISH_TOKEN
+#             server: ghcr.io
+#         - theopenlane/docker-metadata#v1.0.1:
+#             images:
+#               - "${IMAGE_REPO}"
+#             extra_tags:
+#               - "${BUILDKITE_TAG}"
+#               - "latest"
+#         - theopenlane/container-build#v1.1.1:
+#             dockerfile: docker/Dockerfile
+#             push: true
+#             build-args:
+#               - NAME=${APP_NAME}
+#     - trigger: "core-deploy"
+#       depends_on: "docker-build-and-tag"
+#       label: ":rocket: trigger core-deploy"
+#       if: build.tag != null
+#       build:
+#         env:
+#           CORE_TAG: "${BUILDKITE_TAG}"
+# - group: ":rocket: Publish"
+#   key: "publish"
+#   steps:
+#     - label: ":graphql: publish graphql schema"
+#       key: "apollo-publish-schema"
+#       if: build.tag != null
+#       cancel_on_build_failing: true
+#       command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
+#       plugins:
+#         - cluster-secrets#v1.0.0:
+#             variables:
+#               APOLLO_KEY: APOLLO_KEY
+#         - docker#v5.12.0:
+#             image: "ghcr.io/theopenlane/build-image:latest"
+#             always_pull: true
+#             propagate-environment: true
+#             environment:
+#               - "APOLLO_KEY"
+#     - label: ":rocket: atlas push"
+#       if: build.branch == "main" && build.tag == null
+#       key: "atlas_migrate"
+#       plugins:
+#         - cluster-secrets#v1.0.0:
+#             variables:
+#               ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
+#         - theopenlane/atlas#v1.2.0:
+#             project: core
+#             dir: "file://db/migrations"
+#             step: migrate
+#             atlas-env: dev
+#             config: "file://db/atlas.hcl"
