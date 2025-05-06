@@ -28,6 +28,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		controlResults               *generated.ControlConnection
 		controlimplementationResults *generated.ControlImplementationConnection
 		controlobjectiveResults      *generated.ControlObjectiveConnection
+		customdomainResults          *generated.CustomDomainConnection
 		documentdataResults          *generated.DocumentDataConnection
 		entityResults                *generated.EntityConnection
 		entitytypeResults            *generated.EntityTypeConnection
@@ -38,6 +39,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		integrationResults           *generated.IntegrationConnection
 		internalpolicyResults        *generated.InternalPolicyConnection
 		inviteResults                *generated.InviteConnection
+		mappabledomainResults        *generated.MappableDomainConnection
 		mappedcontrolResults         *generated.MappedControlConnection
 		narrativeResults             *generated.NarrativeConnection
 		orgsubscriptionResults       *generated.OrgSubscriptionConnection
@@ -96,6 +98,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		func() {
 			var err error
 			controlobjectiveResults, err = searchControlObjectives(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			customdomainResults, err = searchCustomDomains(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -166,6 +175,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		func() {
 			var err error
 			inviteResults, err = searchInvites(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			mappabledomainResults, err = searchMappableDomains(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -330,6 +346,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += controlobjectiveResults.TotalCount
 	}
+	if customdomainResults != nil && len(customdomainResults.Edges) > 0 {
+		res.CustomDomains = customdomainResults
+
+		res.TotalCount += customdomainResults.TotalCount
+	}
 	if documentdataResults != nil && len(documentdataResults.Edges) > 0 {
 		res.DocumentData = documentdataResults
 
@@ -379,6 +400,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Invites = inviteResults
 
 		res.TotalCount += inviteResults.TotalCount
+	}
+	if mappabledomainResults != nil && len(mappabledomainResults.Edges) > 0 {
+		res.MappableDomains = mappabledomainResults
+
+		res.TotalCount += mappabledomainResults.TotalCount
 	}
 	if mappedcontrolResults != nil && len(mappedcontrolResults.Edges) > 0 {
 		res.MappedControls = mappedcontrolResults
@@ -528,6 +554,16 @@ func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string
 	// return the results
 	return controlobjectiveResults, nil
 }
+func (r *queryResolver) CustomDomainSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomDomainConnection, error) {
+	customdomainResults, err := searchCustomDomains(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return customdomainResults, nil
+}
 func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
 	documentdataResults, err := searchDocumentData(ctx, query, after, first, before, last)
 
@@ -627,6 +663,16 @@ func (r *queryResolver) InviteSearch(ctx context.Context, query string, after *e
 
 	// return the results
 	return inviteResults, nil
+}
+func (r *queryResolver) MappableDomainSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappableDomainConnection, error) {
+	mappabledomainResults, err := searchMappableDomains(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return mappabledomainResults, nil
 }
 func (r *queryResolver) MappedControlSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappedControlConnection, error) {
 	mappedcontrolResults, err := searchMappedControls(ctx, query, after, first, before, last)

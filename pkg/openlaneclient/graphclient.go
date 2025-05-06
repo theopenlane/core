@@ -73,6 +73,16 @@ type OpenlaneGraphClient interface {
 	UpdateControlObjective(ctx context.Context, updateControlObjectiveID string, input UpdateControlObjectiveInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControlObjective, error)
 	GetAllControlObjectiveHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlObjectiveHistories, error)
 	GetControlObjectiveHistories(ctx context.Context, where *ControlObjectiveHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlObjectiveHistories, error)
+	CreateBulkCSVCustomDomain(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCustomDomain, error)
+	CreateBulkCustomDomain(ctx context.Context, input []*CreateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCustomDomain, error)
+	CreateCustomDomain(ctx context.Context, input CreateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateCustomDomain, error)
+	DeleteCustomDomain(ctx context.Context, deleteCustomDomainID string, interceptors ...clientv2.RequestInterceptor) (*DeleteCustomDomain, error)
+	GetAllCustomDomains(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllCustomDomains, error)
+	GetCustomDomainByID(ctx context.Context, customDomainID string, interceptors ...clientv2.RequestInterceptor) (*GetCustomDomainByID, error)
+	GetCustomDomains(ctx context.Context, first *int64, last *int64, where *CustomDomainWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCustomDomains, error)
+	UpdateCustomDomain(ctx context.Context, updateCustomDomainID string, input UpdateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCustomDomain, error)
+	GetAllCustomDomainHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllCustomDomainHistories, error)
+	GetCustomDomainHistories(ctx context.Context, first *int64, last *int64, where *CustomDomainHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCustomDomainHistories, error)
 	CreateDocumentData(ctx context.Context, input CreateDocumentDataInput, interceptors ...clientv2.RequestInterceptor) (*CreateDocumentData, error)
 	DeleteDocumentData(ctx context.Context, deleteDocumentDataID string, interceptors ...clientv2.RequestInterceptor) (*DeleteDocumentData, error)
 	GetDocumentDataByID(ctx context.Context, documentDataID string, interceptors ...clientv2.RequestInterceptor) (*GetDocumentDataByID, error)
@@ -185,6 +195,16 @@ type OpenlaneGraphClient interface {
 	GetAllInvites(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInvites, error)
 	GetInviteByID(ctx context.Context, inviteID string, interceptors ...clientv2.RequestInterceptor) (*GetInviteByID, error)
 	InvitesByOrgID(ctx context.Context, where *InviteWhereInput, interceptors ...clientv2.RequestInterceptor) (*InvitesByOrgID, error)
+	CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVMappableDomain, error)
+	CreateBulkMappableDomain(ctx context.Context, input []*CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkMappableDomain, error)
+	CreateMappableDomain(ctx context.Context, input CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateMappableDomain, error)
+	DeleteMappableDomain(ctx context.Context, deleteMappableDomainID string, interceptors ...clientv2.RequestInterceptor) (*DeleteMappableDomain, error)
+	GetAllMappableDomains(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllMappableDomains, error)
+	GetMappableDomainByID(ctx context.Context, mappableDomainID string, interceptors ...clientv2.RequestInterceptor) (*GetMappableDomainByID, error)
+	GetMappableDomains(ctx context.Context, first *int64, last *int64, where *MappableDomainWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappableDomains, error)
+	UpdateMappableDomain(ctx context.Context, updateMappableDomainID string, input UpdateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*UpdateMappableDomain, error)
+	GetAllMappableDomainHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllMappableDomainHistories, error)
+	GetMappableDomainHistories(ctx context.Context, first *int64, last *int64, where *MappableDomainHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappableDomainHistories, error)
 	CreateBulkCSVMappedControl(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVMappedControl, error)
 	CreateBulkMappedControl(ctx context.Context, input []*CreateMappedControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkMappedControl, error)
 	CreateMappedControl(ctx context.Context, input CreateMappedControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateMappedControl, error)
@@ -2562,6 +2582,120 @@ func (t *AdminSearch_AdminSearch_ControlObjectives) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_CustomDomains_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_CustomDomains_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_CustomDomains_Edges_Node struct {
+	CnameRecord      string   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	DeletedBy        *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID               string   "json:\"id\" graphql:\"id\""
+	MappableDomainID string   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID          *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags             []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetCnameRecord() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
+	}
+	return t.CnameRecord
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetMappableDomainID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
+	}
+	return t.MappableDomainID
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_CustomDomains_Edges struct {
+	Node *AdminSearch_AdminSearch_CustomDomains_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_CustomDomains_Edges) GetNode() *AdminSearch_AdminSearch_CustomDomains_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_CustomDomains struct {
+	Edges      []*AdminSearch_AdminSearch_CustomDomains_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_CustomDomains_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_CustomDomains) GetEdges() []*AdminSearch_AdminSearch_CustomDomains_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_CustomDomains) GetPageInfo() *AdminSearch_AdminSearch_CustomDomains_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_CustomDomains) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch_DocumentData_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -3838,6 +3972,106 @@ func (t *AdminSearch_AdminSearch_Invites) GetPageInfo() *AdminSearch_AdminSearch
 func (t *AdminSearch_AdminSearch_Invites) GetTotalCount() int64 {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Invites{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_MappableDomains_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_MappableDomains_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_MappableDomains_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_MappableDomains_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_MappableDomains_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_MappableDomains_Edges_Node struct {
+	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_MappableDomains_Edges_Node) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_Edges_Node{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_MappableDomains_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_MappableDomains_Edges_Node) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_MappableDomains_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_MappableDomains_Edges struct {
+	Node *AdminSearch_AdminSearch_MappableDomains_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_MappableDomains_Edges) GetNode() *AdminSearch_AdminSearch_MappableDomains_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_MappableDomains struct {
+	Edges      []*AdminSearch_AdminSearch_MappableDomains_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_MappableDomains_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_MappableDomains) GetEdges() []*AdminSearch_AdminSearch_MappableDomains_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_MappableDomains) GetPageInfo() *AdminSearch_AdminSearch_MappableDomains_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_MappableDomains) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains{}
 	}
 	return t.TotalCount
 }
@@ -6221,6 +6455,7 @@ type AdminSearch_AdminSearch struct {
 	ControlImplementations *AdminSearch_AdminSearch_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
 	ControlObjectives      *AdminSearch_AdminSearch_ControlObjectives      "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
 	Controls               *AdminSearch_AdminSearch_Controls               "json:\"controls,omitempty\" graphql:\"controls\""
+	CustomDomains          *AdminSearch_AdminSearch_CustomDomains          "json:\"customDomains,omitempty\" graphql:\"customDomains\""
 	DocumentData           *AdminSearch_AdminSearch_DocumentData           "json:\"documentData,omitempty\" graphql:\"documentData\""
 	Entities               *AdminSearch_AdminSearch_Entities               "json:\"entities,omitempty\" graphql:\"entities\""
 	EntityTypes            *AdminSearch_AdminSearch_EntityTypes            "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
@@ -6231,6 +6466,7 @@ type AdminSearch_AdminSearch struct {
 	Integrations           *AdminSearch_AdminSearch_Integrations           "json:\"integrations,omitempty\" graphql:\"integrations\""
 	InternalPolicies       *AdminSearch_AdminSearch_InternalPolicies       "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
 	Invites                *AdminSearch_AdminSearch_Invites                "json:\"invites,omitempty\" graphql:\"invites\""
+	MappableDomains        *AdminSearch_AdminSearch_MappableDomains        "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
 	MappedControls         *AdminSearch_AdminSearch_MappedControls         "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
 	Narratives             *AdminSearch_AdminSearch_Narratives             "json:\"narratives,omitempty\" graphql:\"narratives\""
 	OrgSubscriptions       *AdminSearch_AdminSearch_OrgSubscriptions       "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
@@ -6286,6 +6522,12 @@ func (t *AdminSearch_AdminSearch) GetControls() *AdminSearch_AdminSearch_Control
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.Controls
+}
+func (t *AdminSearch_AdminSearch) GetCustomDomains() *AdminSearch_AdminSearch_CustomDomains {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.CustomDomains
 }
 func (t *AdminSearch_AdminSearch) GetDocumentData() *AdminSearch_AdminSearch_DocumentData {
 	if t == nil {
@@ -6346,6 +6588,12 @@ func (t *AdminSearch_AdminSearch) GetInvites() *AdminSearch_AdminSearch_Invites 
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.Invites
+}
+func (t *AdminSearch_AdminSearch) GetMappableDomains() *AdminSearch_AdminSearch_MappableDomains {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.MappableDomains
 }
 func (t *AdminSearch_AdminSearch) GetMappedControls() *AdminSearch_AdminSearch_MappedControls {
 	if t == nil {
@@ -15659,6 +15907,1167 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories{}
 	}
 	return t.Edges
+}
+
+type CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains struct {
+	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string                   "json:\"id\" graphql:\"id\""
+	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
+	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetCnameRecord() string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.CnameRecord
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetMappableDomainID() string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.MappableDomainID
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetTxtRecordSubdomain() string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.TxtRecordSubdomain
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetTxtRecordValue() string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.TxtRecordValue
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain struct {
+	CustomDomains []*CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains "json:\"customDomains,omitempty\" graphql:\"customDomains\""
+}
+
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain) GetCustomDomains() []*CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain{}
+	}
+	return t.CustomDomains
+}
+
+type CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains struct {
+	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string                   "json:\"id\" graphql:\"id\""
+	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
+	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetCnameRecord() string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.CnameRecord
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetID() string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetMappableDomainID() string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.MappableDomainID
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetTxtRecordSubdomain() string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.TxtRecordSubdomain
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetTxtRecordValue() string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.TxtRecordValue
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCustomDomain_CreateBulkCustomDomain struct {
+	CustomDomains []*CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains "json:\"customDomains,omitempty\" graphql:\"customDomains\""
+}
+
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain) GetCustomDomains() []*CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain{}
+	}
+	return t.CustomDomains
+}
+
+type CreateCustomDomain_CreateCustomDomain_CustomDomain struct {
+	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string                   "json:\"id\" graphql:\"id\""
+	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
+	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetID() string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.ID
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetMappableDomainID() string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.MappableDomainID
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.OwnerID
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return &t.Status
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetTags() []string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.Tags
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetTxtRecordSubdomain() string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.TxtRecordSubdomain
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetTxtRecordValue() string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.TxtRecordValue
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateCustomDomain_CreateCustomDomain struct {
+	CustomDomain CreateCustomDomain_CreateCustomDomain_CustomDomain "json:\"customDomain\" graphql:\"customDomain\""
+}
+
+func (t *CreateCustomDomain_CreateCustomDomain) GetCustomDomain() *CreateCustomDomain_CreateCustomDomain_CustomDomain {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain{}
+	}
+	return &t.CustomDomain
+}
+
+type DeleteCustomDomain_DeleteCustomDomain struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteCustomDomain_DeleteCustomDomain) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteCustomDomain_DeleteCustomDomain{}
+	}
+	return t.DeletedID
+}
+
+type GetAllCustomDomains_CustomDomains_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllCustomDomains_CustomDomains_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllCustomDomains_CustomDomains_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllCustomDomains_CustomDomains_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllCustomDomains_CustomDomains_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllCustomDomains_CustomDomains_Edges_Node struct {
+	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string                   "json:\"id\" graphql:\"id\""
+	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
+	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetCnameRecord() string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.CnameRecord
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetMappableDomainID() string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.MappableDomainID
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetTxtRecordSubdomain() string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.TxtRecordSubdomain
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetTxtRecordValue() string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.TxtRecordValue
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllCustomDomains_CustomDomains_Edges struct {
+	Node *GetAllCustomDomains_CustomDomains_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllCustomDomains_CustomDomains_Edges) GetNode() *GetAllCustomDomains_CustomDomains_Edges_Node {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllCustomDomains_CustomDomains struct {
+	Edges      []*GetAllCustomDomains_CustomDomains_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllCustomDomains_CustomDomains_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllCustomDomains_CustomDomains) GetEdges() []*GetAllCustomDomains_CustomDomains_Edges {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains{}
+	}
+	return t.Edges
+}
+func (t *GetAllCustomDomains_CustomDomains) GetPageInfo() *GetAllCustomDomains_CustomDomains_PageInfo {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllCustomDomains_CustomDomains) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains{}
+	}
+	return t.TotalCount
+}
+
+type GetCustomDomainByID_CustomDomain struct {
+	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string                   "json:\"id\" graphql:\"id\""
+	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
+	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetCustomDomainByID_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *GetCustomDomainByID_CustomDomain) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.CreatedAt
+}
+func (t *GetCustomDomainByID_CustomDomain) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.CreatedBy
+}
+func (t *GetCustomDomainByID_CustomDomain) GetID() string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.ID
+}
+func (t *GetCustomDomainByID_CustomDomain) GetMappableDomainID() string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.MappableDomainID
+}
+func (t *GetCustomDomainByID_CustomDomain) GetOwnerID() *string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.OwnerID
+}
+func (t *GetCustomDomainByID_CustomDomain) GetStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return &t.Status
+}
+func (t *GetCustomDomainByID_CustomDomain) GetTags() []string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.Tags
+}
+func (t *GetCustomDomainByID_CustomDomain) GetTxtRecordSubdomain() string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.TxtRecordSubdomain
+}
+func (t *GetCustomDomainByID_CustomDomain) GetTxtRecordValue() string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.TxtRecordValue
+}
+func (t *GetCustomDomainByID_CustomDomain) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetCustomDomainByID_CustomDomain) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.UpdatedBy
+}
+
+type GetCustomDomains_CustomDomains_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetCustomDomains_CustomDomains_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetCustomDomains_CustomDomains_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetCustomDomains_CustomDomains_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetCustomDomains_CustomDomains_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetCustomDomains_CustomDomains_Edges_Node struct {
+	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string                   "json:\"id\" graphql:\"id\""
+	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
+	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetCnameRecord() string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.CnameRecord
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetMappableDomainID() string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.MappableDomainID
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetTxtRecordSubdomain() string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.TxtRecordSubdomain
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetTxtRecordValue() string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.TxtRecordValue
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetCustomDomains_CustomDomains_Edges struct {
+	Node *GetCustomDomains_CustomDomains_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetCustomDomains_CustomDomains_Edges) GetNode() *GetCustomDomains_CustomDomains_Edges_Node {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges{}
+	}
+	return t.Node
+}
+
+type GetCustomDomains_CustomDomains struct {
+	Edges      []*GetCustomDomains_CustomDomains_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetCustomDomains_CustomDomains_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetCustomDomains_CustomDomains) GetEdges() []*GetCustomDomains_CustomDomains_Edges {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains{}
+	}
+	return t.Edges
+}
+func (t *GetCustomDomains_CustomDomains) GetPageInfo() *GetCustomDomains_CustomDomains_PageInfo {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains{}
+	}
+	return &t.PageInfo
+}
+func (t *GetCustomDomains_CustomDomains) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains{}
+	}
+	return t.TotalCount
+}
+
+type UpdateCustomDomain_UpdateCustomDomain_CustomDomain struct {
+	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string                   "json:\"id\" graphql:\"id\""
+	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
+	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetCnameRecord() string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.CnameRecord
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetID() string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.ID
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetMappableDomainID() string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.MappableDomainID
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return &t.Status
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetTags() []string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.Tags
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetTxtRecordSubdomain() string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.TxtRecordSubdomain
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetTxtRecordValue() string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.TxtRecordValue
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateCustomDomain_UpdateCustomDomain struct {
+	CustomDomain UpdateCustomDomain_UpdateCustomDomain_CustomDomain "json:\"customDomain\" graphql:\"customDomain\""
+}
+
+func (t *UpdateCustomDomain_UpdateCustomDomain) GetCustomDomain() *UpdateCustomDomain_UpdateCustomDomain_CustomDomain {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain{}
+	}
+	return &t.CustomDomain
+}
+
+type GetAllCustomDomainHistories_CustomDomainHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node struct {
+	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime        time.Time                "json:\"historyTime\" graphql:\"historyTime\""
+	ID                 string                   "json:\"id\" graphql:\"id\""
+	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	Operation          history.OpType           "json:\"operation\" graphql:\"operation\""
+	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                *string                  "json:\"ref,omitempty\" graphql:\"ref\""
+	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
+	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCnameRecord() string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.CnameRecord
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetMappableDomainID() string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.MappableDomainID
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordSubdomain() string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.TxtRecordSubdomain
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordValue() string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.TxtRecordValue
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllCustomDomainHistories_CustomDomainHistories_Edges struct {
+	Node *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges) GetNode() *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllCustomDomainHistories_CustomDomainHistories struct {
+	Edges      []*GetAllCustomDomainHistories_CustomDomainHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllCustomDomainHistories_CustomDomainHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllCustomDomainHistories_CustomDomainHistories) GetEdges() []*GetAllCustomDomainHistories_CustomDomainHistories_Edges {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories) GetPageInfo() *GetAllCustomDomainHistories_CustomDomainHistories_PageInfo {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetCustomDomainHistories_CustomDomainHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetCustomDomainHistories_CustomDomainHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetCustomDomainHistories_CustomDomainHistories_Edges_Node struct {
+	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime        time.Time                "json:\"historyTime\" graphql:\"historyTime\""
+	ID                 string                   "json:\"id\" graphql:\"id\""
+	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	Operation          history.OpType           "json:\"operation\" graphql:\"operation\""
+	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                *string                  "json:\"ref,omitempty\" graphql:\"ref\""
+	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
+	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCnameRecord() string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.CnameRecord
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetMappableDomainID() string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.MappableDomainID
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordSubdomain() string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.TxtRecordSubdomain
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordValue() string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.TxtRecordValue
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetCustomDomainHistories_CustomDomainHistories_Edges struct {
+	Node *GetCustomDomainHistories_CustomDomainHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges) GetNode() *GetCustomDomainHistories_CustomDomainHistories_Edges_Node {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetCustomDomainHistories_CustomDomainHistories struct {
+	Edges      []*GetCustomDomainHistories_CustomDomainHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetCustomDomainHistories_CustomDomainHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetCustomDomainHistories_CustomDomainHistories) GetEdges() []*GetCustomDomainHistories_CustomDomainHistories_Edges {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories{}
+	}
+	return t.Edges
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories) GetPageInfo() *GetCustomDomainHistories_CustomDomainHistories_PageInfo {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories{}
+	}
+	return t.TotalCount
 }
 
 type CreateDocumentData_CreateDocumentData_DocumentData struct {
@@ -32539,6 +33948,852 @@ func (t *InvitesByOrgID_Invites) GetEdges() []*InvitesByOrgID_Invites_Edges {
 		t = &InvitesByOrgID_Invites{}
 	}
 	return t.Edges
+}
+
+type CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Name      string     "json:\"name\" graphql:\"name\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain struct {
+	MappableDomains []*CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
+}
+
+func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain) GetMappableDomains() []*CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain{}
+	}
+	return t.MappableDomains
+}
+
+type CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Name      string     "json:\"name\" graphql:\"name\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetID() string {
+	if t == nil {
+		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
+	}
+	return t.ID
+}
+func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetName() string {
+	if t == nil {
+		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
+	}
+	return t.Name
+}
+func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkMappableDomain_CreateBulkMappableDomain struct {
+	MappableDomains []*CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
+}
+
+func (t *CreateBulkMappableDomain_CreateBulkMappableDomain) GetMappableDomains() []*CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains {
+	if t == nil {
+		t = &CreateBulkMappableDomain_CreateBulkMappableDomain{}
+	}
+	return t.MappableDomains
+}
+
+type CreateMappableDomain_CreateMappableDomain_MappableDomain struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Name      string     "json:\"name\" graphql:\"name\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateMappableDomain_CreateMappableDomain_MappableDomain{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateMappableDomain_CreateMappableDomain_MappableDomain{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetID() string {
+	if t == nil {
+		t = &CreateMappableDomain_CreateMappableDomain_MappableDomain{}
+	}
+	return t.ID
+}
+func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetName() string {
+	if t == nil {
+		t = &CreateMappableDomain_CreateMappableDomain_MappableDomain{}
+	}
+	return t.Name
+}
+func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetTags() []string {
+	if t == nil {
+		t = &CreateMappableDomain_CreateMappableDomain_MappableDomain{}
+	}
+	return t.Tags
+}
+func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateMappableDomain_CreateMappableDomain_MappableDomain{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateMappableDomain_CreateMappableDomain_MappableDomain{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateMappableDomain_CreateMappableDomain struct {
+	MappableDomain CreateMappableDomain_CreateMappableDomain_MappableDomain "json:\"mappableDomain\" graphql:\"mappableDomain\""
+}
+
+func (t *CreateMappableDomain_CreateMappableDomain) GetMappableDomain() *CreateMappableDomain_CreateMappableDomain_MappableDomain {
+	if t == nil {
+		t = &CreateMappableDomain_CreateMappableDomain{}
+	}
+	return &t.MappableDomain
+}
+
+type DeleteMappableDomain_DeleteMappableDomain struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteMappableDomain_DeleteMappableDomain) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteMappableDomain_DeleteMappableDomain{}
+	}
+	return t.DeletedID
+}
+
+type GetAllMappableDomains_MappableDomains_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllMappableDomains_MappableDomains_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllMappableDomains_MappableDomains_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllMappableDomains_MappableDomains_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllMappableDomains_MappableDomains_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllMappableDomains_MappableDomains_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Name      string     "json:\"name\" graphql:\"name\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllMappableDomains_MappableDomains_Edges struct {
+	Node *GetAllMappableDomains_MappableDomains_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllMappableDomains_MappableDomains_Edges) GetNode() *GetAllMappableDomains_MappableDomains_Edges_Node {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllMappableDomains_MappableDomains struct {
+	Edges      []*GetAllMappableDomains_MappableDomains_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllMappableDomains_MappableDomains_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllMappableDomains_MappableDomains) GetEdges() []*GetAllMappableDomains_MappableDomains_Edges {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains{}
+	}
+	return t.Edges
+}
+func (t *GetAllMappableDomains_MappableDomains) GetPageInfo() *GetAllMappableDomains_MappableDomains_PageInfo {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllMappableDomains_MappableDomains) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains{}
+	}
+	return t.TotalCount
+}
+
+type GetMappableDomainByID_MappableDomain struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Name      string     "json:\"name\" graphql:\"name\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetMappableDomainByID_MappableDomain) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetMappableDomainByID_MappableDomain{}
+	}
+	return t.CreatedAt
+}
+func (t *GetMappableDomainByID_MappableDomain) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetMappableDomainByID_MappableDomain{}
+	}
+	return t.CreatedBy
+}
+func (t *GetMappableDomainByID_MappableDomain) GetID() string {
+	if t == nil {
+		t = &GetMappableDomainByID_MappableDomain{}
+	}
+	return t.ID
+}
+func (t *GetMappableDomainByID_MappableDomain) GetName() string {
+	if t == nil {
+		t = &GetMappableDomainByID_MappableDomain{}
+	}
+	return t.Name
+}
+func (t *GetMappableDomainByID_MappableDomain) GetTags() []string {
+	if t == nil {
+		t = &GetMappableDomainByID_MappableDomain{}
+	}
+	return t.Tags
+}
+func (t *GetMappableDomainByID_MappableDomain) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetMappableDomainByID_MappableDomain{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetMappableDomainByID_MappableDomain) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetMappableDomainByID_MappableDomain{}
+	}
+	return t.UpdatedBy
+}
+
+type GetMappableDomains_MappableDomains_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetMappableDomains_MappableDomains_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetMappableDomains_MappableDomains_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetMappableDomains_MappableDomains_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetMappableDomains_MappableDomains_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetMappableDomains_MappableDomains_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Name      string     "json:\"name\" graphql:\"name\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetMappableDomains_MappableDomains_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetMappableDomains_MappableDomains_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetMappableDomains_MappableDomains_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetMappableDomains_MappableDomains_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetMappableDomains_MappableDomains_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetMappableDomains_MappableDomains_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetMappableDomains_MappableDomains_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetMappableDomains_MappableDomains_Edges struct {
+	Node *GetMappableDomains_MappableDomains_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetMappableDomains_MappableDomains_Edges) GetNode() *GetMappableDomains_MappableDomains_Edges_Node {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_Edges{}
+	}
+	return t.Node
+}
+
+type GetMappableDomains_MappableDomains struct {
+	Edges      []*GetMappableDomains_MappableDomains_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetMappableDomains_MappableDomains_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetMappableDomains_MappableDomains) GetEdges() []*GetMappableDomains_MappableDomains_Edges {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains{}
+	}
+	return t.Edges
+}
+func (t *GetMappableDomains_MappableDomains) GetPageInfo() *GetMappableDomains_MappableDomains_PageInfo {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains{}
+	}
+	return &t.PageInfo
+}
+func (t *GetMappableDomains_MappableDomains) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains{}
+	}
+	return t.TotalCount
+}
+
+type UpdateMappableDomain_UpdateMappableDomain_MappableDomain struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Name      string     "json:\"name\" graphql:\"name\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateMappableDomain_UpdateMappableDomain_MappableDomain{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateMappableDomain_UpdateMappableDomain_MappableDomain{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetID() string {
+	if t == nil {
+		t = &UpdateMappableDomain_UpdateMappableDomain_MappableDomain{}
+	}
+	return t.ID
+}
+func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetName() string {
+	if t == nil {
+		t = &UpdateMappableDomain_UpdateMappableDomain_MappableDomain{}
+	}
+	return t.Name
+}
+func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetTags() []string {
+	if t == nil {
+		t = &UpdateMappableDomain_UpdateMappableDomain_MappableDomain{}
+	}
+	return t.Tags
+}
+func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateMappableDomain_UpdateMappableDomain_MappableDomain{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateMappableDomain_UpdateMappableDomain_MappableDomain{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateMappableDomain_UpdateMappableDomain struct {
+	MappableDomain UpdateMappableDomain_UpdateMappableDomain_MappableDomain "json:\"mappableDomain\" graphql:\"mappableDomain\""
+}
+
+func (t *UpdateMappableDomain_UpdateMappableDomain) GetMappableDomain() *UpdateMappableDomain_UpdateMappableDomain_MappableDomain {
+	if t == nil {
+		t = &UpdateMappableDomain_UpdateMappableDomain{}
+	}
+	return &t.MappableDomain
+}
+
+type GetAllMappableDomainHistories_MappableDomainHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Name        string         "json:\"name\" graphql:\"name\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllMappableDomainHistories_MappableDomainHistories_Edges struct {
+	Node *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges) GetNode() *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllMappableDomainHistories_MappableDomainHistories struct {
+	Edges      []*GetAllMappableDomainHistories_MappableDomainHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllMappableDomainHistories_MappableDomainHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllMappableDomainHistories_MappableDomainHistories) GetEdges() []*GetAllMappableDomainHistories_MappableDomainHistories_Edges {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories) GetPageInfo() *GetAllMappableDomainHistories_MappableDomainHistories_PageInfo {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetMappableDomainHistories_MappableDomainHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetMappableDomainHistories_MappableDomainHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetMappableDomainHistories_MappableDomainHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Name        string         "json:\"name\" graphql:\"name\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetMappableDomainHistories_MappableDomainHistories_Edges struct {
+	Node *GetMappableDomainHistories_MappableDomainHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges) GetNode() *GetMappableDomainHistories_MappableDomainHistories_Edges_Node {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetMappableDomainHistories_MappableDomainHistories struct {
+	Edges      []*GetMappableDomainHistories_MappableDomainHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetMappableDomainHistories_MappableDomainHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetMappableDomainHistories_MappableDomainHistories) GetEdges() []*GetMappableDomainHistories_MappableDomainHistories_Edges {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories{}
+	}
+	return t.Edges
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories) GetPageInfo() *GetMappableDomainHistories_MappableDomainHistories_PageInfo {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node struct {
@@ -52382,6 +54637,92 @@ func (t *GlobalSearch_Search_ControlObjectives) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_CustomDomains_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_CustomDomains_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_CustomDomains_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_CustomDomains_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_CustomDomains_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_CustomDomains_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_CustomDomains_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_CustomDomains_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_CustomDomains_Edges struct {
+	Node *GlobalSearch_Search_CustomDomains_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_CustomDomains_Edges) GetNode() *GlobalSearch_Search_CustomDomains_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_CustomDomains struct {
+	Edges      []*GlobalSearch_Search_CustomDomains_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_CustomDomains_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_CustomDomains) GetEdges() []*GlobalSearch_Search_CustomDomains_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_CustomDomains) GetPageInfo() *GlobalSearch_Search_CustomDomains_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_CustomDomains) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_CustomDomains{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_DocumentData_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -53315,6 +55656,92 @@ func (t *GlobalSearch_Search_Invites) GetPageInfo() *GlobalSearch_Search_Invites
 func (t *GlobalSearch_Search_Invites) GetTotalCount() int64 {
 	if t == nil {
 		t = &GlobalSearch_Search_Invites{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_MappableDomains_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_MappableDomains_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_MappableDomains_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_MappableDomains_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_MappableDomains_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_MappableDomains_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_MappableDomains_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_MappableDomains_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_MappableDomains_Edges struct {
+	Node *GlobalSearch_Search_MappableDomains_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_MappableDomains_Edges) GetNode() *GlobalSearch_Search_MappableDomains_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_MappableDomains struct {
+	Edges      []*GlobalSearch_Search_MappableDomains_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_MappableDomains_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_MappableDomains) GetEdges() []*GlobalSearch_Search_MappableDomains_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_MappableDomains) GetPageInfo() *GlobalSearch_Search_MappableDomains_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_MappableDomains) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_MappableDomains{}
 	}
 	return t.TotalCount
 }
@@ -54998,6 +57425,7 @@ type GlobalSearch_Search struct {
 	ControlImplementations *GlobalSearch_Search_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
 	ControlObjectives      *GlobalSearch_Search_ControlObjectives      "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
 	Controls               *GlobalSearch_Search_Controls               "json:\"controls,omitempty\" graphql:\"controls\""
+	CustomDomains          *GlobalSearch_Search_CustomDomains          "json:\"customDomains,omitempty\" graphql:\"customDomains\""
 	DocumentData           *GlobalSearch_Search_DocumentData           "json:\"documentData,omitempty\" graphql:\"documentData\""
 	Entities               *GlobalSearch_Search_Entities               "json:\"entities,omitempty\" graphql:\"entities\""
 	EntityTypes            *GlobalSearch_Search_EntityTypes            "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
@@ -55008,6 +57436,7 @@ type GlobalSearch_Search struct {
 	Integrations           *GlobalSearch_Search_Integrations           "json:\"integrations,omitempty\" graphql:\"integrations\""
 	InternalPolicies       *GlobalSearch_Search_InternalPolicies       "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
 	Invites                *GlobalSearch_Search_Invites                "json:\"invites,omitempty\" graphql:\"invites\""
+	MappableDomains        *GlobalSearch_Search_MappableDomains        "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
 	MappedControls         *GlobalSearch_Search_MappedControls         "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
 	Narratives             *GlobalSearch_Search_Narratives             "json:\"narratives,omitempty\" graphql:\"narratives\""
 	OrgSubscriptions       *GlobalSearch_Search_OrgSubscriptions       "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
@@ -55063,6 +57492,12 @@ func (t *GlobalSearch_Search) GetControls() *GlobalSearch_Search_Controls {
 		t = &GlobalSearch_Search{}
 	}
 	return t.Controls
+}
+func (t *GlobalSearch_Search) GetCustomDomains() *GlobalSearch_Search_CustomDomains {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.CustomDomains
 }
 func (t *GlobalSearch_Search) GetDocumentData() *GlobalSearch_Search_DocumentData {
 	if t == nil {
@@ -55123,6 +57558,12 @@ func (t *GlobalSearch_Search) GetInvites() *GlobalSearch_Search_Invites {
 		t = &GlobalSearch_Search{}
 	}
 	return t.Invites
+}
+func (t *GlobalSearch_Search) GetMappableDomains() *GlobalSearch_Search_MappableDomains {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.MappableDomains
 }
 func (t *GlobalSearch_Search) GetMappedControls() *GlobalSearch_Search_MappedControls {
 	if t == nil {
@@ -67176,6 +69617,116 @@ func (t *GetControlObjectiveHistories) GetControlObjectiveHistories() *GetContro
 	return &t.ControlObjectiveHistories
 }
 
+type CreateBulkCSVCustomDomain struct {
+	CreateBulkCSVCustomDomain CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain "json:\"createBulkCSVCustomDomain\" graphql:\"createBulkCSVCustomDomain\""
+}
+
+func (t *CreateBulkCSVCustomDomain) GetCreateBulkCSVCustomDomain() *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain{}
+	}
+	return &t.CreateBulkCSVCustomDomain
+}
+
+type CreateBulkCustomDomain struct {
+	CreateBulkCustomDomain CreateBulkCustomDomain_CreateBulkCustomDomain "json:\"createBulkCustomDomain\" graphql:\"createBulkCustomDomain\""
+}
+
+func (t *CreateBulkCustomDomain) GetCreateBulkCustomDomain() *CreateBulkCustomDomain_CreateBulkCustomDomain {
+	if t == nil {
+		t = &CreateBulkCustomDomain{}
+	}
+	return &t.CreateBulkCustomDomain
+}
+
+type CreateCustomDomain struct {
+	CreateCustomDomain CreateCustomDomain_CreateCustomDomain "json:\"createCustomDomain\" graphql:\"createCustomDomain\""
+}
+
+func (t *CreateCustomDomain) GetCreateCustomDomain() *CreateCustomDomain_CreateCustomDomain {
+	if t == nil {
+		t = &CreateCustomDomain{}
+	}
+	return &t.CreateCustomDomain
+}
+
+type DeleteCustomDomain struct {
+	DeleteCustomDomain DeleteCustomDomain_DeleteCustomDomain "json:\"deleteCustomDomain\" graphql:\"deleteCustomDomain\""
+}
+
+func (t *DeleteCustomDomain) GetDeleteCustomDomain() *DeleteCustomDomain_DeleteCustomDomain {
+	if t == nil {
+		t = &DeleteCustomDomain{}
+	}
+	return &t.DeleteCustomDomain
+}
+
+type GetAllCustomDomains struct {
+	CustomDomains GetAllCustomDomains_CustomDomains "json:\"customDomains\" graphql:\"customDomains\""
+}
+
+func (t *GetAllCustomDomains) GetCustomDomains() *GetAllCustomDomains_CustomDomains {
+	if t == nil {
+		t = &GetAllCustomDomains{}
+	}
+	return &t.CustomDomains
+}
+
+type GetCustomDomainByID struct {
+	CustomDomain GetCustomDomainByID_CustomDomain "json:\"customDomain\" graphql:\"customDomain\""
+}
+
+func (t *GetCustomDomainByID) GetCustomDomain() *GetCustomDomainByID_CustomDomain {
+	if t == nil {
+		t = &GetCustomDomainByID{}
+	}
+	return &t.CustomDomain
+}
+
+type GetCustomDomains struct {
+	CustomDomains GetCustomDomains_CustomDomains "json:\"customDomains\" graphql:\"customDomains\""
+}
+
+func (t *GetCustomDomains) GetCustomDomains() *GetCustomDomains_CustomDomains {
+	if t == nil {
+		t = &GetCustomDomains{}
+	}
+	return &t.CustomDomains
+}
+
+type UpdateCustomDomain struct {
+	UpdateCustomDomain UpdateCustomDomain_UpdateCustomDomain "json:\"updateCustomDomain\" graphql:\"updateCustomDomain\""
+}
+
+func (t *UpdateCustomDomain) GetUpdateCustomDomain() *UpdateCustomDomain_UpdateCustomDomain {
+	if t == nil {
+		t = &UpdateCustomDomain{}
+	}
+	return &t.UpdateCustomDomain
+}
+
+type GetAllCustomDomainHistories struct {
+	CustomDomainHistories GetAllCustomDomainHistories_CustomDomainHistories "json:\"customDomainHistories\" graphql:\"customDomainHistories\""
+}
+
+func (t *GetAllCustomDomainHistories) GetCustomDomainHistories() *GetAllCustomDomainHistories_CustomDomainHistories {
+	if t == nil {
+		t = &GetAllCustomDomainHistories{}
+	}
+	return &t.CustomDomainHistories
+}
+
+type GetCustomDomainHistories struct {
+	CustomDomainHistories GetCustomDomainHistories_CustomDomainHistories "json:\"customDomainHistories\" graphql:\"customDomainHistories\""
+}
+
+func (t *GetCustomDomainHistories) GetCustomDomainHistories() *GetCustomDomainHistories_CustomDomainHistories {
+	if t == nil {
+		t = &GetCustomDomainHistories{}
+	}
+	return &t.CustomDomainHistories
+}
+
 type CreateDocumentData struct {
 	CreateDocumentData CreateDocumentData_CreateDocumentData "json:\"createDocumentData\" graphql:\"createDocumentData\""
 }
@@ -68406,6 +70957,116 @@ func (t *InvitesByOrgID) GetInvites() *InvitesByOrgID_Invites {
 		t = &InvitesByOrgID{}
 	}
 	return &t.Invites
+}
+
+type CreateBulkCSVMappableDomain struct {
+	CreateBulkCSVMappableDomain CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain "json:\"createBulkCSVMappableDomain\" graphql:\"createBulkCSVMappableDomain\""
+}
+
+func (t *CreateBulkCSVMappableDomain) GetCreateBulkCSVMappableDomain() *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain{}
+	}
+	return &t.CreateBulkCSVMappableDomain
+}
+
+type CreateBulkMappableDomain struct {
+	CreateBulkMappableDomain CreateBulkMappableDomain_CreateBulkMappableDomain "json:\"createBulkMappableDomain\" graphql:\"createBulkMappableDomain\""
+}
+
+func (t *CreateBulkMappableDomain) GetCreateBulkMappableDomain() *CreateBulkMappableDomain_CreateBulkMappableDomain {
+	if t == nil {
+		t = &CreateBulkMappableDomain{}
+	}
+	return &t.CreateBulkMappableDomain
+}
+
+type CreateMappableDomain struct {
+	CreateMappableDomain CreateMappableDomain_CreateMappableDomain "json:\"createMappableDomain\" graphql:\"createMappableDomain\""
+}
+
+func (t *CreateMappableDomain) GetCreateMappableDomain() *CreateMappableDomain_CreateMappableDomain {
+	if t == nil {
+		t = &CreateMappableDomain{}
+	}
+	return &t.CreateMappableDomain
+}
+
+type DeleteMappableDomain struct {
+	DeleteMappableDomain DeleteMappableDomain_DeleteMappableDomain "json:\"deleteMappableDomain\" graphql:\"deleteMappableDomain\""
+}
+
+func (t *DeleteMappableDomain) GetDeleteMappableDomain() *DeleteMappableDomain_DeleteMappableDomain {
+	if t == nil {
+		t = &DeleteMappableDomain{}
+	}
+	return &t.DeleteMappableDomain
+}
+
+type GetAllMappableDomains struct {
+	MappableDomains GetAllMappableDomains_MappableDomains "json:\"mappableDomains\" graphql:\"mappableDomains\""
+}
+
+func (t *GetAllMappableDomains) GetMappableDomains() *GetAllMappableDomains_MappableDomains {
+	if t == nil {
+		t = &GetAllMappableDomains{}
+	}
+	return &t.MappableDomains
+}
+
+type GetMappableDomainByID struct {
+	MappableDomain GetMappableDomainByID_MappableDomain "json:\"mappableDomain\" graphql:\"mappableDomain\""
+}
+
+func (t *GetMappableDomainByID) GetMappableDomain() *GetMappableDomainByID_MappableDomain {
+	if t == nil {
+		t = &GetMappableDomainByID{}
+	}
+	return &t.MappableDomain
+}
+
+type GetMappableDomains struct {
+	MappableDomains GetMappableDomains_MappableDomains "json:\"mappableDomains\" graphql:\"mappableDomains\""
+}
+
+func (t *GetMappableDomains) GetMappableDomains() *GetMappableDomains_MappableDomains {
+	if t == nil {
+		t = &GetMappableDomains{}
+	}
+	return &t.MappableDomains
+}
+
+type UpdateMappableDomain struct {
+	UpdateMappableDomain UpdateMappableDomain_UpdateMappableDomain "json:\"updateMappableDomain\" graphql:\"updateMappableDomain\""
+}
+
+func (t *UpdateMappableDomain) GetUpdateMappableDomain() *UpdateMappableDomain_UpdateMappableDomain {
+	if t == nil {
+		t = &UpdateMappableDomain{}
+	}
+	return &t.UpdateMappableDomain
+}
+
+type GetAllMappableDomainHistories struct {
+	MappableDomainHistories GetAllMappableDomainHistories_MappableDomainHistories "json:\"mappableDomainHistories\" graphql:\"mappableDomainHistories\""
+}
+
+func (t *GetAllMappableDomainHistories) GetMappableDomainHistories() *GetAllMappableDomainHistories_MappableDomainHistories {
+	if t == nil {
+		t = &GetAllMappableDomainHistories{}
+	}
+	return &t.MappableDomainHistories
+}
+
+type GetMappableDomainHistories struct {
+	MappableDomainHistories GetMappableDomainHistories_MappableDomainHistories "json:\"mappableDomainHistories\" graphql:\"mappableDomainHistories\""
+}
+
+func (t *GetMappableDomainHistories) GetMappableDomainHistories() *GetMappableDomainHistories_MappableDomainHistories {
+	if t == nil {
+		t = &GetMappableDomainHistories{}
+	}
+	return &t.MappableDomainHistories
 }
 
 type CreateBulkCSVMappedControl struct {
@@ -70881,6 +73542,25 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				}
 			}
 		}
+		customDomains {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					deletedBy
+					id
+					tags
+					ownerID
+					cnameRecord
+					mappableDomainID
+				}
+			}
+		}
 		documentData {
 			totalCount
 			pageInfo {
@@ -71088,6 +73768,23 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					recipient
 					requestorID
+				}
+			}
+		}
+		mappableDomains {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					deletedBy
+					id
+					tags
+					name
 				}
 			}
 		}
@@ -73956,6 +76653,404 @@ func (c *Client) GetControlObjectiveHistories(ctx context.Context, where *Contro
 
 	var res GetControlObjectiveHistories
 	if err := c.Client.Post(ctx, "GetControlObjectiveHistories", GetControlObjectiveHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVCustomDomainDocument = `mutation CreateBulkCSVCustomDomain ($input: Upload!) {
+	createBulkCSVCustomDomain(input: $input) {
+		customDomains {
+			cnameRecord
+			createdAt
+			createdBy
+			id
+			mappableDomainID
+			ownerID
+			status
+			tags
+			txtRecordSubdomain
+			txtRecordValue
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVCustomDomain(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCustomDomain, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVCustomDomain
+	if err := c.Client.Post(ctx, "CreateBulkCSVCustomDomain", CreateBulkCSVCustomDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCustomDomainDocument = `mutation CreateBulkCustomDomain ($input: [CreateCustomDomainInput!]) {
+	createBulkCustomDomain(input: $input) {
+		customDomains {
+			cnameRecord
+			createdAt
+			createdBy
+			id
+			mappableDomainID
+			ownerID
+			status
+			tags
+			txtRecordSubdomain
+			txtRecordValue
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCustomDomain(ctx context.Context, input []*CreateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCustomDomain, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCustomDomain
+	if err := c.Client.Post(ctx, "CreateBulkCustomDomain", CreateBulkCustomDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateCustomDomainDocument = `mutation CreateCustomDomain ($input: CreateCustomDomainInput!) {
+	createCustomDomain(input: $input) {
+		customDomain {
+			cnameRecord
+			createdAt
+			createdBy
+			id
+			mappableDomainID
+			ownerID
+			status
+			tags
+			txtRecordSubdomain
+			txtRecordValue
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateCustomDomain(ctx context.Context, input CreateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateCustomDomain, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateCustomDomain
+	if err := c.Client.Post(ctx, "CreateCustomDomain", CreateCustomDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteCustomDomainDocument = `mutation DeleteCustomDomain ($deleteCustomDomainId: ID!) {
+	deleteCustomDomain(id: $deleteCustomDomainId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteCustomDomain(ctx context.Context, deleteCustomDomainID string, interceptors ...clientv2.RequestInterceptor) (*DeleteCustomDomain, error) {
+	vars := map[string]any{
+		"deleteCustomDomainId": deleteCustomDomainID,
+	}
+
+	var res DeleteCustomDomain
+	if err := c.Client.Post(ctx, "DeleteCustomDomain", DeleteCustomDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllCustomDomainsDocument = `query GetAllCustomDomains {
+	customDomains {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cnameRecord
+				createdAt
+				createdBy
+				id
+				mappableDomainID
+				ownerID
+				status
+				tags
+				txtRecordSubdomain
+				txtRecordValue
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllCustomDomains(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllCustomDomains, error) {
+	vars := map[string]any{}
+
+	var res GetAllCustomDomains
+	if err := c.Client.Post(ctx, "GetAllCustomDomains", GetAllCustomDomainsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetCustomDomainByIDDocument = `query GetCustomDomainByID ($customDomainId: ID!) {
+	customDomain(id: $customDomainId) {
+		cnameRecord
+		createdAt
+		createdBy
+		id
+		mappableDomainID
+		ownerID
+		status
+		tags
+		txtRecordSubdomain
+		txtRecordValue
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetCustomDomainByID(ctx context.Context, customDomainID string, interceptors ...clientv2.RequestInterceptor) (*GetCustomDomainByID, error) {
+	vars := map[string]any{
+		"customDomainId": customDomainID,
+	}
+
+	var res GetCustomDomainByID
+	if err := c.Client.Post(ctx, "GetCustomDomainByID", GetCustomDomainByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetCustomDomainsDocument = `query GetCustomDomains ($first: Int, $last: Int, $where: CustomDomainWhereInput) {
+	customDomains(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cnameRecord
+				createdAt
+				createdBy
+				id
+				mappableDomainID
+				ownerID
+				status
+				tags
+				txtRecordSubdomain
+				txtRecordValue
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetCustomDomains(ctx context.Context, first *int64, last *int64, where *CustomDomainWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCustomDomains, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetCustomDomains
+	if err := c.Client.Post(ctx, "GetCustomDomains", GetCustomDomainsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateCustomDomainDocument = `mutation UpdateCustomDomain ($updateCustomDomainId: ID!, $input: UpdateCustomDomainInput!) {
+	updateCustomDomain(id: $updateCustomDomainId, input: $input) {
+		customDomain {
+			cnameRecord
+			createdAt
+			createdBy
+			id
+			mappableDomainID
+			ownerID
+			status
+			tags
+			txtRecordSubdomain
+			txtRecordValue
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateCustomDomain(ctx context.Context, updateCustomDomainID string, input UpdateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCustomDomain, error) {
+	vars := map[string]any{
+		"updateCustomDomainId": updateCustomDomainID,
+		"input":                input,
+	}
+
+	var res UpdateCustomDomain
+	if err := c.Client.Post(ctx, "UpdateCustomDomain", UpdateCustomDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllCustomDomainHistoriesDocument = `query GetAllCustomDomainHistories {
+	customDomainHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cnameRecord
+				createdAt
+				createdBy
+				historyTime
+				id
+				mappableDomainID
+				operation
+				ownerID
+				ref
+				status
+				tags
+				txtRecordSubdomain
+				txtRecordValue
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllCustomDomainHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllCustomDomainHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllCustomDomainHistories
+	if err := c.Client.Post(ctx, "GetAllCustomDomainHistories", GetAllCustomDomainHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetCustomDomainHistoriesDocument = `query GetCustomDomainHistories ($first: Int, $last: Int, $where: CustomDomainHistoryWhereInput) {
+	customDomainHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cnameRecord
+				createdAt
+				createdBy
+				historyTime
+				id
+				mappableDomainID
+				operation
+				ownerID
+				ref
+				status
+				tags
+				txtRecordSubdomain
+				txtRecordValue
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetCustomDomainHistories(ctx context.Context, first *int64, last *int64, where *CustomDomainHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCustomDomainHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetCustomDomainHistories
+	if err := c.Client.Post(ctx, "GetCustomDomainHistories", GetCustomDomainHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -79080,6 +82175,359 @@ func (c *Client) InvitesByOrgID(ctx context.Context, where *InviteWhereInput, in
 
 	var res InvitesByOrgID
 	if err := c.Client.Post(ctx, "InvitesByOrgID", InvitesByOrgIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVMappableDomainDocument = `mutation CreateBulkCSVMappableDomain ($input: Upload!) {
+	createBulkCSVMappableDomain(input: $input) {
+		mappableDomains {
+			createdAt
+			createdBy
+			id
+			name
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVMappableDomain, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVMappableDomain
+	if err := c.Client.Post(ctx, "CreateBulkCSVMappableDomain", CreateBulkCSVMappableDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkMappableDomainDocument = `mutation CreateBulkMappableDomain ($input: [CreateMappableDomainInput!]) {
+	createBulkMappableDomain(input: $input) {
+		mappableDomains {
+			createdAt
+			createdBy
+			id
+			name
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkMappableDomain(ctx context.Context, input []*CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkMappableDomain, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkMappableDomain
+	if err := c.Client.Post(ctx, "CreateBulkMappableDomain", CreateBulkMappableDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateMappableDomainDocument = `mutation CreateMappableDomain ($input: CreateMappableDomainInput!) {
+	createMappableDomain(input: $input) {
+		mappableDomain {
+			createdAt
+			createdBy
+			id
+			name
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateMappableDomain(ctx context.Context, input CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateMappableDomain, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateMappableDomain
+	if err := c.Client.Post(ctx, "CreateMappableDomain", CreateMappableDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteMappableDomainDocument = `mutation DeleteMappableDomain ($deleteMappableDomainId: ID!) {
+	deleteMappableDomain(id: $deleteMappableDomainId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteMappableDomain(ctx context.Context, deleteMappableDomainID string, interceptors ...clientv2.RequestInterceptor) (*DeleteMappableDomain, error) {
+	vars := map[string]any{
+		"deleteMappableDomainId": deleteMappableDomainID,
+	}
+
+	var res DeleteMappableDomain
+	if err := c.Client.Post(ctx, "DeleteMappableDomain", DeleteMappableDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllMappableDomainsDocument = `query GetAllMappableDomains {
+	mappableDomains {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				name
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllMappableDomains(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllMappableDomains, error) {
+	vars := map[string]any{}
+
+	var res GetAllMappableDomains
+	if err := c.Client.Post(ctx, "GetAllMappableDomains", GetAllMappableDomainsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetMappableDomainByIDDocument = `query GetMappableDomainByID ($mappableDomainId: ID!) {
+	mappableDomain(id: $mappableDomainId) {
+		createdAt
+		createdBy
+		id
+		name
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetMappableDomainByID(ctx context.Context, mappableDomainID string, interceptors ...clientv2.RequestInterceptor) (*GetMappableDomainByID, error) {
+	vars := map[string]any{
+		"mappableDomainId": mappableDomainID,
+	}
+
+	var res GetMappableDomainByID
+	if err := c.Client.Post(ctx, "GetMappableDomainByID", GetMappableDomainByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetMappableDomainsDocument = `query GetMappableDomains ($first: Int, $last: Int, $where: MappableDomainWhereInput) {
+	mappableDomains(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				name
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetMappableDomains(ctx context.Context, first *int64, last *int64, where *MappableDomainWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappableDomains, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetMappableDomains
+	if err := c.Client.Post(ctx, "GetMappableDomains", GetMappableDomainsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateMappableDomainDocument = `mutation UpdateMappableDomain ($updateMappableDomainId: ID!, $input: UpdateMappableDomainInput!) {
+	updateMappableDomain(id: $updateMappableDomainId, input: $input) {
+		mappableDomain {
+			createdAt
+			createdBy
+			id
+			name
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateMappableDomain(ctx context.Context, updateMappableDomainID string, input UpdateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*UpdateMappableDomain, error) {
+	vars := map[string]any{
+		"updateMappableDomainId": updateMappableDomainID,
+		"input":                  input,
+	}
+
+	var res UpdateMappableDomain
+	if err := c.Client.Post(ctx, "UpdateMappableDomain", UpdateMappableDomainDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllMappableDomainHistoriesDocument = `query GetAllMappableDomainHistories {
+	mappableDomainHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				name
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllMappableDomainHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllMappableDomainHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllMappableDomainHistories
+	if err := c.Client.Post(ctx, "GetAllMappableDomainHistories", GetAllMappableDomainHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetMappableDomainHistoriesDocument = `query GetMappableDomainHistories ($first: Int, $last: Int, $where: MappableDomainHistoryWhereInput) {
+	mappableDomainHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				name
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetMappableDomainHistories(ctx context.Context, first *int64, last *int64, where *MappableDomainHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappableDomainHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetMappableDomainHistories
+	if err := c.Client.Post(ctx, "GetMappableDomainHistories", GetMappableDomainHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -84521,6 +87969,21 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		customDomains {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
 		documentData {
 			totalCount
 			pageInfo {
@@ -84679,6 +88142,21 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				node {
 					id
 					recipient
+				}
+			}
+		}
+		mappableDomains {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
 				}
 			}
 		}
@@ -88221,6 +91699,16 @@ var DocumentOperationNames = map[string]string{
 	UpdateControlObjectiveDocument:               "UpdateControlObjective",
 	GetAllControlObjectiveHistoriesDocument:      "GetAllControlObjectiveHistories",
 	GetControlObjectiveHistoriesDocument:         "GetControlObjectiveHistories",
+	CreateBulkCSVCustomDomainDocument:            "CreateBulkCSVCustomDomain",
+	CreateBulkCustomDomainDocument:               "CreateBulkCustomDomain",
+	CreateCustomDomainDocument:                   "CreateCustomDomain",
+	DeleteCustomDomainDocument:                   "DeleteCustomDomain",
+	GetAllCustomDomainsDocument:                  "GetAllCustomDomains",
+	GetCustomDomainByIDDocument:                  "GetCustomDomainByID",
+	GetCustomDomainsDocument:                     "GetCustomDomains",
+	UpdateCustomDomainDocument:                   "UpdateCustomDomain",
+	GetAllCustomDomainHistoriesDocument:          "GetAllCustomDomainHistories",
+	GetCustomDomainHistoriesDocument:             "GetCustomDomainHistories",
 	CreateDocumentDataDocument:                   "CreateDocumentData",
 	DeleteDocumentDataDocument:                   "DeleteDocumentData",
 	GetDocumentDataByIDDocument:                  "GetDocumentDataByID",
@@ -88333,6 +91821,16 @@ var DocumentOperationNames = map[string]string{
 	GetAllInvitesDocument:                        "GetAllInvites",
 	GetInviteByIDDocument:                        "GetInviteByID",
 	InvitesByOrgIDDocument:                       "InvitesByOrgID",
+	CreateBulkCSVMappableDomainDocument:          "CreateBulkCSVMappableDomain",
+	CreateBulkMappableDomainDocument:             "CreateBulkMappableDomain",
+	CreateMappableDomainDocument:                 "CreateMappableDomain",
+	DeleteMappableDomainDocument:                 "DeleteMappableDomain",
+	GetAllMappableDomainsDocument:                "GetAllMappableDomains",
+	GetMappableDomainByIDDocument:                "GetMappableDomainByID",
+	GetMappableDomainsDocument:                   "GetMappableDomains",
+	UpdateMappableDomainDocument:                 "UpdateMappableDomain",
+	GetAllMappableDomainHistoriesDocument:        "GetAllMappableDomainHistories",
+	GetMappableDomainHistoriesDocument:           "GetMappableDomainHistories",
 	CreateBulkCSVMappedControlDocument:           "CreateBulkCSVMappedControl",
 	CreateBulkMappedControlDocument:              "CreateBulkMappedControl",
 	CreateMappedControlDocument:                  "CreateMappedControl",

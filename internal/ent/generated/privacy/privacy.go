@@ -375,6 +375,54 @@ func (f ControlObjectiveHistoryMutationRuleFunc) EvalMutation(ctx context.Contex
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ControlObjectiveHistoryMutation", m)
 }
 
+// The CustomDomainQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CustomDomainQueryRuleFunc func(context.Context, *generated.CustomDomainQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CustomDomainQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CustomDomainQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.CustomDomainQuery", q)
+}
+
+// The CustomDomainMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CustomDomainMutationRuleFunc func(context.Context, *generated.CustomDomainMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CustomDomainMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.CustomDomainMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.CustomDomainMutation", m)
+}
+
+// The CustomDomainHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CustomDomainHistoryQueryRuleFunc func(context.Context, *generated.CustomDomainHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CustomDomainHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CustomDomainHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.CustomDomainHistoryQuery", q)
+}
+
+// The CustomDomainHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CustomDomainHistoryMutationRuleFunc func(context.Context, *generated.CustomDomainHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CustomDomainHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.CustomDomainHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.CustomDomainHistoryMutation", m)
+}
+
 // The DocumentDataQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type DocumentDataQueryRuleFunc func(context.Context, *generated.DocumentDataQuery) error
@@ -997,6 +1045,54 @@ func (f InviteMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mu
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.InviteMutation", m)
+}
+
+// The MappableDomainQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type MappableDomainQueryRuleFunc func(context.Context, *generated.MappableDomainQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f MappableDomainQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.MappableDomainQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.MappableDomainQuery", q)
+}
+
+// The MappableDomainMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type MappableDomainMutationRuleFunc func(context.Context, *generated.MappableDomainMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f MappableDomainMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.MappableDomainMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.MappableDomainMutation", m)
+}
+
+// The MappableDomainHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type MappableDomainHistoryQueryRuleFunc func(context.Context, *generated.MappableDomainHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f MappableDomainHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.MappableDomainHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.MappableDomainHistoryQuery", q)
+}
+
+// The MappableDomainHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type MappableDomainHistoryMutationRuleFunc func(context.Context, *generated.MappableDomainHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f MappableDomainHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.MappableDomainHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.MappableDomainHistoryMutation", m)
 }
 
 // The MappedControlQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -2016,6 +2112,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.ControlObjectiveHistoryQuery:
 		return q.Filter(), nil
+	case *generated.CustomDomainQuery:
+		return q.Filter(), nil
+	case *generated.CustomDomainHistoryQuery:
+		return q.Filter(), nil
 	case *generated.DocumentDataQuery:
 		return q.Filter(), nil
 	case *generated.DocumentDataHistoryQuery:
@@ -2067,6 +2167,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 	case *generated.InternalPolicyHistoryQuery:
 		return q.Filter(), nil
 	case *generated.InviteQuery:
+		return q.Filter(), nil
+	case *generated.MappableDomainQuery:
+		return q.Filter(), nil
+	case *generated.MappableDomainHistoryQuery:
 		return q.Filter(), nil
 	case *generated.MappedControlQuery:
 		return q.Filter(), nil
@@ -2177,6 +2281,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.ControlObjectiveHistoryMutation:
 		return m.Filter(), nil
+	case *generated.CustomDomainMutation:
+		return m.Filter(), nil
+	case *generated.CustomDomainHistoryMutation:
+		return m.Filter(), nil
 	case *generated.DocumentDataMutation:
 		return m.Filter(), nil
 	case *generated.DocumentDataHistoryMutation:
@@ -2228,6 +2336,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.InternalPolicyHistoryMutation:
 		return m.Filter(), nil
 	case *generated.InviteMutation:
+		return m.Filter(), nil
+	case *generated.MappableDomainMutation:
+		return m.Filter(), nil
+	case *generated.MappableDomainHistoryMutation:
 		return m.Filter(), nil
 	case *generated.MappedControlMutation:
 		return m.Filter(), nil

@@ -33,6 +33,8 @@ type SchemaConfig struct {
 	ControlObjectiveViewers          string // ControlObjective-viewers->Group table.
 	ControlObjectiveTasks            string // ControlObjective-tasks->Task table.
 	ControlObjectiveHistory          string // ControlObjectiveHistory table.
+	CustomDomain                     string // CustomDomain table.
+	CustomDomainHistory              string // CustomDomainHistory table.
 	DocumentData                     string // DocumentData table.
 	DocumentDataFiles                string // DocumentData-files->File table.
 	DocumentDataHistory              string // DocumentDataHistory table.
@@ -85,6 +87,8 @@ type SchemaConfig struct {
 	InternalPolicyHistory            string // InternalPolicyHistory table.
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
+	MappableDomain                   string // MappableDomain table.
+	MappableDomainHistory            string // MappableDomainHistory table.
 	MappedControl                    string // MappedControl table.
 	MappedControlControls            string // MappedControl-controls->Control table.
 	MappedControlSubcontrols         string // MappedControl-subcontrols->Subcontrol table.

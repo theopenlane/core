@@ -133,6 +133,8 @@ const (
 	EdgeStandards = "standards"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
+	// EdgeCustomDomains holds the string denoting the custom_domains edge name in mutations.
+	EdgeCustomDomains = "custom_domains"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -424,6 +426,13 @@ const (
 	ActionPlansInverseTable = "action_plans"
 	// ActionPlansColumn is the table column denoting the action_plans relation/edge.
 	ActionPlansColumn = "owner_id"
+	// CustomDomainsTable is the table that holds the custom_domains relation/edge.
+	CustomDomainsTable = "custom_domains"
+	// CustomDomainsInverseTable is the table name for the CustomDomain entity.
+	// It exists in this package in order to avoid circular dependency with the "customdomain" package.
+	CustomDomainsInverseTable = "custom_domains"
+	// CustomDomainsColumn is the table column denoting the custom_domains relation/edge.
+	CustomDomainsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1180,6 +1189,20 @@ func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCustomDomainsCount orders the results by custom_domains count.
+func ByCustomDomainsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCustomDomainsStep(), opts...)
+	}
+}
+
+// ByCustomDomains orders the results by custom_domains terms.
+func ByCustomDomains(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCustomDomainsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1492,6 +1515,13 @@ func newActionPlansStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ActionPlansInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ActionPlansTable, ActionPlansColumn),
+	)
+}
+func newCustomDomainsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CustomDomainsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CustomDomainsTable, CustomDomainsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

@@ -146,13 +146,15 @@ type OrganizationEdges struct {
 	Standards []*Standard `json:"standards,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
+	// CustomDomains holds the value of the custom_domains edge.
+	CustomDomains []*CustomDomain `json:"custom_domains,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [44]bool
+	loadedTypes [45]bool
 	// totalCount holds the count of the edges above.
-	totalCount [44]map[string]int
+	totalCount [45]map[string]int
 
 	namedControlCreators          map[string][]*Group
 	namedControlObjectiveCreators map[string][]*Group
@@ -194,6 +196,7 @@ type OrganizationEdges struct {
 	namedEvidence                 map[string][]*Evidence
 	namedStandards                map[string][]*Standard
 	namedActionPlans              map[string][]*ActionPlan
+	namedCustomDomains            map[string][]*CustomDomain
 	namedMembers                  map[string][]*OrgMembership
 }
 
@@ -590,10 +593,19 @@ func (e OrganizationEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
+// CustomDomainsOrErr returns the CustomDomains value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) CustomDomainsOrErr() ([]*CustomDomain, error) {
+	if e.loadedTypes[43] {
+		return e.CustomDomains, nil
+	}
+	return nil, &NotLoadedError{edge: "custom_domains"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[43] {
+	if e.loadedTypes[44] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -960,6 +972,11 @@ func (o *Organization) QueryStandards() *StandardQuery {
 // QueryActionPlans queries the "action_plans" edge of the Organization entity.
 func (o *Organization) QueryActionPlans() *ActionPlanQuery {
 	return NewOrganizationClient(o.config).QueryActionPlans(o)
+}
+
+// QueryCustomDomains queries the "custom_domains" edge of the Organization entity.
+func (o *Organization) QueryCustomDomains() *CustomDomainQuery {
+	return NewOrganizationClient(o.config).QueryCustomDomains(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2004,6 +2021,30 @@ func (o *Organization) appendNamedActionPlans(name string, edges ...*ActionPlan)
 		o.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
 		o.Edges.namedActionPlans[name] = append(o.Edges.namedActionPlans[name], edges...)
+	}
+}
+
+// NamedCustomDomains returns the CustomDomains named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedCustomDomains(name string) ([]*CustomDomain, error) {
+	if o.Edges.namedCustomDomains == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedCustomDomains[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedCustomDomains(name string, edges ...*CustomDomain) {
+	if o.Edges.namedCustomDomains == nil {
+		o.Edges.namedCustomDomains = make(map[string][]*CustomDomain)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedCustomDomains[name] = []*CustomDomain{}
+	} else {
+		o.Edges.namedCustomDomains[name] = append(o.Edges.namedCustomDomains[name], edges...)
 	}
 }
 

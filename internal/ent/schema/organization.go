@@ -306,6 +306,11 @@ func (o Organization) Edges() []ent.Edge {
 			edgeSchema:         ActionPlan{},
 			cascadeDeleteOwner: true,
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         CustomDomain{},
+			cascadeDeleteOwner: true,
+		}),
 	}
 }
 

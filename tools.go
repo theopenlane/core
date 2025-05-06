@@ -10,4 +10,5 @@ import (
 	_ "github.com/Yamashou/gqlgenc"
 	_ "github.com/oNaiPs/go-generate-fast"
 	_ "github.com/openfga/go-sdk"
+	_ "github.com/vektra/mockery/v3"
 )

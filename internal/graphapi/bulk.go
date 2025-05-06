@@ -123,6 +123,25 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 	}, nil
 }
 
+// bulkCreateCustomDomain uses the CreateBulk function to create multiple CustomDomain entities
+func (r *mutationResolver) bulkCreateCustomDomain(ctx context.Context, input []*generated.CreateCustomDomainInput) (*model.CustomDomainBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.CustomDomainCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.CustomDomain.Create().SetInput(*data)
+	}
+
+	res, err := c.CustomDomain.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "customdomain"})
+	}
+
+	// return response
+	return &model.CustomDomainBulkCreatePayload{
+		CustomDomains: res,
+	}, nil
+}
+
 // bulkCreateDocumentData uses the CreateBulk function to create multiple DocumentData entities
 func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -329,6 +348,25 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	// return response
 	return &model.InviteBulkCreatePayload{
 		Invites: res,
+	}, nil
+}
+
+// bulkCreateMappableDomain uses the CreateBulk function to create multiple MappableDomain entities
+func (r *mutationResolver) bulkCreateMappableDomain(ctx context.Context, input []*generated.CreateMappableDomainInput) (*model.MappableDomainBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.MappableDomainCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.MappableDomain.Create().SetInput(*data)
+	}
+
+	res, err := c.MappableDomain.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "mappabledomain"})
+	}
+
+	// return response
+	return &model.MappableDomainBulkCreatePayload{
+		MappableDomains: res,
 	}, nil
 }
 

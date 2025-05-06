@@ -19,6 +19,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -45,6 +47,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -439,6 +443,60 @@ func (f TraverseControlObjectiveHistory) Traverse(ctx context.Context, q generat
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.ControlObjectiveHistoryQuery", q)
+}
+
+// The CustomDomainFunc type is an adapter to allow the use of ordinary function as a Querier.
+type CustomDomainFunc func(context.Context, *generated.CustomDomainQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f CustomDomainFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.CustomDomainQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.CustomDomainQuery", q)
+}
+
+// The TraverseCustomDomain type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseCustomDomain func(context.Context, *generated.CustomDomainQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseCustomDomain) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseCustomDomain) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CustomDomainQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.CustomDomainQuery", q)
+}
+
+// The CustomDomainHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type CustomDomainHistoryFunc func(context.Context, *generated.CustomDomainHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f CustomDomainHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.CustomDomainHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.CustomDomainHistoryQuery", q)
+}
+
+// The TraverseCustomDomainHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseCustomDomainHistory func(context.Context, *generated.CustomDomainHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseCustomDomainHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseCustomDomainHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CustomDomainHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.CustomDomainHistoryQuery", q)
 }
 
 // The DocumentDataFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1141,6 +1199,60 @@ func (f TraverseInvite) Traverse(ctx context.Context, q generated.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.InviteQuery", q)
+}
+
+// The MappableDomainFunc type is an adapter to allow the use of ordinary function as a Querier.
+type MappableDomainFunc func(context.Context, *generated.MappableDomainQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f MappableDomainFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.MappableDomainQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.MappableDomainQuery", q)
+}
+
+// The TraverseMappableDomain type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseMappableDomain func(context.Context, *generated.MappableDomainQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseMappableDomain) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseMappableDomain) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.MappableDomainQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.MappableDomainQuery", q)
+}
+
+// The MappableDomainHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type MappableDomainHistoryFunc func(context.Context, *generated.MappableDomainHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f MappableDomainHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.MappableDomainHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.MappableDomainHistoryQuery", q)
+}
+
+// The TraverseMappableDomainHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseMappableDomainHistory func(context.Context, *generated.MappableDomainHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseMappableDomainHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseMappableDomainHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.MappableDomainHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.MappableDomainHistoryQuery", q)
 }
 
 // The MappedControlFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2248,6 +2360,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ControlObjectiveQuery, predicate.ControlObjective, controlobjective.OrderOption]{typ: generated.TypeControlObjective, tq: q}, nil
 	case *generated.ControlObjectiveHistoryQuery:
 		return &query[*generated.ControlObjectiveHistoryQuery, predicate.ControlObjectiveHistory, controlobjectivehistory.OrderOption]{typ: generated.TypeControlObjectiveHistory, tq: q}, nil
+	case *generated.CustomDomainQuery:
+		return &query[*generated.CustomDomainQuery, predicate.CustomDomain, customdomain.OrderOption]{typ: generated.TypeCustomDomain, tq: q}, nil
+	case *generated.CustomDomainHistoryQuery:
+		return &query[*generated.CustomDomainHistoryQuery, predicate.CustomDomainHistory, customdomainhistory.OrderOption]{typ: generated.TypeCustomDomainHistory, tq: q}, nil
 	case *generated.DocumentDataQuery:
 		return &query[*generated.DocumentDataQuery, predicate.DocumentData, documentdata.OrderOption]{typ: generated.TypeDocumentData, tq: q}, nil
 	case *generated.DocumentDataHistoryQuery:
@@ -2300,6 +2416,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.InternalPolicyHistoryQuery, predicate.InternalPolicyHistory, internalpolicyhistory.OrderOption]{typ: generated.TypeInternalPolicyHistory, tq: q}, nil
 	case *generated.InviteQuery:
 		return &query[*generated.InviteQuery, predicate.Invite, invite.OrderOption]{typ: generated.TypeInvite, tq: q}, nil
+	case *generated.MappableDomainQuery:
+		return &query[*generated.MappableDomainQuery, predicate.MappableDomain, mappabledomain.OrderOption]{typ: generated.TypeMappableDomain, tq: q}, nil
+	case *generated.MappableDomainHistoryQuery:
+		return &query[*generated.MappableDomainHistoryQuery, predicate.MappableDomainHistory, mappabledomainhistory.OrderOption]{typ: generated.TypeMappableDomainHistory, tq: q}, nil
 	case *generated.MappedControlQuery:
 		return &query[*generated.MappedControlQuery, predicate.MappedControl, mappedcontrol.OrderOption]{typ: generated.TypeMappedControl, tq: q}, nil
 	case *generated.MappedControlHistoryQuery:

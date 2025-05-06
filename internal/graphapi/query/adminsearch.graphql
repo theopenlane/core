@@ -146,6 +146,25 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    customDomains {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          deletedBy
+          id
+          tags
+          ownerID
+          cnameRecord
+          mappableDomainID
+        }
+      }
+    }
     documentData {
       totalCount
       pageInfo {
@@ -353,6 +372,23 @@ query AdminSearch($query: String!) {
           ownerID
           recipient
           requestorID
+        }
+      }
+    }
+    mappableDomains {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          deletedBy
+          id
+          tags
+          name
         }
       }
     }

@@ -25,6 +25,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -50,6 +52,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -4994,6 +4998,706 @@ func (coh *ControlObjectiveHistory) ToEdge(order *ControlObjectiveHistoryOrder) 
 	return &ControlObjectiveHistoryEdge{
 		Node:   coh,
 		Cursor: order.Field.toCursor(coh),
+	}
+}
+
+// CustomDomainEdge is the edge representation of CustomDomain.
+type CustomDomainEdge struct {
+	Node   *CustomDomain `json:"node"`
+	Cursor Cursor        `json:"cursor"`
+}
+
+// CustomDomainConnection is the connection containing edges to CustomDomain.
+type CustomDomainConnection struct {
+	Edges      []*CustomDomainEdge `json:"edges"`
+	PageInfo   PageInfo            `json:"pageInfo"`
+	TotalCount int                 `json:"totalCount"`
+}
+
+func (c *CustomDomainConnection) build(nodes []*CustomDomain, pager *customdomainPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *CustomDomain
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *CustomDomain {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *CustomDomain {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*CustomDomainEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &CustomDomainEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// CustomDomainPaginateOption enables pagination customization.
+type CustomDomainPaginateOption func(*customdomainPager) error
+
+// WithCustomDomainOrder configures pagination ordering.
+func WithCustomDomainOrder(order []*CustomDomainOrder) CustomDomainPaginateOption {
+	return func(pager *customdomainPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithCustomDomainFilter configures pagination filter.
+func WithCustomDomainFilter(filter func(*CustomDomainQuery) (*CustomDomainQuery, error)) CustomDomainPaginateOption {
+	return func(pager *customdomainPager) error {
+		if filter == nil {
+			return errors.New("CustomDomainQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type customdomainPager struct {
+	reverse bool
+	order   []*CustomDomainOrder
+	filter  func(*CustomDomainQuery) (*CustomDomainQuery, error)
+}
+
+func newCustomDomainPager(opts []CustomDomainPaginateOption, reverse bool) (*customdomainPager, error) {
+	pager := &customdomainPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *customdomainPager) applyFilter(query *CustomDomainQuery) (*CustomDomainQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *customdomainPager) toCursor(cd *CustomDomain) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(cd).Value)
+	}
+	return Cursor{ID: cd.ID, Value: cs_}
+}
+
+func (p *customdomainPager) applyCursors(query *CustomDomainQuery, after, before *Cursor) (*CustomDomainQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultCustomDomainOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *customdomainPager) applyOrder(query *CustomDomainQuery) *CustomDomainQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultCustomDomainOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultCustomDomainOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *customdomainPager) orderExpr(query *CustomDomainQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultCustomDomainOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to CustomDomain.
+func (cd *CustomDomainQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...CustomDomainPaginateOption,
+) (*CustomDomainConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newCustomDomainPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if cd, err = pager.applyFilter(cd); err != nil {
+		return nil, err
+	}
+	conn := &CustomDomainConnection{Edges: []*CustomDomainEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := cd.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if cd, err = pager.applyCursors(cd, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		cd.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := cd.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	cd = pager.applyOrder(cd)
+	nodes, err := cd.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// CustomDomainOrderFieldCreatedAt orders CustomDomain by created_at.
+	CustomDomainOrderFieldCreatedAt = &CustomDomainOrderField{
+		Value: func(cd *CustomDomain) (ent.Value, error) {
+			return cd.CreatedAt, nil
+		},
+		column: customdomain.FieldCreatedAt,
+		toTerm: customdomain.ByCreatedAt,
+		toCursor: func(cd *CustomDomain) Cursor {
+			return Cursor{
+				ID:    cd.ID,
+				Value: cd.CreatedAt,
+			}
+		},
+	}
+	// CustomDomainOrderFieldUpdatedAt orders CustomDomain by updated_at.
+	CustomDomainOrderFieldUpdatedAt = &CustomDomainOrderField{
+		Value: func(cd *CustomDomain) (ent.Value, error) {
+			return cd.UpdatedAt, nil
+		},
+		column: customdomain.FieldUpdatedAt,
+		toTerm: customdomain.ByUpdatedAt,
+		toCursor: func(cd *CustomDomain) Cursor {
+			return Cursor{
+				ID:    cd.ID,
+				Value: cd.UpdatedAt,
+			}
+		},
+	}
+	// CustomDomainOrderFieldCnameRecord orders CustomDomain by cname_record.
+	CustomDomainOrderFieldCnameRecord = &CustomDomainOrderField{
+		Value: func(cd *CustomDomain) (ent.Value, error) {
+			return cd.CnameRecord, nil
+		},
+		column: customdomain.FieldCnameRecord,
+		toTerm: customdomain.ByCnameRecord,
+		toCursor: func(cd *CustomDomain) Cursor {
+			return Cursor{
+				ID:    cd.ID,
+				Value: cd.CnameRecord,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f CustomDomainOrderField) String() string {
+	var str string
+	switch f.column {
+	case CustomDomainOrderFieldCreatedAt.column:
+		str = "created_at"
+	case CustomDomainOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case CustomDomainOrderFieldCnameRecord.column:
+		str = "cname_record"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f CustomDomainOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *CustomDomainOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("CustomDomainOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *CustomDomainOrderFieldCreatedAt
+	case "updated_at":
+		*f = *CustomDomainOrderFieldUpdatedAt
+	case "cname_record":
+		*f = *CustomDomainOrderFieldCnameRecord
+	default:
+		return fmt.Errorf("%s is not a valid CustomDomainOrderField", str)
+	}
+	return nil
+}
+
+// CustomDomainOrderField defines the ordering field of CustomDomain.
+type CustomDomainOrderField struct {
+	// Value extracts the ordering value from the given CustomDomain.
+	Value    func(*CustomDomain) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) customdomain.OrderOption
+	toCursor func(*CustomDomain) Cursor
+}
+
+// CustomDomainOrder defines the ordering of CustomDomain.
+type CustomDomainOrder struct {
+	Direction OrderDirection          `json:"direction"`
+	Field     *CustomDomainOrderField `json:"field"`
+}
+
+// DefaultCustomDomainOrder is the default ordering of CustomDomain.
+var DefaultCustomDomainOrder = &CustomDomainOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &CustomDomainOrderField{
+		Value: func(cd *CustomDomain) (ent.Value, error) {
+			return cd.ID, nil
+		},
+		column: customdomain.FieldID,
+		toTerm: customdomain.ByID,
+		toCursor: func(cd *CustomDomain) Cursor {
+			return Cursor{ID: cd.ID}
+		},
+	},
+}
+
+// ToEdge converts CustomDomain into CustomDomainEdge.
+func (cd *CustomDomain) ToEdge(order *CustomDomainOrder) *CustomDomainEdge {
+	if order == nil {
+		order = DefaultCustomDomainOrder
+	}
+	return &CustomDomainEdge{
+		Node:   cd,
+		Cursor: order.Field.toCursor(cd),
+	}
+}
+
+// CustomDomainHistoryEdge is the edge representation of CustomDomainHistory.
+type CustomDomainHistoryEdge struct {
+	Node   *CustomDomainHistory `json:"node"`
+	Cursor Cursor               `json:"cursor"`
+}
+
+// CustomDomainHistoryConnection is the connection containing edges to CustomDomainHistory.
+type CustomDomainHistoryConnection struct {
+	Edges      []*CustomDomainHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                   `json:"pageInfo"`
+	TotalCount int                        `json:"totalCount"`
+}
+
+func (c *CustomDomainHistoryConnection) build(nodes []*CustomDomainHistory, pager *customdomainhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *CustomDomainHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *CustomDomainHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *CustomDomainHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*CustomDomainHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &CustomDomainHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// CustomDomainHistoryPaginateOption enables pagination customization.
+type CustomDomainHistoryPaginateOption func(*customdomainhistoryPager) error
+
+// WithCustomDomainHistoryOrder configures pagination ordering.
+func WithCustomDomainHistoryOrder(order *CustomDomainHistoryOrder) CustomDomainHistoryPaginateOption {
+	if order == nil {
+		order = DefaultCustomDomainHistoryOrder
+	}
+	o := *order
+	return func(pager *customdomainhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultCustomDomainHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithCustomDomainHistoryFilter configures pagination filter.
+func WithCustomDomainHistoryFilter(filter func(*CustomDomainHistoryQuery) (*CustomDomainHistoryQuery, error)) CustomDomainHistoryPaginateOption {
+	return func(pager *customdomainhistoryPager) error {
+		if filter == nil {
+			return errors.New("CustomDomainHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type customdomainhistoryPager struct {
+	reverse bool
+	order   *CustomDomainHistoryOrder
+	filter  func(*CustomDomainHistoryQuery) (*CustomDomainHistoryQuery, error)
+}
+
+func newCustomDomainHistoryPager(opts []CustomDomainHistoryPaginateOption, reverse bool) (*customdomainhistoryPager, error) {
+	pager := &customdomainhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultCustomDomainHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *customdomainhistoryPager) applyFilter(query *CustomDomainHistoryQuery) (*CustomDomainHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *customdomainhistoryPager) toCursor(cdh *CustomDomainHistory) Cursor {
+	return p.order.Field.toCursor(cdh)
+}
+
+func (p *customdomainhistoryPager) applyCursors(query *CustomDomainHistoryQuery, after, before *Cursor) (*CustomDomainHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultCustomDomainHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *customdomainhistoryPager) applyOrder(query *CustomDomainHistoryQuery) *CustomDomainHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultCustomDomainHistoryOrder.Field {
+		query = query.Order(DefaultCustomDomainHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *customdomainhistoryPager) orderExpr(query *CustomDomainHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultCustomDomainHistoryOrder.Field {
+			b.Comma().Ident(DefaultCustomDomainHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to CustomDomainHistory.
+func (cdh *CustomDomainHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...CustomDomainHistoryPaginateOption,
+) (*CustomDomainHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newCustomDomainHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if cdh, err = pager.applyFilter(cdh); err != nil {
+		return nil, err
+	}
+	conn := &CustomDomainHistoryConnection{Edges: []*CustomDomainHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := cdh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if cdh, err = pager.applyCursors(cdh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		cdh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := cdh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	cdh = pager.applyOrder(cdh)
+	nodes, err := cdh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// CustomDomainHistoryOrderFieldCreatedAt orders CustomDomainHistory by created_at.
+	CustomDomainHistoryOrderFieldCreatedAt = &CustomDomainHistoryOrderField{
+		Value: func(cdh *CustomDomainHistory) (ent.Value, error) {
+			return cdh.CreatedAt, nil
+		},
+		column: customdomainhistory.FieldCreatedAt,
+		toTerm: customdomainhistory.ByCreatedAt,
+		toCursor: func(cdh *CustomDomainHistory) Cursor {
+			return Cursor{
+				ID:    cdh.ID,
+				Value: cdh.CreatedAt,
+			}
+		},
+	}
+	// CustomDomainHistoryOrderFieldUpdatedAt orders CustomDomainHistory by updated_at.
+	CustomDomainHistoryOrderFieldUpdatedAt = &CustomDomainHistoryOrderField{
+		Value: func(cdh *CustomDomainHistory) (ent.Value, error) {
+			return cdh.UpdatedAt, nil
+		},
+		column: customdomainhistory.FieldUpdatedAt,
+		toTerm: customdomainhistory.ByUpdatedAt,
+		toCursor: func(cdh *CustomDomainHistory) Cursor {
+			return Cursor{
+				ID:    cdh.ID,
+				Value: cdh.UpdatedAt,
+			}
+		},
+	}
+	// CustomDomainHistoryOrderFieldCnameRecord orders CustomDomainHistory by cname_record.
+	CustomDomainHistoryOrderFieldCnameRecord = &CustomDomainHistoryOrderField{
+		Value: func(cdh *CustomDomainHistory) (ent.Value, error) {
+			return cdh.CnameRecord, nil
+		},
+		column: customdomainhistory.FieldCnameRecord,
+		toTerm: customdomainhistory.ByCnameRecord,
+		toCursor: func(cdh *CustomDomainHistory) Cursor {
+			return Cursor{
+				ID:    cdh.ID,
+				Value: cdh.CnameRecord,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f CustomDomainHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case CustomDomainHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case CustomDomainHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case CustomDomainHistoryOrderFieldCnameRecord.column:
+		str = "cname_record"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f CustomDomainHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *CustomDomainHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("CustomDomainHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *CustomDomainHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *CustomDomainHistoryOrderFieldUpdatedAt
+	case "cname_record":
+		*f = *CustomDomainHistoryOrderFieldCnameRecord
+	default:
+		return fmt.Errorf("%s is not a valid CustomDomainHistoryOrderField", str)
+	}
+	return nil
+}
+
+// CustomDomainHistoryOrderField defines the ordering field of CustomDomainHistory.
+type CustomDomainHistoryOrderField struct {
+	// Value extracts the ordering value from the given CustomDomainHistory.
+	Value    func(*CustomDomainHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) customdomainhistory.OrderOption
+	toCursor func(*CustomDomainHistory) Cursor
+}
+
+// CustomDomainHistoryOrder defines the ordering of CustomDomainHistory.
+type CustomDomainHistoryOrder struct {
+	Direction OrderDirection                 `json:"direction"`
+	Field     *CustomDomainHistoryOrderField `json:"field"`
+}
+
+// DefaultCustomDomainHistoryOrder is the default ordering of CustomDomainHistory.
+var DefaultCustomDomainHistoryOrder = &CustomDomainHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &CustomDomainHistoryOrderField{
+		Value: func(cdh *CustomDomainHistory) (ent.Value, error) {
+			return cdh.ID, nil
+		},
+		column: customdomainhistory.FieldID,
+		toTerm: customdomainhistory.ByID,
+		toCursor: func(cdh *CustomDomainHistory) Cursor {
+			return Cursor{ID: cdh.ID}
+		},
+	},
+}
+
+// ToEdge converts CustomDomainHistory into CustomDomainHistoryEdge.
+func (cdh *CustomDomainHistory) ToEdge(order *CustomDomainHistoryOrder) *CustomDomainHistoryEdge {
+	if order == nil {
+		order = DefaultCustomDomainHistoryOrder
+	}
+	return &CustomDomainHistoryEdge{
+		Node:   cdh,
+		Cursor: order.Field.toCursor(cdh),
 	}
 }
 
@@ -14086,6 +14790,706 @@ func (i *Invite) ToEdge(order *InviteOrder) *InviteEdge {
 	return &InviteEdge{
 		Node:   i,
 		Cursor: order.Field.toCursor(i),
+	}
+}
+
+// MappableDomainEdge is the edge representation of MappableDomain.
+type MappableDomainEdge struct {
+	Node   *MappableDomain `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// MappableDomainConnection is the connection containing edges to MappableDomain.
+type MappableDomainConnection struct {
+	Edges      []*MappableDomainEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *MappableDomainConnection) build(nodes []*MappableDomain, pager *mappabledomainPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *MappableDomain
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *MappableDomain {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *MappableDomain {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*MappableDomainEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &MappableDomainEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// MappableDomainPaginateOption enables pagination customization.
+type MappableDomainPaginateOption func(*mappabledomainPager) error
+
+// WithMappableDomainOrder configures pagination ordering.
+func WithMappableDomainOrder(order []*MappableDomainOrder) MappableDomainPaginateOption {
+	return func(pager *mappabledomainPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithMappableDomainFilter configures pagination filter.
+func WithMappableDomainFilter(filter func(*MappableDomainQuery) (*MappableDomainQuery, error)) MappableDomainPaginateOption {
+	return func(pager *mappabledomainPager) error {
+		if filter == nil {
+			return errors.New("MappableDomainQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type mappabledomainPager struct {
+	reverse bool
+	order   []*MappableDomainOrder
+	filter  func(*MappableDomainQuery) (*MappableDomainQuery, error)
+}
+
+func newMappableDomainPager(opts []MappableDomainPaginateOption, reverse bool) (*mappabledomainPager, error) {
+	pager := &mappabledomainPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *mappabledomainPager) applyFilter(query *MappableDomainQuery) (*MappableDomainQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *mappabledomainPager) toCursor(md *MappableDomain) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(md).Value)
+	}
+	return Cursor{ID: md.ID, Value: cs_}
+}
+
+func (p *mappabledomainPager) applyCursors(query *MappableDomainQuery, after, before *Cursor) (*MappableDomainQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultMappableDomainOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *mappabledomainPager) applyOrder(query *MappableDomainQuery) *MappableDomainQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultMappableDomainOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultMappableDomainOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *mappabledomainPager) orderExpr(query *MappableDomainQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultMappableDomainOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to MappableDomain.
+func (md *MappableDomainQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...MappableDomainPaginateOption,
+) (*MappableDomainConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newMappableDomainPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if md, err = pager.applyFilter(md); err != nil {
+		return nil, err
+	}
+	conn := &MappableDomainConnection{Edges: []*MappableDomainEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := md.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if md, err = pager.applyCursors(md, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		md.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := md.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	md = pager.applyOrder(md)
+	nodes, err := md.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// MappableDomainOrderFieldCreatedAt orders MappableDomain by created_at.
+	MappableDomainOrderFieldCreatedAt = &MappableDomainOrderField{
+		Value: func(md *MappableDomain) (ent.Value, error) {
+			return md.CreatedAt, nil
+		},
+		column: mappabledomain.FieldCreatedAt,
+		toTerm: mappabledomain.ByCreatedAt,
+		toCursor: func(md *MappableDomain) Cursor {
+			return Cursor{
+				ID:    md.ID,
+				Value: md.CreatedAt,
+			}
+		},
+	}
+	// MappableDomainOrderFieldUpdatedAt orders MappableDomain by updated_at.
+	MappableDomainOrderFieldUpdatedAt = &MappableDomainOrderField{
+		Value: func(md *MappableDomain) (ent.Value, error) {
+			return md.UpdatedAt, nil
+		},
+		column: mappabledomain.FieldUpdatedAt,
+		toTerm: mappabledomain.ByUpdatedAt,
+		toCursor: func(md *MappableDomain) Cursor {
+			return Cursor{
+				ID:    md.ID,
+				Value: md.UpdatedAt,
+			}
+		},
+	}
+	// MappableDomainOrderFieldName orders MappableDomain by name.
+	MappableDomainOrderFieldName = &MappableDomainOrderField{
+		Value: func(md *MappableDomain) (ent.Value, error) {
+			return md.Name, nil
+		},
+		column: mappabledomain.FieldName,
+		toTerm: mappabledomain.ByName,
+		toCursor: func(md *MappableDomain) Cursor {
+			return Cursor{
+				ID:    md.ID,
+				Value: md.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f MappableDomainOrderField) String() string {
+	var str string
+	switch f.column {
+	case MappableDomainOrderFieldCreatedAt.column:
+		str = "created_at"
+	case MappableDomainOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case MappableDomainOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f MappableDomainOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *MappableDomainOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("MappableDomainOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *MappableDomainOrderFieldCreatedAt
+	case "updated_at":
+		*f = *MappableDomainOrderFieldUpdatedAt
+	case "name":
+		*f = *MappableDomainOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid MappableDomainOrderField", str)
+	}
+	return nil
+}
+
+// MappableDomainOrderField defines the ordering field of MappableDomain.
+type MappableDomainOrderField struct {
+	// Value extracts the ordering value from the given MappableDomain.
+	Value    func(*MappableDomain) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) mappabledomain.OrderOption
+	toCursor func(*MappableDomain) Cursor
+}
+
+// MappableDomainOrder defines the ordering of MappableDomain.
+type MappableDomainOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *MappableDomainOrderField `json:"field"`
+}
+
+// DefaultMappableDomainOrder is the default ordering of MappableDomain.
+var DefaultMappableDomainOrder = &MappableDomainOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &MappableDomainOrderField{
+		Value: func(md *MappableDomain) (ent.Value, error) {
+			return md.ID, nil
+		},
+		column: mappabledomain.FieldID,
+		toTerm: mappabledomain.ByID,
+		toCursor: func(md *MappableDomain) Cursor {
+			return Cursor{ID: md.ID}
+		},
+	},
+}
+
+// ToEdge converts MappableDomain into MappableDomainEdge.
+func (md *MappableDomain) ToEdge(order *MappableDomainOrder) *MappableDomainEdge {
+	if order == nil {
+		order = DefaultMappableDomainOrder
+	}
+	return &MappableDomainEdge{
+		Node:   md,
+		Cursor: order.Field.toCursor(md),
+	}
+}
+
+// MappableDomainHistoryEdge is the edge representation of MappableDomainHistory.
+type MappableDomainHistoryEdge struct {
+	Node   *MappableDomainHistory `json:"node"`
+	Cursor Cursor                 `json:"cursor"`
+}
+
+// MappableDomainHistoryConnection is the connection containing edges to MappableDomainHistory.
+type MappableDomainHistoryConnection struct {
+	Edges      []*MappableDomainHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                     `json:"pageInfo"`
+	TotalCount int                          `json:"totalCount"`
+}
+
+func (c *MappableDomainHistoryConnection) build(nodes []*MappableDomainHistory, pager *mappabledomainhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *MappableDomainHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *MappableDomainHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *MappableDomainHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*MappableDomainHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &MappableDomainHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// MappableDomainHistoryPaginateOption enables pagination customization.
+type MappableDomainHistoryPaginateOption func(*mappabledomainhistoryPager) error
+
+// WithMappableDomainHistoryOrder configures pagination ordering.
+func WithMappableDomainHistoryOrder(order *MappableDomainHistoryOrder) MappableDomainHistoryPaginateOption {
+	if order == nil {
+		order = DefaultMappableDomainHistoryOrder
+	}
+	o := *order
+	return func(pager *mappabledomainhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultMappableDomainHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithMappableDomainHistoryFilter configures pagination filter.
+func WithMappableDomainHistoryFilter(filter func(*MappableDomainHistoryQuery) (*MappableDomainHistoryQuery, error)) MappableDomainHistoryPaginateOption {
+	return func(pager *mappabledomainhistoryPager) error {
+		if filter == nil {
+			return errors.New("MappableDomainHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type mappabledomainhistoryPager struct {
+	reverse bool
+	order   *MappableDomainHistoryOrder
+	filter  func(*MappableDomainHistoryQuery) (*MappableDomainHistoryQuery, error)
+}
+
+func newMappableDomainHistoryPager(opts []MappableDomainHistoryPaginateOption, reverse bool) (*mappabledomainhistoryPager, error) {
+	pager := &mappabledomainhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultMappableDomainHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *mappabledomainhistoryPager) applyFilter(query *MappableDomainHistoryQuery) (*MappableDomainHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *mappabledomainhistoryPager) toCursor(mdh *MappableDomainHistory) Cursor {
+	return p.order.Field.toCursor(mdh)
+}
+
+func (p *mappabledomainhistoryPager) applyCursors(query *MappableDomainHistoryQuery, after, before *Cursor) (*MappableDomainHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultMappableDomainHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *mappabledomainhistoryPager) applyOrder(query *MappableDomainHistoryQuery) *MappableDomainHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultMappableDomainHistoryOrder.Field {
+		query = query.Order(DefaultMappableDomainHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *mappabledomainhistoryPager) orderExpr(query *MappableDomainHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultMappableDomainHistoryOrder.Field {
+			b.Comma().Ident(DefaultMappableDomainHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to MappableDomainHistory.
+func (mdh *MappableDomainHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...MappableDomainHistoryPaginateOption,
+) (*MappableDomainHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newMappableDomainHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if mdh, err = pager.applyFilter(mdh); err != nil {
+		return nil, err
+	}
+	conn := &MappableDomainHistoryConnection{Edges: []*MappableDomainHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := mdh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if mdh, err = pager.applyCursors(mdh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		mdh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := mdh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	mdh = pager.applyOrder(mdh)
+	nodes, err := mdh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// MappableDomainHistoryOrderFieldCreatedAt orders MappableDomainHistory by created_at.
+	MappableDomainHistoryOrderFieldCreatedAt = &MappableDomainHistoryOrderField{
+		Value: func(mdh *MappableDomainHistory) (ent.Value, error) {
+			return mdh.CreatedAt, nil
+		},
+		column: mappabledomainhistory.FieldCreatedAt,
+		toTerm: mappabledomainhistory.ByCreatedAt,
+		toCursor: func(mdh *MappableDomainHistory) Cursor {
+			return Cursor{
+				ID:    mdh.ID,
+				Value: mdh.CreatedAt,
+			}
+		},
+	}
+	// MappableDomainHistoryOrderFieldUpdatedAt orders MappableDomainHistory by updated_at.
+	MappableDomainHistoryOrderFieldUpdatedAt = &MappableDomainHistoryOrderField{
+		Value: func(mdh *MappableDomainHistory) (ent.Value, error) {
+			return mdh.UpdatedAt, nil
+		},
+		column: mappabledomainhistory.FieldUpdatedAt,
+		toTerm: mappabledomainhistory.ByUpdatedAt,
+		toCursor: func(mdh *MappableDomainHistory) Cursor {
+			return Cursor{
+				ID:    mdh.ID,
+				Value: mdh.UpdatedAt,
+			}
+		},
+	}
+	// MappableDomainHistoryOrderFieldName orders MappableDomainHistory by name.
+	MappableDomainHistoryOrderFieldName = &MappableDomainHistoryOrderField{
+		Value: func(mdh *MappableDomainHistory) (ent.Value, error) {
+			return mdh.Name, nil
+		},
+		column: mappabledomainhistory.FieldName,
+		toTerm: mappabledomainhistory.ByName,
+		toCursor: func(mdh *MappableDomainHistory) Cursor {
+			return Cursor{
+				ID:    mdh.ID,
+				Value: mdh.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f MappableDomainHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case MappableDomainHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case MappableDomainHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case MappableDomainHistoryOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f MappableDomainHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *MappableDomainHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("MappableDomainHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *MappableDomainHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *MappableDomainHistoryOrderFieldUpdatedAt
+	case "name":
+		*f = *MappableDomainHistoryOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid MappableDomainHistoryOrderField", str)
+	}
+	return nil
+}
+
+// MappableDomainHistoryOrderField defines the ordering field of MappableDomainHistory.
+type MappableDomainHistoryOrderField struct {
+	// Value extracts the ordering value from the given MappableDomainHistory.
+	Value    func(*MappableDomainHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) mappabledomainhistory.OrderOption
+	toCursor func(*MappableDomainHistory) Cursor
+}
+
+// MappableDomainHistoryOrder defines the ordering of MappableDomainHistory.
+type MappableDomainHistoryOrder struct {
+	Direction OrderDirection                   `json:"direction"`
+	Field     *MappableDomainHistoryOrderField `json:"field"`
+}
+
+// DefaultMappableDomainHistoryOrder is the default ordering of MappableDomainHistory.
+var DefaultMappableDomainHistoryOrder = &MappableDomainHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &MappableDomainHistoryOrderField{
+		Value: func(mdh *MappableDomainHistory) (ent.Value, error) {
+			return mdh.ID, nil
+		},
+		column: mappabledomainhistory.FieldID,
+		toTerm: mappabledomainhistory.ByID,
+		toCursor: func(mdh *MappableDomainHistory) Cursor {
+			return Cursor{ID: mdh.ID}
+		},
+	},
+}
+
+// ToEdge converts MappableDomainHistory into MappableDomainHistoryEdge.
+func (mdh *MappableDomainHistory) ToEdge(order *MappableDomainHistoryOrder) *MappableDomainHistoryEdge {
+	if order == nil {
+		order = DefaultMappableDomainHistoryOrder
+	}
+	return &MappableDomainHistoryEdge{
+		Node:   mdh,
+		Cursor: order.Field.toCursor(mdh),
 	}
 }
 

@@ -105,6 +105,21 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    customDomains {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
     documentData {
       totalCount
       pageInfo {
@@ -263,6 +278,21 @@ query GlobalSearch($query: String!) {
         node {
           id
           recipient
+        }
+      }
+    }
+    mappableDomains {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
       }
     }

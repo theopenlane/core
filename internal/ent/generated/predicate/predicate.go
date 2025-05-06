@@ -39,6 +39,12 @@ type ControlObjective func(*sql.Selector)
 // ControlObjectiveHistory is the predicate function for controlobjectivehistory builders.
 type ControlObjectiveHistory func(*sql.Selector)
 
+// CustomDomain is the predicate function for customdomain builders.
+type CustomDomain func(*sql.Selector)
+
+// CustomDomainHistory is the predicate function for customdomainhistory builders.
+type CustomDomainHistory func(*sql.Selector)
+
 // DocumentData is the predicate function for documentdata builders.
 type DocumentData func(*sql.Selector)
 
@@ -116,6 +122,12 @@ type InternalPolicyHistory func(*sql.Selector)
 
 // Invite is the predicate function for invite builders.
 type Invite func(*sql.Selector)
+
+// MappableDomain is the predicate function for mappabledomain builders.
+type MappableDomain func(*sql.Selector)
+
+// MappableDomainHistory is the predicate function for mappabledomainhistory builders.
+type MappableDomainHistory func(*sql.Selector)
 
 // MappedControl is the predicate function for mappedcontrol builders.
 type MappedControl func(*sql.Selector)

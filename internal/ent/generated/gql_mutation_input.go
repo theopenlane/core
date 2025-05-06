@@ -1651,6 +1651,72 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 	return c
 }
 
+// CreateCustomDomainInput represents a mutation input for creating customdomains.
+type CreateCustomDomainInput struct {
+	Tags             []string
+	CnameRecord      string
+	OwnerID          *string
+	MappableDomainID string
+}
+
+// Mutate applies the CreateCustomDomainInput on the CustomDomainMutation builder.
+func (i *CreateCustomDomainInput) Mutate(m *CustomDomainMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetCnameRecord(i.CnameRecord)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetMappableDomainID(i.MappableDomainID)
+}
+
+// SetInput applies the change-set in the CreateCustomDomainInput on the CustomDomainCreate builder.
+func (c *CustomDomainCreate) SetInput(i CreateCustomDomainInput) *CustomDomainCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateCustomDomainInput represents a mutation input for updating customdomains.
+type UpdateCustomDomainInput struct {
+	ClearTags  bool
+	Tags       []string
+	AppendTags []string
+	ClearOwner bool
+	OwnerID    *string
+}
+
+// Mutate applies the UpdateCustomDomainInput on the CustomDomainMutation builder.
+func (i *UpdateCustomDomainInput) Mutate(m *CustomDomainMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateCustomDomainInput on the CustomDomainUpdate builder.
+func (c *CustomDomainUpdate) SetInput(i UpdateCustomDomainInput) *CustomDomainUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateCustomDomainInput on the CustomDomainUpdateOne builder.
+func (c *CustomDomainUpdateOne) SetInput(i UpdateCustomDomainInput) *CustomDomainUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateDocumentDataInput represents a mutation input for creating documentdataslice.
 type CreateDocumentDataInput struct {
 	Tags       []string
@@ -4225,6 +4291,74 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 	return c
 }
 
+// CreateMappableDomainInput represents a mutation input for creating mappabledomains.
+type CreateMappableDomainInput struct {
+	Tags            []string
+	Name            string
+	CustomDomainIDs []string
+}
+
+// Mutate applies the CreateMappableDomainInput on the MappableDomainMutation builder.
+func (i *CreateMappableDomainInput) Mutate(m *MappableDomainMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.CustomDomainIDs; len(v) > 0 {
+		m.AddCustomDomainIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateMappableDomainInput on the MappableDomainCreate builder.
+func (c *MappableDomainCreate) SetInput(i CreateMappableDomainInput) *MappableDomainCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateMappableDomainInput represents a mutation input for updating mappabledomains.
+type UpdateMappableDomainInput struct {
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	ClearCustomDomains    bool
+	AddCustomDomainIDs    []string
+	RemoveCustomDomainIDs []string
+}
+
+// Mutate applies the UpdateMappableDomainInput on the MappableDomainMutation builder.
+func (i *UpdateMappableDomainInput) Mutate(m *MappableDomainMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearCustomDomains {
+		m.ClearCustomDomains()
+	}
+	if v := i.AddCustomDomainIDs; len(v) > 0 {
+		m.AddCustomDomainIDs(v...)
+	}
+	if v := i.RemoveCustomDomainIDs; len(v) > 0 {
+		m.RemoveCustomDomainIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateMappableDomainInput on the MappableDomainUpdate builder.
+func (c *MappableDomainUpdate) SetInput(i UpdateMappableDomainInput) *MappableDomainUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateMappableDomainInput on the MappableDomainUpdateOne builder.
+func (c *MappableDomainUpdateOne) SetInput(i UpdateMappableDomainInput) *MappableDomainUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateMappedControlInput represents a mutation input for creating mappedcontrols.
 type CreateMappedControlInput struct {
 	Tags          []string
@@ -4748,6 +4882,7 @@ type CreateOrganizationInput struct {
 	EvidenceIDs                []string
 	StandardIDs                []string
 	ActionPlanIDs              []string
+	CustomDomainIDs            []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -4897,6 +5032,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
 	}
+	if v := i.CustomDomainIDs; len(v) > 0 {
+		m.AddCustomDomainIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -5036,6 +5174,9 @@ type UpdateOrganizationInput struct {
 	ClearActionPlans                 bool
 	AddActionPlanIDs                 []string
 	RemoveActionPlanIDs              []string
+	ClearCustomDomains               bool
+	AddCustomDomainIDs               []string
+	RemoveCustomDomainIDs            []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5426,6 +5567,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveActionPlanIDs; len(v) > 0 {
 		m.RemoveActionPlanIDs(v...)
+	}
+	if i.ClearCustomDomains {
+		m.ClearCustomDomains()
+	}
+	if v := i.AddCustomDomainIDs; len(v) > 0 {
+		m.AddCustomDomainIDs(v...)
+	}
+	if v := i.RemoveCustomDomainIDs; len(v) > 0 {
+		m.RemoveCustomDomainIDs(v...)
 	}
 }
 

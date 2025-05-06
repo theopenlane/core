@@ -611,6 +611,83 @@ type ComplexityRoot struct {
 		Control func(childComplexity int) int
 	}
 
+	CustomDomain struct {
+		CnameRecord        func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedBy          func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		MappableDomain     func(childComplexity int) int
+		MappableDomainID   func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TxtRecordSubdomain func(childComplexity int) int
+		TxtRecordValue     func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+	}
+
+	CustomDomainBulkCreatePayload struct {
+		CustomDomains func(childComplexity int) int
+	}
+
+	CustomDomainConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	CustomDomainCreatePayload struct {
+		CustomDomain func(childComplexity int) int
+	}
+
+	CustomDomainDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	CustomDomainEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	CustomDomainHistory struct {
+		CnameRecord        func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		DeletedAt          func(childComplexity int) int
+		DeletedBy          func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		MappableDomainID   func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		TxtRecordSubdomain func(childComplexity int) int
+		TxtRecordValue     func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+	}
+
+	CustomDomainHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	CustomDomainHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	CustomDomainUpdatePayload struct {
+		CustomDomain func(childComplexity int) int
+	}
+
 	DocumentData struct {
 		CreatedAt  func(childComplexity int) int
 		CreatedBy  func(childComplexity int) int
@@ -1650,6 +1727,72 @@ type ComplexityRoot struct {
 		Invite func(childComplexity int) int
 	}
 
+	MappableDomain struct {
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		CustomDomains func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		DeletedAt     func(childComplexity int) int
+		DeletedBy     func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+	}
+
+	MappableDomainBulkCreatePayload struct {
+		MappableDomains func(childComplexity int) int
+	}
+
+	MappableDomainConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	MappableDomainCreatePayload struct {
+		MappableDomain func(childComplexity int) int
+	}
+
+	MappableDomainDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	MappableDomainEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	MappableDomainHistory struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		DeletedAt   func(childComplexity int) int
+		DeletedBy   func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		Ref         func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	MappableDomainHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	MappableDomainHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	MappableDomainUpdatePayload struct {
+		MappableDomain func(childComplexity int) int
+	}
+
 	MappedControl struct {
 		Controls    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt   func(childComplexity int) int
@@ -1730,6 +1873,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVControl               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControlImplementation func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControlObjective      func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCustomDomain          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDocumentData          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntity                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntityType            func(childComplexity int, input graphql.Upload) int
@@ -1741,6 +1885,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVIntegration           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInternalPolicy        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInvite                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVMappableDomain        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVMappedControl         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNarrative             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership         func(childComplexity int, input graphql.Upload) int
@@ -1758,6 +1903,7 @@ type ComplexityRoot struct {
 		CreateBulkControl                  func(childComplexity int, input []*generated.CreateControlInput) int
 		CreateBulkControlImplementation    func(childComplexity int, input []*generated.CreateControlImplementationInput) int
 		CreateBulkControlObjective         func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
+		CreateBulkCustomDomain             func(childComplexity int, input []*generated.CreateCustomDomainInput) int
 		CreateBulkDocumentData             func(childComplexity int, input []*generated.CreateDocumentDataInput) int
 		CreateBulkEntity                   func(childComplexity int, input []*generated.CreateEntityInput) int
 		CreateBulkEntityType               func(childComplexity int, input []*generated.CreateEntityTypeInput) int
@@ -1769,6 +1915,7 @@ type ComplexityRoot struct {
 		CreateBulkIntegration              func(childComplexity int, input []*generated.CreateIntegrationInput) int
 		CreateBulkInternalPolicy           func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
 		CreateBulkInvite                   func(childComplexity int, input []*generated.CreateInviteInput) int
+		CreateBulkMappableDomain           func(childComplexity int, input []*generated.CreateMappableDomainInput) int
 		CreateBulkMappedControl            func(childComplexity int, input []*generated.CreateMappedControlInput) int
 		CreateBulkNarrative                func(childComplexity int, input []*generated.CreateNarrativeInput) int
 		CreateBulkOrgMembership            func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
@@ -1788,6 +1935,7 @@ type ComplexityRoot struct {
 		CreateControlObjective             func(childComplexity int, input generated.CreateControlObjectiveInput) int
 		CreateControlWithSubcontrols       func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
 		CreateControlsByClone              func(childComplexity int, input *model.CloneControlInput) int
+		CreateCustomDomain                 func(childComplexity int, input generated.CreateCustomDomainInput) int
 		CreateDocumentData                 func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEntity                       func(childComplexity int, input generated.CreateEntityInput) int
 		CreateEntityType                   func(childComplexity int, input generated.CreateEntityTypeInput) int
@@ -1803,6 +1951,7 @@ type ComplexityRoot struct {
 		CreateIntegration                  func(childComplexity int, input generated.CreateIntegrationInput) int
 		CreateInternalPolicy               func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                       func(childComplexity int, input generated.CreateInviteInput) int
+		CreateMappableDomain               func(childComplexity int, input generated.CreateMappableDomainInput) int
 		CreateMappedControl                func(childComplexity int, input generated.CreateMappedControlInput) int
 		CreateNarrative                    func(childComplexity int, input generated.CreateNarrativeInput) int
 		CreateOnboarding                   func(childComplexity int, input generated.CreateOnboardingInput) int
@@ -1830,6 +1979,7 @@ type ComplexityRoot struct {
 		DeleteControl                      func(childComplexity int, id string) int
 		DeleteControlImplementation        func(childComplexity int, id string) int
 		DeleteControlObjective             func(childComplexity int, id string) int
+		DeleteCustomDomain                 func(childComplexity int, id string) int
 		DeleteDocumentData                 func(childComplexity int, id string) int
 		DeleteEntity                       func(childComplexity int, id string) int
 		DeleteEntityType                   func(childComplexity int, id string) int
@@ -1843,6 +1993,7 @@ type ComplexityRoot struct {
 		DeleteIntegration                  func(childComplexity int, id string) int
 		DeleteInternalPolicy               func(childComplexity int, id string) int
 		DeleteInvite                       func(childComplexity int, id string) int
+		DeleteMappableDomain               func(childComplexity int, id string) int
 		DeleteMappedControl                func(childComplexity int, id string) int
 		DeleteNarrative                    func(childComplexity int, id string) int
 		DeleteOrgMembership                func(childComplexity int, id string) int
@@ -1866,6 +2017,7 @@ type ComplexityRoot struct {
 		UpdateControl                      func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlImplementation        func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
 		UpdateControlObjective             func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
+		UpdateCustomDomain                 func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
 		UpdateDocumentData                 func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
 		UpdateEntity                       func(childComplexity int, id string, input generated.UpdateEntityInput) int
 		UpdateEntityType                   func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
@@ -1878,6 +2030,7 @@ type ComplexityRoot struct {
 		UpdateIntegration                  func(childComplexity int, id string, input generated.UpdateIntegrationInput) int
 		UpdateInternalPolicy               func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
 		UpdateInvite                       func(childComplexity int, id string, input generated.UpdateInviteInput) int
+		UpdateMappableDomain               func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
 		UpdateMappedControl                func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
 		UpdateNarrative                    func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
 		UpdateOrgMembership                func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
@@ -2217,6 +2370,7 @@ type ComplexityRoot struct {
 		Controls                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
+		CustomDomains            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
 		DedicatedDb              func(childComplexity int) int
 		DeletedAt                func(childComplexity int) int
 		DeletedBy                func(childComplexity int) int
@@ -2762,6 +2916,7 @@ type ComplexityRoot struct {
 		AdminControlImplementationSearch func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminControlObjectiveSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminControlSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminCustomDomainSearch          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminDocumentDataSearch          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminEntitySearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminEntityTypeSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -2772,6 +2927,7 @@ type ComplexityRoot struct {
 		AdminIntegrationSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminInternalPolicySearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminInviteSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminMappableDomainSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminMappedControlSearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminNarrativeSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminOrgSubscriptionSearch       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -2807,6 +2963,10 @@ type ComplexityRoot struct {
 		ControlObjectives                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		ControlSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Controls                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CustomDomain                     func(childComplexity int, id string) int
+		CustomDomainHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) int
+		CustomDomainSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		CustomDomains                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
 		DocumentData                     func(childComplexity int, id string) int
 		DocumentDataHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) int
 		DocumentDataSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -2855,6 +3015,10 @@ type ComplexityRoot struct {
 		Invite                           func(childComplexity int, id string) int
 		InviteSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Invites                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
+		MappableDomain                   func(childComplexity int, id string) int
+		MappableDomainHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappableDomainHistoryOrder, where *generated.MappableDomainHistoryWhereInput) int
+		MappableDomainSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		MappableDomains                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappableDomainOrder, where *generated.MappableDomainWhereInput) int
 		MappedControl                    func(childComplexity int, id string) int
 		MappedControlHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlHistoryOrder, where *generated.MappedControlHistoryWhereInput) int
 		MappedControlSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3046,6 +3210,7 @@ type ComplexityRoot struct {
 		ControlImplementations func(childComplexity int) int
 		ControlObjectives      func(childComplexity int) int
 		Controls               func(childComplexity int) int
+		CustomDomains          func(childComplexity int) int
 		DocumentData           func(childComplexity int) int
 		Entities               func(childComplexity int) int
 		EntityTypes            func(childComplexity int) int
@@ -3056,6 +3221,7 @@ type ComplexityRoot struct {
 		Integrations           func(childComplexity int) int
 		InternalPolicies       func(childComplexity int) int
 		Invites                func(childComplexity int) int
+		MappableDomains        func(childComplexity int) int
 		MappedControls         func(childComplexity int) int
 		Narratives             func(childComplexity int) int
 		OrgSubscriptions       func(childComplexity int) int
@@ -6533,6 +6699,335 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlUpdatePayload.Control(childComplexity), true
+
+	case "CustomDomain.cnameRecord":
+		if e.complexity.CustomDomain.CnameRecord == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.CnameRecord(childComplexity), true
+
+	case "CustomDomain.createdAt":
+		if e.complexity.CustomDomain.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.CreatedAt(childComplexity), true
+
+	case "CustomDomain.createdBy":
+		if e.complexity.CustomDomain.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.CreatedBy(childComplexity), true
+
+	case "CustomDomain.deletedAt":
+		if e.complexity.CustomDomain.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.DeletedAt(childComplexity), true
+
+	case "CustomDomain.deletedBy":
+		if e.complexity.CustomDomain.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.DeletedBy(childComplexity), true
+
+	case "CustomDomain.id":
+		if e.complexity.CustomDomain.ID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.ID(childComplexity), true
+
+	case "CustomDomain.mappableDomain":
+		if e.complexity.CustomDomain.MappableDomain == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.MappableDomain(childComplexity), true
+
+	case "CustomDomain.mappableDomainID":
+		if e.complexity.CustomDomain.MappableDomainID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.MappableDomainID(childComplexity), true
+
+	case "CustomDomain.owner":
+		if e.complexity.CustomDomain.Owner == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.Owner(childComplexity), true
+
+	case "CustomDomain.ownerID":
+		if e.complexity.CustomDomain.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.OwnerID(childComplexity), true
+
+	case "CustomDomain.status":
+		if e.complexity.CustomDomain.Status == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.Status(childComplexity), true
+
+	case "CustomDomain.tags":
+		if e.complexity.CustomDomain.Tags == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.Tags(childComplexity), true
+
+	case "CustomDomain.txtRecordSubdomain":
+		if e.complexity.CustomDomain.TxtRecordSubdomain == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.TxtRecordSubdomain(childComplexity), true
+
+	case "CustomDomain.txtRecordValue":
+		if e.complexity.CustomDomain.TxtRecordValue == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.TxtRecordValue(childComplexity), true
+
+	case "CustomDomain.updatedAt":
+		if e.complexity.CustomDomain.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.UpdatedAt(childComplexity), true
+
+	case "CustomDomain.updatedBy":
+		if e.complexity.CustomDomain.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.UpdatedBy(childComplexity), true
+
+	case "CustomDomainBulkCreatePayload.customDomains":
+		if e.complexity.CustomDomainBulkCreatePayload.CustomDomains == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainBulkCreatePayload.CustomDomains(childComplexity), true
+
+	case "CustomDomainConnection.edges":
+		if e.complexity.CustomDomainConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainConnection.Edges(childComplexity), true
+
+	case "CustomDomainConnection.pageInfo":
+		if e.complexity.CustomDomainConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainConnection.PageInfo(childComplexity), true
+
+	case "CustomDomainConnection.totalCount":
+		if e.complexity.CustomDomainConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainConnection.TotalCount(childComplexity), true
+
+	case "CustomDomainCreatePayload.customDomain":
+		if e.complexity.CustomDomainCreatePayload.CustomDomain == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainCreatePayload.CustomDomain(childComplexity), true
+
+	case "CustomDomainDeletePayload.deletedID":
+		if e.complexity.CustomDomainDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainDeletePayload.DeletedID(childComplexity), true
+
+	case "CustomDomainEdge.cursor":
+		if e.complexity.CustomDomainEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainEdge.Cursor(childComplexity), true
+
+	case "CustomDomainEdge.node":
+		if e.complexity.CustomDomainEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainEdge.Node(childComplexity), true
+
+	case "CustomDomainHistory.cnameRecord":
+		if e.complexity.CustomDomainHistory.CnameRecord == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.CnameRecord(childComplexity), true
+
+	case "CustomDomainHistory.createdAt":
+		if e.complexity.CustomDomainHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.CreatedAt(childComplexity), true
+
+	case "CustomDomainHistory.createdBy":
+		if e.complexity.CustomDomainHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.CreatedBy(childComplexity), true
+
+	case "CustomDomainHistory.deletedAt":
+		if e.complexity.CustomDomainHistory.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.DeletedAt(childComplexity), true
+
+	case "CustomDomainHistory.deletedBy":
+		if e.complexity.CustomDomainHistory.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.DeletedBy(childComplexity), true
+
+	case "CustomDomainHistory.historyTime":
+		if e.complexity.CustomDomainHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.HistoryTime(childComplexity), true
+
+	case "CustomDomainHistory.id":
+		if e.complexity.CustomDomainHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.ID(childComplexity), true
+
+	case "CustomDomainHistory.mappableDomainID":
+		if e.complexity.CustomDomainHistory.MappableDomainID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.MappableDomainID(childComplexity), true
+
+	case "CustomDomainHistory.operation":
+		if e.complexity.CustomDomainHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.Operation(childComplexity), true
+
+	case "CustomDomainHistory.ownerID":
+		if e.complexity.CustomDomainHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.OwnerID(childComplexity), true
+
+	case "CustomDomainHistory.ref":
+		if e.complexity.CustomDomainHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.Ref(childComplexity), true
+
+	case "CustomDomainHistory.status":
+		if e.complexity.CustomDomainHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.Status(childComplexity), true
+
+	case "CustomDomainHistory.tags":
+		if e.complexity.CustomDomainHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.Tags(childComplexity), true
+
+	case "CustomDomainHistory.txtRecordSubdomain":
+		if e.complexity.CustomDomainHistory.TxtRecordSubdomain == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.TxtRecordSubdomain(childComplexity), true
+
+	case "CustomDomainHistory.txtRecordValue":
+		if e.complexity.CustomDomainHistory.TxtRecordValue == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.TxtRecordValue(childComplexity), true
+
+	case "CustomDomainHistory.updatedAt":
+		if e.complexity.CustomDomainHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.UpdatedAt(childComplexity), true
+
+	case "CustomDomainHistory.updatedBy":
+		if e.complexity.CustomDomainHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.UpdatedBy(childComplexity), true
+
+	case "CustomDomainHistoryConnection.edges":
+		if e.complexity.CustomDomainHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistoryConnection.Edges(childComplexity), true
+
+	case "CustomDomainHistoryConnection.pageInfo":
+		if e.complexity.CustomDomainHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistoryConnection.PageInfo(childComplexity), true
+
+	case "CustomDomainHistoryConnection.totalCount":
+		if e.complexity.CustomDomainHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistoryConnection.TotalCount(childComplexity), true
+
+	case "CustomDomainHistoryEdge.cursor":
+		if e.complexity.CustomDomainHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistoryEdge.Cursor(childComplexity), true
+
+	case "CustomDomainHistoryEdge.node":
+		if e.complexity.CustomDomainHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistoryEdge.Node(childComplexity), true
+
+	case "CustomDomainUpdatePayload.customDomain":
+		if e.complexity.CustomDomainUpdatePayload.CustomDomain == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainUpdatePayload.CustomDomain(childComplexity), true
 
 	case "DocumentData.createdAt":
 		if e.complexity.DocumentData.CreatedAt == nil {
@@ -11407,6 +11902,263 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InviteUpdatePayload.Invite(childComplexity), true
 
+	case "MappableDomain.createdAt":
+		if e.complexity.MappableDomain.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.CreatedAt(childComplexity), true
+
+	case "MappableDomain.createdBy":
+		if e.complexity.MappableDomain.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.CreatedBy(childComplexity), true
+
+	case "MappableDomain.customDomains":
+		if e.complexity.MappableDomain.CustomDomains == nil {
+			break
+		}
+
+		args, err := ec.field_MappableDomain_customDomains_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.MappableDomain.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
+
+	case "MappableDomain.deletedAt":
+		if e.complexity.MappableDomain.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.DeletedAt(childComplexity), true
+
+	case "MappableDomain.deletedBy":
+		if e.complexity.MappableDomain.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.DeletedBy(childComplexity), true
+
+	case "MappableDomain.id":
+		if e.complexity.MappableDomain.ID == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.ID(childComplexity), true
+
+	case "MappableDomain.name":
+		if e.complexity.MappableDomain.Name == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.Name(childComplexity), true
+
+	case "MappableDomain.tags":
+		if e.complexity.MappableDomain.Tags == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.Tags(childComplexity), true
+
+	case "MappableDomain.updatedAt":
+		if e.complexity.MappableDomain.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.UpdatedAt(childComplexity), true
+
+	case "MappableDomain.updatedBy":
+		if e.complexity.MappableDomain.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.UpdatedBy(childComplexity), true
+
+	case "MappableDomainBulkCreatePayload.mappableDomains":
+		if e.complexity.MappableDomainBulkCreatePayload.MappableDomains == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainBulkCreatePayload.MappableDomains(childComplexity), true
+
+	case "MappableDomainConnection.edges":
+		if e.complexity.MappableDomainConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainConnection.Edges(childComplexity), true
+
+	case "MappableDomainConnection.pageInfo":
+		if e.complexity.MappableDomainConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainConnection.PageInfo(childComplexity), true
+
+	case "MappableDomainConnection.totalCount":
+		if e.complexity.MappableDomainConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainConnection.TotalCount(childComplexity), true
+
+	case "MappableDomainCreatePayload.mappableDomain":
+		if e.complexity.MappableDomainCreatePayload.MappableDomain == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainCreatePayload.MappableDomain(childComplexity), true
+
+	case "MappableDomainDeletePayload.deletedID":
+		if e.complexity.MappableDomainDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainDeletePayload.DeletedID(childComplexity), true
+
+	case "MappableDomainEdge.cursor":
+		if e.complexity.MappableDomainEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainEdge.Cursor(childComplexity), true
+
+	case "MappableDomainEdge.node":
+		if e.complexity.MappableDomainEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainEdge.Node(childComplexity), true
+
+	case "MappableDomainHistory.createdAt":
+		if e.complexity.MappableDomainHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.CreatedAt(childComplexity), true
+
+	case "MappableDomainHistory.createdBy":
+		if e.complexity.MappableDomainHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.CreatedBy(childComplexity), true
+
+	case "MappableDomainHistory.deletedAt":
+		if e.complexity.MappableDomainHistory.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.DeletedAt(childComplexity), true
+
+	case "MappableDomainHistory.deletedBy":
+		if e.complexity.MappableDomainHistory.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.DeletedBy(childComplexity), true
+
+	case "MappableDomainHistory.historyTime":
+		if e.complexity.MappableDomainHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.HistoryTime(childComplexity), true
+
+	case "MappableDomainHistory.id":
+		if e.complexity.MappableDomainHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.ID(childComplexity), true
+
+	case "MappableDomainHistory.name":
+		if e.complexity.MappableDomainHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.Name(childComplexity), true
+
+	case "MappableDomainHistory.operation":
+		if e.complexity.MappableDomainHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.Operation(childComplexity), true
+
+	case "MappableDomainHistory.ref":
+		if e.complexity.MappableDomainHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.Ref(childComplexity), true
+
+	case "MappableDomainHistory.tags":
+		if e.complexity.MappableDomainHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.Tags(childComplexity), true
+
+	case "MappableDomainHistory.updatedAt":
+		if e.complexity.MappableDomainHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.UpdatedAt(childComplexity), true
+
+	case "MappableDomainHistory.updatedBy":
+		if e.complexity.MappableDomainHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.UpdatedBy(childComplexity), true
+
+	case "MappableDomainHistoryConnection.edges":
+		if e.complexity.MappableDomainHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistoryConnection.Edges(childComplexity), true
+
+	case "MappableDomainHistoryConnection.pageInfo":
+		if e.complexity.MappableDomainHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistoryConnection.PageInfo(childComplexity), true
+
+	case "MappableDomainHistoryConnection.totalCount":
+		if e.complexity.MappableDomainHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistoryConnection.TotalCount(childComplexity), true
+
+	case "MappableDomainHistoryEdge.cursor":
+		if e.complexity.MappableDomainHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistoryEdge.Cursor(childComplexity), true
+
+	case "MappableDomainHistoryEdge.node":
+		if e.complexity.MappableDomainHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistoryEdge.Node(childComplexity), true
+
+	case "MappableDomainUpdatePayload.mappableDomain":
+		if e.complexity.MappableDomainUpdatePayload.MappableDomain == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainUpdatePayload.MappableDomain(childComplexity), true
+
 	case "MappedControl.controls":
 		if e.complexity.MappedControl.Controls == nil {
 			break
@@ -11810,6 +12562,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVControlObjective(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVCustomDomain":
+		if e.complexity.Mutation.CreateBulkCSVCustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVCustomDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVCustomDomain(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVDocumentData":
 		if e.complexity.Mutation.CreateBulkCSVDocumentData == nil {
 			break
@@ -11941,6 +12705,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVInvite(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVMappableDomain":
+		if e.complexity.Mutation.CreateBulkCSVMappableDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVMappableDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVMappableDomain(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVMappedControl":
 		if e.complexity.Mutation.CreateBulkCSVMappedControl == nil {
@@ -12146,6 +12922,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkControlObjective(childComplexity, args["input"].([]*generated.CreateControlObjectiveInput)), true
 
+	case "Mutation.createBulkCustomDomain":
+		if e.complexity.Mutation.CreateBulkCustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCustomDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCustomDomain(childComplexity, args["input"].([]*generated.CreateCustomDomainInput)), true
+
 	case "Mutation.createBulkDocumentData":
 		if e.complexity.Mutation.CreateBulkDocumentData == nil {
 			break
@@ -12277,6 +13065,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkInvite(childComplexity, args["input"].([]*generated.CreateInviteInput)), true
+
+	case "Mutation.createBulkMappableDomain":
+		if e.complexity.Mutation.CreateBulkMappableDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkMappableDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkMappableDomain(childComplexity, args["input"].([]*generated.CreateMappableDomainInput)), true
 
 	case "Mutation.createBulkMappedControl":
 		if e.complexity.Mutation.CreateBulkMappedControl == nil {
@@ -12506,6 +13306,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateControlsByClone(childComplexity, args["input"].(*model.CloneControlInput)), true
 
+	case "Mutation.createCustomDomain":
+		if e.complexity.Mutation.CreateCustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createCustomDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateCustomDomain(childComplexity, args["input"].(generated.CreateCustomDomainInput)), true
+
 	case "Mutation.createDocumentData":
 		if e.complexity.Mutation.CreateDocumentData == nil {
 			break
@@ -12685,6 +13497,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateInvite(childComplexity, args["input"].(generated.CreateInviteInput)), true
+
+	case "Mutation.createMappableDomain":
+		if e.complexity.Mutation.CreateMappableDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createMappableDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateMappableDomain(childComplexity, args["input"].(generated.CreateMappableDomainInput)), true
 
 	case "Mutation.createMappedControl":
 		if e.complexity.Mutation.CreateMappedControl == nil {
@@ -13010,6 +13834,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteControlObjective(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteCustomDomain":
+		if e.complexity.Mutation.DeleteCustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteCustomDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteCustomDomain(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteDocumentData":
 		if e.complexity.Mutation.DeleteDocumentData == nil {
 			break
@@ -13165,6 +14001,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteInvite(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteMappableDomain":
+		if e.complexity.Mutation.DeleteMappableDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteMappableDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteMappableDomain(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteMappedControl":
 		if e.complexity.Mutation.DeleteMappedControl == nil {
@@ -13442,6 +14290,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateControlObjective(childComplexity, args["id"].(string), args["input"].(generated.UpdateControlObjectiveInput)), true
 
+	case "Mutation.updateCustomDomain":
+		if e.complexity.Mutation.UpdateCustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateCustomDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateCustomDomain(childComplexity, args["id"].(string), args["input"].(generated.UpdateCustomDomainInput)), true
+
 	case "Mutation.updateDocumentData":
 		if e.complexity.Mutation.UpdateDocumentData == nil {
 			break
@@ -13585,6 +14445,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateInvite(childComplexity, args["id"].(string), args["input"].(generated.UpdateInviteInput)), true
+
+	case "Mutation.updateMappableDomain":
+		if e.complexity.Mutation.UpdateMappableDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateMappableDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateMappableDomain(childComplexity, args["id"].(string), args["input"].(generated.UpdateMappableDomainInput)), true
 
 	case "Mutation.updateMappedControl":
 		if e.complexity.Mutation.UpdateMappedControl == nil {
@@ -15388,6 +16260,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.CreatedBy(childComplexity), true
+
+	case "Organization.customDomains":
+		if e.complexity.Organization.CustomDomains == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_customDomains_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
 
 	case "Organization.dedicatedDb":
 		if e.complexity.Organization.DedicatedDb == nil {
@@ -18291,6 +19175,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminControlSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminCustomDomainSearch":
+		if e.complexity.Query.AdminCustomDomainSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminCustomDomainSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminCustomDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminDocumentDataSearch":
 		if e.complexity.Query.AdminDocumentDataSearch == nil {
 			break
@@ -18410,6 +19306,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.AdminInviteSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminMappableDomainSearch":
+		if e.complexity.Query.AdminMappableDomainSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminMappableDomainSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminMappableDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.adminMappedControlSearch":
 		if e.complexity.Query.AdminMappedControlSearch == nil {
@@ -18830,6 +19738,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Query.customDomain":
+		if e.complexity.Query.CustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Query_customDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CustomDomain(childComplexity, args["id"].(string)), true
+
+	case "Query.customDomainHistories":
+		if e.complexity.Query.CustomDomainHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_customDomainHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CustomDomainHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.CustomDomainHistoryOrder), args["where"].(*generated.CustomDomainHistoryWhereInput)), true
+
+	case "Query.customDomainSearch":
+		if e.complexity.Query.CustomDomainSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_customDomainSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CustomDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.customDomains":
+		if e.complexity.Query.CustomDomains == nil {
+			break
+		}
+
+		args, err := ec.field_Query_customDomains_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
 
 	case "Query.documentData":
 		if e.complexity.Query.DocumentData == nil {
@@ -19406,6 +20362,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Invites(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InviteOrder), args["where"].(*generated.InviteWhereInput)), true
+
+	case "Query.mappableDomain":
+		if e.complexity.Query.MappableDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Query_mappableDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.MappableDomain(childComplexity, args["id"].(string)), true
+
+	case "Query.mappableDomainHistories":
+		if e.complexity.Query.MappableDomainHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_mappableDomainHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.MappableDomainHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.MappableDomainHistoryOrder), args["where"].(*generated.MappableDomainHistoryWhereInput)), true
+
+	case "Query.mappableDomainSearch":
+		if e.complexity.Query.MappableDomainSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_mappableDomainSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.MappableDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.mappableDomains":
+		if e.complexity.Query.MappableDomains == nil {
+			break
+		}
+
+		args, err := ec.field_Query_mappableDomains_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.MappableDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.MappableDomainOrder), args["where"].(*generated.MappableDomainWhereInput)), true
 
 	case "Query.mappedControl":
 		if e.complexity.Query.MappedControl == nil {
@@ -20933,6 +21937,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Controls(childComplexity), true
 
+	case "SearchResults.customDomains":
+		if e.complexity.SearchResults.CustomDomains == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.CustomDomains(childComplexity), true
+
 	case "SearchResults.documentData":
 		if e.complexity.SearchResults.DocumentData == nil {
 			break
@@ -21002,6 +22013,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Invites(childComplexity), true
+
+	case "SearchResults.mappableDomains":
+		if e.complexity.SearchResults.MappableDomains == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.MappableDomains(childComplexity), true
 
 	case "SearchResults.mappedControls":
 		if e.complexity.SearchResults.MappedControls == nil {
@@ -24601,6 +25619,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateControlInput,
 		ec.unmarshalInputCreateControlObjectiveInput,
 		ec.unmarshalInputCreateControlWithSubcontrolsInput,
+		ec.unmarshalInputCreateCustomDomainInput,
 		ec.unmarshalInputCreateDocumentDataInput,
 		ec.unmarshalInputCreateEntityInput,
 		ec.unmarshalInputCreateEntityTypeInput,
@@ -24615,6 +25634,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateIntegrationInput,
 		ec.unmarshalInputCreateInternalPolicyInput,
 		ec.unmarshalInputCreateInviteInput,
+		ec.unmarshalInputCreateMappableDomainInput,
 		ec.unmarshalInputCreateMappedControlInput,
 		ec.unmarshalInputCreateMemberWithProgramInput,
 		ec.unmarshalInputCreateNarrativeInput,
@@ -24637,6 +25657,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTemplateInput,
 		ec.unmarshalInputCreateUserInput,
 		ec.unmarshalInputCreateUserSettingInput,
+		ec.unmarshalInputCustomDomainHistoryOrder,
+		ec.unmarshalInputCustomDomainHistoryWhereInput,
+		ec.unmarshalInputCustomDomainOrder,
+		ec.unmarshalInputCustomDomainWhereInput,
 		ec.unmarshalInputDocumentDataHistoryOrder,
 		ec.unmarshalInputDocumentDataHistoryWhereInput,
 		ec.unmarshalInputDocumentDataOrder,
@@ -24688,6 +25712,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputInternalPolicyWhereInput,
 		ec.unmarshalInputInviteOrder,
 		ec.unmarshalInputInviteWhereInput,
+		ec.unmarshalInputMappableDomainHistoryOrder,
+		ec.unmarshalInputMappableDomainHistoryWhereInput,
+		ec.unmarshalInputMappableDomainOrder,
+		ec.unmarshalInputMappableDomainWhereInput,
 		ec.unmarshalInputMappedControlHistoryOrder,
 		ec.unmarshalInputMappedControlHistoryWhereInput,
 		ec.unmarshalInputMappedControlOrder,
@@ -24762,6 +25790,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateControlImplementationInput,
 		ec.unmarshalInputUpdateControlInput,
 		ec.unmarshalInputUpdateControlObjectiveInput,
+		ec.unmarshalInputUpdateCustomDomainInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
 		ec.unmarshalInputUpdateEntityInput,
 		ec.unmarshalInputUpdateEntityTypeInput,
@@ -24775,6 +25804,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateIntegrationInput,
 		ec.unmarshalInputUpdateInternalPolicyInput,
 		ec.unmarshalInputUpdateInviteInput,
+		ec.unmarshalInputUpdateMappableDomainInput,
 		ec.unmarshalInputUpdateMappedControlInput,
 		ec.unmarshalInputUpdateNarrativeInput,
 		ec.unmarshalInputUpdateNoteInput,
@@ -25156,6 +26186,31 @@ type ActionPlanBulkCreatePayload {
         last: Int
     ): ControlObjectiveConnection
     """
+    Search across CustomDomain objects
+    """
+    adminCustomDomainSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): CustomDomainConnection
+    """
     Search across DocumentData objects
     """
     adminDocumentDataSearch(
@@ -25405,6 +26460,31 @@ type ActionPlanBulkCreatePayload {
         """
         last: Int
     ): InviteConnection
+    """
+    Search across MappableDomain objects
+    """
+    adminMappableDomainSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): MappableDomainConnection
     """
     Search across MappedControl objects
     """
@@ -26441,6 +27521,109 @@ type ControlObjectiveBulkCreatePayload {
     Created controlObjectives
     """
     controlObjectives: [ControlObjective!]
+}`, BuiltIn: false},
+	{Name: "../schema/customdomain.graphql", Input: `extend type Query {
+    """
+    Look up customDomain by ID
+    """
+     customDomain(
+        """
+        ID of the customDomain
+        """
+        id: ID!
+    ):  CustomDomain!
+}
+
+extend type Mutation{
+    """
+    Create a new customDomain
+    """
+    createCustomDomain(
+        """
+        values of the customDomain
+        """
+        input: CreateCustomDomainInput!
+    ): CustomDomainCreatePayload!
+    """
+    Create multiple new customDomains
+    """
+    createBulkCustomDomain(
+        """
+        values of the customDomain
+        """
+        input: [CreateCustomDomainInput!]
+    ): CustomDomainBulkCreatePayload!
+    """
+    Create multiple new customDomains via file upload
+    """
+    createBulkCSVCustomDomain(
+        """
+        csv file containing values of the customDomain
+        """
+        input: Upload!
+    ): CustomDomainBulkCreatePayload!
+    """
+    Update an existing customDomain
+    """
+    updateCustomDomain(
+        """
+        ID of the customDomain
+        """
+        id: ID!
+        """
+        New values for the customDomain
+        """
+        input: UpdateCustomDomainInput!
+    ): CustomDomainUpdatePayload!
+    """
+    Delete an existing customDomain
+    """
+    deleteCustomDomain(
+        """
+        ID of the customDomain
+        """
+        id: ID!
+    ): CustomDomainDeletePayload!
+}
+
+"""
+Return response for createCustomDomain mutation
+"""
+type CustomDomainCreatePayload {
+    """
+    Created customDomain
+    """
+    customDomain: CustomDomain!
+}
+
+"""
+Return response for updateCustomDomain mutation
+"""
+type CustomDomainUpdatePayload {
+    """
+    Updated customDomain
+    """
+    customDomain: CustomDomain!
+}
+
+"""
+Return response for deleteCustomDomain mutation
+"""
+type CustomDomainDeletePayload {
+    """
+    Deleted customDomain ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkCustomDomain mutation
+"""
+type CustomDomainBulkCreatePayload {
+    """
+    Created customDomains
+    """
+    customDomains: [CustomDomain!]
 }`, BuiltIn: false},
 	{Name: "../schema/directives.graphql", Input: `directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
 `, BuiltIn: false},
@@ -32748,6 +33931,22 @@ input CreateControlObjectiveInput {
   taskIDs: [ID!]
 }
 """
+CreateCustomDomainInput is used for create CustomDomain object.
+Input was generated by ent.
+"""
+input CreateCustomDomainInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the name of the custom domain
+  """
+  cnameRecord: String!
+  ownerID: ID
+  mappableDomainID: ID!
+}
+"""
 CreateDocumentDataInput is used for create DocumentData object.
 Input was generated by ent.
 """
@@ -33185,6 +34384,21 @@ input CreateInviteInput {
   eventIDs: [ID!]
 }
 """
+CreateMappableDomainInput is used for create MappableDomain object.
+Input was generated by ent.
+"""
+input CreateMappableDomainInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  Name of the mappable domain
+  """
+  name: String!
+  customDomainIDs: [ID!]
+}
+"""
 CreateMappedControlInput is used for create MappedControl object.
 Input was generated by ent.
 """
@@ -33362,6 +34576,7 @@ input CreateOrganizationInput {
   evidenceIDs: [ID!]
   standardIDs: [ID!]
   actionPlanIDs: [ID!]
+  customDomainIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -34020,6 +35235,603 @@ Define a Relay Cursor type:
 https://relay.dev/graphql/connections.htm#sec-Cursor
 """
 scalar Cursor
+type CustomDomain implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the name of the custom domain
+  """
+  cnameRecord: String!
+  """
+  The mappable domain id that this custom domain maps to
+  """
+  mappableDomainID: ID!
+  """
+  String to be prepended to the cname_record, used to evaluate domain ownership.
+  """
+  txtRecordSubdomain: String!
+  """
+  Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
+  """
+  txtRecordValue: String!
+  """
+  Status of the custom domain verification
+  """
+  status: CustomDomainCustomDomainStatus!
+  owner: Organization
+  mappableDomain: MappableDomain!
+}
+"""
+A connection to a list of items.
+"""
+type CustomDomainConnection {
+  """
+  A list of edges.
+  """
+  edges: [CustomDomainEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+CustomDomainCustomDomainStatus is enum for the field status
+"""
+enum CustomDomainCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
+  INVALID
+  VERIFIED
+  FAILED_VERIFY
+  PENDING
+}
+"""
+An edge in a connection.
+"""
+type CustomDomainEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: CustomDomain
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type CustomDomainHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: CustomDomainHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the name of the custom domain
+  """
+  cnameRecord: String!
+  """
+  The mappable domain id that this custom domain maps to
+  """
+  mappableDomainID: String!
+  """
+  String to be prepended to the cname_record, used to evaluate domain ownership.
+  """
+  txtRecordSubdomain: String!
+  """
+  Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
+  """
+  txtRecordValue: String!
+  """
+  Status of the custom domain verification
+  """
+  status: CustomDomainHistoryCustomDomainStatus!
+}
+"""
+A connection to a list of items.
+"""
+type CustomDomainHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [CustomDomainHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+CustomDomainHistoryCustomDomainStatus is enum for the field status
+"""
+enum CustomDomainHistoryCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
+  INVALID
+  VERIFIED
+  FAILED_VERIFY
+  PENDING
+}
+"""
+An edge in a connection.
+"""
+type CustomDomainHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: CustomDomainHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+CustomDomainHistoryOpType is enum for the field operation
+"""
+enum CustomDomainHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for CustomDomainHistory connections
+"""
+input CustomDomainHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order CustomDomainHistories.
+  """
+  field: CustomDomainHistoryOrderField!
+}
+"""
+Properties by which CustomDomainHistory connections can be ordered.
+"""
+enum CustomDomainHistoryOrderField {
+  created_at
+  updated_at
+  cname_record
+}
+"""
+CustomDomainHistoryWhereInput is used for filtering CustomDomainHistory objects.
+Input was generated by ent.
+"""
+input CustomDomainHistoryWhereInput {
+  not: CustomDomainHistoryWhereInput
+  and: [CustomDomainHistoryWhereInput!]
+  or: [CustomDomainHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: CustomDomainHistoryOpType
+  operationNEQ: CustomDomainHistoryOpType
+  operationIn: [CustomDomainHistoryOpType!]
+  operationNotIn: [CustomDomainHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  cname_record field predicates
+  """
+  cnameRecord: String
+  cnameRecordNEQ: String
+  cnameRecordIn: [String!]
+  cnameRecordNotIn: [String!]
+  cnameRecordGT: String
+  cnameRecordGTE: String
+  cnameRecordLT: String
+  cnameRecordLTE: String
+  cnameRecordContains: String
+  cnameRecordHasPrefix: String
+  cnameRecordHasSuffix: String
+  cnameRecordEqualFold: String
+  cnameRecordContainsFold: String
+  """
+  mappable_domain_id field predicates
+  """
+  mappableDomainID: String
+  mappableDomainIDNEQ: String
+  mappableDomainIDIn: [String!]
+  mappableDomainIDNotIn: [String!]
+  mappableDomainIDGT: String
+  mappableDomainIDGTE: String
+  mappableDomainIDLT: String
+  mappableDomainIDLTE: String
+  mappableDomainIDContains: String
+  mappableDomainIDHasPrefix: String
+  mappableDomainIDHasSuffix: String
+  mappableDomainIDEqualFold: String
+  mappableDomainIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: CustomDomainHistoryCustomDomainStatus
+  statusNEQ: CustomDomainHistoryCustomDomainStatus
+  statusIn: [CustomDomainHistoryCustomDomainStatus!]
+  statusNotIn: [CustomDomainHistoryCustomDomainStatus!]
+}
+"""
+Ordering options for CustomDomain connections
+"""
+input CustomDomainOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order CustomDomains.
+  """
+  field: CustomDomainOrderField!
+}
+"""
+Properties by which CustomDomain connections can be ordered.
+"""
+enum CustomDomainOrderField {
+  created_at
+  updated_at
+  cname_record
+}
+"""
+CustomDomainWhereInput is used for filtering CustomDomain objects.
+Input was generated by ent.
+"""
+input CustomDomainWhereInput {
+  not: CustomDomainWhereInput
+  and: [CustomDomainWhereInput!]
+  or: [CustomDomainWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  cname_record field predicates
+  """
+  cnameRecord: String
+  cnameRecordNEQ: String
+  cnameRecordIn: [String!]
+  cnameRecordNotIn: [String!]
+  cnameRecordGT: String
+  cnameRecordGTE: String
+  cnameRecordLT: String
+  cnameRecordLTE: String
+  cnameRecordContains: String
+  cnameRecordHasPrefix: String
+  cnameRecordHasSuffix: String
+  cnameRecordEqualFold: String
+  cnameRecordContainsFold: String
+  """
+  mappable_domain_id field predicates
+  """
+  mappableDomainID: ID
+  mappableDomainIDNEQ: ID
+  mappableDomainIDIn: [ID!]
+  mappableDomainIDNotIn: [ID!]
+  mappableDomainIDGT: ID
+  mappableDomainIDGTE: ID
+  mappableDomainIDLT: ID
+  mappableDomainIDLTE: ID
+  mappableDomainIDContains: ID
+  mappableDomainIDHasPrefix: ID
+  mappableDomainIDHasSuffix: ID
+  mappableDomainIDEqualFold: ID
+  mappableDomainIDContainsFold: ID
+  """
+  status field predicates
+  """
+  status: CustomDomainCustomDomainStatus
+  statusNEQ: CustomDomainCustomDomainStatus
+  statusIn: [CustomDomainCustomDomainStatus!]
+  statusNotIn: [CustomDomainCustomDomainStatus!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  mappable_domain edge predicates
+  """
+  hasMappableDomain: Boolean
+  hasMappableDomainWith: [MappableDomainWhereInput!]
+}
 type DocumentData implements Node {
   id: ID!
   createdAt: Time
@@ -43771,6 +45583,487 @@ scalar JSON
 The builtin Map type
 """
 scalar Map
+type MappableDomain implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  Name of the mappable domain
+  """
+  name: String!
+  customDomains(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CustomDomains returned from the connection.
+    """
+    orderBy: [CustomDomainOrder!]
+
+    """
+    Filtering options for CustomDomains returned from the connection.
+    """
+    where: CustomDomainWhereInput
+  ): CustomDomainConnection!
+}
+"""
+A connection to a list of items.
+"""
+type MappableDomainConnection {
+  """
+  A list of edges.
+  """
+  edges: [MappableDomainEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type MappableDomainEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: MappableDomain
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type MappableDomainHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: MappableDomainHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  Name of the mappable domain
+  """
+  name: String!
+}
+"""
+A connection to a list of items.
+"""
+type MappableDomainHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [MappableDomainHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type MappableDomainHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: MappableDomainHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+MappableDomainHistoryOpType is enum for the field operation
+"""
+enum MappableDomainHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for MappableDomainHistory connections
+"""
+input MappableDomainHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order MappableDomainHistories.
+  """
+  field: MappableDomainHistoryOrderField!
+}
+"""
+Properties by which MappableDomainHistory connections can be ordered.
+"""
+enum MappableDomainHistoryOrderField {
+  created_at
+  updated_at
+  name
+}
+"""
+MappableDomainHistoryWhereInput is used for filtering MappableDomainHistory objects.
+Input was generated by ent.
+"""
+input MappableDomainHistoryWhereInput {
+  not: MappableDomainHistoryWhereInput
+  and: [MappableDomainHistoryWhereInput!]
+  or: [MappableDomainHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: MappableDomainHistoryOpType
+  operationNEQ: MappableDomainHistoryOpType
+  operationIn: [MappableDomainHistoryOpType!]
+  operationNotIn: [MappableDomainHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+}
+"""
+Ordering options for MappableDomain connections
+"""
+input MappableDomainOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order MappableDomains.
+  """
+  field: MappableDomainOrderField!
+}
+"""
+Properties by which MappableDomain connections can be ordered.
+"""
+enum MappableDomainOrderField {
+  created_at
+  updated_at
+  name
+}
+"""
+MappableDomainWhereInput is used for filtering MappableDomain objects.
+Input was generated by ent.
+"""
+input MappableDomainWhereInput {
+  not: MappableDomainWhereInput
+  and: [MappableDomainWhereInput!]
+  or: [MappableDomainWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  custom_domains edge predicates
+  """
+  hasCustomDomains: Boolean
+  hasCustomDomainsWith: [CustomDomainWhereInput!]
+}
 type MappedControl implements Node {
   id: ID!
   createdAt: Time
@@ -48248,6 +50541,37 @@ type Organization implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  customDomains(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CustomDomains returned from the connection.
+    """
+    orderBy: [CustomDomainOrder!]
+
+    """
+    Filtering options for CustomDomains returned from the connection.
+    """
+    where: CustomDomainWhereInput
+  ): CustomDomainConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -49849,6 +52173,11 @@ input OrganizationWhereInput {
   """
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  custom_domains edge predicates
+  """
+  hasCustomDomains: Boolean
+  hasCustomDomainsWith: [CustomDomainWhereInput!]
   """
   members edge predicates
   """
@@ -53790,6 +56119,68 @@ type Query {
     """
     where: ControlObjectiveHistoryWhereInput
   ): ControlObjectiveHistoryConnection!
+  customDomains(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CustomDomains returned from the connection.
+    """
+    orderBy: [CustomDomainOrder!]
+
+    """
+    Filtering options for CustomDomains returned from the connection.
+    """
+    where: CustomDomainWhereInput
+  ): CustomDomainConnection!
+  customDomainHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CustomDomainHistories returned from the connection.
+    """
+    orderBy: CustomDomainHistoryOrder
+
+    """
+    Filtering options for CustomDomainHistories returned from the connection.
+    """
+    where: CustomDomainHistoryWhereInput
+  ): CustomDomainHistoryConnection!
   documentDataSlice(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -54565,6 +56956,68 @@ type Query {
     """
     where: InviteWhereInput
   ): InviteConnection!
+  mappableDomains(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappableDomains returned from the connection.
+    """
+    orderBy: [MappableDomainOrder!]
+
+    """
+    Filtering options for MappableDomains returned from the connection.
+    """
+    where: MappableDomainWhereInput
+  ): MappableDomainConnection!
+  mappableDomainHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappableDomainHistories returned from the connection.
+    """
+    orderBy: MappableDomainHistoryOrder
+
+    """
+    Filtering options for MappableDomainHistories returned from the connection.
+    """
+    where: MappableDomainHistoryWhereInput
+  ): MappableDomainHistoryConnection!
   mappedControls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62439,6 +64892,20 @@ input UpdateControlObjectiveInput {
   clearTasks: Boolean
 }
 """
+UpdateCustomDomainInput is used for update CustomDomain object.
+Input was generated by ent.
+"""
+input UpdateCustomDomainInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+}
+"""
 UpdateDocumentDataInput is used for update DocumentData object.
 Input was generated by ent.
 """
@@ -63076,6 +65543,21 @@ input UpdateInviteInput {
   clearEvents: Boolean
 }
 """
+UpdateMappableDomainInput is used for update MappableDomain object.
+Input was generated by ent.
+"""
+input UpdateMappableDomainInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  addCustomDomainIDs: [ID!]
+  removeCustomDomainIDs: [ID!]
+  clearCustomDomains: Boolean
+}
+"""
 UpdateMappedControlInput is used for update MappedControl object.
 Input was generated by ent.
 """
@@ -63327,6 +65809,9 @@ input UpdateOrganizationInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
+  addCustomDomainIDs: [ID!]
+  removeCustomDomainIDs: [ID!]
+  clearCustomDomains: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -67756,6 +70241,109 @@ type InviteBulkCreatePayload {
     """
     invites: [Invite!]
 }`, BuiltIn: false},
+	{Name: "../schema/mappabledomain.graphql", Input: `extend type Query {
+    """
+    Look up mappableDomain by ID
+    """
+     mappableDomain(
+        """
+        ID of the mappableDomain
+        """
+        id: ID!
+    ):  MappableDomain!
+}
+
+extend type Mutation{
+    """
+    Create a new mappableDomain
+    """
+    createMappableDomain(
+        """
+        values of the mappableDomain
+        """
+        input: CreateMappableDomainInput!
+    ): MappableDomainCreatePayload!
+    """
+    Create multiple new mappableDomains
+    """
+    createBulkMappableDomain(
+        """
+        values of the mappableDomain
+        """
+        input: [CreateMappableDomainInput!]
+    ): MappableDomainBulkCreatePayload!
+    """
+    Create multiple new mappableDomains via file upload
+    """
+    createBulkCSVMappableDomain(
+        """
+        csv file containing values of the mappableDomain
+        """
+        input: Upload!
+    ): MappableDomainBulkCreatePayload!
+    """
+    Update an existing mappableDomain
+    """
+    updateMappableDomain(
+        """
+        ID of the mappableDomain
+        """
+        id: ID!
+        """
+        New values for the mappableDomain
+        """
+        input: UpdateMappableDomainInput!
+    ): MappableDomainUpdatePayload!
+    """
+    Delete an existing mappableDomain
+    """
+    deleteMappableDomain(
+        """
+        ID of the mappableDomain
+        """
+        id: ID!
+    ): MappableDomainDeletePayload!
+}
+
+"""
+Return response for createMappableDomain mutation
+"""
+type MappableDomainCreatePayload {
+    """
+    Created mappableDomain
+    """
+    mappableDomain: MappableDomain!
+}
+
+"""
+Return response for updateMappableDomain mutation
+"""
+type MappableDomainUpdatePayload {
+    """
+    Updated mappableDomain
+    """
+    mappableDomain: MappableDomain!
+}
+
+"""
+Return response for deleteMappableDomain mutation
+"""
+type MappableDomainDeletePayload {
+    """
+    Deleted mappableDomain ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkMappableDomain mutation
+"""
+type MappableDomainBulkCreatePayload {
+    """
+    Created mappableDomains
+    """
+    mappableDomains: [MappableDomain!]
+}`, BuiltIn: false},
 	{Name: "../schema/mappedcontrol.graphql", Input: `extend type Query {
     """
     Look up mappedControl by ID
@@ -69158,6 +71746,31 @@ scalar AAGUID
         last: Int
     ): ControlObjectiveConnection
     """
+    Search across CustomDomain objects
+    """
+    customDomainSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): CustomDomainConnection
+    """
     Search across DocumentData objects
     """
     documentDataSearch(
@@ -69407,6 +72020,31 @@ scalar AAGUID
         """
         last: Int
     ): InviteConnection
+    """
+    Search across MappableDomain objects
+    """
+    mappableDomainSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): MappableDomainConnection
     """
     Search across MappedControl objects
     """
@@ -69848,6 +72486,7 @@ type SearchResults{
   controls: ControlConnection
   controlImplementations: ControlImplementationConnection
   controlObjectives: ControlObjectiveConnection
+  customDomains: CustomDomainConnection
   documentData: DocumentDataConnection
   entities: EntityConnection
   entityTypes: EntityTypeConnection
@@ -69858,6 +72497,7 @@ type SearchResults{
   integrations: IntegrationConnection
   internalPolicies: InternalPolicyConnection
   invites: InviteConnection
+  mappableDomains: MappableDomainConnection
   mappedControls: MappedControlConnection
   narratives: NarrativeConnection
   orgSubscriptions: OrgSubscriptionConnection
