@@ -777,6 +777,22 @@ func (co *ControlObjective) Tasks(
 	return co.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (cd *CustomDomain) Owner(ctx context.Context) (*Organization, error) {
+	result, err := cd.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = cd.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (cd *CustomDomain) MappableDomain(ctx context.Context) (*MappableDomain, error) {
+	result, err := cd.Edges.MappableDomainOrErr()
+	if IsNotLoaded(err) {
+		result, err = cd.QueryMappableDomain().Only(ctx)
+	}
+	return result, err
+}
+
 func (dd *DocumentData) Owner(ctx context.Context) (*Organization, error) {
 	result, err := dd.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -2254,6 +2270,27 @@ func (i *Invite) Events(
 	return i.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (md *MappableDomain) CustomDomains(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*CustomDomainOrder, where *CustomDomainWhereInput,
+) (*CustomDomainConnection, error) {
+	opts := []CustomDomainPaginateOption{
+		WithCustomDomainOrder(orderBy),
+		WithCustomDomainFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := md.Edges.totalCount[0][alias]
+	if nodes, err := md.NamedCustomDomains(alias); err == nil || hasTotalCount {
+		pager, err := newCustomDomainPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &CustomDomainConnection{Edges: []*CustomDomainEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return md.QueryCustomDomains().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (mc *MappedControl) Controls(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
 ) (*ControlConnection, error) {
@@ -3309,6 +3346,27 @@ func (o *Organization) ActionPlans(
 	return o.QueryActionPlans().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) CustomDomains(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*CustomDomainOrder, where *CustomDomainWhereInput,
+) (*CustomDomainConnection, error) {
+	opts := []CustomDomainPaginateOption{
+		WithCustomDomainOrder(orderBy),
+		WithCustomDomainFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[43][alias]
+	if nodes, err := o.NamedCustomDomains(alias); err == nil || hasTotalCount {
+		pager, err := newCustomDomainPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &CustomDomainConnection{Edges: []*CustomDomainEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryCustomDomains().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -3317,7 +3375,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[43][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[44][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {

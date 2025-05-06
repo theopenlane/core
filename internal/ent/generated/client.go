@@ -30,6 +30,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -56,6 +58,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -140,6 +144,10 @@ type Client struct {
 	ControlObjective *ControlObjectiveClient
 	// ControlObjectiveHistory is the client for interacting with the ControlObjectiveHistory builders.
 	ControlObjectiveHistory *ControlObjectiveHistoryClient
+	// CustomDomain is the client for interacting with the CustomDomain builders.
+	CustomDomain *CustomDomainClient
+	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
+	CustomDomainHistory *CustomDomainHistoryClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -192,6 +200,10 @@ type Client struct {
 	InternalPolicyHistory *InternalPolicyHistoryClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
+	// MappableDomain is the client for interacting with the MappableDomain builders.
+	MappableDomain *MappableDomainClient
+	// MappableDomainHistory is the client for interacting with the MappableDomainHistory builders.
+	MappableDomainHistory *MappableDomainHistoryClient
 	// MappedControl is the client for interacting with the MappedControl builders.
 	MappedControl *MappedControlClient
 	// MappedControlHistory is the client for interacting with the MappedControlHistory builders.
@@ -303,6 +315,8 @@ func (c *Client) init() {
 	c.ControlImplementationHistory = NewControlImplementationHistoryClient(c.config)
 	c.ControlObjective = NewControlObjectiveClient(c.config)
 	c.ControlObjectiveHistory = NewControlObjectiveHistoryClient(c.config)
+	c.CustomDomain = NewCustomDomainClient(c.config)
+	c.CustomDomainHistory = NewCustomDomainHistoryClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
 	c.DocumentDataHistory = NewDocumentDataHistoryClient(c.config)
 	c.EmailVerificationToken = NewEmailVerificationTokenClient(c.config)
@@ -329,6 +343,8 @@ func (c *Client) init() {
 	c.InternalPolicy = NewInternalPolicyClient(c.config)
 	c.InternalPolicyHistory = NewInternalPolicyHistoryClient(c.config)
 	c.Invite = NewInviteClient(c.config)
+	c.MappableDomain = NewMappableDomainClient(c.config)
+	c.MappableDomainHistory = NewMappableDomainHistoryClient(c.config)
 	c.MappedControl = NewMappedControlClient(c.config)
 	c.MappedControlHistory = NewMappedControlHistoryClient(c.config)
 	c.Narrative = NewNarrativeClient(c.config)
@@ -557,6 +573,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ControlImplementationHistory: NewControlImplementationHistoryClient(cfg),
 		ControlObjective:             NewControlObjectiveClient(cfg),
 		ControlObjectiveHistory:      NewControlObjectiveHistoryClient(cfg),
+		CustomDomain:                 NewCustomDomainClient(cfg),
+		CustomDomainHistory:          NewCustomDomainHistoryClient(cfg),
 		DocumentData:                 NewDocumentDataClient(cfg),
 		DocumentDataHistory:          NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
@@ -583,6 +601,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		InternalPolicy:               NewInternalPolicyClient(cfg),
 		InternalPolicyHistory:        NewInternalPolicyHistoryClient(cfg),
 		Invite:                       NewInviteClient(cfg),
+		MappableDomain:               NewMappableDomainClient(cfg),
+		MappableDomainHistory:        NewMappableDomainHistoryClient(cfg),
 		MappedControl:                NewMappedControlClient(cfg),
 		MappedControlHistory:         NewMappedControlHistoryClient(cfg),
 		Narrative:                    NewNarrativeClient(cfg),
@@ -653,6 +673,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ControlImplementationHistory: NewControlImplementationHistoryClient(cfg),
 		ControlObjective:             NewControlObjectiveClient(cfg),
 		ControlObjectiveHistory:      NewControlObjectiveHistoryClient(cfg),
+		CustomDomain:                 NewCustomDomainClient(cfg),
+		CustomDomainHistory:          NewCustomDomainHistoryClient(cfg),
 		DocumentData:                 NewDocumentDataClient(cfg),
 		DocumentDataHistory:          NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
@@ -679,6 +701,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		InternalPolicy:               NewInternalPolicyClient(cfg),
 		InternalPolicyHistory:        NewInternalPolicyHistoryClient(cfg),
 		Invite:                       NewInviteClient(cfg),
+		MappableDomain:               NewMappableDomainClient(cfg),
+		MappableDomainHistory:        NewMappableDomainHistoryClient(cfg),
 		MappedControl:                NewMappedControlClient(cfg),
 		MappedControlHistory:         NewMappedControlHistoryClient(cfg),
 		Narrative:                    NewNarrativeClient(cfg),
@@ -751,12 +775,13 @@ func (c *Client) Use(hooks ...Hook) {
 		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Contact, c.ContactHistory,
 		c.Control, c.ControlHistory, c.ControlImplementation,
 		c.ControlImplementationHistory, c.ControlObjective, c.ControlObjectiveHistory,
-		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
-		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
-		c.Evidence, c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
-		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
-		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
-		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
+		c.CustomDomain, c.CustomDomainHistory, c.DocumentData, c.DocumentDataHistory,
+		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
+		c.EntityTypeHistory, c.Event, c.EventHistory, c.Evidence, c.EvidenceHistory,
+		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
+		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
+		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
+		c.InternalPolicyHistory, c.Invite, c.MappableDomain, c.MappableDomainHistory,
 		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
 		c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership, c.OrgMembershipHistory,
 		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
@@ -779,12 +804,13 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Contact, c.ContactHistory,
 		c.Control, c.ControlHistory, c.ControlImplementation,
 		c.ControlImplementationHistory, c.ControlObjective, c.ControlObjectiveHistory,
-		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
-		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
-		c.Evidence, c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
-		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
-		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
-		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
+		c.CustomDomain, c.CustomDomainHistory, c.DocumentData, c.DocumentDataHistory,
+		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
+		c.EntityTypeHistory, c.Event, c.EventHistory, c.Evidence, c.EvidenceHistory,
+		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
+		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
+		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
+		c.InternalPolicyHistory, c.Invite, c.MappableDomain, c.MappableDomainHistory,
 		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
 		c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership, c.OrgMembershipHistory,
 		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
@@ -897,6 +923,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ControlObjective.mutate(ctx, m)
 	case *ControlObjectiveHistoryMutation:
 		return c.ControlObjectiveHistory.mutate(ctx, m)
+	case *CustomDomainMutation:
+		return c.CustomDomain.mutate(ctx, m)
+	case *CustomDomainHistoryMutation:
+		return c.CustomDomainHistory.mutate(ctx, m)
 	case *DocumentDataMutation:
 		return c.DocumentData.mutate(ctx, m)
 	case *DocumentDataHistoryMutation:
@@ -949,6 +979,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.InternalPolicyHistory.mutate(ctx, m)
 	case *InviteMutation:
 		return c.Invite.mutate(ctx, m)
+	case *MappableDomainMutation:
+		return c.MappableDomain.mutate(ctx, m)
+	case *MappableDomainHistoryMutation:
+		return c.MappableDomainHistory.mutate(ctx, m)
 	case *MappedControlMutation:
 		return c.MappedControl.mutate(ctx, m)
 	case *MappedControlHistoryMutation:
@@ -3385,6 +3419,313 @@ func (c *ControlObjectiveHistoryClient) mutate(ctx context.Context, m *ControlOb
 		return (&ControlObjectiveHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown ControlObjectiveHistory mutation op: %q", m.Op())
+	}
+}
+
+// CustomDomainClient is a client for the CustomDomain schema.
+type CustomDomainClient struct {
+	config
+}
+
+// NewCustomDomainClient returns a client for the CustomDomain from the given config.
+func NewCustomDomainClient(c config) *CustomDomainClient {
+	return &CustomDomainClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `customdomain.Hooks(f(g(h())))`.
+func (c *CustomDomainClient) Use(hooks ...Hook) {
+	c.hooks.CustomDomain = append(c.hooks.CustomDomain, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `customdomain.Intercept(f(g(h())))`.
+func (c *CustomDomainClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CustomDomain = append(c.inters.CustomDomain, interceptors...)
+}
+
+// Create returns a builder for creating a CustomDomain entity.
+func (c *CustomDomainClient) Create() *CustomDomainCreate {
+	mutation := newCustomDomainMutation(c.config, OpCreate)
+	return &CustomDomainCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CustomDomain entities.
+func (c *CustomDomainClient) CreateBulk(builders ...*CustomDomainCreate) *CustomDomainCreateBulk {
+	return &CustomDomainCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CustomDomainClient) MapCreateBulk(slice any, setFunc func(*CustomDomainCreate, int)) *CustomDomainCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CustomDomainCreateBulk{err: fmt.Errorf("calling to CustomDomainClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CustomDomainCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CustomDomainCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CustomDomain.
+func (c *CustomDomainClient) Update() *CustomDomainUpdate {
+	mutation := newCustomDomainMutation(c.config, OpUpdate)
+	return &CustomDomainUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CustomDomainClient) UpdateOne(cd *CustomDomain) *CustomDomainUpdateOne {
+	mutation := newCustomDomainMutation(c.config, OpUpdateOne, withCustomDomain(cd))
+	return &CustomDomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CustomDomainClient) UpdateOneID(id string) *CustomDomainUpdateOne {
+	mutation := newCustomDomainMutation(c.config, OpUpdateOne, withCustomDomainID(id))
+	return &CustomDomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CustomDomain.
+func (c *CustomDomainClient) Delete() *CustomDomainDelete {
+	mutation := newCustomDomainMutation(c.config, OpDelete)
+	return &CustomDomainDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CustomDomainClient) DeleteOne(cd *CustomDomain) *CustomDomainDeleteOne {
+	return c.DeleteOneID(cd.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CustomDomainClient) DeleteOneID(id string) *CustomDomainDeleteOne {
+	builder := c.Delete().Where(customdomain.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CustomDomainDeleteOne{builder}
+}
+
+// Query returns a query builder for CustomDomain.
+func (c *CustomDomainClient) Query() *CustomDomainQuery {
+	return &CustomDomainQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCustomDomain},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CustomDomain entity by its id.
+func (c *CustomDomainClient) Get(ctx context.Context, id string) (*CustomDomain, error) {
+	return c.Query().Where(customdomain.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CustomDomainClient) GetX(ctx context.Context, id string) *CustomDomain {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a CustomDomain.
+func (c *CustomDomainClient) QueryOwner(cd *CustomDomain) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customdomain.Table, customdomain.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, customdomain.OwnerTable, customdomain.OwnerColumn),
+		)
+		schemaConfig := cd.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.CustomDomain
+		fromV = sqlgraph.Neighbors(cd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappableDomain queries the mappable_domain edge of a CustomDomain.
+func (c *CustomDomainClient) QueryMappableDomain(cd *CustomDomain) *MappableDomainQuery {
+	query := (&MappableDomainClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customdomain.Table, customdomain.FieldID, id),
+			sqlgraph.To(mappabledomain.Table, mappabledomain.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, customdomain.MappableDomainTable, customdomain.MappableDomainColumn),
+		)
+		schemaConfig := cd.schemaConfig
+		step.To.Schema = schemaConfig.MappableDomain
+		step.Edge.Schema = schemaConfig.CustomDomain
+		fromV = sqlgraph.Neighbors(cd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *CustomDomainClient) Hooks() []Hook {
+	hooks := c.hooks.CustomDomain
+	return append(hooks[:len(hooks):len(hooks)], customdomain.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *CustomDomainClient) Interceptors() []Interceptor {
+	inters := c.inters.CustomDomain
+	return append(inters[:len(inters):len(inters)], customdomain.Interceptors[:]...)
+}
+
+func (c *CustomDomainClient) mutate(ctx context.Context, m *CustomDomainMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CustomDomainCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CustomDomainUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CustomDomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CustomDomainDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown CustomDomain mutation op: %q", m.Op())
+	}
+}
+
+// CustomDomainHistoryClient is a client for the CustomDomainHistory schema.
+type CustomDomainHistoryClient struct {
+	config
+}
+
+// NewCustomDomainHistoryClient returns a client for the CustomDomainHistory from the given config.
+func NewCustomDomainHistoryClient(c config) *CustomDomainHistoryClient {
+	return &CustomDomainHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `customdomainhistory.Hooks(f(g(h())))`.
+func (c *CustomDomainHistoryClient) Use(hooks ...Hook) {
+	c.hooks.CustomDomainHistory = append(c.hooks.CustomDomainHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `customdomainhistory.Intercept(f(g(h())))`.
+func (c *CustomDomainHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CustomDomainHistory = append(c.inters.CustomDomainHistory, interceptors...)
+}
+
+// Create returns a builder for creating a CustomDomainHistory entity.
+func (c *CustomDomainHistoryClient) Create() *CustomDomainHistoryCreate {
+	mutation := newCustomDomainHistoryMutation(c.config, OpCreate)
+	return &CustomDomainHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CustomDomainHistory entities.
+func (c *CustomDomainHistoryClient) CreateBulk(builders ...*CustomDomainHistoryCreate) *CustomDomainHistoryCreateBulk {
+	return &CustomDomainHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CustomDomainHistoryClient) MapCreateBulk(slice any, setFunc func(*CustomDomainHistoryCreate, int)) *CustomDomainHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CustomDomainHistoryCreateBulk{err: fmt.Errorf("calling to CustomDomainHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CustomDomainHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CustomDomainHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CustomDomainHistory.
+func (c *CustomDomainHistoryClient) Update() *CustomDomainHistoryUpdate {
+	mutation := newCustomDomainHistoryMutation(c.config, OpUpdate)
+	return &CustomDomainHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CustomDomainHistoryClient) UpdateOne(cdh *CustomDomainHistory) *CustomDomainHistoryUpdateOne {
+	mutation := newCustomDomainHistoryMutation(c.config, OpUpdateOne, withCustomDomainHistory(cdh))
+	return &CustomDomainHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CustomDomainHistoryClient) UpdateOneID(id string) *CustomDomainHistoryUpdateOne {
+	mutation := newCustomDomainHistoryMutation(c.config, OpUpdateOne, withCustomDomainHistoryID(id))
+	return &CustomDomainHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CustomDomainHistory.
+func (c *CustomDomainHistoryClient) Delete() *CustomDomainHistoryDelete {
+	mutation := newCustomDomainHistoryMutation(c.config, OpDelete)
+	return &CustomDomainHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CustomDomainHistoryClient) DeleteOne(cdh *CustomDomainHistory) *CustomDomainHistoryDeleteOne {
+	return c.DeleteOneID(cdh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CustomDomainHistoryClient) DeleteOneID(id string) *CustomDomainHistoryDeleteOne {
+	builder := c.Delete().Where(customdomainhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CustomDomainHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for CustomDomainHistory.
+func (c *CustomDomainHistoryClient) Query() *CustomDomainHistoryQuery {
+	return &CustomDomainHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCustomDomainHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CustomDomainHistory entity by its id.
+func (c *CustomDomainHistoryClient) Get(ctx context.Context, id string) (*CustomDomainHistory, error) {
+	return c.Query().Where(customdomainhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CustomDomainHistoryClient) GetX(ctx context.Context, id string) *CustomDomainHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CustomDomainHistoryClient) Hooks() []Hook {
+	return c.hooks.CustomDomainHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *CustomDomainHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.CustomDomainHistory
+	return append(inters[:len(inters):len(inters)], customdomainhistory.Interceptors[:]...)
+}
+
+func (c *CustomDomainHistoryClient) mutate(ctx context.Context, m *CustomDomainHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CustomDomainHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CustomDomainHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CustomDomainHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CustomDomainHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown CustomDomainHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -8726,6 +9067,294 @@ func (c *InviteClient) mutate(ctx context.Context, m *InviteMutation) (Value, er
 	}
 }
 
+// MappableDomainClient is a client for the MappableDomain schema.
+type MappableDomainClient struct {
+	config
+}
+
+// NewMappableDomainClient returns a client for the MappableDomain from the given config.
+func NewMappableDomainClient(c config) *MappableDomainClient {
+	return &MappableDomainClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `mappabledomain.Hooks(f(g(h())))`.
+func (c *MappableDomainClient) Use(hooks ...Hook) {
+	c.hooks.MappableDomain = append(c.hooks.MappableDomain, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `mappabledomain.Intercept(f(g(h())))`.
+func (c *MappableDomainClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MappableDomain = append(c.inters.MappableDomain, interceptors...)
+}
+
+// Create returns a builder for creating a MappableDomain entity.
+func (c *MappableDomainClient) Create() *MappableDomainCreate {
+	mutation := newMappableDomainMutation(c.config, OpCreate)
+	return &MappableDomainCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MappableDomain entities.
+func (c *MappableDomainClient) CreateBulk(builders ...*MappableDomainCreate) *MappableDomainCreateBulk {
+	return &MappableDomainCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MappableDomainClient) MapCreateBulk(slice any, setFunc func(*MappableDomainCreate, int)) *MappableDomainCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MappableDomainCreateBulk{err: fmt.Errorf("calling to MappableDomainClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MappableDomainCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MappableDomainCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MappableDomain.
+func (c *MappableDomainClient) Update() *MappableDomainUpdate {
+	mutation := newMappableDomainMutation(c.config, OpUpdate)
+	return &MappableDomainUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MappableDomainClient) UpdateOne(md *MappableDomain) *MappableDomainUpdateOne {
+	mutation := newMappableDomainMutation(c.config, OpUpdateOne, withMappableDomain(md))
+	return &MappableDomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MappableDomainClient) UpdateOneID(id string) *MappableDomainUpdateOne {
+	mutation := newMappableDomainMutation(c.config, OpUpdateOne, withMappableDomainID(id))
+	return &MappableDomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MappableDomain.
+func (c *MappableDomainClient) Delete() *MappableDomainDelete {
+	mutation := newMappableDomainMutation(c.config, OpDelete)
+	return &MappableDomainDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MappableDomainClient) DeleteOne(md *MappableDomain) *MappableDomainDeleteOne {
+	return c.DeleteOneID(md.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MappableDomainClient) DeleteOneID(id string) *MappableDomainDeleteOne {
+	builder := c.Delete().Where(mappabledomain.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MappableDomainDeleteOne{builder}
+}
+
+// Query returns a query builder for MappableDomain.
+func (c *MappableDomainClient) Query() *MappableDomainQuery {
+	return &MappableDomainQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMappableDomain},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MappableDomain entity by its id.
+func (c *MappableDomainClient) Get(ctx context.Context, id string) (*MappableDomain, error) {
+	return c.Query().Where(mappabledomain.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MappableDomainClient) GetX(ctx context.Context, id string) *MappableDomain {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryCustomDomains queries the custom_domains edge of a MappableDomain.
+func (c *MappableDomainClient) QueryCustomDomains(md *MappableDomain) *CustomDomainQuery {
+	query := (&CustomDomainClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := md.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappabledomain.Table, mappabledomain.FieldID, id),
+			sqlgraph.To(customdomain.Table, customdomain.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappabledomain.CustomDomainsTable, mappabledomain.CustomDomainsColumn),
+		)
+		schemaConfig := md.schemaConfig
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.CustomDomain
+		fromV = sqlgraph.Neighbors(md.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MappableDomainClient) Hooks() []Hook {
+	hooks := c.hooks.MappableDomain
+	return append(hooks[:len(hooks):len(hooks)], mappabledomain.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *MappableDomainClient) Interceptors() []Interceptor {
+	inters := c.inters.MappableDomain
+	return append(inters[:len(inters):len(inters)], mappabledomain.Interceptors[:]...)
+}
+
+func (c *MappableDomainClient) mutate(ctx context.Context, m *MappableDomainMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MappableDomainCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MappableDomainUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MappableDomainUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MappableDomainDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown MappableDomain mutation op: %q", m.Op())
+	}
+}
+
+// MappableDomainHistoryClient is a client for the MappableDomainHistory schema.
+type MappableDomainHistoryClient struct {
+	config
+}
+
+// NewMappableDomainHistoryClient returns a client for the MappableDomainHistory from the given config.
+func NewMappableDomainHistoryClient(c config) *MappableDomainHistoryClient {
+	return &MappableDomainHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `mappabledomainhistory.Hooks(f(g(h())))`.
+func (c *MappableDomainHistoryClient) Use(hooks ...Hook) {
+	c.hooks.MappableDomainHistory = append(c.hooks.MappableDomainHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `mappabledomainhistory.Intercept(f(g(h())))`.
+func (c *MappableDomainHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MappableDomainHistory = append(c.inters.MappableDomainHistory, interceptors...)
+}
+
+// Create returns a builder for creating a MappableDomainHistory entity.
+func (c *MappableDomainHistoryClient) Create() *MappableDomainHistoryCreate {
+	mutation := newMappableDomainHistoryMutation(c.config, OpCreate)
+	return &MappableDomainHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MappableDomainHistory entities.
+func (c *MappableDomainHistoryClient) CreateBulk(builders ...*MappableDomainHistoryCreate) *MappableDomainHistoryCreateBulk {
+	return &MappableDomainHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MappableDomainHistoryClient) MapCreateBulk(slice any, setFunc func(*MappableDomainHistoryCreate, int)) *MappableDomainHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MappableDomainHistoryCreateBulk{err: fmt.Errorf("calling to MappableDomainHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MappableDomainHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MappableDomainHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MappableDomainHistory.
+func (c *MappableDomainHistoryClient) Update() *MappableDomainHistoryUpdate {
+	mutation := newMappableDomainHistoryMutation(c.config, OpUpdate)
+	return &MappableDomainHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MappableDomainHistoryClient) UpdateOne(mdh *MappableDomainHistory) *MappableDomainHistoryUpdateOne {
+	mutation := newMappableDomainHistoryMutation(c.config, OpUpdateOne, withMappableDomainHistory(mdh))
+	return &MappableDomainHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MappableDomainHistoryClient) UpdateOneID(id string) *MappableDomainHistoryUpdateOne {
+	mutation := newMappableDomainHistoryMutation(c.config, OpUpdateOne, withMappableDomainHistoryID(id))
+	return &MappableDomainHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MappableDomainHistory.
+func (c *MappableDomainHistoryClient) Delete() *MappableDomainHistoryDelete {
+	mutation := newMappableDomainHistoryMutation(c.config, OpDelete)
+	return &MappableDomainHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MappableDomainHistoryClient) DeleteOne(mdh *MappableDomainHistory) *MappableDomainHistoryDeleteOne {
+	return c.DeleteOneID(mdh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MappableDomainHistoryClient) DeleteOneID(id string) *MappableDomainHistoryDeleteOne {
+	builder := c.Delete().Where(mappabledomainhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MappableDomainHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for MappableDomainHistory.
+func (c *MappableDomainHistoryClient) Query() *MappableDomainHistoryQuery {
+	return &MappableDomainHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMappableDomainHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MappableDomainHistory entity by its id.
+func (c *MappableDomainHistoryClient) Get(ctx context.Context, id string) (*MappableDomainHistory, error) {
+	return c.Query().Where(mappabledomainhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MappableDomainHistoryClient) GetX(ctx context.Context, id string) *MappableDomainHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *MappableDomainHistoryClient) Hooks() []Hook {
+	return c.hooks.MappableDomainHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *MappableDomainHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.MappableDomainHistory
+	return append(inters[:len(inters):len(inters)], mappabledomainhistory.Interceptors[:]...)
+}
+
+func (c *MappableDomainHistoryClient) mutate(ctx context.Context, m *MappableDomainHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MappableDomainHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MappableDomainHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MappableDomainHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MappableDomainHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown MappableDomainHistory mutation op: %q", m.Op())
+	}
+}
+
 // MappedControlClient is a client for the MappedControl schema.
 type MappedControlClient struct {
 	config
@@ -11485,6 +12114,25 @@ func (c *OrganizationClient) QueryActionPlans(o *Organization) *ActionPlanQuery 
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCustomDomains queries the custom_domains edge of a Organization.
+func (c *OrganizationClient) QueryCustomDomains(o *Organization) *CustomDomainQuery {
+	query := (&CustomDomainClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(customdomain.Table, customdomain.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CustomDomainsTable, organization.CustomDomainsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.CustomDomain
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -17362,40 +18010,40 @@ type (
 	hooks struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
 		ControlHistory, ControlImplementation, ControlImplementationHistory,
-		ControlObjective, ControlObjectiveHistory, DocumentData, DocumentDataHistory,
-		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
-		Event, EventHistory, Evidence, EvidenceHistory, File, FileHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
-		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
-		InternalPolicy, InternalPolicyHistory, Invite, MappedControl,
-		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
-		Onboarding, OrgMembership, OrgMembershipHistory, OrgSubscription,
-		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
-		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
-		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
-		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Hook
+		ControlObjective, ControlObjectiveHistory, CustomDomain, CustomDomainHistory,
+		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
+		EntityHistory, EntityType, EntityTypeHistory, Event, EventHistory, Evidence,
+		EvidenceHistory, File, FileHistory, Group, GroupHistory, GroupMembership,
+		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
+		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
+		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
+		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
+		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
+		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
+		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
+		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subscriber,
+		TFASetting, Task, TaskHistory, Template, TemplateHistory, User, UserHistory,
+		UserSetting, UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
 		ControlHistory, ControlImplementation, ControlImplementationHistory,
-		ControlObjective, ControlObjectiveHistory, DocumentData, DocumentDataHistory,
-		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
-		Event, EventHistory, Evidence, EvidenceHistory, File, FileHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
-		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
-		InternalPolicy, InternalPolicyHistory, Invite, MappedControl,
-		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
-		Onboarding, OrgMembership, OrgMembershipHistory, OrgSubscription,
-		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
-		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
-		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, Standard, StandardHistory,
-		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Interceptor
+		ControlObjective, ControlObjectiveHistory, CustomDomain, CustomDomainHistory,
+		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
+		EntityHistory, EntityType, EntityTypeHistory, Event, EventHistory, Evidence,
+		EvidenceHistory, File, FileHistory, Group, GroupHistory, GroupMembership,
+		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
+		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
+		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
+		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
+		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
+		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
+		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
+		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subscriber,
+		TFASetting, Task, TaskHistory, Template, TemplateHistory, User, UserHistory,
+		UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

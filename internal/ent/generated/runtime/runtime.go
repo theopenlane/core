@@ -17,6 +17,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -43,6 +45,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -721,6 +725,161 @@ func init() {
 	controlobjectivehistoryDescID := controlobjectivehistoryFields[9].Descriptor()
 	// controlobjectivehistory.DefaultID holds the default value on creation for the id field.
 	controlobjectivehistory.DefaultID = controlobjectivehistoryDescID.Default.(func() string)
+	customdomainMixin := schema.CustomDomain{}.Mixin()
+	customdomain.Policy = privacy.NewPolicies(schema.CustomDomain{})
+	customdomain.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := customdomain.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	customdomainMixinHooks0 := customdomainMixin[0].Hooks()
+	customdomainMixinHooks1 := customdomainMixin[1].Hooks()
+	customdomainMixinHooks5 := customdomainMixin[5].Hooks()
+	customdomainHooks := schema.CustomDomain{}.Hooks()
+
+	customdomain.Hooks[1] = customdomainMixinHooks0[0]
+
+	customdomain.Hooks[2] = customdomainMixinHooks1[0]
+
+	customdomain.Hooks[3] = customdomainMixinHooks5[0]
+
+	customdomain.Hooks[4] = customdomainHooks[0]
+	customdomainMixinInters1 := customdomainMixin[1].Interceptors()
+	customdomainMixinInters5 := customdomainMixin[5].Interceptors()
+	customdomain.Interceptors[0] = customdomainMixinInters1[0]
+	customdomain.Interceptors[1] = customdomainMixinInters5[0]
+	customdomainMixinFields0 := customdomainMixin[0].Fields()
+	_ = customdomainMixinFields0
+	customdomainMixinFields2 := customdomainMixin[2].Fields()
+	_ = customdomainMixinFields2
+	customdomainMixinFields3 := customdomainMixin[3].Fields()
+	_ = customdomainMixinFields3
+	customdomainMixinFields5 := customdomainMixin[5].Fields()
+	_ = customdomainMixinFields5
+	customdomainFields := schema.CustomDomain{}.Fields()
+	_ = customdomainFields
+	// customdomainDescCreatedAt is the schema descriptor for created_at field.
+	customdomainDescCreatedAt := customdomainMixinFields0[0].Descriptor()
+	// customdomain.DefaultCreatedAt holds the default value on creation for the created_at field.
+	customdomain.DefaultCreatedAt = customdomainDescCreatedAt.Default.(func() time.Time)
+	// customdomainDescUpdatedAt is the schema descriptor for updated_at field.
+	customdomainDescUpdatedAt := customdomainMixinFields0[1].Descriptor()
+	// customdomain.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	customdomain.DefaultUpdatedAt = customdomainDescUpdatedAt.Default.(func() time.Time)
+	// customdomain.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	customdomain.UpdateDefaultUpdatedAt = customdomainDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// customdomainDescTags is the schema descriptor for tags field.
+	customdomainDescTags := customdomainMixinFields3[0].Descriptor()
+	// customdomain.DefaultTags holds the default value on creation for the tags field.
+	customdomain.DefaultTags = customdomainDescTags.Default.([]string)
+	// customdomainDescOwnerID is the schema descriptor for owner_id field.
+	customdomainDescOwnerID := customdomainMixinFields5[0].Descriptor()
+	// customdomain.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	customdomain.OwnerIDValidator = customdomainDescOwnerID.Validators[0].(func(string) error)
+	// customdomainDescCnameRecord is the schema descriptor for cname_record field.
+	customdomainDescCnameRecord := customdomainFields[0].Descriptor()
+	// customdomain.CnameRecordValidator is a validator for the "cname_record" field. It is called by the builders before save.
+	customdomain.CnameRecordValidator = func() func(string) error {
+		validators := customdomainDescCnameRecord.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+			validators[2].(func(string) error),
+		}
+		return func(cname_record string) error {
+			for _, fn := range fns {
+				if err := fn(cname_record); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// customdomainDescMappableDomainID is the schema descriptor for mappable_domain_id field.
+	customdomainDescMappableDomainID := customdomainFields[1].Descriptor()
+	// customdomain.MappableDomainIDValidator is a validator for the "mappable_domain_id" field. It is called by the builders before save.
+	customdomain.MappableDomainIDValidator = customdomainDescMappableDomainID.Validators[0].(func(string) error)
+	// customdomainDescTxtRecordSubdomain is the schema descriptor for txt_record_subdomain field.
+	customdomainDescTxtRecordSubdomain := customdomainFields[2].Descriptor()
+	// customdomain.DefaultTxtRecordSubdomain holds the default value on creation for the txt_record_subdomain field.
+	customdomain.DefaultTxtRecordSubdomain = customdomainDescTxtRecordSubdomain.Default.(string)
+	// customdomain.TxtRecordSubdomainValidator is a validator for the "txt_record_subdomain" field. It is called by the builders before save.
+	customdomain.TxtRecordSubdomainValidator = func() func(string) error {
+		validators := customdomainDescTxtRecordSubdomain.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(txt_record_subdomain string) error {
+			for _, fn := range fns {
+				if err := fn(txt_record_subdomain); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// customdomainDescTxtRecordValue is the schema descriptor for txt_record_value field.
+	customdomainDescTxtRecordValue := customdomainFields[3].Descriptor()
+	// customdomain.DefaultTxtRecordValue holds the default value on creation for the txt_record_value field.
+	customdomain.DefaultTxtRecordValue = customdomainDescTxtRecordValue.Default.(func() string)
+	// customdomain.TxtRecordValueValidator is a validator for the "txt_record_value" field. It is called by the builders before save.
+	customdomain.TxtRecordValueValidator = func() func(string) error {
+		validators := customdomainDescTxtRecordValue.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(txt_record_value string) error {
+			for _, fn := range fns {
+				if err := fn(txt_record_value); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// customdomainDescID is the schema descriptor for id field.
+	customdomainDescID := customdomainMixinFields2[0].Descriptor()
+	// customdomain.DefaultID holds the default value on creation for the id field.
+	customdomain.DefaultID = customdomainDescID.Default.(func() string)
+	customdomainhistoryInters := schema.CustomDomainHistory{}.Interceptors()
+	customdomainhistory.Interceptors[0] = customdomainhistoryInters[0]
+	customdomainhistoryFields := schema.CustomDomainHistory{}.Fields()
+	_ = customdomainhistoryFields
+	// customdomainhistoryDescHistoryTime is the schema descriptor for history_time field.
+	customdomainhistoryDescHistoryTime := customdomainhistoryFields[0].Descriptor()
+	// customdomainhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	customdomainhistory.DefaultHistoryTime = customdomainhistoryDescHistoryTime.Default.(func() time.Time)
+	// customdomainhistoryDescCreatedAt is the schema descriptor for created_at field.
+	customdomainhistoryDescCreatedAt := customdomainhistoryFields[3].Descriptor()
+	// customdomainhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	customdomainhistory.DefaultCreatedAt = customdomainhistoryDescCreatedAt.Default.(func() time.Time)
+	// customdomainhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	customdomainhistoryDescUpdatedAt := customdomainhistoryFields[4].Descriptor()
+	// customdomainhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	customdomainhistory.DefaultUpdatedAt = customdomainhistoryDescUpdatedAt.Default.(func() time.Time)
+	// customdomainhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	customdomainhistory.UpdateDefaultUpdatedAt = customdomainhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// customdomainhistoryDescTags is the schema descriptor for tags field.
+	customdomainhistoryDescTags := customdomainhistoryFields[10].Descriptor()
+	// customdomainhistory.DefaultTags holds the default value on creation for the tags field.
+	customdomainhistory.DefaultTags = customdomainhistoryDescTags.Default.([]string)
+	// customdomainhistoryDescTxtRecordSubdomain is the schema descriptor for txt_record_subdomain field.
+	customdomainhistoryDescTxtRecordSubdomain := customdomainhistoryFields[14].Descriptor()
+	// customdomainhistory.DefaultTxtRecordSubdomain holds the default value on creation for the txt_record_subdomain field.
+	customdomainhistory.DefaultTxtRecordSubdomain = customdomainhistoryDescTxtRecordSubdomain.Default.(string)
+	// customdomainhistoryDescTxtRecordValue is the schema descriptor for txt_record_value field.
+	customdomainhistoryDescTxtRecordValue := customdomainhistoryFields[15].Descriptor()
+	// customdomainhistory.DefaultTxtRecordValue holds the default value on creation for the txt_record_value field.
+	customdomainhistory.DefaultTxtRecordValue = customdomainhistoryDescTxtRecordValue.Default.(func() string)
+	// customdomainhistoryDescID is the schema descriptor for id field.
+	customdomainhistoryDescID := customdomainhistoryFields[9].Descriptor()
+	// customdomainhistory.DefaultID holds the default value on creation for the id field.
+	customdomainhistory.DefaultID = customdomainhistoryDescID.Default.(func() string)
 	documentdataMixin := schema.DocumentData{}.Mixin()
 	documentdata.Policy = privacy.NewPolicies(schema.DocumentData{})
 	documentdata.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -2050,6 +2209,95 @@ func init() {
 	inviteDescID := inviteMixinFields2[0].Descriptor()
 	// invite.DefaultID holds the default value on creation for the id field.
 	invite.DefaultID = inviteDescID.Default.(func() string)
+	mappabledomainMixin := schema.MappableDomain{}.Mixin()
+	mappabledomain.Policy = privacy.NewPolicies(schema.MappableDomain{})
+	mappabledomain.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := mappabledomain.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	mappabledomainMixinHooks0 := mappabledomainMixin[0].Hooks()
+	mappabledomainMixinHooks1 := mappabledomainMixin[1].Hooks()
+
+	mappabledomain.Hooks[1] = mappabledomainMixinHooks0[0]
+
+	mappabledomain.Hooks[2] = mappabledomainMixinHooks1[0]
+	mappabledomainMixinInters1 := mappabledomainMixin[1].Interceptors()
+	mappabledomain.Interceptors[0] = mappabledomainMixinInters1[0]
+	mappabledomainMixinFields0 := mappabledomainMixin[0].Fields()
+	_ = mappabledomainMixinFields0
+	mappabledomainMixinFields2 := mappabledomainMixin[2].Fields()
+	_ = mappabledomainMixinFields2
+	mappabledomainMixinFields3 := mappabledomainMixin[3].Fields()
+	_ = mappabledomainMixinFields3
+	mappabledomainFields := schema.MappableDomain{}.Fields()
+	_ = mappabledomainFields
+	// mappabledomainDescCreatedAt is the schema descriptor for created_at field.
+	mappabledomainDescCreatedAt := mappabledomainMixinFields0[0].Descriptor()
+	// mappabledomain.DefaultCreatedAt holds the default value on creation for the created_at field.
+	mappabledomain.DefaultCreatedAt = mappabledomainDescCreatedAt.Default.(func() time.Time)
+	// mappabledomainDescUpdatedAt is the schema descriptor for updated_at field.
+	mappabledomainDescUpdatedAt := mappabledomainMixinFields0[1].Descriptor()
+	// mappabledomain.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	mappabledomain.DefaultUpdatedAt = mappabledomainDescUpdatedAt.Default.(func() time.Time)
+	// mappabledomain.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	mappabledomain.UpdateDefaultUpdatedAt = mappabledomainDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// mappabledomainDescTags is the schema descriptor for tags field.
+	mappabledomainDescTags := mappabledomainMixinFields3[0].Descriptor()
+	// mappabledomain.DefaultTags holds the default value on creation for the tags field.
+	mappabledomain.DefaultTags = mappabledomainDescTags.Default.([]string)
+	// mappabledomainDescName is the schema descriptor for name field.
+	mappabledomainDescName := mappabledomainFields[0].Descriptor()
+	// mappabledomain.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	mappabledomain.NameValidator = func() func(string) error {
+		validators := mappabledomainDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+			validators[2].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// mappabledomainDescID is the schema descriptor for id field.
+	mappabledomainDescID := mappabledomainMixinFields2[0].Descriptor()
+	// mappabledomain.DefaultID holds the default value on creation for the id field.
+	mappabledomain.DefaultID = mappabledomainDescID.Default.(func() string)
+	mappabledomainhistoryInters := schema.MappableDomainHistory{}.Interceptors()
+	mappabledomainhistory.Interceptors[0] = mappabledomainhistoryInters[0]
+	mappabledomainhistoryFields := schema.MappableDomainHistory{}.Fields()
+	_ = mappabledomainhistoryFields
+	// mappabledomainhistoryDescHistoryTime is the schema descriptor for history_time field.
+	mappabledomainhistoryDescHistoryTime := mappabledomainhistoryFields[0].Descriptor()
+	// mappabledomainhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	mappabledomainhistory.DefaultHistoryTime = mappabledomainhistoryDescHistoryTime.Default.(func() time.Time)
+	// mappabledomainhistoryDescCreatedAt is the schema descriptor for created_at field.
+	mappabledomainhistoryDescCreatedAt := mappabledomainhistoryFields[3].Descriptor()
+	// mappabledomainhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	mappabledomainhistory.DefaultCreatedAt = mappabledomainhistoryDescCreatedAt.Default.(func() time.Time)
+	// mappabledomainhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	mappabledomainhistoryDescUpdatedAt := mappabledomainhistoryFields[4].Descriptor()
+	// mappabledomainhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	mappabledomainhistory.DefaultUpdatedAt = mappabledomainhistoryDescUpdatedAt.Default.(func() time.Time)
+	// mappabledomainhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	mappabledomainhistory.UpdateDefaultUpdatedAt = mappabledomainhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// mappabledomainhistoryDescTags is the schema descriptor for tags field.
+	mappabledomainhistoryDescTags := mappabledomainhistoryFields[10].Descriptor()
+	// mappabledomainhistory.DefaultTags holds the default value on creation for the tags field.
+	mappabledomainhistory.DefaultTags = mappabledomainhistoryDescTags.Default.([]string)
+	// mappabledomainhistoryDescID is the schema descriptor for id field.
+	mappabledomainhistoryDescID := mappabledomainhistoryFields[9].Descriptor()
+	// mappabledomainhistory.DefaultID holds the default value on creation for the id field.
+	mappabledomainhistory.DefaultID = mappabledomainhistoryDescID.Default.(func() string)
 	mappedcontrolMixin := schema.MappedControl{}.Mixin()
 	mappedcontrol.Policy = privacy.NewPolicies(schema.MappedControl{})
 	mappedcontrol.Hooks[0] = func(next ent.Mutator) ent.Mutator {

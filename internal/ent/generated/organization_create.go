@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -929,6 +930,21 @@ func (oc *OrganizationCreate) AddActionPlans(a ...*ActionPlan) *OrganizationCrea
 		ids[i] = a[i].ID
 	}
 	return oc.AddActionPlanIDs(ids...)
+}
+
+// AddCustomDomainIDs adds the "custom_domains" edge to the CustomDomain entity by IDs.
+func (oc *OrganizationCreate) AddCustomDomainIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddCustomDomainIDs(ids...)
+	return oc
+}
+
+// AddCustomDomains adds the "custom_domains" edges to the CustomDomain entity.
+func (oc *OrganizationCreate) AddCustomDomains(c ...*CustomDomain) *OrganizationCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return oc.AddCustomDomainIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1883,6 +1899,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.CustomDomainsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomDomainsTable,
+			Columns: []string{organization.CustomDomainsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

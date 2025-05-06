@@ -21,6 +21,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -46,6 +48,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -5092,6 +5096,355 @@ func newControlObjectiveHistoryPaginateArgs(rv map[string]any) *controlobjective
 	}
 	if v, ok := rv[whereField].(*ControlObjectiveHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithControlObjectiveHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (cd *CustomDomainQuery) CollectFields(ctx context.Context, satisfies ...string) (*CustomDomainQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return cd, nil
+	}
+	if err := cd.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return cd, nil
+}
+
+func (cd *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(customdomain.Columns))
+		selectedFields = []string{customdomain.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: cd.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			cd.withOwner = query
+			if _, ok := fieldSeen[customdomain.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldOwnerID)
+				fieldSeen[customdomain.FieldOwnerID] = struct{}{}
+			}
+
+		case "mappableDomain":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&MappableDomainClient{config: cd.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, mappabledomainImplementors)...); err != nil {
+				return err
+			}
+			cd.withMappableDomain = query
+			if _, ok := fieldSeen[customdomain.FieldMappableDomainID]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldMappableDomainID)
+				fieldSeen[customdomain.FieldMappableDomainID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[customdomain.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldCreatedAt)
+				fieldSeen[customdomain.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[customdomain.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldUpdatedAt)
+				fieldSeen[customdomain.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[customdomain.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldCreatedBy)
+				fieldSeen[customdomain.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[customdomain.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldUpdatedBy)
+				fieldSeen[customdomain.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[customdomain.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldDeletedAt)
+				fieldSeen[customdomain.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[customdomain.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldDeletedBy)
+				fieldSeen[customdomain.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[customdomain.FieldTags]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldTags)
+				fieldSeen[customdomain.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[customdomain.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldOwnerID)
+				fieldSeen[customdomain.FieldOwnerID] = struct{}{}
+			}
+		case "cnameRecord":
+			if _, ok := fieldSeen[customdomain.FieldCnameRecord]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldCnameRecord)
+				fieldSeen[customdomain.FieldCnameRecord] = struct{}{}
+			}
+		case "mappableDomainID":
+			if _, ok := fieldSeen[customdomain.FieldMappableDomainID]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldMappableDomainID)
+				fieldSeen[customdomain.FieldMappableDomainID] = struct{}{}
+			}
+		case "txtRecordSubdomain":
+			if _, ok := fieldSeen[customdomain.FieldTxtRecordSubdomain]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldTxtRecordSubdomain)
+				fieldSeen[customdomain.FieldTxtRecordSubdomain] = struct{}{}
+			}
+		case "txtRecordValue":
+			if _, ok := fieldSeen[customdomain.FieldTxtRecordValue]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldTxtRecordValue)
+				fieldSeen[customdomain.FieldTxtRecordValue] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[customdomain.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldStatus)
+				fieldSeen[customdomain.FieldStatus] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		cd.Select(selectedFields...)
+	}
+	return nil
+}
+
+type customdomainPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []CustomDomainPaginateOption
+}
+
+func newCustomDomainPaginateArgs(rv map[string]any) *customdomainPaginateArgs {
+	args := &customdomainPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*CustomDomainOrder:
+			args.opts = append(args.opts, WithCustomDomainOrder(v))
+		case []any:
+			var orders []*CustomDomainOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &CustomDomainOrder{Field: &CustomDomainOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithCustomDomainOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*CustomDomainWhereInput); ok {
+		args.opts = append(args.opts, WithCustomDomainFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (cdh *CustomDomainHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*CustomDomainHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return cdh, nil
+	}
+	if err := cdh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return cdh, nil
+}
+
+func (cdh *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(customdomainhistory.Columns))
+		selectedFields = []string{customdomainhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[customdomainhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldHistoryTime)
+				fieldSeen[customdomainhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[customdomainhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldRef)
+				fieldSeen[customdomainhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[customdomainhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldOperation)
+				fieldSeen[customdomainhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[customdomainhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldCreatedAt)
+				fieldSeen[customdomainhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[customdomainhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldUpdatedAt)
+				fieldSeen[customdomainhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[customdomainhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldCreatedBy)
+				fieldSeen[customdomainhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[customdomainhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldUpdatedBy)
+				fieldSeen[customdomainhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[customdomainhistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldDeletedAt)
+				fieldSeen[customdomainhistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[customdomainhistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldDeletedBy)
+				fieldSeen[customdomainhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[customdomainhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldTags)
+				fieldSeen[customdomainhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[customdomainhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldOwnerID)
+				fieldSeen[customdomainhistory.FieldOwnerID] = struct{}{}
+			}
+		case "cnameRecord":
+			if _, ok := fieldSeen[customdomainhistory.FieldCnameRecord]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldCnameRecord)
+				fieldSeen[customdomainhistory.FieldCnameRecord] = struct{}{}
+			}
+		case "mappableDomainID":
+			if _, ok := fieldSeen[customdomainhistory.FieldMappableDomainID]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldMappableDomainID)
+				fieldSeen[customdomainhistory.FieldMappableDomainID] = struct{}{}
+			}
+		case "txtRecordSubdomain":
+			if _, ok := fieldSeen[customdomainhistory.FieldTxtRecordSubdomain]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldTxtRecordSubdomain)
+				fieldSeen[customdomainhistory.FieldTxtRecordSubdomain] = struct{}{}
+			}
+		case "txtRecordValue":
+			if _, ok := fieldSeen[customdomainhistory.FieldTxtRecordValue]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldTxtRecordValue)
+				fieldSeen[customdomainhistory.FieldTxtRecordValue] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[customdomainhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldStatus)
+				fieldSeen[customdomainhistory.FieldStatus] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		cdh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type customdomainhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []CustomDomainHistoryPaginateOption
+}
+
+func newCustomDomainHistoryPaginateArgs(rv map[string]any) *customdomainhistoryPaginateArgs {
+	args := &customdomainhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &CustomDomainHistoryOrder{Field: &CustomDomainHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithCustomDomainHistoryOrder(order))
+			}
+		case *CustomDomainHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithCustomDomainHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*CustomDomainHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithCustomDomainHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -13943,6 +14296,364 @@ func newInvitePaginateArgs(rv map[string]any) *invitePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (md *MappableDomainQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappableDomainQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return md, nil
+	}
+	if err := md.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return md, nil
+}
+
+func (md *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(mappabledomain.Columns))
+		selectedFields = []string{mappabledomain.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "customDomains":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomDomainClient{config: md.config}).Query()
+			)
+			args := newCustomDomainPaginateArgs(fieldArgs(ctx, new(CustomDomainWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newCustomDomainPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					md.loadTotal = append(md.loadTotal, func(ctx context.Context, nodes []*MappableDomain) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"mappable_domain_custom_domains"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(mappabledomain.CustomDomainsColumn), ids...))
+						})
+						if err := query.GroupBy(mappabledomain.CustomDomainsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				} else {
+					md.loadTotal = append(md.loadTotal, func(_ context.Context, nodes []*MappableDomain) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.CustomDomains)
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, customdomainImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(mappabledomain.CustomDomainsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			md.WithNamedCustomDomains(alias, func(wq *CustomDomainQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[mappabledomain.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, mappabledomain.FieldCreatedAt)
+				fieldSeen[mappabledomain.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[mappabledomain.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, mappabledomain.FieldUpdatedAt)
+				fieldSeen[mappabledomain.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[mappabledomain.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, mappabledomain.FieldCreatedBy)
+				fieldSeen[mappabledomain.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[mappabledomain.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, mappabledomain.FieldUpdatedBy)
+				fieldSeen[mappabledomain.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[mappabledomain.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, mappabledomain.FieldDeletedAt)
+				fieldSeen[mappabledomain.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[mappabledomain.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, mappabledomain.FieldDeletedBy)
+				fieldSeen[mappabledomain.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[mappabledomain.FieldTags]; !ok {
+				selectedFields = append(selectedFields, mappabledomain.FieldTags)
+				fieldSeen[mappabledomain.FieldTags] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[mappabledomain.FieldName]; !ok {
+				selectedFields = append(selectedFields, mappabledomain.FieldName)
+				fieldSeen[mappabledomain.FieldName] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		md.Select(selectedFields...)
+	}
+	return nil
+}
+
+type mappabledomainPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []MappableDomainPaginateOption
+}
+
+func newMappableDomainPaginateArgs(rv map[string]any) *mappabledomainPaginateArgs {
+	args := &mappabledomainPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*MappableDomainOrder:
+			args.opts = append(args.opts, WithMappableDomainOrder(v))
+		case []any:
+			var orders []*MappableDomainOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &MappableDomainOrder{Field: &MappableDomainOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithMappableDomainOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*MappableDomainWhereInput); ok {
+		args.opts = append(args.opts, WithMappableDomainFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (mdh *MappableDomainHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappableDomainHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return mdh, nil
+	}
+	if err := mdh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return mdh, nil
+}
+
+func (mdh *MappableDomainHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(mappabledomainhistory.Columns))
+		selectedFields = []string{mappabledomainhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldHistoryTime)
+				fieldSeen[mappabledomainhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldRef)
+				fieldSeen[mappabledomainhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldOperation)
+				fieldSeen[mappabledomainhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldCreatedAt)
+				fieldSeen[mappabledomainhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldUpdatedAt)
+				fieldSeen[mappabledomainhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldCreatedBy)
+				fieldSeen[mappabledomainhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldUpdatedBy)
+				fieldSeen[mappabledomainhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldDeletedAt)
+				fieldSeen[mappabledomainhistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldDeletedBy)
+				fieldSeen[mappabledomainhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldTags)
+				fieldSeen[mappabledomainhistory.FieldTags] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldName)
+				fieldSeen[mappabledomainhistory.FieldName] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		mdh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type mappabledomainhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []MappableDomainHistoryPaginateOption
+}
+
+func newMappableDomainHistoryPaginateArgs(rv map[string]any) *mappabledomainhistoryPaginateArgs {
+	args := &mappabledomainhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &MappableDomainHistoryOrder{Field: &MappableDomainHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithMappableDomainHistoryOrder(order))
+			}
+		case *MappableDomainHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithMappableDomainHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*MappableDomainHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithMappableDomainHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (mc *MappedControlQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappedControlQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -19435,6 +20146,95 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "customDomains":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomDomainClient{config: o.config}).Query()
+			)
+			args := newCustomDomainPaginateArgs(fieldArgs(ctx, new(CustomDomainWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newCustomDomainPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.CustomDomainsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.CustomDomainsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[43] == nil {
+								nodes[i].Edges.totalCount[43] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[43][alias] = n
+						}
+						return nil
+					})
+				} else {
+					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.CustomDomains)
+							if nodes[i].Edges.totalCount[43] == nil {
+								nodes[i].Edges.totalCount[43] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[43][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, customdomainImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.CustomDomainsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			o.WithNamedCustomDomains(alias, func(wq *CustomDomainQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -19478,10 +20278,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[43] == nil {
-								nodes[i].Edges.totalCount[43] = make(map[string]int)
+							if nodes[i].Edges.totalCount[44] == nil {
+								nodes[i].Edges.totalCount[44] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[43][alias] = n
+							nodes[i].Edges.totalCount[44][alias] = n
 						}
 						return nil
 					})
@@ -19489,10 +20289,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[43] == nil {
-								nodes[i].Edges.totalCount[43] = make(map[string]int)
+							if nodes[i].Edges.totalCount[44] == nil {
+								nodes[i].Edges.totalCount[44] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[43][alias] = n
+							nodes[i].Edges.totalCount[44][alias] = n
 						}
 						return nil
 					})

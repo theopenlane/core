@@ -529,6 +529,106 @@ var (
 			},
 		},
 	}
+	// CustomDomainsColumns holds the columns for the "custom_domains" table.
+	CustomDomainsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "cname_record", Type: field.TypeString, Size: 255},
+		{Name: "txt_record_subdomain", Type: field.TypeString, Size: 16, Default: "_olverify"},
+		{Name: "txt_record_value", Type: field.TypeString, Size: 64},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "mappable_domain_id", Type: field.TypeString},
+		{Name: "mappable_domain_custom_domains", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// CustomDomainsTable holds the schema information for the "custom_domains" table.
+	CustomDomainsTable = &schema.Table{
+		Name:       "custom_domains",
+		Columns:    CustomDomainsColumns,
+		PrimaryKey: []*schema.Column{CustomDomainsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "custom_domains_mappable_domains_mappable_domain",
+				Columns:    []*schema.Column{CustomDomainsColumns[12]},
+				RefColumns: []*schema.Column{MappableDomainsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "custom_domains_mappable_domains_custom_domains",
+				Columns:    []*schema.Column{CustomDomainsColumns[13]},
+				RefColumns: []*schema.Column{MappableDomainsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "custom_domains_organizations_custom_domains",
+				Columns:    []*schema.Column{CustomDomainsColumns[14]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "customdomain_id",
+				Unique:  true,
+				Columns: []*schema.Column{CustomDomainsColumns[0]},
+			},
+			{
+				Name:    "customdomain_cname_record",
+				Unique:  true,
+				Columns: []*schema.Column{CustomDomainsColumns[8]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "customdomain_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{CustomDomainsColumns[14]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// CustomDomainHistoryColumns holds the columns for the "custom_domain_history" table.
+	CustomDomainHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "cname_record", Type: field.TypeString, Size: 255},
+		{Name: "mappable_domain_id", Type: field.TypeString},
+		{Name: "txt_record_subdomain", Type: field.TypeString, Size: 16, Default: "_olverify"},
+		{Name: "txt_record_value", Type: field.TypeString, Size: 64},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+	}
+	// CustomDomainHistoryTable holds the schema information for the "custom_domain_history" table.
+	CustomDomainHistoryTable = &schema.Table{
+		Name:       "custom_domain_history",
+		Columns:    CustomDomainHistoryColumns,
+		PrimaryKey: []*schema.Column{CustomDomainHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "customdomainhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{CustomDomainHistoryColumns[1]},
+			},
+		},
+	}
 	// DocumentDataColumns holds the columns for the "document_data" table.
 	DocumentDataColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -1630,6 +1730,67 @@ var (
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
+			},
+		},
+	}
+	// MappableDomainsColumns holds the columns for the "mappable_domains" table.
+	MappableDomainsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString, Size: 255},
+	}
+	// MappableDomainsTable holds the schema information for the "mappable_domains" table.
+	MappableDomainsTable = &schema.Table{
+		Name:       "mappable_domains",
+		Columns:    MappableDomainsColumns,
+		PrimaryKey: []*schema.Column{MappableDomainsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "mappabledomain_id",
+				Unique:  true,
+				Columns: []*schema.Column{MappableDomainsColumns[0]},
+			},
+			{
+				Name:    "mappabledomain_name",
+				Unique:  true,
+				Columns: []*schema.Column{MappableDomainsColumns[8]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// MappableDomainHistoryColumns holds the columns for the "mappable_domain_history" table.
+	MappableDomainHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString, Size: 255},
+	}
+	// MappableDomainHistoryTable holds the schema information for the "mappable_domain_history" table.
+	MappableDomainHistoryTable = &schema.Table{
+		Name:       "mappable_domain_history",
+		Columns:    MappableDomainHistoryColumns,
+		PrimaryKey: []*schema.Column{MappableDomainHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "mappabledomainhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{MappableDomainHistoryColumns[1]},
 			},
 		},
 	}
@@ -5641,6 +5802,8 @@ var (
 		ControlImplementationHistoryTable,
 		ControlObjectivesTable,
 		ControlObjectiveHistoryTable,
+		CustomDomainsTable,
+		CustomDomainHistoryTable,
 		DocumentDataTable,
 		DocumentDataHistoryTable,
 		EmailVerificationTokensTable,
@@ -5667,6 +5830,8 @@ var (
 		InternalPoliciesTable,
 		InternalPolicyHistoryTable,
 		InvitesTable,
+		MappableDomainsTable,
+		MappableDomainHistoryTable,
 		MappedControlsTable,
 		MappedControlHistoryTable,
 		NarrativesTable,
@@ -5825,6 +5990,12 @@ func init() {
 	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_objective_history",
 	}
+	CustomDomainsTable.ForeignKeys[0].RefTable = MappableDomainsTable
+	CustomDomainsTable.ForeignKeys[1].RefTable = MappableDomainsTable
+	CustomDomainsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	CustomDomainHistoryTable.Annotation = &entsql.Annotation{
+		Table: "custom_domain_history",
+	}
 	DocumentDataTable.ForeignKeys[0].RefTable = OrganizationsTable
 	DocumentDataTable.ForeignKeys[1].RefTable = TemplatesTable
 	DocumentDataHistoryTable.Annotation = &entsql.Annotation{
@@ -5891,6 +6062,9 @@ func init() {
 		Table: "internal_policy_history",
 	}
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	MappableDomainHistoryTable.Annotation = &entsql.Annotation{
+		Table: "mappable_domain_history",
+	}
 	MappedControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "mapped_control_history",
 	}

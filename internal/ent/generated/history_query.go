@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
@@ -25,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
@@ -271,6 +273,52 @@ func (cohq *ControlObjectiveHistoryQuery) AsOf(ctx context.Context, time time.Ti
 	return cohq.
 		Where(controlobjectivehistory.HistoryTimeLTE(time)).
 		Order(controlobjectivehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (cd *CustomDomain) History() *CustomDomainHistoryQuery {
+	historyClient := NewCustomDomainHistoryClient(cd.config)
+	return historyClient.Query().Where(customdomainhistory.Ref(cd.ID))
+}
+
+func (cdh *CustomDomainHistory) Next(ctx context.Context) (*CustomDomainHistory, error) {
+	client := NewCustomDomainHistoryClient(cdh.config)
+	return client.Query().
+		Where(
+			customdomainhistory.Ref(cdh.Ref),
+			customdomainhistory.HistoryTimeGT(cdh.HistoryTime),
+		).
+		Order(customdomainhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (cdh *CustomDomainHistory) Prev(ctx context.Context) (*CustomDomainHistory, error) {
+	client := NewCustomDomainHistoryClient(cdh.config)
+	return client.Query().
+		Where(
+			customdomainhistory.Ref(cdh.Ref),
+			customdomainhistory.HistoryTimeLT(cdh.HistoryTime),
+		).
+		Order(customdomainhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (cdhq *CustomDomainHistoryQuery) Earliest(ctx context.Context) (*CustomDomainHistory, error) {
+	return cdhq.
+		Order(customdomainhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (cdhq *CustomDomainHistoryQuery) Latest(ctx context.Context) (*CustomDomainHistory, error) {
+	return cdhq.
+		Order(customdomainhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (cdhq *CustomDomainHistoryQuery) AsOf(ctx context.Context, time time.Time) (*CustomDomainHistory, error) {
+	return cdhq.
+		Where(customdomainhistory.HistoryTimeLTE(time)).
+		Order(customdomainhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
@@ -823,6 +871,52 @@ func (iphq *InternalPolicyHistoryQuery) AsOf(ctx context.Context, time time.Time
 	return iphq.
 		Where(internalpolicyhistory.HistoryTimeLTE(time)).
 		Order(internalpolicyhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (md *MappableDomain) History() *MappableDomainHistoryQuery {
+	historyClient := NewMappableDomainHistoryClient(md.config)
+	return historyClient.Query().Where(mappabledomainhistory.Ref(md.ID))
+}
+
+func (mdh *MappableDomainHistory) Next(ctx context.Context) (*MappableDomainHistory, error) {
+	client := NewMappableDomainHistoryClient(mdh.config)
+	return client.Query().
+		Where(
+			mappabledomainhistory.Ref(mdh.Ref),
+			mappabledomainhistory.HistoryTimeGT(mdh.HistoryTime),
+		).
+		Order(mappabledomainhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (mdh *MappableDomainHistory) Prev(ctx context.Context) (*MappableDomainHistory, error) {
+	client := NewMappableDomainHistoryClient(mdh.config)
+	return client.Query().
+		Where(
+			mappabledomainhistory.Ref(mdh.Ref),
+			mappabledomainhistory.HistoryTimeLT(mdh.HistoryTime),
+		).
+		Order(mappabledomainhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (mdhq *MappableDomainHistoryQuery) Earliest(ctx context.Context) (*MappableDomainHistory, error) {
+	return mdhq.
+		Order(mappabledomainhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (mdhq *MappableDomainHistoryQuery) Latest(ctx context.Context) (*MappableDomainHistory, error) {
+	return mdhq.
+		Order(mappabledomainhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (mdhq *MappableDomainHistoryQuery) AsOf(ctx context.Context, time time.Time) (*MappableDomainHistory, error) {
+	return mdhq.
+		Where(mappabledomainhistory.HistoryTimeLTE(time)).
+		Order(mappabledomainhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

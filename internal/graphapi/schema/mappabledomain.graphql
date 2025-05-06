@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up mappableDomain by ID
+    """
+     mappableDomain(
+        """
+        ID of the mappableDomain
+        """
+        id: ID!
+    ):  MappableDomain!
+}
+
+extend type Mutation{
+    """
+    Create a new mappableDomain
+    """
+    createMappableDomain(
+        """
+        values of the mappableDomain
+        """
+        input: CreateMappableDomainInput!
+    ): MappableDomainCreatePayload!
+    """
+    Create multiple new mappableDomains
+    """
+    createBulkMappableDomain(
+        """
+        values of the mappableDomain
+        """
+        input: [CreateMappableDomainInput!]
+    ): MappableDomainBulkCreatePayload!
+    """
+    Create multiple new mappableDomains via file upload
+    """
+    createBulkCSVMappableDomain(
+        """
+        csv file containing values of the mappableDomain
+        """
+        input: Upload!
+    ): MappableDomainBulkCreatePayload!
+    """
+    Update an existing mappableDomain
+    """
+    updateMappableDomain(
+        """
+        ID of the mappableDomain
+        """
+        id: ID!
+        """
+        New values for the mappableDomain
+        """
+        input: UpdateMappableDomainInput!
+    ): MappableDomainUpdatePayload!
+    """
+    Delete an existing mappableDomain
+    """
+    deleteMappableDomain(
+        """
+        ID of the mappableDomain
+        """
+        id: ID!
+    ): MappableDomainDeletePayload!
+}
+
+"""
+Return response for createMappableDomain mutation
+"""
+type MappableDomainCreatePayload {
+    """
+    Created mappableDomain
+    """
+    mappableDomain: MappableDomain!
+}
+
+"""
+Return response for updateMappableDomain mutation
+"""
+type MappableDomainUpdatePayload {
+    """
+    Updated mappableDomain
+    """
+    mappableDomain: MappableDomain!
+}
+
+"""
+Return response for deleteMappableDomain mutation
+"""
+type MappableDomainDeletePayload {
+    """
+    Deleted mappableDomain ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkMappableDomain mutation
+"""
+type MappableDomainBulkCreatePayload {
+    """
+    Created mappableDomains
+    """
+    mappableDomains: [MappableDomain!]
+}

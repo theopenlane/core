@@ -34,6 +34,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		controlResults               *generated.ControlConnection
 		controlimplementationResults *generated.ControlImplementationConnection
 		controlobjectiveResults      *generated.ControlObjectiveConnection
+		customdomainResults          *generated.CustomDomainConnection
 		documentdataResults          *generated.DocumentDataConnection
 		entityResults                *generated.EntityConnection
 		entitytypeResults            *generated.EntityTypeConnection
@@ -44,6 +45,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		integrationResults           *generated.IntegrationConnection
 		internalpolicyResults        *generated.InternalPolicyConnection
 		inviteResults                *generated.InviteConnection
+		mappabledomainResults        *generated.MappableDomainConnection
 		mappedcontrolResults         *generated.MappedControlConnection
 		narrativeResults             *generated.NarrativeConnection
 		orgsubscriptionResults       *generated.OrgSubscriptionConnection
@@ -102,6 +104,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		func() {
 			var err error
 			controlobjectiveResults, err = searchControlObjectives(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			customdomainResults, err = searchCustomDomains(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -172,6 +181,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		func() {
 			var err error
 			inviteResults, err = searchInvites(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			mappabledomainResults, err = searchMappableDomains(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -336,6 +352,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 		res.TotalCount += controlobjectiveResults.TotalCount
 	}
+	if customdomainResults != nil && len(customdomainResults.Edges) > 0 {
+		res.CustomDomains = customdomainResults
+
+		res.TotalCount += customdomainResults.TotalCount
+	}
 	if documentdataResults != nil && len(documentdataResults.Edges) > 0 {
 		res.DocumentData = documentdataResults
 
@@ -385,6 +406,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.Invites = inviteResults
 
 		res.TotalCount += inviteResults.TotalCount
+	}
+	if mappabledomainResults != nil && len(mappabledomainResults.Edges) > 0 {
+		res.MappableDomains = mappabledomainResults
+
+		res.TotalCount += mappabledomainResults.TotalCount
 	}
 	if mappedcontrolResults != nil && len(mappedcontrolResults.Edges) > 0 {
 		res.MappedControls = mappedcontrolResults
@@ -582,6 +608,24 @@ func (r *queryResolver) AdminControlObjectiveSearch(ctx context.Context, query s
 	// return the results
 	return controlobjectiveResults, nil
 }
+func (r *queryResolver) AdminCustomDomainSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomDomainConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	customdomainResults, err := adminSearchCustomDomains(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return customdomainResults, nil
+}
 func (r *queryResolver) AdminDocumentDataSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
@@ -761,6 +805,24 @@ func (r *queryResolver) AdminInviteSearch(ctx context.Context, query string, aft
 
 	// return the results
 	return inviteResults, nil
+}
+func (r *queryResolver) AdminMappableDomainSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappableDomainConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	mappabledomainResults, err := adminSearchMappableDomains(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return mappabledomainResults, nil
 }
 func (r *queryResolver) AdminMappedControlSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappedControlConnection, error) {
 	// ensure the user is a system admin

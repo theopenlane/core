@@ -1516,6 +1516,235 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 	return nil
 }
 
+func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.CustomDomainHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if cnameRecord, exists := m.CnameRecord(); exists {
+		create = create.SetCnameRecord(cnameRecord)
+	}
+
+	if mappableDomainID, exists := m.MappableDomainID(); exists {
+		create = create.SetMappableDomainID(mappableDomainID)
+	}
+
+	if txtRecordSubdomain, exists := m.TxtRecordSubdomain(); exists {
+		create = create.SetTxtRecordSubdomain(txtRecordSubdomain)
+	}
+
+	if txtRecordValue, exists := m.TxtRecordValue(); exists {
+		create = create.SetTxtRecordValue(txtRecordValue)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		customdomain, err := client.CustomDomain.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.CustomDomainHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(customdomain.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(customdomain.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(customdomain.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(customdomain.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(customdomain.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(customdomain.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(customdomain.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(customdomain.OwnerID)
+		}
+
+		if cnameRecord, exists := m.CnameRecord(); exists {
+			create = create.SetCnameRecord(cnameRecord)
+		} else {
+			create = create.SetCnameRecord(customdomain.CnameRecord)
+		}
+
+		if mappableDomainID, exists := m.MappableDomainID(); exists {
+			create = create.SetMappableDomainID(mappableDomainID)
+		} else {
+			create = create.SetMappableDomainID(customdomain.MappableDomainID)
+		}
+
+		if txtRecordSubdomain, exists := m.TxtRecordSubdomain(); exists {
+			create = create.SetTxtRecordSubdomain(txtRecordSubdomain)
+		} else {
+			create = create.SetTxtRecordSubdomain(customdomain.TxtRecordSubdomain)
+		}
+
+		if txtRecordValue, exists := m.TxtRecordValue(); exists {
+			create = create.SetTxtRecordValue(txtRecordValue)
+		} else {
+			create = create.SetTxtRecordValue(customdomain.TxtRecordValue)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(customdomain.Status)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		customdomain, err := client.CustomDomain.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.CustomDomainHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(customdomain.CreatedAt).
+			SetUpdatedAt(customdomain.UpdatedAt).
+			SetCreatedBy(customdomain.CreatedBy).
+			SetUpdatedBy(customdomain.UpdatedBy).
+			SetDeletedAt(customdomain.DeletedAt).
+			SetDeletedBy(customdomain.DeletedBy).
+			SetTags(customdomain.Tags).
+			SetOwnerID(customdomain.OwnerID).
+			SetCnameRecord(customdomain.CnameRecord).
+			SetMappableDomainID(customdomain.MappableDomainID).
+			SetTxtRecordSubdomain(customdomain.TxtRecordSubdomain).
+			SetTxtRecordValue(customdomain.TxtRecordValue).
+			SetStatus(customdomain.Status).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
@@ -4288,6 +4517,180 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetApproverID(internalpolicy.ApproverID).
 			SetDelegateID(internalpolicy.DelegateID).
 			SetSummary(internalpolicy.Summary).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *MappableDomainMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.MappableDomainHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *MappableDomainMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		mappabledomain, err := client.MappableDomain.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.MappableDomainHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(mappabledomain.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(mappabledomain.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(mappabledomain.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(mappabledomain.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(mappabledomain.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(mappabledomain.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(mappabledomain.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(mappabledomain.Name)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		mappabledomain, err := client.MappableDomain.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.MappableDomainHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(mappabledomain.CreatedAt).
+			SetUpdatedAt(mappabledomain.UpdatedAt).
+			SetCreatedBy(mappabledomain.CreatedBy).
+			SetUpdatedBy(mappabledomain.UpdatedBy).
+			SetDeletedAt(mappabledomain.DeletedAt).
+			SetDeletedBy(mappabledomain.DeletedBy).
+			SetTags(mappabledomain.Tags).
+			SetName(mappabledomain.Name).
 			Save(ctx)
 		if err != nil {
 			return err

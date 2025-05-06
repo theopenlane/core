@@ -308,6 +308,56 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 	return res, err
 }
 
+// CustomDomains is the resolver for the customDomains field.
+func (r *queryResolver) CustomDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) (*generated.CustomDomainConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).CustomDomain.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomain"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithCustomDomainOrder(orderBy),
+		generated.WithCustomDomainFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomain"})
+	}
+
+	return res, err
+}
+
+// CustomDomainHistories is the resolver for the customDomainHistories field.
+func (r *queryResolver) CustomDomainHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) (*generated.CustomDomainHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).CustomDomainHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomainhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithCustomDomainHistoryOrder(orderBy),
+		generated.WithCustomDomainHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomainhistory"})
+	}
+
+	return res, err
+}
+
 // DocumentDataSlice is the resolver for the documentDataSlice field.
 func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
 	// set page limit if nothing was set
@@ -928,6 +978,56 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 		generated.WithInviteFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
+	}
+
+	return res, err
+}
+
+// MappableDomains is the resolver for the mappableDomains field.
+func (r *queryResolver) MappableDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappableDomainOrder, where *generated.MappableDomainWhereInput) (*generated.MappableDomainConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).MappableDomain.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomain"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithMappableDomainOrder(orderBy),
+		generated.WithMappableDomainFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomain"})
+	}
+
+	return res, err
+}
+
+// MappableDomainHistories is the resolver for the mappableDomainHistories field.
+func (r *queryResolver) MappableDomainHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappableDomainHistoryOrder, where *generated.MappableDomainHistoryWhereInput) (*generated.MappableDomainHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).MappableDomainHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomainhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithMappableDomainHistoryOrder(orderBy),
+		generated.WithMappableDomainHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomainhistory"})
 	}
 
 	return res, err

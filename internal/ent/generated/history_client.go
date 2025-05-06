@@ -23,6 +23,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*ControlObjectiveMutation]() {
 		c.ControlObjective.Use(hook)
 	}
+	for _, hook := range history.Hooks[*CustomDomainMutation]() {
+		c.CustomDomain.Use(hook)
+	}
 	for _, hook := range history.Hooks[*DocumentDataMutation]() {
 		c.DocumentData.Use(hook)
 	}
@@ -58,6 +61,9 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*InternalPolicyMutation]() {
 		c.InternalPolicy.Use(hook)
+	}
+	for _, hook := range history.Hooks[*MappableDomainMutation]() {
+		c.MappableDomain.Use(hook)
 	}
 	for _, hook := range history.Hooks[*MappedControlMutation]() {
 		c.MappedControl.Use(hook)
