@@ -11,7 +11,8 @@ env:
   RUNNER_SMALL: "small"
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
-  BUILDKITE_PLUGIN_FS_CACHE_FOLDER: "/var/lib/buildkite-agent/.cache"
+  BUILDKITE_PLUGIN_S3_CACHE_BUCKET: "bkcache"
+  BUILDKITE_PLUGIN_S3_CACHE_ENDPOINT: "s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache"
 
 steps:
   - name: ":golangci-lint: lint"
@@ -35,8 +36,9 @@ steps:
               manifest:
                 - go.mod
                 - go.sum
-              path: $HOME/.cache/go-build
+              path: go-build
               restore: pipeline
+              backend: s3
               save:
                 - file
                 - branch
@@ -46,8 +48,8 @@ steps:
               command: ["task", "ci"]
               environment:
                 - "GOTOOLCHAIN=auto"
-                - "GOCACHE=$HOME/.cache/go-build"
-                - "GOLANGCI_LINT_CACHE=$HOME/.cache/golangci-lint"
+                - "GOCACHE=s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache/go-build"
+                - "GOLANGCI_LINT_CACHE=s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache/golangci-lint"
       - label: ":yaml: generate config"
         key: "generate_config"
         cancel_on_build_failing: true
@@ -75,16 +77,17 @@ steps:
               manifest:
                 - go.mod
                 - go.sum
-              path: $HOME/.cache/go-build
+              path: go-build
               restore: file
+              backend: s3
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci"]
               always_pull: true
               environment:
                 - "GOTOOLCHAIN=auto"
-                - "GOCACHE=$HOME/.cache/go-build"
-                - "GOLANGCI_LINT_CACHE=$HOME/.cache/golangci-lint"
+                - "GOCACHE=s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache/go-build"
+                - "GOLANGCI_LINT_CACHE=s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache/golangci-lint"
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         agents:
@@ -108,6 +111,7 @@ steps:
                 - go.sum
               restore: file
               save: file
+              backend: s3
               key-extra: "{{matrix.version}}"
           - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -346,8 +350,9 @@ steps:
               manifest:
                 - go.mod
                 - go.sum
-              path: $HOME/.cache/go-build
+              path: go-build
               restore: file
+              backend: s3
               save:
                 - pipeline
                 - all
