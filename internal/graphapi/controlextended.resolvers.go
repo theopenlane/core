@@ -24,6 +24,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 
 	existingControls, err := withTransactionalMutation(ctx).Control.Query().
 		Where(control.IDIn(input.ControlIDs...)).
+		// WithMappedControls(). // TODO(adelowo:): uncomment once mapped controls are implemented
 		WithSubcontrols().
 		All(ctx)
 	if err != nil {
@@ -36,7 +37,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 
 	createdControls, err := r.cloneControls(ctx, existingControls, input.ProgramID, false)
 	if err != nil {
-		return nil, err
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
 	}
 
 	return &model.ControlBulkCreatePayload{

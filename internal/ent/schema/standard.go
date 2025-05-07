@@ -3,7 +3,6 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
@@ -126,9 +125,8 @@ func (Standard) Fields() []ent.Field {
 func (s Standard) Edges() []ent.Edge {
 	return []ent.Edge{
 		edgeToWithPagination(&edgeDefinition{
-			fromSchema:  s,
-			edgeSchema:  Control{},
-			annotations: []schema.Annotation{},
+			fromSchema: s,
+			edgeSchema: Control{},
 		}),
 	}
 }

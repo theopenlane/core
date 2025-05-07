@@ -50,7 +50,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, existingControls [
 
 		res, err := withTransactionalMutation(ctx).Control.Create().SetInput(controlInput).Save(ctx)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+			return nil, err
 		}
 
 		createdControlIDs = append(createdControlIDs, res.ID)
@@ -63,7 +63,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, existingControls [
 	// get the created controls
 	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.IDIn(createdControlIDs...)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+		return nil, err
 	}
 
 	return query.All(ctx)
