@@ -5,4 +5,3 @@ set -euo pipefail
 mkdir -p $HOME/.cache/go-build
 mkdir -p $HOME/.cache/golangci-lint
 mkdir -p $HOME/.cache/go/pkg/mod
-mkdir -p $HOME/.cache/sonar
