@@ -23,19 +23,23 @@ type CustomDomain struct {
 }
 
 const (
+	// SchemaCustomDomain is the name of the CustomDomain schema.
 	SchemaCustomDomain = "custom_domain"
 	maxDomainNameLen   = 255
 	maxTXTValueLen     = 64
 )
 
+// Name returns the name of the CustomDomain schema.
 func (CustomDomain) Name() string {
 	return SchemaCustomDomain
 }
 
+// GetType returns the type of the CustomDomain schema.
 func (CustomDomain) GetType() any {
 	return CustomDomain.Type
 }
 
+// PluralName returns the plural name of the CustomDomain schema.
 func (CustomDomain) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaCustomDomain)
 }
@@ -64,7 +68,7 @@ func (CustomDomain) Fields() []ent.Field {
 			Default("_olverify").
 			NotEmpty().
 			Immutable().
-			MaxLen(16),
+			MaxLen(16), //nolint:mnd
 		field.String("txt_record_value").
 			Comment("Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.").
 			Annotations(

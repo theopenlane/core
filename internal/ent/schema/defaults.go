@@ -6,16 +6,21 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"github.com/rs/zerolog/log"
-	"github.com/stoewer/go-strcase"
-	"github.com/theopenlane/core/internal/ent/mixin"
+
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
+
+	"github.com/theopenlane/core/internal/ent/mixin"
+)
+
+const (
+	minNameLength = 3
 )
 
 // SchemaFuncs defines the methods that a custom schema must implement
 // in order to use the helper functions provided by this file
 // including Name(), PluralName(), and GetType()
-type SchemaFuncs interface {
+type SchemaFuncs interface { //nolint:revive
 	Name() string
 	PluralName() string
 	GetType() any
@@ -146,11 +151,6 @@ func getType(schema any) any {
 	sch := toSchemaFuncs(schema)
 
 	return sch.GetType()
-}
-
-// graphqlName returns the graphql name of the schema using LowerCamelCase of the name provided
-func graphqlName(name string) string {
-	return strcase.LowerCamelCase(name)
 }
 
 // edgeToWithPagination uses the provided edge definition to create an edge with pagination

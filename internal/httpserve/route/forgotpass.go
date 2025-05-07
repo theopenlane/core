@@ -24,7 +24,7 @@ func registerForgotPasswordHandler(router *Router) (err error) {
 
 	forgotPasswordOperation := router.Handler.BindForgotPassword()
 
-	if err := router.Addv1Route(path, method, forgotPasswordOperation, route); err != nil {
+	if err := router.AddV1Route(path, method, forgotPasswordOperation, route); err != nil {
 		return err
 	}
 

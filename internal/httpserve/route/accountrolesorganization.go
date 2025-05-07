@@ -25,7 +25,7 @@ func registerAccountRolesOrganizationHandler(router *Router) (err error) {
 
 	rolesOrganizationOperation := router.Handler.BindAccountRolesOrganization()
 
-	if err := router.Addv1Route(route.Path, route.Method, rolesOrganizationOperation, route); err != nil {
+	if err := router.AddV1Route(route.Path, route.Method, rolesOrganizationOperation, route); err != nil {
 		return err
 	}
 
@@ -35,7 +35,7 @@ func registerAccountRolesOrganizationHandler(router *Router) (err error) {
 
 	rolesOrganizationOperationByID := router.Handler.BindAccountRolesOrganizationByID()
 
-	if err := router.Addv1Route(route.Path, route.Method, rolesOrganizationOperationByID, route); err != nil {
+	if err := router.AddV1Route(route.Path, route.Method, rolesOrganizationOperationByID, route); err != nil {
 		return err
 	}
 

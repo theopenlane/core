@@ -22,16 +22,20 @@ type Procedure struct {
 	ent.Schema
 }
 
+// SchemaProcedure is the name of the procedure schema.
 const SchemaProcedure = "procedure"
 
+// Name returns the name of the procedure schema.
 func (Procedure) Name() string {
 	return SchemaProcedure
 }
 
+// GetType returns the type of the procedure schema.
 func (Procedure) GetType() any {
 	return Procedure.Type
 }
 
+// PluralName returns the plural name of the procedure schema.
 func (Procedure) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaProcedure)
 }

@@ -29,8 +29,14 @@ var (
 // Possible default values are "PREPARING", "NEEDS APPROVAL", "CHANGES REQUESTED",
 // "APPROVED" and "ARCHIVED".
 func (ControlStatus) Values() (kinds []string) {
-	for _, s := range []ControlStatus{ControlStatusPreparing, ControlStatusNeedsApproval, ControlStatusChangesRequested,
-		ControlStatusApproved, ControlStatusArchived, ControlStatusNull} {
+	for _, s := range []ControlStatus{
+		ControlStatusPreparing,
+		ControlStatusNeedsApproval,
+		ControlStatusChangesRequested,
+		ControlStatusApproved,
+		ControlStatusArchived,
+		ControlStatusNull,
+	} {
 		kinds = append(kinds, string(s))
 	}
 

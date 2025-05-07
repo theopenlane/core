@@ -194,34 +194,34 @@ func (userOwned UserOwnedMixin) Interceptors() []ent.Interceptor {
 	if userOwned.Optional {
 		// do not add interceptors if the field is optional
 		return []ent.Interceptor{}
-	} else {
-		return []ent.Interceptor{
-			intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-				// Skip the interceptor for all queries if BypassInterceptor flag is set
-				// This is needed for schemas that are never authorized users such as email verification tokens
-				if userOwned.SkipInterceptor == interceptors.SkipAll {
+	}
+
+	return []ent.Interceptor{
+		intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+			// Skip the interceptor for all queries if BypassInterceptor flag is set
+			// This is needed for schemas that are never authorized users such as email verification tokens
+			if userOwned.SkipInterceptor == interceptors.SkipAll {
+				return nil
+			}
+
+			userID, err := auth.GetSubjectIDFromContext(ctx)
+			if err != nil {
+				ctxQuery := ent.QueryFromContext(ctx)
+
+				// Skip the interceptor if the query is for a single entity
+				// and the BypassInterceptor flag is set for Only queries
+				if userOwned.SkipInterceptor == interceptors.SkipOnlyQuery && ctxQuery.Op == interceptors.OnlyOperation {
 					return nil
 				}
 
-				userID, err := auth.GetSubjectIDFromContext(ctx)
-				if err != nil {
-					ctxQuery := ent.QueryFromContext(ctx)
+				return err
+			}
 
-					// Skip the interceptor if the query is for a single entity
-					// and the BypassInterceptor flag is set for Only queries
-					if userOwned.SkipInterceptor == interceptors.SkipOnlyQuery && ctxQuery.Op == interceptors.OnlyOperation {
-						return nil
-					}
+			// sets the owner id on the query for the current user
+			userOwned.P(q, userID)
 
-					return err
-				}
-
-				// sets the owner id on the query for the current user
-				userOwned.P(q, userID)
-
-				return nil
-			}),
-		}
+			return nil
+		}),
 	}
 }
 

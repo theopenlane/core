@@ -24,7 +24,7 @@ func registerSwitchRoute(router *Router) (err error) {
 
 	switchOperation := router.Handler.BindSwitchHandler()
 
-	if err := router.Addv1Route(path, method, switchOperation, route); err != nil {
+	if err := router.AddV1Route(path, method, switchOperation, route); err != nil {
 		return err
 	}
 

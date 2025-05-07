@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"entgo.io/ent"
-
 	"github.com/rs/zerolog"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 )

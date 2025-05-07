@@ -31,16 +31,20 @@ type PasswordResetToken struct {
 	ent.Schema
 }
 
+// SchemaPasswordResetToken is the name of the PasswordResetToken schema.
 const SchemaPasswordResetToken = "password_reset_token"
 
+// Name returns the name of the PasswordResetToken schema.
 func (PasswordResetToken) Name() string {
 	return SchemaPasswordResetToken
 }
 
+// GetType returns the type of the PasswordResetToken schema.
 func (PasswordResetToken) GetType() any {
 	return PasswordResetToken.Type
 }
 
+// PluralName returns the plural name of the PasswordResetToken schema.
 func (PasswordResetToken) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaPasswordResetToken)
 }

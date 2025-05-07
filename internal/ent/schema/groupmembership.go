@@ -26,16 +26,20 @@ type GroupMembership struct {
 	ent.Schema
 }
 
+// SchemaGroupMembership is the name of the GroupMembership schema.
 const SchemaGroupMembership = "groupmembership"
 
+// Name returns the name of the GroupMembership schema.
 func (GroupMembership) Name() string {
 	return SchemaGroupMembership
 }
 
+// GetType returns the type of the GroupMembership schema.
 func (GroupMembership) GetType() any {
 	return GroupMembership.Type
 }
 
+// PluralName returns the plural name of the GroupMembership schema.
 func (GroupMembership) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaGroupMembership)
 }

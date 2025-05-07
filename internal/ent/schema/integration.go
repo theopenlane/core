@@ -18,16 +18,20 @@ type Integration struct {
 	ent.Schema
 }
 
+// SchemaIntegration is the name of the Integration schema.
 const SchemaIntegration = "integration"
 
+// Name returns the name of the Integration schema.
 func (Integration) Name() string {
 	return SchemaIntegration
 }
 
+// GetType returns the type of the Integration schema.
 func (Integration) GetType() any {
 	return Integration.Type
 }
 
+// PluralName returns the plural name of the Integration schema.
 func (Integration) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaIntegration)
 }

@@ -59,7 +59,7 @@ func (Organization) Fields() []ent.Field {
 				dialect.Postgres: "citext",
 			}).
 			MaxLen(orgNameMaxLen).
-			MinLen(3).
+			MinLen(minNameLength).
 			Validate(validator.SpecialCharValidator).
 			Annotations(
 				entx.FieldSearchable(),

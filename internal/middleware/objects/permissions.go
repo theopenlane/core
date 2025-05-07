@@ -12,8 +12,10 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 )
 
+// ErrMissingParent is returned when the parent id or type is missing for file uploads
 var ErrMissingParent = fmt.Errorf("parent id or type is missing")
 
+// AddFilePermissions adds file permissions to the object store
 func AddFilePermissions(ctx context.Context) error {
 	filesUpload, err := objects.FilesFromContext(ctx)
 	if err != nil {

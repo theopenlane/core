@@ -51,6 +51,7 @@ func NewContext(ctx echo.Context, logger *Logger) *Context {
 	return &Context{ctx, logger}
 }
 
+// Logger returns the logger from the context
 func (c *Context) Logger() echo.Logger {
 	return c.logger
 }

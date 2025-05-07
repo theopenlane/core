@@ -24,7 +24,8 @@ func (ObjectiveStatus) Values() (kinds []string) {
 	for _, s := range []ObjectiveStatus{
 		ObjectiveActiveStatus,
 		ObjectiveArchivedStatus,
-		ObjectiveDraftStatus} {
+		ObjectiveDraftStatus,
+	} {
 		kinds = append(kinds, string(s))
 	}
 
