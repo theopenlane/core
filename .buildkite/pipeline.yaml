@@ -10,10 +10,10 @@ env:
   RUNNER_SMALL: "small"
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
-  BUILDKITE_PLUGIN_FS_CACHE_FOLDER: "$BUILDKITE_BUILD_PATH/.cache"
+  BUILDKITE_PLUGIN_FS_CACHE_FOLDER: "/var/lib/buildkite-agent/builds/.cache"
   GOFLAGS: -buildvcs=false
-  GOCACHE: $BUILDKITE_BUILD_PATH/.cache/go-build
-  GOLANGCI_LINT_CACHE: $BUILDKITE_BUILD_PATH/.cache/golangci-lint
+  GOCACHE: /var/lib/buildkite-agent/builds/.cache/go-build
+  GOLANGCI_LINT_CACHE: /var/lib/buildkite-agent/builds/.cache/golangci-lint
 
 steps:
   - group: ":knife: Pre-check"
@@ -61,7 +61,7 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: "SAT"
+          location: "NYC"
         cancel_on_build_failing: true
         timeout_in_minutes: 20
         key: "lint"
@@ -96,7 +96,7 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: "SAT"
+          location: "NYC"
         key: "go_test"
         cancel_on_build_failing: true
         env:
