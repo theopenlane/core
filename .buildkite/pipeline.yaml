@@ -89,6 +89,9 @@ steps:
               command: ["task", "go:lint:ci"]
               always_pull: true
               propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "GOTOOLCHAIN=auto"
         artifact_paths: ["coverage.out"]
@@ -122,6 +125,8 @@ steps:
               always_pull: true
               command: ["task", "go:test:cover"]
               propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
               environment:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
