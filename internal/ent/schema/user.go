@@ -39,16 +39,20 @@ type User struct {
 	ent.Schema
 }
 
+// SchemaUser is the name of the User schema.
 const SchemaUser = "user"
 
+// Name returns the name of the User schema.
 func (User) Name() string {
 	return SchemaUser
 }
 
+// GetType returns the type of the User schema.
 func (User) GetType() any {
 	return User.Type
 }
 
+// PluralName returns the plural name of the User schema.
 func (User) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaUser)
 }

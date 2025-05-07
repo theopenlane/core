@@ -26,16 +26,20 @@ type ProgramMembership struct {
 	ent.Schema
 }
 
+// SchemaProgramMembership is the name of the ProgramMembership schema.
 const SchemaProgramMembership = "programmembership"
 
+// Name returns the name of the ProgramMembership schema.
 func (ProgramMembership) Name() string {
 	return SchemaProgramMembership
 }
 
+// GetType returns the type of the ProgramMembership schema.
 func (ProgramMembership) GetType() any {
 	return ProgramMembership.Type
 }
 
+// PluralName returns the plural name of the ProgramMembership schema.
 func (ProgramMembership) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaProgramMembership)
 }

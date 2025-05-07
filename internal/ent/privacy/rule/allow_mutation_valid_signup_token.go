@@ -8,12 +8,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
 
-type MutationEmailGetter func(generated.Mutation) (string, error)
+type mutationEmailGetter func(generated.Mutation) (string, error)
 
 // AllowMutationIfContextHasValidEmailSignUpToken is used to determine whether a
 // mutation should be allowed or skipped based on the presence and validity of an
 // email signup token in the context
-func AllowMutationIfContextHasValidEmailSignUpToken(getEmail MutationEmailGetter) privacy.MutationRule {
+func AllowMutationIfContextHasValidEmailSignUpToken(getEmail mutationEmailGetter) privacy.MutationRule {
 	return privacy.MutationRuleFunc(
 		func(ctx context.Context, mutation generated.Mutation) error {
 			emailSignupToken := token.EmailSignUpTokenFromContext(ctx)

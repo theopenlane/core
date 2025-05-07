@@ -21,16 +21,20 @@ type TFASetting struct {
 	ent.Schema
 }
 
+// SchemaTFASetting is the name of the TFASetting schema.
 const SchemaTFASetting = "tfa_setting"
 
+// Name returns the name of the TFASetting schema.
 func (TFASetting) Name() string {
 	return SchemaTFASetting
 }
 
+// GetType returns the type of the TFASetting schema.
 func (TFASetting) GetType() any {
 	return TFASetting.Type
 }
 
+// PluralName returns the plural name of the TFASetting schema.
 func (TFASetting) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaTFASetting)
 }

@@ -29,16 +29,20 @@ type Group struct {
 	ent.Schema
 }
 
+// SchemaGroup is the name of the Group schema.
 const SchemaGroup = "group"
 
+// Name returns the name of the Group schema.
 func (Group) Name() string {
 	return SchemaGroup
 }
 
+// GetType returns the type of the Group schema.
 func (Group) GetType() any {
 	return Group.Type
 }
 
+// PluralName returns the plural name of the Group schema.
 func (Group) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaGroup)
 }

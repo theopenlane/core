@@ -24,16 +24,20 @@ type ControlImplementation struct {
 	ent.Schema
 }
 
+// SchemaImplementation is the name of the ControlImplementation schema.
 const SchemaImplementation = "control_implementation"
 
+// Name returns the name of the ControlImplementation schema.
 func (ControlImplementation) Name() string {
 	return SchemaImplementation
 }
 
+// GetType returns the type of the ControlImplementation schema.
 func (ControlImplementation) GetType() any {
 	return ControlImplementation.Type
 }
 
+// PluralName returns the plural name of the ControlImplementation schema.
 func (ControlImplementation) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaImplementation)
 }

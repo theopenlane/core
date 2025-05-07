@@ -24,16 +24,20 @@ type UserSetting struct {
 	ent.Schema
 }
 
+// SchemaUserSetting is the name of the UserSetting schema.
 const SchemaUserSetting = "user_setting"
 
+// Name returns the name of the UserSetting schema.
 func (UserSetting) Name() string {
 	return SchemaUserSetting
 }
 
+// GetType returns the type of the UserSetting schema.
 func (UserSetting) GetType() any {
 	return UserSetting.Type
 }
 
+// PluralName returns the plural name of the UserSetting schema.
 func (UserSetting) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaUserSetting)
 }

@@ -23,16 +23,20 @@ type Control struct {
 	ent.Schema
 }
 
+// SchemaControl is the name of the control schema.
 const SchemaControl = "control"
 
+// Name returns the name of the control schema.
 func (Control) Name() string {
 	return SchemaControl
 }
 
+// GetType returns the type of the control schema.
 func (Control) GetType() any {
 	return Control.Type
 }
 
+// PluralName returns the plural name of the control schema.
 func (Control) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaControl)
 }

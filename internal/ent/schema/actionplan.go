@@ -21,16 +21,20 @@ type ActionPlan struct {
 	ent.Schema
 }
 
+// SchemaActionPlan is the name of the actionplan schema.
 const SchemaActionPlan = "action_plan"
 
+// Name returns the name of the actionplan schema.
 func (ActionPlan) Name() string {
 	return SchemaActionPlan
 }
 
+// GetType returns the type of the actionplan schema.
 func (ActionPlan) GetType() any {
 	return ActionPlan.Type
 }
 
+// PluralName returns the plural name of the actionplan schema.
 func (ActionPlan) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaActionPlan)
 }

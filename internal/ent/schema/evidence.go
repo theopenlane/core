@@ -26,16 +26,20 @@ type Evidence struct {
 	ent.Schema
 }
 
+// SchemaEvidence is the name of the Evidence schema.
 const SchemaEvidence = "evidence"
 
+// Name returns the name of the Evidence schema.
 func (Evidence) Name() string {
 	return SchemaEvidence
 }
 
+// GetType returns the type of the Evidence schema.
 func (Evidence) GetType() any {
 	return Evidence.Type
 }
 
+// PluralName returns the plural name of the Evidence schema.
 func (Evidence) PluralName() string {
 	return SchemaEvidence // special case because evidences is a weird plural
 }

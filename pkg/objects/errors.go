@@ -33,5 +33,6 @@ type errorMsg string
 func (e errorMsg) Error() string { return string(e) }
 
 const (
+	// ErrNoFilesUploaded is returned when no files were uploaded in the request
 	ErrNoFilesUploaded = errorMsg("objects: no uploadable files found in request")
 )

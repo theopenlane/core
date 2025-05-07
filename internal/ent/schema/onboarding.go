@@ -24,16 +24,20 @@ type Onboarding struct {
 	ent.Schema
 }
 
+// SchemaOnboarding is the name of the Onboarding schema.
 const SchemaOnboarding = "onboarding"
 
+// Name returns the name of the Onboarding schema.
 func (Onboarding) Name() string {
 	return SchemaOnboarding
 }
 
+// GetType returns the type of the Onboarding schema.
 func (Onboarding) GetType() any {
 	return Onboarding.Type
 }
 
+// PluralName returns the plural name of the Onboarding schema.
 func (Onboarding) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaOnboarding)
 }

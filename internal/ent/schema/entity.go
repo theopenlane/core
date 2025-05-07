@@ -24,16 +24,20 @@ type Entity struct {
 	ent.Schema
 }
 
+// SchemaEntity is the name of the Entity schema.
 const SchemaEntity = "entity"
 
+// Name returns the name of the Entity schema.
 func (Entity) Name() string {
 	return SchemaEntity
 }
 
+// GetType returns the type of the Entity schema.
 func (Entity) GetType() any {
 	return Entity.Type
 }
 
+// PluralName returns the plural name of the Entity schema.
 func (Entity) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaEntity)
 }

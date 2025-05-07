@@ -10,17 +10,19 @@ import (
 )
 
 type (
+	// UserOwnedMutationPolicyMixin is a mixin for user owned mutation policy
 	UserOwnedMutationPolicyMixin struct {
 		mixin.Schema
 		AllowAdminMutation bool
 	}
 
+	// UserOwnedQueryPolicyMixin is a mixin for user owned query policy
 	UserOwnedQueryPolicyMixin struct {
 		mixin.Schema
 	}
 )
 
-// Policy sets the policy for updating owned fields by the user
+// UserOwnedMutationPolicyMixin sets the policy for updating owned fields by the user
 func (mixin UserOwnedMutationPolicyMixin) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{

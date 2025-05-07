@@ -29,16 +29,20 @@ type Program struct {
 	ent.Schema
 }
 
+// SchemaProgram is the name of the Program schema.
 const SchemaProgram = "program"
 
+// Name returns the name of the Program schema.
 func (Program) Name() string {
 	return SchemaProgram
 }
 
+// GetType returns the type of the Program schema.
 func (Program) GetType() any {
 	return Program.Type
 }
 
+// PluralName returns the plural name of the Program schema.
 func (Program) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaProgram)
 }

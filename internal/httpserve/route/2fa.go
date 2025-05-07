@@ -25,7 +25,7 @@ func register2faHandler(router *Router) (err error) {
 
 	tfaOperation := router.Handler.BindTFAHandler()
 
-	if err := router.Addv1Route(path, method, tfaOperation, route); err != nil {
+	if err := router.AddV1Route(path, method, tfaOperation, route); err != nil {
 		return err
 	}
 

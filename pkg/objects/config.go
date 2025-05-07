@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 )
 
+// Config is the configuration for the object store
 type Config struct {
 	// Enabled indicates if the store is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"true"`
@@ -115,6 +116,7 @@ var (
 	}
 )
 
+// OrganizationNameFunc is a function that generates the organization name
 var OrganizationNameFunc NameGeneratorFunc = func(s string) string {
 	return s
 }

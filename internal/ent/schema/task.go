@@ -26,16 +26,20 @@ type Task struct {
 	ent.Schema
 }
 
+// SchemaTask is the name of the Task schema.
 const SchemaTask = "task"
 
+// Name returns the name of the Task schema.
 func (Task) Name() string {
 	return SchemaTask
 }
 
+// GetType returns the type of the Task schema.
 func (Task) GetType() any {
 	return Task.Type
 }
 
+// PluralName returns the plural name of the Task schema.
 func (Task) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaTask)
 }

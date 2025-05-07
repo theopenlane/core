@@ -145,7 +145,7 @@ type PondPool struct {
 }
 
 var (
-	DefaultConfigFilePath = "./config/.config.yaml"
+	defaultConfigFilePath = "./config/.config.yaml"
 )
 
 // Load is responsible for loading the configuration from a YAML file and environment variables.
@@ -156,7 +156,7 @@ func Load(cfgFile *string) (*Config, error) {
 	k := koanf.New(".")
 
 	if cfgFile == nil || *cfgFile == "" {
-		*cfgFile = DefaultConfigFilePath
+		*cfgFile = defaultConfigFilePath
 	}
 
 	if _, err := os.Stat(*cfgFile); err != nil {

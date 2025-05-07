@@ -26,16 +26,20 @@ type APIToken struct {
 	ent.Schema
 }
 
+// SchemaAPIToken is the name of the APIToken schema.
 const SchemaAPIToken = "api_token"
 
+// Name returns the name of the APIToken schema.
 func (APIToken) Name() string {
 	return SchemaAPIToken
 }
 
+// GetType returns the type of the APIToken schema.
 func (APIToken) GetType() any {
 	return APIToken.Type
 }
 
+// PluralName returns the plural name of the APIToken schema.
 func (APIToken) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaAPIToken)
 }

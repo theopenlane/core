@@ -29,14 +29,17 @@ type {{ $name }} struct {
 // Schema{{ $name }}is the name of the schema in snake case
 const Schema{{ $name }} = "{{ $name | snake }}"
 
+// Name is the name of the schema in snake case
 func ({{ $name }}) Name() string {
 	return Schema{{ . | singular }}
 }
 
+// GetType returns the type of the schema
 func ({{ $name }}) GetType() any {
 	return {{ $name }}.Type
 }
 
+// PluralName returns the plural name of the schema
 func ({{ $name }}) PluralName() string {
 	return pluralize.NewClient().Plural(Schema{{ $name }})
 }

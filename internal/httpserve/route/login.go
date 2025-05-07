@@ -25,7 +25,7 @@ func registerLoginHandler(router *Router) (err error) {
 
 	loginOperation := router.Handler.BindLoginHandler()
 
-	if err := router.Addv1Route(path, method, loginOperation, route); err != nil {
+	if err := router.AddV1Route(path, method, loginOperation, route); err != nil {
 		return err
 	}
 

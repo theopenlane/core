@@ -160,7 +160,7 @@ type ParentObject struct {
 	Type string `json:"type"`
 }
 
-// SKipperFunc is a function that defines whether to skip the middleware
+// SkipperFunc is a function that defines whether to skip the middleware
 type SkipperFunc func(r *http.Request) bool
 
 // UploaderFunc is a function that handles the file upload process and returns the files uploaded

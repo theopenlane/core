@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
+// Server is a struct that holds the configuration for the server
 type Server struct {
 	// config contains the base server settings
 	config config.Config
@@ -27,6 +28,7 @@ type Server struct {
 	Router *route.Router
 }
 
+// ConfigureEcho sets up the echo server with the default middleware and logging
 func ConfigureEcho() *echo.Echo {
 	e := echo.New()
 	e.HTTPErrorHandler = CustomHTTPErrorHandler

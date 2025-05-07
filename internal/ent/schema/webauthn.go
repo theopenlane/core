@@ -23,16 +23,20 @@ type Webauthn struct {
 	ent.Schema
 }
 
+// SchemaWebauthn is the name of the Webauthn schema.
 const SchemaWebauthn = "webauthn"
 
+// Name returns the name of the Webauthn schema.
 func (Webauthn) Name() string {
 	return SchemaWebauthn
 }
 
+// GetType returns the type of the Webauthn schema.
 func (Webauthn) GetType() any {
 	return Webauthn.Type
 }
 
+// PluralName returns the plural name of the Webauthn schema.
 func (Webauthn) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaWebauthn)
 }

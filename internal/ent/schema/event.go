@@ -17,16 +17,20 @@ type Event struct {
 	ent.Schema
 }
 
+// SchemaEvent is the name of the Event schema.
 const SchemaEvent = "event"
 
+// Name returns the name of the Event schema.
 func (Event) Name() string {
 	return SchemaEvent
 }
 
+// GetType returns the type of the Event schema.
 func (Event) GetType() any {
 	return Event.Type
 }
 
+// PluralName returns the plural name of the Event schema.
 func (Event) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaEvent)
 }
