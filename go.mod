@@ -6,7 +6,7 @@ replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-gener
 
 require (
 	ariga.io/entcache v0.1.0
-	dario.cat/mergo v1.0.1
+	dario.cat/mergo v1.0.2
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.4
 	github.com/99designs/gqlgen v0.17.73
