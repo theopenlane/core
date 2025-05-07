@@ -31,16 +31,20 @@ type EmailVerificationToken struct {
 	ent.Schema
 }
 
-const SchemaEmailVerificationToken = "email_verification_token"
+// SchemaEmailVerificationToken is the name of the EmailVerificationToken schema.
+const SchemaEmailVerificationToken = "email_verification_token" // nolint:gosec
 
+// Name returns the name of the EmailVerificationToken schema.
 func (EmailVerificationToken) Name() string {
 	return SchemaEmailVerificationToken
 }
 
+// GetType returns the type of the EmailVerificationToken schema.
 func (EmailVerificationToken) GetType() any {
 	return EmailVerificationToken.Type
 }
 
+// PluralName returns the plural name of the EmailVerificationToken schema.
 func (EmailVerificationToken) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaEmailVerificationToken)
 }

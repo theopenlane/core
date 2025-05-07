@@ -24,7 +24,7 @@ func registerVerifySubscribeHandler(router *Router) (err error) {
 
 	subscribeOperation := router.Handler.BindVerifySubscriberHandler()
 
-	if err := router.Addv1Route(path, method, subscribeOperation, route); err != nil {
+	if err := router.AddV1Route(path, method, subscribeOperation, route); err != nil {
 		return err
 	}
 

@@ -5,8 +5,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-
 	"github.com/gertd/go-pluralize"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -66,7 +66,6 @@ func (m MappedControl) Edges() []ent.Edge {
 // Mixin of the MappedControl
 func (MappedControl) Mixin() []ent.Mixin {
 	return getDefaultMixins()
-
 }
 
 // Annotations of the MappedControl

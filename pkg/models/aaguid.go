@@ -9,9 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var (
-	ErrUnsupportedDataType = errors.New("unsupported aaguid format")
-)
+var ErrUnsupportedDataType = errors.New("unsupported aaguid format")
 
 // AAGUID is a custom type representing an authenticator attestation uuid.
 type AAGUID []byte

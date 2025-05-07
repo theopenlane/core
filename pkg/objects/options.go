@@ -97,6 +97,7 @@ func WithDownloadFileOptions(opts *DownloadFileOptions) Option {
 	}
 }
 
+// WithMetadata allows you to provide metadata for the upload
 func WithMetadata(mp map[string]interface{}) Option {
 	return func(o *Objects) {
 		if o.UploadFileOptions.Metadata == nil {

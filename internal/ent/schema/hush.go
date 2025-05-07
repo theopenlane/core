@@ -19,16 +19,20 @@ type Hush struct {
 	ent.Schema
 }
 
+// SchemaHush is the name of the Hush schema.
 const SchemaHush = "secret"
 
+// Name returns the name of the Hush schema.
 func (Hush) Name() string {
 	return SchemaHush
 }
 
+// GetType returns the type of the Hush schema.
 func (Hush) GetType() any {
 	return Hush.Type
 }
 
+// PluralName returns the plural name of the Hush schema.
 func (Hush) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaHush)
 }

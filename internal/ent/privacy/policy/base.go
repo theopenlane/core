@@ -52,7 +52,7 @@ func WithMutationRules(rules ...privacy.MutationRule) Option {
 	}
 }
 
-// WithOnQueryRules adds query rules to policy for specific operations.
+// WithOnMutationRules adds mutation rules to policy for specific operations.
 func WithOnMutationRules(op ent.Op, rules ...privacy.MutationRule) Option {
 	opRules := []privacy.MutationRule{}
 

@@ -22,16 +22,20 @@ type InternalPolicy struct {
 	ent.Schema
 }
 
+// SchemaInternalPolicy is the name of the internal policy schema.
 const SchemaInternalPolicy = "internal_policy"
 
+// Name returns the name of the internal policy schema.
 func (InternalPolicy) Name() string {
 	return SchemaInternalPolicy
 }
 
+// GetType returns the type of the internal policy schema.
 func (InternalPolicy) GetType() any {
 	return InternalPolicy.Type
 }
 
+// PluralName returns the plural name of the internal policy schema.
 func (InternalPolicy) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaInternalPolicy)
 }

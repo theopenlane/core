@@ -25,16 +25,20 @@ type Standard struct {
 	ent.Schema
 }
 
+// SchemaStandard is the name of the standard schema.
 const SchemaStandard = "standard"
 
+// Name returns the name of the standard schema.
 func (Standard) Name() string {
 	return SchemaStandard
 }
 
+// GetType returns the type of the standard schema.
 func (Standard) GetType() any {
 	return Standard.Type
 }
 
+// PluralName returns the plural name of the standard schema.
 func (Standard) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaStandard)
 }

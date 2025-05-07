@@ -12,9 +12,9 @@ import (
 )
 
 const (
-	// system object type for FGA authorization
+	// SystemObject type for FGA authorization
 	SystemObject = "system"
-	// system object id for FGA authorization
+	// SystemObjectID for FGA authorization
 	SystemObjectID = "openlane_core"
 )
 
@@ -35,7 +35,7 @@ func AllowMutationIfSystemAdmin() privacy.MutationRuleFunc {
 	})
 }
 
-// AllowMutationIfSystemAdmin determines whether a query operation should be allowed based on whether the user is a system admin
+// AllowQueryIfSystemAdmin determines whether a query operation should be allowed based on whether the user is a system admin
 func AllowQueryIfSystemAdmin() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
 		allow, err := CheckIsSystemAdminWithContext(ctx)

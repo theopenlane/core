@@ -6,12 +6,14 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
+
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
+
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/entfga"
 )
 
 // ControlMixin implements the control pattern fields for different schemas.

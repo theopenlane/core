@@ -24,7 +24,7 @@ func registerRefreshHandler(router *Router) (err error) {
 
 	refreshOperation := router.Handler.BindRefreshHandler()
 
-	if err := router.Addv1Route(path, method, refreshOperation, route); err != nil {
+	if err := router.AddV1Route(path, method, refreshOperation, route); err != nil {
 		return err
 	}
 

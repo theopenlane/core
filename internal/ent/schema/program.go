@@ -10,14 +10,16 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/entfga"
 )
 
 // Program holds the schema definition for the Program entity
@@ -27,16 +29,20 @@ type Program struct {
 	ent.Schema
 }
 
+// SchemaProgram is the name of the Program schema.
 const SchemaProgram = "program"
 
+// Name returns the name of the Program schema.
 func (Program) Name() string {
 	return SchemaProgram
 }
 
+// GetType returns the type of the Program schema.
 func (Program) GetType() any {
 	return Program.Type
 }
 
+// PluralName returns the plural name of the Program schema.
 func (Program) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaProgram)
 }

@@ -5,15 +5,16 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-
 	"github.com/gertd/go-pluralize"
+
+	"github.com/theopenlane/iam/entfga"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/iam/entfga"
 )
 
 // ControlImplementation holds the schema definition for the ControlImplementation entity
@@ -23,16 +24,20 @@ type ControlImplementation struct {
 	ent.Schema
 }
 
+// SchemaImplementation is the name of the ControlImplementation schema.
 const SchemaImplementation = "control_implementation"
 
+// Name returns the name of the ControlImplementation schema.
 func (ControlImplementation) Name() string {
 	return SchemaImplementation
 }
 
+// GetType returns the type of the ControlImplementation schema.
 func (ControlImplementation) GetType() any {
 	return ControlImplementation.Type
 }
 
+// PluralName returns the plural name of the ControlImplementation schema.
 func (ControlImplementation) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaImplementation)
 }

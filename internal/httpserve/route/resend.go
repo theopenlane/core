@@ -24,7 +24,7 @@ func registerResendEmailHandler(router *Router) (err error) {
 
 	resendOperation := router.Handler.BindResendEmailHandler()
 
-	if err := router.Addv1Route(path, method, resendOperation, route); err != nil {
+	if err := router.AddV1Route(path, method, resendOperation, route); err != nil {
 		return err
 	}
 

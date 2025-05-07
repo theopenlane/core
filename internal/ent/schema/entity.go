@@ -24,16 +24,20 @@ type Entity struct {
 	ent.Schema
 }
 
+// SchemaEntity is the name of the Entity schema.
 const SchemaEntity = "entity"
 
+// Name returns the name of the Entity schema.
 func (Entity) Name() string {
 	return SchemaEntity
 }
 
+// GetType returns the type of the Entity schema.
 func (Entity) GetType() any {
 	return Entity.Type
 }
 
+// PluralName returns the plural name of the Entity schema.
 func (Entity) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaEntity)
 }
@@ -47,7 +51,7 @@ func (Entity) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.Postgres: "citext",
 			}).
-			MinLen(3).
+			MinLen(minNameLength).
 			Validate(validator.SpecialCharValidator).
 			Annotations(
 				entx.FieldSearchable(),

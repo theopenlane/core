@@ -28,6 +28,7 @@ var _ objects.Storage = &Disk{}
 // ProviderDisk is the provider for the disk storage
 var ProviderDisk = "disk"
 
+// NewDiskStorage creates a new Disk storage backend
 func NewDiskStorage(opts *DiskOptions) (*Disk, error) {
 	if isStringEmpty(opts.Bucket) {
 		return nil, ErrInvalidFolderPath
@@ -50,8 +51,10 @@ func NewDiskStorage(opts *DiskOptions) (*Disk, error) {
 	return disk, nil
 }
 
+// Close satisfies the Storage interface
 func (d *Disk) Close() error { return nil }
 
+// Upload satisfies the Storage interface
 func (d *Disk) Upload(_ context.Context, r io.Reader, opts *objects.UploadFileOptions) (*objects.UploadedFileMetadata, error) {
 	f, err := os.Create(filepath.Join(d.Opts.Bucket, opts.FileName))
 	if err != nil {

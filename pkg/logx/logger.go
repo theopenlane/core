@@ -185,6 +185,7 @@ func (l *Logger) Prefix() string {
 	return l.prefix
 }
 
+// SetHeader implements echo.Logger interface
 func (l *Logger) SetHeader(_ string) {
 	// not implemented
 }

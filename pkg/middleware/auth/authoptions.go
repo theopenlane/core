@@ -53,6 +53,7 @@ type Reauthenticator interface {
 	Refresh(context.Context, *api.RefreshRequest) (*api.LoginReply, error)
 }
 
+// DefaultAuthOptions is the default auth options used by the middleware.
 var DefaultAuthOptions = Options{
 	KeysURL:            "http://localhost:17608/.well-known/jwks.json",
 	Audience:           "http://localhost:17608",

@@ -1,7 +1,9 @@
 package storage
 
+// DiskOption is an options function for the DiskOptions
 type DiskOption func(*DiskOptions)
 
+// DiskOptions are options for the disk storage
 type DiskOptions struct {
 	Bucket string
 	Key    string
@@ -24,6 +26,7 @@ func WithLocalKey(key string) DiskOption {
 	}
 }
 
+// WithLocalURL specifies the URL to use for the "presigned" URL for the file
 func WithLocalURL(url string) DiskOption {
 	return func(d *DiskOptions) {
 		d.LocalURL = url

@@ -25,16 +25,20 @@ type Risk struct {
 	ent.Schema
 }
 
+// SchemaRisk is the name of the risk schema.
 const SchemaRisk = "risk"
 
+// Name returns the name of the risk schema.
 func (Risk) Name() string {
 	return SchemaRisk
 }
 
+// GetType returns the type of the risk schema.
 func (Risk) GetType() any {
 	return Risk.Type
 }
 
+// PluralName returns the plural name of the risk schema.
 func (Risk) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaRisk)
 }

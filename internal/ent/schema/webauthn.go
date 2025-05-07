@@ -8,10 +8,12 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/pkg/models"
+
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
+
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Webauthn holds the schema definition for the Webauthn entity
@@ -21,16 +23,20 @@ type Webauthn struct {
 	ent.Schema
 }
 
+// SchemaWebauthn is the name of the Webauthn schema.
 const SchemaWebauthn = "webauthn"
 
+// Name returns the name of the Webauthn schema.
 func (Webauthn) Name() string {
 	return SchemaWebauthn
 }
 
+// GetType returns the type of the Webauthn schema.
 func (Webauthn) GetType() any {
 	return Webauthn.Type
 }
 
+// PluralName returns the plural name of the Webauthn schema.
 func (Webauthn) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaWebauthn)
 }

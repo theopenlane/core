@@ -29,16 +29,20 @@ type Subscriber struct {
 	ent.Schema
 }
 
+// SchemaSubscriber is the name of the Subscriber schema.
 const SchemaSubscriber = "subscriber"
 
+// Name returns the name of the Subscriber schema.
 func (Subscriber) Name() string {
 	return SchemaSubscriber
 }
 
+// GetType returns the type of the Subscriber schema.
 func (Subscriber) GetType() any {
 	return Subscriber.Type
 }
 
+// PluralName returns the plural name of the Subscriber schema.
 func (Subscriber) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaSubscriber)
 }

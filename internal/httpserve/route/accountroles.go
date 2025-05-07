@@ -24,7 +24,7 @@ func registerAccountRolesHandler(router *Router) (err error) {
 
 	rolesOperation := router.Handler.BindAccountRoles()
 
-	if err := router.Addv1Route(path, method, rolesOperation, route); err != nil {
+	if err := router.AddV1Route(path, method, rolesOperation, route); err != nil {
 		return err
 	}
 

@@ -25,16 +25,20 @@ type Contact struct {
 	ent.Schema
 }
 
+// SchemaContact is the name of the Contact schema.
 const SchemaContact = "contact"
 
+// Name returns the name of the Contact schema.
 func (Contact) Name() string {
 	return SchemaContact
 }
 
+// GetType returns the type of the Contact schema.
 func (Contact) GetType() any {
 	return Contact.Type
 }
 
+// PluralName returns the plural name of the Contact schema.
 func (Contact) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaContact)
 }

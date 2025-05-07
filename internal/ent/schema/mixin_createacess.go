@@ -7,9 +7,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
+	"github.com/theopenlane/iam/fgax"
+
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/iam/fgax"
 )
 
 // createObjectTypes is a list of object types that access can be granted specifically for creation

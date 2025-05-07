@@ -23,6 +23,7 @@ type MappableDomain struct {
 }
 
 const (
+	// SchemaMappableDomain is the name of the MappableDomain schema.
 	SchemaMappableDomain = "mappable_domain"
 )
 
