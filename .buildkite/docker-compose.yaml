@@ -1,0 +1,12 @@
+services:
+  golangci-lint:
+    image: golangci/golangci-lint:v2.1.6
+    working_dir: /app
+    volumes:
+      - ..:/app
+      - ~/.cache/golangci-lint/v2.1.6:/root/.cache
+      - ~/gocache:/gocache
+      - ~/gomodcache:/gomodcache
+    environment:
+      - GOCACHE=/gocache
+      - GOMODCACHE=/gomodcache

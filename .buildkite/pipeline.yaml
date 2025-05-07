@@ -11,8 +11,17 @@ env:
   RUNNER_SMALL: "small"
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-2fwyqq@current"
+  BUILDKITE_PLUGIN_S3_CACHE_BUCKET: "bkcache"
+  BUILDKITE_PLUGIN_S3_CACHE_ENDPOINT: "s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache"
 
 steps:
+  - name: ":golangci-lint: lint"
+    command: golangci-lint run --config=.golangci.yaml --verbose
+    plugins:
+      - docker-compose#v5.2.0:
+          config: .buildkite/docker-compose.yaml
+          run: golangci-lint
+          tty: true
   - group: ":knife: Pre-check"
     key: "precheck"
     steps:
@@ -23,12 +32,24 @@ steps:
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
         plugins:
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: go-build
+              restore: pipeline
+              backend: s3
+              save:
+                - file
+                - branch
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "ci"]
               environment:
                 - "GOTOOLCHAIN=auto"
+                - "GOCACHE=s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache/go-build"
+                - "GOLANGCI_LINT_CACHE=s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache/golangci-lint"
       - label: ":yaml: generate config"
         key: "generate_config"
         cancel_on_build_failing: true
@@ -52,12 +73,21 @@ steps:
         timeout_in_minutes: 20
         key: "lint"
         plugins:
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: go-build
+              restore: file
+              backend: s3
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci"]
               always_pull: true
               environment:
                 - "GOTOOLCHAIN=auto"
+                - "GOCACHE=s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache/go-build"
+                - "GOLANGCI_LINT_CACHE=s3://arn:aws:s3:us-east-1:329599614681:accesspoint/bkcache/golangci-lint"
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         agents:
@@ -68,11 +98,21 @@ steps:
         cancel_on_build_failing: true
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
+          GOMODCACHE: pkg/cache
         matrix:
           setup:
             version:
               - 17-alpine
         plugins:
+          - cache#v1.6.0:
+              path: pkg/cache
+              manifest:
+                - go.mod
+                - go.sum
+              restore: file
+              save: file
+              backend: s3
+              key-extra: "{{matrix.version}}"
           - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
@@ -306,6 +346,16 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
+          - cache#v1.6.0:
+              manifest:
+                - go.mod
+                - go.sum
+              path: go-build
+              restore: file
+              backend: s3
+              save:
+                - pipeline
+                - all
       - trigger: "core-deploy"
         depends_on: "docker-build-and-tag"
         label: ":rocket: trigger core-deploy"
