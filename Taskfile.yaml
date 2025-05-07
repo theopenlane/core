@@ -130,7 +130,7 @@ tasks:
     desc: runs and outputs results of created go tests with coverage
     aliases: [cover]
     cmds:
-      - go test -v ./... -coverprofile=coverage.out -timeout 20m
+      - go test -p 8 -v ./... -coverprofile=coverage.out -covermode=set -timeout 20m
 
   go:test:coverout:
     desc: runs and outputs results of created go tests with coverage
