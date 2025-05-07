@@ -45,7 +45,7 @@ require (
 	github.com/lestrrat-go/jwx/v3 v3.0.1
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
-	github.com/miekg/dns v1.1.65
+	github.com/miekg/dns v1.1.66
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nyaruka/phonenumbers v1.6.1
 	github.com/oNaiPs/go-generate-fast v0.3.0
