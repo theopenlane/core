@@ -155,7 +155,7 @@ tasks:
     desc: runs tests using gotestsum for CI
     aliases: ['testsum:ci']
     cmds:
-      - gotestsum --rerun-fails --junitfile coverage.out
+      - go run gotest.tools/gotestsum@latest --rerun-fails --junitfile coverage.out
 
   go:fmt:
     desc: format all go code
