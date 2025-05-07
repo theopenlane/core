@@ -292,8 +292,9 @@ func (suite *GraphTestSuite) TestMutationCreateStandard() {
 		{
 			name: "happy path, system admin - system owned with controls",
 			request: openlaneclient.CreateStandardInput{
-				Name:     "Super Awesome Standard",
-				IsPublic: lo.ToPtr(true),
+				Name:       "Super Awesome Standard",
+				IsPublic:   lo.ToPtr(true),
+				ControlIDs: adminControlIDs,
 			},
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,

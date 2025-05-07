@@ -78,25 +78,14 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 
 	createdProgram := withTransactionalMutation(ctx).Program.Create()
 
-	if input.StandardID != "" {
-		standardRes, err := withTransactionalMutation(ctx).Standard.Get(ctx, input.StandardID)
-		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
-		}
+	standardRes, err := withTransactionalMutation(ctx).Standard.Get(ctx, input.StandardID)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
+	}
 
-		controls, err := standardRes.QueryControls().All(ctx)
-		if err != nil {
-			return nil, err
-		}
-
-		bulkControls, err := r.cloneControls(ctx, controls, nil, true)
-		if err != nil {
-			return nil, err
-		}
-
-		for _, control := range bulkControls {
-			createdProgram.AddControlIDs(control.ID)
-		}
+	controls, err := standardRes.QueryControls().All(ctx)
+	for _, control := range controls {
+		createdProgram.AddControlIDs(control.ID)
 	}
 
 	// create the program

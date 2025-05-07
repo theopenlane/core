@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/pkg/enums"
@@ -104,6 +105,28 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 	})
 	require.NoError(t, err)
 
+	numAdminControls := 5
+	adminControlIDs := []string{}
+	for range numAdminControls {
+		control := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+		adminControlIDs = append(adminControlIDs, control.ID)
+	}
+
+	// publicStandard, err := suite.client.api.CreateStandard(systemAdminUser.UserCtx, openlaneclient.CreateStandardInput{
+	// 	Name:     "System Awesome Standard",
+	// 	IsPublic: lo.ToPtr(true),
+	// })
+	// require.NoError(t, err)
+	//
+	publicStandard, err := suite.client.db.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).
+		SetIsPublic(true).
+		AddControlIDs(adminControlIDs...).
+		Save(systemAdminUser.UserCtx)
+	require.NoError(t, err)
+
+	s, _ := suite.client.api.GetStandardByID(testUser1.UserCtx, publicStandard.ID)
+	require.Equal(t, len(s.Standard.Controls.Edges), numAdminControls)
+
 	members := []*openlaneclient.CreateMemberWithProgramInput{
 		{
 			UserID: viewOnlyUser.ID,
@@ -116,12 +139,26 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 	}
 
 	testCases := []struct {
-		name        string
-		request     openlaneclient.CreateFullProgramInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name                 string
+		request              openlaneclient.CreateFullProgramInput
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedControlCount int
+		expectedErr          string
 	}{
+		{
+			name: "happy path, system standard id",
+			request: openlaneclient.CreateFullProgramInput{
+				Program: &openlaneclient.CreateProgramInput{
+					Name: "test program",
+				},
+				Members:    members,
+				StandardID: s.Standard.ID,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedControlCount: numAdminControls,
+		},
 		{
 			name: "happy path, standard id",
 			request: openlaneclient.CreateFullProgramInput{
@@ -131,8 +168,9 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 				Members:    members,
 				StandardID: resp.CreateStandard.Standard.ID,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedControlCount: numControls,
 		},
 		{
 			name: "happy path, all the fields",
@@ -210,7 +248,7 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 				assert.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols)
 				assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols.Edges))
 			} else {
-				assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, numControls)
+				assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, tc.expectedControlCount)
 			}
 
 			require.NotNil(t, resp.CreateFullProgram.Program.Risks.Edges)
