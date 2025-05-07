@@ -89,7 +89,12 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 			return nil, err
 		}
 
-		for _, control := range controls {
+		bulkControls, err := r.cloneControls(ctx, controls, nil, true)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, control := range bulkControls {
 			createdProgram.AddControlIDs(control.ID)
 		}
 	}
