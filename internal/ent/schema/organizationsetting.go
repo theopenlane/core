@@ -27,16 +27,20 @@ type OrganizationSetting struct {
 	ent.Schema
 }
 
+// SchemaOrganizationSetting is the name of the OrganizationSetting schema.
 const SchemaOrganizationSetting = "organization_setting"
 
+// Name returns the name of the OrganizationSetting schema.
 func (OrganizationSetting) Name() string {
 	return SchemaOrganizationSetting
 }
 
+// GetType returns the type of the OrganizationSetting schema.
 func (OrganizationSetting) GetType() any {
 	return OrganizationSetting.Type
 }
 
+// PluralName returns the plural name of the OrganizationSetting schema.
 func (OrganizationSetting) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaOrganizationSetting)
 }

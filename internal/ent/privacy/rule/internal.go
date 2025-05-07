@@ -10,6 +10,7 @@ import (
 
 type internalAllowContextKey struct{}
 
+// WithInternalContext adds an internal request key to the context
 func WithInternalContext(ctx context.Context) context.Context {
 	return contextx.With(ctx, internalAllowContextKey{})
 }

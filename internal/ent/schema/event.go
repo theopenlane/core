@@ -5,8 +5,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	emixin "github.com/theopenlane/entx/mixin"
+
+	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
 // Event holds the schema definition for the Event entity
@@ -16,16 +17,20 @@ type Event struct {
 	ent.Schema
 }
 
+// SchemaEvent is the name of the Event schema.
 const SchemaEvent = "event"
 
+// Name returns the name of the Event schema.
 func (Event) Name() string {
 	return SchemaEvent
 }
 
+// GetType returns the type of the Event schema.
 func (Event) GetType() any {
 	return Event.Type
 }
 
+// PluralName returns the plural name of the Event schema.
 func (Event) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaEvent)
 }

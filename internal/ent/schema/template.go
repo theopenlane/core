@@ -21,16 +21,20 @@ type Template struct {
 	ent.Schema
 }
 
+// SchemaTemplate is the name of the Template schema.
 const SchemaTemplate = "template"
 
+// SchemaTemplate is the name of the Template schema.
 func (Template) Name() string {
 	return SchemaTemplate
 }
 
+// GetType returns the type of the Template schema.
 func (Template) GetType() any {
 	return Template.Type
 }
 
+// PluralName returns the plural name of the Template schema.
 func (Template) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaTemplate)
 }

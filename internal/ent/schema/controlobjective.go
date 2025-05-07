@@ -23,16 +23,20 @@ type ControlObjective struct {
 	ent.Schema
 }
 
+// SchemaControlObjective is the name of the controlobjective schema.
 const SchemaControlObjective = "control_objective"
 
+// Name returns the name of the controlobjective schema.
 func (ControlObjective) Name() string {
 	return SchemaControlObjective
 }
 
+// GetType returns the type of the controlobjective schema.
 func (ControlObjective) GetType() any {
 	return ControlObjective.Type
 }
 
+// PluralName returns the plural name of the controlobjective schema.
 func (ControlObjective) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaControlObjective)
 }

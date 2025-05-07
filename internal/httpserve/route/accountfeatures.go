@@ -25,7 +25,7 @@ func registerAccountFeaturesHandler(router *Router) (err error) {
 
 	featuresOrganizationOperation := router.Handler.BindAccountFeatures()
 
-	if err := router.Addv1Route(route.Path, route.Method, featuresOrganizationOperation, route); err != nil {
+	if err := router.AddV1Route(route.Path, route.Method, featuresOrganizationOperation, route); err != nil {
 		return err
 	}
 
@@ -35,7 +35,7 @@ func registerAccountFeaturesHandler(router *Router) (err error) {
 
 	rolesOrganizationOperationByID := router.Handler.BindAccountFeaturesByID()
 
-	if err := router.Addv1Route(route.Path, route.Method, rolesOrganizationOperationByID, route); err != nil {
+	if err := router.AddV1Route(route.Path, route.Method, rolesOrganizationOperationByID, route); err != nil {
 		return err
 	}
 

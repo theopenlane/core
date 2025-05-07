@@ -13,13 +13,14 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 
+	"github.com/theopenlane/iam/fgax"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/iam/fgax"
 )
 
 // ObjectOwnedMixin is a mixin for object owned entities
@@ -63,10 +64,12 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 
 	// defaults settings
 	o := ObjectOwnedMixin{
-		Ref:              sch.PluralName(),
-		HookFuncs:        []HookFunc{defaultObjectHookFunc, defaultTupleUpdateFunc},
-		InterceptorFuncs: []InterceptorFunc{func(o ObjectOwnedMixin) ent.Interceptor { return interceptors.FilterQueryResults[V]() }},
-		OwnerRelation:    fgax.ParentRelation,
+		Ref:       sch.PluralName(),
+		HookFuncs: []HookFunc{defaultObjectHookFunc, defaultTupleUpdateFunc},
+		InterceptorFuncs: []InterceptorFunc{func(_ ObjectOwnedMixin) ent.Interceptor {
+			return interceptors.FilterQueryResults[V]()
+		}},
+		OwnerRelation: fgax.ParentRelation,
 	}
 
 	// apply options
@@ -79,13 +82,6 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 	}
 
 	return o
-}
-
-// withRef allows to set custom ref for the object, by default its set to the plural name of the schema
-func withRef(ref string) objectOwnedOption {
-	return func(o *ObjectOwnedMixin) {
-		o.Ref = ref
-	}
 }
 
 // withSkipTokenTypesObjects allows to set custom token types to skip the traverser or hook
@@ -105,13 +101,6 @@ func withHookFuncs(hookFuncs ...HookFunc) objectOwnedOption {
 		}
 
 		o.HookFuncs = hookFuncs
-	}
-}
-
-// withInterceptorFuncs allows to set custom interceptor functions
-func withInterceptorFuncs(interceptorFuncs ...InterceptorFunc) objectOwnedOption {
-	return func(o *ObjectOwnedMixin) {
-		o.InterceptorFuncs = interceptorFuncs
 	}
 }
 
@@ -138,14 +127,6 @@ func withParents(schemas ...any) objectOwnedOption {
 
 			o.FieldNames = append(o.FieldNames, fmt.Sprintf("%s_id", sch.Name()))
 		}
-	}
-}
-
-// withFieldNames allows to set custom field names for the objects parents
-// withParents should generally be used instead as it will automatically set the field name to be <parent>_id
-func withFieldNames(fieldNames ...string) objectOwnedOption {
-	return func(o *ObjectOwnedMixin) {
-		o.FieldNames = append(o.FieldNames, fieldNames...)
 	}
 }
 
@@ -275,8 +256,6 @@ func (o ObjectOwnedMixin) PWithField(w interface{ WhereP(...func(*sql.Selector))
 // P adds the predicate to the queries, using the "id" field
 func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objectIDs []string) {
 	o.PWithField(w, "id", objectIDs)
-
-	return
 }
 
 // defaultTupleUpdateFunc is the default hook function for the object owned mixin

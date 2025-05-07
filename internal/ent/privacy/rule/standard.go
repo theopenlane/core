@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
 
+// ErrAdminOnlyField is returned when a user attempts to set a field that is only allowed to be set by an admin
 var ErrAdminOnlyField = errors.New("attempted to set admin only field")
 
 // SystemOwnedStandards is a privacy rule that checks if the standard is system owned

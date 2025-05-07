@@ -25,16 +25,20 @@ type PersonalAccessToken struct {
 	ent.Schema
 }
 
+// SchemaPersonalAccessToken is the name of the PersonalAccessToken schema.
 const SchemaPersonalAccessToken = "personal_access_token"
 
+// Name returns the name of the PersonalAccessToken schema.
 func (PersonalAccessToken) Name() string {
 	return SchemaPersonalAccessToken
 }
 
+// GetType returns the type of the PersonalAccessToken schema.
 func (PersonalAccessToken) GetType() any {
 	return PersonalAccessToken.Type
 }
 
+// PluralName returns the plural name of the PersonalAccessToken schema.
 func (PersonalAccessToken) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaPersonalAccessToken)
 }

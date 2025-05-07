@@ -116,7 +116,7 @@ tasks:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
     ## do not use --fix in CI
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage
 
   go:test:
     desc: runs and outputs results of created go tests
@@ -130,7 +130,7 @@ tasks:
     desc: runs and outputs results of created go tests with coverage
     aliases: [cover]
     cmds:
-      - go test ./... -coverprofile=coverage.out -timeout 20m
+      - go test -v ./... -coverprofile=coverage.out -timeout 20m
 
   go:test:coverout:
     desc: runs and outputs results of created go tests with coverage

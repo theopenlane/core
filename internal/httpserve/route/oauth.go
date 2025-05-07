@@ -71,7 +71,7 @@ func registerGithubLoginHandler(router *Router) (err error) {
 		Handler:     githubLogin(router),
 	}
 
-	if err := router.Addv1Route(path, method, nil, route); err != nil {
+	if err := router.AddV1Route(path, method, nil, route); err != nil {
 		return err
 	}
 
@@ -92,7 +92,7 @@ func registerGithubCallbackHandler(router *Router) (err error) {
 		Handler:     githubCallback(router),
 	}
 
-	if err := router.Addv1Route(path, method, nil, route); err != nil {
+	if err := router.AddV1Route(path, method, nil, route); err != nil {
 		return err
 	}
 
@@ -113,7 +113,7 @@ func registerGoogleLoginHandler(router *Router) (err error) {
 		Handler:     googleLogin(router),
 	}
 
-	if err := router.Addv1Route(path, method, nil, route); err != nil {
+	if err := router.AddV1Route(path, method, nil, route); err != nil {
 		return err
 	}
 
@@ -134,7 +134,7 @@ func registerGoogleCallbackHandler(router *Router) (err error) {
 		Handler:     googleCallback(router),
 	}
 
-	if err := router.Addv1Route(path, method, nil, route); err != nil {
+	if err := router.AddV1Route(path, method, nil, route); err != nil {
 		return err
 	}
 

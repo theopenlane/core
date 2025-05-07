@@ -20,16 +20,20 @@ type OrgSubscription struct {
 	ent.Schema
 }
 
+// SchemaOrgSubscription is the name of the OrgSubscription schema.
 const SchemaOrgSubscription = "org_subscription"
 
+// Name returns the name of the OrgSubscription schema.
 func (OrgSubscription) Name() string {
 	return SchemaOrgSubscription
 }
 
+// GetType returns the type of the OrgSubscription schema.
 func (OrgSubscription) GetType() any {
 	return OrgSubscription.Type
 }
 
+// PluralName returns the plural name of the OrgSubscription schema.
 func (OrgSubscription) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaOrgSubscription)
 }

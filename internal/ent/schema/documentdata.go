@@ -20,16 +20,20 @@ type DocumentData struct {
 	ent.Schema
 }
 
+// SchemaDocumentData is the name of the DocumentData schema.
 const SchemaDocumentData = "document"
 
+// Name returns the name of the DocumentData schema.
 func (DocumentData) Name() string {
 	return SchemaDocumentData
 }
 
+// GetType returns the type of the DocumentData schema.
 func (DocumentData) GetType() any {
 	return DocumentData.Type
 }
 
+// PluralName returns the plural name of the DocumentData schema.
 func (DocumentData) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaDocumentData)
 }

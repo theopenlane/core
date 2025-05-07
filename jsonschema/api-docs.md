@@ -20,7 +20,7 @@ Config contains the configuration for the core server
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the default rate limiter<br/>||
-|[**objectStorage**](#objectstorage)|`object`|||
+|[**objectStorage**](#objectstorage)|`object`|Config is the configuration for the object store<br/>||
 |[**subscription**](#subscription)|`object`|||
 
 **Additional Properties:** not allowed  
@@ -822,6 +822,9 @@ Config defines the configuration settings for the default rate limiter
 **Additional Properties:** not allowed  
 <a name="objectstorage"></a>
 ## objectStorage: object
+
+Config is the configuration for the object store
+
 
 **Properties**
 

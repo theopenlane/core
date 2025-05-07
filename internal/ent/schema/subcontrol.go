@@ -24,16 +24,20 @@ type Subcontrol struct {
 	ent.Schema
 }
 
+// SchemaSubcontrol is the name of the Subcontrol schema.
 const SchemaSubcontrol = "subcontrol"
 
+// Name returns the name of the Subcontrol schema.
 func (Subcontrol) Name() string {
 	return SchemaSubcontrol
 }
 
+// GetType returns the type of the Subcontrol schema.
 func (Subcontrol) GetType() any {
 	return Subcontrol.Type
 }
 
+// PluralName returns the plural name of the Subcontrol schema.
 func (Subcontrol) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaSubcontrol)
 }

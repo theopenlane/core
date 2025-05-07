@@ -30,6 +30,7 @@ type Router struct {
 	Logger        *echo.Logger
 }
 
+// RouterOption is an option function that can be used to configure the router
 type RouterOption func(*Router)
 
 // WithLogger is a RouterOption that allows the logger to be set on the router
@@ -97,8 +98,8 @@ func (r *Router) AddRoute(pattern, method string, op *openapi3.Operation, route 
 	return nil
 }
 
-// AddRoute is used to add a route to the echo router and OpenAPI schema at the same time ensuring consistency between the spec and the server
-func (r *Router) Addv1Route(pattern, method string, op *openapi3.Operation, route echo.Routable) error {
+// AddV1Route is used to add a route to the echo router and OpenAPI schema at the same time ensuring consistency between the spec and the server for version 1 routes of the api
+func (r *Router) AddV1Route(pattern, method string, op *openapi3.Operation, route echo.Routable) error {
 	grp := r.VersionOne()
 
 	_, err := grp.AddRoute(route)
@@ -111,7 +112,7 @@ func (r *Router) Addv1Route(pattern, method string, op *openapi3.Operation, rout
 	return nil
 }
 
-// AddRoute is used to add a route to the echo router and OpenAPI schema at the same time ensuring consistency between the spec and the server
+// AddUnversionedRoute is used to add a versioned route to the echo router and OpenAPI schema at the same time ensuring consistency between the spec and the server
 func (r *Router) AddUnversionedRoute(pattern, method string, op *openapi3.Operation, route echo.Routable) error {
 	grp := r.Base()
 

@@ -255,7 +255,6 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 		if _, allow := privacy.DecisionFromContext(ctx); allow {
 			return true
 		}
-
 	}
 
 	// skip the interceptor if the context has the organization creation context key

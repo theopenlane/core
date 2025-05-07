@@ -38,6 +38,7 @@ func ContextHasPrivacyTokenOfType[T token.PrivacyToken](ctx context.Context) boo
 	return ok
 }
 
+// PrivacyToken is an interface that defines a method to get the token string
 type PrivacyToken interface {
 	GetToken() string
 }
