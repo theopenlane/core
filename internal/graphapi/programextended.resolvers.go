@@ -76,8 +76,31 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
+	createdProgram := withTransactionalMutation(ctx).Program.Create()
+
+	if input.StandardID != "" {
+		standardRes, err := withTransactionalMutation(ctx).Standard.Get(ctx, input.StandardID)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
+		}
+
+		controls, err := standardRes.QueryControls().All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		bulkControls, err := r.cloneControls(ctx, controls, nil, true)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, control := range bulkControls {
+			createdProgram.AddControlIDs(control.ID)
+		}
+	}
+
 	// create the program
-	res, err := withTransactionalMutation(ctx).Program.Create().SetInput(*input.Program).Save(ctx)
+	res, err := createdProgram.SetInput(*input.Program).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 	}

@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -20,13 +19,12 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
-
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	existingControls, err := withTransactionalMutation(ctx).Control.Query().
 		Where(control.IDIn(input.ControlIDs...)).
-		// WithMappedControls(). // TODO: uncomment once mapped controls are implemented
+		// WithMappedControls(). // TODO(adelowo:): uncomment once mapped controls are implemented
 		WithSubcontrols().
 		All(ctx)
 	if err != nil {
@@ -37,94 +35,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		return nil, parseRequestError(generated.ErrPermissionDenied, action{action: ActionCreate, object: "control"})
 	}
 
-	createdControlIDs := make([]string, len(existingControls))
-
-	for _, control := range existingControls {
-
-		mappedControlIDs := []string{}
-		mappedControls := control.Edges.MappedControls
-		for _, mc := range mappedControls {
-			mappedControlIDs = append(mappedControlIDs, mc.ID)
-		}
-
-		controlInput := generated.CreateControlInput{
-			Tags:                   control.Tags,
-			RefCode:                control.RefCode,
-			Description:            &control.Description,
-			Source:                 &control.Source,
-			ControlType:            &control.ControlType,
-			Category:               &control.Category,
-			CategoryID:             &control.CategoryID,
-			Subcategory:            &control.Subcategory,
-			MappedCategories:       control.MappedCategories,
-			AssessmentObjectives:   control.AssessmentObjectives,
-			ControlQuestions:       control.ControlQuestions,
-			ImplementationGuidance: control.ImplementationGuidance,
-			ExampleEvidence:        control.ExampleEvidence,
-			References:             control.References,
-			MappedControlIDs:       mappedControlIDs,
-			Status:                 &enums.ControlStatusPreparing,
-		}
-
-		if control.StandardID != "" {
-			controlInput.StandardID = &control.StandardID
-		}
-
-		if input.ProgramID != nil {
-			controlInput.ProgramIDs = []string{*input.ProgramID}
-		}
-
-		res, err := withTransactionalMutation(ctx).Control.Create().SetInput(controlInput).Save(ctx)
-		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
-		}
-
-		createdControlIDs = append(createdControlIDs, res.ID)
-
-		if control.Edges.Subcontrols != nil {
-			mappedControlIDs := []string{}
-			mappedControls := control.Edges.MappedControls
-			for _, mc := range mappedControls {
-				mappedControlIDs = append(mappedControlIDs, mc.ID)
-			}
-
-			// if the control has subcontrols, we need to create them as well
-			subcontrols := make([]*generated.CreateSubcontrolInput, len(control.Edges.Subcontrols))
-			for j, subcontrol := range control.Edges.Subcontrols {
-				subcontrols[j] = &generated.CreateSubcontrolInput{
-					Tags:                   subcontrol.Tags,
-					RefCode:                subcontrol.RefCode,
-					Description:            &subcontrol.Description,
-					Source:                 &subcontrol.Source,
-					ControlID:              res.ID,
-					ControlType:            &subcontrol.ControlType,
-					Category:               &subcontrol.Category,
-					CategoryID:             &subcontrol.CategoryID,
-					Subcategory:            &subcontrol.Subcategory,
-					MappedCategories:       subcontrol.MappedCategories,
-					AssessmentObjectives:   subcontrol.AssessmentObjectives,
-					ControlQuestions:       subcontrol.ControlQuestions,
-					ImplementationGuidance: subcontrol.ImplementationGuidance,
-					ExampleEvidence:        subcontrol.ExampleEvidence,
-					References:             subcontrol.References,
-					MappedControlIDs:       mappedControlIDs,
-					Status:                 &enums.ControlStatusPreparing,
-				}
-			}
-
-			if _, err := r.bulkCreateSubcontrol(ctx, subcontrols); err != nil {
-				return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
-			}
-		}
-	}
-
-	// get the created controls
-	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.IDIn(createdControlIDs...)).CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
-	}
-
-	createdControls, err := query.All(ctx)
+	createdControls, err := r.cloneControls(ctx, existingControls, input.ProgramID, false)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
 	}

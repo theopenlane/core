@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
@@ -91,6 +92,28 @@ func (suite *GraphTestSuite) TestMutationCreateProgramWithMembers() {
 func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 	t := suite.T()
 
+	numControls := 5
+	controlIDs := []string{}
+	for range numControls {
+		control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+		controlIDs = append(controlIDs, control.ID)
+	}
+
+	resp, err := suite.client.api.CreateStandard(testUser1.UserCtx, openlaneclient.CreateStandardInput{
+		Name:       "Super Awesome Standard",
+		ControlIDs: controlIDs,
+	})
+	require.NoError(t, err)
+
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	numAdminControls := 5
+	adminControlIDs := []string{}
+	for range numAdminControls {
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+		adminControlIDs = append(adminControlIDs, control.ID)
+	}
+
 	members := []*openlaneclient.CreateMemberWithProgramInput{
 		{
 			UserID: viewOnlyUser.ID,
@@ -103,12 +126,39 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 	}
 
 	testCases := []struct {
-		name        string
-		request     openlaneclient.CreateFullProgramInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name                 string
+		request              openlaneclient.CreateFullProgramInput
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedControlCount int
+		expectedErr          string
 	}{
+		{
+			name: "happy path, system standard id",
+			request: openlaneclient.CreateFullProgramInput{
+				Program: &openlaneclient.CreateProgramInput{
+					Name: "test program",
+				},
+				Members:    members,
+				StandardID: publicStandard.ID,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedControlCount: numAdminControls,
+		},
+		{
+			name: "happy path, standard id",
+			request: openlaneclient.CreateFullProgramInput{
+				Program: &openlaneclient.CreateProgramInput{
+					Name: "test program",
+				},
+				Members:    members,
+				StandardID: resp.CreateStandard.Standard.ID,
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedControlCount: numControls,
+		},
 		{
 			name: "happy path, all the fields",
 			request: openlaneclient.CreateFullProgramInput{
@@ -178,11 +228,15 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 			// the creator is automatically added as an admin, and the members are added in addition
 			assert.Len(t, resp.CreateFullProgram.Program.Members.Edges, len(tc.request.Members)+1)
 
-			require.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges)
-			assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, len(tc.request.Controls))
+			if tc.request.StandardID == "" {
+				require.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges)
+				assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, len(tc.request.Controls))
 
-			assert.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols)
-			assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols.Edges))
+				assert.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols)
+				assert.Equal(t, 2, len(resp.CreateFullProgram.Program.Controls.Edges[0].Node.Subcontrols.Edges))
+			} else {
+				assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, tc.expectedControlCount)
+			}
 
 			require.NotNil(t, resp.CreateFullProgram.Program.Risks.Edges)
 			assert.Len(t, resp.CreateFullProgram.Program.Risks.Edges, len(tc.request.Risks))
@@ -191,4 +245,8 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 			assert.Len(t, resp.CreateFullProgram.Program.InternalPolicies.Edges, len(tc.request.InternalPolicies))
 		})
 	}
+
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: adminControlIDs}).MustDelete(systemAdminUser.UserCtx, suite)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, suite)
 }
