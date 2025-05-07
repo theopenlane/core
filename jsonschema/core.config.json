@@ -921,7 +921,8 @@
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Config is the configuration for the object store"
     },
     "otelx.Config": {
       "properties": {
