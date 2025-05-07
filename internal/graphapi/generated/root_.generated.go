@@ -34925,6 +34925,7 @@ input CreateStandardInput {
   """
   version: String
   ownerID: ID
+  controlIDs: [ID!]
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -66296,6 +66297,9 @@ input UpdateStandardInput {
   clearVersion: Boolean
   ownerID: ID
   clearOwner: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -71275,6 +71279,7 @@ input CreateFullProgramInput{
   internalPolicies: [CreateInternalPolicyInput!]
   procedures: [CreateProcedureInput!]
   members: [CreateMemberWithProgramInput!]
+  standardID: ID!
 }
 
 input CreateProgramWithMembersInput{
@@ -71315,7 +71320,8 @@ extend type Mutation{
         """
         input: CreateControlWithSubcontrolsInput!
     ): ControlCreatePayload!
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/programmembership.graphql", Input: `extend type Query {
     """
     Look up programMembership by ID

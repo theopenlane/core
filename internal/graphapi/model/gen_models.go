@@ -212,6 +212,7 @@ type CreateFullProgramInput struct {
 	InternalPolicies []*generated.CreateInternalPolicyInput `json:"internalPolicies,omitempty"`
 	Procedures       []*generated.CreateProcedureInput      `json:"procedures,omitempty"`
 	Members          []*CreateMemberWithProgramInput        `json:"members,omitempty"`
+	StandardID       string                                 `json:"standardID"`
 }
 
 type CreateMemberWithProgramInput struct {
