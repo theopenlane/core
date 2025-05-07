@@ -194,6 +194,30 @@ type ControlObjectiveUpdatePayload struct {
 	ControlObjective *generated.ControlObjective `json:"controlObjective"`
 }
 
+// Return response for createBulkControlScheduledJob mutation
+type ControlScheduledJobBulkCreatePayload struct {
+	// Created controlScheduledJobs
+	ControlScheduledJobs []*generated.ControlScheduledJob `json:"controlScheduledJobs,omitempty"`
+}
+
+// Return response for createControlScheduledJob mutation
+type ControlScheduledJobCreatePayload struct {
+	// Created controlScheduledJob
+	ControlScheduledJob *generated.ControlScheduledJob `json:"controlScheduledJob"`
+}
+
+// Return response for deleteControlScheduledJob mutation
+type ControlScheduledJobDeletePayload struct {
+	// Deleted controlScheduledJob ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateControlScheduledJob mutation
+type ControlScheduledJobUpdatePayload struct {
+	// Updated controlScheduledJob
+	ControlScheduledJob *generated.ControlScheduledJob `json:"controlScheduledJob"`
+}
+
 // Return response for updateControl mutation
 type ControlUpdatePayload struct {
 	// Updated control
@@ -819,6 +843,7 @@ type SearchResults struct {
 	Procedures             *generated.ProcedureConnection             `json:"procedures,omitempty"`
 	Programs               *generated.ProgramConnection               `json:"programs,omitempty"`
 	Risks                  *generated.RiskConnection                  `json:"risks,omitempty"`
+	ScheduledJobs          *generated.ScheduledJobConnection          `json:"scheduledJobs,omitempty"`
 	Standards              *generated.StandardConnection              `json:"standards,omitempty"`
 	Subcontrols            *generated.SubcontrolConnection            `json:"subcontrols,omitempty"`
 	Subscribers            *generated.SubscriberConnection            `json:"subscribers,omitempty"`

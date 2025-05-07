@@ -43,3 +43,6 @@ DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-0
 scalar DateTime
 
 scalar AAGUID
+
+scalar JobConfiguration
+scalar JobCadence

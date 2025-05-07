@@ -559,6 +559,25 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    scheduledJobs {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          deletedBy
+          ownerID
+          title
+          description
+        }
+      }
+    }
     standards {
       totalCount
       pageInfo {

@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -74,6 +75,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -160,6 +162,7 @@ func checkColumn(table, column string) error {
 			controlimplementationhistory.Table: controlimplementationhistory.ValidColumn,
 			controlobjective.Table:             controlobjective.ValidColumn,
 			controlobjectivehistory.Table:      controlobjectivehistory.ValidColumn,
+			controlscheduledjob.Table:          controlscheduledjob.ValidColumn,
 			documentdata.Table:                 documentdata.ValidColumn,
 			documentdatahistory.Table:          documentdatahistory.ValidColumn,
 			emailverificationtoken.Table:       emailverificationtoken.ValidColumn,
@@ -211,6 +214,7 @@ func checkColumn(table, column string) error {
 			programmembershiphistory.Table:     programmembershiphistory.ValidColumn,
 			risk.Table:                         risk.ValidColumn,
 			riskhistory.Table:                  riskhistory.ValidColumn,
+			scheduledjob.Table:                 scheduledjob.ValidColumn,
 			standard.Table:                     standard.ValidColumn,
 			standardhistory.Table:              standardhistory.ValidColumn,
 			subcontrol.Table:                   subcontrol.ValidColumn,

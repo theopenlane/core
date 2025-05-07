@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -1121,6 +1122,38 @@ func adminSearchRisks(ctx context.Context, query string, after *entgql.Cursor[st
 				risk.BusinessCostsContainsFold(query), // search by BusinessCosts
 				risk.StakeholderIDContainsFold(query), // search by StakeholderID
 				risk.DelegateIDContainsFold(query),    // search by DelegateID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchScheduledJob searches for ScheduledJob based on the query string looking for matches
+func searchScheduledJobs(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScheduledJobConnection, error) {
+	request := withTransactionalMutation(ctx).ScheduledJob.Query().
+		Where(
+			scheduledjob.Or(
+				scheduledjob.DescriptionContainsFold(query), // search by Description
+				scheduledjob.DisplayID(query),               // search equal to DisplayID
+				scheduledjob.ID(query),                      // search equal to ID
+				scheduledjob.TitleContainsFold(query),       // search by Title
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchScheduledJob searches for ScheduledJob based on the query string looking for matches
+func adminSearchScheduledJobs(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScheduledJobConnection, error) {
+	request := withTransactionalMutation(ctx).ScheduledJob.Query().
+		Where(
+			scheduledjob.Or(
+				scheduledjob.ID(query),                      // search equal to ID
+				scheduledjob.DisplayID(query),               // search equal to DisplayID
+				scheduledjob.DeletedByContainsFold(query),   // search by DeletedBy
+				scheduledjob.OwnerIDContainsFold(query),     // search by OwnerID
+				scheduledjob.TitleContainsFold(query),       // search by Title
+				scheduledjob.DescriptionContainsFold(query), // search by Description
 			),
 		)
 

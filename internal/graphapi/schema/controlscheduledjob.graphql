@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up controlScheduledJob by ID
+    """
+     controlScheduledJob(
+        """
+        ID of the controlScheduledJob
+        """
+        id: ID!
+    ):  ControlScheduledJob!
+}
+
+extend type Mutation{
+    """
+    Create a new controlScheduledJob
+    """
+    createControlScheduledJob(
+        """
+        values of the controlScheduledJob
+        """
+        input: CreateControlScheduledJobInput!
+    ): ControlScheduledJobCreatePayload!
+    """
+    Create multiple new controlScheduledJobs
+    """
+    createBulkControlScheduledJob(
+        """
+        values of the controlScheduledJob
+        """
+        input: [CreateControlScheduledJobInput!]
+    ): ControlScheduledJobBulkCreatePayload!
+    """
+    Create multiple new controlScheduledJobs via file upload
+    """
+    createBulkCSVControlScheduledJob(
+        """
+        csv file containing values of the controlScheduledJob
+        """
+        input: Upload!
+    ): ControlScheduledJobBulkCreatePayload!
+    """
+    Update an existing controlScheduledJob
+    """
+    updateControlScheduledJob(
+        """
+        ID of the controlScheduledJob
+        """
+        id: ID!
+        """
+        New values for the controlScheduledJob
+        """
+        input: UpdateControlScheduledJobInput!
+    ): ControlScheduledJobUpdatePayload!
+    """
+    Delete an existing controlScheduledJob
+    """
+    deleteControlScheduledJob(
+        """
+        ID of the controlScheduledJob
+        """
+        id: ID!
+    ): ControlScheduledJobDeletePayload!
+}
+
+"""
+Return response for createControlScheduledJob mutation
+"""
+type ControlScheduledJobCreatePayload {
+    """
+    Created controlScheduledJob
+    """
+    controlScheduledJob: ControlScheduledJob!
+}
+
+"""
+Return response for updateControlScheduledJob mutation
+"""
+type ControlScheduledJobUpdatePayload {
+    """
+    Updated controlScheduledJob
+    """
+    controlScheduledJob: ControlScheduledJob!
+}
+
+"""
+Return response for deleteControlScheduledJob mutation
+"""
+type ControlScheduledJobDeletePayload {
+    """
+    Deleted controlScheduledJob ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkControlScheduledJob mutation
+"""
+type ControlScheduledJobBulkCreatePayload {
+    """
+    Created controlScheduledJobs
+    """
+    controlScheduledJobs: [ControlScheduledJob!]
+}

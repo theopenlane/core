@@ -123,6 +123,25 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 	}, nil
 }
 
+// bulkCreateControlScheduledJob uses the CreateBulk function to create multiple ControlScheduledJob entities
+func (r *mutationResolver) bulkCreateControlScheduledJob(ctx context.Context, input []*generated.CreateControlScheduledJobInput) (*model.ControlScheduledJobBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ControlScheduledJobCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ControlScheduledJob.Create().SetInput(*data)
+	}
+
+	res, err := c.ControlScheduledJob.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlscheduledjob"})
+	}
+
+	// return response
+	return &model.ControlScheduledJobBulkCreatePayload{
+		ControlScheduledJobs: res,
+	}, nil
+}
+
 // bulkCreateDocumentData uses the CreateBulk function to create multiple DocumentData entities
 func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

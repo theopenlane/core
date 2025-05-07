@@ -34,6 +34,8 @@ type Tx struct {
 	ControlObjective *ControlObjectiveClient
 	// ControlObjectiveHistory is the client for interacting with the ControlObjectiveHistory builders.
 	ControlObjectiveHistory *ControlObjectiveHistoryClient
+	// ControlScheduledJob is the client for interacting with the ControlScheduledJob builders.
+	ControlScheduledJob *ControlScheduledJobClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -136,6 +138,8 @@ type Tx struct {
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// ScheduledJob is the client for interacting with the ScheduledJob builders.
+	ScheduledJob *ScheduledJobClient
 	// Standard is the client for interacting with the Standard builders.
 	Standard *StandardClient
 	// StandardHistory is the client for interacting with the StandardHistory builders.
@@ -308,6 +312,7 @@ func (tx *Tx) init() {
 	tx.ControlImplementationHistory = NewControlImplementationHistoryClient(tx.config)
 	tx.ControlObjective = NewControlObjectiveClient(tx.config)
 	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
+	tx.ControlScheduledJob = NewControlScheduledJobClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)
@@ -359,6 +364,7 @@ func (tx *Tx) init() {
 	tx.ProgramMembershipHistory = NewProgramMembershipHistoryClient(tx.config)
 	tx.Risk = NewRiskClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
+	tx.ScheduledJob = NewScheduledJobClient(tx.config)
 	tx.Standard = NewStandardClient(tx.config)
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)
 	tx.Subcontrol = NewSubcontrolClient(tx.config)

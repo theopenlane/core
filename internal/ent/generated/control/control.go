@@ -114,6 +114,8 @@ const (
 	EdgeControlImplementations = "control_implementations"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeControlScheduledJobs holds the string denoting the control_scheduled_jobs edge name in mutations.
+	EdgeControlScheduledJobs = "control_scheduled_jobs"
 	// Table holds the table name of the control in the database.
 	Table = "controls"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
@@ -221,6 +223,13 @@ const (
 	SubcontrolsInverseTable = "subcontrols"
 	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
 	SubcontrolsColumn = "control_id"
+	// ControlScheduledJobsTable is the table that holds the control_scheduled_jobs relation/edge.
+	ControlScheduledJobsTable = "control_scheduled_jobs"
+	// ControlScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
+	ControlScheduledJobsInverseTable = "control_scheduled_jobs"
+	// ControlScheduledJobsColumn is the table column denoting the control_scheduled_jobs relation/edge.
+	ControlScheduledJobsColumn = "control_id"
 )
 
 // Columns holds all SQL columns for control fields.
@@ -725,6 +734,20 @@ func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByControlScheduledJobsCount orders the results by control_scheduled_jobs count.
+func ByControlScheduledJobsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlScheduledJobsStep(), opts...)
+	}
+}
+
+// ByControlScheduledJobs orders the results by control_scheduled_jobs terms.
+func ByControlScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newEvidenceStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -856,6 +879,13 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+	)
+}
+func newControlScheduledJobsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlScheduledJobsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlScheduledJobsTable, ControlScheduledJobsColumn),
 	)
 }
 

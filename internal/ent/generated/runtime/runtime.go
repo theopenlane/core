@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -68,6 +69,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -721,6 +723,44 @@ func init() {
 	controlobjectivehistoryDescID := controlobjectivehistoryFields[9].Descriptor()
 	// controlobjectivehistory.DefaultID holds the default value on creation for the id field.
 	controlobjectivehistory.DefaultID = controlobjectivehistoryDescID.Default.(func() string)
+	controlscheduledjobMixin := schema.ControlScheduledJob{}.Mixin()
+	controlscheduledjob.Policy = privacy.NewPolicies(schema.ControlScheduledJob{})
+	controlscheduledjob.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := controlscheduledjob.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	controlscheduledjobMixinHooks0 := controlscheduledjobMixin[0].Hooks()
+	controlscheduledjobMixinHooks1 := controlscheduledjobMixin[1].Hooks()
+
+	controlscheduledjob.Hooks[1] = controlscheduledjobMixinHooks0[0]
+
+	controlscheduledjob.Hooks[2] = controlscheduledjobMixinHooks1[0]
+	controlscheduledjobMixinInters1 := controlscheduledjobMixin[1].Interceptors()
+	controlscheduledjob.Interceptors[0] = controlscheduledjobMixinInters1[0]
+	controlscheduledjobMixinFields0 := controlscheduledjobMixin[0].Fields()
+	_ = controlscheduledjobMixinFields0
+	controlscheduledjobMixinFields2 := controlscheduledjobMixin[2].Fields()
+	_ = controlscheduledjobMixinFields2
+	controlscheduledjobFields := schema.ControlScheduledJob{}.Fields()
+	_ = controlscheduledjobFields
+	// controlscheduledjobDescCreatedAt is the schema descriptor for created_at field.
+	controlscheduledjobDescCreatedAt := controlscheduledjobMixinFields0[0].Descriptor()
+	// controlscheduledjob.DefaultCreatedAt holds the default value on creation for the created_at field.
+	controlscheduledjob.DefaultCreatedAt = controlscheduledjobDescCreatedAt.Default.(func() time.Time)
+	// controlscheduledjobDescUpdatedAt is the schema descriptor for updated_at field.
+	controlscheduledjobDescUpdatedAt := controlscheduledjobMixinFields0[1].Descriptor()
+	// controlscheduledjob.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	controlscheduledjob.DefaultUpdatedAt = controlscheduledjobDescUpdatedAt.Default.(func() time.Time)
+	// controlscheduledjob.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	controlscheduledjob.UpdateDefaultUpdatedAt = controlscheduledjobDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// controlscheduledjobDescID is the schema descriptor for id field.
+	controlscheduledjobDescID := controlscheduledjobMixinFields2[0].Descriptor()
+	// controlscheduledjob.DefaultID holds the default value on creation for the id field.
+	controlscheduledjob.DefaultID = controlscheduledjobDescID.Default.(func() string)
 	documentdataMixin := schema.DocumentData{}.Mixin()
 	documentdata.Policy = privacy.NewPolicies(schema.DocumentData{})
 	documentdata.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -3355,6 +3395,73 @@ func init() {
 	riskhistoryDescID := riskhistoryFields[9].Descriptor()
 	// riskhistory.DefaultID holds the default value on creation for the id field.
 	riskhistory.DefaultID = riskhistoryDescID.Default.(func() string)
+	scheduledjobMixin := schema.ScheduledJob{}.Mixin()
+	scheduledjob.Policy = privacy.NewPolicies(schema.ScheduledJob{})
+	scheduledjob.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := scheduledjob.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	scheduledjobMixinHooks0 := scheduledjobMixin[0].Hooks()
+	scheduledjobMixinHooks1 := scheduledjobMixin[1].Hooks()
+	scheduledjobMixinHooks2 := scheduledjobMixin[2].Hooks()
+	scheduledjobMixinHooks3 := scheduledjobMixin[3].Hooks()
+	scheduledjobMixinHooks4 := scheduledjobMixin[4].Hooks()
+
+	scheduledjob.Hooks[1] = scheduledjobMixinHooks0[0]
+
+	scheduledjob.Hooks[2] = scheduledjobMixinHooks1[0]
+
+	scheduledjob.Hooks[3] = scheduledjobMixinHooks2[0]
+
+	scheduledjob.Hooks[4] = scheduledjobMixinHooks3[0]
+
+	scheduledjob.Hooks[5] = scheduledjobMixinHooks4[0]
+	scheduledjobMixinInters1 := scheduledjobMixin[1].Interceptors()
+	scheduledjobMixinInters3 := scheduledjobMixin[3].Interceptors()
+	scheduledjob.Interceptors[0] = scheduledjobMixinInters1[0]
+	scheduledjob.Interceptors[1] = scheduledjobMixinInters3[0]
+	scheduledjobMixinFields0 := scheduledjobMixin[0].Fields()
+	_ = scheduledjobMixinFields0
+	scheduledjobMixinFields2 := scheduledjobMixin[2].Fields()
+	_ = scheduledjobMixinFields2
+	scheduledjobMixinFields4 := scheduledjobMixin[4].Fields()
+	_ = scheduledjobMixinFields4
+	scheduledjobFields := schema.ScheduledJob{}.Fields()
+	_ = scheduledjobFields
+	// scheduledjobDescDisplayID is the schema descriptor for display_id field.
+	scheduledjobDescDisplayID := scheduledjobMixinFields0[1].Descriptor()
+	// scheduledjob.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	scheduledjob.DisplayIDValidator = scheduledjobDescDisplayID.Validators[0].(func(string) error)
+	// scheduledjobDescCreatedAt is the schema descriptor for created_at field.
+	scheduledjobDescCreatedAt := scheduledjobMixinFields2[0].Descriptor()
+	// scheduledjob.DefaultCreatedAt holds the default value on creation for the created_at field.
+	scheduledjob.DefaultCreatedAt = scheduledjobDescCreatedAt.Default.(func() time.Time)
+	// scheduledjobDescUpdatedAt is the schema descriptor for updated_at field.
+	scheduledjobDescUpdatedAt := scheduledjobMixinFields2[1].Descriptor()
+	// scheduledjob.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	scheduledjob.DefaultUpdatedAt = scheduledjobDescUpdatedAt.Default.(func() time.Time)
+	// scheduledjob.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	scheduledjob.UpdateDefaultUpdatedAt = scheduledjobDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// scheduledjobDescSystemOwned is the schema descriptor for system_owned field.
+	scheduledjobDescSystemOwned := scheduledjobMixinFields4[0].Descriptor()
+	// scheduledjob.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	scheduledjob.DefaultSystemOwned = scheduledjobDescSystemOwned.Default.(bool)
+	// scheduledjobDescTitle is the schema descriptor for title field.
+	scheduledjobDescTitle := scheduledjobFields[0].Descriptor()
+	// scheduledjob.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	scheduledjob.TitleValidator = scheduledjobDescTitle.Validators[0].(func(string) error)
+	// scheduledjobDescIsMarketplace is the schema descriptor for is_marketplace field.
+	scheduledjobDescIsMarketplace := scheduledjobFields[4].Descriptor()
+	// scheduledjob.DefaultIsMarketplace holds the default value on creation for the is_marketplace field.
+	scheduledjob.DefaultIsMarketplace = scheduledjobDescIsMarketplace.Default.(bool)
+	// scheduledjobDescID is the schema descriptor for id field.
+	scheduledjobDescID := scheduledjobMixinFields0[0].Descriptor()
+	// scheduledjob.DefaultID holds the default value on creation for the id field.
+	scheduledjob.DefaultID = scheduledjobDescID.Default.(func() string)
 	standardMixin := schema.Standard{}.Mixin()
 	standard.Policy = privacy.NewPolicies(schema.Standard{})
 	standard.Hooks[0] = func(next ent.Mutator) ent.Mutator {
