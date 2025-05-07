@@ -128,9 +128,7 @@ func (s Standard) Edges() []ent.Edge {
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:  s,
 			edgeSchema:  Control{},
-			annotations: []schema.Annotation{
-				// entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-			},
+			annotations: []schema.Annotation{},
 		}),
 	}
 }
