@@ -14,6 +14,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, existingControls [
 	for _, control := range existingControls {
 		mappedControlIDs := []string{}
 		mappedControls := control.Edges.MappedControls
+
 		for _, mc := range mappedControls {
 			mappedControlIDs = append(mappedControlIDs, mc.ID)
 		}
@@ -37,8 +38,10 @@ func (r *mutationResolver) cloneControls(ctx context.Context, existingControls [
 			Status:                 &enums.ControlStatusPreparing,
 		}
 
-		if !ignoreStandard && control.StandardID != "" {
-			controlInput.StandardID = &control.StandardID
+		if !ignoreStandard {
+			if control.StandardID != "" {
+				controlInput.StandardID = &control.StandardID
+			}
 		}
 
 		if programID != nil {
@@ -73,6 +76,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, control *genera
 
 	mappedControlIDs := []string{}
 	mappedControls := control.Edges.MappedControls
+
 	for _, mc := range mappedControls {
 		mappedControlIDs = append(mappedControlIDs, mc.ID)
 	}
@@ -101,5 +105,6 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, control *genera
 	}
 
 	_, err := r.bulkCreateSubcontrol(ctx, subcontrols)
+
 	return err
 }

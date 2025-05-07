@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/pkg/enums"
@@ -105,27 +104,14 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 	})
 	require.NoError(t, err)
 
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
 	numAdminControls := 5
 	adminControlIDs := []string{}
 	for range numAdminControls {
-		control := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
-
-	// publicStandard, err := suite.client.api.CreateStandard(systemAdminUser.UserCtx, openlaneclient.CreateStandardInput{
-	// 	Name:     "System Awesome Standard",
-	// 	IsPublic: lo.ToPtr(true),
-	// })
-	// require.NoError(t, err)
-	//
-	publicStandard, err := suite.client.db.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).
-		SetIsPublic(true).
-		AddControlIDs(adminControlIDs...).
-		Save(systemAdminUser.UserCtx)
-	require.NoError(t, err)
-
-	s, _ := suite.client.api.GetStandardByID(testUser1.UserCtx, publicStandard.ID)
-	require.Equal(t, len(s.Standard.Controls.Edges), numAdminControls)
 
 	members := []*openlaneclient.CreateMemberWithProgramInput{
 		{
@@ -153,7 +139,7 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 					Name: "test program",
 				},
 				Members:    members,
-				StandardID: s.Standard.ID,
+				StandardID: publicStandard.ID,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
