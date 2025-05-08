@@ -266,12 +266,12 @@ func parseClientError(t *testing.T, err error) []*gqlerror.Error {
 func assertErrorCode(t *testing.T, err *gqlerror.Error, code string) {
 	t.Helper()
 
-	assert.Equal(t, code, err.Extensions["code"])
+	assert.Equal(t, code, openlaneclient.GetErrorCode(err))
 }
 
 // assertErrorMessage checks if the error message matches the expected message
 func assertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
 	t.Helper()
 
-	assert.Equal(t, msg, err.Message)
+	assert.Equal(t, msg, openlaneclient.GetErrorMessage(err))
 }

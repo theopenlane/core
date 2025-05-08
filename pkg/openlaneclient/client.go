@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 
 	api "github.com/theopenlane/core/pkg/models"
 )
@@ -231,4 +232,40 @@ func (c *OpenlaneClient) GetAuthTokensFromCookieJar() *oauth2.Token {
 	}
 
 	return &token
+}
+
+// GetErrorMessage returns the error message from the GraphQL error extensions
+func GetErrorCode(err error) string {
+	if err == nil {
+		return ""
+	}
+
+	gqlErr, ok := err.(*gqlerror.Error)
+	if !ok {
+		return ""
+	}
+
+	if code, ok := gqlErr.Extensions["code"].(string); ok {
+		return code
+	}
+
+	return ""
+}
+
+// GetErrorMessage returns the error message from the GraphQL error extensions
+func GetErrorMessage(err error) string {
+	if err == nil {
+		return ""
+	}
+
+	gqlErr, ok := err.(*gqlerror.Error)
+	if !ok {
+		return ""
+	}
+
+	if message, ok := gqlErr.Extensions["message"].(string); ok {
+		return message
+	}
+
+	return ""
 }

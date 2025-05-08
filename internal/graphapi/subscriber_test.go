@@ -301,6 +301,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 		client            *openlaneclient.OpenlaneClient
 		ctx               context.Context
 		wantErr           bool
+		expectedMessage   string
 		expectedErrorCode string
 		expectedAttempts  int64
 	}{
@@ -360,6 +361,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 			ctx:               testUser1.UserCtx,
 			wantErr:           true,
 			expectedErrorCode: gqlerrors.MaxAttemptsErrorCode,
+			expectedMessage:   "max attempts reached for this email, please reach out to support",
 			expectedAttempts:  5,
 		},
 		{
@@ -367,6 +369,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 			client:            suite.client.api,
 			ctx:               testUser1.UserCtx,
 			expectedErrorCode: gqlerrors.BadRequestErrorCode,
+			expectedMessage:   "subscriber email is required, please provide a valid email",
 			wantErr:           true,
 		},
 	}
@@ -390,6 +393,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 				errors := parseClientError(t, err)
 				for _, e := range errors {
 					assertErrorCode(t, e, tc.expectedErrorCode)
+					assertErrorMessage(t, e, tc.expectedMessage)
 				}
 
 				return

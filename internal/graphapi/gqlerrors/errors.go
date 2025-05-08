@@ -7,6 +7,13 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
+const (
+	// ExtensionCodeKey is the key for the error code in the extensions
+	ExtensionCodeKey = "code"
+	// ExtensionMessageKey is the key for the error message in the extensions
+	ExtensionMessageKey = "message"
+)
+
 // CustomErrorType is an interface that defines a custom error type
 type CustomErrorType interface {
 	error
@@ -38,7 +45,7 @@ func (e CustomError) Message() string {
 func NewCustomError(code, message string, err error) CustomError {
 	return CustomError{
 		code:    code,
-		message: err.Error(),
+		message: message,
 		err:     err,
 	}
 }
@@ -70,12 +77,12 @@ func ErrorPresenter(ctx context.Context, e error) *gqlerror.Error {
 
 	// add the code to the extensions
 	if customError.Code() != "" {
-		err.Extensions["code"] = customError.Code()
+		err.Extensions[ExtensionCodeKey] = customError.Code()
 	}
 
 	// add the message to the extensions if it is not empty
 	if customError.Message() != "" {
-		err.Extensions["message"] = customError.Message()
+		err.Extensions[ExtensionMessageKey] = customError.Message()
 	}
 
 	return err
