@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -84,6 +85,12 @@ func (suite *GraphTestSuite) TestQuerySubscriber() {
 			if tc.wantErr {
 				require.Error(t, err)
 				assert.Nil(t, resp)
+
+				errors := parseClientError(t, err)
+				for _, e := range errors {
+					assertErrorCode(t, e, gqlerrors.NotFoundErrorCode)
+					assertErrorMessage(t, e, "subscriber not found")
+				}
 
 				return
 			}
@@ -287,14 +294,15 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 	t := suite.T()
 
 	testCases := []struct {
-		name             string
-		email            string
-		ownerID          string
-		setUnsubscribed  bool
-		client           *openlaneclient.OpenlaneClient
-		ctx              context.Context
-		wantErr          bool
-		expectedAttempts int64
+		name              string
+		email             string
+		ownerID           string
+		setUnsubscribed   bool
+		client            *openlaneclient.OpenlaneClient
+		ctx               context.Context
+		wantErr           bool
+		expectedErrorCode string
+		expectedAttempts  int64
 	}{
 		{
 			name:             "happy path, new subscriber",
@@ -322,10 +330,44 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 			expectedAttempts: 2,
 		},
 		{
-			name:    "missing email",
-			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
-			wantErr: true,
+			name:             "happy path, duplicate subscriber, case insensitive",
+			email:            "c.STARK@example.com",
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			wantErr:          false,
+			expectedAttempts: 3,
+		},
+		{
+			name:             "happy path, duplicate subscriber, case insensitive",
+			email:            "c.STARK@example.com",
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			wantErr:          false,
+			expectedAttempts: 4,
+		},
+		{
+			name:             "happy path, duplicate subscriber, case insensitive",
+			email:            "c.STARK@example.com",
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			wantErr:          false,
+			expectedAttempts: 5,
+		},
+		{
+			name:              "happy path, duplicate subscriber, case insensitive, max attempts",
+			email:             "c.STARK@example.com",
+			client:            suite.client.api,
+			ctx:               testUser1.UserCtx,
+			wantErr:           true,
+			expectedErrorCode: gqlerrors.MaxAttemptsErrorCode,
+			expectedAttempts:  5,
+		},
+		{
+			name:              "missing email",
+			client:            suite.client.api,
+			ctx:               testUser1.UserCtx,
+			expectedErrorCode: gqlerrors.BadRequestErrorCode,
+			wantErr:           true,
 		},
 	}
 
@@ -344,6 +386,11 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 			if tc.wantErr {
 				require.Error(t, err)
 				assert.Nil(t, resp)
+
+				errors := parseClientError(t, err)
+				for _, e := range errors {
+					assertErrorCode(t, e, tc.expectedErrorCode)
+				}
 
 				return
 			}

@@ -27,7 +27,7 @@ var (
 	// ErrUserAlreadyOrgMember is returned when an user attempts to be invited to an org they are already a member of
 	ErrUserAlreadyOrgMember = errors.New("user already member of organization")
 	// ErrUserAlreadySubscriber is returned when an user attempts to subscribe to an organization but is already a subscriber
-	ErrUserAlreadySubscriber = errors.New("user already a subscriber")
+	ErrUserAlreadySubscriber = errors.New("subscriber already exists")
 	// ErrEmailRequired is returned when an email is required but not provided
 	ErrEmailRequired = errors.New("email is required but not provided")
 	// ErrMaxAttempts is returned when a user has reached the max attempts to resend an invitation to an org

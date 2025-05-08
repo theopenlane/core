@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 )
 
 // HookSubscriberCreate runs on subscriber create mutations
@@ -22,7 +23,10 @@ func HookSubscriberCreate() ent.Hook {
 		return hook.SubscriberFunc(func(ctx context.Context, m *generated.SubscriberMutation) (generated.Value, error) {
 			email, ok := m.Email()
 			if !ok || email == "" {
-				return nil, ErrEmailRequired
+				return nil, gqlerrors.NewCustomError(
+					gqlerrors.BadRequestErrorCode,
+					"subscriber email is required, please provide a valid email",
+					ErrEmailRequired)
 			}
 
 			// lowercase the email for uniqueness
@@ -38,7 +42,10 @@ func HookSubscriberCreate() ent.Hook {
 
 			if existingSubscriber != nil && err == nil {
 				if existingSubscriber.Active {
-					return nil, ErrUserAlreadySubscriber
+					return nil, gqlerrors.NewCustomError(
+						gqlerrors.AlreadyExistsErrorCode,
+						"email is already subscribed to this organization",
+						ErrUserAlreadySubscriber)
 				}
 
 				retValue, err = updateSubscriber(ctx, m, existingSubscriber)
@@ -152,7 +159,10 @@ func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*gener
 func updateSubscriber(ctx context.Context,
 	m *generated.SubscriberMutation, subscriber *generated.Subscriber) (*generated.Subscriber, error) {
 	if subscriber.SendAttempts >= maxAttempts {
-		return nil, ErrMaxSubscriptionAttempts
+		return nil, gqlerrors.NewCustomError(
+			gqlerrors.MaxAttemptsErrorCode,
+			"max attempts reached for this email, please reach out to support",
+			ErrMaxSubscriptionAttempts)
 	}
 
 	subscriber.SendAttempts++

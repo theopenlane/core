@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/theopenlane/core/internal/graphapi"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/objects"
 	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
@@ -146,6 +147,9 @@ func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
 	graphapi.WithSkipCache(srv)
 
 	graphapi.WithResultLimit(srv, &MaxResultLimit)
+
+	// Set the error presenter to use the custom error presenter
+	srv.SetErrorPresenter(gqlerrors.ErrorPresenter)
 
 	return srv
 }

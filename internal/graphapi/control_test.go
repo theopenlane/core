@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -760,6 +761,13 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Nil(t, resp)
+
+				errors := parseClientError(t, err)
+				for _, e := range errors {
+					if tc.expectedErr == notAuthorizedErrorMsg {
+						assertErrorCode(t, e, gqlerrors.UnauthorizedErrorCode)
+					}
+				}
 
 				return
 			}

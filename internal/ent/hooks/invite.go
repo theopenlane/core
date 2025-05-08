@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -344,7 +345,10 @@ func updateInvite(ctx context.Context, m *generated.InviteMutation) (*generated.
 
 	// create update mutation
 	if invite.SendAttempts >= maxAttempts {
-		return nil, ErrMaxAttempts
+		return nil, gqlerrors.NewCustomError(
+			gqlerrors.MaxAttemptsErrorCode,
+			"max attempts reached for this email, please delete the invite and try again",
+			ErrMaxAttempts)
 	}
 
 	// increment attempts
