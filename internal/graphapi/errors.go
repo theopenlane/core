@@ -54,6 +54,7 @@ func (e NotFoundError) Error() string {
 	return fmt.Sprintf("%s not found", e.ObjectType)
 }
 
+// Message returns the NotFoundError in string format
 func (e NotFoundError) Message() string {
 	return fmt.Sprintf("%s not found", e.ObjectType)
 }
@@ -70,16 +71,17 @@ var _ gqlerrors.CustomErrorType = (*NotAuthorizedError)(nil)
 // NotAuthorizedError is returned when the user is not authorized to perform the action
 type NotAuthorizedError struct{}
 
-// Code returns the NotFoundError code
+// Code returns the NotAuthorizedError code
 func (e NotAuthorizedError) Code() string {
 	return gqlerrors.UnauthorizedErrorCode
 }
 
-// Error returns the NotFoundError in string format
+// Error returns the NotAuthorizedError in string format
 func (e NotAuthorizedError) Error() string {
 	return generated.ErrPermissionDenied.Error()
 }
 
+// Message returns the NotAuthorizedError in string format
 func (e NotAuthorizedError) Message() string {
 	return "you do not have permission to perform this action, please contact your organization owner"
 }
@@ -174,6 +176,7 @@ func (e *ValidationError) Code() string {
 	return gqlerrors.ValidationErrorCode
 }
 
+// Message returns the ValidationError message
 func (e *ValidationError) Message() string {
 	return fmt.Sprintf("invalid input provided: %s", e.ErrMsg)
 }
