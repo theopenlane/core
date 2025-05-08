@@ -95,7 +95,7 @@ steps:
           - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
-              command: ["task", "go:test:cover"]
+              command: ["task", "go:testsum:ci"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
