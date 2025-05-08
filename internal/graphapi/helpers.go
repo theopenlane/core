@@ -20,6 +20,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
@@ -228,14 +229,22 @@ func getBulkUploadOwnerInput[T any](input []*T) (*string, error) {
 		if ownerInputID == nil {
 			log.Error().Msg("owner id not found in bulk upload input")
 
-			return nil, ErrNoOrganizationID
+			return nil, gqlerrors.NewCustomError(
+				gqlerrors.BadRequestErrorCode,
+				"unable to determine the organization owner id from the input, no owner id found",
+				ErrNoOrganizationID,
+			)
 		}
 
 		// if the owner doesn't match the previous owner, return an error
 		if ownerID != nil && *ownerInputID != *ownerID {
 			log.Error().Msg("multiple owner ids found in bulk upload input")
 
-			return nil, ErrNoOrganizationID
+			return nil, gqlerrors.NewCustomError(
+				gqlerrors.BadRequestErrorCode,
+				"unable to determine the organization owner id from the input, multiple owner ids found",
+				ErrNoOrganizationID,
+			)
 		}
 
 		ownerID = ownerInputID

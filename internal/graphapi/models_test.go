@@ -443,9 +443,12 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 		tf.totpAllowed = lo.ToPtr(true)
 	}
 
-	return tf.client.db.TFASetting.Create().
+	setting, err := tf.client.db.TFASetting.Create().
 		SetTotpAllowed(*tf.totpAllowed).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
+
+	return setting
 }
 
 // MustNew webauthn settings builder is used to create passkeys without the browser setup process
@@ -453,7 +456,7 @@ func (w *WebauthnBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Webaut
 	uuidBytes, err := uuid.NewUUID()
 	require.NoError(t, err)
 
-	return w.client.db.Webauthn.Create().
+	wn, err := w.client.db.Webauthn.Create().
 		SetAaguid(models.ToAAGUID(uuidBytes[:])).
 		SetAttestationType("type").
 		SetBackupEligible(true).
@@ -461,7 +464,11 @@ func (w *WebauthnBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Webaut
 		SetSignCount(10).
 		SetCredentialID([]byte(uuid.NewString())).
 		SetTransports([]string{uuid.NewString()}).
-		SaveX(ctx)
+		Save(ctx)
+
+	require.NoError(t, err)
+
+	return wn
 }
 
 // MustNew org members builder is used to create, without authz checks, org members in the database
@@ -478,10 +485,11 @@ func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 		role = &enums.RoleMember
 	}
 
-	orgMembers := om.client.db.OrgMembership.Create().
+	orgMembers, err := om.client.db.OrgMembership.Create().
 		SetUserID(om.UserID).
 		SetRole(*role).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	return orgMembers
 }
@@ -528,7 +536,8 @@ func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
 		inviteQuery.SetRole(*enums.ToRole(i.Role))
 	}
 
-	invite := inviteQuery.SaveX(ctx)
+	invite, err := inviteQuery.Save(ctx)
+	require.NoError(t, err)
 
 	return invite
 }
@@ -544,9 +553,10 @@ func (i *SubscriberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subs
 		rec = gofakeit.Email()
 	}
 
-	sub := i.client.db.Subscriber.Create().
+	sub, err := i.client.db.Subscriber.Create().
 		SetEmail(rec).
-		SetActive(true).SaveX(reqCtx)
+		SetActive(true).Save(reqCtx)
+	require.NoError(t, err)
 
 	return sub
 }
@@ -577,7 +587,8 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 		request.SetExpiresAt(*pat.ExpiresAt)
 	}
 
-	token := request.SaveX(ctx)
+	token, err := request.Save(ctx)
+	require.NoError(t, err)
 
 	return token
 }
@@ -607,7 +618,8 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 		request.SetExpiresAt(*at.ExpiresAt)
 	}
 
-	token := request.SaveX(ctx)
+	token, err := request.Save(ctx)
+	require.NoError(t, err)
 
 	return token
 }
@@ -643,9 +655,10 @@ func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Enti
 		e.Name = randomName(t)
 	}
 
-	entityType := e.client.db.EntityType.Create().
+	entityType, err := e.client.db.EntityType.Create().
 		SetName(e.Name).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	return entityType
 }
@@ -671,12 +684,13 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		e.TypeID = et.ID
 	}
 
-	entity := e.client.db.Entity.Create().
+	entity, err := e.client.db.Entity.Create().
 		SetName(e.Name).
 		SetDisplayName(e.DisplayName).
 		SetEntityTypeID(e.TypeID).
 		SetDescription(e.Description).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	return entity
 }
@@ -710,14 +724,15 @@ func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact
 		c.Company = gofakeit.Company()
 	}
 
-	entity := c.client.db.Contact.Create().
+	entity, err := c.client.db.Contact.Create().
 		SetFullName(c.Name).
 		SetEmail(c.Email).
 		SetPhoneNumber(c.Phone).
 		SetAddress(c.Address).
 		SetTitle(c.Title).
 		SetCompany(c.Company).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	return entity
 }
@@ -754,7 +769,8 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 		taskCreate.AddGroupIDs(c.GroupID)
 	}
 
-	task := taskCreate.SaveX(ctx)
+	task, err := taskCreate.Save(ctx)
+	require.NoError(t, err)
 
 	return task
 }
@@ -788,8 +804,9 @@ func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program
 		mutation.AddBlockedGroupIDs(p.BlockedGroupIDs)
 	}
 
-	program := mutation.
-		SaveX(ctx)
+	program, err := mutation.
+		Save(ctx)
+	require.NoError(t, err)
 
 	return program
 }
@@ -817,8 +834,8 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 		mutation.SetRole(*enums.ToRole(pm.Role))
 	}
 
-	programMember := mutation.
-		SaveX(ctx)
+	programMember, err := mutation.Save(ctx)
+	require.NoError(t, err)
 
 	return programMember
 }
@@ -838,8 +855,8 @@ func (p *ProcedureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Proce
 		mutation.AddEditorIDs(p.GroupID)
 	}
 
-	procedure := mutation.
-		SaveX(ctx)
+	procedure, err := mutation.Save(ctx)
+	require.NoError(t, err)
 
 	return procedure
 }
@@ -852,9 +869,10 @@ func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 		p.Name = gofakeit.AppName()
 	}
 
-	policy := p.client.db.InternalPolicy.Create().
+	policy, err := p.client.db.InternalPolicy.Create().
 		SetName(p.Name).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	return policy
 }
@@ -874,8 +892,8 @@ func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
 		mutation.AddProgramIDs(r.ProgramID)
 	}
 
-	risk := mutation.
-		SaveX(ctx)
+	risk, err := mutation.Save(ctx)
+	require.NoError(t, err)
 
 	return risk
 }
@@ -895,8 +913,8 @@ func (c *ControlObjectiveBuilder) MustNew(ctx context.Context, t *testing.T) *en
 		mutation.AddProgramIDs(c.ProgramID)
 	}
 
-	co := mutation.
-		SaveX(ctx)
+	co, err := mutation.Save(ctx)
+	require.NoError(t, err)
 
 	return co
 }
@@ -916,8 +934,9 @@ func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narra
 		mutation.AddProgramIDs(n.ProgramID)
 	}
 
-	narrative := mutation.
-		SaveX(ctx)
+	narrative, err := mutation.
+		Save(ctx)
+	require.NoError(t, err)
 
 	return narrative
 }
@@ -989,8 +1008,9 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			})
 	}
 
-	control := mutation.
-		SaveX(ctx)
+	control, err := mutation.
+		Save(ctx)
+	require.NoError(t, err)
 
 	return control
 }
@@ -1013,8 +1033,10 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 
 	mutation.SetControlID(s.ControlID)
 
-	sc := mutation.
-		SaveX(ctx)
+	sc, err := mutation.
+		Save(ctx)
+
+	require.NoError(t, err)
 
 	return sc
 }
@@ -1038,8 +1060,9 @@ func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 		mutation.AddControlIDs(c.ControlID)
 	}
 
-	control := mutation.
-		SaveX(ctx)
+	control, err := mutation.
+		Save(ctx)
+	require.NoError(t, err)
 
 	return control
 }
@@ -1056,13 +1079,14 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 		s.Framework = "MITB Framework"
 	}
 
-	Standard := s.client.db.Standard.Create().
+	standard, err := s.client.db.Standard.Create().
 		SetName(s.Name).
 		SetFramework(s.Framework).
 		SetIsPublic(s.IsPublic).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
-	return Standard
+	return standard
 }
 
 // MustNew note builder is used to create, without authz checks, notes in the database
@@ -1084,7 +1108,8 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 		mutation.AddFileIDs(n.FileIDs...)
 	}
 
-	note := mutation.SaveX(ctx)
+	note, err := mutation.Save(ctx)
+	require.NoError(t, err)
 
 	return note
 }

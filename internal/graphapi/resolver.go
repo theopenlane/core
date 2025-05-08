@@ -24,6 +24,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -151,6 +152,9 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	if r.extensionsEnabled {
 		AddAllExtensions(srv)
 	}
+
+	// Set the error presenter to use the custom error presenter
+	srv.SetErrorPresenter(gqlerrors.ErrorPresenter)
 
 	// add file uploader if it is configured
 	if r.uploader != nil {

@@ -58,10 +58,11 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	var userSetting *ent.UserSetting
 
 	if input != nil && input.confirmedUser {
-		userSetting = suite.db.UserSetting.Create().
+		userSetting, err = suite.db.UserSetting.Create().
 			SetEmailConfirmed(true).
 			SetIsTfaEnabled(true).
-			SaveX(ctx)
+			Save(ctx)
+		require.NoError(t, err)
 	}
 
 	email := gofakeit.Email()
@@ -106,14 +107,17 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	userCtx = ent.NewContext(userCtx, suite.db)
 
 	// create a non-personal test organization
-	orgSetting := suite.db.OrganizationSetting.Create().
+	orgSetting, err := suite.db.OrganizationSetting.Create().
 		SetBillingEmail(testUser.UserInfo.Email).
-		SaveX(userCtx)
+		Save(userCtx)
+	require.NoError(t, err)
 
-	testOrg := suite.db.Organization.Create().
+	testOrg, err := suite.db.Organization.Create().
 		SetName(gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun()).
 		SetSettingID(orgSetting.ID).
-		SaveX(userCtx)
+		Save(userCtx)
+
+	require.NoError(t, err)
 
 	testUser.OrganizationID = testOrg.ID
 

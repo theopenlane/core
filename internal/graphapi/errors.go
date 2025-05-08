@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 )
 
 var (
@@ -36,30 +37,79 @@ var (
 	ErrResourceNotAccessibleWithToken = errors.New("resource is not accessible with token authentication")
 )
 
+var _ gqlerrors.CustomErrorType = (*NotFoundError)(nil)
+
 // NotFoundError is returned when the requested object is not found
 type NotFoundError struct {
 	ObjectType string
 }
 
+// Code returns the NotFoundError code
+func (e NotFoundError) Code() string {
+	return gqlerrors.NotFoundErrorCode
+}
+
 // Error returns the NotFoundError in string format
-func (e *NotFoundError) Error() string {
+func (e NotFoundError) Error() string {
+	return fmt.Sprintf("%s not found", e.ObjectType)
+}
+
+// Message returns the NotFoundError in string format
+func (e NotFoundError) Message() string {
 	return fmt.Sprintf("%s not found", e.ObjectType)
 }
 
 // newPermissionDeniedError returns a NotFoundError
-func newNotFoundError(o string) *NotFoundError {
-	return &NotFoundError{
+func newNotFoundError(o string) NotFoundError {
+	return NotFoundError{
 		ObjectType: o,
 	}
+}
+
+var _ gqlerrors.CustomErrorType = (*NotAuthorizedError)(nil)
+
+// NotAuthorizedError is returned when the user is not authorized to perform the action
+type NotAuthorizedError struct{}
+
+// Code returns the NotAuthorizedError code
+func (e NotAuthorizedError) Code() string {
+	return gqlerrors.UnauthorizedErrorCode
+}
+
+// Error returns the NotAuthorizedError in string format
+func (e NotAuthorizedError) Error() string {
+	return generated.ErrPermissionDenied.Error()
+}
+
+// Message returns the NotAuthorizedError in string format
+func (e NotAuthorizedError) Message() string {
+	return "you do not have permission to perform this action, please contact your organization owner"
+}
+
+// newPermissionDeniedError returns a NotAuthorizedError
+func newPermissionDeniedError() NotAuthorizedError {
+	return NotAuthorizedError{}
 }
 
 func newCascadeDeleteError(err error) error {
 	return fmt.Errorf("%w: %v", ErrCascadeDelete, err)
 }
 
+var _ gqlerrors.CustomErrorType = (*AlreadyExistsError)(nil)
+
 // AlreadyExistsError is returned when an object already exists
 type AlreadyExistsError struct {
 	ObjectType string
+}
+
+// Code returns the AlreadyExistsError code
+func (e *AlreadyExistsError) Code() string {
+	return gqlerrors.AlreadyExistsErrorCode
+}
+
+// Message returns the AlreadyExistsError message
+func (e *AlreadyExistsError) Message() string {
+	return fmt.Sprintf("%s already exists in the system", e.ObjectType)
 }
 
 // Error returns the AlreadyExistsError in string format
@@ -79,10 +129,22 @@ type action struct {
 	action string
 }
 
+var _ gqlerrors.CustomErrorType = (*ForeignKeyError)(nil)
+
 // ForeignKeyError is returned when an object does not exist in the related table
 type ForeignKeyError struct {
 	Action     string
 	ObjectType string
+}
+
+// Code returns the ForeignKeyError code
+func (e *ForeignKeyError) Code() string {
+	return gqlerrors.ConflictErrorCode
+}
+
+// Message returns the ForeignKeyError message
+func (e *ForeignKeyError) Message() string {
+	return "invalid input provided, unable complete the request"
 }
 
 // Error returns the ForeignKeyError in string format
@@ -102,9 +164,21 @@ func newForeignKeyError(action, objecttype string) *ForeignKeyError {
 	}
 }
 
+var _ gqlerrors.CustomErrorType = (*ValidationError)(nil)
+
 // ValidationError is returned when a field fails validation
 type ValidationError struct {
 	ErrMsg string
+}
+
+// Code returns the ValidationError code
+func (e *ValidationError) Code() string {
+	return gqlerrors.ValidationErrorCode
+}
+
+// Message returns the ValidationError message
+func (e *ValidationError) Message() string {
+	return fmt.Sprintf("invalid input provided: %s", e.ErrMsg)
 }
 
 // Error returns the ValidationError in string format, by removing the "generated: " prefix
@@ -164,6 +238,10 @@ func parseRequestError(err error, a action) error {
 		log.Debug().Err(err).Msg("user has no access to the requested object")
 
 		return newNotFoundError(a.object)
+	case errors.Is(err, generated.ErrPermissionDenied):
+		log.Debug().Err(err).Msg("user has no access to the requested object")
+
+		return newPermissionDeniedError()
 	default:
 		log.Error().Err(err).Msg("unexpected error occurred")
 

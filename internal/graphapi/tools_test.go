@@ -6,10 +6,13 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/Yamashou/gqlgenc/clientv2"
 	"github.com/rs/zerolog"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
@@ -232,4 +235,43 @@ func expectUploadCheckOnly(t *testing.T, mockStore objects.Storage) {
 	mockScheme := "file://"
 
 	ms.EXPECT().GetScheme().Return(&mockScheme).Times(1)
+}
+
+// parseClientError parses the error response from the client and returns a slice of gqlerror.Error
+func parseClientError(t *testing.T, err error) []*gqlerror.Error {
+	t.Helper()
+
+	if err == nil {
+		return nil
+	}
+
+	errResp, ok := err.(*clientv2.ErrorResponse)
+	require.True(t, ok)
+	require.True(t, errResp.HasErrors())
+
+	gqlErrors := []*gqlerror.Error{}
+
+	errors := errResp.GqlErrors.Unwrap()
+
+	for _, e := range errors {
+		customErr, ok := e.(*gqlerror.Error)
+		require.True(t, ok)
+		gqlErrors = append(gqlErrors, customErr)
+	}
+
+	return gqlErrors
+}
+
+// assertErrorCode checks if the error code matches the expected code
+func assertErrorCode(t *testing.T, err *gqlerror.Error, code string) {
+	t.Helper()
+
+	assert.Equal(t, code, openlaneclient.GetErrorCode(err))
+}
+
+// assertErrorMessage checks if the error message matches the expected message
+func assertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
+	t.Helper()
+
+	assert.Equal(t, msg, openlaneclient.GetErrorMessage(err))
 }
