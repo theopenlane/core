@@ -17,9 +17,13 @@ const (
 // CustomErrorType is an interface that defines a custom error type
 type CustomErrorType interface {
 	error
+	// Code returns the static error code for the error in the gql extensions
 	Code() string
+	// Message returns the detailed error message for the error in the gql extensions
 	Message() string
 }
+
+var _ CustomErrorType = (*CustomError)(nil)
 
 // CustomError is a struct that implements the CustomErrorType interface
 type CustomError struct {
@@ -28,15 +32,17 @@ type CustomError struct {
 	err     error
 }
 
+// Error satisfies the CustomErrorType interface
 func (e CustomError) Error() string {
 	return e.err.Error()
 }
 
+// Code satisfies the CustomErrorType interface
 func (e CustomError) Code() string {
 	return e.code
 }
 
-// Message returns the message of the error
+// Message satisfies the CustomErrorType interface
 func (e CustomError) Message() string {
 	return e.message
 }
