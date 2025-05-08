@@ -140,10 +140,10 @@ tasks:
       - go tool cover -html=coverage.out
 
   go:testsum:local:
-    desc: runs tests using gotestsum with watch to rerun on changes
+    desc: runs tests using gotestsum
     aliases: [testsum]
     cmds:
-      - gotestsum --watch
+      - gotestsum --format-hide-empty-pkg
 
   go:testsum:slow:
     desc: finds slow tests using gotestsum
@@ -155,7 +155,7 @@ tasks:
     desc: runs tests using gotestsum for CI
     aliases: ['testsum:ci']
     cmds:
-      - go run gotest.tools/gotestsum@latest --rerun-fails --junitfile coverage.out
+      - go run gotest.tools/gotestsum@latest --junitfile coverage.out --packages "./..." --format-hide-empty-pkg --rerun-fails --format-icons hivis -- -p 20
 
   go:fmt:
     desc: format all go code
