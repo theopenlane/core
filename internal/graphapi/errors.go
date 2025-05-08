@@ -37,6 +37,8 @@ var (
 	ErrResourceNotAccessibleWithToken = errors.New("resource is not accessible with token authentication")
 )
 
+var _ gqlerrors.CustomErrorType = (*NotFoundError)(nil)
+
 // NotFoundError is returned when the requested object is not found
 type NotFoundError struct {
 	ObjectType string
@@ -62,6 +64,8 @@ func newNotFoundError(o string) NotFoundError {
 		ObjectType: o,
 	}
 }
+
+var _ gqlerrors.CustomErrorType = (*NotAuthorizedError)(nil)
 
 // NotAuthorizedError is returned when the user is not authorized to perform the action
 type NotAuthorizedError struct{}
@@ -89,6 +93,8 @@ func newCascadeDeleteError(err error) error {
 	return fmt.Errorf("%w: %v", ErrCascadeDelete, err)
 }
 
+var _ gqlerrors.CustomErrorType = (*AlreadyExistsError)(nil)
+
 // AlreadyExistsError is returned when an object already exists
 type AlreadyExistsError struct {
 	ObjectType string
@@ -97,6 +103,11 @@ type AlreadyExistsError struct {
 // Code returns the AlreadyExistsError code
 func (e *AlreadyExistsError) Code() string {
 	return gqlerrors.AlreadyExistsErrorCode
+}
+
+// Message returns the AlreadyExistsError message
+func (e *AlreadyExistsError) Message() string {
+	return fmt.Sprintf("%s already exists in the system", e.ObjectType)
 }
 
 // Error returns the AlreadyExistsError in string format
@@ -115,6 +126,8 @@ type action struct {
 	object string
 	action string
 }
+
+var _ gqlerrors.CustomErrorType = (*ForeignKeyError)(nil)
 
 // ForeignKeyError is returned when an object does not exist in the related table
 type ForeignKeyError struct {
@@ -148,6 +161,8 @@ func newForeignKeyError(action, objecttype string) *ForeignKeyError {
 		ObjectType: objecttype,
 	}
 }
+
+var _ gqlerrors.CustomErrorType = (*ValidationError)(nil)
 
 // ValidationError is returned when a field fails validation
 type ValidationError struct {
