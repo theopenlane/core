@@ -25,7 +25,7 @@ require (
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.132.0
 	github.com/go-viper/mapstructure/v2 v2.2.1
-	github.com/go-webauthn/webauthn v0.12.3
+	github.com/go-webauthn/webauthn v0.13.0
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/uuid v1.6.0
@@ -486,13 +486,13 @@ require (
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/go-webauthn/x v0.1.20 // indirect
+	github.com/go-webauthn/x v0.1.21 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/cel-go v0.25.0 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
-	github.com/google/go-tpm v0.9.3 // indirect
+	github.com/google/go-tpm v0.9.5 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.6 // indirect
 	github.com/googleapis/gax-go/v2 v2.14.1 // indirect
