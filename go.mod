@@ -56,7 +56,7 @@ require (
 	github.com/projectdiscovery/cdncheck v1.1.17
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
-	github.com/projectdiscovery/utils v0.4.18
+	github.com/projectdiscovery/utils v0.4.19
 	github.com/prometheus/client_golang v1.22.0
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.8.0
@@ -545,7 +545,7 @@ require (
 	github.com/pquerna/otp v1.4.0
 	github.com/projectdiscovery/katana v1.1.3
 	github.com/projectdiscovery/subfinder/v2 v2.7.1
-	github.com/projectdiscovery/wappalyzergo v0.2.27
+	github.com/projectdiscovery/wappalyzergo v0.2.28
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
