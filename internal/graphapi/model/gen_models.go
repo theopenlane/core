@@ -212,7 +212,7 @@ type CreateFullProgramInput struct {
 	InternalPolicies []*generated.CreateInternalPolicyInput `json:"internalPolicies,omitempty"`
 	Procedures       []*generated.CreateProcedureInput      `json:"procedures,omitempty"`
 	Members          []*CreateMemberWithProgramInput        `json:"members,omitempty"`
-	StandardID       string                                 `json:"standardID"`
+	StandardID       *string                                `json:"standardID,omitempty"`
 }
 
 type CreateMemberWithProgramInput struct {
@@ -221,8 +221,9 @@ type CreateMemberWithProgramInput struct {
 }
 
 type CreateProgramWithMembersInput struct {
-	Program *generated.CreateProgramInput   `json:"program"`
-	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	Program    *generated.CreateProgramInput   `json:"program"`
+	Members    []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	StandardID *string                         `json:"standardID,omitempty"`
 }
 
 // Return response for createBulkCustomDomain mutation

@@ -4236,7 +4236,7 @@ type CreateFullProgramInput struct {
 	InternalPolicies []*CreateInternalPolicyInput         `json:"internalPolicies,omitempty"`
 	Procedures       []*CreateProcedureInput              `json:"procedures,omitempty"`
 	Members          []*CreateMemberWithProgramInput      `json:"members,omitempty"`
-	StandardID       string                               `json:"standardID"`
+	StandardID       *string                              `json:"standardID,omitempty"`
 }
 
 // CreateGroupInput is used for create Group object.
@@ -4677,8 +4677,9 @@ type CreateProgramMembershipInput struct {
 }
 
 type CreateProgramWithMembersInput struct {
-	Program *CreateProgramInput             `json:"program"`
-	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	Program    *CreateProgramInput             `json:"program"`
+	Members    []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	StandardID *string                         `json:"standardID,omitempty"`
 }
 
 // CreateRiskInput is used for create Risk object.

@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -25,6 +26,15 @@ func (suite *GraphTestSuite) TestMutationCreateProgramWithMembers() {
 		},
 	}
 
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	numAdminControls := 5
+	adminControlIDs := []string{}
+	for range numAdminControls {
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+		adminControlIDs = append(adminControlIDs, control.ID)
+	}
+
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateProgramWithMembersInput
@@ -32,6 +42,18 @@ func (suite *GraphTestSuite) TestMutationCreateProgramWithMembers() {
 		ctx         context.Context
 		expectedErr string
 	}{
+		{
+			name: "happy path, minimal input with standard id",
+			request: openlaneclient.CreateProgramWithMembersInput{
+				Program: &openlaneclient.CreateProgramInput{
+					Name: "mitb program",
+				},
+				Members:    members,
+				StandardID: lo.ToPtr(publicStandard.ID),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
 		{
 			name: "happy path, minimal input",
 			request: openlaneclient.CreateProgramWithMembersInput{
@@ -87,6 +109,9 @@ func (suite *GraphTestSuite) TestMutationCreateProgramWithMembers() {
 			assert.Len(t, resp.CreateProgramWithMembers.Program.Members.Edges, len(tc.request.Members)+1)
 		})
 	}
+
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: adminControlIDs}).MustDelete(systemAdminUser.UserCtx, suite)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, suite)
 }
 
 func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
@@ -140,7 +165,7 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 					Name: "test program",
 				},
 				Members:    members,
-				StandardID: publicStandard.ID,
+				StandardID: lo.ToPtr(publicStandard.ID),
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
@@ -153,7 +178,7 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 					Name: "test program",
 				},
 				Members:    members,
-				StandardID: resp.CreateStandard.Standard.ID,
+				StandardID: lo.ToPtr(resp.CreateStandard.Standard.ID),
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
@@ -228,7 +253,7 @@ func (suite *GraphTestSuite) TestMutationCreateFullProgram() {
 			// the creator is automatically added as an admin, and the members are added in addition
 			assert.Len(t, resp.CreateFullProgram.Program.Members.Edges, len(tc.request.Members)+1)
 
-			if tc.request.StandardID == "" {
+			if tc.request.StandardID == nil {
 				require.NotNil(t, resp.CreateFullProgram.Program.Controls.Edges)
 				assert.Len(t, resp.CreateFullProgram.Program.Controls.Edges, len(tc.request.Controls))
 

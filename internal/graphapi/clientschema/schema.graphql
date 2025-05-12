@@ -6731,7 +6731,7 @@ input CreateFullProgramInput {
 	internalPolicies: [CreateInternalPolicyInput!]
 	procedures: [CreateProcedureInput!]
 	members: [CreateMemberWithProgramInput!]
-	standardID: ID!
+	standardID: ID
 }
 """
 CreateGroupInput is used for create Group object.
@@ -7375,6 +7375,7 @@ input CreateProgramMembershipInput {
 input CreateProgramWithMembersInput {
 	program: CreateProgramInput!
 	members: [CreateMemberWithProgramInput!]
+	standardID: ID
 }
 """
 CreateRiskInput is used for create Risk object.

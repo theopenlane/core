@@ -5,8 +5,42 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 )
+
+type createProgramRequest interface {
+	model.CreateFullProgramInput | model.CreateProgramWithMembersInput
+}
+
+func getStandardID[T createProgramRequest](value T) string {
+	switch input := any(value).(type) {
+	case model.CreateProgramWithMembersInput:
+		if input.StandardID != nil {
+			return *input.StandardID
+		}
+	case model.CreateFullProgramInput:
+		if input.StandardID != nil {
+			return *input.StandardID
+		}
+	}
+
+	return ""
+}
+
+func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standardID string) ([]*generated.Control, error) {
+	standardRes, err := withTransactionalMutation(ctx).Standard.Get(ctx, standardID)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
+	}
+
+	controls, err := standardRes.QueryControls().All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.cloneControls(ctx, controls, nil, true)
+}
 
 func (r *mutationResolver) cloneControls(ctx context.Context, existingControls []*generated.Control, programID *string, ignoreStandard bool) ([]*generated.Control, error) {
 	createdControlIDs := make([]string, len(existingControls))
