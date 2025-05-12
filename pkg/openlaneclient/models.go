@@ -23038,8 +23038,10 @@ type UpdateCustomDomainInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	OwnerID    *string  `json:"ownerID,omitempty"`
-	ClearOwner *bool    `json:"clearOwner,omitempty"`
+	// Status of the custom domain verification
+	Status     *enums.CustomDomainStatus `json:"status,omitempty"`
+	OwnerID    *string                   `json:"ownerID,omitempty"`
+	ClearOwner *bool                     `json:"clearOwner,omitempty"`
 }
 
 // UpdateDocumentDataInput is used for update DocumentData object.

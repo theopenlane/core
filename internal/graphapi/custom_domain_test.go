@@ -344,9 +344,10 @@ func (suite *GraphTestSuite) TestUpdateCustomDomain() {
 			name:    "happy path",
 			queryID: customDomain.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     systemAdminUser.UserCtx,
 			updateInput: openlaneclient.UpdateCustomDomainInput{
-				Tags: []string{"hello"},
+				Tags:   []string{"hello"},
+				Status: lo.ToPtr(enums.CustomDomainStatusVerified),
 			},
 		},
 		{
@@ -357,7 +358,7 @@ func (suite *GraphTestSuite) TestUpdateCustomDomain() {
 			updateInput: openlaneclient.UpdateCustomDomainInput{
 				Tags: []string{"hello"},
 			},
-			errorMsg: notAuthorizedErrorMsg,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
