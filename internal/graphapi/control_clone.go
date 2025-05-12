@@ -25,7 +25,6 @@ func getStandardID[T createProgramRequest](value T) string {
 }
 
 func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standardID string) ([]*generated.Control, error) {
-
 	standardRes, err := withTransactionalMutation(ctx).Standard.Get(ctx, standardID)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
