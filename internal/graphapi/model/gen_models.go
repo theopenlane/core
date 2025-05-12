@@ -221,8 +221,9 @@ type CreateMemberWithProgramInput struct {
 }
 
 type CreateProgramWithMembersInput struct {
-	Program *generated.CreateProgramInput   `json:"program"`
-	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	Program    *generated.CreateProgramInput   `json:"program"`
+	Members    []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	StandardID string                          `json:"standardID"`
 }
 
 // Return response for createBulkCustomDomain mutation

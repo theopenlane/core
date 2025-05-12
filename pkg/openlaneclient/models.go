@@ -4677,8 +4677,9 @@ type CreateProgramMembershipInput struct {
 }
 
 type CreateProgramWithMembersInput struct {
-	Program *CreateProgramInput             `json:"program"`
-	Members []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	Program    *CreateProgramInput             `json:"program"`
+	Members    []*CreateMemberWithProgramInput `json:"members,omitempty"`
+	StandardID string                          `json:"standardID"`
 }
 
 // CreateRiskInput is used for create Risk object.

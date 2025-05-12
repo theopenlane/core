@@ -71285,6 +71285,7 @@ input CreateFullProgramInput{
 input CreateProgramWithMembersInput{
   program: CreateProgramInput!
   members: [CreateMemberWithProgramInput!]
+  standardID: ID!
 }
 
 input CreateMemberWithProgramInput {
