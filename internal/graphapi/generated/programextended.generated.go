@@ -119,7 +119,7 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 			it.Members = data
 		case "standardID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardID"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -194,7 +194,7 @@ func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx cont
 			it.Members = data
 		case "standardID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardID"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}

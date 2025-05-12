@@ -16,12 +16,16 @@ type createProgramRequest interface {
 func getStandardID[T createProgramRequest](value T) string {
 	switch input := any(value).(type) {
 	case model.CreateProgramWithMembersInput:
-		return input.StandardID
+		if input.StandardID != nil {
+			return *input.StandardID
+		}
 	case model.CreateFullProgramInput:
-		return input.StandardID
-	default:
-		return ""
+		if input.StandardID != nil {
+			return *input.StandardID
+		}
 	}
+
+	return ""
 }
 
 func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standardID string) ([]*generated.Control, error) {

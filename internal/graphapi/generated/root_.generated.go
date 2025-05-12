@@ -71279,13 +71279,13 @@ input CreateFullProgramInput{
   internalPolicies: [CreateInternalPolicyInput!]
   procedures: [CreateProcedureInput!]
   members: [CreateMemberWithProgramInput!]
-  standardID: ID!
+  standardID: ID
 }
 
 input CreateProgramWithMembersInput{
   program: CreateProgramInput!
   members: [CreateMemberWithProgramInput!]
-  standardID: ID!
+  standardID: ID
 }
 
 input CreateMemberWithProgramInput {
