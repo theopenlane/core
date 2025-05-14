@@ -5,18 +5,17 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
-func (suite *GraphTestSuite) TestQuerySubcontrol() {
-	t := suite.T()
-
+func TestQuerySubcontrol(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a subcontrol
@@ -24,6 +23,8 @@ func (suite *GraphTestSuite) TestQuerySubcontrol() {
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
 
+	createdControlIDs := []string{}
+	createdSubcontrolIDs := []string{}
 	// add test cases for querying the subcontrol
 	testCases := []struct {
 		name     string
@@ -79,8 +80,10 @@ func (suite *GraphTestSuite) TestQuerySubcontrol() {
 						ProgramIDs: []string{program.ID},
 					})
 
-				require.NoError(t, err)
-				require.NotNil(t, control)
+				assert.NilError(t, err)
+				assert.Assert(t, control != nil)
+
+				createdControlIDs = append(createdControlIDs, control.CreateControl.Control.ID)
 
 				resp, err := suite.client.api.CreateSubcontrol(testUser1.UserCtx,
 					openlaneclient.CreateSubcontrolInput{
@@ -88,41 +91,47 @@ func (suite *GraphTestSuite) TestQuerySubcontrol() {
 						ControlID: control.CreateControl.Control.ID,
 					})
 
-				require.NoError(t, err)
-				require.NotNil(t, resp)
+				assert.NilError(t, err)
+				assert.Assert(t, resp != nil)
 
 				tc.queryID = resp.CreateSubcontrol.Subcontrol.ID
+				createdSubcontrolIDs = append(createdSubcontrolIDs, resp.CreateSubcontrol.Subcontrol.ID)
 			}
 
 			resp, err := tc.client.GetSubcontrolByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			require.NotEmpty(t, resp.Subcontrol)
+			assert.Check(t, is.Equal(tc.queryID, resp.Subcontrol.ID))
+			assert.Check(t, len(resp.Subcontrol.RefCode) != 0)
 
-			assert.Equal(t, tc.queryID, resp.Subcontrol.ID)
-			assert.NotEmpty(t, resp.Subcontrol.RefCode)
-
-			assert.NotEmpty(t, resp.Subcontrol.ControlID)
+			assert.Check(t, len(resp.Subcontrol.ControlID) != 0)
 		})
 	}
+
+	// cleanup the program
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).
+		MustDelete(testUser1.UserCtx, t)
+
+	// cleanup the controls
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: createdSubcontrolIDs}).
+		MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: createdControlIDs}).
+		MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQuerySubcontrols() {
-	t := suite.T()
-
+func TestQuerySubcontrols(t *testing.T) {
 	// create multiple objects to be queried using testUser1
-	(&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	sc1 := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	sc2 := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -165,17 +174,20 @@ func (suite *GraphTestSuite) TestQuerySubcontrols() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllSubcontrols(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.Subcontrols.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.Subcontrols.Edges, tc.expectedResults), "expected %d, got %d", tc.expectedResults, len(resp.Subcontrols.Edges))
 		})
 	}
+
+	// cleanup the controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{sc1.ControlID, sc2.ControlID}}).MustDelete(testUser1.UserCtx, t)
+	// cleanup the subcontrols
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{sc1.ID, sc2.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
-	t := suite.T()
-
+func TestMutationCreateSubcontrol(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -364,86 +376,87 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 						ProgramIDs: []string{program.ID},
 					})
 
-				require.NoError(t, err)
-				require.NotNil(t, control)
+				assert.NilError(t, err)
+				assert.Assert(t, control != nil)
 
 				tc.request.ControlID = control.CreateControl.Control.ID
 			}
 
 			resp, err := tc.client.CreateSubcontrol(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check required fields
-			require.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.ID)
-			assert.Equal(t, tc.request.RefCode, resp.CreateSubcontrol.Subcontrol.RefCode)
-
-			assert.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.DisplayID)
-			assert.Contains(t, resp.CreateSubcontrol.Subcontrol.DisplayID, "SCL-")
-
-			assert.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.RefCode)
-			assert.Equal(t, tc.request.RefCode, resp.CreateSubcontrol.Subcontrol.RefCode)
+			assert.Check(t, resp.CreateSubcontrol.Subcontrol.ID != "")
+			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateSubcontrol.Subcontrol.RefCode))
+			assert.Check(t, is.Contains(resp.CreateSubcontrol.Subcontrol.DisplayID, "SCL-"))
+			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateSubcontrol.Subcontrol.RefCode))
 
 			// ensure the control is set
-			require.NotEmpty(t, resp.CreateSubcontrol.Subcontrol.ControlID)
-			assert.Equal(t, tc.request.ControlID, resp.CreateSubcontrol.Subcontrol.ControlID)
+			assert.Check(t, is.Equal(tc.request.ControlID, resp.CreateSubcontrol.Subcontrol.ControlID))
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.CreateSubcontrol.Subcontrol.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateSubcontrol.Subcontrol.Description))
 			} else {
-				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.Description)
+				assert.Check(t, is.Equal(*resp.CreateSubcontrol.Subcontrol.Description, ""))
 			}
 
-			assert.Equal(t, enums.ControlStatusPreparing, *resp.CreateSubcontrol.Subcontrol.Status)
+			assert.Check(t, is.Equal(enums.ControlStatusPreparing, *resp.CreateSubcontrol.Subcontrol.Status))
 
 			if tc.request.Source != nil {
-				assert.Equal(t, *tc.request.Source, *resp.CreateSubcontrol.Subcontrol.Source)
+				assert.Check(t, is.Equal(*tc.request.Source, *resp.CreateSubcontrol.Subcontrol.Source))
 			} else {
-				assert.Equal(t, enums.ControlSourceUserDefined, *resp.CreateSubcontrol.Subcontrol.Source)
+				assert.Check(t, is.Equal(enums.ControlSourceUserDefined, *resp.CreateSubcontrol.Subcontrol.Source))
 			}
 
 			if tc.request.ControlOwnerID != nil {
-				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
-				assert.Equal(t, *tc.request.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID)
+				assert.Assert(t, resp.CreateSubcontrol.Subcontrol.ControlOwner != nil)
+				assert.Check(t, is.Equal(*tc.request.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID))
 			} else if tc.request.ControlID == controlWithOwner.ID {
 				// it should inherit the owner from the parent control if it was set
-				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
-				assert.Equal(t, controlWithOwner.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID)
+				assert.Assert(t, resp.CreateSubcontrol.Subcontrol.ControlOwner != nil)
+				assert.Check(t, is.Equal(controlWithOwner.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID))
 			} else {
-				assert.Nil(t, resp.CreateSubcontrol.Subcontrol.ControlOwner)
+				assert.Check(t, is.Nil(resp.CreateSubcontrol.Subcontrol.ControlOwner))
 			}
 
 			if tc.request.DelegateID != nil {
-				require.NotNil(t, resp.CreateSubcontrol.Subcontrol.Delegate)
-				assert.Equal(t, *tc.request.DelegateID, resp.CreateSubcontrol.Subcontrol.Delegate.ID)
+				assert.Assert(t, resp.CreateSubcontrol.Subcontrol.Delegate != nil)
+				assert.Check(t, is.Equal(*tc.request.DelegateID, resp.CreateSubcontrol.Subcontrol.Delegate.ID))
 			} else {
-				assert.Nil(t, resp.CreateSubcontrol.Subcontrol.Delegate)
+				assert.Check(t, is.Nil(resp.CreateSubcontrol.Subcontrol.Delegate))
 			}
 
 			// ensure the org owner has access to the subcontrol that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetSubcontrolByID(testUser1.UserCtx, resp.CreateSubcontrol.Subcontrol.ID)
-				require.NoError(t, err)
-				require.NotEmpty(t, res)
-				assert.Equal(t, resp.CreateSubcontrol.Subcontrol.ID, res.Subcontrol.ID)
+				assert.NilError(t, err)
+				assert.Assert(t, res != nil)
+				assert.Check(t, is.Equal(resp.CreateSubcontrol.Subcontrol.ID, res.Subcontrol.ID))
 			}
 		})
 	}
+
+	// cleanup the program
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).
+		MustDelete(testUser1.UserCtx, t)
+	// cleanup the controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, controlWithOwner.ID}}).
+		MustDelete(testUser1.UserCtx, t)
+	// cleanup the groups
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, anotherOwnerGroup.ID, delegateGroup.ID}}).
+		MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
-	t := suite.T()
-
+func TestMutationUpdateSubcontrol(t *testing.T) {
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
 	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID}).MustNew(testUser1.UserCtx, t)
 
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -509,52 +522,59 @@ func (suite *GraphTestSuite) TestMutationUpdateSubcontrol() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateSubcontrol(tc.ctx, subcontrol.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateSubcontrol.Subcontrol.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateSubcontrol.Subcontrol.Description))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.UpdateSubcontrol.Subcontrol.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateSubcontrol.Subcontrol.Status))
 			}
 
 			if tc.request.Tags != nil {
-				assert.ElementsMatch(t, tc.request.Tags, resp.UpdateSubcontrol.Subcontrol.Tags)
+				assert.Check(t, is.DeepEqual(tc.request.Tags, resp.UpdateSubcontrol.Subcontrol.Tags))
 			}
 
 			if tc.request.Source != nil {
-				assert.Equal(t, *tc.request.Source, *resp.UpdateSubcontrol.Subcontrol.Source)
+				assert.Check(t, is.Equal(*tc.request.Source, *resp.UpdateSubcontrol.Subcontrol.Source))
 			}
 
 			if tc.request.ControlOwnerID != nil {
-				require.NotNil(t, resp.UpdateSubcontrol.Subcontrol.ControlOwner)
-				assert.Equal(t, *tc.request.ControlOwnerID, resp.UpdateSubcontrol.Subcontrol.ControlOwner.ID)
+				assert.Assert(t, resp.UpdateSubcontrol.Subcontrol.ControlOwner != nil)
+				assert.Check(t, is.Equal(*tc.request.ControlOwnerID, resp.UpdateSubcontrol.Subcontrol.ControlOwner.ID))
 			} else {
-				assert.Nil(t, resp.UpdateSubcontrol.Subcontrol.ControlOwner)
+				assert.Check(t, is.Nil(resp.UpdateSubcontrol.Subcontrol.ControlOwner))
 			}
 
 			if tc.request.DelegateID != nil {
-				require.NotNil(t, resp.UpdateSubcontrol.Subcontrol.Delegate)
-				assert.Equal(t, *tc.request.DelegateID, resp.UpdateSubcontrol.Subcontrol.Delegate.ID)
+				assert.Assert(t, resp.UpdateSubcontrol.Subcontrol.Delegate != nil)
+				assert.Check(t, is.Equal(*tc.request.DelegateID, resp.UpdateSubcontrol.Subcontrol.Delegate.ID))
 			} else {
-				assert.Nil(t, resp.UpdateSubcontrol.Subcontrol.Delegate)
+				assert.Check(t, is.Nil(resp.UpdateSubcontrol.Subcontrol.Delegate))
 			}
 		})
 	}
+
+	// cleanup the subcontrol
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).
+		MustDelete(testUser1.UserCtx, t)
+	// cleanup the control
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID}}).
+		MustDelete(testUser1.UserCtx, t)
+	// cleanup the groups
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID}}).
+		MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteSubcontrol() {
-	t := suite.T()
-
+func TestMutationDeleteSubcontrol(t *testing.T) {
 	// create objects to be deleted
 	subcontrol1 := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	subcontrol2 := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -605,16 +625,20 @@ func (suite *GraphTestSuite) TestMutationDeleteSubcontrol() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteSubcontrol(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteSubcontrol.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteSubcontrol.DeletedID))
 		})
 	}
+
+	// cleanup the controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{subcontrol1.ControlID, subcontrol2.ControlID}}).
+		MustDelete(testUser1.UserCtx, t)
 }

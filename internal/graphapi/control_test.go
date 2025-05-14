@@ -4,23 +4,20 @@ import (
 	"context"
 	"testing"
 
-	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
-func (suite *GraphTestSuite) TestQueryControl() {
-	t := suite.T()
-
+func TestQueryControl(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a control
@@ -28,6 +25,7 @@ func (suite *GraphTestSuite) TestQueryControl() {
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
 
+	controlIDs := []string{}
 	// add test cases for querying the control
 	testCases := []struct {
 		name     string
@@ -82,43 +80,43 @@ func (suite *GraphTestSuite) TestQueryControl() {
 						ProgramIDs: []string{program.ID},
 					})
 
-				require.NoError(t, err)
-				require.NotNil(t, resp)
+				assert.NilError(t, err)
+				assert.Assert(t, resp != nil)
 
 				tc.queryID = resp.CreateControl.Control.ID
+				controlIDs = append(controlIDs, tc.queryID)
 			}
 
 			resp, err := tc.client.GetControlByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-
-			require.NotEmpty(t, resp.Control)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
 
 			assert.Equal(t, tc.queryID, resp.Control.ID)
-			assert.NotEmpty(t, resp.Control.RefCode)
+			assert.Check(t, len(resp.Control.RefCode) != 0)
 
-			require.Len(t, resp.Control.Programs.Edges, 1)
-			assert.NotEmpty(t, resp.Control.Programs.Edges[0].Node.ID)
+			assert.Check(t, is.Len(resp.Control.Programs.Edges, 1))
+			assert.Check(t, len(resp.Control.Programs.Edges[0].Node.ID) != 0)
 
-			(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: resp.Control.ID}).MustDelete(testUser1.UserCtx, suite)
+			// delete the created evidence, update for the token user cases
+			if tc.ctx == context.Background() {
+				tc.ctx = testUser1.UserCtx
+			}
 		})
 	}
 
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryControls() {
-	t := suite.T()
-
+func TestQueryControls(t *testing.T) {
 	// create multiple objects to be queried using testUser1
 	controlsToCreate := int64(11)
 	controlIDs := []string{}
@@ -127,12 +125,11 @@ func (suite *GraphTestSuite) TestQueryControls() {
 		controlIDs = append(controlIDs, control.ID)
 	}
 
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	userCtxAnotherOrg := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+	userAnotherOrg := suite.userBuilder(context.Background(), t)
 
 	// add a control for the user to another org; this should not be returned for JWT auth, since it's
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
-	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(userCtxAnotherOrg, t)
+	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(userAnotherOrg.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -165,14 +162,14 @@ func (suite *GraphTestSuite) TestQueryControls() {
 		{
 			name:            "first set over max (10 in test)",
 			client:          suite.client.api,
-			first:           lo.ToPtr(int64(11)),
+			first:           &controlsToCreate,
 			ctx:             testUser1.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "last set over max (10 in test)",
 			client:          suite.client.api,
-			last:            lo.ToPtr(int64(11)),
+			last:            &controlsToCreate,
 			ctx:             testUser1.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
@@ -206,45 +203,43 @@ func (suite *GraphTestSuite) TestQueryControls() {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			if tc.first != nil || tc.last != nil {
 				resp, err := tc.client.GetControls(tc.ctx, tc.first, tc.last, nil)
-				require.NoError(t, err)
-				require.NotNil(t, resp)
+				assert.NilError(t, err)
+				assert.Check(t, resp != nil)
 
-				assert.Len(t, resp.Controls.Edges, tc.expectedResults)
-				assert.Equal(t, int64(11), resp.Controls.TotalCount)
+				assert.Check(t, is.Len(resp.Controls.Edges, tc.expectedResults))
+				assert.Check(t, is.Equal(controlsToCreate, resp.Controls.TotalCount))
 
 				// if we are pulling the last, there won't be a next page, but there will be a previous page
 				if tc.last != nil {
-					assert.True(t, resp.Controls.PageInfo.HasPreviousPage)
+					assert.Check(t, resp.Controls.PageInfo.HasPreviousPage)
 				} else {
-					assert.True(t, resp.Controls.PageInfo.HasNextPage)
+					assert.Check(t, resp.Controls.PageInfo.HasNextPage)
 				}
 
 				return
 			}
 
 			resp, err := tc.client.GetAllControls(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
 
-			assert.Len(t, resp.Controls.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.Controls.Edges, tc.expectedResults))
 
 			if tc.expectedResults > 0 {
-				assert.Equal(t, int64(controlsToCreate), resp.Controls.TotalCount)
-				assert.True(t, resp.Controls.PageInfo.HasNextPage)
+				assert.Check(t, is.Equal(int64(controlsToCreate), resp.Controls.TotalCount))
+				assert.Check(t, resp.Controls.PageInfo.HasNextPage)
 			} else {
-				assert.Equal(t, 0, len(resp.Controls.Edges))
+				assert.Check(t, is.Len(resp.Controls.Edges, 0))
 				assert.Equal(t, int64(0), resp.Controls.TotalCount)
-				assert.False(t, resp.Controls.PageInfo.HasNextPage)
+				assert.Check(t, !resp.Controls.PageInfo.HasNextPage)
 			}
 		})
 	}
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(userCtxAnotherOrg, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(userAnotherOrg.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateControl() {
-	t := suite.T()
-
+func TestMutationCreateControl(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -426,42 +421,40 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateControl(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
 
 			// check required fields
-			require.NotEmpty(t, resp.CreateControl.Control.ID)
+			assert.Check(t, len(resp.CreateControl.Control.ID) != 0)
 			assert.Equal(t, tc.request.RefCode, resp.CreateControl.Control.RefCode)
 
-			assert.NotEmpty(t, resp.CreateControl.Control.DisplayID)
-			assert.Contains(t, resp.CreateControl.Control.DisplayID, "CTL-")
+			assert.Check(t, len(resp.CreateControl.Control.DisplayID) != 0)
+			assert.Check(t, is.Contains(resp.CreateControl.Control.DisplayID, "CTL-"))
 
-			assert.NotEmpty(t, resp.CreateControl.Control.RefCode)
+			assert.Check(t, len(resp.CreateControl.Control.RefCode) != 0)
 			assert.Equal(t, tc.request.RefCode, resp.CreateControl.Control.RefCode)
 
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {
-				require.NotEmpty(t, resp.CreateControl.Control.Programs)
-				require.Len(t, resp.CreateControl.Control.Programs.Edges, len(tc.request.ProgramIDs))
+				assert.Check(t, is.Len(resp.CreateControl.Control.Programs.Edges, len(tc.request.ProgramIDs)))
 
 				for i, p := range resp.CreateControl.Control.Programs.Edges {
 					assert.Equal(t, tc.request.ProgramIDs[i], p.Node.ID)
 				}
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Programs.Edges)
+				assert.Check(t, is.Len(resp.CreateControl.Control.Programs.Edges, 0))
 			}
 
 			if tc.request.Description != nil {
 				assert.Equal(t, *tc.request.Description, *resp.CreateControl.Control.Description)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Description)
+				assert.Equal(t, *resp.CreateControl.Control.Description, "")
 			}
 
 			if tc.request.Status != nil {
@@ -485,132 +478,134 @@ func (suite *GraphTestSuite) TestMutationCreateControl() {
 			if tc.request.Category != nil {
 				assert.Equal(t, *tc.request.Category, *resp.CreateControl.Control.Category)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Category)
+				assert.Equal(t, *resp.CreateControl.Control.Category, "")
 			}
 
 			if tc.request.CategoryID != nil {
 				assert.Equal(t, *tc.request.CategoryID, *resp.CreateControl.Control.CategoryID)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.CategoryID)
+				assert.Equal(t, *resp.CreateControl.Control.CategoryID, "")
 			}
 
 			if tc.request.Subcategory != nil {
 				assert.Equal(t, *tc.request.Subcategory, *resp.CreateControl.Control.Subcategory)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Subcategory)
+				assert.Equal(t, *resp.CreateControl.Control.Subcategory, "")
 			}
 
 			if tc.request.MappedCategories != nil {
-				assert.ElementsMatch(t, tc.request.MappedCategories, resp.CreateControl.Control.MappedCategories)
+				assert.DeepEqual(t, tc.request.MappedCategories, resp.CreateControl.Control.MappedCategories)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.MappedCategories)
+				assert.Check(t, is.Len(resp.CreateControl.Control.MappedCategories, 0))
 			}
 
 			if tc.request.ControlQuestions != nil {
-				assert.ElementsMatch(t, tc.request.ControlQuestions, resp.CreateControl.Control.ControlQuestions)
+				assert.DeepEqual(t, tc.request.ControlQuestions, resp.CreateControl.Control.ControlQuestions)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.ControlQuestions)
+				assert.Check(t, is.Len(resp.CreateControl.Control.ControlQuestions, 0))
 			}
 
 			if tc.request.AssessmentObjectives != nil {
-				require.Len(t, resp.CreateControl.Control.AssessmentObjectives, len(tc.request.AssessmentObjectives))
-				assert.ElementsMatch(t, tc.request.AssessmentObjectives, resp.CreateControl.Control.AssessmentObjectives)
+				assert.Check(t, is.Len(resp.CreateControl.Control.AssessmentObjectives, len(tc.request.AssessmentObjectives)))
+				assert.DeepEqual(t, tc.request.AssessmentObjectives, resp.CreateControl.Control.AssessmentObjectives)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.AssessmentObjectives)
+				assert.Check(t, is.Len(resp.CreateControl.Control.AssessmentObjectives, 0))
 			}
 
 			if tc.request.AssessmentMethods != nil {
-				require.Len(t, resp.CreateControl.Control.AssessmentMethods, len(tc.request.AssessmentMethods))
-				assert.ElementsMatch(t, tc.request.AssessmentMethods, resp.CreateControl.Control.AssessmentMethods)
+				assert.Check(t, is.Len(resp.CreateControl.Control.AssessmentMethods, len(tc.request.AssessmentMethods)))
+				assert.DeepEqual(t, tc.request.AssessmentMethods, resp.CreateControl.Control.AssessmentMethods)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.AssessmentMethods)
+				assert.Check(t, is.Len(resp.CreateControl.Control.AssessmentMethods, 0))
 			}
 
 			if tc.request.ImplementationGuidance != nil {
-				require.Len(t, resp.CreateControl.Control.ImplementationGuidance, len(tc.request.ImplementationGuidance))
-				assert.ElementsMatch(t, tc.request.ImplementationGuidance, resp.CreateControl.Control.ImplementationGuidance)
+				assert.Check(t, is.Len(resp.CreateControl.Control.ImplementationGuidance, len(tc.request.ImplementationGuidance)))
+				assert.DeepEqual(t, tc.request.ImplementationGuidance, resp.CreateControl.Control.ImplementationGuidance)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.ImplementationGuidance)
+				assert.Check(t, is.Len(resp.CreateControl.Control.ImplementationGuidance, 0))
 			}
 
 			if tc.request.ExampleEvidence != nil {
-				require.Len(t, resp.CreateControl.Control.ExampleEvidence, len(tc.request.ExampleEvidence))
-				assert.ElementsMatch(t, tc.request.ExampleEvidence, resp.CreateControl.Control.ExampleEvidence)
+				assert.Check(t, is.Len(resp.CreateControl.Control.ExampleEvidence, len(tc.request.ExampleEvidence)))
+				assert.DeepEqual(t, tc.request.ExampleEvidence, resp.CreateControl.Control.ExampleEvidence)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.ExampleEvidence)
+				assert.Check(t, is.Len(resp.CreateControl.Control.ExampleEvidence, 0))
 			}
 
 			if tc.request.References != nil {
-				require.Len(t, resp.CreateControl.Control.References, len(tc.request.References))
-				assert.ElementsMatch(t, tc.request.References, resp.CreateControl.Control.References)
+				assert.Check(t, is.Len(resp.CreateControl.Control.References, len(tc.request.References)))
+				assert.DeepEqual(t, tc.request.References, resp.CreateControl.Control.References)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.References)
+				assert.Check(t, is.Len(resp.CreateControl.Control.References, 0))
 			}
 
 			if tc.request.ControlOwnerID != nil {
-				require.NotEmpty(t, resp.CreateControl.Control.ControlOwner)
 				assert.Equal(t, *tc.request.ControlOwnerID, resp.CreateControl.Control.ControlOwner.ID)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.ControlOwner)
+				assert.Check(t, resp.CreateControl.Control.ControlOwner == nil)
 			}
 
 			if tc.request.DelegateID != nil {
-				require.NotEmpty(t, resp.CreateControl.Control.Delegate)
 				assert.Equal(t, *tc.request.DelegateID, resp.CreateControl.Control.Delegate.ID)
 			} else {
-				assert.Empty(t, resp.CreateControl.Control.Delegate)
+				assert.Check(t, resp.CreateControl.Control.Delegate == nil)
 			}
 
 			if len(tc.request.EditorIDs) > 0 {
-				require.Len(t, resp.CreateControl.Control.Editors, 1)
+				assert.Check(t, is.Len(resp.CreateControl.Control.Editors, 1))
 				for _, edge := range resp.CreateControl.Control.Editors {
 					assert.Equal(t, testUser1.GroupID, edge.ID)
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
-				require.Len(t, resp.CreateControl.Control.BlockedGroups, 1)
+				assert.Check(t, is.Len(resp.CreateControl.Control.BlockedGroups, 1))
 				for _, edge := range resp.CreateControl.Control.BlockedGroups {
 					assert.Equal(t, blockedGroup.ID, edge.ID)
 				}
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
-				require.Len(t, resp.CreateControl.Control.Viewers, 1)
+				assert.Check(t, is.Len(resp.CreateControl.Control.Viewers, 1))
 				for _, edge := range resp.CreateControl.Control.Viewers {
 					assert.Equal(t, viewerGroup.ID, edge.ID)
 				}
 			}
 
 			if tc.request.ControlImplementationIDs != nil {
-				require.Len(t, resp.CreateControl.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs))
+				assert.Assert(t, is.Len(resp.CreateControl.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs)))
 			}
 
 			// ensure the org owner has access to the control that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetControlByID(testUser1.UserCtx, resp.CreateControl.Control.ID)
-				require.NoError(t, err)
-				require.NotEmpty(t, res)
+				assert.NilError(t, err)
 				assert.Equal(t, resp.CreateControl.Control.ID, res.Control.ID)
 
 				if tc.request.ControlImplementationIDs != nil {
-					require.Len(t, res.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs))
+					assert.Check(t, is.Len(res.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs)))
 				}
 			}
 
-			(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: resp.CreateControl.Control.ID}).MustDelete(testUser1.UserCtx, suite)
+			// delete the created evidence, update for the token user cases
+			if tc.ctx == context.Background() {
+				tc.ctx = testUser1.UserCtx
+			}
+
+			(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: resp.CreateControl.Control.ID}).MustDelete(tc.ctx, t)
 		})
 	}
 
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program1.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program2.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, suite)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, blockedGroup.ID, viewerGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
-	t := suite.T()
-
+func TestMutationCreateControlsByClone(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	programAnotherOrg := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -629,8 +624,8 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 
 	// ensure the standard exists and has the correct number of controls for the non-system admin user
 	standard, err := suite.client.api.GetStandardByID(testUser2.UserCtx, publicStandard.ID)
-	require.NoError(t, err)
-	require.NotNil(t, standard)
+	assert.NilError(t, err)
+	assert.Assert(t, standard != nil)
 	assert.Equal(t, standard.Standard.Controls.TotalCount, numControls)
 
 	// create org owned control
@@ -758,9 +753,8 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateControlsByClone(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				errors := parseClientError(t, err)
 				for _, e := range errors {
@@ -772,99 +766,103 @@ func (suite *GraphTestSuite) TestMutationCreateControlsByClone() {
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
 
 			for i, control := range resp.CreateControlsByClone.Controls {
 				// check required fields
-				require.NotEmpty(t, control.ID)
-				require.NotEmpty(t, control.DisplayID)
-				require.NotEmpty(t, control.RefCode)
+				assert.Check(t, len(control.ID) != 0)
+				assert.Check(t, len(control.DisplayID) != 0)
+				assert.Check(t, len(control.RefCode) != 0)
 
 				// all cloned controls should have an owner
-				assert.NotEmpty(t, control.OwnerID)
+				assert.Check(t, control.OwnerID != nil)
 
 				if tc.request.ProgramID != nil {
-					require.NotEmpty(t, control.Programs)
-					require.Len(t, control.Programs.Edges, 1)
+					assert.Check(t, is.Len(control.Programs.Edges, 1))
 					assert.Equal(t, *tc.request.ProgramID, control.Programs.Edges[0].Node.ID)
 				} else {
-					assert.Empty(t, control.Programs.Edges)
+					assert.Check(t, is.Len(control.Programs.Edges, 0))
 				}
 
 				// check the cloned control fields are set and match the original control
-				assert.Equal(t, tc.expectedControls[i].RefCode, control.RefCode)
-				assert.Equal(t, tc.expectedControls[i].ControlType, *control.ControlType)
-				assert.Equal(t, tc.expectedControls[i].Category, *control.Category)
-				assert.Equal(t, tc.expectedControls[i].CategoryID, *control.CategoryID)
-				assert.Equal(t, tc.expectedControls[i].Subcategory, *control.Subcategory)
-				assert.Equal(t, tc.expectedControls[i].MappedCategories, control.MappedCategories)
-				assert.Equal(t, tc.expectedControls[i].ControlQuestions, control.ControlQuestions)
-				assert.Equal(t, tc.expectedControls[i].Tags, control.Tags)
+				assert.Check(t, is.Equal(tc.expectedControls[i].RefCode, control.RefCode))
+				assert.Check(t, is.Equal(tc.expectedControls[i].ControlType, *control.ControlType))
+				assert.Check(t, is.Equal(tc.expectedControls[i].Category, *control.Category))
+				assert.Check(t, is.Equal(tc.expectedControls[i].CategoryID, *control.CategoryID))
+				assert.Check(t, is.Equal(tc.expectedControls[i].Subcategory, *control.Subcategory))
+				assert.Check(t, is.DeepEqual(tc.expectedControls[i].MappedCategories, control.MappedCategories))
+				assert.Check(t, is.DeepEqual(tc.expectedControls[i].ControlQuestions, control.ControlQuestions))
+				assert.Check(t, is.DeepEqual(tc.expectedControls[i].Tags, control.Tags))
 				// expected control status ignored as we always set to preparing
-				assert.Equal(t, enums.ControlStatusPreparing, *control.Status)
-				assert.Equal(t, tc.expectedControls[i].ControlType, *control.ControlType)
-				assert.Equal(t, tc.expectedControls[i].Source, *control.Source)
-				assert.Equal(t, tc.expectedControls[i].StandardID, *control.StandardID)
+				assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
+				assert.Check(t, is.Equal(tc.expectedControls[i].ControlType, *control.ControlType))
+				assert.Check(t, is.Equal(tc.expectedControls[i].Source, *control.Source))
+				assert.Check(t, is.Equal(tc.expectedControls[i].StandardID, *control.StandardID))
 
 				for j, ao := range control.AssessmentObjectives {
-					assert.Equal(t, tc.expectedControls[i].AssessmentObjectives[j], *ao)
+					assert.Check(t, is.DeepEqual(tc.expectedControls[i].AssessmentObjectives[j], *ao))
 				}
 
 				for j, am := range control.AssessmentMethods {
-					assert.Equal(t, tc.expectedControls[i].AssessmentMethods[j], *am)
+					assert.Check(t, is.DeepEqual(tc.expectedControls[i].AssessmentMethods[j], *am))
 				}
 
 				for j, ig := range control.ImplementationGuidance {
-					assert.Equal(t, tc.expectedControls[i].ImplementationGuidance[j], *ig)
+					assert.Check(t, is.DeepEqual(tc.expectedControls[i].ImplementationGuidance[j], *ig))
 				}
 
 				for j, ref := range control.References {
-					assert.Equal(t, tc.expectedControls[i].References[j], *ref)
+					assert.Check(t, is.DeepEqual(tc.expectedControls[i].References[j], *ref))
 				}
 
 				for j, ee := range control.ExampleEvidence {
-					assert.Equal(t, tc.expectedControls[i].ExampleEvidence[j], *ee)
+					assert.Check(t, is.DeepEqual(tc.expectedControls[i].ExampleEvidence[j], *ee))
 				}
 
 				// ensure the org owner has access to the control that was created by an api token
 				if tc.client == suite.client.apiWithToken {
 					res, err := suite.client.api.GetControlByID(testUser1.UserCtx, control.ID)
-					require.NoError(t, err)
-					require.NotEmpty(t, res)
-					assert.Equal(t, control.ID, res.Control.ID)
+					assert.NilError(t, err)
+					assert.Check(t, res != nil)
+					assert.Check(t, is.Equal(control.ID, res.Control.ID))
 				}
 
 				// ensure view only user can see the control created by the admin user
 				res, err := suite.client.api.GetControlByID(viewOnlyUser.UserCtx, control.ID)
 				if tc.expectNoAccessViewer {
-					require.Error(t, err)
 					assert.ErrorContains(t, err, notFoundErrorMsg)
-					assert.Nil(t, res)
+					assert.Check(t, is.Nil(res))
 				} else {
-					require.NoError(t, err)
-					require.NotEmpty(t, res)
-					assert.Equal(t, control.ID, res.Control.ID)
+					assert.NilError(t, err)
+					assert.Check(t, res != nil)
+					assert.Check(t, is.Equal(control.ID, res.Control.ID))
 				}
 
 				// ensure a user outside my organization cannot get the control
 				res, err = suite.client.api.GetControlByID(testUser2.UserCtx, control.ID)
-				require.Nil(t, res)
-				require.Error(t, err)
+				assert.Check(t, is.Nil(res))
+
 				assert.ErrorContains(t, err, notFoundErrorMsg)
+
+				// delete the created evidence, update for the token user cases
+				if tc.ctx == context.Background() {
+					tc.ctx = testUser1.UserCtx
+				}
+
+				(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(tc.ctx, t)
 			}
 		})
 	}
 
 	// cleanup created controls and standards
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: orgOwnedControl.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: orgOwnedControl.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateControl() {
-	t := suite.T()
-
+func TestMutationUpdateControl(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	control := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
@@ -880,15 +878,15 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor/viewer permissions
-	anotherAdminUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	anotherAdminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the control
 	res, err := suite.client.api.GetControlByID(anotherAdminUser.UserCtx, control.ID)
-	require.Error(t, err)
-	require.Nil(t, res)
+	assert.ErrorContains(t, err, notFoundErrorMsg)
+	assert.Assert(t, is.Nil(res))
 
 	testCases := []struct {
 		name        string
@@ -1013,15 +1011,15 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateControl(tc.ctx, control.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			if tc.request.Description != nil {
 				assert.Equal(t, *tc.request.Description, *resp.UpdateControl.Control.Description)
@@ -1032,7 +1030,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 			}
 
 			if tc.request.Tags != nil {
-				assert.ElementsMatch(t, tc.request.Tags, resp.UpdateControl.Control.Tags)
+				assert.DeepEqual(t, tc.request.Tags, resp.UpdateControl.Control.Tags)
 			}
 
 			if tc.request.Source != nil {
@@ -1056,63 +1054,62 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 			}
 
 			if tc.request.AppendMappedCategories != nil {
-				assert.ElementsMatch(t, tc.request.AppendMappedCategories, resp.UpdateControl.Control.MappedCategories)
+				assert.DeepEqual(t, tc.request.AppendMappedCategories, resp.UpdateControl.Control.MappedCategories)
 			}
 
 			if tc.request.AppendControlQuestions != nil {
-				assert.ElementsMatch(t, tc.request.AppendControlQuestions, resp.UpdateControl.Control.ControlQuestions)
+				assert.DeepEqual(t, tc.request.AppendControlQuestions, resp.UpdateControl.Control.ControlQuestions)
 			}
 
 			if tc.request.AppendAssessmentObjectives != nil {
-				assert.ElementsMatch(t, tc.request.AppendAssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives)
+				assert.DeepEqual(t, tc.request.AppendAssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives)
 			}
 
 			if tc.request.AppendAssessmentMethods != nil {
-				assert.ElementsMatch(t, tc.request.AppendAssessmentMethods, resp.UpdateControl.Control.AssessmentMethods)
+				assert.DeepEqual(t, tc.request.AppendAssessmentMethods, resp.UpdateControl.Control.AssessmentMethods)
 			}
 
 			if tc.request.AppendImplementationGuidance != nil {
-				assert.ElementsMatch(t, tc.request.AppendImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance)
+				assert.DeepEqual(t, tc.request.AppendImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance)
 			}
 
 			if tc.request.AppendExampleEvidence != nil {
-				assert.ElementsMatch(t, tc.request.AppendExampleEvidence, resp.UpdateControl.Control.ExampleEvidence)
+				assert.DeepEqual(t, tc.request.AppendExampleEvidence, resp.UpdateControl.Control.ExampleEvidence)
 			}
 
 			if tc.request.ControlOwnerID != nil {
-				require.NotNil(t, resp.UpdateControl.Control.ControlOwner)
+				assert.Assert(t, resp.UpdateControl.Control.ControlOwner != nil)
 				assert.Equal(t, *tc.request.ControlOwnerID, resp.UpdateControl.Control.ControlOwner.ID)
 			}
 
 			if tc.request.DelegateID != nil {
-				require.NotNil(t, resp.UpdateControl.Control.Delegate)
+				assert.Assert(t, resp.UpdateControl.Control.Delegate != nil)
 				assert.Equal(t, *tc.request.DelegateID, resp.UpdateControl.Control.Delegate.ID)
 			}
 
 			if tc.request.AppendReferences != nil {
-				assert.ElementsMatch(t, tc.request.AppendReferences, resp.UpdateControl.Control.References)
+				assert.DeepEqual(t, tc.request.AppendReferences, resp.UpdateControl.Control.References)
 			}
 
 			if tc.request.ClearReferences != nil && *tc.request.ClearReferences {
-				assert.Empty(t, resp.UpdateControl.Control.References)
+				assert.Check(t, is.Len(resp.UpdateControl.Control.References, 0))
 			}
 
 			if tc.request.ClearMappedCategories != nil && *tc.request.ClearMappedCategories {
-				assert.Empty(t, resp.UpdateControl.Control.MappedCategories)
+				assert.Check(t, is.Len(resp.UpdateControl.Control.MappedCategories, 0))
 			}
 
 			if tc.request.AddControlImplementationIDs != nil {
-				require.Len(t, resp.UpdateControl.Control.ControlImplementations.Edges, len(tc.request.AddControlImplementationIDs))
+				assert.Assert(t, is.Len(resp.UpdateControl.Control.ControlImplementations.Edges, len(tc.request.AddControlImplementationIDs)))
 			}
 
 			// ensure the program is set
 			if len(tc.request.AddProgramIDs) > 0 {
-				require.NotEmpty(t, resp.UpdateControl.Control.Programs)
-				require.Len(t, resp.UpdateControl.Control.Programs.Edges, len(tc.request.AddProgramIDs))
+				assert.Assert(t, is.Len(resp.UpdateControl.Control.Programs.Edges, len(tc.request.AddProgramIDs)))
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {
-				require.Len(t, resp.UpdateControl.Control.Viewers, 1)
+				assert.Assert(t, is.Len(resp.UpdateControl.Control.Viewers, 1))
 				found := false
 				for _, edge := range resp.UpdateControl.Control.Viewers {
 					if edge.ID == tc.request.AddViewerIDs[0] {
@@ -1121,27 +1118,27 @@ func (suite *GraphTestSuite) TestMutationUpdateControl() {
 					}
 				}
 
-				assert.True(t, found)
+				assert.Check(t, found)
 
 				// ensure the user has access to the control now
 				res, err := suite.client.api.GetControlByID(anotherAdminUser.UserCtx, control.ID)
-				require.NoError(t, err)
-				require.NotEmpty(t, res)
+				assert.NilError(t, err)
+				assert.Assert(t, res != nil)
 				assert.Equal(t, control.ID, res.Control.ID)
 			}
 		})
 	}
 
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteControl() {
-	t := suite.T()
-
+func TestMutationDeleteControl(t *testing.T) {
 	// create objects to be deleted
-	Control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	Control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -1152,27 +1149,27 @@ func (suite *GraphTestSuite) TestMutationDeleteControl() {
 	}{
 		{
 			name:        "not authorized, delete",
-			idToDelete:  Control1.ID,
+			idToDelete:  control1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
-			idToDelete: Control1.ID,
+			idToDelete: control1.ID,
 			client:     suite.client.api,
 			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
-			idToDelete:  Control1.ID,
+			idToDelete:  control1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
-			idToDelete: Control2.ID,
+			idToDelete: control2.ID,
 			client:     suite.client.apiWithPAT,
 			ctx:        context.Background(),
 		},
@@ -1189,15 +1186,15 @@ func (suite *GraphTestSuite) TestMutationDeleteControl() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteControl(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 			assert.Equal(t, tc.idToDelete, resp.DeleteControl.DeletedID)
 		})
 	}

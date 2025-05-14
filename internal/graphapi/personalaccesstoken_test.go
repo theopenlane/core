@@ -7,17 +7,16 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 
 	"github.com/theopenlane/core/pkg/testutils"
 )
 
-func (suite *GraphTestSuite) TestQueryPersonalAccessToken() {
-	t := suite.T()
-
+func TestQueryPersonalAccessToken(t *testing.T) {
 	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -50,29 +49,31 @@ func (suite *GraphTestSuite) TestQueryPersonalAccessToken() {
 			resp, err := suite.client.api.GetPersonalAccessTokenByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.PersonalAccessToken)
-			assert.Equal(t, redacted, resp.PersonalAccessToken.Token)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(redacted, resp.PersonalAccessToken.Token))
 		})
 	}
+
+	// cleanup
+	(*&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
+		client: suite.client.db.PersonalAccessToken,
+		ID:     token.ID,
+	}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryPersonalAccessTokens() {
-	t := suite.T()
-
+func TestQueryPersonalAccessTokens(t *testing.T) {
 	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// create a token for another user
-	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	(&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{testUser2.OrganizationID}}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -88,24 +89,21 @@ func (suite *GraphTestSuite) TestQueryPersonalAccessTokens() {
 			resp, err := suite.client.api.GetAllPersonalAccessTokens(testUser1.UserCtx)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.PersonalAccessTokens.Edges, 3) // there is an additional token from the seed test data for this user
+			assert.Check(t, is.Len(resp.PersonalAccessTokens.Edges, 3)) // there is an additional token from the seed test data for this user
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationCreatePersonalAccessToken() {
-	t := suite.T()
-
+func TestMutationCreatePersonalAccessToken(t *testing.T) {
 	tokenDescription := gofakeit.Sentence(5)
 	expiration30Days := time.Now().Add(time.Hour * 24 * 30)
 
@@ -165,52 +163,54 @@ func (suite *GraphTestSuite) TestMutationCreatePersonalAccessToken() {
 			resp, err := suite.client.api.CreatePersonalAccessToken(testUser1.UserCtx, tc.input)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreatePersonalAccessToken.PersonalAccessToken)
-			assert.Equal(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Name, tc.input.Name)
-			assert.Equal(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Description, tc.input.Description)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(resp.CreatePersonalAccessToken.PersonalAccessToken.Name, tc.input.Name))
+			assert.Check(t, is.DeepEqual(resp.CreatePersonalAccessToken.PersonalAccessToken.Description, tc.input.Description))
 
 			// check expiration if set
 			if tc.input.ExpiresAt == nil {
-				assert.Empty(t, resp.CreatePersonalAccessToken.PersonalAccessToken.ExpiresAt)
+				assert.Check(t, resp.CreatePersonalAccessToken.PersonalAccessToken.ExpiresAt == nil)
 			} else {
-				assert.True(t, tc.input.ExpiresAt.Equal(*resp.CreatePersonalAccessToken.PersonalAccessToken.ExpiresAt))
+				assert.Check(t, tc.input.ExpiresAt.Equal(*resp.CreatePersonalAccessToken.PersonalAccessToken.ExpiresAt))
 			}
 
 			// check organization is set if provided
 			if tc.input.OrganizationIDs != nil {
-				assert.Len(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, len(tc.input.OrganizationIDs))
+				assert.Check(t, is.Len(resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, len(tc.input.OrganizationIDs)))
 
 				for _, orgID := range resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations.Edges {
-					assert.Contains(t, tc.input.OrganizationIDs, orgID.Node.ID)
+					assert.Check(t, is.Contains(tc.input.OrganizationIDs, orgID.Node.ID))
 				}
 			} else {
-				assert.Len(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, 0)
+				assert.Check(t, is.Len(resp.CreatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, 0))
 			}
 
 			// ensure the owner is the user that made the request
-			assert.Equal(t, testUser1.ID, resp.CreatePersonalAccessToken.PersonalAccessToken.Owner.ID)
+			assert.Check(t, is.Equal(testUser1.ID, resp.CreatePersonalAccessToken.PersonalAccessToken.Owner.ID))
 
 			// token should not be redacted on create
-			assert.NotEqual(t, redacted, resp.CreatePersonalAccessToken.PersonalAccessToken.Token)
+			assert.Check(t, redacted != resp.CreatePersonalAccessToken.PersonalAccessToken.Token)
 
 			// ensure the token is prefixed
-			assert.Contains(t, resp.CreatePersonalAccessToken.PersonalAccessToken.Token, "tolp_")
+			assert.Check(t, is.Contains(resp.CreatePersonalAccessToken.PersonalAccessToken.Token, "tolp_"))
+
+			// cleanup
+			(*&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
+				client: suite.client.db.PersonalAccessToken,
+				ID:     resp.CreatePersonalAccessToken.PersonalAccessToken.ID,
+			}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationUpdatePersonalAccessToken() {
-	t := suite.T()
-
+func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 	token := (&PersonalAccessTokenBuilder{
 		client:          suite.client,
 		OrganizationIDs: []string{testUser1.PersonalOrgID},
@@ -218,7 +218,7 @@ func (suite *GraphTestSuite) TestMutationUpdatePersonalAccessToken() {
 		MustNew(testUser1.UserCtx, t)
 
 	tokenOther := (&PersonalAccessTokenBuilder{
-		client: suite.client}).
+		client: suite.client, OrganizationIDs: []string{testUser2.OrganizationID}}).
 		MustNew(testUser2.UserCtx, t)
 
 	tokenDescription := gofakeit.Sentence(5)
@@ -281,54 +281,62 @@ func (suite *GraphTestSuite) TestMutationUpdatePersonalAccessToken() {
 			resp, err := suite.client.api.UpdatePersonalAccessToken(testUser1.UserCtx, tc.tokenID, tc.input)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdatePersonalAccessToken.PersonalAccessToken)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			if tc.input.Name != nil {
-				assert.Equal(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.Name, *tc.input.Name)
+				assert.Check(t, is.Equal(resp.UpdatePersonalAccessToken.PersonalAccessToken.Name, *tc.input.Name))
 			}
 
 			if tc.input.Description != nil {
-				assert.Equal(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.Description, tc.input.Description)
+				assert.Check(t, is.DeepEqual(resp.UpdatePersonalAccessToken.PersonalAccessToken.Description, tc.input.Description))
 			}
 
 			// make sure these fields did not get updated
 			if token.ExpiresAt != nil {
-				assert.WithinDuration(t, *token.ExpiresAt, *resp.UpdatePersonalAccessToken.PersonalAccessToken.ExpiresAt, 1*time.Second)
+				assert.Assert(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.ExpiresAt != nil)
+				diff := resp.UpdatePersonalAccessToken.PersonalAccessToken.ExpiresAt.Sub(*token.ExpiresAt)
+				assert.Check(t, diff >= -1*time.Second && diff <= 1*time.Second, "time difference is not within 1 second, got %v", diff)
 			} else {
-				assert.Empty(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.ExpiresAt)
+				assert.Check(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.ExpiresAt == nil)
 			}
 
-			assert.Len(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, len(tc.input.AddOrganizationIDs)+1)
+			assert.Check(t, is.Len(resp.UpdatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, len(tc.input.AddOrganizationIDs)+1))
 
 			// Ensure its removed
 			if tc.input.RemoveOrganizationIDs != nil {
-				assert.Len(t, resp.UpdatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, 1)
+				assert.Check(t, is.Len(resp.UpdatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, 1))
 			}
 
-			assert.Equal(t, testUser1.ID, resp.UpdatePersonalAccessToken.PersonalAccessToken.Owner.ID)
+			assert.Check(t, is.Equal(testUser1.ID, resp.UpdatePersonalAccessToken.PersonalAccessToken.Owner.ID))
 
 			// token should be redacted on update
-			assert.Equal(t, redacted, resp.UpdatePersonalAccessToken.PersonalAccessToken.Token)
+			assert.Check(t, is.Equal(redacted, resp.UpdatePersonalAccessToken.PersonalAccessToken.Token))
 		})
 	}
+
+	// cleanup
+	(*&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
+		client: suite.client.db.PersonalAccessToken,
+		ID:     token.ID,
+	}).MustDelete(testUser1.UserCtx, t)
+	(*&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
+		client: suite.client.db.PersonalAccessToken,
+		ID:     tokenOther.ID,
+	}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeletePersonalAccessToken() {
-	t := suite.T()
-
+func TestMutationDeletePersonalAccessToken(t *testing.T) {
 	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// token for another user
-	tokenOther := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	tokenOther := (&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{testUser2.OrganizationID}}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -351,30 +359,33 @@ func (suite *GraphTestSuite) TestMutationDeletePersonalAccessToken() {
 			resp, err := suite.client.api.DeletePersonalAccessToken(testUser1.UserCtx, tc.tokenID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.Equal(t, tc.tokenID, resp.DeletePersonalAccessToken.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Equal(t, tc.tokenID, resp.DeletePersonalAccessToken.DeletedID)
 		})
 	}
+
+	// cleanup
+	(*&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
+		client: suite.client.db.PersonalAccessToken,
+		ID:     tokenOther.ID,
+	}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestLastUsedPersonalAccessToken() {
-	t := suite.T()
-
+func TestLastUsedPersonalAccessToken(t *testing.T) {
 	// create new personal access token
 	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// check that the last used is empty
 	res, err := suite.client.api.GetPersonalAccessTokenByID(testUser1.UserCtx, token.ID)
-	require.NoError(t, err)
-	assert.Empty(t, res.PersonalAccessToken.LastUsedAt)
+	assert.NilError(t, err)
+	assert.Check(t, res.PersonalAccessToken.LastUsedAt == nil)
 
 	// setup graph client using the personal access token
 	authHeader := openlaneclient.Authorization{
@@ -382,10 +393,16 @@ func (suite *GraphTestSuite) TestLastUsedPersonalAccessToken() {
 	}
 
 	graphClient, err := testutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeader))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// get the token to make sure the last used is updated using the token
 	out, err := graphClient.GetPersonalAccessTokenByID(context.Background(), token.ID)
-	require.NoError(t, err)
-	assert.NotEmpty(t, out.PersonalAccessToken.LastUsedAt)
+	assert.NilError(t, err)
+	assert.Check(t, !out.PersonalAccessToken.LastUsedAt.IsZero())
+
+	// cleanup
+	(*&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
+		client: suite.client.db.PersonalAccessToken,
+		ID:     token.ID,
+	}).MustDelete(testUser1.UserCtx, t)
 }

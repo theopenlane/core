@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"testing"
@@ -10,10 +11,13 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -295,7 +299,7 @@ type Faker struct {
 func randomName(t *testing.T) string {
 	var f Faker
 	err := gofakeit.Struct(&f)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	var b strings.Builder
 	for _, r := range f.Name {
@@ -336,19 +340,19 @@ type Cleanup[T DeleteExec] struct {
 //	(&Cleanup[*generated.OrganizationDeleteOne]{
 //		client: suite.client.db.Organization,
 //		ID: resp.CreateOrganization.Organization.ID}).
-//		MustDelete(testUser1.UserCtx, suite)
-func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, suite *GraphTestSuite) {
+//		MustDelete(testUser1.UserCtx, t)
+func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 	// add client to context for hooks that expect the client to be in the context
 	ctx = setContext(ctx, suite.client.db)
 
 	for _, id := range c.IDs {
 		err := c.client.DeleteOneID(id).Exec(ctx)
-		require.NoError(suite.T(), err)
+		assert.NilError(t, err)
 	}
 
 	if c.ID != "" {
 		err := c.client.DeleteOneID(c.ID).Exec(ctx)
-		require.NoError(suite.T(), err)
+		assert.NilError(t, err)
 	}
 }
 
@@ -383,14 +387,14 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	}
 
 	org, err := m.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	if o.AllowedDomains != nil {
 		orgSetting, err := org.Setting(ctx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		err = orgSetting.Update().SetAllowedEmailDomains(o.AllowedDomains).Exec(ctx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 	}
 
 	return org
@@ -418,7 +422,7 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 
 	// create user setting
 	userSetting, err := u.client.db.UserSetting.Create().Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	user, err := u.client.db.User.Create().
 		SetFirstName(u.FirstName).
@@ -429,10 +433,10 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 		SetLastSeen(time.Now()).
 		SetSetting(userSetting).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = user.Edges.Setting.DefaultOrg(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return user
 }
@@ -446,7 +450,12 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 	setting, err := tf.client.db.TFASetting.Create().
 		SetTotpAllowed(*tf.totpAllowed).
 		Save(ctx)
-	require.NoError(t, err)
+
+	// if the setting is not created, it means the user already has a setting
+	// and let's skip for seeding
+	if errors.Is(err, generated.ConstraintError{}) {
+		return nil
+	}
 
 	return setting
 }
@@ -454,7 +463,7 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 // MustNew webauthn settings builder is used to create passkeys without the browser setup process
 func (w *WebauthnBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Webauthn {
 	uuidBytes, err := uuid.NewUUID()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	wn, err := w.client.db.Webauthn.Create().
 		SetAaguid(models.ToAAGUID(uuidBytes[:])).
@@ -465,8 +474,7 @@ func (w *WebauthnBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Webaut
 		SetCredentialID([]byte(uuid.NewString())).
 		SetTransports([]string{uuid.NewString()}).
 		Save(ctx)
-
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return wn
 }
@@ -485,13 +493,13 @@ func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 		role = &enums.RoleMember
 	}
 
-	orgMembers, err := om.client.db.OrgMembership.Create().
+	orgMember, err := om.client.db.OrgMembership.Create().
 		SetUserID(om.UserID).
 		SetRole(*role).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	return orgMembers
+	return orgMember
 }
 
 // MustNew group builder is used to create, without authz checks, groups in the database
@@ -513,7 +521,7 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 	}
 
 	group, err := mutation.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return group
 }
@@ -537,7 +545,7 @@ func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
 	}
 
 	invite, err := inviteQuery.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return invite
 }
@@ -556,7 +564,7 @@ func (i *SubscriberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subs
 	sub, err := i.client.db.Subscriber.Create().
 		SetEmail(rec).
 		SetActive(true).Save(reqCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return sub
 }
@@ -574,8 +582,8 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 	}
 
 	if pat.OrganizationIDs == nil {
-		org := (&OrganizationBuilder{client: pat.client}).MustNew(ctx, t)
-		pat.OrganizationIDs = []string{org.ID}
+		// default to adding the test users organization ID
+		pat.OrganizationIDs = []string{testUser1.OrganizationID}
 	}
 
 	request := pat.client.db.PersonalAccessToken.Create().
@@ -588,7 +596,7 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 	}
 
 	token, err := request.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return token
 }
@@ -619,7 +627,7 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 	}
 
 	token, err := request.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return token
 }
@@ -634,7 +642,7 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 	}
 
 	if gm.UserID == "" {
-		orgMember := (&OrgMemberBuilder{client: gm.client}).MustNew(testUser1.UserCtx, t)
+		orgMember := (&OrgMemberBuilder{client: gm.client}).MustNew(ctx, t)
 		gm.UserID = orgMember.UserID
 	}
 
@@ -642,9 +650,15 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 		SetUserID(gm.UserID).
 		SetGroupID(gm.GroupID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	return groupMember
+	gmToReturn, err := gm.client.db.GroupMembership.Query().
+		WithUser().
+		WithOrgmembership().
+		Where(groupmembership.ID(groupMember.ID)).Only(ctx)
+	assert.NilError(t, err)
+
+	return gmToReturn
 }
 
 // MustNew entity type builder is used to create, without authz checks, entity types in the database
@@ -658,7 +672,7 @@ func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Enti
 	entityType, err := e.client.db.EntityType.Create().
 		SetName(e.Name).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return entityType
 }
@@ -690,7 +704,7 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		SetEntityTypeID(e.TypeID).
 		SetDescription(e.Description).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return entity
 }
@@ -732,7 +746,7 @@ func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact
 		SetTitle(c.Title).
 		SetCompany(c.Company).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return entity
 }
@@ -770,7 +784,7 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 	}
 
 	task, err := taskCreate.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return task
 }
@@ -806,7 +820,7 @@ func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program
 
 	program, err := mutation.
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return program
 }
@@ -835,7 +849,13 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 	}
 
 	programMember, err := mutation.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
+
+	programMember, err = pm.client.db.ProgramMembership.Query().
+		WithUser().
+		WithOrgmembership().
+		Where(programmembership.ID(programMember.ID)).Only(ctx)
+	assert.NilError(t, err)
 
 	return programMember
 }
@@ -856,7 +876,7 @@ func (p *ProcedureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Proce
 	}
 
 	procedure, err := mutation.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return procedure
 }
@@ -872,7 +892,7 @@ func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 	policy, err := p.client.db.InternalPolicy.Create().
 		SetName(p.Name).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return policy
 }
@@ -893,7 +913,7 @@ func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
 	}
 
 	risk, err := mutation.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return risk
 }
@@ -914,7 +934,7 @@ func (c *ControlObjectiveBuilder) MustNew(ctx context.Context, t *testing.T) *en
 	}
 
 	co, err := mutation.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return co
 }
@@ -936,7 +956,7 @@ func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narra
 
 	narrative, err := mutation.
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return narrative
 }
@@ -1010,7 +1030,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	control, err := mutation.
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return control
 }
@@ -1036,7 +1056,7 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 	sc, err := mutation.
 		Save(ctx)
 
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return sc
 }
@@ -1062,7 +1082,7 @@ func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 
 	control, err := mutation.
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return control
 }
@@ -1084,7 +1104,7 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 		SetFramework(s.Framework).
 		SetIsPublic(s.IsPublic).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return standard
 }
@@ -1109,7 +1129,7 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 	}
 
 	note, err := mutation.Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return note
 }
@@ -1140,8 +1160,7 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 
 	controlImplementation, err := mutation.
 		Save(ctx)
-
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return controlImplementation
 }
@@ -1157,7 +1176,7 @@ func (e *MappableDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 	mappableDomain, err := e.client.db.MappableDomain.Create().
 		SetName(e.Name).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return mappableDomain
 }
@@ -1200,7 +1219,7 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T, status 
 		SetOwnerID(c.OwnerID).
 		SetStatus(*status).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return customDomain
 }

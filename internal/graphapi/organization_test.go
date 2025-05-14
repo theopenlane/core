@@ -8,14 +8,16 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/entx"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -23,8 +25,22 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-func (suite *GraphTestSuite) TestQueryOrganization() {
-	t := suite.T()
+func TestQueryOrganization(t *testing.T) {
+	t.Parallel()
+
+	// create another user for this test
+	// so it doesn't interfere with the other tests
+	orgUser := suite.userBuilder(context.Background(), t)
+	apiTokenClient := suite.setupAPITokenClient(orgUser.UserCtx, t)
+	patTokenClient := suite.setupPatClient(orgUser, t)
+
+	// create api token for the user
+	(&APITokenBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	// create personal access token for the user
+	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+
+	// add org members
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
 
 	testCases := []struct {
 		name               string
@@ -36,30 +52,30 @@ func (suite *GraphTestSuite) TestQueryOrganization() {
 	}{
 		{
 			name:               "happy path, get organization",
-			queryID:            testUser1.OrganizationID,
+			queryID:            orgUser.OrganizationID,
 			client:             suite.client.api,
-			ctx:                testUser1.UserCtx,
-			orgMembersExpected: 4, // owner, admin, and 2 view only users
+			ctx:                orgUser.UserCtx,
+			orgMembersExpected: 2, // owner and 1 member
 		},
 		{
 			name:               "happy path, get using api token",
-			queryID:            testUser1.OrganizationID,
-			client:             suite.client.apiWithToken,
+			queryID:            orgUser.OrganizationID,
+			client:             apiTokenClient,
 			ctx:                context.Background(),
-			orgMembersExpected: 4, // owner, admin, and 2 view only users
+			orgMembersExpected: 2, // owner and 1 member
 		},
 		{
 			name:               "happy path, get using personal access token",
-			queryID:            testUser1.OrganizationID,
-			client:             suite.client.apiWithPAT,
+			queryID:            orgUser.OrganizationID,
+			client:             patTokenClient,
 			ctx:                context.Background(),
-			orgMembersExpected: 4, // owner, admin, and 2 view only users
+			orgMembersExpected: 2, // owner and 1 member
 		},
 		{
 			name:     "invalid-id",
 			queryID:  "tacos-for-dinner",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      orgUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -69,50 +85,51 @@ func (suite *GraphTestSuite) TestQueryOrganization() {
 			resp, err := tc.client.GetOrganizationByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.Organization)
-			require.NotNil(t, resp.Organization.Members)
-			assert.Len(t, resp.Organization.Members.Edges, tc.orgMembersExpected)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.Organization.Members.Edges, tc.orgMembersExpected), "expected %d org members, got %d", tc.orgMembersExpected, len(resp.Organization.Members.Edges))
 
 			if tc.orgMembersExpected > 1 {
 				orgMemberFound := false
 
 				for _, m := range resp.Organization.Members.Edges {
-					if m.Node.User.ID == viewOnlyUser.ID {
+					if m.Node.User.ID == om.UserID {
 						orgMemberFound = true
 					}
 				}
 
-				assert.True(t, orgMemberFound)
+				assert.Check(t, orgMemberFound)
 			}
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestQueryOrganizations() {
-	t := suite.T()
+func TestQueryOrganizations(t *testing.T) {
+	t.Parallel()
 
-	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// create another user for this test
+	// so it doesn't interfere with the other tests
+	orgUser := suite.userBuilder(context.Background(), t)
+
+	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
 
 	t.Run("Get Organizations", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllOrganizations(testUser1.UserCtx)
+		resp, err := suite.client.api.GetAllOrganizations(orgUser.UserCtx)
 
-		require.NoError(t, err)
-		require.NotNil(t, resp)
-		require.NotNil(t, resp.Organizations.Edges)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Assert(t, resp.Organizations.Edges != nil)
 
 		// make sure two organizations are returned, the two created and
 		// the personal org and test org created at suite setup
-		assert.Equal(t, 4, len(resp.Organizations.Edges))
+		assert.Check(t, is.Equal(4, len(resp.Organizations.Edges)))
 
 		org1Found := false
 		org2Found := false
@@ -125,28 +142,37 @@ func (suite *GraphTestSuite) TestQueryOrganizations() {
 			}
 		}
 
-		assert.True(t, org1Found)
-		assert.True(t, org2Found)
+		assert.Check(t, org1Found)
+		assert.Check(t, org2Found)
 	})
+
+	// cleanup orgs
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, IDs: []string{org1.ID, org2.ID}}).MustDelete(orgUser.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateOrganization() {
-	t := suite.T()
+func TestMutationCreateOrganization(t *testing.T) {
+	t.Parallel()
 
-	parentOrg, err := suite.client.api.GetOrganizationByID(testUser1.UserCtx, testUser1.OrganizationID)
-	require.NoError(t, err)
+	// create another user for this test
+	// so it doesn't interfere with the other tests
+	orgUser := suite.userBuilder(context.Background(), t)
+	patClient := suite.setupPatClient(orgUser, t)
+	tokenClient := suite.setupAPITokenClient(orgUser.UserCtx, t)
+
+	parentOrg, err := suite.client.api.GetOrganizationByID(orgUser.UserCtx, orgUser.OrganizationID)
+	assert.NilError(t, err)
 
 	// setup deleted org
-	orgToDelete := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	orgToDelete := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
 	// delete said org
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgToDelete.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgToDelete.ID}).MustDelete(orgUser.UserCtx, t)
 
 	// avatar file setup
 	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name                     string
@@ -169,7 +195,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			expectedDefaultOrgUpdate: true, // only the first org created should update the default org
 			parentOrgID:              "",   // root org
 			client:                   suite.client.api,
-			ctx:                      testUser1.UserCtx,
+			ctx:                      orgUser.UserCtx,
 		},
 		{
 			name:           "happy path organization with settings and avatar",
@@ -195,15 +221,15 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			},
 			parentOrgID: "", // root org
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         orgUser.UserCtx,
 		},
 		{
 			name:           "happy path organization with parent org",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
-			parentOrgID:    testUser1.OrganizationID,
+			parentOrgID:    orgUser.OrganizationID,
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "organization with parent org, no access",
@@ -211,15 +237,15 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgDescription: gofakeit.HipsterSentence(10),
 			parentOrgID:    testUser2.OrganizationID,
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 			errorMsg:       notAuthorizedErrorMsg,
 		},
 		{
 			name:           "organization with parent org using personal access token, not allowed",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
-			parentOrgID:    testUser1.OrganizationID,
-			client:         suite.client.apiWithPAT,
+			parentOrgID:    orgUser.OrganizationID,
+			client:         patClient,
 			ctx:            context.Background(),
 			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -228,7 +254,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
 			parentOrgID:    testUser2.OrganizationID,
-			client:         suite.client.apiWithPAT,
+			client:         patClient,
 			ctx:            context.Background(),
 			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -236,7 +262,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			name:           "organization create with api token not allowed",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
-			client:         suite.client.apiWithToken,
+			client:         tokenClient,
 			ctx:            context.Background(),
 			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -244,10 +270,10 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			name:           "organization with parent personal org",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
-			parentOrgID:    testUser1.PersonalOrgID,
+			parentOrgID:    orgUser.PersonalOrgID,
 			errorMsg:       "personal organizations are not allowed to have child organizations",
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "empty organization name",
@@ -255,7 +281,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgDescription: gofakeit.HipsterSentence(10),
 			errorMsg:       "value is less than the required length",
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "long organization name",
@@ -263,15 +289,15 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgDescription: gofakeit.HipsterSentence(10),
 			errorMsg:       "value is greater than the required length",
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "organization with no description",
 			orgName:        gofakeit.Name(),
 			orgDescription: "",
-			parentOrgID:    testUser1.OrganizationID,
+			parentOrgID:    orgUser.OrganizationID,
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "duplicate organization name",
@@ -279,7 +305,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgDescription: gofakeit.HipsterSentence(10),
 			errorMsg:       "already exists",
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "duplicate organization name, case insensitive",
@@ -287,21 +313,21 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgDescription: gofakeit.HipsterSentence(10),
 			errorMsg:       "already exists",
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "duplicate organization name, but other was deleted, should pass",
 			orgName:        orgToDelete.Name,
 			orgDescription: gofakeit.HipsterSentence(10),
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "organization name with trailing space should work with trailing space removed",
 			orgName:        "orgname ",
 			orgDescription: gofakeit.HipsterSentence(10),
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "invalid organization name, too short",
@@ -309,7 +335,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgDescription: gofakeit.HipsterSentence(10),
 			errorMsg:       "value is less than the required length",
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 
@@ -318,7 +344,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			orgDescription: gofakeit.HipsterSentence(10),
 			errorMsg:       "invalid or unparsable field: name, field cannot contain special characters",
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "duplicate display name, should be allowed",
@@ -326,7 +352,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			displayName:    parentOrg.Organization.DisplayName,
 			orgDescription: gofakeit.HipsterSentence(10),
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:           "display name with spaces should pass",
@@ -334,7 +360,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			displayName:    gofakeit.Sentence(3),
 			orgDescription: gofakeit.HipsterSentence(10),
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            orgUser.UserCtx,
 		},
 		{
 			name:    "invalid avatar file",
@@ -346,7 +372,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 				ContentType: invalidAvatarFile.ContentType,
 			},
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      orgUser.UserCtx,
 			errorMsg: "unsupported mime type uploaded: text/plain",
 		},
 		{
@@ -356,7 +382,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 				AllowedEmailDomains: []string{"theopenlane"},
 			},
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      orgUser.UserCtx,
 			errorMsg: "invalid or unparsable field: domains",
 		},
 		{
@@ -366,7 +392,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 				Domains: []string{"theopenlane"},
 			},
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      orgUser.UserCtx,
 			errorMsg: "invalid or unparsable field: domains",
 		},
 	}
@@ -401,73 +427,71 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			resp, err := tc.client.CreateOrganization(tc.ctx, input, tc.avatarFile)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateOrganization.Organization)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Make sure provided values match
-			assert.Equal(t, strings.TrimSpace(tc.orgName), resp.CreateOrganization.Organization.Name)
-			assert.Equal(t, tc.orgDescription, *resp.CreateOrganization.Organization.Description)
+			assert.Check(t, is.Equal(strings.TrimSpace(tc.orgName), resp.CreateOrganization.Organization.Name))
+			assert.Check(t, is.Equal(tc.orgDescription, *resp.CreateOrganization.Organization.Description))
 
 			if tc.parentOrgID == "" {
-				assert.Nil(t, resp.CreateOrganization.Organization.Parent)
+				assert.Check(t, is.Nil(resp.CreateOrganization.Organization.Parent))
 			} else {
 				parent := resp.CreateOrganization.Organization.GetParent()
-				assert.Equal(t, tc.parentOrgID, parent.ID)
+				assert.Check(t, is.Equal(tc.parentOrgID, parent.ID))
 			}
 
 			// Ensure org settings is not null
-			assert.NotNil(t, resp.CreateOrganization.Organization.Setting.ID)
+			assert.Check(t, resp.CreateOrganization.Organization.Setting.ID != "")
 
 			// Ensure display name is not empty
-			assert.NotEmpty(t, resp.CreateOrganization.Organization.DisplayName)
+			assert.Check(t, len(resp.CreateOrganization.Organization.DisplayName) != 0)
 
 			// Ensure avatar file is not empty
 			if tc.avatarFile != nil {
-				assert.NotNil(t, resp.CreateOrganization.Organization.AvatarLocalFileID)
-				assert.NotNil(t, resp.CreateOrganization.Organization.AvatarFile.PresignedURL)
+				assert.Check(t, resp.CreateOrganization.Organization.AvatarLocalFileID != nil)
+				assert.Check(t, resp.CreateOrganization.Organization.AvatarFile.PresignedURL != nil)
 			}
 
 			if tc.settings != nil {
-				assert.Len(t, resp.CreateOrganization.Organization.Setting.Domains, 1)
+				assert.Check(t, is.Len(resp.CreateOrganization.Organization.Setting.Domains, 1))
 
 				// make sure default org is updated if it's the first org created
-				userResp, err := tc.client.GetUserByID(tc.ctx, testUser1.ID)
-				require.NoError(t, err)
+				userResp, err := tc.client.GetUserByID(tc.ctx, orgUser.ID)
+				assert.NilError(t, err)
 
 				if tc.expectedDefaultOrgUpdate {
-					assert.Equal(t, resp.CreateOrganization.Organization.ID, userResp.User.Setting.DefaultOrg.ID)
+					assert.Check(t, is.Equal(resp.CreateOrganization.Organization.ID, userResp.User.Setting.DefaultOrg.ID))
 				} else {
-					assert.NotEqual(t, resp.CreateOrganization.Organization.ID, userResp.User.Setting.DefaultOrg.ID)
+					assert.Check(t, resp.CreateOrganization.Organization.ID != userResp.User.Setting.DefaultOrg.ID)
 				}
 
 				if tc.settings.BillingAddress != nil {
-					assert.Equal(t, tc.settings.BillingAddress.Line1, resp.CreateOrganization.Organization.Setting.BillingAddress.Line1)
-					assert.Equal(t, tc.settings.BillingAddress.City, resp.CreateOrganization.Organization.Setting.BillingAddress.City)
-					assert.Equal(t, tc.settings.BillingAddress.State, resp.CreateOrganization.Organization.Setting.BillingAddress.State)
-					assert.Equal(t, tc.settings.BillingAddress.PostalCode, resp.CreateOrganization.Organization.Setting.BillingAddress.PostalCode)
-					assert.Equal(t, tc.settings.BillingAddress.Country, resp.CreateOrganization.Organization.Setting.BillingAddress.Country)
+					assert.Check(t, is.Equal(tc.settings.BillingAddress.Line1, resp.CreateOrganization.Organization.Setting.BillingAddress.Line1))
+					assert.Check(t, is.Equal(tc.settings.BillingAddress.City, resp.CreateOrganization.Organization.Setting.BillingAddress.City))
+					assert.Check(t, is.Equal(tc.settings.BillingAddress.State, resp.CreateOrganization.Organization.Setting.BillingAddress.State))
+					assert.Check(t, is.Equal(tc.settings.BillingAddress.PostalCode, resp.CreateOrganization.Organization.Setting.BillingAddress.PostalCode))
+					assert.Check(t, is.Equal(tc.settings.BillingAddress.Country, resp.CreateOrganization.Organization.Setting.BillingAddress.Country))
 				}
 			}
 
 			// ensure entity types are created
-			newCtx := auth.NewTestContextWithOrgID(testUser1.ID, resp.CreateOrganization.Organization.ID)
+			newCtx := auth.NewTestContextWithOrgID(orgUser.ID, resp.CreateOrganization.Organization.ID)
 
 			et, err := suite.client.api.GetEntityTypes(newCtx, &openlaneclient.EntityTypeWhereInput{
 				OwnerID: &resp.CreateOrganization.Organization.ID,
 			})
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
-			require.Len(t, et.EntityTypes.Edges, 1)
-			assert.Equal(t, "vendor", et.EntityTypes.Edges[0].Node.Name)
-			assert.Equal(t, resp.CreateOrganization.Organization.ID, *et.EntityTypes.Edges[0].Node.OwnerID)
+			assert.Assert(t, is.Len(et.EntityTypes.Edges, 1))
+			assert.Check(t, is.Equal("vendor", et.EntityTypes.Edges[0].Node.Name))
+			assert.Check(t, is.Equal(resp.CreateOrganization.Organization.ID, *et.EntityTypes.Edges[0].Node.OwnerID))
 
 			// ensure managed groups are created
 			managedGroups, err := suite.client.api.GetGroups(newCtx, &openlaneclient.GroupWhereInput{
@@ -475,26 +499,30 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 			})
 
 			// admins, viewers, all users should be created
-			require.Len(t, managedGroups.Groups.Edges, 3)
+			assert.Check(t, is.Len(managedGroups.Groups.Edges, 3))
 
 			// cleanup org
-			(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(testUser1.UserCtx, suite)
+			(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(orgUser.UserCtx, t)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
-	t := suite.T()
+func TestMutationUpdateOrganization(t *testing.T) {
+	t.Parallel()
+
+	// create another user for this test
+	// so it doesn't interfere with the other tests
+	orgUser := suite.userBuilder(context.Background(), t)
 
 	nameUpdate := gofakeit.Name()
 	displayNameUpdate := gofakeit.LetterN(40)
 	descriptionUpdate := gofakeit.HipsterSentence(10)
 	nameUpdateLong := gofakeit.LetterN(200)
 
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	org := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	user1 := (&UserBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
 
-	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+	reqCtx := auth.NewTestContextWithOrgID(orgUser.ID, org.ID)
 
 	// create groups for creator permissions tests and add a member
 	// group created by org owner
@@ -507,15 +535,15 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 	(&GroupMemberBuilder{client: suite.client, GroupID: groupProcedureCreators.ID}).MustNew(reqCtx, t)
 
 	// add a member to the org, to test permissions
-	om := (&OrgMemberBuilder{client: suite.client, Role: string(enums.RoleMember)}).MustNew(reqCtx, t)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(reqCtx, t)
 	memberUserCtx := auth.NewTestContextWithOrgID(om.UserID, org.ID)
 
 	// avatar file setup
 	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name        string
@@ -722,12 +750,12 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 		},
 		{
 			name:  "update name, no access",
-			orgID: viewOnlyUser.OrganizationID,
+			orgID: org.ID,
 			updateInput: openlaneclient.UpdateOrganizationInput{
 				Name: &nameUpdate,
 			},
 			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
+			ctx:      memberUserCtx,
 			errorMsg: notAuthorizedErrorMsg,
 		},
 		{
@@ -755,61 +783,61 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			resp, err := tc.client.UpdateOrganization(tc.ctx, tc.orgID, tc.updateInput, tc.avatarFile)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateOrganization.Organization)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Make sure provided values match
 			updatedOrg := resp.GetUpdateOrganization().Organization
-			assert.Equal(t, tc.expectedRes.Name, updatedOrg.Name)
-			assert.Equal(t, tc.expectedRes.DisplayName, updatedOrg.DisplayName)
-			assert.Equal(t, tc.expectedRes.Description, updatedOrg.Description)
+			assert.Check(t, is.Equal(tc.expectedRes.Name, updatedOrg.Name))
+			assert.Check(t, is.Equal(tc.expectedRes.DisplayName, updatedOrg.DisplayName))
+			assert.Check(t, is.DeepEqual(tc.expectedRes.Description, updatedOrg.Description))
 
 			if tc.updateInput.AddOrgMembers != nil {
 				// Adding a member to an org will make it 3 users, there is an owner
 				// assigned to the org automatically and an another member added in the test and
 				// 3 created as part of the group member logic
-				assert.Len(t, updatedOrg.Members.Edges, 6)
-				assert.Equal(t, tc.expectedRes.Members.Edges[0].Node.Role, updatedOrg.Members.Edges[5].Node.Role)
-				assert.Equal(t, tc.expectedRes.Members.Edges[0].Node.UserID, updatedOrg.Members.Edges[5].Node.UserID)
+				assert.Check(t, is.Len(updatedOrg.Members.Edges, 6))
+				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.Role, updatedOrg.Members.Edges[5].Node.Role))
+				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.UserID, updatedOrg.Members.Edges[5].Node.UserID))
 			}
 
 			if tc.updateInput.UpdateOrgSettings != nil {
-				assert.Len(t, updatedOrg.GetSetting().Domains, 2)
+				assert.Check(t, is.Len(updatedOrg.GetSetting().Domains, 2))
 			}
 
 			if tc.avatarFile != nil {
-				assert.NotNil(t, updatedOrg.AvatarLocalFileID)
-				assert.NotNil(t, updatedOrg.AvatarFile.PresignedURL)
+				assert.Check(t, updatedOrg.AvatarLocalFileID != nil)
+				assert.Check(t, updatedOrg.AvatarFile.PresignedURL != nil)
 			}
 		})
 	}
 
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org.ID}).MustDelete(reqCtx, suite)
-	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, ID: user1.ID}).MustDelete(reqCtx, suite)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org.ID}).MustDelete(reqCtx, t)
+	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, ID: user1.ID}).MustDelete(reqCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
-	t := suite.T()
+func TestMutationDeleteOrganization(t *testing.T) {
+	t.Parallel()
 
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// create another user for this test
+	// so it doesn't interfere with the other tests
+	orgUser := suite.userBuilder(context.Background(), t)
 
-	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+	reqCtx := orgUser.UserCtx
 
-	setting, err := suite.client.api.UpdateUserSetting(reqCtx, testUser1.UserInfo.Edges.Setting.ID,
+	setting, err := suite.client.api.UpdateUserSetting(reqCtx, orgUser.UserInfo.Edges.Setting.ID,
 		openlaneclient.UpdateUserSettingInput{
-			DefaultOrgID: &org.ID,
+			DefaultOrgID: &orgUser.OrganizationID,
 		},
 	)
-	require.NoError(t, err)
-	require.Equal(t, org.ID, setting.UpdateUserSetting.UserSetting.DefaultOrg.ID)
+	assert.NilError(t, err)
+	assert.Equal(t, orgUser.OrganizationID, setting.UpdateUserSetting.UserSetting.DefaultOrg.ID)
 
 	testCases := []struct {
 		name     string
@@ -825,25 +853,25 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 		},
 		{
 			name:     "delete org, not found",
-			orgID:    org.ID,
+			orgID:    orgUser.OrganizationID,
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:  "delete org, happy path",
-			orgID: org.ID,
-			ctx:   testUser1.UserCtx,
+			orgID: orgUser.OrganizationID,
+			ctx:   orgUser.UserCtx,
 		},
 		{
 			name:     "delete org, personal org not allowed",
-			orgID:    testUser1.PersonalOrgID,
-			ctx:      testUser1.UserCtx,
+			orgID:    orgUser.PersonalOrgID,
+			ctx:      orgUser.UserCtx,
 			errorMsg: "cannot delete personal organizations",
 		},
 		{
 			name:     "delete org, not found",
 			orgID:    "tacos-tuesday",
-			ctx:      testUser1.UserCtx,
+			ctx:      orgUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -853,33 +881,33 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 			resp, err := suite.client.api.DeleteOrganization(tc.ctx, tc.orgID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.DeleteOrganization.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.DeleteOrganization.DeletedID != "")
 
 			// make sure the deletedID matches the ID we wanted to delete
-			assert.Equal(t, tc.orgID, resp.DeleteOrganization.DeletedID)
+			assert.Check(t, is.Equal(tc.orgID, resp.DeleteOrganization.DeletedID))
 
 			// update the context to have the correct org after the org is deleted
-			reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID)
+			reqCtx := auth.NewTestContextWithOrgID(orgUser.ID, orgUser.OrganizationID)
 
 			// make sure the default org is reset
-			settingUpdated, err := suite.client.api.GetUserSettingByID(reqCtx, testUser1.UserInfo.Edges.Setting.ID)
-			require.NoError(t, err)
-			require.NotNil(t, settingUpdated.UserSetting.DefaultOrg)
-			assert.NotEqual(t, org.ID, settingUpdated.UserSetting.DefaultOrg.ID)
+			settingUpdated, err := suite.client.api.GetUserSettingByID(reqCtx, orgUser.UserInfo.Edges.Setting.ID)
+			assert.NilError(t, err)
+			assert.Assert(t, settingUpdated.UserSetting.DefaultOrg != nil)
+			assert.Check(t, orgUser.OrganizationID != settingUpdated.UserSetting.DefaultOrg.ID)
 
-			o, err := suite.client.api.GetOrganizationByID(reqCtx, tc.orgID)
+			// allow ctx to ensure the org no longer exists after deletion
+			allowCtx := ent.NewContext(rule.WithInternalContext(reqCtx), suite.client.db)
 
-			require.Nil(t, o)
-			require.Error(t, err)
+			o, err := suite.client.api.GetOrganizationByID(allowCtx, tc.orgID)
+			assert.Assert(t, is.Nil(o))
 			assert.ErrorContains(t, err, notFoundErrorMsg)
 
 			// tuples and entity are deleted, so we need to skip soft delete and privacy checks
@@ -887,20 +915,24 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 			ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 			o, err = suite.client.api.GetOrganizationByID(ctx, tc.orgID)
-			require.NoError(t, err)
-			require.NotNil(t, o)
+			assert.NilError(t, err)
+			assert.Assert(t, o != nil)
 
-			require.Equal(t, o.Organization.ID, tc.orgID)
+			assert.Equal(t, o.Organization.ID, tc.orgID)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationOrganizationCascadeDelete() {
-	t := suite.T()
+func TestMutationOrganizationCascadeDelete(t *testing.T) {
+	t.Parallel()
 
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// create another user for this test
+	// so it doesn't interfere with the other tests
+	orgUser := suite.userBuilder(context.Background(), t)
 
-	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+	org := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+
+	reqCtx := auth.NewTestContextWithOrgID(orgUser.ID, org.ID)
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
 
 	// add child org
@@ -909,29 +941,26 @@ func (suite *GraphTestSuite) TestMutationOrganizationCascadeDelete() {
 	// delete org
 	resp, err := suite.client.api.DeleteOrganization(reqCtx, org.ID)
 
-	require.NoError(t, err)
-	require.NotNil(t, resp)
-	require.NotNil(t, resp.DeleteOrganization.DeletedID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Assert(t, resp.DeleteOrganization.DeletedID != "")
 
 	// make sure the deletedID matches the ID we wanted to delete
-	assert.Equal(t, org.ID, resp.DeleteOrganization.DeletedID)
+	assert.Check(t, is.Equal(org.ID, resp.DeleteOrganization.DeletedID))
 
 	o, err := suite.client.api.GetOrganizationByID(reqCtx, org.ID)
 
-	require.Nil(t, o)
-	require.Error(t, err)
+	assert.Assert(t, is.Nil(o))
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	co, err := suite.client.api.GetOrganizationByID(reqCtx, childOrg.ID)
 
-	require.Nil(t, co)
-	require.Error(t, err)
+	assert.Assert(t, is.Nil(co))
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	g, err := suite.client.api.GetGroupByID(reqCtx, group1.ID)
 
-	require.Nil(t, g)
-	require.Error(t, err)
+	assert.Assert(t, is.Nil(g))
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	// allow after tuples have been deleted
@@ -940,15 +969,15 @@ func (suite *GraphTestSuite) TestMutationOrganizationCascadeDelete() {
 
 	o, err = suite.client.api.GetOrganizationByID(ctx, org.ID)
 
-	require.NoError(t, err)
-	require.Equal(t, o.Organization.ID, org.ID)
+	assert.NilError(t, err)
+	assert.Equal(t, o.Organization.ID, org.ID)
 
 	// allow after tuples have been deleted
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 	ctx = entx.SkipSoftDelete(ctx)
 
 	co, err = suite.client.api.GetOrganizationByID(ctx, childOrg.ID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.Equal(t, co.Organization.ID, childOrg.ID)
+	assert.Equal(t, co.Organization.ID, childOrg.ID)
 }

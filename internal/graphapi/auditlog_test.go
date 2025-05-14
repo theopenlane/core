@@ -4,14 +4,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestAuditLogList() {
-	t := suite.T()
-
+func TestAuditLogList(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
@@ -31,15 +29,14 @@ func (suite *GraphTestSuite) TestAuditLogList() {
 			resp, err := tc.client.AuditLogs(testUser1.UserCtx)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 		})
 	}
 }

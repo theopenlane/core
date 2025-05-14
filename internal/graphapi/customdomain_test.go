@@ -5,16 +5,14 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestQueryCustomDomainByID() {
-	t := suite.T()
-
+func TestQueryCustomDomainByID(t *testing.T) {
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, nil)
 
 	testCases := []struct {
@@ -61,38 +59,37 @@ func (suite *GraphTestSuite) TestQueryCustomDomainByID() {
 			resp, err := tc.client.GetCustomDomainByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotEmpty(t, resp.CustomDomain)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Equal(t, tc.queryID, resp.CustomDomain.ID)
-			assert.Equal(t, tc.expectedDomain, resp.CustomDomain.CnameRecord)
+			assert.Check(t, is.Equal(tc.queryID, resp.CustomDomain.ID))
+			assert.Check(t, is.Equal(tc.expectedDomain, resp.CustomDomain.CnameRecord))
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(t.Context(), suite)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryCustomDomains() {
-	t := suite.T()
-
+func TestQueryCustomDomains(t *testing.T) {
 	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 	mappableDomain2 := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+
 	customDomain1 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain2.ID}).MustNew(testUser1.UserCtx, t, nil)
-	(&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(testUser1.UserCtx, t, lo.ToPtr(enums.CustomDomainStatusVerified))
-	(&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(testUser2.UserCtx, t, lo.ToPtr(enums.CustomDomainStatusVerified))
+	customDomain2 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(testUser1.UserCtx, t, lo.ToPtr(enums.CustomDomainStatusVerified))
+	customDomain3 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(testUser2.UserCtx, t, lo.ToPtr(enums.CustomDomainStatusVerified))
+
 	nonExistentDomain := "nonexistent.example.com"
 
 	testCases := []struct {
 		name            string
 		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
-		expectedResults int
+		expectedResults int64
 		where           *openlaneclient.CustomDomainWhereInput
 	}{
 		{
@@ -149,22 +146,24 @@ func (suite *GraphTestSuite) TestQueryCustomDomains() {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetCustomDomains(tc.ctx, nil, nil, tc.where)
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotEmpty(t, resp.CustomDomains)
-			assert.Equal(t, int64(tc.expectedResults), resp.CustomDomains.TotalCount)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Equal(tc.expectedResults, resp.CustomDomains.TotalCount))
+
 			for _, domain := range resp.CustomDomains.Edges {
-				assert.Equal(t, *domain.Node.OwnerID, testUser1.OrganizationID)
+				assert.Check(t, is.Equal(*domain.Node.OwnerID, testUser1.OrganizationID))
 			}
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(t.Context(), suite)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain2.ID}).MustDelete(t.Context(), suite)
+
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{mappableDomain.ID, mappableDomain2.ID}}).MustDelete(testUser1.UserCtx, t)
+
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, IDs: []string{customDomain1.ID, customDomain2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain3.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateCustomDomain() {
-	t := suite.T()
-
+func TestMutationCreateCustomDomain(t *testing.T) {
 	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
 	testCases := []struct {
@@ -232,33 +231,31 @@ func (suite *GraphTestSuite) TestMutationCreateCustomDomain() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateCustomDomain(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Equal(t, tc.request.CnameRecord, resp.CreateCustomDomain.CustomDomain.CnameRecord)
-			assert.Equal(t, tc.request.MappableDomainID, resp.CreateCustomDomain.CustomDomain.MappableDomainID)
-			assert.Equal(t, enums.CustomDomainStatusPending, resp.CreateCustomDomain.CustomDomain.Status)
-			assert.Equal(t, resp.CreateCustomDomain.CustomDomain.TxtRecordSubdomain, "_olverify")
-			assert.NotEmpty(t, resp.CreateCustomDomain.CustomDomain.TxtRecordSubdomain)
-			assert.NotEmpty(t, resp.CreateCustomDomain.CustomDomain.TxtRecordValue)
+			assert.Check(t, is.Equal(tc.request.CnameRecord, resp.CreateCustomDomain.CustomDomain.CnameRecord))
+			assert.Check(t, is.Equal(tc.request.MappableDomainID, resp.CreateCustomDomain.CustomDomain.MappableDomainID))
+			assert.Check(t, is.Equal(enums.CustomDomainStatusPending, resp.CreateCustomDomain.CustomDomain.Status))
+			assert.Check(t, is.Equal(resp.CreateCustomDomain.CustomDomain.TxtRecordSubdomain, "_olverify"))
+			assert.Check(t, len(resp.CreateCustomDomain.CustomDomain.TxtRecordSubdomain) != 0)
+			assert.Check(t, len(resp.CreateCustomDomain.CustomDomain.TxtRecordValue) != 0)
 
 			// Clean up
-			(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateCustomDomain.CustomDomain.ID}).MustDelete(tc.ctx, suite)
+			(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateCustomDomain.CustomDomain.ID}).MustDelete(tc.ctx, t)
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(t.Context(), suite)
+
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(t.Context(), t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteCustomDomain() {
-	t := suite.T()
-
+func TestMutationDeleteCustomDomain(t *testing.T) {
 	customDomain := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t, nil)
 	customDomain2 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t, nil)
 	customDomain3 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t, nil)
@@ -301,35 +298,29 @@ func (suite *GraphTestSuite) TestMutationDeleteCustomDomain() {
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
-
 			resp, err := tc.client.DeleteCustomDomain(tc.ctx, tc.id)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Equal(t, tc.id, resp.DeleteCustomDomain.DeletedID)
+			assert.Check(t, is.Equal(tc.id, resp.DeleteCustomDomain.DeletedID))
 
 			// Verify the domain is deleted
 			_, err = tc.client.GetCustomDomainByID(tc.ctx, tc.id)
-			require.Error(t, err)
 			assert.ErrorContains(t, err, notFoundErrorMsg)
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(t.Context(), suite)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain2.MappableDomainID}).MustDelete(t.Context(), suite)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain3.MappableDomainID}).MustDelete(t.Context(), suite)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID, customDomain2.MappableDomainID, customDomain3.MappableDomainID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain3.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestUpdateCustomDomain() {
-	t := suite.T()
-
+func TestUpdateCustomDomain(t *testing.T) {
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, nil)
 
 	testCases := []struct {
@@ -366,22 +357,20 @@ func (suite *GraphTestSuite) TestUpdateCustomDomain() {
 			resp, err := tc.client.UpdateCustomDomain(tc.ctx, tc.queryID, tc.updateInput)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(t.Context(), suite)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateBulkCustomDomain() {
-	t := suite.T()
-
+func TestMutationCreateBulkCustomDomain(t *testing.T) {
 	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
 	testCases := []struct {
@@ -485,24 +474,23 @@ func (suite *GraphTestSuite) TestMutationCreateBulkCustomDomain() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateBulkCustomDomain(tc.ctx, tc.requests)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.Len(t, resp.CreateBulkCustomDomain.CustomDomains, tc.numExpected)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.CreateBulkCustomDomain.CustomDomains, tc.numExpected))
 
 			// Verify each domain was created correctly
 			for i, request := range tc.requests {
-				assert.Equal(t, request.CnameRecord, resp.CreateBulkCustomDomain.CustomDomains[i].CnameRecord)
-				assert.Equal(t, request.MappableDomainID, resp.CreateBulkCustomDomain.CustomDomains[i].MappableDomainID)
-				assert.Equal(t, enums.CustomDomainStatusPending, resp.CreateBulkCustomDomain.CustomDomains[i].Status)
-				assert.Equal(t, resp.CreateBulkCustomDomain.CustomDomains[i].TxtRecordSubdomain, "_olverify")
-				assert.NotEmpty(t, resp.CreateBulkCustomDomain.CustomDomains[i].TxtRecordValue)
+				assert.Check(t, is.Equal(request.CnameRecord, resp.CreateBulkCustomDomain.CustomDomains[i].CnameRecord))
+				assert.Check(t, is.Equal(request.MappableDomainID, resp.CreateBulkCustomDomain.CustomDomains[i].MappableDomainID))
+				assert.Check(t, is.Equal(enums.CustomDomainStatusPending, resp.CreateBulkCustomDomain.CustomDomains[i].Status))
+				assert.Check(t, is.Equal(resp.CreateBulkCustomDomain.CustomDomains[i].TxtRecordSubdomain, "_olverify"))
+				assert.Check(t, len(resp.CreateBulkCustomDomain.CustomDomains[i].TxtRecordValue) != 0)
 			}
 
 			// Clean up created domains
@@ -510,16 +498,14 @@ func (suite *GraphTestSuite) TestMutationCreateBulkCustomDomain() {
 				(&Cleanup[*generated.CustomDomainDeleteOne]{
 					client: suite.client.db.CustomDomain,
 					ID:     domain.ID,
-				}).MustDelete(tc.ctx, suite)
+				}).MustDelete(tc.ctx, t)
 			}
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(t.Context(), suite)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestGetAllCustomDomains() {
-	t := suite.T()
-
+func TestGetAllCustomDomains(t *testing.T) {
 	// Create test mappable domain
 	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
@@ -546,7 +532,7 @@ func (suite *GraphTestSuite) TestGetAllCustomDomains() {
 		name            string
 		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
-		expectedResults int
+		expectedResults int64
 		expectedErr     string
 	}{
 		{
@@ -580,53 +566,50 @@ func (suite *GraphTestSuite) TestGetAllCustomDomains() {
 			resp, err := tc.client.GetAllCustomDomains(tc.ctx)
 
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CustomDomains)
-			require.NotNil(t, resp.CustomDomains.Edges)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, resp.CustomDomains.Edges != nil)
 
 			// Verify the number of results
-			assert.Len(t, resp.CustomDomains.Edges, tc.expectedResults)
-			assert.Equal(t, int64(tc.expectedResults), resp.CustomDomains.TotalCount)
+			assert.Check(t, is.Len(resp.CustomDomains.Edges, int(tc.expectedResults)))
+			assert.Check(t, is.Equal(tc.expectedResults, resp.CustomDomains.TotalCount))
 
 			// Verify pagination info
-			assert.NotNil(t, resp.CustomDomains.PageInfo)
+			assert.Check(t, resp.CustomDomains.PageInfo.StartCursor != nil)
 
 			// If we have results, verify the structure of the first result
 			if tc.expectedResults > 0 {
 				firstNode := resp.CustomDomains.Edges[0].Node
-				assert.NotEmpty(t, firstNode.ID)
-				assert.NotEmpty(t, firstNode.CnameRecord)
-				assert.NotEmpty(t, firstNode.MappableDomainID)
-				assert.NotEmpty(t, firstNode.OwnerID)
-				assert.NotNil(t, firstNode.CreatedAt)
-				assert.NotEmpty(t, firstNode.Status)
-				assert.NotEmpty(t, firstNode.TxtRecordSubdomain)
-				assert.NotEmpty(t, firstNode.TxtRecordValue)
+				assert.Check(t, len(firstNode.ID) != 0)
+				assert.Check(t, len(firstNode.CnameRecord) != 0)
+				assert.Check(t, len(firstNode.MappableDomainID) != 0)
+				assert.Check(t, firstNode.OwnerID != nil)
+				assert.Check(t, firstNode.CreatedAt != nil)
+				assert.Check(t, len(firstNode.Status) != 0)
+				assert.Check(t, len(firstNode.TxtRecordSubdomain) != 0)
+				assert.Check(t, len(firstNode.TxtRecordValue) != 0)
 			}
 
 			// Verify that users only see domains from their organization
 			if tc.ctx == testUser1.UserCtx || tc.ctx == viewOnlyUser.UserCtx {
 				for _, edge := range resp.CustomDomains.Edges {
-					assert.Equal(t, testUser1.OrganizationID, *edge.Node.OwnerID)
+					assert.Check(t, is.Equal(testUser1.OrganizationID, *edge.Node.OwnerID))
 				}
 			} else if tc.ctx == testUser2.UserCtx {
 				for _, edge := range resp.CustomDomains.Edges {
-					assert.Equal(t, testUser2.OrganizationID, *edge.Node.OwnerID)
+					assert.Check(t, is.Equal(testUser2.OrganizationID, *edge.Node.OwnerID))
 				}
 			}
 		})
 	}
 
 	// Clean up created domains
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain1.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain2.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain3.ID}).MustDelete(testUser2.UserCtx, suite)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(systemAdminUser.UserCtx, suite)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, IDs: []string{customDomain1.ID, customDomain2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain3.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }

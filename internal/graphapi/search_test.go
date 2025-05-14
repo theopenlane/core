@@ -5,34 +5,49 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestGlobalSearch() {
-	t := suite.T()
+func TestGlobalSearch(t *testing.T) {
+	t.Parallel()
 
-	// create multiple objects to be searched by testUser1
+	// create a new user for this test
+	testSearchUser := suite.userBuilder(context.Background(), t)
+
+	testViewOnlyUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testSearchUser.UserCtx, t, &testViewOnlyUser, enums.RoleMember, testSearchUser.OrganizationID)
+
+	// create multiple objects to be searched by testSearchUser
 	numGroups := 12
+	groupIDs := []string{}
 	for i := range numGroups {
-		(&GroupBuilder{client: suite.client, Name: fmt.Sprintf("Test Group %d", i)}).MustNew(testUser1.UserCtx, t)
+		group := (&GroupBuilder{client: suite.client, Name: fmt.Sprintf("Test Group %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		groupIDs = append(groupIDs, group.ID)
 	}
 
 	numContacts := 3
+	contactIDs := []string{}
 	for i := range numContacts {
-		(&ContactBuilder{client: suite.client, Name: fmt.Sprintf("Test Contact %d", i)}).MustNew(testUser1.UserCtx, t)
+		contact := (&ContactBuilder{client: suite.client, Name: fmt.Sprintf("Test Contact %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		contactIDs = append(contactIDs, contact.ID)
 	}
 
 	numPrograms := 3
+	programIDs := []string{}
 	for i := range numPrograms {
-		(&ProgramBuilder{client: suite.client, Name: fmt.Sprintf("Test Program %d", i)}).MustNew(testUser1.UserCtx, t)
+		program := (&ProgramBuilder{client: suite.client, Name: fmt.Sprintf("Test Program %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		programIDs = append(programIDs, program.ID)
 	}
 
 	numControls := 3
+	controlIDs := []string{}
 	for i := range numControls {
-		(&ControlBuilder{client: suite.client, Name: fmt.Sprintf("Test Control %d", i)}).MustNew(testUser1.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, Name: fmt.Sprintf("Test Control %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		controlIDs = append(controlIDs, control.ID)
 	}
 
 	testCases := []struct {
@@ -50,7 +65,7 @@ func (suite *GraphTestSuite) TestGlobalSearch() {
 		{
 			name:             "happy path",
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              testSearchUser.UserCtx,
 			query:            "Test",
 			expectedResults:  21, // this is total count of all objects searched
 			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
@@ -61,7 +76,7 @@ func (suite *GraphTestSuite) TestGlobalSearch() {
 		{
 			name:             "happy path, case insensitive",
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              testSearchUser.UserCtx,
 			query:            "TEST",
 			expectedResults:  21, // this is total count of all objects searched
 			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
@@ -72,7 +87,7 @@ func (suite *GraphTestSuite) TestGlobalSearch() {
 		{
 			name:             "happy path, case insensitive",
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              testSearchUser.UserCtx,
 			query:            "con",
 			expectedResults:  6, // this is total count of all objects searched
 			expectedGroups:   0,
@@ -83,7 +98,7 @@ func (suite *GraphTestSuite) TestGlobalSearch() {
 		{
 			name:             "happy path, view only user",
 			client:           suite.client.api,
-			ctx:              viewOnlyUser.UserCtx,
+			ctx:              testViewOnlyUser.UserCtx,
 			query:            "Test",
 			expectedResults:  15, // this is total count of all objects searched
 			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
@@ -94,7 +109,7 @@ func (suite *GraphTestSuite) TestGlobalSearch() {
 		{
 			name:            "no results",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testSearchUser.UserCtx,
 			query:           "NonExistent",
 			expectedResults: 0,
 		},
@@ -108,7 +123,7 @@ func (suite *GraphTestSuite) TestGlobalSearch() {
 		{
 			name:        "empty query",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testSearchUser.UserCtx,
 			query:       "",
 			errExpected: "search query is too short",
 		},
@@ -118,49 +133,59 @@ func (suite *GraphTestSuite) TestGlobalSearch() {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GlobalSearch(tc.ctx, tc.query)
 			if tc.errExpected != "" {
-				require.Error(t, err)
-				require.Contains(t, err.Error(), tc.errExpected)
+
+				assert.Assert(t, is.Contains(err.Error(), tc.errExpected))
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			if tc.expectedResults > 0 {
-				assert.Equal(t, resp.Search.TotalCount, int64(tc.expectedResults))
+				assert.Check(t, is.Equal(resp.Search.TotalCount, int64(tc.expectedResults)))
 
 				if tc.expectedGroups > 0 {
-					assert.Len(t, resp.Search.Groups.Edges, tc.expectedGroups)
-					assert.Equal(t, resp.Search.Groups.TotalCount, int64(numGroups))
-					assert.True(t, resp.Search.Groups.PageInfo.HasNextPage)
-					assert.False(t, resp.Search.Groups.PageInfo.HasPreviousPage)
+					assert.Assert(t, resp.Search.Groups != nil)
+					assert.Check(t, is.Len(resp.Search.Groups.Edges, tc.expectedGroups))
+					assert.Check(t, is.Equal(resp.Search.Groups.TotalCount, int64(numGroups)))
+					assert.Check(t, resp.Search.Groups.PageInfo.HasNextPage)
+					assert.Check(t, !resp.Search.Groups.PageInfo.HasPreviousPage)
 				} else {
-					assert.Empty(t, resp.Search.Groups)
+					assert.Check(t, is.Nil(resp.Search.Groups))
 				}
 
 				if tc.expectedContacts > 0 {
-					assert.Len(t, resp.Search.Contacts.Edges, tc.expectedContacts)
+					assert.Assert(t, resp.Search.Contacts != nil)
+					assert.Check(t, is.Len(resp.Search.Contacts.Edges, tc.expectedContacts))
 				} else {
-					assert.Empty(t, resp.Search.Contacts)
+					assert.Check(t, is.Nil(resp.Search.Contacts))
 				}
 
 				if tc.expectedPrograms > 0 {
-					assert.Len(t, resp.Search.Programs.Edges, tc.expectedPrograms)
+					assert.Assert(t, resp.Search.Programs != nil)
+					assert.Check(t, is.Len(resp.Search.Programs.Edges, tc.expectedPrograms))
 				} else {
-					assert.Empty(t, resp.Search.Programs)
+					assert.Check(t, is.Nil(resp.Search.Programs))
 				}
 
 				if tc.expectedControls > 0 {
-					assert.Len(t, resp.Search.Controls.Edges, tc.expectedControls)
+					assert.Assert(t, resp.Search.Controls != nil)
+					assert.Check(t, is.Len(resp.Search.Controls.Edges, tc.expectedControls))
 				} else {
-					assert.Empty(t, resp.Search.Controls)
+					assert.Check(t, is.Nil(resp.Search.Controls))
 				}
 			} else {
-				assert.Empty(t, resp.Search.Groups)
-				assert.Empty(t, resp.Search.Contacts)
-				assert.Empty(t, resp.Search.Programs)
-				assert.Empty(t, resp.Search.Controls)
+				assert.Check(t, is.Nil(resp.Search.Groups))
+				assert.Check(t, is.Nil(resp.Search.Contacts))
+				assert.Check(t, is.Nil(resp.Search.Programs))
+				assert.Check(t, is.Nil(resp.Search.Controls))
 			}
 		})
 	}
+
+	// clean up the created objects
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: groupIDs}).MustDelete(testSearchUser.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, IDs: contactIDs}).MustDelete(testSearchUser.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programIDs}).MustDelete(testSearchUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testSearchUser.UserCtx, t)
 }

@@ -7,11 +7,12 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
@@ -19,9 +20,7 @@ import (
 	"github.com/theopenlane/core/pkg/testutils"
 )
 
-func (suite *GraphTestSuite) TestQueryTask() {
-	t := suite.T()
-
+func TestQueryTask(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -57,42 +56,47 @@ func (suite *GraphTestSuite) TestQueryTask() {
 			resp, err := tc.client.GetTaskByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Equal(t, tc.queryID, resp.Task.ID)
-			assert.NotEmpty(t, resp.Task.Title)
-			assert.NotEmpty(t, resp.Task.Details)
-			assert.NotEmpty(t, resp.Task.Status)
+			assert.Check(t, is.Equal(tc.queryID, resp.Task.ID))
+			assert.Check(t, len(resp.Task.Title) != 0)
+			assert.Check(t, resp.Task.Details != nil)
+			assert.Check(t, len(resp.Task.Status) != 0)
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryTasks() {
-	t := suite.T()
-
+func TestQueryTasks(t *testing.T) {
 	// create a bunch to test the pagination with different users
 	// works with overfetching
 	numTasks := 10
+	org1TaskIDs := []string{}
+	org2TaskIDs := []string{}
 	for range numTasks {
-		(&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		(&TaskBuilder{client: suite.client}).MustNew(viewOnlyUser.UserCtx, t)
-		(&TaskBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-		(&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+		t1 := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+		t2 := (&TaskBuilder{client: suite.client}).MustNew(viewOnlyUser2.UserCtx, t)
+		t3 := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
+
+		t4 := (&TaskBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+		org2TaskIDs = append(org2TaskIDs, t4.ID)
 	}
 
 	userCtxPersonalOrg := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.PersonalOrgID)
 
 	// add a task for the user to another org; this should not be returned for JWT auth, since it's
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
-	(&TaskBuilder{client: suite.client, AssigneeID: testUser1.ID}).MustNew(userCtxPersonalOrg, t)
+	taskPersonal := (&TaskBuilder{client: suite.client, AssigneeID: testUser1.ID}).MustNew(userCtxPersonalOrg, t)
 
 	testCases := []struct {
 		name            string
@@ -109,9 +113,9 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 			totalCount:      30,
 		},
 		{
-			name:            "happy path",
+			name:            "happy path, view only user",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             viewOnlyUser2.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 			totalCount:      10,
 		},
@@ -135,17 +139,23 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			first := int64(10)
 			resp, err := tc.client.GetTasks(tc.ctx, &first, nil, nil)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.Tasks.Edges, tc.expectedResults)
-			assert.Equal(t, tc.totalCount, resp.Tasks.TotalCount)
+			assert.Check(t, is.Len(resp.Tasks.Edges, tc.expectedResults))
+			assert.Check(t, is.Equal(tc.totalCount, resp.Tasks.TotalCount))
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskPersonal.ID}).MustDelete(userCtxPersonalOrg, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateTask() {
-	t := suite.T()
+func TestMutationCreateTask(t *testing.T) {
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	userCtx := auth.NewTestContextWithOrgID(om.UserID, om.OrganizationID)
 
 	testCases := []struct {
 		name        string
@@ -170,7 +180,7 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 				Status:     &enums.TaskStatusInProgress,
 				Category:   lo.ToPtr("evidence upload"),
 				Due:        lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
-				AssigneeID: &viewOnlyUser.ID, // assign the task to another user
+				AssigneeID: &om.UserID, // assign the task to another user
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -217,106 +227,113 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateTask(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Equal(t, tc.request.Title, resp.CreateTask.Task.Title)
+			assert.Check(t, is.Equal(tc.request.Title, resp.CreateTask.Task.Title))
 
-			assert.NotEmpty(t, resp.CreateTask.Task.DisplayID)
-			assert.Contains(t, resp.CreateTask.Task.DisplayID, "TSK-")
+			assert.Check(t, len(resp.CreateTask.Task.DisplayID) != 0)
+			assert.Check(t, is.Contains(resp.CreateTask.Task.DisplayID, "TSK-"))
 
-			assert.NotNil(t, resp.CreateTask.Task.OwnerID)
+			assert.Check(t, resp.CreateTask.Task.OwnerID != nil)
 
 			if tc.request.Details == nil {
-				assert.Empty(t, resp.CreateTask.Task.Details)
+				assert.Check(t, is.Equal(*resp.CreateTask.Task.Details, ""))
 			} else {
-				assert.Equal(t, tc.request.Details, resp.CreateTask.Task.Details)
+				assert.Check(t, is.Equal(*tc.request.Details, *resp.CreateTask.Task.Details))
 			}
 
 			if tc.request.Status == nil {
-				assert.Equal(t, enums.TaskStatusOpen, resp.CreateTask.Task.Status)
+				assert.Check(t, is.Equal(enums.TaskStatusOpen, resp.CreateTask.Task.Status))
 			} else {
-				assert.Equal(t, *tc.request.Status, resp.CreateTask.Task.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, resp.CreateTask.Task.Status))
 			}
 
 			if tc.request.Details == nil {
-				assert.Empty(t, resp.CreateTask.Task.Details)
+				assert.Check(t, is.Equal(*resp.CreateTask.Task.Details, ""))
 			} else {
-				assert.Equal(t, tc.request.Details, resp.CreateTask.Task.Details)
+				assert.Check(t, is.Equal(*tc.request.Details, *resp.CreateTask.Task.Details))
 			}
 
 			if tc.request.Category == nil {
-				assert.Empty(t, resp.CreateTask.Task.Category)
+				assert.Check(t, is.Equal(*resp.CreateTask.Task.Category, ""))
 			} else {
-				assert.Equal(t, tc.request.Category, resp.CreateTask.Task.Category)
+				assert.Check(t, is.Equal(*tc.request.Category, *resp.CreateTask.Task.Category))
 			}
 
 			if tc.request.Due == nil {
-				assert.Empty(t, resp.CreateTask.Task.Due)
+				assert.Check(t, is.Equal(*resp.CreateTask.Task.Due, models.DateTime(time.Time{})))
 			} else {
-				assert.WithinDuration(t, time.Time(*tc.request.Due), time.Time(*resp.CreateTask.Task.Due), 10*time.Second)
+				assert.Assert(t, resp.CreateTask.Task.Due != nil)
+				diff := time.Time(*resp.CreateTask.Task.Due).Sub(time.Time(*tc.request.Due))
+				assert.Check(t, diff >= -10*time.Second && diff <= 10*time.Second, "time difference is not within 10 seconds")
 			}
 
 			// when using an API token, the assigner is not set
 			if tc.client == suite.client.apiWithToken {
-				assert.Nil(t, resp.CreateTask.Task.Assigner)
+				assert.Check(t, is.Nil(resp.CreateTask.Task.Assigner))
 			} else {
 				// otherwise it defaults to the authorized user
-				assert.NotNil(t, resp.CreateTask.Task.Assigner)
-				assert.Equal(t, testUser1.ID, resp.CreateTask.Task.Assigner.ID)
+				assert.Check(t, resp.CreateTask.Task.Assigner != nil)
+				assert.Check(t, is.Equal(testUser1.ID, resp.CreateTask.Task.Assigner.ID))
 			}
 
 			if tc.request.AssigneeID == nil {
-				assert.Nil(t, resp.CreateTask.Task.Assignee)
+				assert.Check(t, is.Nil(resp.CreateTask.Task.Assignee))
 			} else {
-				require.NotNil(t, resp.CreateTask.Task.Assignee)
-
-				assert.Equal(t, *tc.request.AssigneeID, resp.CreateTask.Task.Assignee.ID)
+				assert.Assert(t, resp.CreateTask.Task.Assignee != nil)
+				assert.Check(t, is.Equal(*tc.request.AssigneeID, resp.CreateTask.Task.Assignee.ID))
 
 				// make sure the assignee can see the task
-				taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser.UserCtx, resp.CreateTask.Task.ID)
-				require.NoError(t, err)
-				assert.NotNil(t, taskResp)
+				taskResp, err := suite.client.api.GetTaskByID(userCtx, resp.CreateTask.Task.ID)
+				assert.NilError(t, err)
+				assert.Check(t, taskResp != nil)
 
 				// make sure the another org member cannot see the task
 				taskResp, err = suite.client.api.GetTaskByID(adminUser.UserCtx, resp.CreateTask.Task.ID)
-				require.Error(t, err)
-				assert.Nil(t, taskResp)
+
+				assert.Check(t, is.Nil(taskResp))
 			}
+
+			// cleanup
+			(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: resp.CreateTask.Task.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateTask() {
-	t := suite.T()
-
+func TestMutationUpdateTask(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	group := (&GroupBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
 	pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	pdfFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	taskCommentID := ""
 
+	assignee := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &assignee, enums.RoleMember, testUser1.OrganizationID)
+
 	// make sure the user cannot can see the task before they are the assigner
 	taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, task.ID)
-	require.Error(t, err)
-	assert.Nil(t, taskResp)
+	assert.ErrorContains(t, err, notFoundErrorMsg)
+	assert.Check(t, is.Nil(taskResp))
 
 	// make sure the user cannot can see the task before they are the assignee
-	taskResp, err = suite.client.api.GetTaskByID(viewOnlyUser.UserCtx, task.ID)
-	require.Error(t, err)
-	assert.Nil(t, taskResp)
+	taskResp, err = suite.client.api.GetTaskByID(assignee.UserCtx, task.ID)
+	assert.ErrorContains(t, err, notFoundErrorMsg)
+	assert.Check(t, is.Nil(taskResp))
 
 	// NOTE: the tests and checks are ordered due to dependencies between updates
 	// if you update cases, they will most likely need to be added to the end of the list
@@ -408,7 +425,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 		{
 			name: "update assignee to view only user",
 			request: &openlaneclient.UpdateTaskInput{
-				AssigneeID: lo.ToPtr(viewOnlyUser.ID),
+				AssigneeID: lo.ToPtr(assignee.ID),
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -416,7 +433,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 		{
 			name: "update assignee to same user, should not error",
 			request: &openlaneclient.UpdateTaskInput{
-				AssigneeID: lo.ToPtr(viewOnlyUser.ID),
+				AssigneeID: lo.ToPtr(assignee.ID),
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -474,122 +491,117 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 
 			if tc.request != nil {
 				resp, err = tc.client.UpdateTask(tc.ctx, task.ID, *tc.request)
-				if tc.expectedErr != "" {
-					require.Error(t, err)
-					assert.ErrorContains(t, err, tc.expectedErr)
-					assert.Nil(t, resp)
-
-					return
-				}
 			} else if tc.updateCommentRequest != nil {
 				if len(tc.files) > 0 {
 					expectUploadNillable(t, suite.client.objectStore.Storage, tc.files)
 				}
+
 				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID, *tc.updateCommentRequest, tc.files)
 			}
 
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			if tc.request != nil {
-				require.NotNil(t, resp)
+				assert.Assert(t, resp != nil)
 
 				if tc.request.Details != nil {
-					assert.Equal(t, *tc.request.Details, *resp.UpdateTask.Task.Details)
+					assert.Check(t, is.Equal(*tc.request.Details, *resp.UpdateTask.Task.Details))
 				}
 
 				if tc.request.Status != nil {
-					assert.Equal(t, *tc.request.Status, resp.UpdateTask.Task.Status)
+					assert.Check(t, is.Equal(*tc.request.Status, resp.UpdateTask.Task.Status))
 				}
 
 				if tc.request.Details != nil {
-					assert.Equal(t, tc.request.Details, resp.UpdateTask.Task.Details)
+					assert.Check(t, is.DeepEqual(tc.request.Details, resp.UpdateTask.Task.Details))
 				}
 
 				if tc.request.Category != nil {
-					assert.Equal(t, *tc.request.Category, *resp.UpdateTask.Task.Category)
+					assert.Check(t, is.Equal(*tc.request.Category, *resp.UpdateTask.Task.Category))
 				}
 
 				if tc.request.ClearAssignee != nil {
-					assert.Nil(t, resp.UpdateTask.Task.Assignee)
+					assert.Check(t, is.Nil(resp.UpdateTask.Task.Assignee))
 
 					// the previous assignee should no longer be able to see the task
-					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser.UserCtx, resp.UpdateTask.Task.ID)
-					assert.Error(t, err)
-					assert.Nil(t, taskResp)
+					taskResp, err := suite.client.api.GetTaskByID(assignee.UserCtx, resp.UpdateTask.Task.ID)
+					assert.Check(t, is.ErrorContains(err, ""))
+					assert.Check(t, is.Nil(taskResp))
 				}
 
 				if tc.request.ClearAssigner != nil {
-					assert.Nil(t, resp.UpdateTask.Task.Assignee)
+					assert.Check(t, is.Nil(resp.UpdateTask.Task.Assignee))
 
 					// the previous assigner should no longer be able to see the task
 					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
-					assert.Error(t, err)
-					assert.Nil(t, taskResp)
+					assert.Check(t, is.ErrorContains(err, ""))
+					assert.Check(t, is.Nil(taskResp))
 				}
 
 				if tc.request.AssignerID != nil {
-					assert.NotNil(t, resp.UpdateTask.Task.Assigner)
-					assert.Equal(t, *tc.request.AssignerID, resp.UpdateTask.Task.Assigner.ID)
+					assert.Check(t, resp.UpdateTask.Task.Assigner != nil)
+					assert.Check(t, is.Equal(*tc.request.AssignerID, resp.UpdateTask.Task.Assigner.ID))
 
 					// make sure the assigner can see the task
 					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
-					assert.NoError(t, err)
-					assert.NotNil(t, taskResp)
+					assert.Check(t, err)
+					assert.Check(t, taskResp != nil)
 
 					// make sure the original creator can still see the task
 					taskResp, err = suite.client.api.GetTaskByID(adminUser.UserCtx, resp.UpdateTask.Task.ID)
-					require.NoError(t, err)
-					assert.NotNil(t, taskResp)
+					assert.NilError(t, err)
+					assert.Check(t, taskResp != nil)
 				}
 
 				if tc.request.AddComment != nil {
-					assert.NotEmpty(t, resp.UpdateTask.Task.Comments.Edges)
-					assert.Equal(t, tc.request.AddComment.Text, resp.UpdateTask.Task.Comments.Edges[0].Node.Text)
+					assert.Check(t, len(resp.UpdateTask.Task.Comments.Edges) != 0)
+					assert.Check(t, is.Equal(tc.request.AddComment.Text, resp.UpdateTask.Task.Comments.Edges[0].Node.Text))
 
 					// there should only be one comment
-					require.Len(t, resp.UpdateTask.Task.Comments.Edges, 1)
+					assert.Assert(t, is.Len(resp.UpdateTask.Task.Comments.Edges, 1))
 					taskCommentID = resp.UpdateTask.Task.Comments.Edges[0].Node.ID
 
 					// user shouldn't be able to see the comment
-					checkResp, err := suite.client.api.GetNoteByID(viewOnlyUser.UserCtx, taskCommentID)
-					assert.Error(t, err)
-					assert.Nil(t, checkResp)
+					checkResp, err := suite.client.api.GetNoteByID(assignee.UserCtx, taskCommentID)
+					assert.Check(t, is.ErrorContains(err, ""))
+					assert.Check(t, is.Nil(checkResp))
 
 					// user should be able to see the comment since they created the task
 					checkResp, err = suite.client.api.GetNoteByID(adminUser.UserCtx, taskCommentID)
-					assert.NoError(t, err)
-					assert.NotNil(t, checkResp)
+					assert.Check(t, err)
+					assert.Check(t, checkResp != nil)
 
 					// org owner should be able to see the comment
 					checkResp, err = suite.client.api.GetNoteByID(testUser1.UserCtx, taskCommentID)
-					assert.NoError(t, err)
-					assert.NotNil(t, checkResp)
+					assert.Check(t, err)
+					assert.Check(t, checkResp != nil)
 				} else if tc.request.DeleteComment != nil {
 					// should not have any comments
-					assert.Len(t, resp.UpdateTask.Task.Comments.Edges, 0)
+					assert.Check(t, is.Len(resp.UpdateTask.Task.Comments.Edges, 0))
 				}
 			} else if tc.updateCommentRequest != nil {
-				require.NotNil(t, commentResp)
+				assert.Assert(t, commentResp != nil)
 
 				// should only have the original comment
-				require.Len(t, commentResp.UpdateTaskComment.Task.Comments.Edges, 1)
-				assert.Equal(t, *tc.updateCommentRequest.Text, commentResp.UpdateTaskComment.Task.Comments.Edges[0].Node.Text)
+				assert.Assert(t, is.Len(commentResp.UpdateTaskComment.Task.Comments.Edges, 1))
+				assert.Check(t, is.Equal(*tc.updateCommentRequest.Text, commentResp.UpdateTaskComment.Task.Comments.Edges[0].Node.Text))
 			}
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteTask() {
-	t := suite.T()
-
+func TestMutationDeleteTask(t *testing.T) {
 	task1 := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	task2 := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -639,16 +651,15 @@ func (suite *GraphTestSuite) TestMutationDeleteTask() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteTask(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteTask.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTask.DeletedID))
 		})
 	}
 }

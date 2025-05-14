@@ -68,3 +68,5 @@ results.txt
 *.config.yaml
 .task
 .hermit
+
+junit.xml
