@@ -10,7 +10,6 @@ import (
 )
 
 func TestAuditLogList(t *testing.T) {
-
 	testCases := []struct {
 		name     string
 		queryID  string
@@ -30,7 +29,6 @@ func TestAuditLogList(t *testing.T) {
 			resp, err := tc.client.AuditLogs(testUser1.UserCtx)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 

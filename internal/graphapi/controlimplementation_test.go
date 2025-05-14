@@ -131,7 +131,6 @@ func TestQueryControlImplementation(t *testing.T) {
 			resp, err := tc.client.GetControlImplementationByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -364,7 +363,6 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateControlImplementation(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -588,7 +586,6 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateControlImplementation(tc.ctx, tc.id, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -700,7 +697,6 @@ func TestMutationDeleteControlImplementation(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteControlImplementation(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

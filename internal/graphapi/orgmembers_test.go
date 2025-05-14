@@ -16,6 +16,8 @@ import (
 )
 
 func TestQueryOrgMembers(t *testing.T) {
+	t.Parallel()
+
 	testOrgMemberUser := suite.userBuilder(context.Background(), t)
 	org1Member := (&OrgMemberBuilder{client: suite.client}).MustNew(testOrgMemberUser.UserCtx, t)
 
@@ -218,7 +220,6 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			resp, err := suite.client.api.AddUserToOrgWithRole(tc.ctx, input)
 
 			if tc.errMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return
@@ -301,7 +302,6 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 			resp, err := suite.client.api.UpdateUserRoleInOrg(testUser1.UserCtx, tc.orgMemberID, input)
 
 			if tc.errMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return

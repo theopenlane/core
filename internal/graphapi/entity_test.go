@@ -56,7 +56,6 @@ func TestQueryEntity(t *testing.T) {
 			resp, err := tc.client.GetEntityByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -457,7 +456,6 @@ func TestMutationDeleteEntity(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteEntity(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

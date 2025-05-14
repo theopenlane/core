@@ -56,7 +56,6 @@ func TestQueryTask(t *testing.T) {
 			resp, err := tc.client.GetTaskByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -155,7 +154,6 @@ func TestQueryTasks(t *testing.T) {
 }
 
 func TestMutationCreateTask(t *testing.T) {
-
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	userCtx := auth.NewTestContextWithOrgID(om.UserID, om.OrganizationID)
 
@@ -493,17 +491,11 @@ func TestMutationUpdateTask(t *testing.T) {
 
 			if tc.request != nil {
 				resp, err = tc.client.UpdateTask(tc.ctx, task.ID, *tc.request)
-				if tc.expectedErr != "" {
-
-					assert.ErrorContains(t, err, tc.expectedErr)
-					assert.Check(t, is.Nil(resp))
-
-					return
-				}
 			} else if tc.updateCommentRequest != nil {
 				if len(tc.files) > 0 {
 					expectUploadNillable(t, suite.client.objectStore.Storage, tc.files)
 				}
+
 				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID, *tc.updateCommentRequest, tc.files)
 			}
 
@@ -659,7 +651,6 @@ func TestMutationDeleteTask(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteTask(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

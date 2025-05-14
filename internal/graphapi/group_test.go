@@ -360,7 +360,6 @@ func TestMutationCreateGroup(t *testing.T) {
 			resp, err := tc.client.CreateGroup(tc.ctx, input)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -909,7 +908,6 @@ func TestMutationUpdateGroup(t *testing.T) {
 			resp, err := tc.client.UpdateGroup(tc.ctx, group.ID, tc.updateInput)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -1058,7 +1056,6 @@ func TestMutationDeleteGroup(t *testing.T) {
 			resp, err := tc.client.DeleteGroup(tc.ctx, tc.groupID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 

@@ -119,7 +119,6 @@ func TestQueryStandard(t *testing.T) {
 			resp, err := tc.client.GetStandardByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -390,7 +389,6 @@ func TestMutationCreateStandard(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateStandard(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -638,7 +636,6 @@ func TestMutationUpdateStandard(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateStandard(tc.ctx, tc.id, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -789,7 +786,6 @@ func TestMutationDeleteStandard(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteStandard(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

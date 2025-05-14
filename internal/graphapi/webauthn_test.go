@@ -51,7 +51,6 @@ func TestQueryPasskeys(t *testing.T) {
 			resp, err := tc.client.GetAllWebauthns(tc.ctx)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -69,7 +68,6 @@ func TestQueryPasskeys(t *testing.T) {
 }
 
 func TestMutationDeletePasskeys(t *testing.T) {
-
 	passkey := (&WebauthnBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	secondPasskey := (&WebauthnBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -111,7 +109,6 @@ func TestMutationDeletePasskeys(t *testing.T) {
 			resp, err := tc.client.DeleteWebauthn(tc.ctx, tc.passkeyID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 

@@ -47,7 +47,6 @@ func TestQueryUser(t *testing.T) {
 			resp, err := suite.client.api.GetUserByID(testUser1.UserCtx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -132,7 +131,6 @@ func TestMutationCreateUser(t *testing.T) {
 			resp, err := suite.client.api.CreateUser(testUser1.UserCtx, tc.userInput, tc.avatarFile)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -302,7 +300,6 @@ func TestMutationUpdateUser(t *testing.T) {
 			// update user
 			resp, err := suite.client.api.UpdateUser(reqCtx, user.ID, tc.updateInput, tc.avatarFile)
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -362,7 +359,6 @@ func TestMutationDeleteUser(t *testing.T) {
 			resp, err := suite.client.api.DeleteUser(reqCtx, tc.userID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 

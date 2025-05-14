@@ -67,7 +67,6 @@ func TestQueryInternalPolicy(t *testing.T) {
 			resp, err := tc.client.GetInternalPolicyByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -321,7 +320,6 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 
 			resp, err := tc.client.CreateInternalPolicy(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -526,7 +524,6 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateInternalPolicy(tc.ctx, internalPolicy.ID, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -626,7 +623,6 @@ func TestMutationDeleteInternalPolicy(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteInternalPolicy(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

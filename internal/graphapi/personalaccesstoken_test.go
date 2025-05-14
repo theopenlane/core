@@ -49,7 +49,6 @@ func TestQueryPersonalAccessToken(t *testing.T) {
 			resp, err := suite.client.api.GetPersonalAccessTokenByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 

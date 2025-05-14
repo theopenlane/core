@@ -19,7 +19,6 @@ import (
 )
 
 func TestQueryContact(t *testing.T) {
-
 	contact := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -68,7 +67,6 @@ func TestQueryContact(t *testing.T) {
 			resp, err := tc.client.GetContactByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -84,7 +82,6 @@ func TestQueryContact(t *testing.T) {
 }
 
 func TestQueryContacts(t *testing.T) {
-
 	contact1 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	contact2 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -141,7 +138,6 @@ func TestQueryContacts(t *testing.T) {
 }
 
 func TestMutationCreateContact(t *testing.T) {
-
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateContactInput
@@ -211,7 +207,6 @@ func TestMutationCreateContact(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateContact(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -266,7 +261,6 @@ func TestMutationCreateContact(t *testing.T) {
 }
 
 func TestMutationUpdateContact(t *testing.T) {
-
 	contact := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -366,7 +360,6 @@ func TestMutationUpdateContact(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateContact(tc.ctx, contact.ID, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -406,7 +399,6 @@ func TestMutationUpdateContact(t *testing.T) {
 }
 
 func TestMutationDeleteContact(t *testing.T) {
-
 	contact1 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	contact2 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	contact3 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -470,7 +462,6 @@ func TestMutationDeleteContact(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteContact(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

@@ -171,16 +171,16 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 				},
 			},
 		},
-		// {
-		// 	name:          "update default org to org without access",
-		// 	userSettingID: testUser1.UserInfo.Edges.Setting.ID,
-		// 	updateInput: openlaneclient.UpdateUserSettingInput{
-		// 		DefaultOrgID: &org2.ID,
-		// 	},
-		// 	client:   suite.client.api,
-		// 	ctx:      testUser1.UserCtx,
-		// 	errorMsg: "Organization with the specified ID was not found",
-		// },
+		{
+			name:          "update default org to org without access",
+			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateUserSettingInput{
+				DefaultOrgID: &org2.ID,
+			},
+			client:   suite.client.api,
+			ctx:      testUser1.UserCtx,
+			errorMsg: "Organization with the specified ID was not found",
+		},
 		{
 			name:          "update status to invalid",
 			userSettingID: testUser1.UserInfo.Edges.Setting.ID,
@@ -212,7 +212,6 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 			resp, err := tc.client.UpdateUserSetting(tc.ctx, tc.userSettingID, tc.updateInput)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 

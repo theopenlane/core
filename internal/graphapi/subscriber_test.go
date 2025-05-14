@@ -17,7 +17,6 @@ import (
 )
 
 func TestQuerySubscriber(t *testing.T) {
-
 	subscriber := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -84,7 +83,6 @@ func TestQuerySubscriber(t *testing.T) {
 			resp, err := tc.client.GetSubscriberByEmail(tc.ctx, tc.email)
 
 			if tc.wantErr {
-
 				assert.Check(t, is.Nil(resp))
 
 				errors := parseClientError(t, err)
@@ -108,7 +106,6 @@ func TestQuerySubscriber(t *testing.T) {
 }
 
 func TestQuerySubscribers(t *testing.T) {
-
 	s1 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	s2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	s3 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -212,7 +209,6 @@ func TestMutationCreateBulkSubscribers(t *testing.T) {
 			resp, err := tc.client.CreateBulkSubscriber(tc.ctx, input)
 
 			if tc.wantErr {
-
 				assert.Check(t, is.Nil(resp))
 
 				return
@@ -456,7 +452,6 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 }
 
 func TestUpdateSubscriber(t *testing.T) {
-
 	subscriber := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -570,7 +565,6 @@ func TestUpdateSubscriber(t *testing.T) {
 }
 
 func TestDeleteSubscriber(t *testing.T) {
-
 	subscriber1 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	subscriber3 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)

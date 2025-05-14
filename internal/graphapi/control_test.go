@@ -90,7 +90,6 @@ func TestQueryControl(t *testing.T) {
 			resp, err := tc.client.GetControlByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -422,7 +421,6 @@ func TestMutationCreateControl(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateControl(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -755,7 +753,6 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateControlsByClone(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -834,7 +831,6 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				// ensure view only user can see the control created by the admin user
 				res, err := suite.client.api.GetControlByID(viewOnlyUser.UserCtx, control.ID)
 				if tc.expectNoAccessViewer {
-
 					assert.ErrorContains(t, err, notFoundErrorMsg)
 					assert.Check(t, is.Nil(res))
 				} else {

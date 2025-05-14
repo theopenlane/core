@@ -79,7 +79,6 @@ func TestQueryGroupMembers(t *testing.T) {
 			resp, err := tc.client.GetGroupMembersByGroupID(tc.ctx, &whereInput)
 
 			if tc.errExpected {
-
 				assert.ErrorContains(t, err, notFoundErrorMsg)
 
 				return
@@ -227,7 +226,6 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 			resp, err := tc.client.AddUserToGroupWithRole(tc.ctx, input)
 
 			if tc.errMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return
@@ -329,7 +327,6 @@ func TestMutationUpdateGroupMembers(t *testing.T) {
 			resp, err := tc.client.UpdateUserRoleInGroup(tc.ctx, tc.groupMemberID, input)
 
 			if tc.errMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return
@@ -433,7 +430,6 @@ func TestMutationDeleteGroupMembers(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.RemoveUserFromGroup(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

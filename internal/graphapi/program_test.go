@@ -146,7 +146,6 @@ func TestQueryPrograms(t *testing.T) {
 			resp, err := tc.client.GetAllPrograms(tc.ctx)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -726,7 +725,6 @@ func TestMutationUpdateProgram(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateProgram(tc.ctx, program.ID, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

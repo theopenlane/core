@@ -13,6 +13,8 @@ import (
 )
 
 func TestMutationCreateProgramWithMembers(t *testing.T) {
+	t.Parallel()
+
 	// setup a separate user
 	user := suite.userBuilder(context.Background(), t)
 
@@ -118,6 +120,8 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 }
 
 func TestMutationCreateFullProgram(t *testing.T) {
+	t.Parallel()
+
 	// setup a separate user
 	user := suite.userBuilder(context.Background(), t)
 
@@ -246,7 +250,6 @@ func TestMutationCreateFullProgram(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateFullProgram(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

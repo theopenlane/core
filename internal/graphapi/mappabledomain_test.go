@@ -42,7 +42,6 @@ func TestQueryMappableDomainByID(t *testing.T) {
 			resp, err := tc.client.GetMappableDomainByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -151,7 +150,6 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateMappableDomain(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -243,7 +241,6 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateBulkMappableDomain(tc.ctx, tc.requests)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -317,12 +314,12 @@ func TestUpdateMappableDomain(t *testing.T) {
 			resp, err := tc.client.UpdateMappableDomain(tc.ctx, tc.queryID, tc.input)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
 				return
 			}
+
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 			assert.Check(t, is.DeepEqual(tc.input.Tags, resp.UpdateMappableDomain.MappableDomain.Tags))

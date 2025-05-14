@@ -384,7 +384,6 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 
 			resp, err := tc.client.CreateSubcontrol(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 

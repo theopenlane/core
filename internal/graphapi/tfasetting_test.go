@@ -257,7 +257,6 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 			resp, err := tc.client.UpdateTFASetting(tc.ctx, tc.input)
 
 			if tc.errMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errMsg)
 				assert.Check(t, is.Nil(resp))
 

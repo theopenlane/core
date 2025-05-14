@@ -16,7 +16,6 @@ import (
 )
 
 func TestQueryApiToken(t *testing.T) {
-
 	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -49,7 +48,6 @@ func TestQueryApiToken(t *testing.T) {
 			resp, err := suite.client.api.GetAPITokenByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -67,7 +65,6 @@ func TestQueryApiToken(t *testing.T) {
 }
 
 func TestQueryAPITokens(t *testing.T) {
-
 	token1 := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	token2 := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -85,7 +82,6 @@ func TestQueryAPITokens(t *testing.T) {
 			resp, err := suite.client.api.GetAllAPITokens(testUser1.UserCtx)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -106,7 +102,6 @@ func TestQueryAPITokens(t *testing.T) {
 }
 
 func TestMutationCreateAPIToken(t *testing.T) {
-
 	tokenDescription := gofakeit.Sentence(5)
 	expiration30Days := time.Now().Add(time.Hour * 24 * 30)
 
@@ -159,7 +154,6 @@ func TestMutationCreateAPIToken(t *testing.T) {
 			resp, err := suite.client.api.CreateAPIToken(testUser1.UserCtx, tc.input)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -195,7 +189,6 @@ func TestMutationCreateAPIToken(t *testing.T) {
 }
 
 func TestMutationUpdateAPIToken(t *testing.T) {
-
 	token := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	tokenDescription := gofakeit.Sentence(5)
@@ -257,7 +250,6 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 			resp, err := suite.client.api.UpdateAPIToken(tc.ctx, tc.tokenID, tc.input)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -291,7 +283,6 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 }
 
 func TestMutationDeleteAPIToken(t *testing.T) {
-
 	// create user to make tokens
 	user := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -328,7 +319,6 @@ func TestMutationDeleteAPIToken(t *testing.T) {
 			resp, err := suite.client.api.DeleteAPIToken(reqCtx, tc.tokenID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -343,7 +333,6 @@ func TestMutationDeleteAPIToken(t *testing.T) {
 }
 
 func TestLastUsedAPIToken(t *testing.T) {
-
 	// create new API token
 	token := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 

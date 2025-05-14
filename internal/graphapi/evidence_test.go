@@ -13,10 +13,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryEvidence(t *testing.T) {
-
 	program := (&ProgramBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
 	(&ProgramMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
@@ -96,7 +96,6 @@ func TestQueryEvidence(t *testing.T) {
 			resp, err := tc.client.GetEvidenceByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
@@ -522,7 +521,6 @@ func TestMutationUpdateEvidence(t *testing.T) {
 
 			resp, err := tc.client.UpdateEvidence(tc.ctx, evidence.ID, tc.request, tc.files)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -559,67 +557,67 @@ func TestMutationUpdateEvidence(t *testing.T) {
 	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidence.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-// func TestMutationDeleteEvidence(t *testing.T) {
-// // 	// create objects to be deleted
-// 	evidence1 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-// 	evidence2 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+func TestMutationDeleteEvidence(t *testing.T) {
+	// 	// create objects to be deleted
+	evidence1 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	evidence2 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
-// 	testCases := []struct {
-// 		name        string
-// 		idToDelete  string
-// 		client      openlaneclient.OpenlaneClient
-// 		ctx         context.Context
-// 		expectedErr string
-// 	}{
-// 		{
-// 			name:        "not authorized, delete",
-// 			idToDelete:  evidence1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser2.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 		{
-// 			name:       "happy path, delete",
-// 			idToDelete: evidence1.ID,
-// 			client:     suite.client.api,
-// 			ctx:        adminUser.UserCtx,
-// 		},
-// 		{
-// 			name:        "already deleted, not found",
-// 			idToDelete:  evidence1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: "not found",
-// 		},
-// 		{
-// 			name:       "happy path, delete using personal access token",
-// 			idToDelete: evidence2.ID,
-// 			client:     suite.client.apiWithPAT,
-// 			ctx:        context.Background(),
-// 		},
-// 		{
-// 			name:        "unknown id, not found",
-// 			idToDelete:  ulids.New().String(),
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 	}
+	testCases := []struct {
+		name        string
+		idToDelete  string
+		client      openlaneclient.OpenlaneClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name:        "not authorized, delete",
+			idToDelete:  evidence1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:       "happy path, delete",
+			idToDelete: evidence1.ID,
+			client:     suite.client.api,
+			ctx:        adminUser.UserCtx,
+		},
+		{
+			name:        "already deleted, not found",
+			idToDelete:  evidence1.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "not found",
+		},
+		{
+			name:       "happy path, delete using personal access token",
+			idToDelete: evidence2.ID,
+			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
+		},
+		{
+			name:        "unknown id, not found",
+			idToDelete:  ulids.New().String(),
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+	}
 
-// 	for _, tc := range testCases {
-// 		t.Run("Delete "+tc.name, func(t *testing.T) {
-// // 			resp, err := tc.client.DeleteEvidence(tc.ctx, tc.idToDelete)
-// 			if tc.expectedErr != "" {
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.DeleteEvidence(tc.ctx, tc.idToDelete)
+			if tc.expectedErr != "" {
 
-// 				assert.ErrorContains(t, err, tc.expectedErr)
-// 				assert.Check(t, is.Nil(resp))
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
 
-// 				return
-// 			}
+				return
+			}
 
-// 			assert.NilError(t, err)
-// 			assert.Assert(t, resp != nil)
-// 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteEvidence.DeletedID))
-// 		})
-// 	}
-// }
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteEvidence.DeletedID))
+		})
+	}
+}

@@ -120,7 +120,6 @@ func TestMutationCreateProgramMembers(t *testing.T) {
 			resp, err := tc.client.AddUserToProgramWithRole(tc.ctx, input)
 
 			if tc.errMsg != "" {
-
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return

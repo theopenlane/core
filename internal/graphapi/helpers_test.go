@@ -14,6 +14,8 @@ import (
 )
 
 func TestStripOperation(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name     string
 		input    string
@@ -60,6 +62,8 @@ func TestStripOperation(t *testing.T) {
 }
 
 func TestRetrieveObjectDetails(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name        string
 		fieldName   string
@@ -160,6 +164,8 @@ func TestRetrieveObjectDetails(t *testing.T) {
 	}
 }
 func TestGetOrgOwnerFromInput(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name        string
 		input       any
@@ -216,6 +222,8 @@ func TestGetOrgOwnerFromInput(t *testing.T) {
 	}
 }
 func TestGetBulkUploadOwnerInput(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name        string
 		input       []*generated.CreateProcedureInput // used as an example, should work with any type

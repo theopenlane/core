@@ -100,7 +100,6 @@ func TestQueryControlObjective(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.queryID, resp.ControlObjective.ID))
 			assert.Check(t, len(resp.ControlObjective.Name) != 0)
-
 		})
 	}
 
