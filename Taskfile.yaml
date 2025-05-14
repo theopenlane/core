@@ -140,12 +140,14 @@ tasks:
       - go tool cover -html=coverage.out
 
   go:testsum:local:
+    silent: true
     desc: runs tests using gotestsum
     aliases: [testsum]
     cmds:
-      - gotestsum --format-hide-empty-pkg
+      - gotestsum --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20
 
   go:testsum:slow:
+    silent: true
     desc: finds slow tests using gotestsum
     aliases: ['testsum:slow']
     cmds:
@@ -163,7 +165,7 @@ tasks:
     silent: true
     aliases: ['testsum:graph']
     cmds:
-      - go run gotest.tools/gotestsum@latest --junitfile coverage.out --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 --race
+      - gotestsum --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20
 
   go:fmt:
     desc: format all go code
