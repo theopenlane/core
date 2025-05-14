@@ -183,11 +183,12 @@ func TestMutationCreateTFASetting(t *testing.T) {
 func TestMutationUpdateTFASetting(t *testing.T) {
 	t.Parallel()
 
-	// create tfa settings for users
-	tfaSetting := (&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+	patClient := suite.setupPatClient(testUser, t)
+	apiClient := suite.setupAPITokenClient(testUser.UserCtx, t)
 
-	// create one with not enabled by default
-	tfaSetting2 := (&TFASettingBuilder{client: suite.client, totpAllowed: lo.ToPtr(false)}).MustNew(testUser2.UserCtx, t)
+	// create tfa settings for users
+	tfaSetting := (&TFASettingBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	recoveryCodes := []string{}
 
@@ -205,14 +206,14 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 				Verified:    lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "regen codes using personal access token",
 			input: openlaneclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(true),
 			},
-			client: suite.client.apiWithPAT,
+			client: *patClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -220,7 +221,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 			input: openlaneclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(true),
 			},
-			client: suite.client.apiWithToken,
+			client: *apiClient,
 			ctx:    context.Background(),
 			errMsg: rout.ErrBadRequest.Error(),
 		},
@@ -230,7 +231,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 				RegenBackupCodes: lo.ToPtr(false),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "update totp to false should clear settings",
@@ -238,7 +239,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 				TotpAllowed: lo.ToPtr(false),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "update TotpAllowed to true should enable TFA",
@@ -246,7 +247,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 				TotpAllowed: lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 	}
 
@@ -314,6 +315,5 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TFASettingDeleteOne]{client: suite.client.db.TFASetting, ID: tfaSetting.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TFASettingDeleteOne]{client: suite.client.db.TFASetting, ID: tfaSetting2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.TFASettingDeleteOne]{client: suite.client.db.TFASetting, ID: tfaSetting.ID}).MustDelete(testUser.UserCtx, t)
 }
