@@ -4,21 +4,19 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestMutationUpdateNote() {
-	t := suite.T()
-
+func TestMutationUpdateNote(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateTaskInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -82,39 +80,37 @@ func (suite *GraphTestSuite) TestMutationUpdateNote() {
 
 			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateTask)
-			require.NotNil(t, resp.UpdateTask.Task)
-			require.NotNil(t, resp.UpdateTask.Task.Comments)
-			require.NotEmpty(t, resp.UpdateTask.Task.Comments.Edges)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, len(resp.UpdateTask.Task.Comments.Edges) != 0)
 
-			assert.Equal(t, tc.request.AddComment.Text, resp.UpdateTask.Task.Comments.Edges[idx].Node.Text)
+			assert.Check(t, is.Equal(tc.request.AddComment.Text, resp.UpdateTask.Task.Comments.Edges[idx].Node.Text))
 
 			noteID := resp.UpdateTask.Task.Comments.Edges[idx].Node.ID
 
 			_, err = tc.client.GetNoteByID(tc.ctx, noteID)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 		})
 	}
+
+	// clean up
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteNote() {
-	t := suite.T()
-
+func TestMutationDeleteNote(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		request     func() openlaneclient.UpdateTaskInput // changed to function to get fresh note ID each time
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -126,10 +122,9 @@ func (suite *GraphTestSuite) TestMutationDeleteNote() {
 						Text: "Note to be deleted",
 					},
 				})
-				require.NoError(t, err)
-				require.NotNil(t, createResp)
-				require.NotNil(t, createResp.UpdateTask.Task.Comments)
-				require.NotEmpty(t, createResp.UpdateTask.Task.Comments.Edges)
+				assert.NilError(t, err)
+				assert.Assert(t, createResp != nil)
+				assert.Assert(t, len(createResp.UpdateTask.Task.Comments.Edges) != 0)
 				noteID := createResp.UpdateTask.Task.Comments.Edges[0].Node.ID
 				return openlaneclient.UpdateTaskInput{
 					DeleteComment: &noteID,
@@ -147,10 +142,9 @@ func (suite *GraphTestSuite) TestMutationDeleteNote() {
 						Text: "Note to be deleted with PAT",
 					},
 				})
-				require.NoError(t, err)
-				require.NotNil(t, createResp)
-				require.NotNil(t, createResp.UpdateTask.Task.Comments)
-				require.NotEmpty(t, createResp.UpdateTask.Task.Comments.Edges)
+				assert.NilError(t, err)
+				assert.Assert(t, createResp != nil)
+				assert.Assert(t, len(createResp.UpdateTask.Task.Comments.Edges) != 0)
 				noteID := createResp.UpdateTask.Task.Comments.Edges[0].Node.ID
 				return openlaneclient.UpdateTaskInput{
 					DeleteComment: &noteID,
@@ -177,29 +171,27 @@ func (suite *GraphTestSuite) TestMutationDeleteNote() {
 			request := tc.request() // get fresh request with new note
 			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateTask)
-			require.NotNil(t, resp.UpdateTask.Task)
-			require.NotNil(t, resp.UpdateTask.Task.Comments)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			noteID := *request.DeleteComment
 			_, err = tc.client.GetNoteByID(tc.ctx, noteID)
-			assert.Error(t, err)
+			assert.Check(t, is.ErrorContains(err, ""))
 			assert.ErrorContains(t, err, "note not found")
 		})
 	}
+
+	// clean up
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryNote() {
-	t := suite.T()
-
+func TestQueryNote(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, task.ID, openlaneclient.UpdateTaskInput{
@@ -207,16 +199,15 @@ func (suite *GraphTestSuite) TestQueryNote() {
 			Text: "Note for querying",
 		},
 	})
-	require.NoError(t, err)
-	require.NotNil(t, createResp)
-	require.NotNil(t, createResp.UpdateTask.Task.Comments)
-	require.NotEmpty(t, createResp.UpdateTask.Task.Comments.Edges)
+	assert.NilError(t, err)
+	assert.Assert(t, createResp != nil)
+	assert.Assert(t, len(createResp.UpdateTask.Task.Comments.Edges) != 0)
 	noteID := createResp.UpdateTask.Task.Comments.Edges[0].Node.ID
 
 	testCases := []struct {
 		name        string
 		noteID      string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -252,16 +243,19 @@ func (suite *GraphTestSuite) TestQueryNote() {
 		t.Run("Query "+tc.name, func(t *testing.T) {
 			note, err := tc.client.GetNoteByID(tc.ctx, tc.noteID)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, note)
+				assert.Check(t, is.Nil(note))
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, note)
-			assert.Equal(t, tc.noteID, note.Note.ID)
-			assert.Equal(t, "Note for querying", note.Note.Text)
+			assert.NilError(t, err)
+			assert.Assert(t, note != nil)
+			assert.Check(t, is.Equal(tc.noteID, note.Note.ID))
+			assert.Check(t, is.Equal("Note for querying", note.Note.Text))
 		})
 	}
+
+	// clean up
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
 }

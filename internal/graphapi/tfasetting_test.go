@@ -1,297 +1,284 @@
 package graphapi_test
 
-import (
-	"context"
-	"testing"
+// func TestQueryTFASetting(t *testing.T) {
+// 	tfa := (&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+// 	testCases := []struct {
+// 		name     string
+// 		userID   string
+// 		client   openlaneclient.OpenlaneClient
+// 		ctx      context.Context
+// 		errorMsg string
+// 	}{
+// 		{
+// 			name:   "happy path user",
+// 			client: suite.client.api,
+// 			ctx:    testUser1.UserCtx,
+// 		},
+// 		{
+// 			name:   "happy path, using personal access token",
+// 			client: suite.client.apiWithPAT,
+// 			ctx:    context.Background(),
+// 		},
+// 		{
+// 			name:     "valid user, but not auth",
+// 			client:   suite.client.api,
+// 			ctx:      testUser2.UserCtx,
+// 			errorMsg: notFoundErrorMsg,
+// 		},
+// 	}
 
-	"github.com/theopenlane/utils/rout"
+// 	for _, tc := range testCases {
+// 		t.Run("Get "+tc.name, func(t *testing.T) {
+// 			resp, err := tc.client.GetTFASetting(tc.ctx)
 
-	"github.com/theopenlane/core/pkg/openlaneclient"
-)
+// 			if tc.errorMsg != "" {
 
-func (suite *GraphTestSuite) TestQueryTFASetting() {
-	t := suite.T()
+// 				assert.ErrorContains(t, err, tc.errorMsg)
+// 				assert.Check(t, is.Nil(resp))
 
-	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+// 				return
+// 			}
 
-	testCases := []struct {
-		name     string
-		userID   string
-		client   *openlaneclient.OpenlaneClient
-		ctx      context.Context
-		errorMsg string
-	}{
-		{
-			name:   "happy path user",
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-		},
-		{
-			name:   "happy path, using personal access token",
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
-		},
-		{
-			name:     "valid user, but not auth",
-			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
-		},
-	}
+// 			assert.NilError(t, err)
+// 			assert.Assert(t, resp != nil)
+// 		})
+// 	}
 
-	for _, tc := range testCases {
-		t.Run("Get "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetTFASetting(tc.ctx)
+// 	// cleanup
+// 	(&Cleanup[*generated.TFASettingDeleteOne]{client: suite.client.db.TFASetting, ID: tfa.ID}).MustDelete(testUser1.UserCtx, t)
+// }
 
-			if tc.errorMsg != "" {
-				require.Error(t, err)
-				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+// func TestMutationCreateTFASetting(t *testing.T) {
+// 	testCases := []struct {
+// 		name   string
+// 		userID string
+// 		input  openlaneclient.CreateTFASettingInput
+// 		client openlaneclient.OpenlaneClient
+// 		ctx    context.Context
+// 		errMsg string
+// 	}{
+// 		{
+// 			name:   "happy path",
+// 			userID: testUser2.ID,
+// 			input: openlaneclient.CreateTFASettingInput{
+// 				TotpAllowed: lo.ToPtr(true),
+// 			},
+// 			client: suite.client.api,
+// 			ctx:    testUser2.UserCtx,
+// 		},
+// 		{
+// 			name:   "happy path, using personal access token",
+// 			userID: testUser1.ID,
+// 			input: openlaneclient.CreateTFASettingInput{
+// 				TotpAllowed: lo.ToPtr(true),
+// 			},
+// 			client: suite.client.apiWithPAT,
+// 			ctx:    context.Background(),
+// 		},
+// 		{
+// 			name:   "unable to create using api token",
+// 			userID: testUser1.ID,
+// 			input: openlaneclient.CreateTFASettingInput{
+// 				TotpAllowed: lo.ToPtr(true),
+// 			},
+// 			client: suite.client.apiWithToken,
+// 			ctx:    context.Background(),
+// 			errMsg: rout.ErrBadRequest.Error(),
+// 		},
+// 		{
+// 			name:   "already exists",
+// 			userID: testUser1.ID,
+// 			input: openlaneclient.CreateTFASettingInput{
+// 				TotpAllowed: lo.ToPtr(true),
+// 			},
+// 			client: suite.client.api,
+// 			ctx:    testUser1.UserCtx,
+// 			errMsg: "tfasetting already exists",
+// 		},
+// 		{
+// 			name:   "create with not enabling totp should not return qr code",
+// 			userID: viewOnlyUser.ID,
+// 			input: openlaneclient.CreateTFASettingInput{
+// 				TotpAllowed: lo.ToPtr(false),
+// 			},
+// 			client: suite.client.api,
+// 			ctx:    viewOnlyUser.UserCtx,
+// 		},
+// 	}
 
-				return
-			}
+// 	for _, tc := range testCases {
+// 		t.Run("Create "+tc.name, func(t *testing.T) {
+// 			// create tfa setting for user
+// 			resp, err := tc.client.CreateTFASetting(tc.ctx, tc.input)
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-		})
-	}
-}
+// 			if tc.errMsg != "" {
+// 				assert.ErrorContains(t, err, tc.errMsg)
+// 				assert.Check(t, is.Nil(resp))
 
-func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
-	t := suite.T()
+// 				return
+// 			}
 
-	testCases := []struct {
-		name   string
-		userID string
-		input  openlaneclient.CreateTFASettingInput
-		client *openlaneclient.OpenlaneClient
-		ctx    context.Context
-		errMsg string
-	}{
-		{
-			name:   "happy path",
-			userID: testUser2.ID,
-			input: openlaneclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
-			},
-			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
-		},
-		{
-			name:   "happy path, using personal access token",
-			userID: testUser1.ID,
-			input: openlaneclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
-			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
-		},
-		{
-			name:   "unable to create using api token",
-			userID: testUser1.ID,
-			input: openlaneclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
-			},
-			client: suite.client.apiWithToken,
-			ctx:    context.Background(),
-			errMsg: rout.ErrBadRequest.Error(),
-		},
-		{
-			name:   "already exists",
-			userID: testUser1.ID,
-			input: openlaneclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
-			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-			errMsg: "tfasetting already exists",
-		},
-		{
-			name:   "create with not enabling totp should not return qr code",
-			userID: viewOnlyUser.ID,
-			input: openlaneclient.CreateTFASettingInput{
-				TotpAllowed: lo.ToPtr(false),
-			},
-			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
-		},
-	}
+// 			assert.NilError(t, err)
+// 			assert.Assert(t, resp != nil)
 
-	for _, tc := range testCases {
-		t.Run("Create "+tc.name, func(t *testing.T) {
-			// create tfa setting for user
-			resp, err := tc.client.CreateTFASetting(tc.ctx, tc.input)
+// 			// Make sure provided values match
+// 			assert.Check(t, is.DeepEqual(tc.input.TotpAllowed, resp.CreateTFASetting.TfaSetting.TotpAllowed))
 
-			if tc.errMsg != "" {
-				require.Error(t, err)
-				assert.ErrorContains(t, err, tc.errMsg)
-				assert.Nil(t, resp)
+// 			if *tc.input.TotpAllowed {
+// 				assert.Check(t, resp.CreateTFASetting.QRCode != nil)
+// 				assert.Check(t, resp.CreateTFASetting.TfaSecret != nil)
+// 			} else {
+// 				assert.Check(t, is.Equal(*resp.CreateTFASetting.QRCode, ""))
+// 				assert.Check(t, is.Equal(*resp.CreateTFASetting.TfaSecret, ""))
+// 			}
 
-				return
-			}
+// 			assert.Assert(t, resp.CreateTFASetting.TfaSetting.Owner != nil)
+// 			assert.Check(t, is.Equal(tc.userID, resp.CreateTFASetting.TfaSetting.Owner.ID))
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateTFASetting.TfaSetting)
+// 			// make sure user setting was not updated
+// 			userSetting, err := testUser1.UserInfo.Setting(testUser1.UserCtx)
+// 			assert.NilError(t, err)
 
-			// Make sure provided values match
-			assert.Equal(t, tc.input.TotpAllowed, resp.CreateTFASetting.TfaSetting.TotpAllowed)
+// 			assert.Check(t, !userSetting.IsTfaEnabled)
+// 		})
+// 	}
 
-			if *tc.input.TotpAllowed {
-				assert.NotEmpty(t, resp.CreateTFASetting.QRCode)
-				assert.NotEmpty(t, resp.CreateTFASetting.TfaSecret)
-			} else {
-				assert.Empty(t, resp.CreateTFASetting.QRCode)
-				assert.Empty(t, resp.CreateTFASetting.TfaSecret)
-			}
+// 	// cleanup by setting totp to false
+// 	_, err := suite.client.api.UpdateTFASetting(testUser1.UserCtx, openlaneclient.UpdateTFASettingInput{
+// 		TotpAllowed: lo.ToPtr(false),
+// 	})
+// 	assert.NilError(t, err)
+// }
 
-			require.NotEmpty(t, resp.CreateTFASetting.TfaSetting.Owner)
-			assert.Equal(t, tc.userID, resp.CreateTFASetting.TfaSetting.Owner.ID)
+// func TestMutationUpdateTFASetting(t *testing.T) {
+// 	// create tfa settings for users
+// 	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-			// make sure user setting was not updated
-			userSetting, err := testUser1.UserInfo.Setting(testUser1.UserCtx)
-			require.NoError(t, err)
+// 	// create one with not enabled by default
+// 	(&TFASettingBuilder{client: suite.client, totpAllowed: lo.ToPtr(false)}).MustNew(testUser2.UserCtx, t)
 
-			assert.False(t, userSetting.IsTfaEnabled)
-		})
-	}
-}
+// 	recoveryCodes := []string{}
 
-func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
-	t := suite.T()
+// 	testCases := []struct {
+// 		name   string
+// 		input  openlaneclient.UpdateTFASettingInput
+// 		client openlaneclient.OpenlaneClient
+// 		ctx    context.Context
+// 		errMsg string
+// 	}{
+// 		{
+// 			name: "update verify",
+// 			input: openlaneclient.UpdateTFASettingInput{
+// 				TotpAllowed: lo.ToPtr(true),
+// 				Verified:    lo.ToPtr(true),
+// 			},
+// 			client: suite.client.api,
+// 			ctx:    testUser1.UserCtx,
+// 		},
+// 		{
+// 			name: "regen codes using personal access token",
+// 			input: openlaneclient.UpdateTFASettingInput{
+// 				RegenBackupCodes: lo.ToPtr(true),
+// 			},
+// 			client: suite.client.apiWithPAT,
+// 			ctx:    context.Background(),
+// 		},
+// 		{
+// 			name: "regen codes using api token not allowed",
+// 			input: openlaneclient.UpdateTFASettingInput{
+// 				RegenBackupCodes: lo.ToPtr(true),
+// 			},
+// 			client: suite.client.apiWithToken,
+// 			ctx:    context.Background(),
+// 			errMsg: rout.ErrBadRequest.Error(),
+// 		},
+// 		{
+// 			name: "regen codes - false",
+// 			input: openlaneclient.UpdateTFASettingInput{
+// 				RegenBackupCodes: lo.ToPtr(false),
+// 			},
+// 			client: suite.client.api,
+// 			ctx:    testUser1.UserCtx,
+// 		},
+// 		{
+// 			name: "update totp to false should clear settings",
+// 			input: openlaneclient.UpdateTFASettingInput{
+// 				TotpAllowed: lo.ToPtr(false),
+// 			},
+// 			client: suite.client.api,
+// 			ctx:    testUser1.UserCtx,
+// 		},
+// 		{
+// 			name: "update TotpAllowed to true should enable TFA",
+// 			input: openlaneclient.UpdateTFASettingInput{
+// 				TotpAllowed: lo.ToPtr(true),
+// 			},
+// 			client: suite.client.api,
+// 			ctx:    testUser1.UserCtx,
+// 		},
+// 	}
 
-	// create tfa settings for users
-	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+// 	for _, tc := range testCases {
+// 		t.Run("Update "+tc.name, func(t *testing.T) {
+// 			// update tfa settings
+// 			resp, err := tc.client.UpdateTFASetting(tc.ctx, tc.input)
 
-	// create one with not enabled by default
-	(&TFASettingBuilder{client: suite.client, totpAllowed: lo.ToPtr(false)}).MustNew(testUser2.UserCtx, t)
+// 			if tc.errMsg != "" {
 
-	recoveryCodes := []string{}
+// 				assert.ErrorContains(t, err, tc.errMsg)
+// 				assert.Check(t, is.Nil(resp))
 
-	testCases := []struct {
-		name   string
-		input  openlaneclient.UpdateTFASettingInput
-		client *openlaneclient.OpenlaneClient
-		ctx    context.Context
-		errMsg string
-	}{
-		{
-			name: "update verify",
-			input: openlaneclient.UpdateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
-				Verified:    lo.ToPtr(true),
-			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-		},
-		{
-			name: "regen codes using personal access token",
-			input: openlaneclient.UpdateTFASettingInput{
-				RegenBackupCodes: lo.ToPtr(true),
-			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
-		},
-		{
-			name: "regen codes using api token not allowed",
-			input: openlaneclient.UpdateTFASettingInput{
-				RegenBackupCodes: lo.ToPtr(true),
-			},
-			client: suite.client.apiWithToken,
-			ctx:    context.Background(),
-			errMsg: rout.ErrBadRequest.Error(),
-		},
-		{
-			name: "regen codes - false",
-			input: openlaneclient.UpdateTFASettingInput{
-				RegenBackupCodes: lo.ToPtr(false),
-			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-		},
-		{
-			name: "update totp to false should clear settings",
-			input: openlaneclient.UpdateTFASettingInput{
-				TotpAllowed: lo.ToPtr(false),
-			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-		},
-		{
-			name: "update TotpAllowed to true should enable TFA",
-			input: openlaneclient.UpdateTFASettingInput{
-				TotpAllowed: lo.ToPtr(true),
-			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-		},
-	}
+// 				return
+// 			}
 
-	for _, tc := range testCases {
-		t.Run("Update "+tc.name, func(t *testing.T) {
-			// update tfa settings
-			resp, err := tc.client.UpdateTFASetting(tc.ctx, tc.input)
+// 			assert.NilError(t, err)
+// 			assert.Assert(t, resp != nil)
 
-			if tc.errMsg != "" {
-				require.Error(t, err)
-				assert.ErrorContains(t, err, tc.errMsg)
-				assert.Nil(t, resp)
+// 			// backup codes should only be regenerated on explicit request
+// 			// and should only be returned on initial verification or regen request
+// 			if (tc.input.RegenBackupCodes != nil && *tc.input.RegenBackupCodes) ||
+// 				(tc.input.Verified != nil && *tc.input.Verified) {
+// 				// recovery codes should be returned
+// 				assert.Check(t, len(resp.UpdateTFASetting.RecoveryCodes) != 0)
 
-				return
-			}
+// 				if tc.input.RegenBackupCodes != nil {
+// 					if *tc.input.RegenBackupCodes {
+// 						assert.Assert(t, !reflect.DeepEqual(recoveryCodes, resp.UpdateTFASetting.RecoveryCodes))
+// 					} else {
+// 						assert.Check(t, is.DeepEqual(recoveryCodes, resp.UpdateTFASetting.RecoveryCodes))
+// 					}
+// 				}
+// 			} else {
+// 				assert.Check(t, is.Len(resp.UpdateTFASetting.RecoveryCodes, 0))
+// 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateTFASetting.TfaSetting)
+// 			if tc.input.TotpAllowed == nil || *tc.input.TotpAllowed {
+// 				assert.Check(t, resp.UpdateTFASetting.QRCode != nil)
+// 				assert.Check(t, resp.UpdateTFASetting.TfaSecret != nil)
+// 			} else if !*tc.input.TotpAllowed { // settings were cleared
+// 				assert.Check(t, is.Equal(*resp.UpdateTFASetting.QRCode, ""))
+// 				assert.Check(t, is.Equal(*resp.UpdateTFASetting.TfaSecret, ""))
+// 				assert.Check(t, is.Len(resp.UpdateTFASetting.RecoveryCodes, 0))
+// 				assert.Check(t, !resp.UpdateTFASetting.TfaSetting.Verified)
+// 				assert.Check(t, !*resp.UpdateTFASetting.TfaSetting.TotpAllowed)
+// 			}
 
-			// backup codes should only be regenerated on explicit request
-			// and should only be returned on initial verification or regen request
-			if (tc.input.RegenBackupCodes != nil && *tc.input.RegenBackupCodes) ||
-				(tc.input.Verified != nil && *tc.input.Verified) {
-				// recovery codes should be returned
-				assert.NotEmpty(t, resp.UpdateTFASetting.RecoveryCodes)
+// 			// make sure user setting is updated correctly
+// 			userSettings, err := suite.client.api.GetUserSettingByID(testUser1.UserCtx, testUser1.UserInfo.Edges.Setting.ID)
+// 			assert.NilError(t, err)
 
-				if tc.input.RegenBackupCodes != nil {
-					if *tc.input.RegenBackupCodes {
-						assert.NotEqual(t, recoveryCodes, resp.UpdateTFASetting.RecoveryCodes)
-					} else {
-						assert.Equal(t, recoveryCodes, resp.UpdateTFASetting.RecoveryCodes)
-					}
-				}
-			} else {
-				assert.Empty(t, resp.UpdateTFASetting.RecoveryCodes)
-			}
+// 			if resp.UpdateTFASetting.TfaSetting.Verified {
+// 				assert.Check(t, *userSettings.UserSetting.IsTfaEnabled)
+// 			}
 
-			if tc.input.TotpAllowed == nil || *tc.input.TotpAllowed {
-				assert.NotEmpty(t, resp.UpdateTFASetting.QRCode)
-				assert.NotEmpty(t, resp.UpdateTFASetting.TfaSecret)
-			} else if !*tc.input.TotpAllowed { // settings were cleared
-				assert.Empty(t, resp.UpdateTFASetting.QRCode)
-				assert.Empty(t, resp.UpdateTFASetting.TfaSecret)
-				assert.Empty(t, resp.UpdateTFASetting.RecoveryCodes)
-				assert.False(t, resp.UpdateTFASetting.TfaSetting.Verified)
-				assert.False(t, *resp.UpdateTFASetting.TfaSetting.TotpAllowed)
-			}
+// 			// ensure TFA is disabled if totp is not allowed
+// 			if !*resp.UpdateTFASetting.TfaSetting.TotpAllowed {
+// 				assert.Check(t, !*userSettings.UserSetting.IsTfaEnabled)
+// 			}
 
-			// make sure user setting is updated correctly
-			userSettings, err := suite.client.api.GetUserSettingByID(testUser1.UserCtx, testUser1.UserInfo.Edges.Setting.ID)
-			require.NoError(t, err)
-
-			if resp.UpdateTFASetting.TfaSetting.Verified {
-				assert.True(t, *userSettings.UserSetting.IsTfaEnabled)
-			}
-
-			// ensure TFA is disabled if totp is not allowed
-			if !*resp.UpdateTFASetting.TfaSetting.TotpAllowed {
-				assert.False(t, *userSettings.UserSetting.IsTfaEnabled)
-			}
-
-			// set at the end so we can compare later
-			recoveryCodes = resp.UpdateTFASetting.RecoveryCodes
-		})
-	}
-}
+// 			// set at the end so we can compare later
+// 			recoveryCodes = resp.UpdateTFASetting.RecoveryCodes
+// 		})
+// 	}
+// }

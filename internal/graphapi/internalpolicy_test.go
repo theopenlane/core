@@ -6,18 +6,17 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-func (suite *GraphTestSuite) TestQueryInternalPolicy() {
-	t := suite.T()
-
+func TestQueryInternalPolicy(t *testing.T) {
 	// create an InternalPolicy to be queried using testUser1
 	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -25,7 +24,7 @@ func (suite *GraphTestSuite) TestQueryInternalPolicy() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -68,34 +67,33 @@ func (suite *GraphTestSuite) TestQueryInternalPolicy() {
 			resp, err := tc.client.GetInternalPolicyByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			require.NotEmpty(t, resp.InternalPolicy)
-
-			assert.Equal(t, tc.queryID, resp.InternalPolicy.ID)
-			assert.NotEmpty(t, resp.InternalPolicy.Name)
+			assert.Check(t, is.Equal(tc.queryID, resp.InternalPolicy.ID))
+			assert.Check(t, len(resp.InternalPolicy.Name) != 0)
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryInternalPolicies() {
-	t := suite.T()
-
+func TestQueryInternalPolicies(t *testing.T) {
 	// create multiple policies to be queried using testUser1
-	(&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ip1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ip2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -134,17 +132,18 @@ func (suite *GraphTestSuite) TestQueryInternalPolicies() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllInternalPolicies(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.InternalPolicies.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.InternalPolicies.Edges, tc.expectedResults))
 		})
 	}
+
+	// delete created policies
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{ip1.ID, ip2.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
-	t := suite.T()
-
+func TestMutationCreateInternalPolicy(t *testing.T) {
 	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// group for the view only user
@@ -163,7 +162,7 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 		name          string
 		request       openlaneclient.CreateInternalPolicyInput
 		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
+		client        openlaneclient.OpenlaneClient
 		ctx           context.Context
 		expectedErr   string
 	}{
@@ -317,86 +316,93 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 					openlaneclient.UpdateOrganizationInput{
 						AddInternalPolicyCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			resp, err := tc.client.CreateInternalPolicy(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check required fields
-			assert.Equal(t, tc.request.Name, resp.CreateInternalPolicy.InternalPolicy.Name)
+			assert.Check(t, is.Equal(tc.request.Name, resp.CreateInternalPolicy.InternalPolicy.Name))
 
-			assert.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy.DisplayID)
-			assert.Contains(t, resp.CreateInternalPolicy.InternalPolicy.DisplayID, "PLC-")
+			assert.Check(t, len(resp.CreateInternalPolicy.InternalPolicy.DisplayID) != 0)
+			assert.Check(t, is.Contains(resp.CreateInternalPolicy.InternalPolicy.DisplayID, "PLC-"))
 
 			// check optional fields with if checks if they were provided or not
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.CreateInternalPolicy.InternalPolicy.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.CreateInternalPolicy.InternalPolicy.Status))
 			} else {
-				assert.Equal(t, enums.DocumentDraft, *resp.CreateInternalPolicy.InternalPolicy.Status)
+				assert.Check(t, is.Equal(enums.DocumentDraft, *resp.CreateInternalPolicy.InternalPolicy.Status))
 			}
 
 			if tc.request.PolicyType != nil {
-				assert.Equal(t, *tc.request.PolicyType, *resp.CreateInternalPolicy.InternalPolicy.PolicyType)
+				assert.Check(t, is.Equal(*tc.request.PolicyType, *resp.CreateInternalPolicy.InternalPolicy.PolicyType))
 			} else {
-				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.PolicyType)
+				assert.Check(t, is.Equal(*resp.CreateInternalPolicy.InternalPolicy.PolicyType, ""))
 			}
 
 			if tc.request.Revision != nil {
-				assert.Equal(t, *tc.request.Revision, *resp.CreateInternalPolicy.InternalPolicy.Revision)
+				assert.Check(t, is.Equal(*tc.request.Revision, *resp.CreateInternalPolicy.InternalPolicy.Revision))
 			} else {
-				assert.Equal(t, models.DefaultRevision, *resp.CreateInternalPolicy.InternalPolicy.Revision)
+				assert.Check(t, is.Equal(models.DefaultRevision, *resp.CreateInternalPolicy.InternalPolicy.Revision))
 			}
 
 			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.CreateInternalPolicy.InternalPolicy.Details)
-				assert.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy.Summary)
+				assert.Check(t, is.DeepEqual(tc.request.Details, resp.CreateInternalPolicy.InternalPolicy.Details))
+				assert.Check(t, resp.CreateInternalPolicy.InternalPolicy.Summary != nil)
 			} else {
-				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Details)
+				assert.Check(t, is.Equal(*resp.CreateInternalPolicy.InternalPolicy.Details, ""))
 			}
 
 			if tc.request.ApproverID != nil {
-				require.NotEmpty(t, resp.CreateInternalPolicy.InternalPolicy)
-				assert.Equal(t, *tc.request.ApproverID, resp.CreateInternalPolicy.InternalPolicy.Approver.ID)
+				assert.Check(t, resp.CreateInternalPolicy.InternalPolicy.ID != "")
+				assert.Check(t, is.Equal(*tc.request.ApproverID, resp.CreateInternalPolicy.InternalPolicy.Approver.ID))
 			} else {
-				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Approver)
+				assert.Check(t, resp.CreateInternalPolicy.InternalPolicy.Approver == nil)
 			}
 
 			if tc.request.DelegateID != nil {
-				assert.Equal(t, *tc.request.DelegateID, resp.CreateInternalPolicy.InternalPolicy.Delegate.ID)
+				assert.Check(t, is.Equal(*tc.request.DelegateID, resp.CreateInternalPolicy.InternalPolicy.Delegate.ID))
 			} else {
-				assert.Empty(t, resp.CreateInternalPolicy.InternalPolicy.Delegate)
+				assert.Check(t, resp.CreateInternalPolicy.InternalPolicy.Delegate == nil)
 			}
+
+			// cleanup
+			(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{resp.CreateInternalPolicy.InternalPolicy.ID}}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID, subcontrol.ControlID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{anotherGroup.ID, groupMember.GroupID, approverGroup.ID, delegateGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
-	t := suite.T()
-
-	InternalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+func TestMutationUpdateInternalPolicy(t *testing.T) {
+	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor permissions
-	anotherAdminUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	anotherAdminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
 	// create a viewer user and add them to the same organization as testUser1
 	// also add them to the same group as testUser1, this should still allow them to edit the policy
 	// despite not not being an organization admin
-	anotherViewerUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(testUser1.UserCtx, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
+	anotherViewerUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
 
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
@@ -412,7 +418,7 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateInternalPolicyInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -518,87 +524,92 @@ func (suite *GraphTestSuite) TestMutationUpdateInternalPolicy() {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateInternalPolicy(tc.ctx, InternalPolicy.ID, tc.request)
+			resp, err := tc.client.UpdateInternalPolicy(tc.ctx, internalPolicy.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check updated fields
 			if tc.request.Name != nil {
-				assert.Equal(t, *tc.request.Name, resp.UpdateInternalPolicy.InternalPolicy.Name)
+				assert.Check(t, is.Equal(*tc.request.Name, resp.UpdateInternalPolicy.InternalPolicy.Name))
 			}
 
 			if tc.request.Details != nil {
-				assert.NotEmpty(t, resp.UpdateInternalPolicy.InternalPolicy.Summary)
+				assert.Check(t, resp.UpdateInternalPolicy.InternalPolicy.Summary != nil)
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.UpdateInternalPolicy.InternalPolicy.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateInternalPolicy.InternalPolicy.Status))
 			}
 
 			if tc.request.PolicyType != nil {
-				assert.Equal(t, *tc.request.PolicyType, *resp.UpdateInternalPolicy.InternalPolicy.PolicyType)
+				assert.Check(t, is.Equal(*tc.request.PolicyType, *resp.UpdateInternalPolicy.InternalPolicy.PolicyType))
 			}
 
 			if tc.request.Revision != nil {
-				assert.Equal(t, *tc.request.Revision, *resp.UpdateInternalPolicy.InternalPolicy.Revision)
+				assert.Check(t, is.Equal(*tc.request.Revision, *resp.UpdateInternalPolicy.InternalPolicy.Revision))
 			}
 
 			if tc.request.RevisionBump == &models.Major {
-				assert.Equal(t, "v1.0.0", *resp.UpdateInternalPolicy.InternalPolicy.Revision)
+				assert.Check(t, is.Equal("v1.0.0", *resp.UpdateInternalPolicy.InternalPolicy.Revision))
 			}
 
 			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.UpdateInternalPolicy.InternalPolicy.Details)
+				assert.Check(t, is.DeepEqual(tc.request.Details, resp.UpdateInternalPolicy.InternalPolicy.Details))
 			}
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID, subcontrol.ControlID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteInternalPolicy() {
-	t := suite.T()
-
+func TestMutationDeleteInternalPolicy(t *testing.T) {
 	// create internal policies to be deleted
-	InternalPolicy1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	InternalPolicy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	internalPolicy1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	internalPolicy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name:        "not authorized, delete",
-			idToDelete:  InternalPolicy1.ID,
+			idToDelete:  internalPolicy1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
-			idToDelete: InternalPolicy1.ID,
+			idToDelete: internalPolicy1.ID,
 			client:     suite.client.api,
 			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
-			idToDelete:  InternalPolicy1.ID,
+			idToDelete:  internalPolicy1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
-			idToDelete: InternalPolicy2.ID,
+			idToDelete: internalPolicy2.ID,
 			client:     suite.client.apiWithPAT,
 			ctx:        context.Background(),
 		},
@@ -615,16 +626,16 @@ func (suite *GraphTestSuite) TestMutationDeleteInternalPolicy() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteInternalPolicy(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteInternalPolicy.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteInternalPolicy.DeletedID))
 		})
 	}
 }

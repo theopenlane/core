@@ -2,10 +2,11 @@ package graphapi_test
 
 import (
 	"context"
+	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"gotest.tools/v3/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -27,6 +28,8 @@ var (
 	adminUser testUserDetails
 	// systemAdminUser is a test user that is a system admin
 	systemAdminUser testUserDetails
+	// testUserCreator is used to create other organizations later to not conflict the test user
+	testUserCreator testUserDetails
 )
 
 // testUserDetails is a struct that holds the details of a test user
@@ -34,7 +37,7 @@ type testUserDetails struct {
 	// ID is the ID of the user
 	ID string
 	// UserInfo contains all the details of the user
-	UserInfo *ent.User
+	UserInfo ent.User
 	// PersonalOrgID is the ID of the personal organization of the user
 	PersonalOrgID string
 	// OrganizationID is the ID of the organization of the user
@@ -46,18 +49,16 @@ type testUserDetails struct {
 }
 
 // userBuilder creates a new test user and returns the details
-func (suite *GraphTestSuite) userBuilder(ctx context.Context) testUserDetails {
-	t := suite.T()
-
+func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T) testUserDetails {
 	testUser := testUserDetails{}
 
 	// create a test user
-	testUser.UserInfo = (&UserBuilder{client: suite.client}).MustNew(ctx, t)
+	testUser.UserInfo = *(&UserBuilder{client: suite.client}).MustNew(ctx, t)
 	testUser.ID = testUser.UserInfo.ID
 
 	// get the personal org for the user
 	testPersonalOrg, err := testUser.UserInfo.Edges.Setting.DefaultOrg(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testUser.PersonalOrgID = testPersonalOrg.ID
 
@@ -81,62 +82,65 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context) testUserDetails {
 // setupTestData creates test users and sets up the clients with the necessary tokens
 // this includes three users, two with personal orgs and organizations, and one that is a member of the first user's organization
 // as well as an api token and personal access token for the first user
-func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
-	t := suite.T()
-
+// all data using this should be cleaned up after each test to ensure no conflicts between tests
+// if there are potential conflicts, new users should be created for the test
+func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 	// create system admin user
-	systemAdminUser = suite.systemAdminBuilder(ctx)
+	systemAdminUser = suite.systemAdminBuilder(ctx, t)
 
 	// create test users
-	testUser1 = suite.userBuilder(ctx)
-	testUser2 = suite.userBuilder(ctx)
+	testUserCreator = suite.userBuilder(ctx, t)
+	testUser1 = suite.userBuilder(ctx, t)
+	testUser2 = suite.userBuilder(ctx, t)
 
 	// setup two test users that are members of the organization
-	viewOnlyUser = suite.userBuilder(ctx)
-	viewOnlyUser2 = suite.userBuilder(ctx)
+	viewOnlyUser = suite.userBuilder(ctx, t)
+	viewOnlyUser2 = suite.userBuilder(ctx, t)
 
 	// add the user to the organization
-	suite.addUserToOrganization(testUser1.UserCtx, &viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
-	suite.addUserToOrganization(testUser1.UserCtx, &viewOnlyUser2, enums.RoleAdmin, testUser1.OrganizationID)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser2, enums.RoleAdmin, testUser1.OrganizationID)
 
 	// setup a test user that is an admin of an organization
-	adminUser = suite.userBuilder(ctx)
-	suite.addUserToOrganization(testUser1.UserCtx, &adminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	adminUser = suite.userBuilder(ctx, t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &adminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
+	suite.client.apiWithPAT = *suite.setupPatClient(testUser1, t)
+
+	suite.client.apiWithToken = *suite.setupAPITokenClient(testUser1.UserCtx, t)
+}
+
+func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) *openlaneclient.OpenlaneClient {
 	// setup client with a personal access token
-	pat := (&PersonalAccessTokenBuilder{
-		client:          suite.client,
-		OrganizationIDs: []string{testUser1.OrganizationID, testUser1.PersonalOrgID}}).
-		MustNew(testUser1.UserCtx, t)
+	pat := (&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{user.OrganizationID, user.PersonalOrgID}}).MustNew(user.UserCtx, t)
 
 	authHeaderPAT := openlaneclient.Authorization{
 		BearerToken: pat.Token,
 	}
 
-	var err error
+	apiClientPat, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderPAT))
+	assert.NilError(t, err)
 
-	suite.client.apiWithPAT, err = coreutils.TestClientWithAuth(
-		suite.client.db,
-		suite.client.objectStore,
-		openlaneclient.WithCredentials(authHeaderPAT))
-	require.NoError(t, err)
+	return apiClientPat
+}
 
+func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing.T) *openlaneclient.OpenlaneClient {
 	// setup client with an API token
-	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(ctx, t)
 
 	authHeaderAPIToken := openlaneclient.Authorization{
 		BearerToken: apiToken.Token,
 	}
 
-	suite.client.apiWithToken, err = coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
-	require.NoError(t, err)
+	apiClientToken, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
+	assert.NilError(t, err)
+
+	return apiClientToken
 }
 
 // addUserToOrganization adds a user to an organization with the provided role and set's the user's organization ID and user context
 // the context passed in is the context that has access to the organization the user is being added to
-func (suite *GraphTestSuite) addUserToOrganization(ctx context.Context, userDetails *testUserDetails, role enums.Role, organizationID string) {
-	t := suite.T()
-
+func (suite *GraphTestSuite) addUserToOrganization(ctx context.Context, t *testing.T, userDetails *testUserDetails, role enums.Role, organizationID string) {
 	// update organization to be the read-only member of the first test organization
 	(&OrgMemberBuilder{client: suite.client, UserID: userDetails.ID, Role: role.String()}).MustNew(ctx, t)
 
@@ -146,8 +150,8 @@ func (suite *GraphTestSuite) addUserToOrganization(ctx context.Context, userDeta
 	userDetails.UserCtx = auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID)
 }
 
-func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context) testUserDetails {
-	newUser := suite.userBuilder(ctx)
+func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context, t *testing.T) testUserDetails {
+	newUser := suite.userBuilder(ctx, t)
 
 	req := fgax.TupleRequest{
 		SubjectID:   newUser.ID,
@@ -159,7 +163,7 @@ func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context) testUserDet
 
 	// add system admin relation for user
 	_, err := suite.client.db.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{fgax.GetTupleKey(req)}, nil)
-	require.NoError(suite.T(), err)
+	assert.NilError(t, err)
 
 	return newUser
 }

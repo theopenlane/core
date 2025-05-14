@@ -6,19 +6,17 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-func (suite *GraphTestSuite) TestQueryProcedure() {
-	t := suite.T()
-
+func TestQueryProcedure(t *testing.T) {
 	// create an Procedure to be queried using testUser1
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -26,7 +24,7 @@ func (suite *GraphTestSuite) TestQueryProcedure() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -69,40 +67,36 @@ func (suite *GraphTestSuite) TestQueryProcedure() {
 			resp, err := tc.client.GetProcedureByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			require.NotEmpty(t, resp.Procedure)
-
-			assert.Equal(t, tc.queryID, resp.Procedure.ID)
-			assert.NotEmpty(t, resp.Procedure.Name)
+			assert.Check(t, is.Equal(tc.queryID, resp.Procedure.ID))
+			assert.Check(t, len(resp.Procedure.Name) != 0)
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryProcedures() {
-	t := suite.T()
-
+func TestQueryProcedures(t *testing.T) {
 	// create multiple Procedures to be queried using testUser1
-	(&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	userCtxAnotherOrg := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+	p1 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	p2 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add procedure for another org; it should not be returned in the list
-	(&ProcedureBuilder{client: suite.client}).MustNew(userCtxAnotherOrg, t)
+	p3 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -131,27 +125,29 @@ func (suite *GraphTestSuite) TestQueryProcedures() {
 			expectedResults: 2,
 		},
 		{
-			name:            "another user, no Procedures should be returned",
+			name:            "another user, no procedures should be returned",
 			client:          suite.client.api,
 			ctx:             testUser2.UserCtx,
-			expectedResults: 0,
+			expectedResults: 1,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllProcedures(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.Procedures.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.Procedures.Edges, tc.expectedResults), "expected %d, got %d", tc.expectedResults, len(resp.Procedures.Edges))
 		})
 	}
+
+	// cleanup procedures created for the test
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: []string{p1.ID, p2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: p3.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateProcedure() {
-	t := suite.T()
-
+func TestMutationCreateProcedure(t *testing.T) {
 	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// group for the view only user
@@ -164,7 +160,7 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 		name          string
 		request       openlaneclient.CreateProcedureInput
 		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
+		client        openlaneclient.OpenlaneClient
 		ctx           context.Context
 		expectedErr   string
 	}{
@@ -273,101 +269,104 @@ func (suite *GraphTestSuite) TestMutationCreateProcedure() {
 					openlaneclient.UpdateOrganizationInput{
 						AddProcedureCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			resp, err := tc.client.CreateProcedure(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check required fields
-			assert.Equal(t, tc.request.Name, resp.CreateProcedure.Procedure.Name)
+			assert.Check(t, is.Equal(tc.request.Name, resp.CreateProcedure.Procedure.Name))
 
-			assert.NotEmpty(t, resp.CreateProcedure.Procedure.DisplayID)
-			assert.Contains(t, resp.CreateProcedure.Procedure.DisplayID, "PRD-")
+			assert.Check(t, len(resp.CreateProcedure.Procedure.DisplayID) != 0)
+			assert.Check(t, is.Contains(resp.CreateProcedure.Procedure.DisplayID, "PRD-"))
 
 			// check optional fields with if checks if they were provided or not
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.CreateProcedure.Procedure.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.CreateProcedure.Procedure.Status))
 			} else {
 				// default status is draft
-				assert.Equal(t, enums.DocumentDraft, *resp.CreateProcedure.Procedure.Status)
+				assert.Check(t, is.Equal(enums.DocumentDraft, *resp.CreateProcedure.Procedure.Status))
 			}
 
 			if tc.request.ProcedureType != nil {
-				assert.Equal(t, *tc.request.ProcedureType, *resp.CreateProcedure.Procedure.ProcedureType)
+				assert.Check(t, is.Equal(*tc.request.ProcedureType, *resp.CreateProcedure.Procedure.ProcedureType))
 			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.ProcedureType)
+				assert.Check(t, is.Len(*resp.CreateProcedure.Procedure.ProcedureType, 0))
 			}
 
 			if tc.request.Revision != nil {
-				assert.Equal(t, *tc.request.Revision, *resp.CreateProcedure.Procedure.Revision)
+				assert.Check(t, is.Equal(*tc.request.Revision, *resp.CreateProcedure.Procedure.Revision))
 			} else {
 				// default revision is v0.0.1
-				assert.Equal(t, models.DefaultRevision, *resp.CreateProcedure.Procedure.Revision)
+				assert.Check(t, is.Equal(models.DefaultRevision, *resp.CreateProcedure.Procedure.Revision))
 			}
 
 			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.CreateProcedure.Procedure.Details)
-				assert.NotEmpty(t, resp.CreateProcedure.Procedure.Summary)
+				assert.Check(t, is.DeepEqual(tc.request.Details, resp.CreateProcedure.Procedure.Details))
+				assert.Check(t, resp.CreateProcedure.Procedure.Summary != nil)
 			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.Details)
-				assert.Empty(t, resp.CreateProcedure.Procedure.Summary)
+				assert.Check(t, is.Len(*resp.CreateProcedure.Procedure.Details, 0))
+				assert.Check(t, is.Len(*resp.CreateProcedure.Procedure.Summary, 0))
 			}
 
 			if tc.request.EditorIDs != nil {
-				assert.Len(t, resp.CreateProcedure.Procedure.Editors, len(tc.request.EditorIDs))
+				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.Editors, len(tc.request.EditorIDs)))
 			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.Editors)
+				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.Editors, 0))
 			}
 
 			if tc.request.BlockedGroupIDs != nil {
-				assert.Len(t, resp.CreateProcedure.Procedure.BlockedGroups, len(tc.request.BlockedGroupIDs))
+				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.BlockedGroups, len(tc.request.BlockedGroupIDs)))
 			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.BlockedGroups)
+				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.BlockedGroups, 0))
 			}
 
 			if tc.request.ApproverID != nil {
-				assert.Equal(t, *tc.request.ApproverID, resp.CreateProcedure.Procedure.Approver.ID)
+				assert.Check(t, is.Equal(*tc.request.ApproverID, resp.CreateProcedure.Procedure.Approver.ID))
 			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.Approver)
+				assert.Check(t, is.Nil(resp.CreateProcedure.Procedure.Approver))
 			}
 
 			if tc.request.DelegateID != nil {
-				assert.Equal(t, *tc.request.DelegateID, resp.CreateProcedure.Procedure.Delegate.ID)
+				assert.Check(t, is.Equal(*tc.request.DelegateID, resp.CreateProcedure.Procedure.Delegate.ID))
 			} else {
-				assert.Empty(t, resp.CreateProcedure.Procedure.Delegate)
+				assert.Check(t, is.Nil(resp.CreateProcedure.Procedure.Delegate))
 			}
+
+			// cleanup
+			(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: resp.CreateProcedure.Procedure.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
+
+	// cleanup group created for the test
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{anotherGroup.ID, groupMember.GroupID, approverGroup.ID, delegateGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
-	t := suite.T()
-
+func TestMutationUpdateProcedure(t *testing.T) {
 	// create procedure to be updated
-	Procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor permissions
-	anotherAdminUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	anotherAdminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
 	// create a viewer user and add them to the same organization as testUser1
 	// also add them to the same group as testUser1, this should still allow them to edit the procedure
 	// despite not not being an organization admin
-	anotherViewerUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(testUser1.UserCtx, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
+	anotherViewerUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
 
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
@@ -383,7 +382,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateProcedureInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -499,93 +498,95 @@ func (suite *GraphTestSuite) TestMutationUpdateProcedure() {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateProcedure(tc.ctx, Procedure.ID, tc.request)
+			resp, err := tc.client.UpdateProcedure(tc.ctx, procedure.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check updated fields
 			if tc.request.Name != nil {
-				assert.Equal(t, *tc.request.Name, resp.UpdateProcedure.Procedure.Name)
+				assert.Check(t, is.Equal(*tc.request.Name, resp.UpdateProcedure.Procedure.Name))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.UpdateProcedure.Procedure.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateProcedure.Procedure.Status))
 			}
 
 			if tc.request.ProcedureType != nil {
-				assert.Equal(t, *tc.request.ProcedureType, *resp.UpdateProcedure.Procedure.ProcedureType)
+				assert.Check(t, is.Equal(*tc.request.ProcedureType, *resp.UpdateProcedure.Procedure.ProcedureType))
 			}
 
 			if tc.request.Revision != nil {
-				assert.Equal(t, *tc.request.Revision, *resp.UpdateProcedure.Procedure.Revision)
+				assert.Check(t, is.Equal(*tc.request.Revision, *resp.UpdateProcedure.Procedure.Revision))
 			}
 
 			if tc.request.RevisionBump == &models.Minor {
-				assert.Equal(t, "v0.1.0", *resp.UpdateProcedure.Procedure.Revision)
+				assert.Check(t, is.Equal("v0.1.0", *resp.UpdateProcedure.Procedure.Revision))
 			}
 
 			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.UpdateProcedure.Procedure.Details)
-				assert.NotEmpty(t, resp.UpdateProcedure.Procedure.Summary)
-				assert.NotEqual(t, resp.UpdateProcedure.Procedure.Summary, Procedure.Summary)
+				assert.Check(t, is.DeepEqual(tc.request.Details, resp.UpdateProcedure.Procedure.Details))
+				assert.Check(t, resp.UpdateProcedure.Procedure.Summary != nil)
+				assert.Check(t, *resp.UpdateProcedure.Procedure.Summary != procedure.Summary)
 			}
 
 			if tc.request.ApproverID != nil {
-				assert.Equal(t, *tc.request.ApproverID, resp.UpdateProcedure.Procedure.Approver.ID)
+				assert.Check(t, is.Equal(*tc.request.ApproverID, resp.UpdateProcedure.Procedure.Approver.ID))
 			}
 
 			if tc.request.DelegateID != nil {
-				assert.Equal(t, *tc.request.DelegateID, resp.UpdateProcedure.Procedure.Delegate.ID)
+				assert.Check(t, is.Equal(*tc.request.DelegateID, resp.UpdateProcedure.Procedure.Delegate.ID))
 			}
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockGroup.ID, approverGroup.ID, delegateGroup.ID, anotherApproverGroup.ID, anotherDelegateGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteProcedure() {
-	t := suite.T()
-
-	// create Procedures to be deleted
-	Procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	Procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+func TestMutationDeleteProcedure(t *testing.T) {
+	// create procedures to be deleted
+	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name:        "not authorized, delete",
-			idToDelete:  Procedure1.ID,
+			idToDelete:  procedure1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
-			idToDelete: Procedure1.ID,
+			idToDelete: procedure1.ID,
 			client:     suite.client.api,
 			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
-			idToDelete:  Procedure1.ID,
+			idToDelete:  procedure1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
-			idToDelete: Procedure2.ID,
+			idToDelete: procedure2.ID,
 			client:     suite.client.apiWithPAT,
 			ctx:        context.Background(),
 		},
@@ -602,16 +603,16 @@ func (suite *GraphTestSuite) TestMutationDeleteProcedure() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteProcedure(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteProcedure.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteProcedure.DeletedID))
 		})
 	}
 }

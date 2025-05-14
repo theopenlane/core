@@ -53,8 +53,7 @@ import (
 // 	return OBJECT
 // }
 
-func (suite *GraphTestSuite) TestQueryOBJECT() {
-	t := suite.T()
+func TestQueryOBJECT(t *testing.T) {
 
 	// create an OBJECT to be queried using testUser1
 	OBJECT := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -63,7 +62,7 @@ func (suite *GraphTestSuite) TestQueryOBJECT() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -126,8 +125,7 @@ func (suite *GraphTestSuite) TestQueryOBJECT() {
 	}
 }
 
-func (suite *GraphTestSuite) TestQueryOBJECTs() {
-	t := suite.T()
+func TestQueryOBJECTs(t *testing.T) {
 
 	// create multiple objects to be queried using testUser1
 	(&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -135,7 +133,7 @@ func (suite *GraphTestSuite) TestQueryOBJECTs() {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -182,13 +180,12 @@ func (suite *GraphTestSuite) TestQueryOBJECTs() {
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationCreateOBJECT() {
-	t := suite.T()
+func TestMutationCreateOBJECT(t *testing.T) {
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateOBJECTInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -266,15 +263,14 @@ func (suite *GraphTestSuite) TestMutationCreateOBJECT() {
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateOBJECT() {
-	t := suite.T()
+func TestMutationUpdateOBJECT(t *testing.T) {
 
 	OBJECT := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateOBJECTInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -334,8 +330,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOBJECT() {
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteOBJECT() {
-	t := suite.T()
+func TestMutationDeleteOBJECT(t *testing.T) {
 
 	// create objects to be deleted
 	OBJECT1 := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -344,7 +339,7 @@ func (suite *GraphTestSuite) TestMutationDeleteOBJECT() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

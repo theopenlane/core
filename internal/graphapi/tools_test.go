@@ -2,17 +2,17 @@ package graphapi_test
 
 import (
 	"context"
+	"flag"
+	"os"
 	"testing"
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Yamashou/gqlgenc/clientv2"
 	"github.com/rs/zerolog"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
-	"github.com/stretchr/testify/suite"
 	"github.com/vektah/gqlparser/v2/gqlerror"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
@@ -49,14 +49,8 @@ const (
 	notAuthorizedErrorMsg = "you are not authorized to perform this action"
 )
 
-// TestGraphTestSuite runs all the tests in the GraphTestSuite
-func TestGraphTestSuite(t *testing.T) {
-	suite.Run(t, new(GraphTestSuite))
-}
-
 // GraphTestSuite handles the setup and teardown between tests
 type GraphTestSuite struct {
-	suite.Suite
 	client *client
 	tf     *testutils.TestFixture
 	ofgaTF *fgatest.OpenFGATestFixture
@@ -65,14 +59,37 @@ type GraphTestSuite struct {
 // client contains all the clients the test need to interact with
 type client struct {
 	db           *ent.Client
-	api          *openlaneclient.OpenlaneClient
-	apiWithPAT   *openlaneclient.OpenlaneClient
-	apiWithToken *openlaneclient.OpenlaneClient
+	api          openlaneclient.OpenlaneClient
+	apiWithPAT   openlaneclient.OpenlaneClient
+	apiWithToken openlaneclient.OpenlaneClient
 	fga          *fgax.Client
 	objectStore  *objects.Objects
 }
 
-func (suite *GraphTestSuite) SetupSuite() {
+var suite = &GraphTestSuite{}
+
+func TestMain(m *testing.M) {
+	flag.Parse()
+
+	// Create a new testing.T instance
+	// Note: this is only to seed data; you should not use this instance for actual tests
+	t := &testing.T{}
+
+	// Setup code here (e.g., initialize database connection)
+	suite.SetupSuite(t)
+
+	suite.setupTestData(context.Background(), t)
+	// Run the tests
+	exitCode := m.Run()
+
+	// Teardown code here (e.g., close database connection)
+	suite.TearDownSuite(t)
+
+	// Exit with the result of the tests
+	os.Exit(exitCode)
+}
+
+func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 
 	if testing.Verbose() {
@@ -87,11 +104,9 @@ func (suite *GraphTestSuite) SetupSuite() {
 
 	ctx := context.Background()
 
-	t := suite.T()
-
 	// setup fga client
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	c := &client{
 		fga: fgaClient,
@@ -108,7 +123,7 @@ func (suite *GraphTestSuite) SetupSuite() {
 	}
 
 	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
@@ -131,7 +146,7 @@ func (suite *GraphTestSuite) SetupSuite() {
 	}
 
 	summarizerClient, err := summarizer.NewSummarizer(*entCfg)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
@@ -149,53 +164,43 @@ func (suite *GraphTestSuite) SetupSuite() {
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
-	require.NoError(t, err, "failed opening connection to database")
+	assert.NilError(t, err)
 
 	c.objectStore, err = coreutils.MockObjectManager(t, objmw.Upload)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// set the validation function
 	c.objectStore.ValidationFunc = objmw.MimeTypeValidator
 
 	// assign values
 	c.db = db
-	c.api, err = coreutils.TestClient(c.db, c.objectStore)
-	require.NoError(t, err)
+	api, err := coreutils.TestClient(c.db, c.objectStore)
+	assert.NilError(t, err)
+
+	c.api = *api
 
 	suite.client = c
 }
 
-func (suite *GraphTestSuite) SetupTest() {
-	ctx := context.Background()
-	// setup test data
-	suite.setupTestData(ctx)
-}
-
-func (suite *GraphTestSuite) TearDownTest() {
-
-}
-
-func (suite *GraphTestSuite) TearDownSuite() {
-	t := suite.T()
-
+func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 	// close the database connection
 	err := suite.client.db.Close()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// close the database container
 	testutils.TeardownFixture(suite.tf)
 
 	// terminate all fga containers
 	err = suite.ofgaTF.TeardownFixture()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 // expectUpload sets up the mock object store to expect an upload and related operations
 func expectUpload(t *testing.T, mockStore objects.Storage, expectedUploads []graphql.Upload) {
-	require.NotNil(t, mockStore)
+	assert.Assert(t, mockStore != nil)
 
 	ms, ok := mockStore.(*mock_objects.MockStorage)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	mockScheme := "file://"
 
@@ -209,10 +214,10 @@ func expectUpload(t *testing.T, mockStore objects.Storage, expectedUploads []gra
 
 // expectUploadNillable sets up the mock object store to expect an upload and related operations
 func expectUploadNillable(t *testing.T, mockStore objects.Storage, expectedUploads []*graphql.Upload) {
-	require.NotNil(t, mockStore)
+	assert.Check(t, mockStore != nil)
 
 	ms, ok := mockStore.(*mock_objects.MockStorage)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	mockScheme := "file://"
 
@@ -227,10 +232,10 @@ func expectUploadNillable(t *testing.T, mockStore objects.Storage, expectedUploa
 // expectUploadCheckOnly sets up the mock object store to expect an upload check only operation
 // but fails before the upload is attempted
 func expectUploadCheckOnly(t *testing.T, mockStore objects.Storage) {
-	require.NotNil(t, mockStore)
+	assert.Assert(t, mockStore != nil)
 
 	ms, ok := mockStore.(*mock_objects.MockStorage)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	mockScheme := "file://"
 
@@ -246,8 +251,8 @@ func parseClientError(t *testing.T, err error) []*gqlerror.Error {
 	}
 
 	errResp, ok := err.(*clientv2.ErrorResponse)
-	require.True(t, ok)
-	require.True(t, errResp.HasErrors())
+	assert.Check(t, ok)
+	assert.Check(t, errResp.HasErrors())
 
 	gqlErrors := []*gqlerror.Error{}
 
@@ -255,7 +260,7 @@ func parseClientError(t *testing.T, err error) []*gqlerror.Error {
 
 	for _, e := range errors {
 		customErr, ok := e.(*gqlerror.Error)
-		require.True(t, ok)
+		assert.Check(t, ok)
 		gqlErrors = append(gqlErrors, customErr)
 	}
 

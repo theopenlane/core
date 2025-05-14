@@ -5,18 +5,16 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
-func (suite *GraphTestSuite) TestQueryNarrative() {
-	t := suite.T()
-
+func TestQueryNarrative(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a Narrative
@@ -24,11 +22,13 @@ func (suite *GraphTestSuite) TestQueryNarrative() {
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
 
+	narratives := []string{}
+
 	// add test cases for querying the Narrative
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -78,53 +78,55 @@ func (suite *GraphTestSuite) TestQueryNarrative() {
 						ProgramIDs: []string{program.ID},
 					})
 
-				require.NoError(t, err)
-				require.NotNil(t, resp)
+				assert.NilError(t, err)
+				assert.Assert(t, resp != nil)
 
 				tc.queryID = resp.CreateNarrative.Narrative.ID
+				narratives = append(narratives, tc.queryID)
+
 			}
 
 			resp, err := tc.client.GetNarrativeByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			require.NotEmpty(t, resp.Narrative)
+			assert.Check(t, is.Equal(tc.queryID, resp.Narrative.ID))
+			assert.Check(t, len(resp.Narrative.Name) != 0)
 
-			assert.Equal(t, tc.queryID, resp.Narrative.ID)
-			assert.NotEmpty(t, resp.Narrative.Name)
+			assert.Check(t, is.Len(resp.Narrative.Programs.Edges, 1))
+			assert.Check(t, len(resp.Narrative.Programs.Edges[0].Node.ID) != 0)
 
-			require.Len(t, resp.Narrative.Programs.Edges, 1)
-			assert.NotEmpty(t, resp.Narrative.Programs.Edges[0].Node.ID)
 		})
 	}
+
+	// delete created narratives
+	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, IDs: narratives}).MustDelete(testUser1.UserCtx, t)
+	// delete created program
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryNarratives() {
-	t := suite.T()
-
+func TestQueryNarratives(t *testing.T) {
 	// create multiple objects to be queried using testUser1
-	(&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	nrt1 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	nrt2 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	userCtxAnotherOrg := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+	userAnotherOrg := suite.userBuilder(context.Background(), t)
 
 	// add narrative for the user to another org; this should not be returned for JWT auth, since it's
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
-	(&NarrativeBuilder{client: suite.client}).MustNew(userCtxAnotherOrg, t)
+	nrt3 := (&NarrativeBuilder{client: suite.client}).MustNew(userAnotherOrg.UserCtx, t)
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -163,17 +165,18 @@ func (suite *GraphTestSuite) TestQueryNarratives() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllNarratives(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.Narratives.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.Narratives.Edges, tc.expectedResults), "expected %d narratives, got %d", tc.expectedResults, len(resp.Narratives.Edges))
 		})
 	}
+
+	// delete created narrative
+	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, IDs: []string{nrt1.ID, nrt2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, ID: nrt3.ID}).MustDelete(userAnotherOrg.UserCtx, t)
 }
-
-func (suite *GraphTestSuite) TestMutationCreateNarrative() {
-	t := suite.T()
-
+func TestMutationCreateNarrative(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -190,11 +193,13 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	narratives := []string{}
+
 	testCases := []struct {
 		name          string
 		request       openlaneclient.CreateNarrativeInput
 		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
+		client        openlaneclient.OpenlaneClient
 		ctx           context.Context
 		expectedErr   string
 	}{
@@ -308,103 +313,109 @@ func (suite *GraphTestSuite) TestMutationCreateNarrative() {
 					openlaneclient.UpdateOrganizationInput{
 						AddNarrativeCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			resp, err := tc.client.CreateNarrative(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check required fields
-			require.NotEmpty(t, resp.CreateNarrative.Narrative.ID)
-			assert.Equal(t, tc.request.Name, resp.CreateNarrative.Narrative.Name)
+			assert.Check(t, len(resp.CreateNarrative.Narrative.ID) != 0)
+			assert.Check(t, is.Equal(tc.request.Name, resp.CreateNarrative.Narrative.Name))
 
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {
-				require.NotEmpty(t, resp.CreateNarrative.Narrative.Programs)
-				require.Len(t, resp.CreateNarrative.Narrative.Programs.Edges, len(tc.request.ProgramIDs))
+				assert.Check(t, is.Len(resp.CreateNarrative.Narrative.Programs.Edges, len(tc.request.ProgramIDs)))
 
 				for i, p := range resp.CreateNarrative.Narrative.Programs.Edges {
-					assert.Equal(t, tc.request.ProgramIDs[i], p.Node.ID)
+					assert.Check(t, is.Equal(tc.request.ProgramIDs[i], p.Node.ID))
 				}
 			} else {
-				assert.Empty(t, resp.CreateNarrative.Narrative.Programs.Edges)
+				assert.Check(t, is.Len(resp.CreateNarrative.Narrative.Programs.Edges, 0))
 			}
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.CreateNarrative.Narrative.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateNarrative.Narrative.Description))
 			} else {
-				assert.Empty(t, resp.CreateNarrative.Narrative.Description)
+				assert.Check(t, is.Equal(*resp.CreateNarrative.Narrative.Description, ""))
 			}
 
 			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.CreateNarrative.Narrative.Details)
+				assert.Check(t, is.DeepEqual(tc.request.Details, resp.CreateNarrative.Narrative.Details))
 			} else {
-				assert.Empty(t, resp.CreateNarrative.Narrative.Details)
+				assert.Check(t, is.Equal(*resp.CreateNarrative.Narrative.Details, ""))
 			}
 
 			if len(tc.request.EditorIDs) > 0 {
-				require.Len(t, resp.CreateNarrative.Narrative.Editors, 1)
+				assert.Check(t, is.Len(resp.CreateNarrative.Narrative.Editors, 1))
 				for _, edge := range resp.CreateNarrative.Narrative.Editors {
-					assert.Equal(t, testUser1.GroupID, edge.ID)
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.ID))
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
-				require.Len(t, resp.CreateNarrative.Narrative.BlockedGroups, 1)
+				assert.Check(t, is.Len(resp.CreateNarrative.Narrative.BlockedGroups, 1))
 				for _, edge := range resp.CreateNarrative.Narrative.BlockedGroups {
-					assert.Equal(t, blockedGroup.ID, edge.ID)
+					assert.Check(t, is.Equal(blockedGroup.ID, edge.ID))
 				}
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
-				require.Len(t, resp.CreateNarrative.Narrative.Viewers, 1)
+				assert.Check(t, is.Len(resp.CreateNarrative.Narrative.Viewers, 1))
 				for _, edge := range resp.CreateNarrative.Narrative.Viewers {
-					assert.Equal(t, viewerGroup.ID, edge.ID)
+					assert.Check(t, is.Equal(viewerGroup.ID, edge.ID))
 				}
 			}
 
 			// ensure the org owner has access to the narrative that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetNarrativeByID(testUser1.UserCtx, resp.CreateNarrative.Narrative.ID)
-				require.NoError(t, err)
-				require.NotEmpty(t, res)
-				assert.Equal(t, resp.CreateNarrative.Narrative.ID, res.Narrative.ID)
+				assert.NilError(t, err)
+				assert.Assert(t, res != nil)
+				assert.Check(t, is.Equal(resp.CreateNarrative.Narrative.ID, res.Narrative.ID))
 			}
+
+			narratives = append(narratives, resp.CreateNarrative.Narrative.ID)
 		})
 	}
+
+	// delete created narratives
+	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, IDs: narratives}).MustDelete(testUser1.UserCtx, t)
+	// delete created programs
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
+	// delete created groups
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockedGroup.ID, viewerGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
-	t := suite.T()
-
+func TestMutationUpdateNarrative(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	narrative := (&NarrativeBuilder{client: suite.client, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
 
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor/viewer permissions
-	anotherAdminUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	anotherAdminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the narrative
 	res, err := suite.client.api.GetNarrativeByID(anotherAdminUser.UserCtx, narrative.ID)
-	require.Error(t, err)
-	require.Nil(t, res)
+	assert.ErrorContains(t, err, notFoundErrorMsg)
+	assert.Assert(t, res == nil)
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateNarrativeInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -453,41 +464,40 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateNarrative(tc.ctx, narrative.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			if tc.request.Name != nil {
-				assert.Equal(t, *tc.request.Name, resp.UpdateNarrative.Narrative.Name)
+				assert.Check(t, is.Equal(*tc.request.Name, resp.UpdateNarrative.Narrative.Name))
 			}
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateNarrative.Narrative.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateNarrative.Narrative.Description))
 			}
 
 			if tc.request.Tags != nil {
-				require.Len(t, resp.UpdateNarrative.Narrative.Tags, 2)
-				assert.ElementsMatch(t, tc.request.Tags, resp.UpdateNarrative.Narrative.Tags)
+				assert.Check(t, is.Len(resp.UpdateNarrative.Narrative.Tags, 2))
+				assert.DeepEqual(t, tc.request.Tags, resp.UpdateNarrative.Narrative.Tags)
 			}
 
 			if tc.request.AppendTags != nil {
-				assert.Len(t, resp.UpdateNarrative.Narrative.Tags, 4)
-				assert.Contains(t, resp.UpdateNarrative.Narrative.Tags, tc.request.AppendTags[0])
-				assert.Contains(t, resp.UpdateNarrative.Narrative.Tags, tc.request.AppendTags[1])
+				assert.Check(t, is.Len(resp.UpdateNarrative.Narrative.Tags, 4))
+				assert.Check(t, is.Contains(resp.UpdateNarrative.Narrative.Tags, tc.request.AppendTags[0]))
+				assert.Check(t, is.Contains(resp.UpdateNarrative.Narrative.Tags, tc.request.AppendTags[1]))
 			}
 
 			if tc.request.Details != nil {
-				assert.Equal(t, tc.request.Details, resp.UpdateNarrative.Narrative.Details)
+				assert.Check(t, is.DeepEqual(tc.request.Details, resp.UpdateNarrative.Narrative.Details))
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {
-				require.Len(t, resp.UpdateNarrative.Narrative.Viewers, 1)
+				assert.Check(t, is.Len(resp.UpdateNarrative.Narrative.Viewers, 1))
 				found := false
 				for _, edge := range resp.UpdateNarrative.Narrative.Viewers {
 					if edge.ID == tc.request.AddViewerIDs[0] {
@@ -496,55 +506,60 @@ func (suite *GraphTestSuite) TestMutationUpdateNarrative() {
 					}
 				}
 
-				assert.True(t, found)
+				assert.Check(t, found)
 
 				// ensure the user has access to the narrative now
 				res, err := suite.client.api.GetNarrativeByID(anotherAdminUser.UserCtx, narrative.ID)
-				require.NoError(t, err)
-				require.NotEmpty(t, res)
-				assert.Equal(t, narrative.ID, res.Narrative.ID)
+				assert.NilError(t, err)
+				assert.Assert(t, res != nil)
+				assert.Check(t, is.Equal(narrative.ID, res.Narrative.ID))
 			}
 		})
 	}
+
+	// delete created narrative
+	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, ID: narrative.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete created program
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete created group
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: groupMember.GroupID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteNarrative() {
-	t := suite.T()
-
+func TestMutationDeleteNarrative(t *testing.T) {
 	// create objects to be deleted
-	Narrative1 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	Narrative2 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	narrative1 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	narrative2 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
 			name:        "not authorized, delete",
-			idToDelete:  Narrative1.ID,
+			idToDelete:  narrative1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
-			idToDelete: Narrative1.ID,
+			idToDelete: narrative1.ID,
 			client:     suite.client.api,
 			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
-			idToDelete:  Narrative1.ID,
+			idToDelete:  narrative1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
-			idToDelete: Narrative2.ID,
+			idToDelete: narrative2.ID,
 			client:     suite.client.apiWithPAT,
 			ctx:        context.Background(),
 		},
@@ -561,16 +576,15 @@ func (suite *GraphTestSuite) TestMutationDeleteNarrative() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteNarrative(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteNarrative.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteNarrative.DeletedID))
 		})
 	}
 }

@@ -5,36 +5,33 @@ import (
 	"strings"
 	"testing"
 
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
-	"github.com/theopenlane/iam/auth"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
 )
 
-func (suite *GraphTestSuite) TestQueryGroup() {
-	t := suite.T()
-
+func TestQueryGroup(t *testing.T) {
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	privateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	privateGroupWithSetting, err := suite.client.api.GetGroupByID(testUser1.UserCtx, privateGroup.ID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = suite.client.api.UpdateGroupSetting(testUser1.UserCtx, privateGroupWithSetting.Group.Setting.ID, openlaneclient.UpdateGroupSettingInput{
 		Visibility: &enums.VisibilityPrivate,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -78,37 +75,39 @@ func (suite *GraphTestSuite) TestQueryGroup() {
 			resp, err := tc.client.GetGroupByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.Group)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.Group.ID != "")
 		})
 	}
+
+	// delete created group
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{group1.ID, privateGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
-	t := suite.T()
-
-	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
-	reqCtx := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
-	reqCtx2 := auth.NewTestContextWithOrgID(testUser1.ID, org2.ID)
-
+func TestQueryGroupsByOwner(t *testing.T) {
+	userAnotherOrg := suite.userBuilder(context.Background(), t)
+	org1 := userAnotherOrg.OrganizationID
+	reqCtx := userAnotherOrg.UserCtx
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
+
+	userAnotherOrg2 := suite.userBuilder(context.Background(), t)
+	org2 := userAnotherOrg2.OrganizationID
+	reqCtx2 := userAnotherOrg2.UserCtx
 	group2 := (&GroupBuilder{client: suite.client}).MustNew(reqCtx2, t)
 
 	t.Run("Get Groups By Owner", func(t *testing.T) {
 		whereInput := &openlaneclient.GroupWhereInput{
 			HasOwnerWith: []*openlaneclient.OrganizationWhereInput{
 				{
-					ID: &org1.ID,
+					ID: &org1,
 				},
 			},
 			IsManaged: lo.ToPtr(false),
@@ -116,12 +115,12 @@ func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
 
 		resp, err := suite.client.api.GetGroups(reqCtx, whereInput)
 
-		require.NoError(t, err)
-		require.NotNil(t, resp)
-		require.NotNil(t, resp.Groups.Edges)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Assert(t, resp.Groups.Edges != nil)
 
-		// make sure 1 group is returned
-		assert.Equal(t, 1, len(resp.Groups.Edges))
+		// make sure 2 groups are returned, the first was created as part of the seeding process
+		assert.Check(t, is.Len(resp.Groups.Edges, 2))
 
 		group1Found := false
 		group2Found := false
@@ -135,13 +134,13 @@ func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
 		}
 
 		// group1 should be returned, group 2 should not be returned
-		assert.True(t, group1Found)
-		assert.False(t, group2Found)
+		assert.Check(t, group1Found)
+		assert.Check(t, !group2Found)
 
 		whereInput = &openlaneclient.GroupWhereInput{
 			HasOwnerWith: []*openlaneclient.OrganizationWhereInput{
 				{
-					ID: &org2.ID,
+					ID: &org2,
 				},
 			},
 			IsManaged: lo.ToPtr(false),
@@ -149,18 +148,17 @@ func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
 
 		resp, err = suite.client.api.GetGroups(reqCtx2, whereInput)
 
-		require.NoError(t, err)
-		require.Len(t, resp.Groups.Edges, 1)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(resp.Groups.Edges, 2))
+
 	})
 
-	// delete created orgs
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org1.ID}).MustDelete(reqCtx, suite)
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org2.ID}).MustDelete(reqCtx2, suite)
+	// delete created groups and orgs
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group1.ID}).MustDelete(reqCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group2.ID}).MustDelete(reqCtx2, t)
 }
 
-func (suite *GraphTestSuite) TestQueryGroups() {
-	t := suite.T()
-
+func TestQueryGroups(t *testing.T) {
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	group2 := (&GroupBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	group3 := (&GroupBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -168,22 +166,22 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 	privateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	privateGroupWithSetting, err := suite.client.api.GetGroupByID(testUser1.UserCtx, privateGroup.ID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = suite.client.api.UpdateGroupSetting(testUser1.UserCtx, privateGroupWithSetting.Group.Setting.ID, openlaneclient.UpdateGroupSettingInput{
 		Visibility: &enums.VisibilityPrivate,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	t.Run("Get Groups", func(t *testing.T) {
 		resp, err := suite.client.api.GetAllGroups(testUser2.UserCtx)
 
-		require.NoError(t, err)
-		require.NotNil(t, resp)
-		require.NotNil(t, resp.Groups.Edges)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Assert(t, resp.Groups.Edges != nil)
 
 		// make sure two organizations are returned (group 2 and group 3), the seeded group, and the 3 managed groups
-		assert.Equal(t, 6, len(resp.Groups.Edges))
+		assert.Check(t, is.Equal(6, len(resp.Groups.Edges)))
 
 		group1Found := false
 		group2Found := false
@@ -201,39 +199,41 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 		}
 
 		// if one of the groups isn't found, fail the test
-		assert.True(t, group2Found)
-		assert.True(t, group3Found)
+		assert.Check(t, group2Found)
+		assert.Check(t, group3Found)
 
 		// if group 1 (which belongs to an unauthorized org) is found, fail the test
-		require.False(t, group1Found)
+		assert.Assert(t, !group1Found)
 
 		// check groups available to testuser1
 		resp, err = suite.client.api.GetAllGroups(testUser1.UserCtx)
 
-		require.NoError(t, err)
-		require.NotNil(t, resp)
-
-		// make sure only 6 groups are returned, group 1, private group and the seeded group, and the 3 managed groups
-		assert.Equal(t, 6, len(resp.Groups.Edges))
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
 
 		// check groups available to admin user (private group created by testUser1 should not be returned)
 		resp, err = suite.client.api.GetAllGroups(adminUser.UserCtx)
 
-		require.NoError(t, err)
-		require.NotNil(t, resp)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
 
 		// make sure only 5 groups are returned, group 1 and the seeded group, and the 3 managed groups
-		assert.Equal(t, 5, len(resp.Groups.Edges))
+		assert.Check(t, is.Equal(5, len(resp.Groups.Edges)))
 	})
+
+	// delete created groups
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{group1.ID, privateGroup.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{group2.ID, group3.ID}}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateGroup() {
-	t := suite.T()
-
+func TestMutationCreateGroup(t *testing.T) {
 	name := gofakeit.Name()
 
 	// group for the view only user
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
+
+	createdGroups := []string{group.ID}
 
 	testCases := []struct {
 		name          string
@@ -243,7 +243,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 		owner         string
 		settings      *openlaneclient.CreateGroupSettingInput
 		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
+		client        openlaneclient.OpenlaneClient
 		ctx           context.Context
 		errorMsg      string
 	}{
@@ -311,9 +311,9 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 			groupName:   gofakeit.Name(),
 			displayName: gofakeit.LetterN(50),
 			description: gofakeit.HipsterSentence(10),
-			owner:       testUser1.ID,
+			owner:       testUser2.OrganizationID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         testUser1.UserCtx,
 		},
 		{
 			name:      "happy path group, minimum fields",
@@ -334,9 +334,9 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 			if tc.addGroupToOrg {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					openlaneclient.UpdateOrganizationInput{
-						AddGroupCreatorIDs: []string{groupMember.GroupID},
+						AddGroupCreatorIDs: []string{group.ID},
 					}, nil)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			input := openlaneclient.CreateGroupInput{
@@ -360,48 +360,57 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 			resp, err := tc.client.CreateGroup(tc.ctx, input)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateGroup.Group)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.CreateGroup.Group.ID != "")
 
 			// Make sure provided values match
-			assert.Equal(t, tc.groupName, resp.CreateGroup.Group.Name)
-			assert.Equal(t, tc.description, *resp.CreateGroup.Group.Description)
+			assert.Check(t, is.Equal(tc.groupName, resp.CreateGroup.Group.Name))
+			assert.Check(t, is.Equal(tc.description, *resp.CreateGroup.Group.Description))
 
 			if tc.displayName != "" {
-				assert.Equal(t, tc.displayName, resp.CreateGroup.Group.DisplayName)
+				assert.Check(t, is.Equal(tc.displayName, resp.CreateGroup.Group.DisplayName))
 			} else {
 				// display name defaults to the name if not set
-				assert.Equal(t, tc.groupName, resp.CreateGroup.Group.DisplayName)
+				assert.Check(t, is.Equal(tc.groupName, resp.CreateGroup.Group.DisplayName))
 			}
 
 			if tc.settings != nil {
-				assert.Equal(t, resp.CreateGroup.Group.Setting.JoinPolicy, enums.JoinPolicyInviteOnly)
+				assert.Check(t, is.Equal(resp.CreateGroup.Group.Setting.JoinPolicy, enums.JoinPolicyInviteOnly))
 			}
 
 			if tc.owner != "" && tc.ctx == testUser2.UserCtx {
 				// make sure the owner is ignored if the user doesn't have access
-				assert.NotEqual(t, tc.owner, resp.CreateGroup.Group.Owner.ID)
+				assert.Check(t, tc.owner != resp.CreateGroup.Group.Owner.ID)
 			}
+
+			createdGroups = append(createdGroups, resp.CreateGroup.Group.ID)
 		})
 	}
+
+	// cleanup the group creator
+	_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
+		openlaneclient.UpdateOrganizationInput{
+			RemoveGroupCreatorIDs: []string{group.ID},
+		}, nil)
+	assert.NilError(t, err)
+
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: createdGroups}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateGroupWithMembers() {
-	t := suite.T()
-
+func TestMutationCreateGroupWithMembers(t *testing.T) {
 	testCases := []struct {
 		name     string
 		group    openlaneclient.CreateGroupInput
 		members  []*openlaneclient.GroupMembersInput
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -476,22 +485,21 @@ func (suite *GraphTestSuite) TestMutationCreateGroupWithMembers() {
 			resp, err := tc.client.CreateGroupWithMembers(tc.ctx, tc.group, tc.members)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateGroupWithMembers.Group)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.CreateGroupWithMembers.Group.ID != "")
 
 			// Make sure provided values match
-			assert.Equal(t, tc.group.Name, resp.CreateGroupWithMembers.Group.Name)
+			assert.Check(t, is.Equal(tc.group.Name, resp.CreateGroupWithMembers.Group.Name))
 
 			// ensure we can still set the visibility on the group when creating it
-			assert.Equal(t, resp.CreateGroupWithMembers.Group.Setting.Visibility, enums.VisibilityPrivate)
+			assert.Check(t, is.Equal(resp.CreateGroupWithMembers.Group.Setting.Visibility, enums.VisibilityPrivate))
 
 			// make sure there are three members, user who created the group, admin, and member
 			// except when using an api token
@@ -500,32 +508,34 @@ func (suite *GraphTestSuite) TestMutationCreateGroupWithMembers() {
 				expectedLen = 2
 			}
 
-			require.Len(t, resp.CreateGroupWithMembers.Group.Members, expectedLen)
+			assert.Assert(t, is.Len(resp.CreateGroupWithMembers.Group.Members, expectedLen))
 
 			// make sure we get the member data back
 			for _, member := range tc.members {
 				found := false
 				for _, m := range resp.CreateGroupWithMembers.Group.Members {
-					require.NotNil(t, m.User)
+					assert.Assert(t, m.User.ID != "")
 
 					if m.User.ID == member.UserID {
 						found = true
-						assert.Equal(t, *member.Role, m.Role)
+						assert.Check(t, is.Equal(*member.Role, m.Role))
 
-						assert.NotEmpty(t, m.User.FirstName)
-						assert.NotEmpty(t, m.User.LastName)
+						assert.Check(t, m.User.FirstName != nil)
+						assert.Check(t, m.User.LastName != nil)
 					}
 				}
 
-				assert.Truef(t, found, "member %s not found", member.UserID)
+				assert.Check(t, found, "member %s not found", member.UserID)
 			}
+
+			// cleanup using the api
+			_, err = tc.client.DeleteGroup(tc.ctx, resp.CreateGroupWithMembers.Group.ID)
+			assert.NilError(t, err)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
-	t := suite.T()
-
+func TestMutationCreateGroupByClone(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	group := (&GroupBuilder{client: suite.client, ProgramEditorsIDs: []string{program.ID}, ControlEditorsIDs: []string{control.ID}}).MustNew(testUser1.UserCtx, t)
@@ -541,7 +551,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
 		groupPermissionsClone *string
 		groupMembersClone     *string
 		members               []*openlaneclient.GroupMembersInput
-		client                *openlaneclient.OpenlaneClient
+		client                openlaneclient.OpenlaneClient
 		ctx                   context.Context
 		errorMsg              string
 	}{
@@ -603,19 +613,18 @@ func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
 			resp, err := tc.client.CreateGroupByClone(tc.ctx, tc.group, tc.groupPermissionsClone, tc.groupMembersClone)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateGroupByClone.Group)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.CreateGroupByClone.Group.ID != "")
 
 			// the display id should be different
-			require.NotEqual(t, group.DisplayID, resp.CreateGroupByClone.Group.DisplayID)
+			assert.Assert(t, group.DisplayID != resp.CreateGroupByClone.Group.DisplayID)
 
 			// make sure there are two members, user who created the group and the cloned member
 			// even when an api token is used, there will still be the original user (testUser1)
@@ -624,7 +633,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
 				expectedLen += 1
 			}
 
-			assert.Len(t, resp.CreateGroupByClone.Group.Members, expectedLen)
+			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Members, expectedLen))
 
 			// added a control and a program to the group we cloned, make sure they are there
 			expectedLenPerms := 0
@@ -632,14 +641,22 @@ func (suite *GraphTestSuite) TestMutationCreateGroupByClone() {
 				expectedLenPerms = 2
 			}
 
-			assert.Len(t, resp.CreateGroupByClone.Group.Permissions, expectedLenPerms)
+			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Permissions, expectedLenPerms))
+
+			// delete group via the api
+			_, err = tc.client.DeleteGroup(tc.ctx, resp.CreateGroupByClone.Group.ID)
+			assert.NilError(t, err)
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: groupAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateGroup() {
-	t := suite.T()
-
+func TestMutationUpdateGroup(t *testing.T) {
 	nameUpdate := gofakeit.Name()
 	displayNameUpdate := gofakeit.LetterN(40)
 	descriptionUpdate := gofakeit.HipsterSentence(10)
@@ -664,24 +681,24 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 
 	// ensure user cannot get access to the program
 	programResp, err := suite.client.api.GetProgramByID(gmCtx, program.ID)
-	require.Error(t, err)
-	require.Nil(t, programResp)
+
+	assert.Assert(t, is.Nil(programResp))
 
 	// ensure user cannot get access to the control
 	controlResp, err := suite.client.api.GetControlByID(gmCtx, control.ID)
-	require.Error(t, err)
-	require.Nil(t, controlResp)
+
+	assert.Assert(t, is.Nil(controlResp))
 
 	// access to procedures is granted by default in the org
 	procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
-	require.NoError(t, err)
-	require.NotNil(t, procedureResp)
+	assert.NilError(t, err)
+	assert.Assert(t, procedureResp != nil)
 
 	testCases := []struct {
 		name        string
 		updateInput openlaneclient.UpdateGroupInput
 		expectedRes openlaneclient.UpdateGroup_UpdateGroup_Group
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		errorMsg    string
 	}{
@@ -892,106 +909,117 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 			resp, err := tc.client.UpdateGroup(tc.ctx, group.ID, tc.updateInput)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateGroup.Group)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.UpdateGroup.Group.ID != "")
 
 			// Make sure provided values match
 			updatedGroup := resp.GetUpdateGroup().Group
-			assert.Equal(t, tc.expectedRes.Name, updatedGroup.Name)
-			assert.Equal(t, tc.expectedRes.DisplayName, updatedGroup.DisplayName)
-			assert.Equal(t, tc.expectedRes.Description, updatedGroup.Description)
+			assert.Check(t, is.Equal(tc.expectedRes.Name, updatedGroup.Name))
+			assert.Check(t, is.Equal(tc.expectedRes.DisplayName, updatedGroup.DisplayName))
+			assert.Check(t, is.DeepEqual(tc.expectedRes.Description, updatedGroup.Description))
 
 			if tc.updateInput.LogoURL != nil {
-				assert.Equal(t, *tc.expectedRes.LogoURL, *updatedGroup.LogoURL)
+				assert.Check(t, is.Equal(*tc.expectedRes.LogoURL, *updatedGroup.LogoURL))
 			}
 
 			if tc.updateInput.AddGroupMembers != nil {
 				// Adding a member to an group will make it 2 users, there is an admin
 				// assigned to the group automatically and a member added in the test case
-				assert.Len(t, updatedGroup.Members, 3)
-				assert.Equal(t, tc.expectedRes.Members[0].Role, updatedGroup.Members[2].Role)
-				assert.Equal(t, tc.expectedRes.Members[0].User.ID, updatedGroup.Members[2].User.ID)
+				assert.Check(t, is.Len(updatedGroup.Members, 3))
+				assert.Check(t, is.Equal(tc.expectedRes.Members[0].Role, updatedGroup.Members[2].Role))
+				assert.Check(t, is.Equal(tc.expectedRes.Members[0].User.ID, updatedGroup.Members[2].User.ID))
 			}
 
 			if tc.updateInput.UpdateGroupSettings != nil {
 				if tc.updateInput.UpdateGroupSettings.JoinPolicy != nil {
-					assert.Equal(t, updatedGroup.GetSetting().JoinPolicy, enums.JoinPolicyOpen)
+					assert.Check(t, is.Equal(updatedGroup.GetSetting().JoinPolicy, enums.JoinPolicyOpen))
 				}
 
 				if tc.updateInput.UpdateGroupSettings.Visibility != nil {
-					assert.Equal(t, updatedGroup.GetSetting().Visibility, *tc.updateInput.UpdateGroupSettings.Visibility)
+					assert.Check(t, is.Equal(updatedGroup.GetSetting().Visibility, *tc.updateInput.UpdateGroupSettings.Visibility))
 				}
 			}
 
 			if tc.updateInput.AddProgramViewerIDs != nil || tc.updateInput.AddProcedureEditorIDs != nil || tc.updateInput.AddControlBlockedGroupIDs != nil {
-				assert.Equal(t, len(tc.expectedRes.Permissions), len(updatedGroup.Permissions))
-				assert.ElementsMatch(t, tc.expectedRes.Permissions, updatedGroup.Permissions)
+				assert.Check(t, is.Equal(len(tc.expectedRes.Permissions), len(updatedGroup.Permissions)))
+
+				for _, permission := range updatedGroup.Permissions {
+					found := false
+					for _, expectedPermission := range tc.expectedRes.Permissions {
+						if *permission.ID == *expectedPermission.ID {
+							found = true
+							assert.Check(t, is.DeepEqual(permission, expectedPermission))
+						}
+					}
+
+					assert.Check(t, found, "permission %s not found", permission.ObjectType)
+				}
 
 				// ensure user can now get access to the program
 				programResp, err := suite.client.api.GetProgramByID(gmCtx, program.ID)
-				require.NoError(t, err)
-				require.NotNil(t, programResp)
+				assert.NilError(t, err)
+				assert.Assert(t, programResp != nil)
 
 				// ensure user can now access the control (they have editor access and should be able to make changes)
 				description := gofakeit.HipsterSentence(10)
 				controlResp, err := suite.client.api.UpdateControl(gmCtx, control.ID, openlaneclient.UpdateControlInput{
 					Description: &description,
 				})
-				require.NoError(t, err)
-				require.NotNil(t, controlResp)
-				assert.Equal(t, description, *controlResp.UpdateControl.Control.Description)
+				assert.NilError(t, err)
+				assert.Assert(t, controlResp != nil)
+				assert.Check(t, is.Equal(description, *controlResp.UpdateControl.Control.Description))
 
 				// access to procedures is granted by default in the org, it should be blocked now
 				procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
-				require.Error(t, err)
-				require.Nil(t, procedureResp)
+
+				assert.Assert(t, is.Nil(procedureResp))
 			}
 
 			if tc.updateInput.InheritGroupPermissions != nil {
 				// ensure the group has the additional permissions as the group we cloned, there is one overlap with the group we cloned
-				assert.Len(t, updatedGroup.Permissions, 5)
+				assert.Check(t, is.Len(updatedGroup.Permissions, 5))
 			}
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{om.ID, gm.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{group.ID, groupClone.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program.ID, programClone.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID, controlClone.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(testUser1.UserCtx, t)
+
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteGroup() {
-	t := suite.T()
-
+func TestMutationDeleteGroup(t *testing.T) {
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	group2 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	group3 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	privateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	privateGroupWithSetting, err := suite.client.api.GetGroupByID(testUser1.UserCtx, privateGroup.ID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = suite.client.api.UpdateGroupSetting(testUser1.UserCtx, privateGroupWithSetting.Group.Setting.ID, openlaneclient.UpdateGroupSettingInput{
 		Visibility: &enums.VisibilityPrivate,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name     string
 		groupID  string
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
-		{
-			name:    "delete group, happy path",
-			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
-			groupID: group1.ID,
-		},
 		{
 			name:    "delete private group, happy path",
 			client:  suite.client.api,
@@ -1015,7 +1043,13 @@ func (suite *GraphTestSuite) TestMutationDeleteGroup() {
 			client:   suite.client.api,
 			ctx:      viewOnlyUser.UserCtx,
 			groupID:  group1.ID,
-			errorMsg: notFoundErrorMsg, // user was not added to the group, so they can't delete it
+			errorMsg: notAuthorizedErrorMsg,
+		},
+		{
+			name:    "delete group, happy path",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			groupID: group1.ID,
 		},
 	}
 
@@ -1024,35 +1058,34 @@ func (suite *GraphTestSuite) TestMutationDeleteGroup() {
 			resp, err := tc.client.DeleteGroup(tc.ctx, tc.groupID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.DeleteGroup.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.DeleteGroup.DeletedID != "")
 
 			// make sure the deletedID matches the ID we wanted to delete
-			assert.Equal(t, tc.groupID, resp.DeleteGroup.DeletedID)
+			assert.Check(t, is.Equal(tc.groupID, resp.DeleteGroup.DeletedID))
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestManagedGroups() {
-	t := suite.T()
+func TestManagedGroups(t *testing.T) {
 	whereInput := &openlaneclient.GroupWhereInput{
 		IsManaged: lo.ToPtr(true),
 	}
 
-	resp, err := suite.client.api.GetGroups(testUser1.UserCtx, whereInput)
-	require.NoError(t, err)
-	require.NotNil(t, resp)
+	resp, err := suite.client.api.GetGroupInfo(testUser1.UserCtx, whereInput)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
 
 	// there should be 3 managed groups created by the system on org creation
-	assert.Len(t, resp.Groups.Edges, 3)
+	assert.Check(t, is.Len(resp.Groups.Edges, 3))
 
 	// you should not be able to update a managed group
 	groupID := resp.Groups.Edges[0].Node.ID
@@ -1061,7 +1094,6 @@ func (suite *GraphTestSuite) TestManagedGroups() {
 	}
 
 	_, err = suite.client.api.UpdateGroup(testUser1.UserCtx, groupID, input)
-	require.Error(t, err)
 	assert.ErrorContains(t, err, "managed groups cannot be modified")
 
 	// you should not be able to add group members to a managed group
@@ -1069,11 +1101,9 @@ func (suite *GraphTestSuite) TestManagedGroups() {
 		GroupID: groupID,
 		UserID:  testUser2.ID,
 	})
-	require.Error(t, err)
 	assert.ErrorContains(t, err, "managed groups cannot be modified")
 
 	// you should not be able to delete a managed group
 	_, err = suite.client.api.DeleteGroup(testUser1.UserCtx, groupID)
-	require.Error(t, err)
 	assert.ErrorContains(t, err, "managed groups cannot be modified")
 }

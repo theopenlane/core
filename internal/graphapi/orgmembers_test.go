@@ -4,9 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -14,16 +11,17 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestQueryOrgMembers() {
-	t := suite.T()
+func TestQueryOrgMembers(t *testing.T) {
+	testOrgMemberUser := suite.userBuilder(context.Background(), t)
+	org1Member := (&OrgMemberBuilder{client: suite.client}).MustNew(testOrgMemberUser.UserCtx, t)
 
-	org1Member := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: testOrgMemberUser.OrganizationID}).MustNew(testOrgMemberUser.UserCtx, t)
 
-	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
-
-	childReqCtx := auth.NewTestContextWithOrgID(testUser1.ID, childOrg.ID)
+	childReqCtx := auth.NewTestContextWithOrgID(testOrgMemberUser.ID, childOrg.ID)
 
 	(&OrgMemberBuilder{client: suite.client}).MustNew(childReqCtx, t)
 	(&OrgMemberBuilder{client: suite.client, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
@@ -31,23 +29,23 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedLen int
 		expectErr   bool
 	}{
 		{
 			name:        "happy path, get org members by org id",
-			queryID:     testUser1.OrganizationID,
+			queryID:     testOrgMemberUser.OrganizationID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedLen: 5, // account for the seeded org members
+			ctx:         testOrgMemberUser.UserCtx,
+			expectedLen: 2,
 		},
 		{
 			name:        "happy path, get org with parent members based on context",
 			client:      suite.client.api,
 			ctx:         childReqCtx,
-			expectedLen: 6, // 2 from child org, 2 from parent org because we dedupe
+			expectedLen: 3, // 2 from child org, 1 from parent org because we dedupe
 		},
 		{
 			name:        "happy path, get org with parent members using org ID, only direct members will be returned",
@@ -58,7 +56,7 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 		},
 		{
 			name:        "no access",
-			queryID:     testUser1.OrganizationID,
+			queryID:     testOrgMemberUser.OrganizationID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedLen: 0,
@@ -68,7 +66,7 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 			name:        "invalid-id",
 			queryID:     "tacos-for-dinner",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testOrgMemberUser.UserCtx,
 			expectedLen: 0,
 			expectErr:   false, // no org members returned
 		},
@@ -86,32 +84,29 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 			resp, err := tc.client.GetOrgMembersByOrgID(tc.ctx, &whereInput)
 
 			if tc.expectErr {
-				require.Error(t, err)
-
+				assert.Assert(t, err != nil)
+				assert.Assert(t, is.Nil(resp))
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			if tc.expectedLen == 0 {
-				assert.Empty(t, resp.OrgMemberships.Edges)
+				assert.Check(t, is.Len(resp.OrgMemberships.Edges, 0))
 
 				return
 			}
 
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.OrgMemberships)
-			assert.Len(t, resp.OrgMemberships.Edges, tc.expectedLen)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.OrgMemberships.Edges, tc.expectedLen))
 		})
 	}
 
 	// delete created org
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: childOrg.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, IDs: []string{childOrg.ID, testOrgMemberUser.OrganizationID}}).MustDelete(testOrgMemberUser.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
-	t := suite.T()
-
+func TestMutationCreateOrgMembers(t *testing.T) {
 	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	userCtx := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
@@ -223,39 +218,35 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			resp, err := suite.client.api.AddUserToOrgWithRole(tc.ctx, input)
 
 			if tc.errMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateOrgMembership)
-			assert.Equal(t, tc.userID, resp.CreateOrgMembership.OrgMembership.UserID)
-			assert.Equal(t, tc.orgID, resp.CreateOrgMembership.OrgMembership.OrganizationID)
-			assert.Equal(t, tc.role, resp.CreateOrgMembership.OrgMembership.Role)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.userID, resp.CreateOrgMembership.OrgMembership.UserID))
+			assert.Check(t, is.Equal(tc.orgID, resp.CreateOrgMembership.OrgMembership.OrganizationID))
+			assert.Check(t, is.Equal(tc.role, resp.CreateOrgMembership.OrgMembership.Role))
 
 			// make sure the user default org is set to the new org
-			suite.assertDefaultOrgUpdate(testUser1.UserCtx, tc.userID, tc.orgID, true)
+			suite.assertDefaultOrgUpdate(testUser1.UserCtx, t, tc.userID, tc.orgID, true)
 		})
 	}
 
 	// delete created org and users
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org1.ID}).MustDelete(testUser1.UserCtx, suite)
-
-	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, IDs: []string{user1.ID, user2.ID}}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, IDs: []string{org1.ID, orgWithRestrictions.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, IDs: []string{user1.ID, user2.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateOrgMembers() {
-	t := suite.T()
-
+func TestMutationUpdateOrgMembers(t *testing.T) {
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser1.UserCtx, &openlaneclient.OrgMembershipWhereInput{
 		OrganizationID: &testUser1.OrganizationID,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testUser1OrgMember := ""
 
@@ -310,38 +301,33 @@ func (suite *GraphTestSuite) TestMutationUpdateOrgMembers() {
 			resp, err := suite.client.api.UpdateUserRoleInOrg(testUser1.UserCtx, tc.orgMemberID, input)
 
 			if tc.errMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateOrgMembership)
-			assert.Equal(t, tc.role, resp.UpdateOrgMembership.OrgMembership.Role)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.role, resp.UpdateOrgMembership.OrgMembership.Role))
 		})
 	}
 
 	// delete created org members
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser1.UserCtx, suite)
-
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteOrgMembers() {
-	t := suite.T()
-
+func TestMutationDeleteOrgMembers(t *testing.T) {
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	resp, err := suite.client.api.RemoveUserFromOrg(testUser1.UserCtx, om.ID)
 
-	require.NoError(t, err)
-	require.NotNil(t, resp)
-	require.NotNil(t, resp.DeleteOrgMembership)
-	assert.Equal(t, om.ID, resp.DeleteOrgMembership.DeletedID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Equal(om.ID, resp.DeleteOrgMembership.DeletedID))
 
 	// make sure the user default org is not set to the deleted org
-	suite.assertDefaultOrgUpdate(testUser1.UserCtx, om.UserID, om.OrganizationID, false)
+	suite.assertDefaultOrgUpdate(testUser1.UserCtx, t, om.UserID, om.OrganizationID, false)
 
 	// test re-adding the user to the org
 	_, err = suite.client.api.AddUserToOrgWithRole(testUser1.UserCtx, openlaneclient.CreateOrgMembershipInput{
@@ -350,34 +336,31 @@ func (suite *GraphTestSuite) TestMutationDeleteOrgMembers() {
 		Role:           &om.Role,
 	})
 
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// cant remove self from org and owners cannot be removed
 	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser1.UserCtx, &openlaneclient.OrgMembershipWhereInput{
 		OrganizationID: &testUser1.OrganizationID,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	for _, edge := range orgMembers.OrgMemberships.Edges {
 		// cannot delete self
 		if edge.Node.UserID == adminUser.ID {
 			_, err := suite.client.api.RemoveUserFromOrg(adminUser.UserCtx, edge.Node.ID)
-			require.Error(t, err)
-
+			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 		}
 
 		// organization owner cannot be deleted
 		if edge.Node.UserID == testUser1.ID {
 			_, err = suite.client.api.RemoveUserFromOrg(adminUser.UserCtx, edge.Node.ID)
-			require.Error(t, err)
+			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 			break
 		}
 	}
 }
 
-func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, userID, orgID string, isEqual bool) {
-	t := suite.T()
-
+func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, t *testing.T, userID, orgID string, isEqual bool) {
 	// when an org membership is deleted, the user default org should be updated
 	// we need to allow the request because this is not for the user making the request
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -387,13 +370,13 @@ func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, userID,
 	}
 
 	userSettingResp, err := suite.client.api.GetUserSettings(allowCtx, where)
-	require.NoError(t, err)
-	require.NotNil(t, userSettingResp)
-	require.Len(t, userSettingResp.UserSettings.Edges, 1)
+	assert.NilError(t, err)
+	assert.Assert(t, userSettingResp != nil)
+	assert.Check(t, is.Len(userSettingResp.UserSettings.Edges, 1))
 
 	if isEqual {
-		assert.Equal(t, orgID, userSettingResp.UserSettings.Edges[0].Node.DefaultOrg.ID)
+		assert.Check(t, is.Equal(orgID, userSettingResp.UserSettings.Edges[0].Node.DefaultOrg.ID))
 	} else {
-		assert.NotEqual(t, orgID, userSettingResp.UserSettings.Edges[0].Node.DefaultOrg.ID)
+		assert.Check(t, orgID != userSettingResp.UserSettings.Edges[0].Node.DefaultOrg.ID)
 	}
 }

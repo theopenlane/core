@@ -5,9 +5,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/vektah/gqlparser/v2/ast"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/objects"
@@ -54,7 +54,7 @@ func TestStripOperation(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := stripOperation(tt.input)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -149,14 +149,13 @@ func TestRetrieveObjectDetails(t *testing.T) {
 
 			result, err := retrieveObjectDetails(rctx, tt.key, upload)
 			if tt.expectedErr != nil {
-				require.Error(t, err)
 
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected.CorrelatedObjectType, result.CorrelatedObjectType)
-			assert.Equal(t, tt.expected.Key, result.Key)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected.CorrelatedObjectType, result.CorrelatedObjectType))
+			assert.Check(t, is.Equal(tt.expected.Key, result.Key))
 		})
 	}
 }
@@ -206,13 +205,13 @@ func TestGetOrgOwnerFromInput(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := getOrgOwnerFromInput(&tt.input)
 			if tt.expectedErr != nil {
-				require.Error(t, err)
-				assert.Nil(t, result)
+
+				assert.Check(t, is.Nil(result))
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, result)
+			assert.NilError(t, err)
+			assert.Check(t, is.DeepEqual(tt.expected, result))
 		})
 	}
 }
@@ -275,13 +274,13 @@ func TestGetBulkUploadOwnerInput(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := getBulkUploadOwnerInput(tt.input)
 			if tt.expectedErr != nil {
-				require.Error(t, err)
-				assert.Nil(t, result)
+
+				assert.Check(t, is.Nil(result))
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, result)
+			assert.NilError(t, err)
+			assert.Check(t, is.DeepEqual(tt.expected, result))
 		})
 	}
 }

@@ -6,16 +6,16 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
 )
 
-func (suite *GraphTestSuite) TestQueryApiToken() {
-	t := suite.T()
+func TestQueryApiToken(t *testing.T) {
 
 	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -49,27 +49,27 @@ func (suite *GraphTestSuite) TestQueryApiToken() {
 			resp, err := suite.client.api.GetAPITokenByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.APIToken)
-			assert.Equal(t, redacted, resp.APIToken.Token)
-			assert.Equal(t, testUser1.OrganizationID, resp.APIToken.Owner.ID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(redacted, resp.APIToken.Token))
+			assert.Check(t, is.Equal(testUser1.OrganizationID, resp.APIToken.Owner.ID))
 		})
 	}
+
+	(&Cleanup[*generated.APITokenDeleteOne]{client: suite.client.db.APIToken, ID: apiToken.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryAPITokens() {
-	t := suite.T()
+func TestQueryAPITokens(t *testing.T) {
 
-	(&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	token1 := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	token2 := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -85,25 +85,27 @@ func (suite *GraphTestSuite) TestQueryAPITokens() {
 			resp, err := suite.client.api.GetAllAPITokens(testUser1.UserCtx)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// this is three because we create two tokens in the test
 			// and there is one created in the suite setup
-			assert.Len(t, resp.APITokens.Edges, 3)
+			assert.Check(t, is.Len(resp.APITokens.Edges, 3))
 		})
 	}
+
+	(&Cleanup[*generated.APITokenDeleteOne]{client: suite.client.db.APIToken, ID: token1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.APITokenDeleteOne]{client: suite.client.db.APIToken, ID: token2.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateAPIToken() {
-	t := suite.T()
+func TestMutationCreateAPIToken(t *testing.T) {
 
 	tokenDescription := gofakeit.Sentence(5)
 	expiration30Days := time.Now().Add(time.Hour * 24 * 30)
@@ -157,42 +159,42 @@ func (suite *GraphTestSuite) TestMutationCreateAPIToken() {
 			resp, err := suite.client.api.CreateAPIToken(testUser1.UserCtx, tc.input)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateAPIToken.APIToken)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Equal(t, tc.input.Name, resp.CreateAPIToken.APIToken.Name)
-			assert.Equal(t, tc.input.Description, resp.CreateAPIToken.APIToken.Description)
-			assert.Equal(t, tc.input.Scopes, resp.CreateAPIToken.APIToken.Scopes)
+			assert.Check(t, is.Equal(tc.input.Name, resp.CreateAPIToken.APIToken.Name))
+			assert.Check(t, is.DeepEqual(tc.input.Description, resp.CreateAPIToken.APIToken.Description))
+			assert.Check(t, is.DeepEqual(tc.input.Scopes, resp.CreateAPIToken.APIToken.Scopes))
 
 			// check expiration if set
 			if tc.input.ExpiresAt == nil {
-				assert.Empty(t, resp.CreateAPIToken.APIToken.ExpiresAt)
+				assert.Equal(t, resp.CreateAPIToken.APIToken.ExpiresAt, (*time.Time)(nil))
 			} else {
-				assert.True(t, tc.input.ExpiresAt.Equal(*resp.CreateAPIToken.APIToken.ExpiresAt))
+				assert.Check(t, tc.input.ExpiresAt.Equal(*resp.CreateAPIToken.APIToken.ExpiresAt))
 			}
 
 			// ensure the owner is the org set in the request
-			assert.Equal(t, testUser1.OrganizationID, *resp.CreateAPIToken.APIToken.OwnerID)
+			assert.Check(t, is.Equal(testUser1.OrganizationID, *resp.CreateAPIToken.APIToken.OwnerID))
 
 			// token should not be redacted on create
-			assert.NotEqual(t, redacted, resp.CreateAPIToken.APIToken.Token)
+			assert.Check(t, redacted != resp.CreateAPIToken.APIToken.Token)
 
 			// ensure the token is prefixed
-			assert.Contains(t, resp.CreateAPIToken.APIToken.Token, "tola_")
+			assert.Check(t, is.Contains(resp.CreateAPIToken.APIToken.Token, "tola_"))
+
+			(&Cleanup[*generated.APITokenDeleteOne]{client: suite.client.db.APIToken, ID: resp.CreateAPIToken.APIToken.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
-	t := suite.T()
+func TestMutationUpdateAPIToken(t *testing.T) {
 
 	token := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -255,40 +257,40 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 			resp, err := suite.client.api.UpdateAPIToken(tc.ctx, tc.tokenID, tc.input)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateAPIToken.APIToken)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			if tc.input.Name != nil {
-				assert.Equal(t, resp.UpdateAPIToken.APIToken.Name, *tc.input.Name)
+				assert.Check(t, is.Equal(resp.UpdateAPIToken.APIToken.Name, *tc.input.Name))
 			}
 
 			if tc.input.Description != nil {
-				assert.Equal(t, resp.UpdateAPIToken.APIToken.Description, tc.input.Description)
+				assert.Check(t, is.DeepEqual(resp.UpdateAPIToken.APIToken.Description, tc.input.Description))
 			}
 
 			// Ensure its added
 			if tc.input.Scopes != nil {
-				assert.Len(t, resp.UpdateAPIToken.APIToken.Scopes, 1)
+				assert.Check(t, is.Len(resp.UpdateAPIToken.APIToken.Scopes, 1))
 			}
 
-			assert.Equal(t, testUser1.OrganizationID, *resp.UpdateAPIToken.APIToken.OwnerID)
+			assert.Check(t, is.Equal(testUser1.OrganizationID, *resp.UpdateAPIToken.APIToken.OwnerID))
 
 			// token should be redacted on update
-			assert.Equal(t, redacted, resp.UpdateAPIToken.APIToken.Token)
+			assert.Check(t, is.Equal(redacted, resp.UpdateAPIToken.APIToken.Token))
 		})
 	}
+
+	(&Cleanup[*generated.APITokenDeleteOne]{client: suite.client.db.APIToken, ID: token.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteAPIToken() {
-	t := suite.T()
+func TestMutationDeleteAPIToken(t *testing.T) {
 
 	// create user to make tokens
 	user := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -326,30 +328,29 @@ func (suite *GraphTestSuite) TestMutationDeleteAPIToken() {
 			resp, err := suite.client.api.DeleteAPIToken(reqCtx, tc.tokenID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.Equal(t, tc.tokenID, resp.DeleteAPIToken.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Equal(t, tc.tokenID, resp.DeleteAPIToken.DeletedID)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestLastUsedAPIToken() {
-	t := suite.T()
+func TestLastUsedAPIToken(t *testing.T) {
 
 	// create new API token
 	token := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// check that the last used is empty
 	res, err := suite.client.api.GetAPITokenByID(testUser1.UserCtx, token.ID)
-	require.NoError(t, err)
-	assert.Empty(t, res.APIToken.LastUsedAt)
+	assert.NilError(t, err)
+	assert.Check(t, res.APIToken.LastUsedAt == nil)
 
 	// setup graph client using the API token
 	authHeader := openlaneclient.Authorization{
@@ -357,10 +358,10 @@ func (suite *GraphTestSuite) TestLastUsedAPIToken() {
 	}
 
 	graphClient, err := testutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeader))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// get the token to make sure the last used is updated using the token
 	out, err := graphClient.GetAPITokenByID(context.Background(), token.ID)
-	require.NoError(t, err)
-	assert.NotEmpty(t, out.APIToken.LastUsedAt)
+	assert.NilError(t, err)
+	assert.Check(t, !out.APIToken.LastUsedAt.IsZero())
 }

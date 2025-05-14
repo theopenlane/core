@@ -7,17 +7,16 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
 )
 
-func (suite *GraphTestSuite) TestQueryControlImplementation() {
-	t := suite.T()
-
+func TestQueryControlImplementation(t *testing.T) {
 	// create an controlImplementation1 to be queried using testUser1
 	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -43,7 +42,7 @@ func (suite *GraphTestSuite) TestQueryControlImplementation() {
 	testCases := []struct {
 		name                  string
 		queryID               string
-		client                *openlaneclient.OpenlaneClient
+		client                openlaneclient.OpenlaneClient
 		ctx                   context.Context
 		shouldHaveControls    bool
 		shouldHaveSubcontrols bool
@@ -132,44 +131,47 @@ func (suite *GraphTestSuite) TestQueryControlImplementation() {
 			resp, err := tc.client.GetControlImplementationByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			require.NotEmpty(t, resp.ControlImplementation)
-
-			assert.Equal(t, tc.queryID, resp.ControlImplementation.ID)
+			assert.Check(t, is.Equal(tc.queryID, resp.ControlImplementation.ID))
 
 			// check if the controlImplementation has the expected fields
-			assert.NotEmpty(t, resp.ControlImplementation.ID)
+			assert.Check(t, len(resp.ControlImplementation.ID) != 0)
 
 			// model tests set up defaults here
-			assert.NotEmpty(t, resp.ControlImplementation.Details)
-			assert.NotEmpty(t, resp.ControlImplementation.ImplementationDate)
+			assert.Check(t, resp.ControlImplementation.Details != nil)
+			assert.Check(t, !resp.ControlImplementation.ImplementationDate.IsZero())
 
 			if tc.shouldHaveControls {
-				assert.NotEmpty(t, resp.ControlImplementation.Controls)
+				assert.Check(t, resp.ControlImplementation.Controls.Edges != nil)
 			}
 
 			if tc.shouldHaveSubcontrols {
-				assert.NotEmpty(t, resp.ControlImplementation.Subcontrols)
-				assert.Len(t, resp.ControlImplementation.Subcontrols.Edges, 2)
-				assert.Equal(t, subcontrol1.ID, resp.ControlImplementation.Subcontrols.Edges[0].Node.ID)
-				assert.Equal(t, subcontrol2.ID, resp.ControlImplementation.Subcontrols.Edges[1].Node.ID)
+				assert.Check(t, len(resp.ControlImplementation.Subcontrols.Edges) != 0)
+				assert.Check(t, is.Len(resp.ControlImplementation.Subcontrols.Edges, 2))
+				assert.Check(t, is.Equal(subcontrol1.ID, resp.ControlImplementation.Subcontrols.Edges[0].Node.ID))
+				assert.Check(t, is.Equal(subcontrol2.ID, resp.ControlImplementation.Subcontrols.Edges[1].Node.ID))
 			}
 		})
 	}
+
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation1.ID, controlImplementation3.ID, controlImplementation4.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation2.ID}}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupViewer.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID}}).MustDelete(testUser1.UserCtx, t)
+
 }
 
-func (suite *GraphTestSuite) TestQuerycontrolImplementations() {
-	t := suite.T()
-
+func TestQueryControlImplementations(t *testing.T) {
 	// create multiple controlImplementations to be queried using testUser1
 	numCIs := 5
 	for range numCIs {
@@ -182,14 +184,17 @@ func (suite *GraphTestSuite) TestQuerycontrolImplementations() {
 	(&GroupMemberBuilder{client: suite.client, GroupID: groupViewer.ID, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	numCIsWithGroupViewer := 2
+	controlIDs := []string{}
 	for range numCIsWithGroupViewer {
 		control1 := (&ControlBuilder{client: suite.client, ControlViewerGroupID: groupViewer.ID}).MustNew(testUser1.UserCtx, t)
 		(&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser1.UserCtx, t)
+
+		controlIDs = append(controlIDs, control1.ID)
 	}
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -228,17 +233,20 @@ func (suite *GraphTestSuite) TestQuerycontrolImplementations() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllControlImplementations(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.ControlImplementations.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.ControlImplementations.Edges, tc.expectedResults))
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupViewer.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateControlImplementation() {
-	t := suite.T()
-
+func TestMutationCreateControlImplementation(t *testing.T) {
 	yesterday := time.Now().Add(-time.Hour * 24)
 
 	groupEditor := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -268,7 +276,7 @@ func (suite *GraphTestSuite) TestMutationCreateControlImplementation() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateControlImplementationInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -356,77 +364,86 @@ func (suite *GraphTestSuite) TestMutationCreateControlImplementation() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateControlImplementation(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
 
 			// check default fields
-			assert.NotEmpty(t, resp.CreateControlImplementation.ControlImplementation.ID)
+			assert.Check(t, len(resp.CreateControlImplementation.ControlImplementation.ID) != 0)
 
 			if tc.request.Details != nil {
-				assert.Equal(t, *tc.request.Details, *resp.CreateControlImplementation.ControlImplementation.Details)
+				assert.Check(t, is.Equal(*tc.request.Details, *resp.CreateControlImplementation.ControlImplementation.Details))
 			} else {
-				assert.Empty(t, resp.CreateControlImplementation.ControlImplementation.Details)
+				assert.Check(t, is.Equal(*resp.CreateControlImplementation.ControlImplementation.Details, ""))
 			}
 
 			// check if the implementation is close, time is hard in CI so don't check exact
 			if tc.request.ImplementationDate != nil {
-				assert.WithinDuration(t, yesterday, *resp.CreateControlImplementation.ControlImplementation.ImplementationDate, time.Hour)
+				assert.Check(t, resp.CreateControlImplementation.ControlImplementation.ImplementationDate != nil)
+				diff := resp.CreateControlImplementation.ControlImplementation.ImplementationDate.Sub(yesterday)
+				assert.Check(t, diff >= -time.Hour && diff <= time.Hour, "time difference is not within 1 hour")
 			} else {
-				assert.Nil(t, resp.CreateControlImplementation.ControlImplementation.ImplementationDate)
+				assert.Check(t, is.Nil(resp.CreateControlImplementation.ControlImplementation.ImplementationDate))
 			}
 
 			if tc.request.Tags != nil {
-				assert.Equal(t, tc.request.Tags, resp.CreateControlImplementation.ControlImplementation.Tags)
+				assert.Check(t, is.DeepEqual(tc.request.Tags, resp.CreateControlImplementation.ControlImplementation.Tags))
 			} else {
-				assert.Empty(t, resp.CreateControlImplementation.ControlImplementation.Tags)
+				assert.Check(t, is.Len(resp.CreateControlImplementation.ControlImplementation.Tags, 0))
 			}
 
 			if tc.request.Verified != nil {
-				assert.Equal(t, *tc.request.Verified, *resp.CreateControlImplementation.ControlImplementation.Verified)
+				assert.Check(t, is.Equal(*tc.request.Verified, *resp.CreateControlImplementation.ControlImplementation.Verified))
 			} else {
-				assert.False(t, *resp.CreateControlImplementation.ControlImplementation.Verified)
+				assert.Check(t, !*resp.CreateControlImplementation.ControlImplementation.Verified)
 			}
 
 			if tc.request.VerificationDate != nil {
-				assert.WithinDuration(t, yesterday, *resp.CreateControlImplementation.ControlImplementation.VerificationDate, time.Hour)
+				assert.Check(t, resp.CreateControlImplementation.ControlImplementation.VerificationDate != nil)
+				diff := resp.CreateControlImplementation.ControlImplementation.VerificationDate.Sub(yesterday)
+				assert.Check(t, diff >= -time.Hour && diff <= time.Hour, "time difference is not within 1 hour")
 			} else {
-				assert.Nil(t, resp.CreateControlImplementation.ControlImplementation.VerificationDate)
+				assert.Check(t, is.Nil(resp.CreateControlImplementation.ControlImplementation.VerificationDate))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, tc.request.Status, resp.CreateControlImplementation.ControlImplementation.Status)
+				assert.Check(t, is.DeepEqual(tc.request.Status, resp.CreateControlImplementation.ControlImplementation.Status))
 			} else {
 				// default value is DocumentDraft in the model
-				assert.Equal(t, &enums.DocumentDraft, resp.CreateControlImplementation.ControlImplementation.Status)
+				assert.Check(t, is.DeepEqual(&enums.DocumentDraft, resp.CreateControlImplementation.ControlImplementation.Status))
 			}
 
 			if tc.request.ControlIDs != nil {
-				assert.Len(t, resp.CreateControlImplementation.ControlImplementation.Controls.Edges, numControls)
-				assert.Equal(t, int64(numControls), resp.CreateControlImplementation.ControlImplementation.Controls.TotalCount)
+				assert.Check(t, is.Len(resp.CreateControlImplementation.ControlImplementation.Controls.Edges, numControls))
+				assert.Check(t, is.Equal(int64(numControls), resp.CreateControlImplementation.ControlImplementation.Controls.TotalCount))
 			} else {
-				assert.Empty(t, resp.CreateControlImplementation.ControlImplementation.Controls.Edges)
+				assert.Check(t, is.Len(resp.CreateControlImplementation.ControlImplementation.Controls.Edges, 0))
 			}
 
 			if tc.request.SubcontrolIDs != nil {
-				assert.Len(t, resp.CreateControlImplementation.ControlImplementation.Subcontrols.Edges, numControls)
-				assert.Equal(t, int64(numControls), resp.CreateControlImplementation.ControlImplementation.Subcontrols.TotalCount)
+				assert.Check(t, is.Len(resp.CreateControlImplementation.ControlImplementation.Subcontrols.Edges, numControls))
+				assert.Check(t, is.Equal(int64(numControls), resp.CreateControlImplementation.ControlImplementation.Subcontrols.TotalCount))
 			} else {
-				assert.Empty(t, resp.CreateControlImplementation.ControlImplementation.Subcontrols.Edges)
+				assert.Check(t, is.Len(resp.CreateControlImplementation.ControlImplementation.Subcontrols.Edges, 0))
 			}
+
+			(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: resp.CreateControlImplementation.ControlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: allControlIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupEditor.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateControlImplementation() {
-	t := suite.T()
-
+func TestMutationUpdateControlImplementation(t *testing.T) {
 	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -459,7 +476,7 @@ func (suite *GraphTestSuite) TestMutationUpdateControlImplementation() {
 		name        string
 		request     openlaneclient.UpdateControlImplementationInput
 		id          string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -571,59 +588,68 @@ func (suite *GraphTestSuite) TestMutationUpdateControlImplementation() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateControlImplementation(tc.ctx, tc.id, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
 
 			if tc.request.Details != nil {
-				assert.Equal(t, *tc.request.Details, *resp.UpdateControlImplementation.ControlImplementation.Details)
+				assert.Check(t, is.Equal(*tc.request.Details, *resp.UpdateControlImplementation.ControlImplementation.Details))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, tc.request.Status, resp.UpdateControlImplementation.ControlImplementation.Status)
+				assert.Check(t, is.DeepEqual(tc.request.Status, resp.UpdateControlImplementation.ControlImplementation.Status))
 			}
 
 			if tc.request.Verified != nil {
-				assert.Equal(t, tc.request.Verified, resp.UpdateControlImplementation.ControlImplementation.Verified)
+				assert.Check(t, is.DeepEqual(tc.request.Verified, resp.UpdateControlImplementation.ControlImplementation.Verified))
 			}
 
 			if tc.request.VerificationDate != nil {
-				assert.WithinDuration(t, yesterday, *resp.UpdateControlImplementation.ControlImplementation.VerificationDate, time.Hour)
+				assert.Check(t, resp.UpdateControlImplementation.ControlImplementation.VerificationDate != nil)
+				diff := resp.UpdateControlImplementation.ControlImplementation.VerificationDate.Sub(yesterday)
+				assert.Check(t, diff >= -time.Hour && diff <= time.Hour, "time difference is not within 1 hour")
 			} else if tc.request.Verified != nil && *tc.request.Verified {
 				// default value is time.Now() in the model if verified is true
-				assert.WithinDuration(t, time.Now(), *resp.UpdateControlImplementation.ControlImplementation.VerificationDate, time.Hour)
+				assert.Check(t, resp.UpdateControlImplementation.ControlImplementation.VerificationDate != nil)
+				diff := resp.UpdateControlImplementation.ControlImplementation.VerificationDate.Sub(time.Now())
+				assert.Check(t, diff >= -time.Hour && diff <= time.Hour, "time difference is not within 1 hour")
 			}
 
 			if tc.request.ImplementationDate != nil {
-				assert.WithinDuration(t, yesterday, *resp.UpdateControlImplementation.ControlImplementation.ImplementationDate, time.Hour)
+				assert.Check(t, resp.UpdateControlImplementation.ControlImplementation.ImplementationDate != nil)
+				diff := resp.UpdateControlImplementation.ControlImplementation.ImplementationDate.Sub(yesterday)
+				assert.Check(t, diff >= -time.Hour && diff <= time.Hour, "time difference is not within 1 hour")
 			}
 
 			if tc.request.Tags != nil {
-				assert.Equal(t, tc.request.Tags, resp.UpdateControlImplementation.ControlImplementation.Tags)
+				assert.Check(t, is.DeepEqual(tc.request.Tags, resp.UpdateControlImplementation.ControlImplementation.Tags))
 			}
 
 			if tc.request.AddControlIDs != nil {
-				assert.Len(t, resp.UpdateControlImplementation.ControlImplementation.Controls.Edges, len(tc.request.AddControlIDs))
-				assert.Equal(t, int64(len(tc.request.AddControlIDs)), resp.UpdateControlImplementation.ControlImplementation.Controls.TotalCount)
+				assert.Check(t, is.Len(resp.UpdateControlImplementation.ControlImplementation.Controls.Edges, len(tc.request.AddControlIDs)))
+				assert.Check(t, is.Equal(int64(len(tc.request.AddControlIDs)), resp.UpdateControlImplementation.ControlImplementation.Controls.TotalCount))
 			}
 
 			if tc.request.AddSubcontrolIDs != nil {
-				assert.Len(t, resp.UpdateControlImplementation.ControlImplementation.Subcontrols.Edges, numSubcontrols)
-				assert.Equal(t, int64(numSubcontrols), resp.UpdateControlImplementation.ControlImplementation.Subcontrols.TotalCount)
+				assert.Check(t, is.Len(resp.UpdateControlImplementation.ControlImplementation.Subcontrols.Edges, numSubcontrols))
+				assert.Check(t, is.Equal(int64(numSubcontrols), resp.UpdateControlImplementation.ControlImplementation.Subcontrols.TotalCount))
 			}
 		})
 	}
+
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation1.ID, controlImplementation2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupEditor.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeletecontrolImplementation() {
-	t := suite.T()
-
+func TestMutationDeleteControlImplementation(t *testing.T) {
 	// create controlImplementations to be deleted
 	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -631,7 +657,7 @@ func (suite *GraphTestSuite) TestMutationDeletecontrolImplementation() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -674,16 +700,16 @@ func (suite *GraphTestSuite) TestMutationDeletecontrolImplementation() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteControlImplementation(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteControlImplementation.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteControlImplementation.DeletedID))
 		})
 	}
 }

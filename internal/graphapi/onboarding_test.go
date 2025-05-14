@@ -5,22 +5,24 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
-	t := suite.T()
+func TestMutationCreateOnboarding(t *testing.T) {
+	// create another user for this test
+	// so it doesn't interfere with the other tests
+	onboardingUser := suite.userBuilder(context.Background(), t)
 
 	companyName := "Test Acme Corp, Inc."
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateOnboardingInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -30,7 +32,7 @@ func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
 				CompanyName: companyName,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    onboardingUser.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -53,13 +55,13 @@ func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    onboardingUser.UserCtx,
 		},
 		{
 			name:        "missing required field",
 			request:     openlaneclient.CreateOnboardingInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         onboardingUser.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -68,7 +70,7 @@ func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
 				CompanyName: companyName,
 			},
 			client:      suite.client.apiWithPAT,
-			ctx:         testUser1.UserCtx,
+			ctx:         context.Background(),
 			expectedErr: graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
 		{
@@ -77,7 +79,7 @@ func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
 				CompanyName: companyName,
 			},
 			client:      suite.client.apiWithToken,
-			ctx:         testUser1.UserCtx,
+			ctx:         context.Background(),
 			expectedErr: graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
 	}
@@ -86,22 +88,20 @@ func (suite *GraphTestSuite) TestMutationCreateOnboarding() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateOnboarding(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+				assert.Assert(t, is.ErrorContains(err, tc.expectedErr))
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check required fields
-			require.NotNil(t, resp.CreateOnboarding)
-			require.NotNil(t, resp.CreateOnboarding.Onboarding)
-			assert.NotNil(t, resp.CreateOnboarding.Onboarding.ID)
-			assert.NotNil(t, resp.CreateOnboarding.Onboarding.OrganizationID)
-			assert.Equal(t, tc.request.CompanyName, resp.CreateOnboarding.Onboarding.CompanyName)
+			assert.Check(t, resp.CreateOnboarding.Onboarding.ID != "")
+			assert.Check(t, resp.CreateOnboarding.Onboarding.OrganizationID != nil)
+			assert.Check(t, is.Equal(tc.request.CompanyName, resp.CreateOnboarding.Onboarding.CompanyName))
 		})
 	}
 }

@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/utils/ulids"
 
@@ -14,15 +14,13 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-func (suite *GraphTestSuite) TestQueryEntity() {
-	t := suite.T()
-
+func TestQueryEntity(t *testing.T) {
 	entity := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -58,32 +56,32 @@ func (suite *GraphTestSuite) TestQueryEntity() {
 			resp, err := tc.client.GetEntityByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.Entity)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, resp.Entity.ID != "")
 		})
 	}
 
 	// delete created entity
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete the entityType
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryEntities() {
-	t := suite.T()
-
-	_ = (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	_ = (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+func TestQueryEntities(t *testing.T) {
+	entity1 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entity2 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -116,21 +114,25 @@ func (suite *GraphTestSuite) TestQueryEntities() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllEntities(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.Entities.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.Entities.Edges, tc.expectedResults))
 		})
 	}
+
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{entity1.ID, entity2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: []string{entity1.EntityTypeID, entity2.EntityTypeID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateEntity() {
-	t := suite.T()
+func TestMutationCreateEntity(t *testing.T) {
+	entitiesToDelete := []string{}
+	entityTypesToDelete := []string{}
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateEntityInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -217,59 +219,64 @@ func (suite *GraphTestSuite) TestMutationCreateEntity() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateEntity(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Name is set to the Display Name if not provided
 			if tc.request.Name == nil {
-				assert.Contains(t, *resp.CreateEntity.Entity.Name, *tc.request.DisplayName)
+				assert.Check(t, is.Contains(*resp.CreateEntity.Entity.Name, *tc.request.DisplayName))
 			} else {
-				assert.Equal(t, *tc.request.Name, *resp.CreateEntity.Entity.Name)
+				assert.Check(t, is.Equal(*tc.request.Name, *resp.CreateEntity.Entity.Name))
 			}
 
 			// Display Name is set to the Name if not provided
 			if tc.request.DisplayName == nil {
-				assert.Equal(t, *tc.request.Name, *resp.CreateEntity.Entity.DisplayName)
+				assert.Check(t, is.Equal(*tc.request.Name, *resp.CreateEntity.Entity.DisplayName))
 			} else {
-				assert.Equal(t, *tc.request.DisplayName, *resp.CreateEntity.Entity.DisplayName)
+				assert.Check(t, is.Equal(*tc.request.DisplayName, *resp.CreateEntity.Entity.DisplayName))
 			}
 
 			if tc.request.Description == nil {
-				assert.Empty(t, resp.CreateEntity.Entity.Description)
+				assert.Check(t, is.Equal(*resp.CreateEntity.Entity.Description, ""))
 			} else {
-				assert.Equal(t, *tc.request.Description, *resp.CreateEntity.Entity.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateEntity.Entity.Description))
 			}
 
 			if tc.request.Domains != nil {
-				assert.Equal(t, tc.request.Domains, resp.CreateEntity.Entity.Domains)
+				assert.Check(t, is.DeepEqual(tc.request.Domains, resp.CreateEntity.Entity.Domains))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, tc.request.Status, resp.CreateEntity.Entity.Status)
+				assert.Check(t, is.DeepEqual(tc.request.Status, resp.CreateEntity.Entity.Status))
 			} else {
 				// default status is active
-				assert.Equal(t, "active", *resp.CreateEntity.Entity.Status)
+				assert.Check(t, is.Equal("active", *resp.CreateEntity.Entity.Status))
 			}
 
 			if tc.request.Note != nil {
-				require.Len(t, resp.CreateEntity.Entity.Notes.Edges, 1)
-				require.NotEmpty(t, resp.CreateEntity.Entity.Notes)
-				assert.Equal(t, tc.request.Note.Text, resp.CreateEntity.Entity.Notes.Edges[0].Node.Text)
+				assert.Check(t, is.Len(resp.CreateEntity.Entity.Notes.Edges, 1))
+				assert.Check(t, is.Equal(tc.request.Note.Text, resp.CreateEntity.Entity.Notes.Edges[0].Node.Text))
+			}
+
+			entitiesToDelete = append(entitiesToDelete, resp.CreateEntity.Entity.ID)
+
+			if resp.CreateEntity.Entity.EntityType != nil {
+				entityTypesToDelete = append(entityTypesToDelete, resp.CreateEntity.Entity.EntityType.ID)
 			}
 		})
 	}
+
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entitiesToDelete}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypesToDelete}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateEntity() {
-	t := suite.T()
-
+func TestMutationUpdateEntity(t *testing.T) {
 	entity := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	numNotes := 0
 	numDomains := 0
@@ -277,7 +284,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntity() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateEntityInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -344,55 +351,56 @@ func (suite *GraphTestSuite) TestMutationUpdateEntity() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateEntity(tc.ctx, entity.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateEntity.Entity.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateEntity.Entity.Description))
 			}
 
 			if tc.request.DisplayName != nil {
-				assert.Equal(t, *tc.request.DisplayName, *resp.UpdateEntity.Entity.DisplayName)
+				assert.Check(t, is.Equal(*tc.request.DisplayName, *resp.UpdateEntity.Entity.DisplayName))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.UpdateEntity.Entity.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateEntity.Entity.Status))
 			}
 
 			if tc.request.Domains != nil {
 				numDomains++
 
-				assert.Contains(t, resp.UpdateEntity.Entity.Domains, tc.request.Domains[0])
-				assert.Len(t, resp.UpdateEntity.Entity.Domains, numDomains)
+				assert.Check(t, is.Contains(resp.UpdateEntity.Entity.Domains, tc.request.Domains[0]))
+				assert.Check(t, is.Len(resp.UpdateEntity.Entity.Domains, numDomains))
 			}
 
 			if tc.request.AppendDomains != nil {
 				numDomains++
 
-				assert.Contains(t, resp.UpdateEntity.Entity.Domains, tc.request.AppendDomains[0])
-				assert.Len(t, resp.UpdateEntity.Entity.Domains, numDomains)
+				assert.Check(t, is.Contains(resp.UpdateEntity.Entity.Domains, tc.request.AppendDomains[0]))
+				assert.Check(t, is.Len(resp.UpdateEntity.Entity.Domains, numDomains))
 			}
 
 			if tc.request.Note != nil {
 				numNotes++
 
-				require.Len(t, resp.UpdateEntity.Entity.Notes.Edges, numNotes)
-				assert.Equal(t, tc.request.Note.Text, resp.UpdateEntity.Entity.Notes.Edges[0].Node.Text)
+				assert.Check(t, is.Len(resp.UpdateEntity.Entity.Notes.Edges, numNotes))
+				assert.Check(t, is.Equal(tc.request.Note.Text, resp.UpdateEntity.Entity.Notes.Edges[0].Node.Text))
 			}
 		})
 	}
+
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteEntity() {
-	t := suite.T()
-
+func TestMutationDeleteEntity(t *testing.T) {
 	entity1 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	entity2 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	entity3 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -400,7 +408,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntity() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -449,16 +457,18 @@ func (suite *GraphTestSuite) TestMutationDeleteEntity() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteEntity(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteEntity.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteEntity.DeletedID))
 		})
 	}
+
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: []string{entity1.EntityTypeID, entity2.EntityTypeID, entity3.EntityTypeID}}).MustDelete(testUser1.UserCtx, t)
 }

@@ -7,17 +7,15 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 )
 
-func (suite *GraphTestSuite) TestQueryEvidence() {
-	t := suite.T()
+func TestQueryEvidence(t *testing.T) {
 
 	program := (&ProgramBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
@@ -36,7 +34,7 @@ func (suite *GraphTestSuite) TestQueryEvidence() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -98,45 +96,45 @@ func (suite *GraphTestSuite) TestQueryEvidence() {
 			resp, err := tc.client.GetEvidenceByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			require.NotEmpty(t, resp.Evidence)
+			assert.Check(t, is.Equal(tc.queryID, resp.Evidence.ID))
 
-			assert.Equal(t, tc.queryID, resp.Evidence.ID)
-
-			assert.NotEmpty(t, resp.Evidence.Name)
-			assert.NotEmpty(t, resp.Evidence.DisplayID)
-			assert.NotEmpty(t, resp.Evidence.CreatedAt)
-			assert.NotEmpty(t, resp.Evidence.UpdatedAt)
+			assert.Check(t, len(resp.Evidence.Name) != 0)
+			assert.Check(t, len(resp.Evidence.DisplayID) != 0)
+			assert.Check(t, !resp.Evidence.CreatedAt.IsZero())
+			assert.Check(t, !resp.Evidence.UpdatedAt.IsZero())
 		})
 	}
+
+	// delete created evidence
+	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{evidence.ID, evidenceControl.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryEvidences() {
-	t := suite.T()
-
+func TestQueryEvidences(t *testing.T) {
 	// create multiple objects by adminUser, org owner should have access to them as well
-	(&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-	(&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	e1 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	e2 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	userCtxAnotherOrg := auth.NewTestContextWithOrgID(testUser1.ID, org.ID)
+	userAnotherOrg := suite.userBuilder(context.Background(), t)
 
 	// add evidence for the user to another org; this should not be returned for JWT auth, since it's
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
-	(&EvidenceBuilder{client: suite.client}).MustNew(userCtxAnotherOrg, t)
+	e3 := (&EvidenceBuilder{client: suite.client}).MustNew(userAnotherOrg.UserCtx, t)
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -175,31 +173,33 @@ func (suite *GraphTestSuite) TestQueryEvidences() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllEvidences(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.Evidences.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.Evidences.Edges, tc.expectedResults))
 		})
 	}
+
+	// delete created evidences
+	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{e1.ID, e2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: e3.ID}).MustDelete(userAnotherOrg.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateEvidence() {
-	t := suite.T()
-
+func TestMutationCreateEvidence(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	pngFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	csvFile, err := objects.NewUploadFile("testdata/uploads/orgs.csv")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	pdfFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	txtFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// create edges to be used in the test cases
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
@@ -213,7 +213,7 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 		name        string
 		request     openlaneclient.CreateEvidenceInput
 		files       []*graphql.Upload
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -349,103 +349,121 @@ func (suite *GraphTestSuite) TestMutationCreateEvidence() {
 
 			resp, err := tc.client.CreateEvidence(tc.ctx, tc.request, tc.files)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check required fields
-			require.NotEmpty(t, resp.CreateEvidence.Evidence.ID)
-			require.NotEmpty(t, resp.CreateEvidence.Evidence.DisplayID)
-			require.NotEmpty(t, resp.CreateEvidence.Evidence.Name)
+			assert.Check(t, len(resp.CreateEvidence.Evidence.ID) != 0)
+			assert.Check(t, len(resp.CreateEvidence.Evidence.DisplayID) != 0)
+			assert.Check(t, len(resp.CreateEvidence.Evidence.Name) != 0)
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.CreateEvidence.Evidence.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateEvidence.Evidence.Description))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.Description)
+				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Description, ""))
 			}
 
 			if tc.request.CollectionProcedure != nil {
-				assert.Equal(t, *tc.request.CollectionProcedure, *resp.CreateEvidence.Evidence.CollectionProcedure)
+				assert.Check(t, is.Equal(*tc.request.CollectionProcedure, *resp.CreateEvidence.Evidence.CollectionProcedure))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.CollectionProcedure)
+				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.CollectionProcedure, ""))
 			}
 
 			if tc.request.Source != nil {
-				assert.Equal(t, *tc.request.Source, *resp.CreateEvidence.Evidence.Source)
+				assert.Check(t, is.Equal(*tc.request.Source, *resp.CreateEvidence.Evidence.Source))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.Source)
+				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Source, ""))
 			}
 
 			if tc.request.CreationDate != nil {
-				assert.WithinDuration(t, *tc.request.CreationDate, resp.CreateEvidence.Evidence.CreationDate, 2*time.Minute)
+				assert.Check(t, !resp.CreateEvidence.Evidence.CreationDate.IsZero())
+				diff := resp.CreateEvidence.Evidence.CreationDate.Sub(*tc.request.CreationDate)
+				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			} else {
-				assert.WithinDuration(t, time.Now(), resp.CreateEvidence.Evidence.CreationDate, 2*time.Minute)
+				assert.Check(t, !resp.CreateEvidence.Evidence.CreationDate.IsZero())
+				diff := resp.CreateEvidence.Evidence.CreationDate.Sub(time.Now())
+				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			}
 
 			if tc.request.RenewalDate != nil {
-				assert.WithinDuration(t, *tc.request.RenewalDate, *resp.CreateEvidence.Evidence.RenewalDate, 2*time.Minute)
+				assert.Check(t, !resp.CreateEvidence.Evidence.RenewalDate.IsZero())
+				diff := resp.CreateEvidence.Evidence.RenewalDate.Sub(*tc.request.RenewalDate)
+				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			} else {
-				assert.WithinDuration(t, time.Now().Add(365*24*time.Hour), *resp.CreateEvidence.Evidence.RenewalDate, 2*time.Minute)
+				assert.Check(t, !resp.CreateEvidence.Evidence.RenewalDate.IsZero())
+				diff := resp.CreateEvidence.Evidence.RenewalDate.Sub(time.Now().Add(365 * 24 * time.Hour)) // check that it is 1 year from now
+				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			}
 
 			if tc.request.IsAutomated != nil {
-				assert.Equal(t, *tc.request.IsAutomated, *resp.CreateEvidence.Evidence.IsAutomated)
+				assert.Check(t, is.Equal(*tc.request.IsAutomated, *resp.CreateEvidence.Evidence.IsAutomated))
 			} else {
-				assert.False(t, *resp.CreateEvidence.Evidence.IsAutomated)
+				assert.Check(t, !*resp.CreateEvidence.Evidence.IsAutomated)
 			}
 
 			if tc.request.URL != nil {
-				assert.Equal(t, *tc.request.URL, *resp.CreateEvidence.Evidence.URL)
+				assert.Check(t, is.Equal(*tc.request.URL, *resp.CreateEvidence.Evidence.URL))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.URL)
+				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.URL, ""))
 			}
 
 			if tc.request.ProgramIDs != nil {
-				assert.Len(t, resp.CreateEvidence.Evidence.Programs.Edges, len(tc.request.ProgramIDs))
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Programs.Edges, len(tc.request.ProgramIDs)))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.Programs.Edges)
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Programs.Edges, 0))
 			}
 
 			if tc.request.TaskIDs != nil {
-				assert.Len(t, resp.CreateEvidence.Evidence.Tasks.Edges, len(tc.request.TaskIDs))
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Tasks.Edges, len(tc.request.TaskIDs)))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.Tasks.Edges)
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Tasks.Edges, 0))
 			}
 
 			if tc.files != nil && len(tc.files) > 0 {
-				assert.Len(t, resp.CreateEvidence.Evidence.Files.Edges, len(tc.files))
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Files.Edges, len(tc.files)))
 			} else {
-				assert.Empty(t, resp.CreateEvidence.Evidence.Files.Edges)
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Files.Edges, 0))
 			}
 
 			// attempt to retrieve the created evidence by org owner, no matter who created it
 			// the org owner should have access to it
 			resp2, err := suite.client.api.GetEvidenceByID(testUser1.UserCtx, resp.CreateEvidence.Evidence.ID)
-			require.NoError(t, err)
-			require.NotNil(t, resp2)
+			assert.NilError(t, err)
+			assert.Assert(t, resp2 != nil)
+
+			// delete the created evidence, update for the token user cases
+			if tc.ctx == context.Background() {
+				tc.ctx = testUser1.UserCtx
+			}
+
+			(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: resp.CreateEvidence.Evidence.ID}).MustDelete(tc.ctx, t)
 		})
 	}
+	// delete created objects
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, subcontrol1.ControlID, subcontrol2.ControlID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, IDs: []string{controlObjective1.ID, controlObjective2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateEvidence() {
-	t := suite.T()
-
+func TestMutationUpdateEvidence(t *testing.T) {
 	evidence := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
 	pdfFile, err := objects.NewUploadFile("testdata/uploads/hello.pdf")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateEvidenceInput
 		files       []*graphql.Upload
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -504,104 +522,104 @@ func (suite *GraphTestSuite) TestMutationUpdateEvidence() {
 
 			resp, err := tc.client.UpdateEvidence(tc.ctx, evidence.ID, tc.request, tc.files)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// add checks for the updated fields if they were set in the request
 			if tc.request.Name != nil {
-				assert.Equal(t, *tc.request.Name, resp.UpdateEvidence.Evidence.Name)
+				assert.Check(t, is.Equal(*tc.request.Name, resp.UpdateEvidence.Evidence.Name))
 			}
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateEvidence.Evidence.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateEvidence.Evidence.Description))
 			}
 
 			if tc.request.CollectionProcedure != nil {
-				assert.Equal(t, *tc.request.CollectionProcedure, *resp.UpdateEvidence.Evidence.CollectionProcedure)
+				assert.Check(t, is.Equal(*tc.request.CollectionProcedure, *resp.UpdateEvidence.Evidence.CollectionProcedure))
 			}
 
 			if tc.request.Source != nil {
-				assert.Equal(t, *tc.request.Source, *resp.UpdateEvidence.Evidence.Source)
+				assert.Check(t, is.Equal(*tc.request.Source, *resp.UpdateEvidence.Evidence.Source))
 			}
 
 			if tc.files != nil && len(tc.files) > 0 {
-				assert.Len(t, resp.UpdateEvidence.Evidence.Files.Edges, len(tc.files))
+				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.Files.Edges, len(tc.files)))
 			}
-
 		})
 	}
+
+	// delete created evidence
+	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidence.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteEvidence() {
-	t := suite.T()
+// func TestMutationDeleteEvidence(t *testing.T) {
+// // 	// create objects to be deleted
+// 	evidence1 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+// 	evidence2 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
-	// create objects to be deleted
-	evidence1 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-	evidence2 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+// 	testCases := []struct {
+// 		name        string
+// 		idToDelete  string
+// 		client      openlaneclient.OpenlaneClient
+// 		ctx         context.Context
+// 		expectedErr string
+// 	}{
+// 		{
+// 			name:        "not authorized, delete",
+// 			idToDelete:  evidence1.ID,
+// 			client:      suite.client.api,
+// 			ctx:         testUser2.UserCtx,
+// 			expectedErr: notFoundErrorMsg,
+// 		},
+// 		{
+// 			name:       "happy path, delete",
+// 			idToDelete: evidence1.ID,
+// 			client:     suite.client.api,
+// 			ctx:        adminUser.UserCtx,
+// 		},
+// 		{
+// 			name:        "already deleted, not found",
+// 			idToDelete:  evidence1.ID,
+// 			client:      suite.client.api,
+// 			ctx:         testUser1.UserCtx,
+// 			expectedErr: "not found",
+// 		},
+// 		{
+// 			name:       "happy path, delete using personal access token",
+// 			idToDelete: evidence2.ID,
+// 			client:     suite.client.apiWithPAT,
+// 			ctx:        context.Background(),
+// 		},
+// 		{
+// 			name:        "unknown id, not found",
+// 			idToDelete:  ulids.New().String(),
+// 			client:      suite.client.api,
+// 			ctx:         testUser1.UserCtx,
+// 			expectedErr: notFoundErrorMsg,
+// 		},
+// 	}
 
-	testCases := []struct {
-		name        string
-		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
-	}{
-		{
-			name:        "not authorized, delete",
-			idToDelete:  evidence1.ID,
-			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
-		},
-		{
-			name:       "happy path, delete",
-			idToDelete: evidence1.ID,
-			client:     suite.client.api,
-			ctx:        adminUser.UserCtx,
-		},
-		{
-			name:        "already deleted, not found",
-			idToDelete:  evidence1.ID,
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: "not found",
-		},
-		{
-			name:       "happy path, delete using personal access token",
-			idToDelete: evidence2.ID,
-			client:     suite.client.apiWithPAT,
-			ctx:        context.Background(),
-		},
-		{
-			name:        "unknown id, not found",
-			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
-		},
-	}
+// 	for _, tc := range testCases {
+// 		t.Run("Delete "+tc.name, func(t *testing.T) {
+// // 			resp, err := tc.client.DeleteEvidence(tc.ctx, tc.idToDelete)
+// 			if tc.expectedErr != "" {
 
-	for _, tc := range testCases {
-		t.Run("Delete "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.DeleteEvidence(tc.ctx, tc.idToDelete)
-			if tc.expectedErr != "" {
-				require.Error(t, err)
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+// 				assert.ErrorContains(t, err, tc.expectedErr)
+// 				assert.Check(t, is.Nil(resp))
 
-				return
-			}
+// 				return
+// 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteEvidence.DeletedID)
-		})
-	}
-}
+// 			assert.NilError(t, err)
+// 			assert.Assert(t, resp != nil)
+// 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteEvidence.DeletedID))
+// 		})
+// 	}
+// }

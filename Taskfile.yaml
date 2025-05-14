@@ -139,6 +139,32 @@ tasks:
       - task: go:test:cover
       - go tool cover -html=coverage.out
 
+  go:testsum:local:
+    desc: runs tests using gotestsum
+    aliases: [testsum]
+    cmds:
+      - gotestsum --format-hide-empty-pkg
+
+  go:testsum:slow:
+    desc: finds slow tests using gotestsum
+    aliases: ['testsum:slow']
+    cmds:
+      - gotestsum tool slowest
+
+  go:testsum:ci:
+    desc: runs tests using gotestsum for CI
+    silent: true
+    aliases: ['testsum:ci']
+    cmds:
+      - go run gotest.tools/gotestsum@latest --junitfile coverage.out --packages "./..." --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20
+
+  go:testsum:graph:
+    desc: runs only the graph tests using gotestsum
+    silent: true
+    aliases: ['testsum:graph']
+    cmds:
+      - go run gotest.tools/gotestsum@latest --junitfile coverage.out --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 --race
+
   go:fmt:
     desc: format all go code
     cmds:
@@ -295,6 +321,7 @@ tasks:
     vars:
       DEPS: >-
         age helm kubernetes-cli yq jq gomplate golangci-lint openfga/tap/fga pre-commit ariga/tap/atlas rover #magic___^_^___line
+
   brew-installed:
     silent: true
     desc: check if Homebrew is installed

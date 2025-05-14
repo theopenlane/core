@@ -7,10 +7,10 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -18,15 +18,14 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-func (suite *GraphTestSuite) TestQueryContact() {
-	t := suite.T()
+func TestQueryContact(t *testing.T) {
 
 	contact := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenlaneClient
+		client   openlaneclient.OpenlaneClient
 		ctx      context.Context
 		expected *ent.Contact
 		errorMsg string
@@ -69,31 +68,29 @@ func (suite *GraphTestSuite) TestQueryContact() {
 			resp, err := tc.client.GetContactByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.Contact)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 		})
 	}
 
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryContacts() {
-	t := suite.T()
+func TestQueryContacts(t *testing.T) {
 
 	contact1 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	contact2 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenlaneClient
+		client          openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -132,24 +129,23 @@ func (suite *GraphTestSuite) TestQueryContacts() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllContacts(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.Contacts.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.Contacts.Edges, tc.expectedResults))
 		})
 	}
 
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact1.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact2.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact2.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateContact() {
-	t := suite.T()
+func TestMutationCreateContact(t *testing.T) {
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateContactInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -215,44 +211,44 @@ func (suite *GraphTestSuite) TestMutationCreateContact() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateContact(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			assert.Equal(t, tc.request.FullName, resp.CreateContact.Contact.FullName)
 
 			if tc.request.Email == nil {
-				assert.Empty(t, resp.CreateContact.Contact.Email)
+				assert.Equal(t, *resp.CreateContact.Contact.Email, "")
 			} else {
 				assert.Equal(t, strings.ToLower(*tc.request.Email), *resp.CreateContact.Contact.Email)
 			}
 
 			if tc.request.PhoneNumber == nil {
-				assert.Empty(t, resp.CreateContact.Contact.PhoneNumber)
+				assert.Equal(t, *resp.CreateContact.Contact.PhoneNumber, "")
 			} else {
 				assert.Equal(t, *tc.request.PhoneNumber, *resp.CreateContact.Contact.PhoneNumber)
 			}
 
 			if tc.request.Address == nil {
-				assert.Empty(t, resp.CreateContact.Contact.Address)
+				assert.Equal(t, *resp.CreateContact.Contact.Address, "")
 			} else {
 				assert.Equal(t, *tc.request.Address, *resp.CreateContact.Contact.Address)
 			}
 
 			if tc.request.Title == nil {
-				assert.Empty(t, resp.CreateContact.Contact.Title)
+				assert.Equal(t, *resp.CreateContact.Contact.Title, "")
 			} else {
 				assert.Equal(t, *tc.request.Title, *resp.CreateContact.Contact.Title)
 			}
 
 			if tc.request.Company == nil {
-				assert.Empty(t, resp.CreateContact.Contact.Company)
+				assert.Equal(t, *resp.CreateContact.Contact.Company, "")
 			} else {
 				assert.Equal(t, *tc.request.Company, *resp.CreateContact.Contact.Company)
 			}
@@ -264,20 +260,19 @@ func (suite *GraphTestSuite) TestMutationCreateContact() {
 				assert.Equal(t, *tc.request.Status, resp.CreateContact.Contact.Status)
 			}
 
-			(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: resp.CreateContact.Contact.ID}).MustDelete(testUser1.UserCtx, suite)
+			(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: resp.CreateContact.Contact.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateContact() {
-	t := suite.T()
+func TestMutationUpdateContact(t *testing.T) {
 
 	contact := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateContactInput
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -371,15 +366,15 @@ func (suite *GraphTestSuite) TestMutationUpdateContact() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateContact(tc.ctx, contact.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			if tc.request.PhoneNumber != nil {
 				assert.Equal(t, *tc.request.PhoneNumber, *resp.UpdateContact.Contact.PhoneNumber)
@@ -407,11 +402,10 @@ func (suite *GraphTestSuite) TestMutationUpdateContact() {
 		})
 	}
 
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteContact() {
-	t := suite.T()
+func TestMutationDeleteContact(t *testing.T) {
 
 	contact1 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	contact2 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -420,7 +414,7 @@ func (suite *GraphTestSuite) TestMutationDeleteContact() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenlaneClient
+		client      openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -476,15 +470,15 @@ func (suite *GraphTestSuite) TestMutationDeleteContact() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteContact(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 			assert.Equal(t, tc.idToDelete, resp.DeleteContact.DeletedID)
 		})
 	}

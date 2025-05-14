@@ -5,25 +5,24 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-func (suite *GraphTestSuite) TestQueryInvite() {
-	t := suite.T()
-
+func TestQueryInvite(t *testing.T) {
 	invite := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	invite2 := (&InviteBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name    string
 		queryID string
-		client  *openlaneclient.OpenlaneClient
+		client  openlaneclient.OpenlaneClient
 		ctx     context.Context
 		wantErr bool
 	}{
@@ -68,40 +67,43 @@ func (suite *GraphTestSuite) TestQueryInvite() {
 			resp, err := tc.client.GetInviteByID(tc.ctx, tc.queryID)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.Invite)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.Invite.ID != "")
 		})
 	}
+
+	// delete created invite
+	(&Cleanup[*generated.InviteDeleteOne]{client: suite.client.db.Invite, ID: invite.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InviteDeleteOne]{client: suite.client.db.Invite, ID: invite2.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateInvite() {
-	t := suite.T()
-
+func TestMutationCreateInvite(t *testing.T) {
 	// existing user to invite to org
 	existingUser := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// existing user already a member of org
 	existingUser2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	_ = (&OrgMemberBuilder{client: suite.client, UserID: existingUser2.ID}).MustNew(testUser1.UserCtx, t)
+	om := (&OrgMemberBuilder{client: suite.client, UserID: existingUser2.ID}).MustNew(testUser1.UserCtx, t)
 
-	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"meow.net"}}).MustNew(testUser1.UserCtx, t)
+	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"meow.net"}}).MustNew(testUserCreator.UserCtx, t)
 
-	orgWithRestrictionsCtx := auth.NewTestContextWithOrgID(testUser1.ID, orgWithRestrictions.ID)
-	user1Context := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID)
+	orgWithRestrictionsCtx := auth.NewTestContextWithOrgID(testUserCreator.ID, orgWithRestrictions.ID)
+
+	user1Context := auth.NewTestContextWithOrgID(testUserCreator.ID, testUserCreator.OrganizationID)
 
 	testCases := []struct {
 		name             string
 		recipient        string
 		orgID            string
 		role             enums.Role
-		client           *openlaneclient.OpenlaneClient
+		client           openlaneclient.OpenlaneClient
 		ctx              context.Context
 		requestorID      string
 		expectedStatus   enums.InviteStatus
@@ -111,11 +113,11 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		{
 			name:             "happy path, new user as member",
 			recipient:        "meow@theopenlane.io",
-			orgID:            testUser1.OrganizationID,
+			orgID:            testUserCreator.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              user1Context,
-			requestorID:      testUser1.ID,
+			requestorID:      testUserCreator.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 			wantErr:          false,
@@ -127,7 +129,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              orgWithRestrictionsCtx,
-			requestorID:      testUser1.ID,
+			requestorID:      testUserCreator.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 			wantErr:          false,
@@ -139,8 +141,20 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			role:        enums.RoleMember,
 			client:      suite.client.api,
 			ctx:         orgWithRestrictionsCtx,
-			requestorID: testUser1.ID,
+			requestorID: testUserCreator.ID,
 			wantErr:     true,
+		},
+		{
+			name:             "invite new user as member using api token",
+			recipient:        "meow@theopenlane.io",
+			orgID:            testUser1.OrganizationID,
+			role:             enums.RoleMember,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			requestorID:      testUser1.ID,
+			expectedStatus:   enums.InvitationSent,
+			expectedAttempts: 1,
+			wantErr:          false,
 		},
 		{
 			name:             "re-invite new user as member using api token",
@@ -209,11 +223,11 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		{
 			name:             "happy path, existing user as member",
 			recipient:        existingUser.Email,
-			orgID:            testUser1.OrganizationID,
+			orgID:            testUserCreator.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              user1Context,
-			requestorID:      testUser1.ID,
+			requestorID:      testUserCreator.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 			wantErr:          false,
@@ -221,11 +235,11 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		{
 			name:             "user already a member, will still send an invite",
 			recipient:        existingUser2.Email,
-			orgID:            testUser1.OrganizationID,
+			orgID:            testUserCreator.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              user1Context,
-			requestorID:      testUser1.ID,
+			requestorID:      testUserCreator.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 			wantErr:          false,
@@ -244,33 +258,39 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 			resp, err := tc.client.CreateInvite(tc.ctx, input)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Assert matching fields
-			assert.Equal(t, tc.orgID, resp.CreateInvite.Invite.Owner.ID)
-			assert.Equal(t, tc.role, resp.CreateInvite.Invite.Role)
-			assert.Equal(t, tc.requestorID, *resp.CreateInvite.Invite.RequestorID)
-			assert.Equal(t, tc.expectedStatus, resp.CreateInvite.Invite.Status)
-			assert.Equal(t, tc.expectedAttempts, resp.CreateInvite.Invite.SendAttempts)
-			assert.WithinDuration(t, time.Now().UTC().AddDate(0, 0, 14), *resp.CreateInvite.Invite.Expires, 2*time.Minute)
+			assert.Check(t, is.Equal(tc.orgID, resp.CreateInvite.Invite.Owner.ID))
+			assert.Check(t, is.Equal(tc.role, resp.CreateInvite.Invite.Role))
+			assert.Check(t, is.Equal(tc.requestorID, *resp.CreateInvite.Invite.RequestorID))
+			assert.Check(t, is.Equal(tc.expectedStatus, resp.CreateInvite.Invite.Status))
+			assert.Check(t, is.Equal(tc.expectedAttempts, resp.CreateInvite.Invite.SendAttempts))
+
+			assert.Assert(t, resp.CreateInvite.Invite.Expires != nil)
+			diff := resp.CreateInvite.Invite.Expires.Sub(time.Now().UTC().AddDate(0, 0, 14))
+			assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 		})
 	}
+
+	// delete organization created
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgWithRestrictions.ID}).MustDelete(testUserCreator.UserCtx, t)
+	// delete org member created
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateBulkInvite() {
-	t := suite.T()
-
+func TestMutationCreateBulkInvite(t *testing.T) {
+	invites := []string{}
 	testCases := []struct {
 		name             string
 		recipients       []string
-		client           *openlaneclient.OpenlaneClient
+		client           openlaneclient.OpenlaneClient
 		ctx              context.Context
 		requestorID      string
 		expectedStatus   enums.InviteStatus
@@ -279,7 +299,7 @@ func (suite *GraphTestSuite) TestMutationCreateBulkInvite() {
 	}{
 		{
 			name:             "happy path, new user with defaults",
-			recipients:       []string{"meow@theopenlane.io", "kitty@theopenlane.io"},
+			recipients:       []string{"meow-meow-meow@theopenlane.io", "kitty@theopenlane.io"},
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
 			requestorID:      testUser1.ID,
@@ -289,7 +309,7 @@ func (suite *GraphTestSuite) TestMutationCreateBulkInvite() {
 		},
 		{
 			name:             "happy path, resend with defaults",
-			recipients:       []string{"meow@theopenlane.io", "kitty@theopenlane.io"},
+			recipients:       []string{"meow-meow-meow@theopenlane.io", "kitty@theopenlane.io"},
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
 			requestorID:      testUser1.ID,
@@ -299,7 +319,7 @@ func (suite *GraphTestSuite) TestMutationCreateBulkInvite() {
 		},
 		{
 			name:             "happy path, resend again with defaults",
-			recipients:       []string{"meow@theopenlane.io", "kitty@theopenlane.io"},
+			recipients:       []string{"meow-meow-meow@theopenlane.io", "kitty@theopenlane.io"},
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
 			requestorID:      testUser1.ID,
@@ -320,31 +340,36 @@ func (suite *GraphTestSuite) TestMutationCreateBulkInvite() {
 			}
 
 			resp, err := tc.client.CreateBulkInvite(tc.ctx, input)
-
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Len(t, resp.CreateBulkInvite.Invites, len(tc.recipients))
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.CreateBulkInvite.Invites, len(tc.recipients)))
 
 			for _, invite := range resp.CreateBulkInvite.Invites {
-				assert.Equal(t, enums.RoleMember, invite.Role)
-				assert.Equal(t, testUser1.ID, *invite.RequestorID)
-				assert.Equal(t, tc.expectedStatus, invite.Status)
-				assert.Equal(t, tc.expectedAttempts, invite.SendAttempts)
+				assert.Check(t, is.Equal(enums.RoleMember, invite.Role))
+				assert.Check(t, is.Equal(testUser1.ID, *invite.RequestorID))
+				assert.Check(t, is.Equal(tc.expectedStatus, invite.Status))
+				assert.Check(t, is.Equal(tc.expectedAttempts, invite.SendAttempts))
+			}
+
+			// delete created invites
+			invites := []string{}
+			for _, invite := range resp.CreateBulkInvite.Invites {
+				invites = append(invites, invite.ID)
 			}
 		})
 	}
+
+	(&Cleanup[*generated.InviteDeleteOne]{client: suite.client.db.Invite, IDs: invites}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteInvite() {
-	t := suite.T()
-
+func TestMutationDeleteInvite(t *testing.T) {
 	invite1 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	invite2 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	invite3 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -354,7 +379,7 @@ func (suite *GraphTestSuite) TestMutationDeleteInvite() {
 	testCases := []struct {
 		name    string
 		queryID string
-		client  *openlaneclient.OpenlaneClient
+		client  openlaneclient.OpenlaneClient
 		ctx     context.Context
 		wantErr bool
 	}{
@@ -414,17 +439,17 @@ func (suite *GraphTestSuite) TestMutationDeleteInvite() {
 			resp, err := tc.client.DeleteInvite(tc.ctx, tc.queryID)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// assert equal
-			assert.Equal(t, tc.queryID, resp.DeleteInvite.DeletedID)
+			assert.Check(t, is.Equal(tc.queryID, resp.DeleteInvite.DeletedID))
 		})
 	}
 }
