@@ -92,6 +92,9 @@ steps:
             version:
               - 17-alpine
         plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                ANALYTICS_KEY: ANALYTICS_KEY
           - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
