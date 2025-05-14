@@ -17,7 +17,6 @@ linters:
     - mnd
     - noctx
     - revive
-    - staticcheck
     - whitespace
     - wsl
   exclusions:
@@ -29,7 +28,6 @@ linters:
       - legacy
       - std-error-handling
     rules:
-      # Completely exclude specified files and directories from all linters
       - path: ".*\\.generated\\.go"
         linters: ["*"]
       - path: "pkg/openlaneclient/graphclient.go"
@@ -69,13 +67,6 @@ linters:
 formatters:
   enable:
     - gofmt
-    - goimports
-  settings:
-    gofumpt:
-      extra-rules: true
-    goimports:
-      local-prefixes:
-        - github.com/theopenlane/core
   exclusions:
     generated: lax
     warn-unused: true
@@ -83,19 +74,7 @@ formatters:
       - internal/graphapi/model/gen_models.go
       - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
-      - internal/ent/generated/*
-      - internal/ent/generate/generate/*
-      - internal/ent/templates/*
-      - jsonschema/templates/*
-      - pkg/objects/mocks/*
-      - internal/graphapi/generate/*
-      - internal/graphapi/generated/*
       - pkg/entitlements/test/*
       - cmd/cli/cmd/*
-      - pkg/sleuth/static/*
-      - pkg/entitlements/mocks/*
       - pkg/events/soiree/examples/*
-      - pkg/middleware/ratelimiter/examples/*
       - pkg/sleuth/dnsx/* # this should be fixed in the future
-      - jsonschema/*
-      - pkg/gencmd/*
