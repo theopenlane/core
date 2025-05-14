@@ -160,11 +160,17 @@ tasks:
     aliases: ['testsum:ci']
     cmds:
       - go run gotest.tools/gotestsum@latest --junitfile coverage.out --junitfile junit.xml --rerun-fails --packages "./..." --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20
+
+  go:testsum:ci:cover:
+    desc: pushes test results to buildkite using gotestsum
+    silent: true
+    aliases: ['testsum:ci:cover']
+    cmds:
       - |
         curl \
         -X POST \
         --fail-with-body \
-        -H "Authorization: Token token=\"$$ANALYTICS_TOKEN\"" \
+        -H "Authorization: Token token=\"$ANALYTICS_TOKEN\"" \
         -F "data=@junit.xml" \
         -F "format=junit" \
         -F "run_env[CI]=buildkite" \
