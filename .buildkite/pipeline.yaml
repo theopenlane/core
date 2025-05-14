@@ -125,9 +125,8 @@ steps:
     if: build.branch !~ /^renovate\//
     steps:
       - label: ":buildkite: upload test analytics report"
-        key: "scan-upload-pr"
-        cancel_on_build_failing: true
-        if: build.pull_request.id != null
+        key: "test-analytics"
+        cancel_on_build_failing: false
         depends_on: ["go_test"]
         commands: |
           #!/bin/bash
