@@ -287,11 +287,6 @@ func (cdc *CustomDomainCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cdc *CustomDomainCreate) check() error {
-	if v, ok := cdc.mutation.OwnerID(); ok {
-		if err := customdomain.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := cdc.mutation.CnameRecord(); !ok {
 		return &ValidationError{Name: "cname_record", err: errors.New(`generated: missing required field "CustomDomain.cname_record"`)}
 	}

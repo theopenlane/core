@@ -1682,6 +1682,7 @@ type UpdateCustomDomainInput struct {
 	ClearTags  bool
 	Tags       []string
 	AppendTags []string
+	Status     *enums.CustomDomainStatus
 	ClearOwner bool
 	OwnerID    *string
 }
@@ -1696,6 +1697,9 @@ func (i *UpdateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

@@ -757,8 +757,6 @@ func init() {
 	_ = customdomainMixinFields2
 	customdomainMixinFields3 := customdomainMixin[3].Fields()
 	_ = customdomainMixinFields3
-	customdomainMixinFields5 := customdomainMixin[5].Fields()
-	_ = customdomainMixinFields5
 	customdomainFields := schema.CustomDomain{}.Fields()
 	_ = customdomainFields
 	// customdomainDescCreatedAt is the schema descriptor for created_at field.
@@ -775,10 +773,6 @@ func init() {
 	customdomainDescTags := customdomainMixinFields3[0].Descriptor()
 	// customdomain.DefaultTags holds the default value on creation for the tags field.
 	customdomain.DefaultTags = customdomainDescTags.Default.([]string)
-	// customdomainDescOwnerID is the schema descriptor for owner_id field.
-	customdomainDescOwnerID := customdomainMixinFields5[0].Descriptor()
-	// customdomain.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	customdomain.OwnerIDValidator = customdomainDescOwnerID.Validators[0].(func(string) error)
 	// customdomainDescCnameRecord is the schema descriptor for cname_record field.
 	customdomainDescCnameRecord := customdomainFields[0].Descriptor()
 	// customdomain.CnameRecordValidator is a validator for the "cname_record" field. It is called by the builders before save.

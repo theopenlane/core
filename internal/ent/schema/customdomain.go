@@ -9,8 +9,10 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -91,7 +93,7 @@ func (CustomDomain) Fields() []ent.Field {
 		field.Enum("status").
 			Comment("Status of the custom domain verification").
 			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entgql.Skip(entgql.SkipMutationCreateInput),
 			).
 			GoType(enums.CustomDomainStatus("")).
 			Default(enums.CustomDomainStatusPending.String()),
@@ -102,7 +104,7 @@ func (CustomDomain) Fields() []ent.Field {
 func (e CustomDomain) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(e),
+			newOrgOwnedMixin(e, withSkipForSystemAdmin(true)),
 		},
 	}.getMixins()
 }
@@ -134,9 +136,16 @@ func (CustomDomain) Indexes() []ent.Index {
 func (CustomDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
+			rule.AllowQueryIfSystemAdmin(),
 			policy.CheckOrgReadAccess(),
 		),
-		policy.WithMutationRules(
+		policy.WithOnMutationRules(
+			ent.OpUpdateOne|ent.OpUpdate,
+			rule.AllowMutationIfSystemAdmin(),
+			privacy.AlwaysDenyRule(),
+		),
+		policy.WithOnMutationRules(
+			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,
 			policy.CheckOrgWriteAccess(),
 		),
 	)

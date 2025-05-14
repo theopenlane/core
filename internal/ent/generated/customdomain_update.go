@@ -218,11 +218,6 @@ func (cdu *CustomDomainUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cdu *CustomDomainUpdate) check() error {
-	if v, ok := cdu.mutation.OwnerID(); ok {
-		if err := customdomain.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := cdu.mutation.Status(); ok {
 		if err := customdomain.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.status": %w`, err)}
@@ -548,11 +543,6 @@ func (cduo *CustomDomainUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cduo *CustomDomainUpdateOne) check() error {
-	if v, ok := cduo.mutation.OwnerID(); ok {
-		if err := customdomain.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := cduo.mutation.Status(); ok {
 		if err := customdomain.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.status": %w`, err)}

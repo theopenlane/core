@@ -64902,6 +64902,10 @@ input UpdateCustomDomainInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  Status of the custom domain verification
+  """
+  status: CustomDomainCustomDomainStatus
   ownerID: ID
   clearOwner: Boolean
 }

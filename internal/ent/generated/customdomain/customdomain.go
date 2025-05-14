@@ -122,8 +122,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	OwnerIDValidator func(string) error
 	// CnameRecordValidator is a validator for the "cname_record" field. It is called by the builders before save.
 	CnameRecordValidator func(string) error
 	// MappableDomainIDValidator is a validator for the "mappable_domain_id" field. It is called by the builders before save.
