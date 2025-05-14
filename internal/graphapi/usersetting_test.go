@@ -4,29 +4,26 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestQueryUserSetting() {
-	t := suite.T()
-
+func TestQueryUserSetting(t *testing.T) {
 	// setup user context
 	reqCtx := testUser1.UserCtx
 
 	user2 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
 	user2Setting, err := user2.Setting(reqCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// setup valid user context
 	user1SettingResp, err := suite.client.api.GetUserSettings(reqCtx, openlaneclient.UserSettingWhereInput{})
-	require.NoError(t, err)
-	require.Len(t, user1SettingResp.UserSettings.Edges, 1)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(user1SettingResp.UserSettings.Edges, 1))
 
 	user1Setting := user1SettingResp.UserSettings.Edges[0].Node
 
@@ -73,32 +70,29 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 			resp, err := tc.client.GetUserSettingByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
+
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UserSetting)
-			require.Equal(t, tc.expected.Status, resp.UserSetting.Status)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Equal(t, tc.expected.Status, resp.UserSetting.Status)
 		})
 	}
 
-	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, ID: user2.ID}).MustDelete(reqCtx, suite)
+	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, ID: user2.ID}).MustDelete(reqCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryUserSettings() {
-	t := suite.T()
-
+func TestQueryUserSettings(t *testing.T) {
 	// setup user context
 	reqCtx := testUser1.UserCtx
 
 	user1 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
 	user1Setting, err := user1.Setting(reqCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// create another user to make sure we don't get their settings back
 	_ = (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
@@ -106,28 +100,26 @@ func (suite *GraphTestSuite) TestQueryUserSettings() {
 	t.Run("Get User Settings", func(t *testing.T) {
 		resp, err := suite.client.api.GetAllUserSettings(reqCtx)
 
-		require.NoError(t, err)
-		require.NotNil(t, resp)
-		require.NotNil(t, resp.UserSettings.Edges)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Assert(t, resp.UserSettings.Edges != nil)
 
 		// make sure only the current user settings are returned
-		assert.Equal(t, len(resp.UserSettings.Edges), 1)
+		assert.Check(t, is.Equal(len(resp.UserSettings.Edges), 1))
 
 		// setup valid user context
 		reqCtx := auth.NewTestContextWithValidUser(user1.ID)
 
 		resp, err = suite.client.api.GetAllUserSettings(reqCtx)
 
-		require.NoError(t, err)
-		require.NotNil(t, resp)
-		require.NotNil(t, resp.UserSettings.Edges)
-		require.Equal(t, user1Setting.ID, resp.UserSettings.Edges[0].Node.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Assert(t, resp.UserSettings.Edges != nil)
+		assert.Equal(t, user1Setting.ID, resp.UserSettings.Edges[0].Node.ID)
 	})
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
-	t := suite.T()
-
+func TestMutationUpdateUserSetting(t *testing.T) {
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	om := (&OrgMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
@@ -220,24 +212,26 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 			resp, err := tc.client.UpdateUserSetting(tc.ctx, tc.userSettingID, tc.updateInput)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateUserSetting.UserSetting)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Make sure provided values match
-			assert.Equal(t, tc.expectedRes.Status, resp.UpdateUserSetting.UserSetting.Status)
-			assert.ElementsMatch(t, tc.expectedRes.Tags, resp.UpdateUserSetting.UserSetting.Tags)
+			assert.Check(t, is.Equal(tc.expectedRes.Status, resp.UpdateUserSetting.UserSetting.Status))
+			assert.DeepEqual(t, tc.expectedRes.Tags, resp.UpdateUserSetting.UserSetting.Tags)
 
 			if tc.updateInput.DefaultOrgID != nil {
-				assert.Equal(t, tc.expectedRes.DefaultOrg.ID, resp.UpdateUserSetting.UserSetting.DefaultOrg.ID)
+				assert.Check(t, is.Equal(tc.expectedRes.DefaultOrg.ID, resp.UpdateUserSetting.UserSetting.DefaultOrg.ID))
 			}
 		})
 	}
+
+	// cleanup created organizations
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org2.ID}).MustDelete(testUser2.UserCtx, t)
 }

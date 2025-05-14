@@ -6,9 +6,9 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/utils/rout"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	auth "github.com/theopenlane/iam/auth"
 
@@ -18,13 +18,11 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-func (suite *GraphTestSuite) TestQueryUser() {
-	t := suite.T()
-
+func TestQueryUser(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		expected *ent.User
+		expected ent.User
 		errorMsg string
 	}{
 		{
@@ -49,47 +47,44 @@ func (suite *GraphTestSuite) TestQueryUser() {
 			resp, err := suite.client.api.GetUserByID(testUser1.UserCtx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.User)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.NotEmpty(t, resp.User.DisplayID)
-			assert.Contains(t, resp.User.DisplayID, "USR-")
+			assert.Check(t, len(resp.User.DisplayID) != 0)
+			assert.Check(t, is.Contains(resp.User.DisplayID, "USR-"))
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestQueryUsers() {
-	t := suite.T()
+func TestQueryUsers(t *testing.T) {
 
 	t.Run("Get Users", func(t *testing.T) {
 		resp, err := suite.client.api.GetAllUsers(testUser1.UserCtx)
 
-		require.NoError(t, err)
-		require.NotNil(t, resp)
-		require.NotNil(t, resp.Users.Edges)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Assert(t, resp.Users.Edges != nil)
 
 		// make sure only the current user is returned
-		assert.Len(t, resp.Users.Edges, 1)
+		assert.Check(t, is.Len(resp.Users.Edges, 1))
 
 		// setup valid user context
 		reqCtx := testUser1.UserCtx
 
 		resp, err = suite.client.api.GetAllUsers(reqCtx)
 
-		require.NoError(t, err)
-		require.NotNil(t, resp)
-		require.NotNil(t, resp.Users.Edges)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Assert(t, resp.Users.Edges != nil)
 
 		// only user that is making the request should be returned
-		assert.Len(t, resp.Users.Edges, 1)
+		assert.Check(t, is.Len(resp.Users.Edges, 1))
 
 		user1Found := false
 		user2Found := false
@@ -103,15 +98,13 @@ func (suite *GraphTestSuite) TestQueryUsers() {
 		}
 
 		// only user 1 should be found
-		assert.True(t, user1Found)
+		assert.Check(t, user1Found)
 		// user 2 should not be found
-		assert.False(t, user2Found)
+		assert.Check(t, !user2Found)
 	})
 }
 
-func (suite *GraphTestSuite) TestMutationCreateUser() {
-	t := suite.T()
-
+func TestMutationCreateUser(t *testing.T) {
 	strongPassword := "my&supers3cr3tpassw0rd!"
 
 	testCases := []struct {
@@ -138,47 +131,40 @@ func (suite *GraphTestSuite) TestMutationCreateUser() {
 			resp, err := suite.client.api.CreateUser(testUser1.UserCtx, tc.userInput, tc.avatarFile)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateUser.User)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Make sure provided values match
-			assert.Equal(t, tc.userInput.FirstName, resp.CreateUser.User.FirstName)
-			assert.Equal(t, tc.userInput.LastName, resp.CreateUser.User.LastName)
-			assert.Equal(t, tc.userInput.Email, resp.CreateUser.User.Email)
+			assert.Check(t, is.DeepEqual(tc.userInput.FirstName, resp.CreateUser.User.FirstName))
+			assert.Check(t, is.DeepEqual(tc.userInput.LastName, resp.CreateUser.User.LastName))
+			assert.Check(t, is.Equal(tc.userInput.Email, resp.CreateUser.User.Email))
 
 			// display name defaults to email if not provided
 			if tc.userInput.DisplayName == "" {
-				assert.Equal(t, tc.userInput.Email, resp.CreateUser.User.DisplayName)
+				assert.Check(t, is.Equal(tc.userInput.Email, resp.CreateUser.User.DisplayName))
 			} else {
-				assert.Equal(t, tc.userInput.DisplayName, resp.CreateUser.User.DisplayName)
+				assert.Check(t, is.Equal(tc.userInput.DisplayName, resp.CreateUser.User.DisplayName))
 			}
-
-			// ensure a user setting was created
-			assert.NotNil(t, resp.CreateUser.User.Setting)
 
 			// ensure personal org is created
 			// default org will always be the personal org when the user is first created
 			personalOrgID := resp.CreateUser.User.Setting.DefaultOrg.ID
 
 			org, err := suite.client.api.GetOrganizationByID(testUser1.UserCtx, personalOrgID)
-			require.NoError(t, err)
-			assert.Equal(t, personalOrgID, org.Organization.ID)
-			assert.True(t, *org.Organization.PersonalOrg)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(personalOrgID, org.Organization.ID))
+			assert.Check(t, *org.Organization.PersonalOrg)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateUser() {
-	t := suite.T()
-
+func TestMutationUpdateUser(t *testing.T) {
 	firstNameUpdate := gofakeit.FirstName()
 	lastNameUpdate := gofakeit.LastName()
 	emailUpdate := gofakeit.Email()
@@ -195,10 +181,10 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 	weakPassword := "notsecure"
 
 	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name        string
@@ -314,35 +300,31 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 			// update user
 			resp, err := suite.client.api.UpdateUser(reqCtx, user.ID, tc.updateInput, tc.avatarFile)
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateUser.User)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Make sure provided values match
 			updatedUser := resp.GetUpdateUser().User
-			assert.Equal(t, tc.expectedRes.FirstName, updatedUser.FirstName)
-			assert.Equal(t, tc.expectedRes.LastName, updatedUser.LastName)
-			assert.Equal(t, tc.expectedRes.DisplayName, updatedUser.DisplayName)
-			assert.Equal(t, tc.expectedRes.Email, updatedUser.Email)
+			assert.Check(t, is.DeepEqual(tc.expectedRes.FirstName, updatedUser.FirstName))
+			assert.Check(t, is.DeepEqual(tc.expectedRes.LastName, updatedUser.LastName))
+			assert.Check(t, is.Equal(tc.expectedRes.DisplayName, updatedUser.DisplayName))
+			assert.Check(t, is.Equal(tc.expectedRes.Email, updatedUser.Email))
 
 			if tc.avatarFile != nil {
-				assert.NotNil(t, updatedUser.AvatarLocalFileID)
-				assert.NotNil(t, updatedUser.AvatarFile.PresignedURL)
+				assert.Check(t, updatedUser.AvatarLocalFileID != nil)
+				assert.Check(t, updatedUser.AvatarFile.PresignedURL != nil)
 			}
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteUser() {
-	t := suite.T()
-
+func TestMutationDeleteUser(t *testing.T) {
 	// bypass auth on object creation
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
@@ -377,65 +359,61 @@ func (suite *GraphTestSuite) TestMutationDeleteUser() {
 			resp, err := suite.client.api.DeleteUser(reqCtx, tc.userID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.DeleteUser.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.DeleteUser.DeletedID != "")
 
 			// make sure the personal org is deleted
 			// add allow context to bypass auth since the tuple will be deleted
 			reqCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
 
 			org, err := suite.client.api.GetOrganizationByID(reqCtx, personalOrgID)
-			require.Nil(t, org)
-			require.Error(t, err)
+			assert.Assert(t, is.Nil(org))
+
 			assert.ErrorContains(t, err, notFoundErrorMsg)
 
 			// make sure the deletedID matches the ID we wanted to delete
-			assert.Equal(t, tc.userID, resp.DeleteUser.DeletedID)
+			assert.Check(t, is.Equal(tc.userID, resp.DeleteUser.DeletedID))
 
 			// make sure the user setting is deleted
 			out, err := suite.client.api.GetUserSettingByID(reqCtx, userSetting.ID)
-			require.Nil(t, out)
-			require.Error(t, err)
+			assert.Assert(t, is.Nil(out))
+
 			assert.ErrorContains(t, err, notFoundErrorMsg)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationUserCascadeDelete() {
-	t := suite.T()
-
+func TestMutationUserCascadeDelete(t *testing.T) {
 	user := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	reqCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.Setting.Edges.DefaultOrg.ID)
 
-	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(reqCtx, t)
+	token := (&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{user.Edges.Setting.Edges.DefaultOrg.ID}}).MustNew(reqCtx, t)
 
 	resp, err := suite.client.api.DeleteUser(reqCtx, user.ID)
 
-	require.NoError(t, err)
-	require.NotNil(t, resp)
-	require.NotNil(t, resp.DeleteUser.DeletedID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Assert(t, resp.DeleteUser.DeletedID != "")
 
 	// make sure the deletedID matches the ID we wanted to delete
-	assert.Equal(t, user.ID, resp.DeleteUser.DeletedID)
+	assert.Check(t, is.Equal(user.ID, resp.DeleteUser.DeletedID))
 
 	o, err := suite.client.api.GetUserByID(reqCtx, user.ID)
 
-	require.Nil(t, o)
-	require.Error(t, err)
+	assert.Assert(t, is.Nil(o))
+
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	g, err := suite.client.api.GetPersonalAccessTokenByID(reqCtx, token.ID)
-	require.Error(t, err)
 
-	require.Nil(t, g)
+	assert.Assert(t, is.Nil(g))
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 }

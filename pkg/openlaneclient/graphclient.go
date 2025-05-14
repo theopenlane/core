@@ -141,6 +141,7 @@ type OpenlaneGraphClient interface {
 	DeleteGroup(ctx context.Context, deleteGroupID string, interceptors ...clientv2.RequestInterceptor) (*DeleteGroup, error)
 	GetAllGroups(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllGroups, error)
 	GetGroupByID(ctx context.Context, groupID string, interceptors ...clientv2.RequestInterceptor) (*GetGroupByID, error)
+	GetGroupInfo(ctx context.Context, where *GroupWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetGroupInfo, error)
 	GetGroups(ctx context.Context, where *GroupWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetGroups, error)
 	UpdateGroup(ctx context.Context, updateGroupID string, input UpdateGroupInput, interceptors ...clientv2.RequestInterceptor) (*UpdateGroup, error)
 	GetAllGroupHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllGroupHistories, error)
@@ -17530,9 +17531,16 @@ func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes) GetEdges() []*C
 }
 
 type CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_EntityType struct {
+	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
 }
 
+func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_EntityType) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_EntityType{}
+	}
+	return t.ID
+}
 func (t *CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_EntityType) GetName() string {
 	if t == nil {
 		t = &CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_EntityType{}
@@ -17701,9 +17709,16 @@ func (t *CreateBulkEntity_CreateBulkEntity_Entities_Notes) GetEdges() []*CreateB
 }
 
 type CreateBulkEntity_CreateBulkEntity_Entities_EntityType struct {
+	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
 }
 
+func (t *CreateBulkEntity_CreateBulkEntity_Entities_EntityType) GetID() string {
+	if t == nil {
+		t = &CreateBulkEntity_CreateBulkEntity_Entities_EntityType{}
+	}
+	return t.ID
+}
 func (t *CreateBulkEntity_CreateBulkEntity_Entities_EntityType) GetName() string {
 	if t == nil {
 		t = &CreateBulkEntity_CreateBulkEntity_Entities_EntityType{}
@@ -17872,9 +17887,16 @@ func (t *CreateEntity_CreateEntity_Entity_Notes) GetEdges() []*CreateEntity_Crea
 }
 
 type CreateEntity_CreateEntity_Entity_EntityType struct {
+	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
 }
 
+func (t *CreateEntity_CreateEntity_Entity_EntityType) GetID() string {
+	if t == nil {
+		t = &CreateEntity_CreateEntity_Entity_EntityType{}
+	}
+	return t.ID
+}
 func (t *CreateEntity_CreateEntity_Entity_EntityType) GetName() string {
 	if t == nil {
 		t = &CreateEntity_CreateEntity_Entity_EntityType{}
@@ -18054,9 +18076,16 @@ func (t *GetAllEntities_Entities_Edges_Node_Notes) GetEdges() []*GetAllEntities_
 }
 
 type GetAllEntities_Entities_Edges_Node_EntityType struct {
+	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
 }
 
+func (t *GetAllEntities_Entities_Edges_Node_EntityType) GetID() string {
+	if t == nil {
+		t = &GetAllEntities_Entities_Edges_Node_EntityType{}
+	}
+	return t.ID
+}
 func (t *GetAllEntities_Entities_Edges_Node_EntityType) GetName() string {
 	if t == nil {
 		t = &GetAllEntities_Entities_Edges_Node_EntityType{}
@@ -18236,9 +18265,16 @@ func (t *GetEntities_Entities_Edges_Node_Notes) GetEdges() []*GetEntities_Entiti
 }
 
 type GetEntities_Entities_Edges_Node_EntityType struct {
+	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
 }
 
+func (t *GetEntities_Entities_Edges_Node_EntityType) GetID() string {
+	if t == nil {
+		t = &GetEntities_Entities_Edges_Node_EntityType{}
+	}
+	return t.ID
+}
 func (t *GetEntities_Entities_Edges_Node_EntityType) GetName() string {
 	if t == nil {
 		t = &GetEntities_Entities_Edges_Node_EntityType{}
@@ -18418,9 +18454,16 @@ func (t *GetEntityByID_Entity_Notes) GetEdges() []*GetEntityByID_Entity_Notes_Ed
 }
 
 type GetEntityByID_Entity_EntityType struct {
+	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
 }
 
+func (t *GetEntityByID_Entity_EntityType) GetID() string {
+	if t == nil {
+		t = &GetEntityByID_Entity_EntityType{}
+	}
+	return t.ID
+}
 func (t *GetEntityByID_Entity_EntityType) GetName() string {
 	if t == nil {
 		t = &GetEntityByID_Entity_EntityType{}
@@ -18660,9 +18703,16 @@ func (t *UpdateEntity_UpdateEntity_Entity_Notes) GetEdges() []*UpdateEntity_Upda
 }
 
 type UpdateEntity_UpdateEntity_Entity_EntityType struct {
+	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
 }
 
+func (t *UpdateEntity_UpdateEntity_Entity_EntityType) GetID() string {
+	if t == nil {
+		t = &UpdateEntity_UpdateEntity_Entity_EntityType{}
+	}
+	return t.ID
+}
 func (t *UpdateEntity_UpdateEntity_Entity_EntityType) GetName() string {
 	if t == nil {
 		t = &UpdateEntity_UpdateEntity_Entity_EntityType{}
@@ -26681,6 +26731,183 @@ func (t *GetGroupByID_Group) GetUpdatedBy() *string {
 		t = &GetGroupByID_Group{}
 	}
 	return t.UpdatedBy
+}
+
+type GetGroupInfo_Groups_Edges_Node_Setting struct {
+	CreatedAt    *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID           string           "json:\"id\" graphql:\"id\""
+	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
+	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
+	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
+	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *GetGroupInfo_Groups_Edges_Node_Setting) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node_Setting{}
+	}
+	return t.CreatedAt
+}
+func (t *GetGroupInfo_Groups_Edges_Node_Setting) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node_Setting{}
+	}
+	return t.CreatedBy
+}
+func (t *GetGroupInfo_Groups_Edges_Node_Setting) GetID() string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node_Setting{}
+	}
+	return t.ID
+}
+func (t *GetGroupInfo_Groups_Edges_Node_Setting) GetJoinPolicy() *enums.JoinPolicy {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node_Setting{}
+	}
+	return &t.JoinPolicy
+}
+func (t *GetGroupInfo_Groups_Edges_Node_Setting) GetSyncToGithub() *bool {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node_Setting{}
+	}
+	return t.SyncToGithub
+}
+func (t *GetGroupInfo_Groups_Edges_Node_Setting) GetSyncToSlack() *bool {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node_Setting{}
+	}
+	return t.SyncToSlack
+}
+func (t *GetGroupInfo_Groups_Edges_Node_Setting) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node_Setting{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetGroupInfo_Groups_Edges_Node_Setting) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node_Setting{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetGroupInfo_Groups_Edges_Node_Setting) GetVisibility() *enums.Visibility {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node_Setting{}
+	}
+	return &t.Visibility
+}
+
+type GetGroupInfo_Groups_Edges_Node struct {
+	CreatedAt   *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string                                  "json:\"displayName\" graphql:\"displayName\""
+	ID          string                                  "json:\"id\" graphql:\"id\""
+	IsManaged   *bool                                   "json:\"isManaged,omitempty\" graphql:\"isManaged\""
+	LogoURL     *string                                 "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Name        string                                  "json:\"name\" graphql:\"name\""
+	Setting     *GetGroupInfo_Groups_Edges_Node_Setting "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags        []string                                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetGroupInfo_Groups_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetIsManaged() *bool {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.IsManaged
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetLogoURL() *string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.LogoURL
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetSetting() *GetGroupInfo_Groups_Edges_Node_Setting {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.Setting
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetGroupInfo_Groups_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetGroupInfo_Groups_Edges struct {
+	Node *GetGroupInfo_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetGroupInfo_Groups_Edges) GetNode() *GetGroupInfo_Groups_Edges_Node {
+	if t == nil {
+		t = &GetGroupInfo_Groups_Edges{}
+	}
+	return t.Node
+}
+
+type GetGroupInfo_Groups struct {
+	Edges []*GetGroupInfo_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetGroupInfo_Groups) GetEdges() []*GetGroupInfo_Groups_Edges {
+	if t == nil {
+		t = &GetGroupInfo_Groups{}
+	}
+	return t.Edges
 }
 
 type GetGroups_Groups_Edges_Node_Owner struct {
@@ -65808,11 +66035,18 @@ func (t *GetTFASetting_TfaSetting_Owner) GetID() string {
 }
 
 type GetTFASetting_TfaSetting struct {
+	ID          string                          "json:\"id\" graphql:\"id\""
 	Owner       *GetTFASetting_TfaSetting_Owner "json:\"owner,omitempty\" graphql:\"owner\""
 	TotpAllowed *bool                           "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
 	Verified    bool                            "json:\"verified\" graphql:\"verified\""
 }
 
+func (t *GetTFASetting_TfaSetting) GetID() string {
+	if t == nil {
+		t = &GetTFASetting_TfaSetting{}
+	}
+	return t.ID
+}
 func (t *GetTFASetting_TfaSetting) GetOwner() *GetTFASetting_TfaSetting_Owner {
 	if t == nil {
 		t = &GetTFASetting_TfaSetting{}
@@ -70363,6 +70597,17 @@ func (t *GetGroupByID) GetGroup() *GetGroupByID_Group {
 		t = &GetGroupByID{}
 	}
 	return &t.Group
+}
+
+type GetGroupInfo struct {
+	Groups GetGroupInfo_Groups "json:\"groups\" graphql:\"groups\""
+}
+
+func (t *GetGroupInfo) GetGroups() *GetGroupInfo_Groups {
+	if t == nil {
+		t = &GetGroupInfo{}
+	}
+	return &t.Groups
 }
 
 type GetGroups struct {
@@ -77275,6 +77520,7 @@ const CreateBulkCSVEntityDocument = `mutation CreateBulkCSVEntity ($input: Uploa
 				}
 			}
 			entityType {
+				id
 				name
 			}
 			id
@@ -77324,6 +77570,7 @@ const CreateBulkEntityDocument = `mutation CreateBulkEntity ($input: [CreateEnti
 				}
 			}
 			entityType {
+				id
 				name
 			}
 			id
@@ -77373,6 +77620,7 @@ const CreateEntityDocument = `mutation CreateEntity ($input: CreateEntityInput!)
 				}
 			}
 			entityType {
+				id
 				name
 			}
 			id
@@ -77447,6 +77695,7 @@ const GetAllEntitiesDocument = `query GetAllEntities {
 					}
 				}
 				entityType {
+					id
 					name
 				}
 				id
@@ -77496,6 +77745,7 @@ const GetEntitiesDocument = `query GetEntities ($where: EntityWhereInput) {
 					}
 				}
 				entityType {
+					id
 					name
 				}
 				id
@@ -77545,6 +77795,7 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 			}
 		}
 		entityType {
+			id
 			name
 		}
 		id
@@ -77606,6 +77857,7 @@ const UpdateEntityDocument = `mutation UpdateEntity ($updateEntityId: ID!, $inpu
 				}
 			}
 			entityType {
+				id
 				name
 			}
 			id
@@ -79850,6 +80102,55 @@ func (c *Client) GetGroupByID(ctx context.Context, groupID string, interceptors 
 
 	var res GetGroupByID
 	if err := c.Client.Post(ctx, "GetGroupByID", GetGroupByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetGroupInfoDocument = `query GetGroupInfo ($where: GroupWhereInput) {
+	groups(where: $where) {
+		edges {
+			node {
+				description
+				displayName
+				id
+				logoURL
+				name
+				tags
+				isManaged
+				setting {
+					createdAt
+					createdBy
+					id
+					joinPolicy
+					syncToGithub
+					syncToSlack
+					updatedAt
+					updatedBy
+					visibility
+				}
+				createdAt
+				createdBy
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetGroupInfo(ctx context.Context, where *GroupWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetGroupInfo, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetGroupInfo
+	if err := c.Client.Post(ctx, "GetGroupInfo", GetGroupInfoDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -90743,6 +91044,7 @@ func (c *Client) GetAllTFASettings(ctx context.Context, interceptors ...clientv2
 
 const GetTFASettingDocument = `query GetTFASetting {
 	tfaSetting {
+		id
 		totpAllowed
 		verified
 		owner {
@@ -91767,6 +92069,7 @@ var DocumentOperationNames = map[string]string{
 	DeleteGroupDocument:                          "DeleteGroup",
 	GetAllGroupsDocument:                         "GetAllGroups",
 	GetGroupByIDDocument:                         "GetGroupByID",
+	GetGroupInfoDocument:                         "GetGroupInfo",
 	GetGroupsDocument:                            "GetGroups",
 	UpdateGroupDocument:                          "UpdateGroup",
 	GetAllGroupHistoriesDocument:                 "GetAllGroupHistories",

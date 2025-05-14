@@ -25,7 +25,20 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	res, err := withTransactionalMutation(ctx).Program.Create().SetInput(*input.Program).Save(ctx)
+	createdProgram := withTransactionalMutation(ctx).Program.Create()
+
+	if standardID := getStandardID(input); standardID != "" {
+		bulkControls, err := r.cloneControlsFromStandard(ctx, standardID)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, control := range bulkControls {
+			createdProgram.AddControlIDs(control.ID)
+		}
+	}
+
+	res, err := createdProgram.SetInput(*input.Program).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 	}
@@ -78,18 +91,8 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 
 	createdProgram := withTransactionalMutation(ctx).Program.Create()
 
-	if input.StandardID != "" {
-		standardRes, err := withTransactionalMutation(ctx).Standard.Get(ctx, input.StandardID)
-		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
-		}
-
-		controls, err := standardRes.QueryControls().All(ctx)
-		if err != nil {
-			return nil, err
-		}
-
-		bulkControls, err := r.cloneControls(ctx, controls, nil, true)
+	if standardID := getStandardID(input); standardID != "" {
+		bulkControls, err := r.cloneControlsFromStandard(ctx, standardID)
 		if err != nil {
 			return nil, err
 		}

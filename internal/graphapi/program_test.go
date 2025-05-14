@@ -6,16 +6,15 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestQueryProgram() {
-	t := suite.T()
-
+func TestQueryProgram(t *testing.T) {
 	// create program with a linked procedure and policy
 	program := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
 
@@ -59,36 +58,49 @@ func (suite *GraphTestSuite) TestQueryProgram() {
 			resp, err := tc.client.GetProgramByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Equal(t, program.ID, resp.Program.ID)
-			assert.Equal(t, program.Name, resp.Program.Name)
-			assert.Len(t, resp.Program.Procedures.Edges, 1)
-			assert.Len(t, resp.Program.InternalPolicies.Edges, 1)
+			assert.Check(t, is.Equal(program.ID, resp.Program.ID))
+			assert.Check(t, is.Equal(program.Name, resp.Program.Name))
+			assert.Check(t, is.Len(resp.Program.Procedures.Edges, 1))
+			assert.Check(t, is.Len(resp.Program.InternalPolicies.Edges, 1))
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	// cleanup procedure and policy
+	procedureIDs := []string{}
+	for _, p := range program.Edges.Procedures {
+		procedureIDs = append(procedureIDs, p.ID)
+	}
+	policyIDs := []string{}
+	for _, p := range program.Edges.InternalPolicies {
+		policyIDs = append(policyIDs, p.ID)
+	}
+
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: procedureIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: policyIDs}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryPrograms() {
-	t := suite.T()
-
+func TestQueryPrograms(t *testing.T) {
 	// programs for the first organization with a linked procedure and policy
-	(&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
-	(&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
+	program1 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
 
 	// program created by an admin user of the first organization with a linked procedure and policy
-	(&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(adminUser.UserCtx, t)
+	program3 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(adminUser.UserCtx, t)
 
 	// program for the other organization with a linked procedure and policy
-	(&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser2.UserCtx, t)
+	anotherUser := suite.userBuilder(context.Background(), t)
+	program4 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(anotherUser.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -124,7 +136,7 @@ func (suite *GraphTestSuite) TestQueryPrograms() {
 		{
 			name:            "owner of the other organization should see the program they created",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             anotherUser.UserCtx,
 			expectedResults: 1,
 		},
 	}
@@ -134,29 +146,63 @@ func (suite *GraphTestSuite) TestQueryPrograms() {
 			resp, err := tc.client.GetAllPrograms(tc.ctx)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Len(t, resp.Programs.Edges, tc.expectedResults)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.Programs.Edges, tc.expectedResults))
 
 			for _, edge := range resp.Programs.Edges {
-				require.NotNil(t, edge.Node)
-				assert.Len(t, edge.Node.Procedures.Edges, 1)
-				assert.Len(t, edge.Node.InternalPolicies.Edges, 1)
+				assert.Assert(t, edge.Node != nil)
+				assert.Check(t, is.Len(edge.Node.Procedures.Edges, 1))
+				assert.Check(t, is.Len(edge.Node.InternalPolicies.Edges, 1))
 			}
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID, program3.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program4.ID}).MustDelete(anotherUser.UserCtx, t)
+
+	// cleanup procedures and policies
+	procedureIDs := []string{}
+	for _, p := range program1.Edges.Procedures {
+		procedureIDs = append(procedureIDs, p.ID)
+	}
+
+	for _, p := range program2.Edges.Procedures {
+		procedureIDs = append(procedureIDs, p.ID)
+	}
+
+	for _, p := range program3.Edges.Procedures {
+		procedureIDs = append(procedureIDs, p.ID)
+	}
+
+	policyIDs := []string{}
+	for _, p := range program1.Edges.InternalPolicies {
+		policyIDs = append(policyIDs, p.ID)
+	}
+
+	for _, p := range program2.Edges.InternalPolicies {
+		policyIDs = append(policyIDs, p.ID)
+	}
+
+	for _, p := range program3.Edges.InternalPolicies {
+		policyIDs = append(policyIDs, p.ID)
+	}
+
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: procedureIDs}).MustDelete(testUser1.UserCtx, t)
+
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: policyIDs}).MustDelete(testUser1.UserCtx, t)
+
+	// we can ignore the cleanup for the new user, it won't conflict with other tests
 }
 
-func (suite *GraphTestSuite) TestMutationCreateProgram() {
-	t := suite.T()
-
+func TestMutationCreateProgram(t *testing.T) {
 	startDate := time.Now().AddDate(0, 0, 1)
 	endDate := time.Now().AddDate(0, 0, 360)
 
@@ -165,6 +211,7 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 	// Create some edge objects
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -277,7 +324,7 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			ctx:           viewOnlyUser.UserCtx,
 		},
 		{
-			name: "user not authorized, no permissions",
+			name: "user not authorized, no permissions, owner id set to correct org",
 			request: openlaneclient.CreateProgramInput{
 				Name:    "mitb program",
 				OwnerID: &testUser1.OrganizationID,
@@ -313,154 +360,168 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 					openlaneclient.UpdateOrganizationInput{
 						AddProgramCreatorIDs: []string{groupMember.GroupID},
 					}, nil)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			resp, err := tc.client.CreateProgram(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check required fields
-			assert.Equal(t, tc.request.Name, resp.CreateProgram.Program.Name)
+			assert.Check(t, is.Equal(tc.request.Name, resp.CreateProgram.Program.Name))
 
-			assert.NotEmpty(t, resp.CreateProgram.Program.DisplayID)
-			assert.Contains(t, resp.CreateProgram.Program.DisplayID, "PRG-")
+			assert.Check(t, len(resp.CreateProgram.Program.DisplayID) != 0)
+			assert.Check(t, is.Contains(resp.CreateProgram.Program.DisplayID, "PRG-"))
 
 			// ensure the owner is set to the user's organization, not the  input
 			if tc.request.OwnerID != nil && tc.ctx == testUser2.UserCtx {
-				assert.Equal(t, testUser2.OrganizationID, *resp.CreateProgram.Program.OwnerID)
+				assert.Check(t, is.Equal(testUser2.OrganizationID, *resp.CreateProgram.Program.OwnerID))
 			}
 
 			// check optional fields
 			if tc.request.Description == nil {
-				assert.Empty(t, resp.CreateProgram.Program.Description)
+				assert.Check(t, is.Len(*resp.CreateProgram.Program.Description, 0))
 			} else {
-				assert.Equal(t, tc.request.Description, resp.CreateProgram.Program.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateProgram.Program.Description))
 			}
 
 			if tc.request.ProgramType == nil {
-				assert.Equal(t, enums.ProgramTypeFramework, resp.CreateProgram.Program.ProgramType)
+				assert.Check(t, is.Equal(enums.ProgramTypeFramework, resp.CreateProgram.Program.ProgramType))
 			} else {
-				assert.Equal(t, *tc.request.ProgramType, resp.CreateProgram.Program.ProgramType)
+				assert.Check(t, is.Equal(*tc.request.ProgramType, resp.CreateProgram.Program.ProgramType))
 			}
 
 			if tc.request.FrameworkName == nil {
-				assert.Empty(t, resp.CreateProgram.Program.FrameworkName)
+				assert.Check(t, is.Len(*resp.CreateProgram.Program.FrameworkName, 0))
 			} else {
-				assert.Equal(t, tc.request.FrameworkName, resp.CreateProgram.Program.FrameworkName)
+				assert.Check(t, is.Equal(*tc.request.FrameworkName, *resp.CreateProgram.Program.FrameworkName))
 			}
 
 			if tc.request.Status == nil {
-				assert.Equal(t, enums.ProgramStatusNotStarted, resp.CreateProgram.Program.Status)
+				assert.Check(t, is.Equal(enums.ProgramStatusNotStarted, resp.CreateProgram.Program.Status))
 			} else {
-				assert.Equal(t, *tc.request.Status, resp.CreateProgram.Program.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, resp.CreateProgram.Program.Status))
 			}
 
 			if tc.request.StartDate == nil {
-				assert.Empty(t, resp.CreateProgram.Program.StartDate)
+				assert.Check(t, resp.CreateProgram.Program.StartDate == nil)
 			} else {
-				assert.WithinDuration(t, startDate, *resp.CreateProgram.Program.StartDate, 2*time.Minute)
+				assert.Assert(t, resp.CreateProgram.Program.StartDate != nil)
+				diff := resp.CreateProgram.Program.StartDate.Sub(startDate)
+				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			}
 
 			if tc.request.EndDate == nil {
-				assert.Empty(t, resp.CreateProgram.Program.EndDate)
+				assert.Check(t, resp.CreateProgram.Program.EndDate == nil)
 			} else {
-				assert.WithinDuration(t, endDate, *resp.CreateProgram.Program.EndDate, 2*time.Minute)
+				assert.Assert(t, resp.CreateProgram.Program.EndDate != nil)
+				diff := resp.CreateProgram.Program.EndDate.Sub(endDate)
+				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			}
 
 			if tc.request.AuditorReady == nil {
-				assert.False(t, resp.CreateProgram.Program.AuditorReady)
+				assert.Check(t, !resp.CreateProgram.Program.AuditorReady)
 			} else {
-				assert.Equal(t, *tc.request.AuditorReady, resp.CreateProgram.Program.AuditorReady)
+				assert.Check(t, is.Equal(*tc.request.AuditorReady, resp.CreateProgram.Program.AuditorReady))
 			}
 
 			if tc.request.AuditorWriteComments == nil {
-				assert.False(t, resp.CreateProgram.Program.AuditorWriteComments)
+				assert.Check(t, !resp.CreateProgram.Program.AuditorWriteComments)
 			} else {
-				assert.Equal(t, *tc.request.AuditorWriteComments, resp.CreateProgram.Program.AuditorWriteComments)
+				assert.Check(t, is.Equal(*tc.request.AuditorWriteComments, resp.CreateProgram.Program.AuditorWriteComments))
 			}
 
 			if tc.request.AuditorReadComments == nil {
-				assert.False(t, resp.CreateProgram.Program.AuditorReadComments)
+				assert.Check(t, !resp.CreateProgram.Program.AuditorReadComments)
 			} else {
-				assert.Equal(t, *tc.request.AuditorReadComments, resp.CreateProgram.Program.AuditorReadComments)
+				assert.Check(t, is.Equal(*tc.request.AuditorReadComments, resp.CreateProgram.Program.AuditorReadComments))
 			}
 
 			if tc.request.AuditFirm == nil {
-				assert.Empty(t, resp.CreateProgram.Program.AuditFirm)
+				assert.Check(t, is.Len(*resp.CreateProgram.Program.AuditFirm, 0))
 			} else {
-				assert.Equal(t, tc.request.AuditFirm, resp.CreateProgram.Program.AuditFirm)
+				assert.Check(t, is.Equal(*tc.request.AuditFirm, *resp.CreateProgram.Program.AuditFirm))
 			}
 
 			if tc.request.Auditor == nil {
-				assert.Empty(t, resp.CreateProgram.Program.Auditor)
+				assert.Check(t, is.Len(*resp.CreateProgram.Program.Auditor, 0))
 			} else {
-				assert.Equal(t, tc.request.Auditor, resp.CreateProgram.Program.Auditor)
+				assert.Check(t, is.Equal(*tc.request.Auditor, *resp.CreateProgram.Program.Auditor))
 			}
 
 			if tc.request.AuditorEmail == nil {
-				assert.Empty(t, resp.CreateProgram.Program.AuditorEmail)
+				assert.Check(t, is.Len(*resp.CreateProgram.Program.AuditorEmail, 0))
 			} else {
-				assert.Equal(t, tc.request.AuditorEmail, resp.CreateProgram.Program.AuditorEmail)
+				assert.Check(t, is.Equal(*tc.request.AuditorEmail, *resp.CreateProgram.Program.AuditorEmail))
 			}
 
 			// check edges
 			if len(tc.request.ProcedureIDs) > 0 {
-				require.Len(t, resp.CreateProgram.Program.Procedures.Edges, 1)
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.Procedures.Edges, 1))
 				for _, edge := range resp.CreateProgram.Program.Procedures.Edges {
-					assert.Equal(t, procedure.ID, edge.Node.ID)
+					assert.Check(t, is.Equal(procedure.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.InternalPolicyIDs) > 0 {
-				require.Len(t, resp.CreateProgram.Program.InternalPolicies.Edges, 1)
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.InternalPolicies.Edges, 1))
 				for _, edge := range resp.CreateProgram.Program.InternalPolicies.Edges {
-					assert.Equal(t, policy.ID, edge.Node.ID)
+					assert.Check(t, is.Equal(policy.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.EditorIDs) > 0 {
-				require.Len(t, resp.CreateProgram.Program.Editors, 1)
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.Editors, 1))
 				for _, edge := range resp.CreateProgram.Program.Editors {
-					assert.Equal(t, testUser1.GroupID, edge.ID)
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.ID))
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
-				require.Len(t, resp.CreateProgram.Program.BlockedGroups, 1)
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.BlockedGroups, 1))
 				for _, edge := range resp.CreateProgram.Program.BlockedGroups {
-					assert.Equal(t, blockedGroup.ID, edge.ID)
+					assert.Check(t, is.Equal(blockedGroup.ID, edge.ID))
 				}
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
-				require.Len(t, resp.CreateProgram.Program.Viewers, 1)
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.Viewers, 1))
 				for _, edge := range resp.CreateProgram.Program.Viewers {
-					assert.Equal(t, viewerGroup.ID, edge.ID)
+					assert.Check(t, is.Equal(viewerGroup.ID, edge.ID))
 				}
 			}
+
+			// cleanup program
+			if tc.ctx == context.Background() {
+				tc.ctx = testUser1.UserCtx
+			}
+
+			(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: resp.CreateProgram.Program.ID}).MustDelete(tc.ctx, t)
 		})
 	}
+
+	// cleanup policy and procedure
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy.ID}).MustDelete(testUser1.UserCtx, t)
+	// cleanup group
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupMember.GroupID, blockedGroup.ID, viewerGroup.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: anotherGroup.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateProgram() {
-	t := suite.T()
-
+func TestMutationUpdateProgram(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{
 		ProgramID: &program.ID,
 	})
-
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testUserProgramMemberID := ""
 	for _, pm := range programMembers.ProgramMemberships.Edges {
@@ -470,8 +531,8 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 	}
 
 	// create program user to remove
-	programUser := suite.userBuilder(context.Background())
-	(&OrgMemberBuilder{client: suite.client, UserID: programUser.ID}).MustNew(testUser1.UserCtx, t)
+	programUser := suite.userBuilder(context.Background(), t)
+	om := (&OrgMemberBuilder{client: suite.client, UserID: programUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	pm := (&ProgramMemberBuilder{client: suite.client, UserID: programUser.ID, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
 
@@ -485,38 +546,38 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor permissions
-	anotherAdminUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(testUser1.UserCtx, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	anotherAdminUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	gm1 := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
 	// create a viewer user and add them to the same organization as testUser1
 	// also add them to the same group as testUser1, this should still allow them to edit the policy
 	// despite not not being an organization admin
-	anotherViewerUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(testUser1.UserCtx, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
+	anotherViewerUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
 
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	gm2 := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
 	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
 	blockGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	// create a view only user and add them to the same organization as testUser1
-	meowViewerUser := suite.userBuilder(context.Background())
-	suite.addUserToOrganization(testUser1.UserCtx, &meowViewerUser, enums.RoleMember, testUser1.OrganizationID)
+	meowViewerUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &meowViewerUser, enums.RoleMember, testUser1.OrganizationID)
 
 	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, UserID: meowViewerUser.ID, GroupID: blockGroup.ID}).MustNew(testUser1.UserCtx, t)
+	gm3 := (&GroupMemberBuilder{client: suite.client, UserID: meowViewerUser.ID, GroupID: blockGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	// add add user to the viewer group
-	(&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(testUser1.UserCtx, t)
+	gm4 := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the program
 	res, err := suite.client.api.GetProgramByID(viewOnlyUser.UserCtx, program.ID)
-	require.Error(t, err)
-	require.Nil(t, res)
+	assert.ErrorContains(t, err, notFoundErrorMsg)
+	assert.Assert(t, is.Nil(res))
 
 	testCases := []struct {
 		name              string
@@ -664,130 +725,143 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateProgram(tc.ctx, program.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// add checks for the updated fields if they were set in the request
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateProgram.Program.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateProgram.Program.Description))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, resp.UpdateProgram.Program.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, resp.UpdateProgram.Program.Status))
 			}
 
 			if tc.request.ProgramType != nil {
-				assert.Equal(t, *tc.request.ProgramType, resp.UpdateProgram.Program.ProgramType)
+				assert.Check(t, is.Equal(*tc.request.ProgramType, resp.UpdateProgram.Program.ProgramType))
 			}
 
 			if tc.request.FrameworkName != nil {
-				assert.Equal(t, tc.request.FrameworkName, resp.UpdateProgram.Program.FrameworkName)
+				assert.Check(t, is.DeepEqual(tc.request.FrameworkName, resp.UpdateProgram.Program.FrameworkName))
 			}
 
 			if tc.request.StartDate != nil {
-				assert.WithinDuration(t, *tc.request.StartDate, *resp.UpdateProgram.Program.StartDate, 2*time.Minute)
+				assert.Assert(t, resp.UpdateProgram.Program.StartDate != nil)
+				diff := resp.UpdateProgram.Program.StartDate.Sub(*tc.request.StartDate)
+				assert.Assert(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			}
 
 			if tc.request.EndDate != nil {
-				assert.WithinDuration(t, *tc.request.EndDate, *resp.UpdateProgram.Program.EndDate, 2*time.Minute)
+				assert.Assert(t, resp.UpdateProgram.Program.EndDate != nil)
+				diff := resp.UpdateProgram.Program.EndDate.Sub(*tc.request.EndDate)
+				assert.Assert(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			}
 
 			if tc.request.AuditorReady != nil {
-				assert.Equal(t, *tc.request.AuditorReady, resp.UpdateProgram.Program.AuditorReady)
+				assert.Check(t, is.Equal(*tc.request.AuditorReady, resp.UpdateProgram.Program.AuditorReady))
 			}
 
 			if tc.request.AuditorWriteComments != nil {
-				assert.Equal(t, *tc.request.AuditorWriteComments, resp.UpdateProgram.Program.AuditorWriteComments)
+				assert.Check(t, is.Equal(*tc.request.AuditorWriteComments, resp.UpdateProgram.Program.AuditorWriteComments))
 			}
 
 			if tc.request.AuditorReadComments != nil {
-				assert.Equal(t, *tc.request.AuditorReadComments, resp.UpdateProgram.Program.AuditorReadComments)
+				assert.Check(t, is.Equal(*tc.request.AuditorReadComments, resp.UpdateProgram.Program.AuditorReadComments))
 			}
 
 			if tc.request.AuditFirm != nil {
-				assert.Equal(t, tc.request.AuditFirm, resp.UpdateProgram.Program.AuditFirm)
+				assert.Check(t, is.DeepEqual(tc.request.AuditFirm, resp.UpdateProgram.Program.AuditFirm))
 			}
 
 			if tc.request.Auditor != nil {
-				assert.Equal(t, tc.request.Auditor, resp.UpdateProgram.Program.Auditor)
+				assert.Check(t, is.DeepEqual(tc.request.Auditor, resp.UpdateProgram.Program.Auditor))
 			}
 
 			if tc.request.AuditorEmail != nil {
-				assert.Equal(t, tc.request.AuditorEmail, resp.UpdateProgram.Program.AuditorEmail)
+				assert.Check(t, is.DeepEqual(tc.request.AuditorEmail, resp.UpdateProgram.Program.AuditorEmail))
 			}
 
 			// check edges
 			if len(tc.request.AddProcedureIDs) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Procedures.Edges, 1)
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Procedures.Edges, 1))
 				for _, edge := range resp.UpdateProgram.Program.Procedures.Edges {
-					assert.Equal(t, procedure1.ID, edge.Node.ID)
+					assert.Check(t, is.Equal(procedure1.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.AddInternalPolicyIDs) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.InternalPolicies.Edges, 1)
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.InternalPolicies.Edges, 1))
 				for _, edge := range resp.UpdateProgram.Program.InternalPolicies.Edges {
-					assert.Equal(t, policy1.ID, edge.Node.ID)
+					assert.Check(t, is.Equal(policy1.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.AddEditorIDs) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Editors, 1)
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Editors, 1))
 				for _, edge := range resp.UpdateProgram.Program.Editors {
-					assert.Equal(t, testUser1.GroupID, edge.ID)
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.ID))
 				}
 			}
 
 			if len(tc.request.AddBlockedGroupIDs) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.BlockedGroups, 1)
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.BlockedGroups, 1))
 				for _, edge := range resp.UpdateProgram.Program.BlockedGroups {
-					assert.Equal(t, blockGroup.ID, edge.ID)
+					assert.Check(t, is.Equal(blockGroup.ID, edge.ID))
 				}
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Viewers, 1)
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Viewers, 1))
 				for _, edge := range resp.UpdateProgram.Program.Viewers {
-					assert.Equal(t, viewerGroup.ID, edge.ID)
+					assert.Check(t, is.Equal(viewerGroup.ID, edge.ID))
 				}
 
 				// ensure the user has access to the program now
 				res, err := suite.client.api.GetProgramByID(viewOnlyUser.UserCtx, program.ID)
-				require.NoError(t, err)
-				require.NotEmpty(t, res)
-				assert.Equal(t, program.ID, res.Program.ID)
+				assert.NilError(t, err)
+				assert.Assert(t, res != nil)
+				assert.Check(t, is.Equal(program.ID, res.Program.ID))
 			}
 
 			if len(tc.request.AddProgramMembers) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Members.Edges, 3)
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 3))
 
 				// it should have the owner and the admin user and the other user added in the test setup
-				require.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)
-				require.Equal(t, programUser.ID, resp.UpdateProgram.Program.Members.Edges[1].Node.User.ID)
-				require.Equal(t, adminUser.ID, resp.UpdateProgram.Program.Members.Edges[2].Node.User.ID)
+				assert.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)
+				assert.Equal(t, programUser.ID, resp.UpdateProgram.Program.Members.Edges[1].Node.User.ID)
+				assert.Equal(t, adminUser.ID, resp.UpdateProgram.Program.Members.Edges[2].Node.User.ID)
 			}
 
 			// member was removed, ensure there are two members left
 			if len(tc.request.RemoveProgramMembers) > 0 {
-				require.Len(t, resp.UpdateProgram.Program.Members.Edges, 2)
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 2))
 
 				// it should have the owner and the admin user
-				require.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)
+				assert.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)
 			}
 		})
 	}
+
+	// cleanup program
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	// cleanup policy and procedure
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy2.ID}).MustDelete(testUser2.UserCtx, t)
+	// cleanup group
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockGroup.ID, viewerGroup.ID}}).MustDelete(testUser1.UserCtx, t)
+	// org member cleanup
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{om.ID, gm1.Edges.Orgmembership.ID, gm2.Edges.Orgmembership.ID, gm3.Edges.Orgmembership.ID, gm4.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteProgram() {
-	t := suite.T()
-
+func TestMutationDeleteProgram(t *testing.T) {
 	// create Programs to be deleted
 	program1 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -813,7 +887,7 @@ func (suite *GraphTestSuite) TestMutationDeleteProgram() {
 			ctx:        testUser1.UserCtx,
 		},
 		{
-			name:        "Program already deleted, not found",
+			name:        "program already deleted, not found",
 			idToDelete:  program1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -838,16 +912,15 @@ func (suite *GraphTestSuite) TestMutationDeleteProgram() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteProgram(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteProgram.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteProgram.DeletedID))
 		})
 	}
 }

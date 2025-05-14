@@ -4,15 +4,14 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestQueryPasskeys() {
-	t := suite.T()
-
-	(&WebauthnBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+func TestQueryPasskeys(t *testing.T) {
+	w := (&WebauthnBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -52,24 +51,23 @@ func (suite *GraphTestSuite) TestQueryPasskeys() {
 			resp, err := tc.client.GetAllWebauthns(tc.ctx)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			require.Len(t, resp.Webauthns.Edges, tc.expectedCount)
+			assert.Check(t, is.Len(resp.Webauthns.Edges, tc.expectedCount))
 		})
 	}
+
+	(&Cleanup[*generated.WebauthnDeleteOne]{client: suite.client.db.Webauthn, ID: w.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeletePasskeys() {
-	t := suite.T()
-
+func TestMutationDeletePasskeys(t *testing.T) {
 	passkey := (&WebauthnBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	secondPasskey := (&WebauthnBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -111,19 +109,18 @@ func (suite *GraphTestSuite) TestMutationDeletePasskeys() {
 			resp, err := tc.client.DeleteWebauthn(tc.ctx, tc.passkeyID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			passkeys, err := tc.client.GetAllWebauthns(tc.ctx)
-			require.NoError(t, err)
-			require.Len(t, passkeys.Webauthns.Edges, tc.expectedCount)
+			assert.NilError(t, err)
+			assert.Check(t, is.Len(passkeys.Webauthns.Edges, tc.expectedCount))
 		})
 	}
 }

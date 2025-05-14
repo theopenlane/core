@@ -250,6 +250,37 @@ query GetGroupByID($groupId: ID!) {
   }
 }
 
+query GetGroupInfo($where: GroupWhereInput) {
+  groups(where: $where) {
+    edges {
+      node {
+        description
+        displayName
+        id
+        logoURL
+        name
+        tags
+        isManaged
+        setting {
+          createdAt
+          createdBy
+          id
+          joinPolicy
+          syncToGithub
+          syncToSlack
+          updatedAt
+          updatedBy
+          visibility
+        }
+        createdAt
+        createdBy
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
 query GetGroups($where: GroupWhereInput) {
   groups(where: $where) {
     edges {

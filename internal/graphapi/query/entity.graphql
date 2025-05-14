@@ -17,6 +17,7 @@ mutation CreateBulkCSVEntity($input: Upload!) {
         }
       }
       entityType {
+        id
         name
       }
       id
@@ -48,6 +49,7 @@ mutation CreateBulkEntity($input: [CreateEntityInput!]) {
         }
       }
       entityType {
+        id
         name
       }
       id
@@ -79,6 +81,7 @@ mutation CreateEntity($input: CreateEntityInput!) {
         }
       }
       entityType {
+        id
         name
       }
       id
@@ -117,6 +120,7 @@ query GetAllEntities {
           }
         }
         entityType {
+          id
           name
         }
         id
@@ -150,6 +154,7 @@ query GetEntities($where: EntityWhereInput) {
           }
         }
         entityType {
+          id
           name
         }
         id
@@ -181,6 +186,7 @@ query GetEntityByID($entityId: ID!) {
       }
     }
     entityType {
+      id
       name
     }
     id
@@ -224,6 +230,7 @@ mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
         }
       }
       entityType {
+        id
         name
       }
       id

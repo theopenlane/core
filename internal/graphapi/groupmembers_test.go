@@ -4,27 +4,24 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestQueryGroupMembers() {
-	t := suite.T()
-
+func TestQueryGroupMembers(t *testing.T) {
 	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	checkCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 	groupMember, err := group.Members(checkCtx)
-	require.NoError(t, err)
-	require.Len(t, groupMember, 1)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(groupMember, 1))
 
 	testCases := []struct {
 		name        string
@@ -82,41 +79,38 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 			resp, err := tc.client.GetGroupMembersByGroupID(tc.ctx, &whereInput)
 
 			if tc.errExpected {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, notFoundErrorMsg)
 
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			if tc.expected == nil {
-				assert.Empty(t, resp.GroupMemberships.Edges)
+				assert.Check(t, is.Len(resp.GroupMemberships.Edges, 0))
 
 				return
 			}
 
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.GroupMemberships)
-			assert.Equal(t, tc.expected.UserID, resp.GroupMemberships.Edges[0].Node.GetUser().GetID())
-			assert.Equal(t, tc.expected.Role, resp.GroupMemberships.Edges[0].Node.Role)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.GroupMemberships.Edges != nil)
+			assert.Check(t, is.Equal(tc.expected.UserID, resp.GroupMemberships.Edges[0].Node.GetUser().GetID()))
+			assert.Check(t, is.Equal(tc.expected.Role, resp.GroupMemberships.Edges[0].Node.Role))
 		})
 	}
 
 	// delete created group
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
-	t := suite.T()
-
+func TestMutationCreateGroupMembers(t *testing.T) {
 	group1 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	checkCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 	groupMember, err := group1.Members(checkCtx)
-	require.NoError(t, err)
-	require.Len(t, groupMember, 1)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(groupMember, 1))
 
 	orgMember1 := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	orgMember2 := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -232,29 +226,25 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			resp, err := tc.client.AddUserToGroupWithRole(tc.ctx, input)
 
 			if tc.errMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateGroupMembership)
-			assert.Equal(t, tc.userID, resp.CreateGroupMembership.GroupMembership.UserID)
-			assert.Equal(t, tc.groupID, resp.CreateGroupMembership.GroupMembership.GroupID)
-			assert.Equal(t, tc.role, resp.CreateGroupMembership.GroupMembership.Role)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.userID, resp.CreateGroupMembership.GroupMembership.UserID))
+			assert.Check(t, is.Equal(tc.groupID, resp.CreateGroupMembership.GroupMembership.GroupID))
+			assert.Check(t, is.Equal(tc.role, resp.CreateGroupMembership.GroupMembership.Role))
 		})
 	}
 
 	// delete created groups and org members
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group1.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{orgMember1.ID, orgMember2.ID, orgMember3.ID}}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{orgMember1.ID, orgMember2.ID, orgMember3.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
-	t := suite.T()
-
+func TestMutationUpdateGroupMembers(t *testing.T) {
 	gm := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 
 	// get all group members so we know the id of the test user group member
@@ -262,7 +252,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 		GroupID: &testUser1.GroupID,
 	})
 
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testUser1GroupMember := ""
 	for _, gm := range groupMembers.GroupMemberships.Edges {
@@ -337,23 +327,24 @@ func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 			resp, err := tc.client.UpdateUserRoleInGroup(tc.ctx, tc.groupMemberID, input)
 
 			if tc.errMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateGroupMembership)
-			assert.Equal(t, tc.role, resp.UpdateGroupMembership.GroupMembership.Role)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.role, resp.UpdateGroupMembership.GroupMembership.Role))
 		})
 	}
+
+	// delete created group member
+	(&Cleanup[*generated.GroupMembershipDeleteOne]{client: suite.client.db.GroupMembership, ID: gm.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete org member
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{gm.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
-	t := suite.T()
-
+func TestMutationDeleteGroupMembers(t *testing.T) {
 	gm1 := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	gm2 := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	gm3 := (&GroupMemberBuilder{client: suite.client, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
@@ -363,7 +354,7 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 		GroupID: &testUser1.GroupID,
 	})
 
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testUser1GroupMember := ""
 	for _, gm := range groupMembers.GroupMemberships.Edges {
@@ -439,17 +430,18 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.RemoveUserFromGroup(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.DeleteGroupMembership)
-			assert.Equal(t, tc.idToDelete, resp.DeleteGroupMembership.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteGroupMembership.DeletedID))
 		})
 	}
+
+	// delete org members
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{gm1.Edges.Orgmembership.ID, gm2.Edges.Orgmembership.ID, gm3.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }

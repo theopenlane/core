@@ -2,22 +2,21 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"strings"
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-func (suite *GraphTestSuite) TestQuerySubscriber() {
-	t := suite.T()
-
+func TestQuerySubscriber(t *testing.T) {
 	subscriber := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
 	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
@@ -83,8 +82,7 @@ func (suite *GraphTestSuite) TestQuerySubscriber() {
 			resp, err := tc.client.GetSubscriberByEmail(tc.ctx, tc.email)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				errors := parseClientError(t, err)
 				for _, e := range errors {
@@ -95,20 +93,21 @@ func (suite *GraphTestSuite) TestQuerySubscriber() {
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.Subscriber)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, resp.Subscriber.ID != "")
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber2.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQuerySubscribers() {
-	t := suite.T()
-
-	(&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
-	(&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+func TestQuerySubscribers(t *testing.T) {
+	s1 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	s2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	s3 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -146,15 +145,18 @@ func (suite *GraphTestSuite) TestQuerySubscribers() {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllSubscribers(tc.ctx)
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.Len(t, resp.Subscribers.Edges, tc.numExpected)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Len(resp.Subscribers.Edges, tc.numExpected))
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, IDs: []string{s1.ID, s2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, IDs: []string{s3.ID}}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateBulkSubscribers() {
-	t := suite.T()
+func TestMutationCreateBulkSubscribers(t *testing.T) {
 
 	testCases := []struct {
 		name    string
@@ -206,26 +208,29 @@ func (suite *GraphTestSuite) TestMutationCreateBulkSubscribers() {
 			resp, err := tc.client.CreateBulkSubscriber(tc.ctx, input)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			for k, v := range tc.emails {
-				assert.Equal(t, strings.ToLower(v), resp.CreateBulkSubscriber.Subscribers[k].Email)
-				assert.False(t, resp.CreateBulkSubscriber.Subscribers[k].Unsubscribed)
-				assert.False(t, resp.CreateBulkSubscriber.Subscribers[k].Active)
+				assert.Check(t, is.Equal(strings.ToLower(v), resp.CreateBulkSubscriber.Subscribers[k].Email))
+				assert.Check(t, !resp.CreateBulkSubscriber.Subscribers[k].Unsubscribed)
+				assert.Check(t, !resp.CreateBulkSubscriber.Subscribers[k].Active)
+			}
+
+			// cleanup
+			for _, v := range resp.CreateBulkSubscriber.Subscribers {
+				(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: v.ID}).MustDelete(testUser1.UserCtx, t)
 			}
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationCreateSubscriber_Tokens() {
-	t := suite.T()
+func TestMutationCreateSubscriber_Tokens(t *testing.T) {
 
 	testCases := []struct {
 		name             string
@@ -273,26 +278,29 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_Tokens() {
 			resp, err := tc.client.CreateSubscriber(tc.ctx, input)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+				assert.ErrorContains(t, err, "email is required but not provided")
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Assert matching fields
 			// Since we convert to lower case already on insertion/update
-			assert.Equal(t, strings.ToLower(tc.email), resp.CreateSubscriber.Subscriber.Email)
-			assert.False(t, resp.CreateSubscriber.Subscriber.Unsubscribed)
+			assert.Check(t, is.Equal(strings.ToLower(tc.email), resp.CreateSubscriber.Subscriber.Email))
+			assert.Check(t, !resp.CreateSubscriber.Subscriber.Unsubscribed)
+
+			// cleanup
+			(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
 }
 
-func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
-	t := suite.T()
+func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 
+	createdSubscriberEmails := []string{}
 	testCases := []struct {
 		name              string
 		email             string
@@ -387,8 +395,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 			resp, err := tc.client.CreateSubscriber(tc.ctx, input)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+				assert.Assert(t, is.Nil(resp))
 
 				errors := parseClientError(t, err)
 				for _, e := range errors {
@@ -399,42 +406,51 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber_SendAttempts() {
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Assert matching fields
 			// Since we convert to lower case already on insertion/update
-			assert.Equal(t, strings.ToLower(tc.email), resp.CreateSubscriber.Subscriber.Email)
-			assert.False(t, resp.CreateSubscriber.Subscriber.Unsubscribed)
+			assert.Check(t, is.Equal(strings.ToLower(tc.email), resp.CreateSubscriber.Subscriber.Email))
+			assert.Check(t, !resp.CreateSubscriber.Subscriber.Unsubscribed)
 
 			if tc.setUnsubscribed {
 				// Set the subscriber as unsubscribed to test for duplicate email
 				resp, err := tc.client.UpdateSubscriber(tc.ctx, resp.CreateSubscriber.Subscriber.Email, openlaneclient.UpdateSubscriberInput{
 					Unsubscribed: lo.ToPtr(true),
 				})
-				require.NoError(t, err)
-				require.NotNil(t, resp)
+				assert.NilError(t, err)
+				assert.Assert(t, resp != nil)
 
-				require.True(t, resp.UpdateSubscriber.Subscriber.Unsubscribed) // ensure the subscriber is unsubscribed now
-				require.False(t, resp.UpdateSubscriber.Subscriber.Active)      // ensure the subscriber is inactive now after unsubscribing
+				assert.Check(t, resp.UpdateSubscriber.Subscriber.Unsubscribed) // ensure the subscriber is unsubscribed now
+				assert.Check(t, !resp.UpdateSubscriber.Subscriber.Active)      // ensure the subscriber is inactive now after unsubscribing
+			}
+
+			// add the list to cleanup later
+			if !slices.Contains(createdSubscriberEmails, strings.ToLower(tc.email)) {
+				createdSubscriberEmails = append(createdSubscriberEmails, strings.ToLower(tc.email))
 			}
 
 			sub, err := tc.client.GetSubscriberByEmail(tc.ctx, strings.ToLower(tc.email))
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			if tc.setUnsubscribed {
-				require.Zero(t, sub.Subscriber.SendAttempts) // reset attempts count to zero
+				assert.Equal(t, sub.Subscriber.SendAttempts, int64(0)) // reset attempts count to zero
 				return
 			}
 
-			require.Equal(t, tc.expectedAttempts, sub.Subscriber.SendAttempts)
+			assert.Equal(t, tc.expectedAttempts, sub.Subscriber.SendAttempts)
 		})
+	}
+
+	// cleanup
+	for _, v := range createdSubscriberEmails {
+		_, err := suite.client.api.DeleteSubscriber(testUser1.UserCtx, v, nil)
+		assert.NilError(t, err)
 	}
 }
 
-func (suite *GraphTestSuite) TestUpdateSubscriber() {
-	t := suite.T()
-
+func TestUpdateSubscriber(t *testing.T) {
 	subscriber := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -513,39 +529,41 @@ func (suite *GraphTestSuite) TestUpdateSubscriber() {
 			resp, err := tc.client.UpdateSubscriber(tc.ctx, tc.email, tc.updateInput)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+				assert.Assert(t, is.Nil(resp))
+				assert.ErrorContains(t, err, "subscriber not found")
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.Equal(t, tc.email, resp.UpdateSubscriber.Subscriber.Email)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Equal(t, tc.email, resp.UpdateSubscriber.Subscriber.Email)
 
 			if tc.updateInput.PhoneNumber != nil {
-				require.Equal(t, tc.updateInput.PhoneNumber, resp.UpdateSubscriber.Subscriber.PhoneNumber)
+				assert.Check(t, is.Equal(*tc.updateInput.PhoneNumber, *resp.UpdateSubscriber.Subscriber.PhoneNumber))
 			}
 
 			if tc.updateInput.Unsubscribed != nil {
-				require.Equal(t, *tc.updateInput.Unsubscribed, resp.UpdateSubscriber.Subscriber.Unsubscribed)
+				assert.Check(t, *tc.updateInput.Unsubscribed, resp.UpdateSubscriber.Subscriber.Unsubscribed)
 
 				if *tc.updateInput.Unsubscribed {
 					// ensure I can create another subscriber with the same email
 					resp, err := tc.client.CreateSubscriber(tc.ctx, openlaneclient.CreateSubscriberInput{
 						Email: tc.email,
 					})
-					require.NoError(t, err)
-					require.NotNil(t, resp)
+					assert.NilError(t, err)
+					assert.Assert(t, resp != nil)
 				}
 			}
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriber2.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestDeleteSubscriber() {
-	t := suite.T()
-
+func TestDeleteSubscriber(t *testing.T) {
 	subscriber1 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	subscriber2 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	subscriber3 := (&SubscriberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -603,21 +621,23 @@ func (suite *GraphTestSuite) TestDeleteSubscriber() {
 			resp, err := tc.client.DeleteSubscriber(tc.ctx, tc.email, &tc.organizationID)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+				assert.ErrorContains(t, err, notFoundErrorMsg)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.Equal(t, tc.email, resp.DeleteSubscriber.Email)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Equal(t, tc.email, resp.DeleteSubscriber.Email)
 		})
 	}
+
+	// cleanup
+	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: subscriberOtherOrg.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestActiveSubscriber() {
-	t := suite.T()
+func TestActiveSubscriber(t *testing.T) {
 
 	testCases := []struct {
 		name       string
@@ -659,16 +679,14 @@ func (suite *GraphTestSuite) TestActiveSubscriber() {
 			resp, err := tc.client.CreateSubscriber(tc.ctx, input)
 
 			if tc.wantErr {
-				require.Error(t, err)
-				assert.Nil(t, resp)
+				assert.Assert(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NotNil(t, resp)
+			assert.Assert(t, resp != nil)
 
 			if tc.markActive {
-
 				ctx := setContext(tc.ctx, suite.client.db)
 
 				// update the subscriber and mark active
@@ -677,19 +695,21 @@ func (suite *GraphTestSuite) TestActiveSubscriber() {
 					SetActive(true).
 					Save(ctx)
 
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			_, err = tc.client.CreateSubscriber(tc.ctx, input)
-
 			if tc.markActive {
 				// if we marked the user as active, this should fail
-				require.Error(t, err)
+				assert.ErrorContains(t, err, "subscriber already exists")
 
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
+
+			// cleanup
+			(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(tc.ctx, t)
 		})
 	}
 }

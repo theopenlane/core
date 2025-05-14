@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
@@ -16,9 +16,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 )
 
-func (suite *GraphTestSuite) TestQueryStandard() {
-	t := suite.T()
-
+func TestQueryStandard(t *testing.T) {
 	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
 
 	numControls := 20
@@ -121,56 +119,49 @@ func (suite *GraphTestSuite) TestQueryStandard() {
 			resp, err := tc.client.GetStandardByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			require.NotEmpty(t, resp.Standard)
-
-			require.Equal(t, tc.queryID, resp.Standard.ID)
-			require.NotEmpty(t, resp.Standard.Name)
+			assert.Check(t, is.Equal(tc.queryID, resp.Standard.ID))
+			assert.Check(t, resp.Standard.Name != "")
 
 			if tc.queryID == orgOwnedStandard.ID {
-				assert.Equal(t, orgStandardName, resp.Standard.Name)
+				assert.Check(t, is.Equal(orgStandardName, resp.Standard.Name))
+				assert.Check(t, !*resp.Standard.SystemOwned)
+			} else {
+				assert.Check(t, *resp.Standard.SystemOwned)
 			}
 
-			assert.NotEmpty(t, resp.Standard.Framework)
+			assert.Check(t, resp.Standard.Framework != nil)
 
 			if tc.queryID == publicStandard.ID {
-				assert.True(t, *resp.Standard.IsPublic)
+				assert.Check(t, *resp.Standard.IsPublic)
+
 			} else {
-				assert.False(t, *resp.Standard.IsPublic)
+				assert.Check(t, !*resp.Standard.IsPublic)
 			}
 
-			if tc.queryID != orgOwnedStandard.ID {
-				assert.True(t, *resp.Standard.SystemOwned)
-			} else {
-				assert.False(t, *resp.Standard.SystemOwned)
-			}
-
-			assert.Equal(t, tc.expectedControlCount, resp.Standard.Controls.TotalCount)
+			assert.Check(t, is.Equal(tc.expectedControlCount, resp.Standard.Controls.TotalCount))
 
 			// only check edges if we expect them
 			if tc.expectedControlCount > 0 {
-				assert.Equal(t, testutils.MaxResultLimit, len(resp.Standard.Controls.Edges))
+				assert.Check(t, is.Equal(testutils.MaxResultLimit, len(resp.Standard.Controls.Edges)))
 			}
 
 		})
 	}
 
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(systemAdminUser.UserCtx, suite)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgOwnedStandard.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgOwnedStandard.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestQueryStandards() {
-	t := suite.T()
-
+func TestQueryStandards(t *testing.T) {
 	// create multiple org owned standards
 	countOrgOwned := 2
 	orgOwnedStandardIDs := []string{}
@@ -240,26 +231,24 @@ func (suite *GraphTestSuite) TestQueryStandards() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllStandards(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.Standards.Edges, tc.expectedResults)
-			assert.Equal(t, int64(tc.expectedResults), resp.Standards.TotalCount)
+			assert.Check(t, is.Len(resp.Standards.Edges, tc.expectedResults))
+			assert.Check(t, is.Equal(int64(tc.expectedResults), resp.Standards.TotalCount))
 
 			// under the max results in tests (10), has next should be false
-			assert.False(t, resp.Standards.PageInfo.HasNextPage)
+			assert.Check(t, !resp.Standards.PageInfo.HasNextPage)
 		})
 	}
 
 	systemOwnedIDs := append(notPublicStandardIDs, publicStandardIDs...)
 
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: systemOwnedIDs}).MustDelete(systemAdminUser.UserCtx, suite)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: systemOwnedIDs}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationCreateStandard() {
-	t := suite.T()
-
+func TestMutationCreateStandard(t *testing.T) {
 	numControls := 20
 	controlIDs := []string{}
 	for range numControls {
@@ -400,42 +389,41 @@ func (suite *GraphTestSuite) TestMutationCreateStandard() {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateStandard(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.NotEmpty(t, resp.CreateStandard.Standard.Name)
+			assert.Check(t, len(resp.CreateStandard.Standard.Name) != 0)
 
 			expectedRevision := "v0.0.1" //default
 			if tc.request.Revision != nil {
 				expectedRevision = *tc.request.Revision
 			}
 
-			assert.Equal(t, expectedRevision, *resp.CreateStandard.Standard.Revision)
+			assert.Check(t, is.Equal(expectedRevision, *resp.CreateStandard.Standard.Revision))
 
 			expectedStatus := enums.StandardActive
 			if tc.request.Status != nil {
 				expectedStatus = *tc.request.Status
 			}
-			assert.Equal(t, expectedStatus, *resp.CreateStandard.Standard.Status)
+			assert.Check(t, is.Equal(expectedStatus, *resp.CreateStandard.Standard.Status))
 
 			expectedSystemOwned := false
 			if tc.ctx == systemAdminUser.UserCtx {
 				expectedSystemOwned = true
 			}
-			assert.Equal(t, expectedSystemOwned, *resp.CreateStandard.Standard.SystemOwned)
+			assert.Check(t, is.Equal(expectedSystemOwned, *resp.CreateStandard.Standard.SystemOwned))
 
 			expectedIsPublic := false
 			if tc.request.IsPublic != nil {
 				expectedIsPublic = *tc.request.IsPublic
 			}
-			assert.Equal(t, expectedIsPublic, *resp.CreateStandard.Standard.IsPublic)
+			assert.Check(t, is.Equal(expectedIsPublic, *resp.CreateStandard.Standard.IsPublic))
 
 			// this field isn't currently used to enforce anything, it may change to restrict
 			// usage on tiers + features
@@ -443,64 +431,64 @@ func (suite *GraphTestSuite) TestMutationCreateStandard() {
 			if tc.request.FreeToUse != nil {
 				expectedFreeToUse = *tc.request.FreeToUse
 			}
-			assert.Equal(t, expectedFreeToUse, *resp.CreateStandard.Standard.FreeToUse)
+			assert.Check(t, is.Equal(expectedFreeToUse, *resp.CreateStandard.Standard.FreeToUse))
 
 			expectedTags := []string{}
 			if tc.request.Tags != nil {
 				expectedTags = tc.request.Tags
 			}
-			assert.Equal(t, expectedTags, resp.CreateStandard.Standard.Tags)
+			assert.Check(t, is.DeepEqual(expectedTags, resp.CreateStandard.Standard.Tags))
 
 			expectedFramework := ""
 			if tc.request.Framework != nil {
 				expectedFramework = *tc.request.Framework
 			}
-			assert.Equal(t, expectedFramework, *resp.CreateStandard.Standard.Framework)
+			assert.Check(t, is.Equal(expectedFramework, *resp.CreateStandard.Standard.Framework))
 
 			// short name defaults to the name
 			expectedShortName := tc.request.Name
 			if tc.request.ShortName != nil {
 				expectedShortName = *tc.request.ShortName
 			}
-			assert.Equal(t, expectedShortName, *resp.CreateStandard.Standard.ShortName)
+			assert.Check(t, is.Equal(expectedShortName, *resp.CreateStandard.Standard.ShortName))
 
 			expectedDescription := ""
 			if tc.request.Description != nil {
 				expectedDescription = *tc.request.Description
 			}
-			assert.Equal(t, expectedDescription, *resp.CreateStandard.Standard.Description)
+			assert.Check(t, is.Equal(expectedDescription, *resp.CreateStandard.Standard.Description))
 
 			expectedGoverningBodyLogoURL := ""
 			if tc.request.GoverningBodyLogoURL != nil {
 				expectedGoverningBodyLogoURL = *tc.request.GoverningBodyLogoURL
 			}
-			assert.Equal(t, expectedGoverningBodyLogoURL, *resp.CreateStandard.Standard.GoverningBodyLogoURL)
+			assert.Check(t, is.Equal(expectedGoverningBodyLogoURL, *resp.CreateStandard.Standard.GoverningBodyLogoURL))
 
 			expectedGoverningBody := ""
 			if tc.request.GoverningBody != nil {
 				expectedGoverningBody = *tc.request.GoverningBody
 			}
-			assert.Equal(t, expectedGoverningBody, *resp.CreateStandard.Standard.GoverningBody)
+			assert.Check(t, is.Equal(expectedGoverningBody, *resp.CreateStandard.Standard.GoverningBody))
 
-			assert.Equal(t, tc.request.Domains, resp.CreateStandard.Standard.Domains)
+			assert.Check(t, is.DeepEqual(tc.request.Domains, resp.CreateStandard.Standard.Domains))
 
 			expectedLink := ""
 			if tc.request.Link != nil {
 				expectedLink = *tc.request.Link
 			}
-			assert.Equal(t, expectedLink, *resp.CreateStandard.Standard.Link)
+			assert.Check(t, is.Equal(expectedLink, *resp.CreateStandard.Standard.Link))
 
 			expectedStandardType := ""
 			if tc.request.StandardType != nil {
 				expectedStandardType = *tc.request.StandardType
 			}
-			assert.Equal(t, expectedStandardType, *resp.CreateStandard.Standard.StandardType)
+			assert.Check(t, is.Equal(expectedStandardType, *resp.CreateStandard.Standard.StandardType))
 
 			expectedVersion := ""
 			if tc.request.Version != nil {
 				expectedVersion = *tc.request.Version
 			}
-			assert.Equal(t, expectedVersion, *resp.CreateStandard.Standard.Version)
+			assert.Check(t, is.Equal(expectedVersion, *resp.CreateStandard.Standard.Version))
 
 			// cleanup the created standard
 			ctx := tc.ctx
@@ -508,24 +496,22 @@ func (suite *GraphTestSuite) TestMutationCreateStandard() {
 				ctx = testUser1.UserCtx
 			}
 
-			(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, suite)
+			(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
 		})
 	}
 
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: adminControlIDs}).MustDelete(systemAdminUser.UserCtx, suite)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: adminControlIDs}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateStandard() {
-	t := suite.T()
-
+func TestMutationUpdateStandard(t *testing.T) {
 	standardOrgOwned := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
 	// users should not be able to get the system owned standard because its not public
 	std, err := suite.client.api.GetStandardByID(testUser1.UserCtx, standardSystemOwned.ID)
-	require.Error(t, err)
-	require.Nil(t, std)
+	assert.ErrorContains(t, err, notFoundErrorMsg)
+	assert.Assert(t, is.Nil(std))
 
 	testCases := []struct {
 		name        string
@@ -650,81 +636,78 @@ func (suite *GraphTestSuite) TestMutationUpdateStandard() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateStandard(tc.ctx, tc.id, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			if tc.request.GoverningBodyLogoURL != nil {
-				assert.Equal(t, *tc.request.GoverningBodyLogoURL, *resp.UpdateStandard.Standard.GoverningBodyLogoURL)
+				assert.Check(t, is.Equal(*tc.request.GoverningBodyLogoURL, *resp.UpdateStandard.Standard.GoverningBodyLogoURL))
 			}
 
 			if tc.request.AppendTags != nil {
 				for _, tag := range tc.request.AppendTags {
-					assert.Contains(t, resp.UpdateStandard.Standard.Tags, tag)
+					assert.Check(t, is.Contains(resp.UpdateStandard.Standard.Tags, tag))
 				}
 			}
 
 			if tc.request.GoverningBody != nil {
-				assert.Equal(t, *tc.request.GoverningBody, *resp.UpdateStandard.Standard.GoverningBody)
+				assert.Check(t, is.Equal(*tc.request.GoverningBody, *resp.UpdateStandard.Standard.GoverningBody))
 			}
 
 			if tc.request.ShortName != nil {
-				assert.Equal(t, *tc.request.ShortName, *resp.UpdateStandard.Standard.ShortName)
+				assert.Check(t, is.Equal(*tc.request.ShortName, *resp.UpdateStandard.Standard.ShortName))
 			}
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateStandard.Standard.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateStandard.Standard.Description))
 			}
 
 			if tc.request.Link != nil {
-				assert.Equal(t, *tc.request.Link, *resp.UpdateStandard.Standard.Link)
+				assert.Check(t, is.Equal(*tc.request.Link, *resp.UpdateStandard.Standard.Link))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.UpdateStandard.Standard.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateStandard.Standard.Status))
 			}
 
 			if tc.request.StandardType != nil {
-				assert.Equal(t, *tc.request.StandardType, *resp.UpdateStandard.Standard.StandardType)
+				assert.Check(t, is.Equal(*tc.request.StandardType, *resp.UpdateStandard.Standard.StandardType))
 			}
 
 			if tc.request.RevisionBump == &models.Major {
-				assert.Equal(t, "v1.0.0", *resp.UpdateStandard.Standard.Revision)
+				assert.Check(t, is.Equal("v1.0.0", *resp.UpdateStandard.Standard.Revision))
 			}
 
 			if tc.request.RevisionBump == &models.Minor {
-				assert.Equal(t, "v0.1.0", *resp.UpdateStandard.Standard.Revision)
+				assert.Check(t, is.Equal("v0.1.0", *resp.UpdateStandard.Standard.Revision))
 			}
 
 			if tc.request.IsPublic != nil && *tc.request.IsPublic {
-				assert.True(t, *resp.UpdateStandard.Standard.IsPublic)
+				assert.Check(t, *resp.UpdateStandard.Standard.IsPublic)
 
 				// users should now be be able to get the system owned standard because its not public
 				std, err := suite.client.api.GetStandardByID(testUser1.UserCtx, standardSystemOwned.ID)
-				require.NoError(t, err)
-				require.NotNil(t, std)
-				require.Equal(t, standardSystemOwned.ID, std.Standard.ID)
+				assert.NilError(t, err)
+				assert.Assert(t, std != nil)
+				assert.Equal(t, standardSystemOwned.ID, std.Standard.ID)
 			}
 
 			if tc.request.Tags != nil {
-				assert.Equal(t, tc.request.Tags, resp.UpdateStandard.Standard.Tags)
+				assert.Check(t, is.DeepEqual(tc.request.Tags, resp.UpdateStandard.Standard.Tags))
 			}
 		})
 	}
 
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(testUser1.UserCtx, suite)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(testUser1.UserCtx, suite)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationDeleteStandard() {
-	t := suite.T()
-
+func TestMutationDeleteStandard(t *testing.T) {
 	standardOrgOwned1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standardOrgOwned2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standardOrgOwned3 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -803,16 +786,15 @@ func (suite *GraphTestSuite) TestMutationDeleteStandard() {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteStandard(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteStandard.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteStandard.DeletedID))
 		})
 	}
 }

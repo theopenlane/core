@@ -4,15 +4,14 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *GraphTestSuite) TestMutationCreateProgramMembers() {
-	t := suite.T()
-
+func TestMutationCreateProgramMembers(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	orgMember1 := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -121,32 +120,33 @@ func (suite *GraphTestSuite) TestMutationCreateProgramMembers() {
 			resp, err := tc.client.AddUserToProgramWithRole(tc.ctx, input)
 
 			if tc.errMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errMsg)
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.CreateProgramMembership)
-			assert.Equal(t, tc.userID, resp.CreateProgramMembership.ProgramMembership.UserID)
-			assert.Equal(t, tc.programID, resp.CreateProgramMembership.ProgramMembership.ProgramID)
-			assert.Equal(t, tc.role, resp.CreateProgramMembership.ProgramMembership.Role)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.userID, resp.CreateProgramMembership.ProgramMembership.UserID))
+			assert.Check(t, is.Equal(tc.programID, resp.CreateProgramMembership.ProgramMembership.ProgramID))
+			assert.Check(t, is.Equal(tc.role, resp.CreateProgramMembership.ProgramMembership.Role))
 		})
 	}
+
+	// cleanup program
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	// cleanup org members
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{orgMember1.ID, orgMember2.ID, orgMember3.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func (suite *GraphTestSuite) TestMutationUpdateProgramMembers() {
-	t := suite.T()
-
+func TestMutationUpdateProgramMembers(t *testing.T) {
 	pm := (&ProgramMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// get all program members so we know the id of the test user program member
 	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{
 		ProgramID: &pm.ProgramID,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testUser1ProgramMember := ""
 	for _, pm := range programMembers.ProgramMemberships.Edges {
@@ -212,18 +212,21 @@ func (suite *GraphTestSuite) TestMutationUpdateProgramMembers() {
 			}
 
 			resp, err := tc.client.UpdateUserRoleInProgram(tc.ctx, tc.programMemberID, input)
-
 			if tc.errMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errMsg)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			require.NotNil(t, resp.UpdateProgramMembership)
-			assert.Equal(t, tc.role, resp.UpdateProgramMembership.ProgramMembership.Role)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.role, resp.UpdateProgramMembership.ProgramMembership.Role))
 		})
 	}
+
+	// cleanup program
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: pm.ProgramID}).MustDelete(testUser1.UserCtx, t)
+	// cleanup org members
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{pm.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
 }
