@@ -297,7 +297,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 			}
 
 			// make sure user setting is updated correctly
-			userSettings, err := suite.client.api.GetUserSettingByID(testUser1.UserCtx, testUser1.UserInfo.Edges.Setting.ID)
+			userSettings, err := suite.client.api.GetUserSettingByID(testUser.UserCtx, testUser.UserInfo.Edges.Setting.ID)
 			assert.NilError(t, err)
 
 			if resp.UpdateTFASetting.TfaSetting.Verified {
