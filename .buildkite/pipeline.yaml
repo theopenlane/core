@@ -106,6 +106,7 @@ steps:
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
+                - "ANALYTICS_KEY"
                 - "GOMAXPROCS=16"
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
