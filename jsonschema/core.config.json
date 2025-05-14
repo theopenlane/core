@@ -1081,6 +1081,9 @@
         "Schema": {
           "type": "string"
         },
+        "SkipJobKindValidation": {
+          "type": "boolean"
+        },
         "SkipUnknownJobCheck": {
           "type": "boolean"
         },

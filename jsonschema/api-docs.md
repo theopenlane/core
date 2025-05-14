@@ -598,6 +598,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**RescueStuckJobsAfter**|`integer`|||
 |**RetryPolicy**||||
 |**Schema**|`string`|||
+|**SkipJobKindValidation**|`boolean`|||
 |**SkipUnknownJobCheck**|`boolean`|||
 |[**Test**](#jobqueueriverconftest)|`object`|||
 |**TestOnly**|`boolean`|||
