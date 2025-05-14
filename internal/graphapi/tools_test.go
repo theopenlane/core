@@ -78,7 +78,9 @@ func TestMain(m *testing.M) {
 	// Setup code here (e.g., initialize database connection)
 	suite.SetupSuite(t)
 
+	// Setup test data, most tests can reuse this same data
 	suite.setupTestData(context.Background(), t)
+
 	// Run the tests
 	exitCode := m.Run()
 

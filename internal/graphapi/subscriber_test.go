@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -436,7 +435,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 			assert.NilError(t, err)
 
 			if tc.setUnsubscribed {
-				require.Zero(t, sub.Subscriber.SendAttempts) // reset attempts count to zero
+				assert.Equal(t, sub.Subscriber.SendAttempts, int64(0)) // reset attempts count to zero
 				return
 			}
 

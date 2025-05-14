@@ -558,7 +558,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 }
 
 func TestMutationDeleteEvidence(t *testing.T) {
-	// 	// create objects to be deleted
+	// create objects to be deleted
 	evidence1 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	evidence2 := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 

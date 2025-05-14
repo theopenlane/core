@@ -67,7 +67,7 @@ func TestQueryInvite(t *testing.T) {
 			resp, err := tc.client.GetInviteByID(tc.ctx, tc.queryID)
 
 			if tc.wantErr {
-
+				assert.ErrorContains(t, err, notFoundErrorMsg)
 				assert.Check(t, is.Nil(resp))
 
 				return
@@ -108,7 +108,7 @@ func TestMutationCreateInvite(t *testing.T) {
 		requestorID      string
 		expectedStatus   enums.InviteStatus
 		expectedAttempts int64
-		wantErr          bool
+		expectedErr      string
 	}{
 		{
 			name:             "happy path, new user as member",
@@ -120,7 +120,6 @@ func TestMutationCreateInvite(t *testing.T) {
 			requestorID:      testUserCreator.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
-			wantErr:          false,
 		},
 		{
 			name:             "happy path, new user as member in restricted domain org",
@@ -132,7 +131,6 @@ func TestMutationCreateInvite(t *testing.T) {
 			requestorID:      testUserCreator.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
-			wantErr:          false,
 		},
 		{
 			name:        "new user as member in restricted domain org with invalid domain",
@@ -142,7 +140,7 @@ func TestMutationCreateInvite(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         orgWithRestrictionsCtx,
 			requestorID: testUserCreator.ID,
-			wantErr:     true,
+			expectedErr: "email domain not allowed",
 		},
 		{
 			name:             "invite new user as member using api token",
@@ -154,7 +152,6 @@ func TestMutationCreateInvite(t *testing.T) {
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
-			wantErr:          false,
 		},
 		{
 			name:             "re-invite new user as member using api token",
@@ -166,7 +163,6 @@ func TestMutationCreateInvite(t *testing.T) {
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 2,
-			wantErr:          false,
 		},
 		{
 			name:             "happy path, new user as admin using pat",
@@ -178,7 +174,6 @@ func TestMutationCreateInvite(t *testing.T) {
 			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
-			wantErr:          false,
 		},
 		{
 			name:             "happy path, new user as member, by member",
@@ -190,7 +185,6 @@ func TestMutationCreateInvite(t *testing.T) {
 			requestorID:      viewOnlyUser.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
-			wantErr:          false,
 		},
 		{
 			name:        "new user as admin, by member, not allowed",
@@ -200,25 +194,25 @@ func TestMutationCreateInvite(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
 			requestorID: viewOnlyUser.ID,
-			wantErr:     true,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name:      "new user as owner should fail",
-			recipient: "woof@theopenlane.io",
-			orgID:     testUser1.OrganizationID,
-			role:      enums.RoleOwner,
-			client:    suite.client.api,
-			ctx:       user1Context,
-			wantErr:   true,
+			name:        "new user as owner should fail",
+			recipient:   "woof@theopenlane.io",
+			orgID:       testUser1.OrganizationID,
+			role:        enums.RoleOwner,
+			client:      suite.client.api,
+			ctx:         user1Context,
+			expectedErr: "not a valid",
 		},
 		{
-			name:      "new user with invalid email",
-			recipient: "woof",
-			orgID:     testUser1.OrganizationID,
-			role:      enums.RoleOwner,
-			client:    suite.client.api,
-			ctx:       user1Context,
-			wantErr:   true,
+			name:        "new user with invalid email",
+			recipient:   "woof",
+			orgID:       testUser1.OrganizationID,
+			role:        enums.RoleOwner,
+			client:      suite.client.api,
+			ctx:         user1Context,
+			expectedErr: "not a valid",
 		},
 		{
 			name:             "happy path, existing user as member",
@@ -230,7 +224,6 @@ func TestMutationCreateInvite(t *testing.T) {
 			requestorID:      testUserCreator.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
-			wantErr:          false,
 		},
 		{
 			name:             "user already a member, will still send an invite",
@@ -242,7 +235,6 @@ func TestMutationCreateInvite(t *testing.T) {
 			requestorID:      testUserCreator.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
-			wantErr:          false,
 		},
 	}
 
@@ -257,7 +249,8 @@ func TestMutationCreateInvite(t *testing.T) {
 
 			resp, err := tc.client.CreateInvite(tc.ctx, input)
 
-			if tc.wantErr {
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
 				return
@@ -341,7 +334,7 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 
 			resp, err := tc.client.CreateBulkInvite(tc.ctx, input)
 			if tc.wantErr {
-
+				assert.ErrorContains(t, err, "failed to create invite")
 				assert.Check(t, is.Nil(resp))
 
 				return
@@ -377,60 +370,55 @@ func TestMutationDeleteInvite(t *testing.T) {
 	invite5 := (&InviteBuilder{client: suite.client, Role: fgax.AdminRelation}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name    string
-		queryID string
-		client  *openlaneclient.OpenlaneClient
-		ctx     context.Context
-		wantErr bool
+		name        string
+		queryID     string
+		client      *openlaneclient.OpenlaneClient
+		ctx         context.Context
+		expectedErr string
 	}{
 		{
 			name:    "happy path",
 			queryID: invite1.ID,
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
-			wantErr: false,
 		},
 		{
 			name:    "happy path, using api token",
 			queryID: invite2.ID,
 			client:  suite.client.apiWithToken,
 			ctx:     context.Background(),
-			wantErr: false,
 		},
 		{
 			name:    "happy path, using personal access token",
 			queryID: invite3.ID,
 			client:  suite.client.apiWithPAT,
 			ctx:     context.Background(),
-			wantErr: false,
 		},
 		{
 			name:    "happy path, org member deleting member invite",
 			queryID: invite4.ID,
 			client:  suite.client.api,
 			ctx:     viewOnlyUser.UserCtx,
-			wantErr: false,
 		},
 		{
-			name:    "org member deleting admin invite",
-			queryID: invite5.ID,
-			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
-			wantErr: true,
+			name:        "org member deleting admin invite",
+			queryID:     invite5.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:    "org owner deleting admin invite",
 			queryID: invite5.ID,
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
-			wantErr: false,
 		},
 		{
-			name:    "invalid id",
-			queryID: "allthefooandbar",
-			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
-			wantErr: true,
+			name:        "invalid id",
+			queryID:     "allthefooandbar",
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 	}
 
@@ -438,8 +426,8 @@ func TestMutationDeleteInvite(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteInvite(tc.ctx, tc.queryID)
 
-			if tc.wantErr {
-
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
 				return
