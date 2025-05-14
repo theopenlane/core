@@ -53,10 +53,10 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 					Name: "mitb program",
 				},
 				Members:    members,
-				StandardID: lo.ToPtr(publicStandard.ID),
+				StandardID: &publicStandard.ID,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    user.UserCtx,
 		},
 		{
 			name: "happy path, minimal input",

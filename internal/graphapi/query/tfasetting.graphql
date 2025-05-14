@@ -28,6 +28,7 @@ query GetAllTFASettings {
 
 query GetTFASetting {
   tfaSetting {
+    id
     totpAllowed
     verified
     owner {

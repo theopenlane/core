@@ -66035,11 +66035,18 @@ func (t *GetTFASetting_TfaSetting_Owner) GetID() string {
 }
 
 type GetTFASetting_TfaSetting struct {
+	ID          string                          "json:\"id\" graphql:\"id\""
 	Owner       *GetTFASetting_TfaSetting_Owner "json:\"owner,omitempty\" graphql:\"owner\""
 	TotpAllowed *bool                           "json:\"totpAllowed,omitempty\" graphql:\"totpAllowed\""
 	Verified    bool                            "json:\"verified\" graphql:\"verified\""
 }
 
+func (t *GetTFASetting_TfaSetting) GetID() string {
+	if t == nil {
+		t = &GetTFASetting_TfaSetting{}
+	}
+	return t.ID
+}
 func (t *GetTFASetting_TfaSetting) GetOwner() *GetTFASetting_TfaSetting_Owner {
 	if t == nil {
 		t = &GetTFASetting_TfaSetting{}
@@ -91037,6 +91044,7 @@ func (c *Client) GetAllTFASettings(ctx context.Context, interceptors ...clientv2
 
 const GetTFASettingDocument = `query GetTFASetting {
 	tfaSetting {
+		id
 		totpAllowed
 		verified
 		owner {
