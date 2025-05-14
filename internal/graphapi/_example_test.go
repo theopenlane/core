@@ -4,8 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -105,31 +106,29 @@ func TestQueryOBJECT(t *testing.T) {
 			resp, err := tc.client.GetOBJECTByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
-				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
-				assert.Nil(t, resp)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			require.NotEmpty(t, resp.OBJECT)
-
-			assert.Equal(t, tc.queryID, resp.OBJECT.ID)
+			assert.Check(t, is.Equal(tc.queryID, resp.OBJECT.ID))
 			// add additional assertions for the object
 			// e.g.
-			// assert.NotEmpty(t, resp.OBJECT.Name)
+			// assert.Check(t, resp.OBJECT.Name !=)
 		})
 	}
+
+	(&Cleanup[*generated.OBJECTDeleteOne]{client: suite.client.db.OBJECT, ID: OBJECT.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestQueryOBJECTs(t *testing.T) {
-
 	// create multiple objects to be queried using testUser1
-	(&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	OBJECT1 := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	OBJECT2 := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -172,16 +171,17 @@ func TestQueryOBJECTs(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.GetAllOBJECTs(tc.ctx)
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			assert.Len(t, resp.OBJECTs.Edges, tc.expectedResults)
+			assert.Check(t, is.Len(resp.OBJECTs.Edges, tc.expectedResults))
 		})
 	}
+
+	(&Cleanup[*generated.OBJECTDeleteOne]{client: suite.client.db.OBJECT, IDs: []string{OBJECT1.ID, OBJECT2.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateOBJECT(t *testing.T) {
-
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateOBJECTInput
@@ -246,25 +246,26 @@ func TestMutationCreateOBJECT(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateOBJECT(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.ErrorContains(t, err, tc.errorMsg)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// check required fields
 
 			// check optional fields with if checks if they were provided or not
+
+			// cleanup each object created
+			(&Cleanup[*generated.OBJECTDeleteOne]{client: suite.client.db.OBJECT, ID: resp.CreateOBJECT.OBJECT.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateOBJECT(t *testing.T) {
-
 	OBJECT := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -315,23 +316,22 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateOBJECT(tc.ctx, OBJECT.ID, tc.request)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.ErrorContains(t, err, tc.errorMsg)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 			// add checks for the updated fields if they were set in the request
 		})
 	}
+
+	(&Cleanup[*generated.OBJECTDeleteOne]{client: suite.client.db.OBJECT, ID: OBJECT.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteOBJECT(t *testing.T) {
-
 	// create objects to be deleted
 	OBJECT1 := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	OBJECT2 := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -382,16 +382,15 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteOBJECT(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				require.Error(t, err)
-				assert.ErrorContains(t, err, tc.expectedErr)
-				assert.Nil(t, resp)
+				assert.ErrorContains(t, err, tc.errorMsg)
+				assert.Check(t, is.Nil(resp))
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, resp)
-			assert.Equal(t, tc.idToDelete, resp.DeleteOBJECT.DeletedID)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.tokenID, resp.DeleteOBJECTDeletedID))
 		})
 	}
 }

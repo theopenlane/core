@@ -114,8 +114,7 @@ tasks:
 
   go:lint:ci:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
-    parallel: true
-    ## do not use --fix in CI, run each in parallel
+    ## do not use --fix in CI
     cmds:
       - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage
 

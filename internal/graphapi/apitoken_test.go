@@ -327,7 +327,7 @@ func TestMutationDeleteAPIToken(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-			assert.Equal(t, tc.tokenID, resp.DeleteAPIToken.DeletedID)
+			assert.Check(t, is.Equal(tc.tokenID, resp.DeleteAPIToken.DeletedID))
 		})
 	}
 }

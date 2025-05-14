@@ -3,9 +3,6 @@ run:
   modules-download-mode: readonly
   tests: false
   allow-parallel-runners: true
-issues:
-  new: true
-  new-from-rev: HEAD~
 linters:
   enable:
     - bodyclose
@@ -23,47 +20,26 @@ linters:
     generated: lax
     warn-unused: true
     presets:
-      - comments # uncomment this after fixing all comments
+      - comments # undisable this after fixing all comments
       - common-false-positives
       - legacy
       - std-error-handling
-    rules:
-      - path: ".*\\.generated\\.go"
-        linters: ["*"]
-      - path: "pkg/openlaneclient/graphclient.go"
-        linters: ["*"]
-      - path: "pkg/openlaneclient/models.go"
-        linters: ["*"]
-      - path: "pkg/testutils/.*"
-        linters: ["*"]
-      - path: "internal/ent/generated/.*"
-        linters: ["*"]
-      - path: "internal/ent/templates/.*"
-        linters: ["*"]
-      - path: "jsonschema/templates/.*"
-        linters: ["*"]
-      - path: "pkg/objects/mocks/.*"
-        linters: ["*"]
-      - path: "internal/graphapi/generate/.*"
-        linters: ["*"]
-      - path: "internal/graphapi/generated/.*"
-        linters: ["*"]
-      - path: "internal/graphapi/directives/.*"
-        linters: ["*"]
-      - path: "internal/graphapi/model/.*"
-        linters: ["*"]
-      - path: "pkg/entitlements/test/.*"
-        linters: ["*"]
-      - path: "cmd/cli/cmd/.*"
-        linters: ["*"]
-      - path: "pkg/sleuth/static/.*"
-        linters: ["*"]
-      - path: "pkg/entitlements/mocks/.*"
-        linters: ["*"]
-      - path: "pkg/events/soiree/examples/.*"
-        linters: ["*"]
-      - path: "pkg/middleware/ratelimiter/examples/.*"
-        linters: ["*"]
+    paths:
+      - internal/graphapi/model/gen_models.go
+      - pkg/openlaneclient/graphclient.go
+      - pkg/testutils/*
+      - internal/ent/generated/*
+      - internal/ent/templates/*
+      - jsonschema/templates/*
+      - pkg/objects/mocks/*
+      - internal/graphapi/generate/*
+      - internal/graphapi/generated/*
+      - pkg/entitlements/test/*
+      - cmd/cli/cmd/*
+      - pkg/sleuth/static/*
+      - pkg/entitlements/mocks/*
+      - pkg/events/soiree/examples/*
+      - pkg/middleware/ratelimiter/examples/*
 formatters:
   enable:
     - gofmt
