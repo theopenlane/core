@@ -23,7 +23,7 @@ func TestMutationCreateProgramMembers(t *testing.T) {
 		programID string
 		userID    string
 		role      enums.Role
-		client    openlaneclient.OpenlaneClient
+		client    *openlaneclient.OpenlaneClient
 		ctx       context.Context
 		errMsg    string
 	}{
@@ -160,7 +160,7 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 		name            string
 		programMemberID string
 		role            enums.Role
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		errMsg          string
 	}{

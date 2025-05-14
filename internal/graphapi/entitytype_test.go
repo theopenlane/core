@@ -20,7 +20,7 @@ func TestQueryEntityType(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -78,7 +78,7 @@ func TestQueryEntityTypes(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -125,7 +125,7 @@ func TestMutationCreateEntityType(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateEntityTypeInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -198,7 +198,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateEntityTypeInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -264,7 +264,7 @@ func TestMutationDeleteEntityType(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

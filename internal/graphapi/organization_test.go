@@ -53,7 +53,7 @@ func TestQueryOrganization(t *testing.T) {
 		{
 			name:               "happy path, get organization",
 			queryID:            orgUser.OrganizationID,
-			client:             &suite.client.api,
+			client:             suite.client.api,
 			ctx:                orgUser.UserCtx,
 			orgMembersExpected: 2, // owner and 1 member
 		},
@@ -74,7 +74,7 @@ func TestQueryOrganization(t *testing.T) {
 		{
 			name:     "invalid-id",
 			queryID:  "tacos-for-dinner",
-			client:   &suite.client.api,
+			client:   suite.client.api,
 			ctx:      orgUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
@@ -182,7 +182,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		parentOrgID              string
 		avatarFile               *graphql.Upload
 		settings                 *openlaneclient.CreateOrganizationSettingInput
-		client                   openlaneclient.OpenlaneClient
+		client                   *openlaneclient.OpenlaneClient
 		ctx                      context.Context
 		expectedDefaultOrgUpdate bool
 		errorMsg                 string
@@ -245,7 +245,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
 			parentOrgID:    orgUser.OrganizationID,
-			client:         *patClient,
+			client:         patClient,
 			ctx:            context.Background(),
 			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -254,7 +254,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
 			parentOrgID:    testUser2.OrganizationID,
-			client:         *patClient,
+			client:         patClient,
 			ctx:            context.Background(),
 			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -262,7 +262,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "organization create with api token not allowed",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(10),
-			client:         *tokenClient,
+			client:         tokenClient,
 			ctx:            context.Background(),
 			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -550,7 +550,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		orgID       string
 		updateInput openlaneclient.UpdateOrganizationInput
 		avatarFile  *graphql.Upload
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedRes openlaneclient.UpdateOrganization_UpdateOrganization_Organization
 		errorMsg    string

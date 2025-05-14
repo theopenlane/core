@@ -23,7 +23,7 @@ func TestQuerySubscriber(t *testing.T) {
 	testCases := []struct {
 		name    string
 		email   string
-		client  openlaneclient.OpenlaneClient
+		client  *openlaneclient.OpenlaneClient
 		ctx     context.Context
 		wantErr bool
 	}{
@@ -112,7 +112,7 @@ func TestQuerySubscribers(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		numExpected int
 	}{
@@ -162,7 +162,7 @@ func TestMutationCreateBulkSubscribers(t *testing.T) {
 	testCases := []struct {
 		name    string
 		emails  []string
-		client  openlaneclient.OpenlaneClient
+		client  *openlaneclient.OpenlaneClient
 		ctx     context.Context
 		wantErr bool
 	}{
@@ -238,7 +238,7 @@ func TestMutationCreateSubscriber_Tokens(t *testing.T) {
 		email            string
 		ownerID          string
 		setUnsubscribed  bool
-		client           openlaneclient.OpenlaneClient
+		client           *openlaneclient.OpenlaneClient
 		ctx              context.Context
 		wantErr          bool
 		expectedAttempts int
@@ -307,7 +307,7 @@ func TestMutationCreateSubscriber_SendAttempts(t *testing.T) {
 		email             string
 		ownerID           string
 		setUnsubscribed   bool
-		client            openlaneclient.OpenlaneClient
+		client            *openlaneclient.OpenlaneClient
 		ctx               context.Context
 		wantErr           bool
 		expectedMessage   string
@@ -459,7 +459,7 @@ func TestUpdateSubscriber(t *testing.T) {
 		name        string
 		email       string
 		updateInput openlaneclient.UpdateSubscriberInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		wantErr     bool
 	}{
@@ -575,7 +575,7 @@ func TestDeleteSubscriber(t *testing.T) {
 		name           string
 		email          string
 		organizationID string
-		client         openlaneclient.OpenlaneClient
+		client         *openlaneclient.OpenlaneClient
 		ctx            context.Context
 		wantErr        bool
 	}{
@@ -644,7 +644,7 @@ func TestActiveSubscriber(t *testing.T) {
 		name       string
 		email      string
 		ownerID    string
-		client     openlaneclient.OpenlaneClient
+		client     *openlaneclient.OpenlaneClient
 		ctx        context.Context
 		wantErr    bool
 		markActive bool

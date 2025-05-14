@@ -59,9 +59,9 @@ type GraphTestSuite struct {
 // client contains all the clients the test need to interact with
 type client struct {
 	db           *ent.Client
-	api          openlaneclient.OpenlaneClient
-	apiWithPAT   openlaneclient.OpenlaneClient
-	apiWithToken openlaneclient.OpenlaneClient
+	api          *openlaneclient.OpenlaneClient
+	apiWithPAT   *openlaneclient.OpenlaneClient
+	apiWithToken *openlaneclient.OpenlaneClient
 	fga          *fgax.Client
 	objectStore  *objects.Objects
 }
@@ -174,10 +174,8 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// assign values
 	c.db = db
-	api, err := coreutils.TestClient(c.db, c.objectStore)
+	c.api, err = coreutils.TestClient(c.db, c.objectStore)
 	assert.NilError(t, err)
-
-	c.api = *api
 
 	suite.client = c
 }

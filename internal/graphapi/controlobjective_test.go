@@ -28,7 +28,7 @@ func TestQueryControlObjective(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -120,7 +120,7 @@ func TestQueryControlObjectives(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -190,7 +190,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 		name          string
 		request       openlaneclient.CreateControlObjectiveInput
 		addGroupToOrg bool
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		expectedErr   string
 	}{
@@ -406,7 +406,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateControlObjectiveInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -555,7 +555,7 @@ func TestMutationDeleteControlObjective(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

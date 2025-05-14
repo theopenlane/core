@@ -13,7 +13,7 @@ func TestAuditLogList(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{

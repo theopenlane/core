@@ -31,7 +31,7 @@ func TestQueryGroup(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -243,7 +243,7 @@ func TestMutationCreateGroup(t *testing.T) {
 		owner         string
 		settings      *openlaneclient.CreateGroupSettingInput
 		addGroupToOrg bool
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		errorMsg      string
 	}{
@@ -409,7 +409,7 @@ func TestMutationCreateGroupWithMembers(t *testing.T) {
 		name     string
 		group    openlaneclient.CreateGroupInput
 		members  []*openlaneclient.GroupMembersInput
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -550,7 +550,7 @@ func TestMutationCreateGroupByClone(t *testing.T) {
 		groupPermissionsClone *string
 		groupMembersClone     *string
 		members               []*openlaneclient.GroupMembersInput
-		client                openlaneclient.OpenlaneClient
+		client                *openlaneclient.OpenlaneClient
 		ctx                   context.Context
 		errorMsg              string
 	}{
@@ -697,7 +697,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 		name        string
 		updateInput openlaneclient.UpdateGroupInput
 		expectedRes openlaneclient.UpdateGroup_UpdateGroup_Group
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		errorMsg    string
 	}{
@@ -1014,7 +1014,7 @@ func TestMutationDeleteGroup(t *testing.T) {
 	testCases := []struct {
 		name     string
 		groupID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{

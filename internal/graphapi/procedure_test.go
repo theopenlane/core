@@ -24,7 +24,7 @@ func TestQueryProcedure(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -96,7 +96,7 @@ func TestQueryProcedures(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -160,7 +160,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 		name          string
 		request       openlaneclient.CreateProcedureInput
 		addGroupToOrg bool
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		expectedErr   string
 	}{
@@ -382,7 +382,7 @@ func TestMutationUpdateProcedure(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateProcedureInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -559,7 +559,7 @@ func TestMutationDeleteProcedure(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

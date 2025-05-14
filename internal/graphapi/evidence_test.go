@@ -34,7 +34,7 @@ func TestQueryEvidence(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -133,7 +133,7 @@ func TestQueryEvidences(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -212,7 +212,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		name        string
 		request     openlaneclient.CreateEvidenceInput
 		files       []*graphql.Upload
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -462,7 +462,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		name        string
 		request     openlaneclient.UpdateEvidenceInput
 		files       []*graphql.Upload
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -565,7 +565,7 @@ func TestMutationDeleteEvidence(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

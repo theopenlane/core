@@ -31,7 +31,7 @@ func TestQueryOrgMembers(t *testing.T) {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedLen int
 		expectErr   bool

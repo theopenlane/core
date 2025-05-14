@@ -24,7 +24,7 @@ func TestQueryInternalPolicy(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -92,7 +92,7 @@ func TestQueryInternalPolicies(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -161,7 +161,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 		name          string
 		request       openlaneclient.CreateInternalPolicyInput
 		addGroupToOrg bool
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		expectedErr   string
 	}{
@@ -416,7 +416,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateInternalPolicyInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -580,7 +580,7 @@ func TestMutationDeleteInternalPolicy(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

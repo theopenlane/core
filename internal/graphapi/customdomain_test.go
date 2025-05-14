@@ -19,7 +19,7 @@ func TestQueryCustomDomainByID(t *testing.T) {
 		name           string
 		expectedDomain string
 		queryID        string
-		client         openlaneclient.OpenlaneClient
+		client         *openlaneclient.OpenlaneClient
 		ctx            context.Context
 		errorMsg       string
 	}{
@@ -87,7 +87,7 @@ func TestQueryCustomDomains(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int64
 		where           *openlaneclient.CustomDomainWhereInput
@@ -169,7 +169,7 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateCustomDomainInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -264,7 +264,7 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 	testCases := []struct {
 		name        string
 		id          string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -326,7 +326,7 @@ func TestUpdateCustomDomain(t *testing.T) {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		errorMsg    string
 		updateInput openlaneclient.UpdateCustomDomainInput
@@ -376,7 +376,7 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 	testCases := []struct {
 		name        string
 		requests    []*openlaneclient.CreateCustomDomainInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 		numExpected int
@@ -530,7 +530,7 @@ func TestGetAllCustomDomains(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int64
 		expectedErr     string

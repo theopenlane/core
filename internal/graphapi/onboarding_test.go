@@ -24,7 +24,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateOnboardingInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

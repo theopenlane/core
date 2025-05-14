@@ -28,7 +28,7 @@ func TestQueryNarrative(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -126,7 +126,7 @@ func TestQueryNarratives(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -199,7 +199,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 		name          string
 		request       openlaneclient.CreateNarrativeInput
 		addGroupToOrg bool
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		expectedErr   string
 	}{
@@ -415,7 +415,7 @@ func TestMutationUpdateNarrative(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateNarrativeInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -533,7 +533,7 @@ func TestMutationDeleteNarrative(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

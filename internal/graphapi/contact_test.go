@@ -24,7 +24,7 @@ func TestQueryContact(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		expected *ent.Contact
 		errorMsg string
@@ -87,7 +87,7 @@ func TestQueryContacts(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -141,7 +141,7 @@ func TestMutationCreateContact(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateContactInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -266,7 +266,7 @@ func TestMutationUpdateContact(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateContactInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -406,7 +406,7 @@ func TestMutationDeleteContact(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

@@ -52,7 +52,7 @@ func TestGlobalSearch(t *testing.T) {
 
 	testCases := []struct {
 		name             string
-		client           openlaneclient.OpenlaneClient
+		client           *openlaneclient.OpenlaneClient
 		ctx              context.Context
 		query            string
 		expectedResults  int

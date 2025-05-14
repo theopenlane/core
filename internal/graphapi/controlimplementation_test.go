@@ -42,7 +42,7 @@ func TestQueryControlImplementation(t *testing.T) {
 	testCases := []struct {
 		name                  string
 		queryID               string
-		client                openlaneclient.OpenlaneClient
+		client                *openlaneclient.OpenlaneClient
 		ctx                   context.Context
 		shouldHaveControls    bool
 		shouldHaveSubcontrols bool
@@ -193,7 +193,7 @@ func TestQueryControlImplementations(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -275,7 +275,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateControlImplementationInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -474,7 +474,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		name        string
 		request     openlaneclient.UpdateControlImplementationInput
 		id          string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -654,7 +654,7 @@ func TestMutationDeleteControlImplementation(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

@@ -27,7 +27,7 @@ func TestQueryTFASetting(t *testing.T) {
 	testCases := []struct {
 		name     string
 		userID   string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -38,7 +38,7 @@ func TestQueryTFASetting(t *testing.T) {
 		},
 		{
 			name:   "happy path, using personal access token",
-			client: *patClient,
+			client: patClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -83,7 +83,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 		name   string
 		userID string
 		input  openlaneclient.CreateTFASettingInput
-		client openlaneclient.OpenlaneClient
+		client *openlaneclient.OpenlaneClient
 		ctx    context.Context
 		errMsg string
 	}{
@@ -102,7 +102,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			input: openlaneclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
-			client: *patClient,
+			client: patClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -111,7 +111,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			input: openlaneclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
-			client: *apiClient,
+			client: apiClient,
 			ctx:    context.Background(),
 			errMsg: rout.ErrBadRequest.Error(),
 		},
@@ -195,7 +195,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 	testCases := []struct {
 		name   string
 		input  openlaneclient.UpdateTFASettingInput
-		client openlaneclient.OpenlaneClient
+		client *openlaneclient.OpenlaneClient
 		ctx    context.Context
 		errMsg string
 	}{
@@ -213,7 +213,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 			input: openlaneclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(true),
 			},
-			client: *patClient,
+			client: patClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -221,7 +221,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 			input: openlaneclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(true),
 			},
-			client: *apiClient,
+			client: apiClient,
 			ctx:    context.Background(),
 			errMsg: rout.ErrBadRequest.Error(),
 		},

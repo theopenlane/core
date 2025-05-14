@@ -105,9 +105,8 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 	adminUser = suite.userBuilder(ctx, t)
 	suite.addUserToOrganization(testUser1.UserCtx, t, &adminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
-	suite.client.apiWithPAT = *suite.setupPatClient(testUser1, t)
-
-	suite.client.apiWithToken = *suite.setupAPITokenClient(testUser1.UserCtx, t)
+	suite.client.apiWithPAT = suite.setupPatClient(testUser1, t)
+	suite.client.apiWithToken = suite.setupAPITokenClient(testUser1.UserCtx, t)
 }
 
 func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) *openlaneclient.OpenlaneClient {

@@ -17,7 +17,7 @@ func TestQueryMappableDomainByID(t *testing.T) {
 		name         string
 		expectedName string
 		queryID      string
-		client       openlaneclient.OpenlaneClient
+		client       *openlaneclient.OpenlaneClient
 		ctx          context.Context
 		errorMsg     string
 	}{
@@ -65,7 +65,7 @@ func TestQueryMappableDomains(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 		where           *openlaneclient.MappableDomainWhereInput
@@ -115,7 +115,7 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateMappableDomainInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -170,7 +170,7 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 	testCases := []struct {
 		name        string
 		requests    []*openlaneclient.CreateMappableDomainInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 		numExpected int
@@ -273,7 +273,7 @@ func TestUpdateMappableDomain(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 		input    openlaneclient.UpdateMappableDomainInput
@@ -337,7 +337,7 @@ func TestGetAllMappableDomains(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 		expectedErr     string

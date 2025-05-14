@@ -30,7 +30,7 @@ func TestQueryControl(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -133,7 +133,7 @@ func TestQueryControls(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		first           *int64
 		last            *int64
 		ctx             context.Context
@@ -262,7 +262,7 @@ func TestMutationCreateControl(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateControlInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -635,7 +635,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		name                 string
 		request              openlaneclient.CloneControlInput
 		expectedControls     []*generated.Control
-		client               openlaneclient.OpenlaneClient
+		client               *openlaneclient.OpenlaneClient
 		ctx                  context.Context
 		expectNoAccessViewer bool
 		expectedErr          string
@@ -891,7 +891,7 @@ func TestMutationUpdateControl(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateControlInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -1143,7 +1143,7 @@ func TestMutationDeleteControl(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

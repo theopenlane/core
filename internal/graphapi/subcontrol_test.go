@@ -29,7 +29,7 @@ func TestQuerySubcontrol(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -135,7 +135,7 @@ func TestQuerySubcontrols(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -208,7 +208,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		name                string
 		request             openlaneclient.CreateSubcontrolInput
 		createParentControl bool
-		client              openlaneclient.OpenlaneClient
+		client              *openlaneclient.OpenlaneClient
 		ctx                 context.Context
 		expectedErr         string
 	}{
@@ -465,7 +465,7 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateSubcontrolInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -582,7 +582,7 @@ func TestMutationDeleteSubcontrol(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

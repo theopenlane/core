@@ -26,7 +26,7 @@ func TestQueryTask(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -100,7 +100,7 @@ func TestQueryTasks(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 		totalCount      int64
@@ -160,7 +160,7 @@ func TestMutationCreateTask(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateTaskInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -342,7 +342,7 @@ func TestMutationUpdateTask(t *testing.T) {
 		request              *openlaneclient.UpdateTaskInput
 		updateCommentRequest *openlaneclient.UpdateNoteInput
 		files                []*graphql.Upload
-		client               openlaneclient.OpenlaneClient
+		client               *openlaneclient.OpenlaneClient
 		ctx                  context.Context
 		expectedErr          string
 	}{
@@ -608,7 +608,7 @@ func TestMutationDeleteTask(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

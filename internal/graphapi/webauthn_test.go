@@ -16,7 +16,7 @@ func TestQueryPasskeys(t *testing.T) {
 	testCases := []struct {
 		name          string
 		userID        string
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		errorMsg      string
 		expectedCount int
@@ -74,7 +74,7 @@ func TestMutationDeletePasskeys(t *testing.T) {
 	testCases := []struct {
 		name          string
 		userID        string
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		errorMsg      string
 		passkeyID     string

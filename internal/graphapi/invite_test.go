@@ -22,7 +22,7 @@ func TestQueryInvite(t *testing.T) {
 	testCases := []struct {
 		name    string
 		queryID string
-		client  openlaneclient.OpenlaneClient
+		client  *openlaneclient.OpenlaneClient
 		ctx     context.Context
 		wantErr bool
 	}{
@@ -103,7 +103,7 @@ func TestMutationCreateInvite(t *testing.T) {
 		recipient        string
 		orgID            string
 		role             enums.Role
-		client           openlaneclient.OpenlaneClient
+		client           *openlaneclient.OpenlaneClient
 		ctx              context.Context
 		requestorID      string
 		expectedStatus   enums.InviteStatus
@@ -290,7 +290,7 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 	testCases := []struct {
 		name             string
 		recipients       []string
-		client           openlaneclient.OpenlaneClient
+		client           *openlaneclient.OpenlaneClient
 		ctx              context.Context
 		requestorID      string
 		expectedStatus   enums.InviteStatus
@@ -379,7 +379,7 @@ func TestMutationDeleteInvite(t *testing.T) {
 	testCases := []struct {
 		name    string
 		queryID string
-		client  openlaneclient.OpenlaneClient
+		client  *openlaneclient.OpenlaneClient
 		ctx     context.Context
 		wantErr bool
 	}{

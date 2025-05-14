@@ -44,7 +44,7 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateProgramWithMembersInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -166,7 +166,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 	testCases := []struct {
 		name                 string
 		request              openlaneclient.CreateFullProgramInput
-		client               openlaneclient.OpenlaneClient
+		client               *openlaneclient.OpenlaneClient
 		ctx                  context.Context
 		expectedControlCount int
 		expectedErr          string

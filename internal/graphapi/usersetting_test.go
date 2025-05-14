@@ -30,7 +30,7 @@ func TestQueryUserSetting(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		expected *openlaneclient.GetUserSettings_UserSettings_Edges_Node
 		errorMsg string
@@ -132,7 +132,7 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 		name          string
 		userSettingID string
 		updateInput   openlaneclient.UpdateUserSettingInput
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		expectedRes   openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting
 		errorMsg      string

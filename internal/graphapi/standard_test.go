@@ -36,7 +36,7 @@ func TestQueryStandard(t *testing.T) {
 		name                 string
 		queryID              string
 		expectedControlCount int64
-		client               openlaneclient.OpenlaneClient
+		client               *openlaneclient.OpenlaneClient
 		ctx                  context.Context
 		errorMsg             string
 	}{
@@ -186,7 +186,7 @@ func TestQueryStandards(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -266,7 +266,7 @@ func TestMutationCreateStandard(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateStandardInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -517,7 +517,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 		name        string
 		id          string
 		request     openlaneclient.UpdateStandardInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -717,7 +717,7 @@ func TestMutationDeleteStandard(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

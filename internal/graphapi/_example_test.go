@@ -62,7 +62,7 @@ func TestQueryOBJECT(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -133,7 +133,7 @@ func TestQueryOBJECTs(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -185,7 +185,7 @@ func TestMutationCreateOBJECT(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateOBJECTInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -270,7 +270,7 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateOBJECTInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -339,7 +339,7 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

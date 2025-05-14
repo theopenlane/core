@@ -26,7 +26,7 @@ func TestQueryGroupMembers(t *testing.T) {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expected    *ent.GroupMembership
 		errExpected bool
@@ -121,7 +121,7 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 		groupID string
 		userID  string
 		role    enums.Role
-		client  openlaneclient.OpenlaneClient
+		client  *openlaneclient.OpenlaneClient
 		ctx     context.Context
 		errMsg  string
 	}{
@@ -266,7 +266,7 @@ func TestMutationUpdateGroupMembers(t *testing.T) {
 		name          string
 		groupMemberID string
 		role          enums.Role
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		errMsg        string
 	}{
@@ -367,7 +367,7 @@ func TestMutationDeleteGroupMembers(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

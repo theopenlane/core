@@ -16,7 +16,7 @@ func TestMutationUpdateNote(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateTaskInput
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -108,7 +108,7 @@ func TestMutationDeleteNote(t *testing.T) {
 	testCases := []struct {
 		name        string
 		request     func() openlaneclient.UpdateTaskInput // changed to function to get fresh note ID each time
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
@@ -204,7 +204,7 @@ func TestQueryNote(t *testing.T) {
 	testCases := []struct {
 		name        string
 		noteID      string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{

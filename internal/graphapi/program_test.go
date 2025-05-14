@@ -21,7 +21,7 @@ func TestQueryProgram(t *testing.T) {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   openlaneclient.OpenlaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -104,7 +104,7 @@ func TestQueryPrograms(t *testing.T) {
 
 	testCases := []struct {
 		name            string
-		client          openlaneclient.OpenlaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 		errorMsg        string
@@ -222,7 +222,7 @@ func TestMutationCreateProgram(t *testing.T) {
 		name          string
 		request       openlaneclient.CreateProgramInput
 		addGroupToOrg bool
-		client        openlaneclient.OpenlaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		expectedErr   string
 	}{
@@ -582,7 +582,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 	testCases := []struct {
 		name              string
 		request           openlaneclient.UpdateProgramInput
-		client            openlaneclient.OpenlaneClient
+		client            *openlaneclient.OpenlaneClient
 		ctx               context.Context
 		expectedErr       string
 		expectedEdgeCount int
@@ -869,7 +869,7 @@ func TestMutationDeleteProgram(t *testing.T) {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      openlaneclient.OpenlaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
