@@ -117,7 +117,7 @@ tasks:
     parallel: true
     ## do not use --fix in CI, run each in parallel
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 16 --print-resources-usage
+      - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --print-resources-usage
 
   go:test:
     desc: runs and outputs results of created go tests
