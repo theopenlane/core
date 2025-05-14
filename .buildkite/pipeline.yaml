@@ -163,6 +163,9 @@ steps:
           - artifacts#v1.9.4:
               download: "coverage.out"
               step: "go_test"
+          - artifacts#v1.9.4:
+              download: "junit.xml"
+              step: "go_test"
           - docker#v5.12.0:
               image: "sonarsource/sonar-scanner-cli:11.2"
               propagate-environment: true
@@ -185,6 +188,9 @@ steps:
                 SONAR_TOKEN: SONAR_TOKEN
           - artifacts#v1.9.4:
               download: coverage.out
+              step: "go_test"
+          - artifacts#v1.9.4:
+              download: "junit.xml"
               step: "go_test"
           - docker#v5.12.0:
               image: "sonarsource/sonar-scanner-cli:11.2"
