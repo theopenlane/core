@@ -146,6 +146,7 @@ jobQueue:
         RescueStuckJobsAfter: 0
         RetryPolicy: null
         Schema: ""
+        SkipJobKindValidation: false
         SkipUnknownJobCheck: false
         Test:
             DisableUniqueEnforcement: false
