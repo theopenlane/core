@@ -77,7 +77,6 @@ steps:
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "GOTOOLCHAIN=auto"
-        artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -108,7 +107,9 @@ steps:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
-        artifact_paths: ["coverage.out", "junit.xml"]
+        artifact_paths:
+          - coverage.out
+          - junit.xml
       - label: ":auth0: fga model test"
         if: build.branch !~ /^renovate\//
         agents:
