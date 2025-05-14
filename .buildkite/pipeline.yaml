@@ -133,7 +133,7 @@ steps:
           curl \
             -X POST \
             --fail-with-body \
-            -H "Authorization: Token token=\"$$ANALYTICS_TOKEN\"" \
+            -H "Authorization: Token token=\"$$ANALYTICS_KEY\"" \
             -F "data=@junit.xml" \
             -F "format=junit" \
             -F "run_env[CI]=buildkite" \
