@@ -115,7 +115,7 @@ var controlFields = []ent.Field{
 	field.Enum("status").
 		GoType(enums.ControlStatus("")).
 		Optional().
-		Default(enums.ControlStatusNull.String()).
+		Default(enums.ControlStatusNotImplemented.String()).
 		Annotations(
 			entgql.OrderField("STATUS"),
 		).

@@ -41,12 +41,12 @@ func TestControlStatus(t *testing.T) {
 		{
 			name:     "empty",
 			status:   "",
-			expected: enums.ControlStatusNull,
+			expected: enums.ControlStatusNotImplemented,
 		},
 		{
-			name:     "null",
-			status:   "NULL",
-			expected: enums.ControlStatusNull,
+			name:     "not implemented",
+			status:   "NOT_IMPLEMENTED",
+			expected: enums.ControlStatusNotImplemented,
 		},
 	}
 

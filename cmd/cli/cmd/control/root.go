@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
@@ -106,12 +105,7 @@ func tableOutput(out []openlaneclient.Control) {
 			}
 		}
 
-		status := i.Status.String()
-		if status == enums.ControlStatusNull.String() {
-			status = "-"
-		}
-
-		writer.AddRow(i.ID, i.RefCode, *i.Description, i.Source, *i.Category, *i.CategoryID, *i.Subcategory, status, i.ControlType, strings.Join(i.MappedCategories, ", "), stdName, strings.Join(programs, ", "))
+		writer.AddRow(i.ID, i.RefCode, *i.Description, i.Source, *i.Category, *i.CategoryID, *i.Subcategory, i.Status.String(), i.ControlType, strings.Join(i.MappedCategories, ", "), stdName, strings.Join(programs, ", "))
 	}
 
 	writer.Render()
