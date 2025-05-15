@@ -30599,7 +30599,7 @@ enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
   CHANGES_REQUESTED
   APPROVED
   ARCHIVED
-  NULL
+  NOT_IMPLEMENTED
 }
 """
 ControlControlType is enum for the field control_type
@@ -30762,7 +30762,7 @@ enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pk
   CHANGES_REQUESTED
   APPROVED
   ARCHIVED
-  NULL
+  NOT_IMPLEMENTED
 }
 """
 ControlHistoryControlType is enum for the field control_type
@@ -60992,7 +60992,7 @@ enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/en
   CHANGES_REQUESTED
   APPROVED
   ARCHIVED
-  NULL
+  NOT_IMPLEMENTED
 }
 """
 SubcontrolControlType is enum for the field control_type
@@ -61155,7 +61155,7 @@ enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core
   CHANGES_REQUESTED
   APPROVED
   ARCHIVED
-  NULL
+  NOT_IMPLEMENTED
 }
 """
 SubcontrolHistoryControlType is enum for the field control_type

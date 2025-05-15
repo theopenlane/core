@@ -460,7 +460,7 @@ func TestMutationCreateControl(t *testing.T) {
 			if tc.request.Status != nil {
 				assert.Equal(t, *tc.request.Status, *resp.CreateControl.Control.Status)
 			} else {
-				assert.Equal(t, enums.ControlStatusNull, *resp.CreateControl.Control.Status)
+				assert.Equal(t, enums.ControlStatusNotImplemented, *resp.CreateControl.Control.Status)
 			}
 
 			if tc.request.ControlType != nil {
