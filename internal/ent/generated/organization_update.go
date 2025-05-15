@@ -30,6 +30,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -920,6 +923,51 @@ func (ou *OrganizationUpdate) AddCustomDomains(c ...*CustomDomain) *Organization
 		ids[i] = c[i].ID
 	}
 	return ou.AddCustomDomainIDs(ids...)
+}
+
+// AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
+func (ou *OrganizationUpdate) AddJobRunnerIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddJobRunnerIDs(ids...)
+	return ou
+}
+
+// AddJobRunners adds the "job_runners" edges to the JobRunner entity.
+func (ou *OrganizationUpdate) AddJobRunners(j ...*JobRunner) *OrganizationUpdate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ou.AddJobRunnerIDs(ids...)
+}
+
+// AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
+func (ou *OrganizationUpdate) AddJobRunnerTokenIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddJobRunnerTokenIDs(ids...)
+	return ou
+}
+
+// AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
+func (ou *OrganizationUpdate) AddJobRunnerTokens(j ...*JobRunnerToken) *OrganizationUpdate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ou.AddJobRunnerTokenIDs(ids...)
+}
+
+// AddJobRunnerRegistrationTokenIDs adds the "job_runner_registration_tokens" edge to the JobRunnerRegistrationToken entity by IDs.
+func (ou *OrganizationUpdate) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
+	return ou
+}
+
+// AddJobRunnerRegistrationTokens adds the "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
+func (ou *OrganizationUpdate) AddJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationUpdate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ou.AddJobRunnerRegistrationTokenIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1813,6 +1861,69 @@ func (ou *OrganizationUpdate) RemoveCustomDomains(c ...*CustomDomain) *Organizat
 		ids[i] = c[i].ID
 	}
 	return ou.RemoveCustomDomainIDs(ids...)
+}
+
+// ClearJobRunners clears all "job_runners" edges to the JobRunner entity.
+func (ou *OrganizationUpdate) ClearJobRunners() *OrganizationUpdate {
+	ou.mutation.ClearJobRunners()
+	return ou
+}
+
+// RemoveJobRunnerIDs removes the "job_runners" edge to JobRunner entities by IDs.
+func (ou *OrganizationUpdate) RemoveJobRunnerIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveJobRunnerIDs(ids...)
+	return ou
+}
+
+// RemoveJobRunners removes "job_runners" edges to JobRunner entities.
+func (ou *OrganizationUpdate) RemoveJobRunners(j ...*JobRunner) *OrganizationUpdate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ou.RemoveJobRunnerIDs(ids...)
+}
+
+// ClearJobRunnerTokens clears all "job_runner_tokens" edges to the JobRunnerToken entity.
+func (ou *OrganizationUpdate) ClearJobRunnerTokens() *OrganizationUpdate {
+	ou.mutation.ClearJobRunnerTokens()
+	return ou
+}
+
+// RemoveJobRunnerTokenIDs removes the "job_runner_tokens" edge to JobRunnerToken entities by IDs.
+func (ou *OrganizationUpdate) RemoveJobRunnerTokenIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveJobRunnerTokenIDs(ids...)
+	return ou
+}
+
+// RemoveJobRunnerTokens removes "job_runner_tokens" edges to JobRunnerToken entities.
+func (ou *OrganizationUpdate) RemoveJobRunnerTokens(j ...*JobRunnerToken) *OrganizationUpdate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ou.RemoveJobRunnerTokenIDs(ids...)
+}
+
+// ClearJobRunnerRegistrationTokens clears all "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
+func (ou *OrganizationUpdate) ClearJobRunnerRegistrationTokens() *OrganizationUpdate {
+	ou.mutation.ClearJobRunnerRegistrationTokens()
+	return ou
+}
+
+// RemoveJobRunnerRegistrationTokenIDs removes the "job_runner_registration_tokens" edge to JobRunnerRegistrationToken entities by IDs.
+func (ou *OrganizationUpdate) RemoveJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveJobRunnerRegistrationTokenIDs(ids...)
+	return ou
+}
+
+// RemoveJobRunnerRegistrationTokens removes "job_runner_registration_tokens" edges to JobRunnerRegistrationToken entities.
+func (ou *OrganizationUpdate) RemoveJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationUpdate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ou.RemoveJobRunnerRegistrationTokenIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -4045,6 +4156,150 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.JobRunnersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnersTable,
+			Columns: []string{organization.JobRunnersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobRunner
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedJobRunnersIDs(); len(nodes) > 0 && !ou.mutation.JobRunnersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnersTable,
+			Columns: []string{organization.JobRunnersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobRunner
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.JobRunnersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnersTable,
+			Columns: []string{organization.JobRunnersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobRunner
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.JobRunnerTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerTokensTable,
+			Columns: []string{organization.JobRunnerTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobRunnerToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !ou.mutation.JobRunnerTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerTokensTable,
+			Columns: []string{organization.JobRunnerTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobRunnerToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerTokensTable,
+			Columns: []string{organization.JobRunnerTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobRunnerToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.JobRunnerRegistrationTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokensTable,
+			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobRunnerRegistrationToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedJobRunnerRegistrationTokensIDs(); len(nodes) > 0 && !ou.mutation.JobRunnerRegistrationTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokensTable,
+			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobRunnerRegistrationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokensTable,
+			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobRunnerRegistrationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4974,6 +5229,51 @@ func (ouo *OrganizationUpdateOne) AddCustomDomains(c ...*CustomDomain) *Organiza
 	return ouo.AddCustomDomainIDs(ids...)
 }
 
+// AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
+func (ouo *OrganizationUpdateOne) AddJobRunnerIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddJobRunnerIDs(ids...)
+	return ouo
+}
+
+// AddJobRunners adds the "job_runners" edges to the JobRunner entity.
+func (ouo *OrganizationUpdateOne) AddJobRunners(j ...*JobRunner) *OrganizationUpdateOne {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ouo.AddJobRunnerIDs(ids...)
+}
+
+// AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
+func (ouo *OrganizationUpdateOne) AddJobRunnerTokenIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddJobRunnerTokenIDs(ids...)
+	return ouo
+}
+
+// AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
+func (ouo *OrganizationUpdateOne) AddJobRunnerTokens(j ...*JobRunnerToken) *OrganizationUpdateOne {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ouo.AddJobRunnerTokenIDs(ids...)
+}
+
+// AddJobRunnerRegistrationTokenIDs adds the "job_runner_registration_tokens" edge to the JobRunnerRegistrationToken entity by IDs.
+func (ouo *OrganizationUpdateOne) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
+	return ouo
+}
+
+// AddJobRunnerRegistrationTokens adds the "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
+func (ouo *OrganizationUpdateOne) AddJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationUpdateOne {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ouo.AddJobRunnerRegistrationTokenIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -5865,6 +6165,69 @@ func (ouo *OrganizationUpdateOne) RemoveCustomDomains(c ...*CustomDomain) *Organ
 		ids[i] = c[i].ID
 	}
 	return ouo.RemoveCustomDomainIDs(ids...)
+}
+
+// ClearJobRunners clears all "job_runners" edges to the JobRunner entity.
+func (ouo *OrganizationUpdateOne) ClearJobRunners() *OrganizationUpdateOne {
+	ouo.mutation.ClearJobRunners()
+	return ouo
+}
+
+// RemoveJobRunnerIDs removes the "job_runners" edge to JobRunner entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveJobRunnerIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveJobRunnerIDs(ids...)
+	return ouo
+}
+
+// RemoveJobRunners removes "job_runners" edges to JobRunner entities.
+func (ouo *OrganizationUpdateOne) RemoveJobRunners(j ...*JobRunner) *OrganizationUpdateOne {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ouo.RemoveJobRunnerIDs(ids...)
+}
+
+// ClearJobRunnerTokens clears all "job_runner_tokens" edges to the JobRunnerToken entity.
+func (ouo *OrganizationUpdateOne) ClearJobRunnerTokens() *OrganizationUpdateOne {
+	ouo.mutation.ClearJobRunnerTokens()
+	return ouo
+}
+
+// RemoveJobRunnerTokenIDs removes the "job_runner_tokens" edge to JobRunnerToken entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveJobRunnerTokenIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveJobRunnerTokenIDs(ids...)
+	return ouo
+}
+
+// RemoveJobRunnerTokens removes "job_runner_tokens" edges to JobRunnerToken entities.
+func (ouo *OrganizationUpdateOne) RemoveJobRunnerTokens(j ...*JobRunnerToken) *OrganizationUpdateOne {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ouo.RemoveJobRunnerTokenIDs(ids...)
+}
+
+// ClearJobRunnerRegistrationTokens clears all "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
+func (ouo *OrganizationUpdateOne) ClearJobRunnerRegistrationTokens() *OrganizationUpdateOne {
+	ouo.mutation.ClearJobRunnerRegistrationTokens()
+	return ouo
+}
+
+// RemoveJobRunnerRegistrationTokenIDs removes the "job_runner_registration_tokens" edge to JobRunnerRegistrationToken entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveJobRunnerRegistrationTokenIDs(ids...)
+	return ouo
+}
+
+// RemoveJobRunnerRegistrationTokens removes "job_runner_registration_tokens" edges to JobRunnerRegistrationToken entities.
+func (ouo *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationUpdateOne {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ouo.RemoveJobRunnerRegistrationTokenIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -8122,6 +8485,150 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.CustomDomain
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.JobRunnersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnersTable,
+			Columns: []string{organization.JobRunnersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobRunner
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedJobRunnersIDs(); len(nodes) > 0 && !ouo.mutation.JobRunnersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnersTable,
+			Columns: []string{organization.JobRunnersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobRunner
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.JobRunnersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnersTable,
+			Columns: []string{organization.JobRunnersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobRunner
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.JobRunnerTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerTokensTable,
+			Columns: []string{organization.JobRunnerTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobRunnerToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !ouo.mutation.JobRunnerTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerTokensTable,
+			Columns: []string{organization.JobRunnerTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobRunnerToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerTokensTable,
+			Columns: []string{organization.JobRunnerTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobRunnerToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.JobRunnerRegistrationTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokensTable,
+			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobRunnerRegistrationToken
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedJobRunnerRegistrationTokensIDs(); len(nodes) > 0 && !ouo.mutation.JobRunnerRegistrationTokensCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokensTable,
+			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobRunnerRegistrationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokensTable,
+			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

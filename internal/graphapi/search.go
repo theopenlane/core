@@ -27,6 +27,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -769,6 +772,117 @@ func adminSearchInvites(ctx context.Context, query string, after *entgql.Cursor[
 				invite.OwnerIDContainsFold(query),     // search by OwnerID
 				invite.RecipientContainsFold(query),   // search by Recipient
 				invite.RequestorIDContainsFold(query), // search by RequestorID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchJobRunner searches for JobRunner based on the query string looking for matches
+func searchJobRunners(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerConnection, error) {
+	request := withTransactionalMutation(ctx).JobRunner.Query().
+		Where(
+			jobrunner.Or(
+				jobrunner.DisplayID(query),        // search equal to DisplayID
+				jobrunner.ID(query),               // search equal to ID
+				jobrunner.NameContainsFold(query), // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchJobRunner searches for JobRunner based on the query string looking for matches
+func adminSearchJobRunners(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerConnection, error) {
+	request := withTransactionalMutation(ctx).JobRunner.Query().
+		Where(
+			jobrunner.Or(
+				jobrunner.DeletedByContainsFold(query), // search by DeletedBy
+				jobrunner.ID(query),                    // search equal to ID
+				jobrunner.DisplayID(query),             // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+				},
+				jobrunner.OwnerIDContainsFold(query),   // search by OwnerID
+				jobrunner.NameContainsFold(query),      // search by Name
+				jobrunner.IPAddressContainsFold(query), // search by IPAddress
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchJobRunnerRegistrationToken searches for JobRunnerRegistrationToken based on the query string looking for matches
+func searchJobRunnerRegistrationTokens(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerRegistrationTokenConnection, error) {
+	request := withTransactionalMutation(ctx).JobRunnerRegistrationToken.Query().
+		Where(
+			jobrunnerregistrationtoken.Or(
+				jobrunnerregistrationtoken.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchJobRunnerRegistrationToken searches for JobRunnerRegistrationToken based on the query string looking for matches
+func adminSearchJobRunnerRegistrationTokens(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerRegistrationTokenConnection, error) {
+	request := withTransactionalMutation(ctx).JobRunnerRegistrationToken.Query().
+		Where(
+			jobrunnerregistrationtoken.Or(
+				jobrunnerregistrationtoken.DeletedByContainsFold(query), // search by DeletedBy
+				jobrunnerregistrationtoken.ID(query),                    // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				jobrunnerregistrationtoken.OwnerIDContainsFold(query),     // search by OwnerID
+				jobrunnerregistrationtoken.JobRunnerIDContainsFold(query), // search by JobRunnerID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchJobRunnerToken searches for JobRunnerToken based on the query string looking for matches
+func searchJobRunnerTokens(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerTokenConnection, error) {
+	request := withTransactionalMutation(ctx).JobRunnerToken.Query().
+		Where(
+			jobrunnertoken.Or(
+				jobrunnertoken.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchJobRunnerToken searches for JobRunnerToken based on the query string looking for matches
+func adminSearchJobRunnerTokens(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerTokenConnection, error) {
+	request := withTransactionalMutation(ctx).JobRunnerToken.Query().
+		Where(
+			jobrunnertoken.Or(
+				jobrunnertoken.DeletedByContainsFold(query), // search by DeletedBy
+				jobrunnertoken.ID(query),                    // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				jobrunnertoken.OwnerIDContainsFold(query),       // search by OwnerID
+				jobrunnertoken.JobRunnerIDContainsFold(query),   // search by JobRunnerID
+				jobrunnertoken.RevokedReasonContainsFold(query), // search by RevokedReason
+				jobrunnertoken.RevokedByContainsFold(query),     // search by RevokedBy
 			),
 		)
 

@@ -2313,6 +2313,93 @@ func HasCustomDomainsWith(preds ...predicate.CustomDomain) predicate.Organizatio
 	})
 }
 
+// HasJobRunners applies the HasEdge predicate on the "job_runners" edge.
+func HasJobRunners() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, JobRunnersTable, JobRunnersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.JobRunner
+		step.Edge.Schema = schemaConfig.JobRunner
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasJobRunnersWith applies the HasEdge predicate on the "job_runners" edge with a given conditions (other predicates).
+func HasJobRunnersWith(preds ...predicate.JobRunner) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newJobRunnersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.JobRunner
+		step.Edge.Schema = schemaConfig.JobRunner
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasJobRunnerTokens applies the HasEdge predicate on the "job_runner_tokens" edge.
+func HasJobRunnerTokens() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerTokensTable, JobRunnerTokensColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.JobRunnerToken
+		step.Edge.Schema = schemaConfig.JobRunnerToken
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasJobRunnerTokensWith applies the HasEdge predicate on the "job_runner_tokens" edge with a given conditions (other predicates).
+func HasJobRunnerTokensWith(preds ...predicate.JobRunnerToken) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newJobRunnerTokensStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.JobRunnerToken
+		step.Edge.Schema = schemaConfig.JobRunnerToken
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasJobRunnerRegistrationTokens applies the HasEdge predicate on the "job_runner_registration_tokens" edge.
+func HasJobRunnerRegistrationTokens() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerRegistrationTokensTable, JobRunnerRegistrationTokensColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.JobRunnerRegistrationToken
+		step.Edge.Schema = schemaConfig.JobRunnerRegistrationToken
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasJobRunnerRegistrationTokensWith applies the HasEdge predicate on the "job_runner_registration_tokens" edge with a given conditions (other predicates).
+func HasJobRunnerRegistrationTokensWith(preds ...predicate.JobRunnerRegistrationToken) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newJobRunnerRegistrationTokensStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.JobRunnerRegistrationToken
+		step.Edge.Schema = schemaConfig.JobRunnerRegistrationToken
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

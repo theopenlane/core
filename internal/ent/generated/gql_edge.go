@@ -2270,6 +2270,75 @@ func (i *Invite) Events(
 	return i.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (jr *JobRunner) Owner(ctx context.Context) (*Organization, error) {
+	result, err := jr.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = jr.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (jr *JobRunner) JobRunnerTokens(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*JobRunnerTokenOrder, where *JobRunnerTokenWhereInput,
+) (*JobRunnerTokenConnection, error) {
+	opts := []JobRunnerTokenPaginateOption{
+		WithJobRunnerTokenOrder(orderBy),
+		WithJobRunnerTokenFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := jr.Edges.totalCount[1][alias]
+	if nodes, err := jr.NamedJobRunnerTokens(alias); err == nil || hasTotalCount {
+		pager, err := newJobRunnerTokenPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &JobRunnerTokenConnection{Edges: []*JobRunnerTokenEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return jr.QueryJobRunnerTokens().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (jr *JobRunner) JobRunner(ctx context.Context) (*JobRunnerRegistrationToken, error) {
+	result, err := jr.Edges.JobRunnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = jr.QueryJobRunner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (jrrt *JobRunnerRegistrationToken) Owner(ctx context.Context) (*Organization, error) {
+	result, err := jrrt.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = jrrt.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (jrrt *JobRunnerRegistrationToken) JobRunner(ctx context.Context) (*JobRunner, error) {
+	result, err := jrrt.Edges.JobRunnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = jrrt.QueryJobRunner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (jrt *JobRunnerToken) Owner(ctx context.Context) (*Organization, error) {
+	result, err := jrt.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = jrt.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (jrt *JobRunnerToken) JobRunner(ctx context.Context) (*JobRunner, error) {
+	result, err := jrt.Edges.JobRunnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = jrt.QueryJobRunner().Only(ctx)
+	}
+	return result, err
+}
+
 func (md *MappableDomain) CustomDomains(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*CustomDomainOrder, where *CustomDomainWhereInput,
 ) (*CustomDomainConnection, error) {
@@ -3367,6 +3436,69 @@ func (o *Organization) CustomDomains(
 	return o.QueryCustomDomains().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) JobRunners(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*JobRunnerOrder, where *JobRunnerWhereInput,
+) (*JobRunnerConnection, error) {
+	opts := []JobRunnerPaginateOption{
+		WithJobRunnerOrder(orderBy),
+		WithJobRunnerFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[44][alias]
+	if nodes, err := o.NamedJobRunners(alias); err == nil || hasTotalCount {
+		pager, err := newJobRunnerPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &JobRunnerConnection{Edges: []*JobRunnerEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryJobRunners().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (o *Organization) JobRunnerTokens(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*JobRunnerTokenOrder, where *JobRunnerTokenWhereInput,
+) (*JobRunnerTokenConnection, error) {
+	opts := []JobRunnerTokenPaginateOption{
+		WithJobRunnerTokenOrder(orderBy),
+		WithJobRunnerTokenFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[45][alias]
+	if nodes, err := o.NamedJobRunnerTokens(alias); err == nil || hasTotalCount {
+		pager, err := newJobRunnerTokenPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &JobRunnerTokenConnection{Edges: []*JobRunnerTokenEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryJobRunnerTokens().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (o *Organization) JobRunnerRegistrationTokens(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*JobRunnerRegistrationTokenOrder, where *JobRunnerRegistrationTokenWhereInput,
+) (*JobRunnerRegistrationTokenConnection, error) {
+	opts := []JobRunnerRegistrationTokenPaginateOption{
+		WithJobRunnerRegistrationTokenOrder(orderBy),
+		WithJobRunnerRegistrationTokenFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[46][alias]
+	if nodes, err := o.NamedJobRunnerRegistrationTokens(alias); err == nil || hasTotalCount {
+		pager, err := newJobRunnerRegistrationTokenPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &JobRunnerRegistrationTokenConnection{Edges: []*JobRunnerRegistrationTokenEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryJobRunnerRegistrationTokens().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -3375,7 +3507,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[44][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[47][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {

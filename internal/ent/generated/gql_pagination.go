@@ -52,6 +52,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -14790,6 +14794,1460 @@ func (i *Invite) ToEdge(order *InviteOrder) *InviteEdge {
 	return &InviteEdge{
 		Node:   i,
 		Cursor: order.Field.toCursor(i),
+	}
+}
+
+// JobRunnerEdge is the edge representation of JobRunner.
+type JobRunnerEdge struct {
+	Node   *JobRunner `json:"node"`
+	Cursor Cursor     `json:"cursor"`
+}
+
+// JobRunnerConnection is the connection containing edges to JobRunner.
+type JobRunnerConnection struct {
+	Edges      []*JobRunnerEdge `json:"edges"`
+	PageInfo   PageInfo         `json:"pageInfo"`
+	TotalCount int              `json:"totalCount"`
+}
+
+func (c *JobRunnerConnection) build(nodes []*JobRunner, pager *jobrunnerPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *JobRunner
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *JobRunner {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *JobRunner {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*JobRunnerEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &JobRunnerEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// JobRunnerPaginateOption enables pagination customization.
+type JobRunnerPaginateOption func(*jobrunnerPager) error
+
+// WithJobRunnerOrder configures pagination ordering.
+func WithJobRunnerOrder(order []*JobRunnerOrder) JobRunnerPaginateOption {
+	return func(pager *jobrunnerPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithJobRunnerFilter configures pagination filter.
+func WithJobRunnerFilter(filter func(*JobRunnerQuery) (*JobRunnerQuery, error)) JobRunnerPaginateOption {
+	return func(pager *jobrunnerPager) error {
+		if filter == nil {
+			return errors.New("JobRunnerQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type jobrunnerPager struct {
+	reverse bool
+	order   []*JobRunnerOrder
+	filter  func(*JobRunnerQuery) (*JobRunnerQuery, error)
+}
+
+func newJobRunnerPager(opts []JobRunnerPaginateOption, reverse bool) (*jobrunnerPager, error) {
+	pager := &jobrunnerPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *jobrunnerPager) applyFilter(query *JobRunnerQuery) (*JobRunnerQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *jobrunnerPager) toCursor(jr *JobRunner) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(jr).Value)
+	}
+	return Cursor{ID: jr.ID, Value: cs_}
+}
+
+func (p *jobrunnerPager) applyCursors(query *JobRunnerQuery, after, before *Cursor) (*JobRunnerQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultJobRunnerOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *jobrunnerPager) applyOrder(query *JobRunnerQuery) *JobRunnerQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultJobRunnerOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultJobRunnerOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *jobrunnerPager) orderExpr(query *JobRunnerQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultJobRunnerOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to JobRunner.
+func (jr *JobRunnerQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...JobRunnerPaginateOption,
+) (*JobRunnerConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newJobRunnerPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if jr, err = pager.applyFilter(jr); err != nil {
+		return nil, err
+	}
+	conn := &JobRunnerConnection{Edges: []*JobRunnerEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := jr.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if jr, err = pager.applyCursors(jr, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		jr.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := jr.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	jr = pager.applyOrder(jr)
+	nodes, err := jr.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// JobRunnerOrderFieldCreatedAt orders JobRunner by created_at.
+	JobRunnerOrderFieldCreatedAt = &JobRunnerOrderField{
+		Value: func(jr *JobRunner) (ent.Value, error) {
+			return jr.CreatedAt, nil
+		},
+		column: jobrunner.FieldCreatedAt,
+		toTerm: jobrunner.ByCreatedAt,
+		toCursor: func(jr *JobRunner) Cursor {
+			return Cursor{
+				ID:    jr.ID,
+				Value: jr.CreatedAt,
+			}
+		},
+	}
+	// JobRunnerOrderFieldUpdatedAt orders JobRunner by updated_at.
+	JobRunnerOrderFieldUpdatedAt = &JobRunnerOrderField{
+		Value: func(jr *JobRunner) (ent.Value, error) {
+			return jr.UpdatedAt, nil
+		},
+		column: jobrunner.FieldUpdatedAt,
+		toTerm: jobrunner.ByUpdatedAt,
+		toCursor: func(jr *JobRunner) Cursor {
+			return Cursor{
+				ID:    jr.ID,
+				Value: jr.UpdatedAt,
+			}
+		},
+	}
+	// JobRunnerOrderFieldName orders JobRunner by name.
+	JobRunnerOrderFieldName = &JobRunnerOrderField{
+		Value: func(jr *JobRunner) (ent.Value, error) {
+			return jr.Name, nil
+		},
+		column: jobrunner.FieldName,
+		toTerm: jobrunner.ByName,
+		toCursor: func(jr *JobRunner) Cursor {
+			return Cursor{
+				ID:    jr.ID,
+				Value: jr.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f JobRunnerOrderField) String() string {
+	var str string
+	switch f.column {
+	case JobRunnerOrderFieldCreatedAt.column:
+		str = "created_at"
+	case JobRunnerOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case JobRunnerOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f JobRunnerOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *JobRunnerOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("JobRunnerOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *JobRunnerOrderFieldCreatedAt
+	case "updated_at":
+		*f = *JobRunnerOrderFieldUpdatedAt
+	case "name":
+		*f = *JobRunnerOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid JobRunnerOrderField", str)
+	}
+	return nil
+}
+
+// JobRunnerOrderField defines the ordering field of JobRunner.
+type JobRunnerOrderField struct {
+	// Value extracts the ordering value from the given JobRunner.
+	Value    func(*JobRunner) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) jobrunner.OrderOption
+	toCursor func(*JobRunner) Cursor
+}
+
+// JobRunnerOrder defines the ordering of JobRunner.
+type JobRunnerOrder struct {
+	Direction OrderDirection       `json:"direction"`
+	Field     *JobRunnerOrderField `json:"field"`
+}
+
+// DefaultJobRunnerOrder is the default ordering of JobRunner.
+var DefaultJobRunnerOrder = &JobRunnerOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &JobRunnerOrderField{
+		Value: func(jr *JobRunner) (ent.Value, error) {
+			return jr.ID, nil
+		},
+		column: jobrunner.FieldID,
+		toTerm: jobrunner.ByID,
+		toCursor: func(jr *JobRunner) Cursor {
+			return Cursor{ID: jr.ID}
+		},
+	},
+}
+
+// ToEdge converts JobRunner into JobRunnerEdge.
+func (jr *JobRunner) ToEdge(order *JobRunnerOrder) *JobRunnerEdge {
+	if order == nil {
+		order = DefaultJobRunnerOrder
+	}
+	return &JobRunnerEdge{
+		Node:   jr,
+		Cursor: order.Field.toCursor(jr),
+	}
+}
+
+// JobRunnerHistoryEdge is the edge representation of JobRunnerHistory.
+type JobRunnerHistoryEdge struct {
+	Node   *JobRunnerHistory `json:"node"`
+	Cursor Cursor            `json:"cursor"`
+}
+
+// JobRunnerHistoryConnection is the connection containing edges to JobRunnerHistory.
+type JobRunnerHistoryConnection struct {
+	Edges      []*JobRunnerHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                `json:"pageInfo"`
+	TotalCount int                     `json:"totalCount"`
+}
+
+func (c *JobRunnerHistoryConnection) build(nodes []*JobRunnerHistory, pager *jobrunnerhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *JobRunnerHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *JobRunnerHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *JobRunnerHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*JobRunnerHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &JobRunnerHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// JobRunnerHistoryPaginateOption enables pagination customization.
+type JobRunnerHistoryPaginateOption func(*jobrunnerhistoryPager) error
+
+// WithJobRunnerHistoryOrder configures pagination ordering.
+func WithJobRunnerHistoryOrder(order *JobRunnerHistoryOrder) JobRunnerHistoryPaginateOption {
+	if order == nil {
+		order = DefaultJobRunnerHistoryOrder
+	}
+	o := *order
+	return func(pager *jobrunnerhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultJobRunnerHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithJobRunnerHistoryFilter configures pagination filter.
+func WithJobRunnerHistoryFilter(filter func(*JobRunnerHistoryQuery) (*JobRunnerHistoryQuery, error)) JobRunnerHistoryPaginateOption {
+	return func(pager *jobrunnerhistoryPager) error {
+		if filter == nil {
+			return errors.New("JobRunnerHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type jobrunnerhistoryPager struct {
+	reverse bool
+	order   *JobRunnerHistoryOrder
+	filter  func(*JobRunnerHistoryQuery) (*JobRunnerHistoryQuery, error)
+}
+
+func newJobRunnerHistoryPager(opts []JobRunnerHistoryPaginateOption, reverse bool) (*jobrunnerhistoryPager, error) {
+	pager := &jobrunnerhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultJobRunnerHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *jobrunnerhistoryPager) applyFilter(query *JobRunnerHistoryQuery) (*JobRunnerHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *jobrunnerhistoryPager) toCursor(jrh *JobRunnerHistory) Cursor {
+	return p.order.Field.toCursor(jrh)
+}
+
+func (p *jobrunnerhistoryPager) applyCursors(query *JobRunnerHistoryQuery, after, before *Cursor) (*JobRunnerHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultJobRunnerHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *jobrunnerhistoryPager) applyOrder(query *JobRunnerHistoryQuery) *JobRunnerHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultJobRunnerHistoryOrder.Field {
+		query = query.Order(DefaultJobRunnerHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *jobrunnerhistoryPager) orderExpr(query *JobRunnerHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultJobRunnerHistoryOrder.Field {
+			b.Comma().Ident(DefaultJobRunnerHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to JobRunnerHistory.
+func (jrh *JobRunnerHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...JobRunnerHistoryPaginateOption,
+) (*JobRunnerHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newJobRunnerHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if jrh, err = pager.applyFilter(jrh); err != nil {
+		return nil, err
+	}
+	conn := &JobRunnerHistoryConnection{Edges: []*JobRunnerHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := jrh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if jrh, err = pager.applyCursors(jrh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		jrh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := jrh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	jrh = pager.applyOrder(jrh)
+	nodes, err := jrh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// JobRunnerHistoryOrderFieldCreatedAt orders JobRunnerHistory by created_at.
+	JobRunnerHistoryOrderFieldCreatedAt = &JobRunnerHistoryOrderField{
+		Value: func(jrh *JobRunnerHistory) (ent.Value, error) {
+			return jrh.CreatedAt, nil
+		},
+		column: jobrunnerhistory.FieldCreatedAt,
+		toTerm: jobrunnerhistory.ByCreatedAt,
+		toCursor: func(jrh *JobRunnerHistory) Cursor {
+			return Cursor{
+				ID:    jrh.ID,
+				Value: jrh.CreatedAt,
+			}
+		},
+	}
+	// JobRunnerHistoryOrderFieldUpdatedAt orders JobRunnerHistory by updated_at.
+	JobRunnerHistoryOrderFieldUpdatedAt = &JobRunnerHistoryOrderField{
+		Value: func(jrh *JobRunnerHistory) (ent.Value, error) {
+			return jrh.UpdatedAt, nil
+		},
+		column: jobrunnerhistory.FieldUpdatedAt,
+		toTerm: jobrunnerhistory.ByUpdatedAt,
+		toCursor: func(jrh *JobRunnerHistory) Cursor {
+			return Cursor{
+				ID:    jrh.ID,
+				Value: jrh.UpdatedAt,
+			}
+		},
+	}
+	// JobRunnerHistoryOrderFieldName orders JobRunnerHistory by name.
+	JobRunnerHistoryOrderFieldName = &JobRunnerHistoryOrderField{
+		Value: func(jrh *JobRunnerHistory) (ent.Value, error) {
+			return jrh.Name, nil
+		},
+		column: jobrunnerhistory.FieldName,
+		toTerm: jobrunnerhistory.ByName,
+		toCursor: func(jrh *JobRunnerHistory) Cursor {
+			return Cursor{
+				ID:    jrh.ID,
+				Value: jrh.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f JobRunnerHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case JobRunnerHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case JobRunnerHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case JobRunnerHistoryOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f JobRunnerHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *JobRunnerHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("JobRunnerHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *JobRunnerHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *JobRunnerHistoryOrderFieldUpdatedAt
+	case "name":
+		*f = *JobRunnerHistoryOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid JobRunnerHistoryOrderField", str)
+	}
+	return nil
+}
+
+// JobRunnerHistoryOrderField defines the ordering field of JobRunnerHistory.
+type JobRunnerHistoryOrderField struct {
+	// Value extracts the ordering value from the given JobRunnerHistory.
+	Value    func(*JobRunnerHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) jobrunnerhistory.OrderOption
+	toCursor func(*JobRunnerHistory) Cursor
+}
+
+// JobRunnerHistoryOrder defines the ordering of JobRunnerHistory.
+type JobRunnerHistoryOrder struct {
+	Direction OrderDirection              `json:"direction"`
+	Field     *JobRunnerHistoryOrderField `json:"field"`
+}
+
+// DefaultJobRunnerHistoryOrder is the default ordering of JobRunnerHistory.
+var DefaultJobRunnerHistoryOrder = &JobRunnerHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &JobRunnerHistoryOrderField{
+		Value: func(jrh *JobRunnerHistory) (ent.Value, error) {
+			return jrh.ID, nil
+		},
+		column: jobrunnerhistory.FieldID,
+		toTerm: jobrunnerhistory.ByID,
+		toCursor: func(jrh *JobRunnerHistory) Cursor {
+			return Cursor{ID: jrh.ID}
+		},
+	},
+}
+
+// ToEdge converts JobRunnerHistory into JobRunnerHistoryEdge.
+func (jrh *JobRunnerHistory) ToEdge(order *JobRunnerHistoryOrder) *JobRunnerHistoryEdge {
+	if order == nil {
+		order = DefaultJobRunnerHistoryOrder
+	}
+	return &JobRunnerHistoryEdge{
+		Node:   jrh,
+		Cursor: order.Field.toCursor(jrh),
+	}
+}
+
+// JobRunnerRegistrationTokenEdge is the edge representation of JobRunnerRegistrationToken.
+type JobRunnerRegistrationTokenEdge struct {
+	Node   *JobRunnerRegistrationToken `json:"node"`
+	Cursor Cursor                      `json:"cursor"`
+}
+
+// JobRunnerRegistrationTokenConnection is the connection containing edges to JobRunnerRegistrationToken.
+type JobRunnerRegistrationTokenConnection struct {
+	Edges      []*JobRunnerRegistrationTokenEdge `json:"edges"`
+	PageInfo   PageInfo                          `json:"pageInfo"`
+	TotalCount int                               `json:"totalCount"`
+}
+
+func (c *JobRunnerRegistrationTokenConnection) build(nodes []*JobRunnerRegistrationToken, pager *jobrunnerregistrationtokenPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *JobRunnerRegistrationToken
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *JobRunnerRegistrationToken {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *JobRunnerRegistrationToken {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*JobRunnerRegistrationTokenEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &JobRunnerRegistrationTokenEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// JobRunnerRegistrationTokenPaginateOption enables pagination customization.
+type JobRunnerRegistrationTokenPaginateOption func(*jobrunnerregistrationtokenPager) error
+
+// WithJobRunnerRegistrationTokenOrder configures pagination ordering.
+func WithJobRunnerRegistrationTokenOrder(order []*JobRunnerRegistrationTokenOrder) JobRunnerRegistrationTokenPaginateOption {
+	return func(pager *jobrunnerregistrationtokenPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithJobRunnerRegistrationTokenFilter configures pagination filter.
+func WithJobRunnerRegistrationTokenFilter(filter func(*JobRunnerRegistrationTokenQuery) (*JobRunnerRegistrationTokenQuery, error)) JobRunnerRegistrationTokenPaginateOption {
+	return func(pager *jobrunnerregistrationtokenPager) error {
+		if filter == nil {
+			return errors.New("JobRunnerRegistrationTokenQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type jobrunnerregistrationtokenPager struct {
+	reverse bool
+	order   []*JobRunnerRegistrationTokenOrder
+	filter  func(*JobRunnerRegistrationTokenQuery) (*JobRunnerRegistrationTokenQuery, error)
+}
+
+func newJobRunnerRegistrationTokenPager(opts []JobRunnerRegistrationTokenPaginateOption, reverse bool) (*jobrunnerregistrationtokenPager, error) {
+	pager := &jobrunnerregistrationtokenPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *jobrunnerregistrationtokenPager) applyFilter(query *JobRunnerRegistrationTokenQuery) (*JobRunnerRegistrationTokenQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *jobrunnerregistrationtokenPager) toCursor(jrrt *JobRunnerRegistrationToken) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(jrrt).Value)
+	}
+	return Cursor{ID: jrrt.ID, Value: cs_}
+}
+
+func (p *jobrunnerregistrationtokenPager) applyCursors(query *JobRunnerRegistrationTokenQuery, after, before *Cursor) (*JobRunnerRegistrationTokenQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultJobRunnerRegistrationTokenOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *jobrunnerregistrationtokenPager) applyOrder(query *JobRunnerRegistrationTokenQuery) *JobRunnerRegistrationTokenQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultJobRunnerRegistrationTokenOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultJobRunnerRegistrationTokenOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *jobrunnerregistrationtokenPager) orderExpr(query *JobRunnerRegistrationTokenQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultJobRunnerRegistrationTokenOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to JobRunnerRegistrationToken.
+func (jrrt *JobRunnerRegistrationTokenQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...JobRunnerRegistrationTokenPaginateOption,
+) (*JobRunnerRegistrationTokenConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newJobRunnerRegistrationTokenPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if jrrt, err = pager.applyFilter(jrrt); err != nil {
+		return nil, err
+	}
+	conn := &JobRunnerRegistrationTokenConnection{Edges: []*JobRunnerRegistrationTokenEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := jrrt.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if jrrt, err = pager.applyCursors(jrrt, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		jrrt.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := jrrt.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	jrrt = pager.applyOrder(jrrt)
+	nodes, err := jrrt.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// JobRunnerRegistrationTokenOrderFieldCreatedAt orders JobRunnerRegistrationToken by created_at.
+	JobRunnerRegistrationTokenOrderFieldCreatedAt = &JobRunnerRegistrationTokenOrderField{
+		Value: func(jrrt *JobRunnerRegistrationToken) (ent.Value, error) {
+			return jrrt.CreatedAt, nil
+		},
+		column: jobrunnerregistrationtoken.FieldCreatedAt,
+		toTerm: jobrunnerregistrationtoken.ByCreatedAt,
+		toCursor: func(jrrt *JobRunnerRegistrationToken) Cursor {
+			return Cursor{
+				ID:    jrrt.ID,
+				Value: jrrt.CreatedAt,
+			}
+		},
+	}
+	// JobRunnerRegistrationTokenOrderFieldUpdatedAt orders JobRunnerRegistrationToken by updated_at.
+	JobRunnerRegistrationTokenOrderFieldUpdatedAt = &JobRunnerRegistrationTokenOrderField{
+		Value: func(jrrt *JobRunnerRegistrationToken) (ent.Value, error) {
+			return jrrt.UpdatedAt, nil
+		},
+		column: jobrunnerregistrationtoken.FieldUpdatedAt,
+		toTerm: jobrunnerregistrationtoken.ByUpdatedAt,
+		toCursor: func(jrrt *JobRunnerRegistrationToken) Cursor {
+			return Cursor{
+				ID:    jrrt.ID,
+				Value: jrrt.UpdatedAt,
+			}
+		},
+	}
+	// JobRunnerRegistrationTokenOrderFieldLastUsedAt orders JobRunnerRegistrationToken by last_used_at.
+	JobRunnerRegistrationTokenOrderFieldLastUsedAt = &JobRunnerRegistrationTokenOrderField{
+		Value: func(jrrt *JobRunnerRegistrationToken) (ent.Value, error) {
+			return jrrt.LastUsedAt, nil
+		},
+		column: jobrunnerregistrationtoken.FieldLastUsedAt,
+		toTerm: jobrunnerregistrationtoken.ByLastUsedAt,
+		toCursor: func(jrrt *JobRunnerRegistrationToken) Cursor {
+			return Cursor{
+				ID:    jrrt.ID,
+				Value: jrrt.LastUsedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f JobRunnerRegistrationTokenOrderField) String() string {
+	var str string
+	switch f.column {
+	case JobRunnerRegistrationTokenOrderFieldCreatedAt.column:
+		str = "created_at"
+	case JobRunnerRegistrationTokenOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case JobRunnerRegistrationTokenOrderFieldLastUsedAt.column:
+		str = "last_used_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f JobRunnerRegistrationTokenOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *JobRunnerRegistrationTokenOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("JobRunnerRegistrationTokenOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *JobRunnerRegistrationTokenOrderFieldCreatedAt
+	case "updated_at":
+		*f = *JobRunnerRegistrationTokenOrderFieldUpdatedAt
+	case "last_used_at":
+		*f = *JobRunnerRegistrationTokenOrderFieldLastUsedAt
+	default:
+		return fmt.Errorf("%s is not a valid JobRunnerRegistrationTokenOrderField", str)
+	}
+	return nil
+}
+
+// JobRunnerRegistrationTokenOrderField defines the ordering field of JobRunnerRegistrationToken.
+type JobRunnerRegistrationTokenOrderField struct {
+	// Value extracts the ordering value from the given JobRunnerRegistrationToken.
+	Value    func(*JobRunnerRegistrationToken) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) jobrunnerregistrationtoken.OrderOption
+	toCursor func(*JobRunnerRegistrationToken) Cursor
+}
+
+// JobRunnerRegistrationTokenOrder defines the ordering of JobRunnerRegistrationToken.
+type JobRunnerRegistrationTokenOrder struct {
+	Direction OrderDirection                        `json:"direction"`
+	Field     *JobRunnerRegistrationTokenOrderField `json:"field"`
+}
+
+// DefaultJobRunnerRegistrationTokenOrder is the default ordering of JobRunnerRegistrationToken.
+var DefaultJobRunnerRegistrationTokenOrder = &JobRunnerRegistrationTokenOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &JobRunnerRegistrationTokenOrderField{
+		Value: func(jrrt *JobRunnerRegistrationToken) (ent.Value, error) {
+			return jrrt.ID, nil
+		},
+		column: jobrunnerregistrationtoken.FieldID,
+		toTerm: jobrunnerregistrationtoken.ByID,
+		toCursor: func(jrrt *JobRunnerRegistrationToken) Cursor {
+			return Cursor{ID: jrrt.ID}
+		},
+	},
+}
+
+// ToEdge converts JobRunnerRegistrationToken into JobRunnerRegistrationTokenEdge.
+func (jrrt *JobRunnerRegistrationToken) ToEdge(order *JobRunnerRegistrationTokenOrder) *JobRunnerRegistrationTokenEdge {
+	if order == nil {
+		order = DefaultJobRunnerRegistrationTokenOrder
+	}
+	return &JobRunnerRegistrationTokenEdge{
+		Node:   jrrt,
+		Cursor: order.Field.toCursor(jrrt),
+	}
+}
+
+// JobRunnerTokenEdge is the edge representation of JobRunnerToken.
+type JobRunnerTokenEdge struct {
+	Node   *JobRunnerToken `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// JobRunnerTokenConnection is the connection containing edges to JobRunnerToken.
+type JobRunnerTokenConnection struct {
+	Edges      []*JobRunnerTokenEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *JobRunnerTokenConnection) build(nodes []*JobRunnerToken, pager *jobrunnertokenPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *JobRunnerToken
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *JobRunnerToken {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *JobRunnerToken {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*JobRunnerTokenEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &JobRunnerTokenEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// JobRunnerTokenPaginateOption enables pagination customization.
+type JobRunnerTokenPaginateOption func(*jobrunnertokenPager) error
+
+// WithJobRunnerTokenOrder configures pagination ordering.
+func WithJobRunnerTokenOrder(order []*JobRunnerTokenOrder) JobRunnerTokenPaginateOption {
+	return func(pager *jobrunnertokenPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithJobRunnerTokenFilter configures pagination filter.
+func WithJobRunnerTokenFilter(filter func(*JobRunnerTokenQuery) (*JobRunnerTokenQuery, error)) JobRunnerTokenPaginateOption {
+	return func(pager *jobrunnertokenPager) error {
+		if filter == nil {
+			return errors.New("JobRunnerTokenQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type jobrunnertokenPager struct {
+	reverse bool
+	order   []*JobRunnerTokenOrder
+	filter  func(*JobRunnerTokenQuery) (*JobRunnerTokenQuery, error)
+}
+
+func newJobRunnerTokenPager(opts []JobRunnerTokenPaginateOption, reverse bool) (*jobrunnertokenPager, error) {
+	pager := &jobrunnertokenPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *jobrunnertokenPager) applyFilter(query *JobRunnerTokenQuery) (*JobRunnerTokenQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *jobrunnertokenPager) toCursor(jrt *JobRunnerToken) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(jrt).Value)
+	}
+	return Cursor{ID: jrt.ID, Value: cs_}
+}
+
+func (p *jobrunnertokenPager) applyCursors(query *JobRunnerTokenQuery, after, before *Cursor) (*JobRunnerTokenQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultJobRunnerTokenOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *jobrunnertokenPager) applyOrder(query *JobRunnerTokenQuery) *JobRunnerTokenQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultJobRunnerTokenOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultJobRunnerTokenOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *jobrunnertokenPager) orderExpr(query *JobRunnerTokenQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultJobRunnerTokenOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to JobRunnerToken.
+func (jrt *JobRunnerTokenQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...JobRunnerTokenPaginateOption,
+) (*JobRunnerTokenConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newJobRunnerTokenPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if jrt, err = pager.applyFilter(jrt); err != nil {
+		return nil, err
+	}
+	conn := &JobRunnerTokenConnection{Edges: []*JobRunnerTokenEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := jrt.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if jrt, err = pager.applyCursors(jrt, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		jrt.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := jrt.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	jrt = pager.applyOrder(jrt)
+	nodes, err := jrt.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// JobRunnerTokenOrderFieldCreatedAt orders JobRunnerToken by created_at.
+	JobRunnerTokenOrderFieldCreatedAt = &JobRunnerTokenOrderField{
+		Value: func(jrt *JobRunnerToken) (ent.Value, error) {
+			return jrt.CreatedAt, nil
+		},
+		column: jobrunnertoken.FieldCreatedAt,
+		toTerm: jobrunnertoken.ByCreatedAt,
+		toCursor: func(jrt *JobRunnerToken) Cursor {
+			return Cursor{
+				ID:    jrt.ID,
+				Value: jrt.CreatedAt,
+			}
+		},
+	}
+	// JobRunnerTokenOrderFieldUpdatedAt orders JobRunnerToken by updated_at.
+	JobRunnerTokenOrderFieldUpdatedAt = &JobRunnerTokenOrderField{
+		Value: func(jrt *JobRunnerToken) (ent.Value, error) {
+			return jrt.UpdatedAt, nil
+		},
+		column: jobrunnertoken.FieldUpdatedAt,
+		toTerm: jobrunnertoken.ByUpdatedAt,
+		toCursor: func(jrt *JobRunnerToken) Cursor {
+			return Cursor{
+				ID:    jrt.ID,
+				Value: jrt.UpdatedAt,
+			}
+		},
+	}
+	// JobRunnerTokenOrderFieldExpiresAt orders JobRunnerToken by expires_at.
+	JobRunnerTokenOrderFieldExpiresAt = &JobRunnerTokenOrderField{
+		Value: func(jrt *JobRunnerToken) (ent.Value, error) {
+			return jrt.ExpiresAt, nil
+		},
+		column: jobrunnertoken.FieldExpiresAt,
+		toTerm: jobrunnertoken.ByExpiresAt,
+		toCursor: func(jrt *JobRunnerToken) Cursor {
+			return Cursor{
+				ID:    jrt.ID,
+				Value: jrt.ExpiresAt,
+			}
+		},
+	}
+	// JobRunnerTokenOrderFieldLastUsedAt orders JobRunnerToken by last_used_at.
+	JobRunnerTokenOrderFieldLastUsedAt = &JobRunnerTokenOrderField{
+		Value: func(jrt *JobRunnerToken) (ent.Value, error) {
+			return jrt.LastUsedAt, nil
+		},
+		column: jobrunnertoken.FieldLastUsedAt,
+		toTerm: jobrunnertoken.ByLastUsedAt,
+		toCursor: func(jrt *JobRunnerToken) Cursor {
+			return Cursor{
+				ID:    jrt.ID,
+				Value: jrt.LastUsedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f JobRunnerTokenOrderField) String() string {
+	var str string
+	switch f.column {
+	case JobRunnerTokenOrderFieldCreatedAt.column:
+		str = "created_at"
+	case JobRunnerTokenOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case JobRunnerTokenOrderFieldExpiresAt.column:
+		str = "expires_at"
+	case JobRunnerTokenOrderFieldLastUsedAt.column:
+		str = "last_used_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f JobRunnerTokenOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *JobRunnerTokenOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("JobRunnerTokenOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *JobRunnerTokenOrderFieldCreatedAt
+	case "updated_at":
+		*f = *JobRunnerTokenOrderFieldUpdatedAt
+	case "expires_at":
+		*f = *JobRunnerTokenOrderFieldExpiresAt
+	case "last_used_at":
+		*f = *JobRunnerTokenOrderFieldLastUsedAt
+	default:
+		return fmt.Errorf("%s is not a valid JobRunnerTokenOrderField", str)
+	}
+	return nil
+}
+
+// JobRunnerTokenOrderField defines the ordering field of JobRunnerToken.
+type JobRunnerTokenOrderField struct {
+	// Value extracts the ordering value from the given JobRunnerToken.
+	Value    func(*JobRunnerToken) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) jobrunnertoken.OrderOption
+	toCursor func(*JobRunnerToken) Cursor
+}
+
+// JobRunnerTokenOrder defines the ordering of JobRunnerToken.
+type JobRunnerTokenOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *JobRunnerTokenOrderField `json:"field"`
+}
+
+// DefaultJobRunnerTokenOrder is the default ordering of JobRunnerToken.
+var DefaultJobRunnerTokenOrder = &JobRunnerTokenOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &JobRunnerTokenOrderField{
+		Value: func(jrt *JobRunnerToken) (ent.Value, error) {
+			return jrt.ID, nil
+		},
+		column: jobrunnertoken.FieldID,
+		toTerm: jobrunnertoken.ByID,
+		toCursor: func(jrt *JobRunnerToken) Cursor {
+			return Cursor{ID: jrt.ID}
+		},
+	},
+}
+
+// ToEdge converts JobRunnerToken into JobRunnerTokenEdge.
+func (jrt *JobRunnerToken) ToEdge(order *JobRunnerTokenOrder) *JobRunnerTokenEdge {
+	if order == nil {
+		order = DefaultJobRunnerTokenOrder
+	}
+	return &JobRunnerTokenEdge{
+		Node:   jrt,
+		Cursor: order.Field.toCursor(jrt),
 	}
 }
 

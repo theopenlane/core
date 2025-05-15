@@ -60,6 +60,10 @@ type TFASettingBuilder struct {
 	totpAllowed *bool
 }
 
+type JobRunnerBuilder struct {
+	client *client
+}
+
 type WebauthnBuilder struct {
 	client *client
 }
@@ -458,6 +462,17 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 	}
 
 	return setting
+}
+
+// MustNew JobRunner settings builder is used to create runners
+func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRunner {
+	wn, err := w.client.db.JobRunner.Create().
+		SetName(randomName(t)).
+		SetIPAddress(gofakeit.IPv4Address()).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	return wn
 }
 
 // MustNew webauthn settings builder is used to create passkeys without the browser setup process
@@ -1222,4 +1237,60 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T, status 
 	assert.NilError(t, err)
 
 	return customDomain
+}
+
+type JobRunnerTokenBuilder struct {
+	client *client
+
+	// Fields
+	JobRunnerID string
+	ExpiresAt   *time.Time
+	IsActive    *bool
+}
+
+func (j *JobRunnerTokenBuilder) MustNew(ctx context.Context, t *testing.T) *generated.JobRunnerToken {
+	ctx = setContext(ctx, j.client.db)
+
+	jobRunner := (&JobRunnerBuilder{client: j.client}).MustNew(ctx, t)
+
+	if j.JobRunnerID == "" {
+		j.JobRunnerID = jobRunner.ID
+	}
+
+	create := j.client.db.JobRunnerToken.Create().
+		SetJobRunnerID(j.JobRunnerID)
+
+	if j.ExpiresAt != nil {
+		create.SetExpiresAt(*j.ExpiresAt)
+	}
+
+	if j.IsActive != nil {
+		create.SetIsActive(*j.IsActive)
+	}
+
+	token, err := create.Save(ctx)
+	assert.NilError(t, err)
+
+	return token
+}
+
+type JobRunnerRegistrationTokenBuilder struct {
+	client *client
+
+	WithRunner bool
+}
+
+func (j *JobRunnerRegistrationTokenBuilder) MustNew(ctx context.Context, t *testing.T) *generated.JobRunnerRegistrationToken {
+	ctx = setContext(ctx, j.client.db)
+
+	create := j.client.db.JobRunnerRegistrationToken.Create()
+	if j.WithRunner {
+		jobRunner := (&JobRunnerBuilder{client: j.client}).MustNew(ctx, t)
+		create.SetJobRunnerID(jobRunner.ID)
+	}
+
+	token, err := create.Save(ctx)
+	assert.NilError(t, err)
+
+	return token
 }

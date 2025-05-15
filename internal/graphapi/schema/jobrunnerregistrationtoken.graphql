@@ -1,0 +1,85 @@
+extend type Query {
+    """
+    Look up jobRunnerRegistrationToken by ID
+    """
+     jobRunnerRegistrationToken(
+        """
+        ID of the jobRunnerRegistrationToken
+        """
+        id: ID!
+    ):  JobRunnerRegistrationToken!
+}
+
+extend type Mutation{
+    """
+    Create a new jobRunnerRegistrationToken
+    """
+    createJobRunnerRegistrationToken(
+        """
+        values of the jobRunnerRegistrationToken
+        """
+        input: CreateJobRunnerRegistrationTokenInput!
+    ): JobRunnerRegistrationTokenCreatePayload!
+    """
+    Update an existing jobRunnerRegistrationToken
+    """
+    updateJobRunnerRegistrationToken(
+        """
+        ID of the jobRunnerRegistrationToken
+        """
+        id: ID!
+        """
+        New values for the jobRunnerRegistrationToken
+        """
+        input: UpdateJobRunnerRegistrationTokenInput!
+    ): JobRunnerRegistrationTokenUpdatePayload!
+    """
+    Delete an existing jobRunnerRegistrationToken
+    """
+    deleteJobRunnerRegistrationToken(
+        """
+        ID of the jobRunnerRegistrationToken
+        """
+        id: ID!
+    ): JobRunnerRegistrationTokenDeletePayload!
+}
+
+"""
+Return response for createJobRunnerRegistrationToken mutation
+"""
+type JobRunnerRegistrationTokenCreatePayload {
+    """
+    Created jobRunnerRegistrationToken
+    """
+    jobRunnerRegistrationToken: JobRunnerRegistrationToken!
+}
+
+"""
+Return response for updateJobRunnerRegistrationToken mutation
+"""
+type JobRunnerRegistrationTokenUpdatePayload {
+    """
+    Updated jobRunnerRegistrationToken
+    """
+    jobRunnerRegistrationToken: JobRunnerRegistrationToken!
+}
+
+"""
+Return response for deleteJobRunnerRegistrationToken mutation
+"""
+type JobRunnerRegistrationTokenDeletePayload {
+    """
+    Deleted jobRunnerRegistrationToken ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkJobRunnerRegistrationToken mutation
+"""
+type JobRunnerRegistrationTokenBulkCreatePayload {
+    """
+    Created jobRunnerRegistrationTokens
+    """
+    jobRunnerRegistrationTokens: [JobRunnerRegistrationToken!]
+}

@@ -87,6 +87,10 @@ type SchemaConfig struct {
 	InternalPolicyHistory            string // InternalPolicyHistory table.
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
+	JobRunner                        string // JobRunner table.
+	JobRunnerHistory                 string // JobRunnerHistory table.
+	JobRunnerRegistrationToken       string // JobRunnerRegistrationToken table.
+	JobRunnerToken                   string // JobRunnerToken table.
 	MappableDomain                   string // MappableDomain table.
 	MappableDomainHistory            string // MappableDomainHistory table.
 	MappedControl                    string // MappedControl table.

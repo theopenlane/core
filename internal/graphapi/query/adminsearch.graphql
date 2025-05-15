@@ -375,6 +375,64 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    jobRunners {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          deletedBy
+          id
+          displayID
+          tags
+          ownerID
+          name
+          ipAddress
+        }
+      }
+    }
+    jobRunnerRegistrationTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          deletedBy
+          id
+          tags
+          ownerID
+          jobRunnerID
+        }
+      }
+    }
+    jobRunnerTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          deletedBy
+          id
+          tags
+          ownerID
+          jobRunnerID
+          revokedReason
+          revokedBy
+        }
+      }
+    }
     mappableDomains {
       totalCount
       pageInfo {

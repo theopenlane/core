@@ -47,6 +47,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -284,6 +288,26 @@ var inviteImplementors = []string{"Invite", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Invite) IsNode() {}
+
+var jobrunnerImplementors = []string{"JobRunner", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*JobRunner) IsNode() {}
+
+var jobrunnerhistoryImplementors = []string{"JobRunnerHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*JobRunnerHistory) IsNode() {}
+
+var jobrunnerregistrationtokenImplementors = []string{"JobRunnerRegistrationToken", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*JobRunnerRegistrationToken) IsNode() {}
+
+var jobrunnertokenImplementors = []string{"JobRunnerToken", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*JobRunnerToken) IsNode() {}
 
 var mappabledomainImplementors = []string{"MappableDomain", "Node"}
 
@@ -886,6 +910,42 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(invite.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, inviteImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case jobrunner.Table:
+		query := c.JobRunner.Query().
+			Where(jobrunner.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobrunnerImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case jobrunnerhistory.Table:
+		query := c.JobRunnerHistory.Query().
+			Where(jobrunnerhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobrunnerhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case jobrunnerregistrationtoken.Table:
+		query := c.JobRunnerRegistrationToken.Query().
+			Where(jobrunnerregistrationtoken.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobrunnerregistrationtokenImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case jobrunnertoken.Table:
+		query := c.JobRunnerToken.Query().
+			Where(jobrunnertoken.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobrunnertokenImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1928,6 +1988,70 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Invite.Query().
 			Where(invite.IDIn(ids...))
 		query, err := query.CollectFields(ctx, inviteImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case jobrunner.Table:
+		query := c.JobRunner.Query().
+			Where(jobrunner.IDIn(ids...))
+		query, err := query.CollectFields(ctx, jobrunnerImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case jobrunnerhistory.Table:
+		query := c.JobRunnerHistory.Query().
+			Where(jobrunnerhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, jobrunnerhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case jobrunnerregistrationtoken.Table:
+		query := c.JobRunnerRegistrationToken.Query().
+			Where(jobrunnerregistrationtoken.IDIn(ids...))
+		query, err := query.CollectFields(ctx, jobrunnerregistrationtokenImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case jobrunnertoken.Table:
+		query := c.JobRunnerToken.Query().
+			Where(jobrunnertoken.IDIn(ids...))
+		query, err := query.CollectFields(ctx, jobrunnertokenImplementors...)
 		if err != nil {
 			return nil, err
 		}

@@ -1733,6 +1733,191 @@ var (
 			},
 		},
 	}
+	// JobRunnersColumns holds the columns for the "job_runners" table.
+	JobRunnersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "name", Type: field.TypeString},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ONLINE", "OFFLINE"}, Default: "OFFLINE"},
+		{Name: "ip_address", Type: field.TypeString, Unique: true},
+		{Name: "job_runner_job_runner", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// JobRunnersTable holds the schema information for the "job_runners" table.
+	JobRunnersTable = &schema.Table{
+		Name:       "job_runners",
+		Columns:    JobRunnersColumns,
+		PrimaryKey: []*schema.Column{JobRunnersColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "job_runners_job_runner_registration_tokens_job_runner",
+				Columns:    []*schema.Column{JobRunnersColumns[13]},
+				RefColumns: []*schema.Column{JobRunnerRegistrationTokensColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "job_runners_organizations_job_runners",
+				Columns:    []*schema.Column{JobRunnersColumns[14]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "jobrunner_id",
+				Unique:  true,
+				Columns: []*schema.Column{JobRunnersColumns[0]},
+			},
+			{
+				Name:    "jobrunner_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[14]},
+			},
+		},
+	}
+	// JobRunnerHistoryColumns holds the columns for the "job_runner_history" table.
+	JobRunnerHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "name", Type: field.TypeString},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ONLINE", "OFFLINE"}, Default: "OFFLINE"},
+		{Name: "ip_address", Type: field.TypeString},
+	}
+	// JobRunnerHistoryTable holds the schema information for the "job_runner_history" table.
+	JobRunnerHistoryTable = &schema.Table{
+		Name:       "job_runner_history",
+		Columns:    JobRunnerHistoryColumns,
+		PrimaryKey: []*schema.Column{JobRunnerHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "jobrunnerhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{JobRunnerHistoryColumns[1]},
+			},
+		},
+	}
+	// JobRunnerRegistrationTokensColumns holds the columns for the "job_runner_registration_tokens" table.
+	JobRunnerRegistrationTokensColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "token", Type: field.TypeString, Unique: true},
+		{Name: "expires_at", Type: field.TypeTime},
+		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// JobRunnerRegistrationTokensTable holds the schema information for the "job_runner_registration_tokens" table.
+	JobRunnerRegistrationTokensTable = &schema.Table{
+		Name:       "job_runner_registration_tokens",
+		Columns:    JobRunnerRegistrationTokensColumns,
+		PrimaryKey: []*schema.Column{JobRunnerRegistrationTokensColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "job_runner_registration_tokens_job_runners_job_runner",
+				Columns:    []*schema.Column{JobRunnerRegistrationTokensColumns[11]},
+				RefColumns: []*schema.Column{JobRunnersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "job_runner_registration_tokens_organizations_job_runner_registration_tokens",
+				Columns:    []*schema.Column{JobRunnerRegistrationTokensColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "jobrunnerregistrationtoken_id",
+				Unique:  true,
+				Columns: []*schema.Column{JobRunnerRegistrationTokensColumns[0]},
+			},
+		},
+	}
+	// JobRunnerTokensColumns holds the columns for the "job_runner_tokens" table.
+	JobRunnerTokensColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "token", Type: field.TypeString, Unique: true},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
+		{Name: "is_active", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "revoked_reason", Type: field.TypeString, Nullable: true},
+		{Name: "revoked_by", Type: field.TypeString, Nullable: true},
+		{Name: "revoked_at", Type: field.TypeTime, Nullable: true},
+		{Name: "job_runner_job_runner_tokens", Type: field.TypeString, Nullable: true},
+		{Name: "job_runner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// JobRunnerTokensTable holds the schema information for the "job_runner_tokens" table.
+	JobRunnerTokensTable = &schema.Table{
+		Name:       "job_runner_tokens",
+		Columns:    JobRunnerTokensColumns,
+		PrimaryKey: []*schema.Column{JobRunnerTokensColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "job_runner_tokens_job_runners_job_runner_tokens",
+				Columns:    []*schema.Column{JobRunnerTokensColumns[15]},
+				RefColumns: []*schema.Column{JobRunnersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "job_runner_tokens_job_runners_job_runner",
+				Columns:    []*schema.Column{JobRunnerTokensColumns[16]},
+				RefColumns: []*schema.Column{JobRunnersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "job_runner_tokens_organizations_job_runner_tokens",
+				Columns:    []*schema.Column{JobRunnerTokensColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "jobrunnertoken_id",
+				Unique:  true,
+				Columns: []*schema.Column{JobRunnerTokensColumns[0]},
+			},
+			{
+				Name:    "jobrunnertoken_token_expires_at_is_active",
+				Unique:  false,
+				Columns: []*schema.Column{JobRunnerTokensColumns[8], JobRunnerTokensColumns[9], JobRunnerTokensColumns[11]},
+			},
+		},
+	}
 	// MappableDomainsColumns holds the columns for the "mappable_domains" table.
 	MappableDomainsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -5830,6 +6015,10 @@ var (
 		InternalPoliciesTable,
 		InternalPolicyHistoryTable,
 		InvitesTable,
+		JobRunnersTable,
+		JobRunnerHistoryTable,
+		JobRunnerRegistrationTokensTable,
+		JobRunnerTokensTable,
 		MappableDomainsTable,
 		MappableDomainHistoryTable,
 		MappedControlsTable,
@@ -6062,6 +6251,16 @@ func init() {
 		Table: "internal_policy_history",
 	}
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	JobRunnersTable.ForeignKeys[0].RefTable = JobRunnerRegistrationTokensTable
+	JobRunnersTable.ForeignKeys[1].RefTable = OrganizationsTable
+	JobRunnerHistoryTable.Annotation = &entsql.Annotation{
+		Table: "job_runner_history",
+	}
+	JobRunnerRegistrationTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
+	JobRunnerRegistrationTokensTable.ForeignKeys[1].RefTable = OrganizationsTable
+	JobRunnerTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
+	JobRunnerTokensTable.ForeignKeys[1].RefTable = JobRunnersTable
+	JobRunnerTokensTable.ForeignKeys[2].RefTable = OrganizationsTable
 	MappableDomainHistoryTable.Annotation = &entsql.Annotation{
 		Table: "mappable_domain_history",
 	}

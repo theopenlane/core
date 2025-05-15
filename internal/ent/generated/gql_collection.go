@@ -48,6 +48,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -14296,6 +14300,820 @@ func newInvitePaginateArgs(rv map[string]any) *invitePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (jr *JobRunnerQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return jr, nil
+	}
+	if err := jr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return jr, nil
+}
+
+func (jr *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(jobrunner.Columns))
+		selectedFields = []string{jobrunner.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: jr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			jr.withOwner = query
+			if _, ok := fieldSeen[jobrunner.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldOwnerID)
+				fieldSeen[jobrunner.FieldOwnerID] = struct{}{}
+			}
+
+		case "jobRunnerTokens":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerTokenClient{config: jr.config}).Query()
+			)
+			args := newJobRunnerTokenPaginateArgs(fieldArgs(ctx, new(JobRunnerTokenWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newJobRunnerTokenPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					jr.loadTotal = append(jr.loadTotal, func(ctx context.Context, nodes []*JobRunner) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"job_runner_job_runner_tokens"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(jobrunner.JobRunnerTokensColumn), ids...))
+						})
+						if err := query.GroupBy(jobrunner.JobRunnerTokensColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				} else {
+					jr.loadTotal = append(jr.loadTotal, func(_ context.Context, nodes []*JobRunner) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.JobRunnerTokens)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, jobrunnertokenImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(jobrunner.JobRunnerTokensColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			jr.WithNamedJobRunnerTokens(alias, func(wq *JobRunnerTokenQuery) {
+				*wq = *query
+			})
+
+		case "jobRunner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerRegistrationTokenClient{config: jr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerregistrationtokenImplementors)...); err != nil {
+				return err
+			}
+			jr.withJobRunner = query
+		case "createdAt":
+			if _, ok := fieldSeen[jobrunner.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldCreatedAt)
+				fieldSeen[jobrunner.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[jobrunner.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldUpdatedAt)
+				fieldSeen[jobrunner.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[jobrunner.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldCreatedBy)
+				fieldSeen[jobrunner.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[jobrunner.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldUpdatedBy)
+				fieldSeen[jobrunner.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[jobrunner.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldDeletedAt)
+				fieldSeen[jobrunner.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[jobrunner.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldDeletedBy)
+				fieldSeen[jobrunner.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[jobrunner.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldDisplayID)
+				fieldSeen[jobrunner.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[jobrunner.FieldTags]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldTags)
+				fieldSeen[jobrunner.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[jobrunner.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldOwnerID)
+				fieldSeen[jobrunner.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[jobrunner.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldSystemOwned)
+				fieldSeen[jobrunner.FieldSystemOwned] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[jobrunner.FieldName]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldName)
+				fieldSeen[jobrunner.FieldName] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[jobrunner.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldStatus)
+				fieldSeen[jobrunner.FieldStatus] = struct{}{}
+			}
+		case "ipAddress":
+			if _, ok := fieldSeen[jobrunner.FieldIPAddress]; !ok {
+				selectedFields = append(selectedFields, jobrunner.FieldIPAddress)
+				fieldSeen[jobrunner.FieldIPAddress] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		jr.Select(selectedFields...)
+	}
+	return nil
+}
+
+type jobrunnerPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []JobRunnerPaginateOption
+}
+
+func newJobRunnerPaginateArgs(rv map[string]any) *jobrunnerPaginateArgs {
+	args := &jobrunnerPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*JobRunnerOrder:
+			args.opts = append(args.opts, WithJobRunnerOrder(v))
+		case []any:
+			var orders []*JobRunnerOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &JobRunnerOrder{Field: &JobRunnerOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithJobRunnerOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*JobRunnerWhereInput); ok {
+		args.opts = append(args.opts, WithJobRunnerFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (jrh *JobRunnerHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return jrh, nil
+	}
+	if err := jrh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return jrh, nil
+}
+
+func (jrh *JobRunnerHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(jobrunnerhistory.Columns))
+		selectedFields = []string{jobrunnerhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldHistoryTime)
+				fieldSeen[jobrunnerhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldRef)
+				fieldSeen[jobrunnerhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldOperation)
+				fieldSeen[jobrunnerhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldCreatedAt)
+				fieldSeen[jobrunnerhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldUpdatedAt)
+				fieldSeen[jobrunnerhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldCreatedBy)
+				fieldSeen[jobrunnerhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldUpdatedBy)
+				fieldSeen[jobrunnerhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldDeletedAt)
+				fieldSeen[jobrunnerhistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldDeletedBy)
+				fieldSeen[jobrunnerhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldDisplayID)
+				fieldSeen[jobrunnerhistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldTags)
+				fieldSeen[jobrunnerhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldOwnerID)
+				fieldSeen[jobrunnerhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldSystemOwned)
+				fieldSeen[jobrunnerhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldName)
+				fieldSeen[jobrunnerhistory.FieldName] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldStatus)
+				fieldSeen[jobrunnerhistory.FieldStatus] = struct{}{}
+			}
+		case "ipAddress":
+			if _, ok := fieldSeen[jobrunnerhistory.FieldIPAddress]; !ok {
+				selectedFields = append(selectedFields, jobrunnerhistory.FieldIPAddress)
+				fieldSeen[jobrunnerhistory.FieldIPAddress] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		jrh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type jobrunnerhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []JobRunnerHistoryPaginateOption
+}
+
+func newJobRunnerHistoryPaginateArgs(rv map[string]any) *jobrunnerhistoryPaginateArgs {
+	args := &jobrunnerhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &JobRunnerHistoryOrder{Field: &JobRunnerHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithJobRunnerHistoryOrder(order))
+			}
+		case *JobRunnerHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithJobRunnerHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*JobRunnerHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithJobRunnerHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (jrrt *JobRunnerRegistrationTokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerRegistrationTokenQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return jrrt, nil
+	}
+	if err := jrrt.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return jrrt, nil
+}
+
+func (jrrt *JobRunnerRegistrationTokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(jobrunnerregistrationtoken.Columns))
+		selectedFields = []string{jobrunnerregistrationtoken.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: jrrt.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			jrrt.withOwner = query
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldOwnerID)
+				fieldSeen[jobrunnerregistrationtoken.FieldOwnerID] = struct{}{}
+			}
+
+		case "jobRunner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerClient{config: jrrt.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerImplementors)...); err != nil {
+				return err
+			}
+			jrrt.withJobRunner = query
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldJobRunnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldJobRunnerID)
+				fieldSeen[jobrunnerregistrationtoken.FieldJobRunnerID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldCreatedAt)
+				fieldSeen[jobrunnerregistrationtoken.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldUpdatedAt)
+				fieldSeen[jobrunnerregistrationtoken.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldCreatedBy)
+				fieldSeen[jobrunnerregistrationtoken.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldUpdatedBy)
+				fieldSeen[jobrunnerregistrationtoken.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldDeletedAt)
+				fieldSeen[jobrunnerregistrationtoken.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldDeletedBy)
+				fieldSeen[jobrunnerregistrationtoken.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldTags]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldTags)
+				fieldSeen[jobrunnerregistrationtoken.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldOwnerID)
+				fieldSeen[jobrunnerregistrationtoken.FieldOwnerID] = struct{}{}
+			}
+		case "token":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldToken]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldToken)
+				fieldSeen[jobrunnerregistrationtoken.FieldToken] = struct{}{}
+			}
+		case "expiresAt":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldExpiresAt)
+				fieldSeen[jobrunnerregistrationtoken.FieldExpiresAt] = struct{}{}
+			}
+		case "lastUsedAt":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldLastUsedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldLastUsedAt)
+				fieldSeen[jobrunnerregistrationtoken.FieldLastUsedAt] = struct{}{}
+			}
+		case "jobRunnerID":
+			if _, ok := fieldSeen[jobrunnerregistrationtoken.FieldJobRunnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunnerregistrationtoken.FieldJobRunnerID)
+				fieldSeen[jobrunnerregistrationtoken.FieldJobRunnerID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		jrrt.Select(selectedFields...)
+	}
+	return nil
+}
+
+type jobrunnerregistrationtokenPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []JobRunnerRegistrationTokenPaginateOption
+}
+
+func newJobRunnerRegistrationTokenPaginateArgs(rv map[string]any) *jobrunnerregistrationtokenPaginateArgs {
+	args := &jobrunnerregistrationtokenPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*JobRunnerRegistrationTokenOrder:
+			args.opts = append(args.opts, WithJobRunnerRegistrationTokenOrder(v))
+		case []any:
+			var orders []*JobRunnerRegistrationTokenOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &JobRunnerRegistrationTokenOrder{Field: &JobRunnerRegistrationTokenOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithJobRunnerRegistrationTokenOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*JobRunnerRegistrationTokenWhereInput); ok {
+		args.opts = append(args.opts, WithJobRunnerRegistrationTokenFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (jrt *JobRunnerTokenQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerTokenQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return jrt, nil
+	}
+	if err := jrt.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return jrt, nil
+}
+
+func (jrt *JobRunnerTokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(jobrunnertoken.Columns))
+		selectedFields = []string{jobrunnertoken.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: jrt.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			jrt.withOwner = query
+			if _, ok := fieldSeen[jobrunnertoken.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldOwnerID)
+				fieldSeen[jobrunnertoken.FieldOwnerID] = struct{}{}
+			}
+
+		case "jobRunner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerClient{config: jrt.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerImplementors)...); err != nil {
+				return err
+			}
+			jrt.withJobRunner = query
+			if _, ok := fieldSeen[jobrunnertoken.FieldJobRunnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldJobRunnerID)
+				fieldSeen[jobrunnertoken.FieldJobRunnerID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[jobrunnertoken.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldCreatedAt)
+				fieldSeen[jobrunnertoken.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[jobrunnertoken.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldUpdatedAt)
+				fieldSeen[jobrunnertoken.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[jobrunnertoken.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldCreatedBy)
+				fieldSeen[jobrunnertoken.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[jobrunnertoken.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldUpdatedBy)
+				fieldSeen[jobrunnertoken.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[jobrunnertoken.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldDeletedAt)
+				fieldSeen[jobrunnertoken.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[jobrunnertoken.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldDeletedBy)
+				fieldSeen[jobrunnertoken.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[jobrunnertoken.FieldTags]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldTags)
+				fieldSeen[jobrunnertoken.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[jobrunnertoken.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldOwnerID)
+				fieldSeen[jobrunnertoken.FieldOwnerID] = struct{}{}
+			}
+		case "jobRunnerID":
+			if _, ok := fieldSeen[jobrunnertoken.FieldJobRunnerID]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldJobRunnerID)
+				fieldSeen[jobrunnertoken.FieldJobRunnerID] = struct{}{}
+			}
+		case "token":
+			if _, ok := fieldSeen[jobrunnertoken.FieldToken]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldToken)
+				fieldSeen[jobrunnertoken.FieldToken] = struct{}{}
+			}
+		case "expiresAt":
+			if _, ok := fieldSeen[jobrunnertoken.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldExpiresAt)
+				fieldSeen[jobrunnertoken.FieldExpiresAt] = struct{}{}
+			}
+		case "lastUsedAt":
+			if _, ok := fieldSeen[jobrunnertoken.FieldLastUsedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldLastUsedAt)
+				fieldSeen[jobrunnertoken.FieldLastUsedAt] = struct{}{}
+			}
+		case "isActive":
+			if _, ok := fieldSeen[jobrunnertoken.FieldIsActive]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldIsActive)
+				fieldSeen[jobrunnertoken.FieldIsActive] = struct{}{}
+			}
+		case "revokedReason":
+			if _, ok := fieldSeen[jobrunnertoken.FieldRevokedReason]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldRevokedReason)
+				fieldSeen[jobrunnertoken.FieldRevokedReason] = struct{}{}
+			}
+		case "revokedBy":
+			if _, ok := fieldSeen[jobrunnertoken.FieldRevokedBy]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldRevokedBy)
+				fieldSeen[jobrunnertoken.FieldRevokedBy] = struct{}{}
+			}
+		case "revokedAt":
+			if _, ok := fieldSeen[jobrunnertoken.FieldRevokedAt]; !ok {
+				selectedFields = append(selectedFields, jobrunnertoken.FieldRevokedAt)
+				fieldSeen[jobrunnertoken.FieldRevokedAt] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		jrt.Select(selectedFields...)
+	}
+	return nil
+}
+
+type jobrunnertokenPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []JobRunnerTokenPaginateOption
+}
+
+func newJobRunnerTokenPaginateArgs(rv map[string]any) *jobrunnertokenPaginateArgs {
+	args := &jobrunnertokenPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*JobRunnerTokenOrder:
+			args.opts = append(args.opts, WithJobRunnerTokenOrder(v))
+		case []any:
+			var orders []*JobRunnerTokenOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &JobRunnerTokenOrder{Field: &JobRunnerTokenOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithJobRunnerTokenOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*JobRunnerTokenWhereInput); ok {
+		args.opts = append(args.opts, WithJobRunnerTokenFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (md *MappableDomainQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappableDomainQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -20235,6 +21053,273 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "jobRunners":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerClient{config: o.config}).Query()
+			)
+			args := newJobRunnerPaginateArgs(fieldArgs(ctx, new(JobRunnerWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newJobRunnerPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.JobRunnersColumn), ids...))
+						})
+						if err := query.GroupBy(organization.JobRunnersColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[44] == nil {
+								nodes[i].Edges.totalCount[44] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[44][alias] = n
+						}
+						return nil
+					})
+				} else {
+					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.JobRunners)
+							if nodes[i].Edges.totalCount[44] == nil {
+								nodes[i].Edges.totalCount[44] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[44][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, jobrunnerImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.JobRunnersColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			o.WithNamedJobRunners(alias, func(wq *JobRunnerQuery) {
+				*wq = *query
+			})
+
+		case "jobRunnerTokens":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerTokenClient{config: o.config}).Query()
+			)
+			args := newJobRunnerTokenPaginateArgs(fieldArgs(ctx, new(JobRunnerTokenWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newJobRunnerTokenPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.JobRunnerTokensColumn), ids...))
+						})
+						if err := query.GroupBy(organization.JobRunnerTokensColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[45] == nil {
+								nodes[i].Edges.totalCount[45] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[45][alias] = n
+						}
+						return nil
+					})
+				} else {
+					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.JobRunnerTokens)
+							if nodes[i].Edges.totalCount[45] == nil {
+								nodes[i].Edges.totalCount[45] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[45][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, jobrunnertokenImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.JobRunnerTokensColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			o.WithNamedJobRunnerTokens(alias, func(wq *JobRunnerTokenQuery) {
+				*wq = *query
+			})
+
+		case "jobRunnerRegistrationTokens":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerRegistrationTokenClient{config: o.config}).Query()
+			)
+			args := newJobRunnerRegistrationTokenPaginateArgs(fieldArgs(ctx, new(JobRunnerRegistrationTokenWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newJobRunnerRegistrationTokenPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.JobRunnerRegistrationTokensColumn), ids...))
+						})
+						if err := query.GroupBy(organization.JobRunnerRegistrationTokensColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[46] == nil {
+								nodes[i].Edges.totalCount[46] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[46][alias] = n
+						}
+						return nil
+					})
+				} else {
+					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.JobRunnerRegistrationTokens)
+							if nodes[i].Edges.totalCount[46] == nil {
+								nodes[i].Edges.totalCount[46] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[46][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, jobrunnerregistrationtokenImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.JobRunnerRegistrationTokensColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			o.WithNamedJobRunnerRegistrationTokens(alias, func(wq *JobRunnerRegistrationTokenQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -20278,10 +21363,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[44] == nil {
-								nodes[i].Edges.totalCount[44] = make(map[string]int)
+							if nodes[i].Edges.totalCount[47] == nil {
+								nodes[i].Edges.totalCount[47] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[44][alias] = n
+							nodes[i].Edges.totalCount[47][alias] = n
 						}
 						return nil
 					})
@@ -20289,10 +21374,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[44] == nil {
-								nodes[i].Edges.totalCount[44] = make(map[string]int)
+							if nodes[i].Edges.totalCount[47] == nil {
+								nodes[i].Edges.totalCount[47] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[44][alias] = n
+							nodes[i].Edges.totalCount[47][alias] = n
 						}
 						return nil
 					})

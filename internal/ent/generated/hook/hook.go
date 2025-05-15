@@ -477,6 +477,54 @@ func (f InviteFunc) Mutate(ctx context.Context, m generated.Mutation) (generated
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.InviteMutation", m)
 }
 
+// The JobRunnerFunc type is an adapter to allow the use of ordinary
+// function as JobRunner mutator.
+type JobRunnerFunc func(context.Context, *generated.JobRunnerMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobRunnerFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobRunnerMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobRunnerMutation", m)
+}
+
+// The JobRunnerHistoryFunc type is an adapter to allow the use of ordinary
+// function as JobRunnerHistory mutator.
+type JobRunnerHistoryFunc func(context.Context, *generated.JobRunnerHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobRunnerHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobRunnerHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobRunnerHistoryMutation", m)
+}
+
+// The JobRunnerRegistrationTokenFunc type is an adapter to allow the use of ordinary
+// function as JobRunnerRegistrationToken mutator.
+type JobRunnerRegistrationTokenFunc func(context.Context, *generated.JobRunnerRegistrationTokenMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobRunnerRegistrationTokenFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobRunnerRegistrationTokenMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobRunnerRegistrationTokenMutation", m)
+}
+
+// The JobRunnerTokenFunc type is an adapter to allow the use of ordinary
+// function as JobRunnerToken mutator.
+type JobRunnerTokenFunc func(context.Context, *generated.JobRunnerTokenMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobRunnerTokenFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobRunnerTokenMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobRunnerTokenMutation", m)
+}
+
 // The MappableDomainFunc type is an adapter to allow the use of ordinary
 // function as MappableDomain mutator.
 type MappableDomainFunc func(context.Context, *generated.MappableDomainMutation) (generated.Value, error)

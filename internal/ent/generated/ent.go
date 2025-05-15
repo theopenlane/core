@@ -51,6 +51,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -192,6 +196,10 @@ func checkColumn(table, column string) error {
 			internalpolicy.Table:               internalpolicy.ValidColumn,
 			internalpolicyhistory.Table:        internalpolicyhistory.ValidColumn,
 			invite.Table:                       invite.ValidColumn,
+			jobrunner.Table:                    jobrunner.ValidColumn,
+			jobrunnerhistory.Table:             jobrunnerhistory.ValidColumn,
+			jobrunnerregistrationtoken.Table:   jobrunnerregistrationtoken.ValidColumn,
+			jobrunnertoken.Table:               jobrunnertoken.ValidColumn,
 			mappabledomain.Table:               mappabledomain.ValidColumn,
 			mappabledomainhistory.Table:        mappabledomainhistory.ValidColumn,
 			mappedcontrol.Table:                mappedcontrol.ValidColumn,

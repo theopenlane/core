@@ -1,0 +1,75 @@
+extend type Query {
+    """
+    Look up jobRunnerToken by ID
+    """
+     jobRunnerToken(
+        """
+        ID of the jobRunnerToken
+        """
+        id: ID!
+    ):  JobRunnerToken!
+}
+
+extend type Mutation{
+    """
+    Create a new jobRunnerToken
+    """
+    createJobRunnerToken(
+        """
+        values of the jobRunnerToken
+        """
+        input: CreateJobRunnerTokenInput!
+    ): JobRunnerTokenCreatePayload!
+    """
+    Update an existing jobRunnerToken
+    """
+    updateJobRunnerToken(
+        """
+        ID of the jobRunnerToken
+        """
+        id: ID!
+        """
+        New values for the jobRunnerToken
+        """
+        input: UpdateJobRunnerTokenInput!
+    ): JobRunnerTokenUpdatePayload!
+    """
+    Delete an existing jobRunnerToken
+    """
+    deleteJobRunnerToken(
+        """
+        ID of the jobRunnerToken
+        """
+        id: ID!
+    ): JobRunnerTokenDeletePayload!
+}
+
+"""
+Return response for createJobRunnerToken mutation
+"""
+type JobRunnerTokenCreatePayload {
+    """
+    Created jobRunnerToken
+    """
+    jobRunnerToken: JobRunnerToken!
+}
+
+"""
+Return response for updateJobRunnerToken mutation
+"""
+type JobRunnerTokenUpdatePayload {
+    """
+    Updated jobRunnerToken
+    """
+    jobRunnerToken: JobRunnerToken!
+}
+
+"""
+Return response for deleteJobRunnerToken mutation
+"""
+type JobRunnerTokenDeletePayload {
+    """
+    Deleted jobRunnerToken ID
+    """
+    deletedID: ID!
+}
