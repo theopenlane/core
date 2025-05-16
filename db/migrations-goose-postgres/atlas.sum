@@ -1,4 +1,4 @@
-h1:h19usT44fXzWshqPwGMIzSGDeqT66ASl1iSyqJPzZUw=
+h1:IlUHoIYQITTmcBrT4flfTtPzvs6/hu7px5wZlaOwFEw=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -9,3 +9,4 @@ h1:h19usT44fXzWshqPwGMIzSGDeqT66ASl1iSyqJPzZUw=
 20250428050151_allow_for_multiple_passkeys.sql h1:oUxHge7l47VzsqNqsqF1wqPoXOvE4yhJEN6VU3JMsHo=
 20250505171149_add_summary.sql h1:GQGxTPwf076mWg+NgMWrwBubnqKSzNAvGnrW6AS5u/g=
 20250505192111_create_custom_domain_tables.sql h1:11M+sKKWQAuqckgFDm96a64sOkQNPjT2zUpEPUQEfoc=
+20250515194418_control_status.sql h1:7kSi5ULlVVj7EWsDwZ/wm3sVnq/JOK91LmK0N0Q1C08=

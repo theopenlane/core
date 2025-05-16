@@ -9,6 +9,8 @@ import (
 type ControlStatus string
 
 var (
+	// ControlStatusNotImplemented indicates that this control has not yet been worked on, this is the default value
+	ControlStatusNotImplemented ControlStatus = "NOT_IMPLEMENTED"
 	// ControlStatusPreparing indicates the control is being prepared
 	ControlStatusPreparing ControlStatus = "PREPARING"
 	// ControlStatusNeedsApproval indicates the control needs to be approved before it is available
@@ -19,14 +21,12 @@ var (
 	ControlStatusApproved ControlStatus = "APPROVED"
 	// ControlStatusArchived indicates the control is now archived
 	ControlStatusArchived ControlStatus = "ARCHIVED"
-	// ControlStatusNull indicates that this control status does not exists and is also not invalid
-	ControlStatusNull ControlStatus = "NULL"
 	// ControlStatusInvalid indicates the control is invalid or unknown
 	ControlStatusInvalid ControlStatus = "CONTROL_STATUS_INVALID"
 )
 
 // Values returns a slice of strings that represents all the possible values of the ControlType enum.
-// Possible default values are "PREPARING", "NEEDS APPROVAL", "CHANGES REQUESTED",
+// Possible default values are "NOT_IMPLEMENTED", "PREPARING", "NEEDS APPROVAL", "CHANGES REQUESTED",
 // "APPROVED" and "ARCHIVED".
 func (ControlStatus) Values() (kinds []string) {
 	for _, s := range []ControlStatus{
@@ -35,7 +35,7 @@ func (ControlStatus) Values() (kinds []string) {
 		ControlStatusChangesRequested,
 		ControlStatusApproved,
 		ControlStatusArchived,
-		ControlStatusNull,
+		ControlStatusNotImplemented,
 	} {
 		kinds = append(kinds, string(s))
 	}
@@ -51,8 +51,8 @@ func (r ControlStatus) String() string {
 // ToControlStatus returns the control type enum based on string input
 func ToControlStatus(r string) *ControlStatus {
 	switch r := strings.ToUpper(r); r {
-	case "", ControlStatusNull.String():
-		return &ControlStatusNull
+	case "", ControlStatusNotImplemented.String():
+		return &ControlStatusNotImplemented
 	case ControlStatusPreparing.String():
 		return &ControlStatusPreparing
 	case ControlStatusNeedsApproval.String():
