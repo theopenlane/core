@@ -1869,8 +1869,6 @@ var (
 		{Name: "revoked_reason", Type: field.TypeString, Nullable: true},
 		{Name: "revoked_by", Type: field.TypeString, Nullable: true},
 		{Name: "revoked_at", Type: field.TypeTime, Nullable: true},
-		{Name: "job_runner_job_runner_tokens", Type: field.TypeString, Nullable: true},
-		{Name: "job_runner_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// JobRunnerTokensTable holds the schema information for the "job_runner_tokens" table.
@@ -1880,20 +1878,8 @@ var (
 		PrimaryKey: []*schema.Column{JobRunnerTokensColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "job_runner_tokens_job_runners_job_runner_tokens",
-				Columns:    []*schema.Column{JobRunnerTokensColumns[15]},
-				RefColumns: []*schema.Column{JobRunnersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "job_runner_tokens_job_runners_job_runner",
-				Columns:    []*schema.Column{JobRunnerTokensColumns[16]},
-				RefColumns: []*schema.Column{JobRunnersColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
 				Symbol:     "job_runner_tokens_organizations_job_runner_tokens",
-				Columns:    []*schema.Column{JobRunnerTokensColumns[17]},
+				Columns:    []*schema.Column{JobRunnerTokensColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4817,6 +4803,31 @@ var (
 			},
 		},
 	}
+	// JobRunnerJobRunnerTokensColumns holds the columns for the "job_runner_job_runner_tokens" table.
+	JobRunnerJobRunnerTokensColumns = []*schema.Column{
+		{Name: "job_runner_id", Type: field.TypeString},
+		{Name: "job_runner_token_id", Type: field.TypeString},
+	}
+	// JobRunnerJobRunnerTokensTable holds the schema information for the "job_runner_job_runner_tokens" table.
+	JobRunnerJobRunnerTokensTable = &schema.Table{
+		Name:       "job_runner_job_runner_tokens",
+		Columns:    JobRunnerJobRunnerTokensColumns,
+		PrimaryKey: []*schema.Column{JobRunnerJobRunnerTokensColumns[0], JobRunnerJobRunnerTokensColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "job_runner_job_runner_tokens_job_runner_id",
+				Columns:    []*schema.Column{JobRunnerJobRunnerTokensColumns[0]},
+				RefColumns: []*schema.Column{JobRunnersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "job_runner_job_runner_tokens_job_runner_token_id",
+				Columns:    []*schema.Column{JobRunnerJobRunnerTokensColumns[1]},
+				RefColumns: []*schema.Column{JobRunnerTokensColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// MappedControlControlsColumns holds the columns for the "mapped_control_controls" table.
 	MappedControlControlsColumns = []*schema.Column{
 		{Name: "mapped_control_id", Type: field.TypeString},
@@ -6095,6 +6106,7 @@ var (
 		InternalPolicyTasksTable,
 		InternalPolicyRisksTable,
 		InviteEventsTable,
+		JobRunnerJobRunnerTokensTable,
 		MappedControlControlsTable,
 		MappedControlSubcontrolsTable,
 		NarrativeBlockedGroupsTable,
@@ -6250,9 +6262,7 @@ func init() {
 	}
 	JobRunnerRegistrationTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
 	JobRunnerRegistrationTokensTable.ForeignKeys[1].RefTable = OrganizationsTable
-	JobRunnerTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
-	JobRunnerTokensTable.ForeignKeys[1].RefTable = JobRunnersTable
-	JobRunnerTokensTable.ForeignKeys[2].RefTable = OrganizationsTable
+	JobRunnerTokensTable.ForeignKeys[0].RefTable = OrganizationsTable
 	MappableDomainHistoryTable.Annotation = &entsql.Annotation{
 		Table: "mappable_domain_history",
 	}
@@ -6434,6 +6444,8 @@ func init() {
 	InternalPolicyRisksTable.ForeignKeys[1].RefTable = RisksTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
+	JobRunnerJobRunnerTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
+	JobRunnerJobRunnerTokensTable.ForeignKeys[1].RefTable = JobRunnerTokensTable
 	MappedControlControlsTable.ForeignKeys[0].RefTable = MappedControlsTable
 	MappedControlControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	MappedControlSubcontrolsTable.ForeignKeys[0].RefTable = MappedControlsTable

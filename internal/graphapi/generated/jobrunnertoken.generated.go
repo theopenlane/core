@@ -86,8 +86,6 @@ func (ec *executionContext) fieldContext_JobRunnerTokenCreatePayload_jobRunnerTo
 				return ec.fieldContext_JobRunnerToken_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_JobRunnerToken_ownerID(ctx, field)
-			case "jobRunnerID":
-				return ec.fieldContext_JobRunnerToken_jobRunnerID(ctx, field)
 			case "token":
 				return ec.fieldContext_JobRunnerToken_token(ctx, field)
 			case "expiresAt":
@@ -104,8 +102,8 @@ func (ec *executionContext) fieldContext_JobRunnerTokenCreatePayload_jobRunnerTo
 				return ec.fieldContext_JobRunnerToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobRunnerToken_owner(ctx, field)
-			case "jobRunner":
-				return ec.fieldContext_JobRunnerToken_jobRunner(ctx, field)
+			case "jobRunners":
+				return ec.fieldContext_JobRunnerToken_jobRunners(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobRunnerToken", field.Name)
 		},
@@ -214,8 +212,6 @@ func (ec *executionContext) fieldContext_JobRunnerTokenUpdatePayload_jobRunnerTo
 				return ec.fieldContext_JobRunnerToken_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_JobRunnerToken_ownerID(ctx, field)
-			case "jobRunnerID":
-				return ec.fieldContext_JobRunnerToken_jobRunnerID(ctx, field)
 			case "token":
 				return ec.fieldContext_JobRunnerToken_token(ctx, field)
 			case "expiresAt":
@@ -232,8 +228,8 @@ func (ec *executionContext) fieldContext_JobRunnerTokenUpdatePayload_jobRunnerTo
 				return ec.fieldContext_JobRunnerToken_revokedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobRunnerToken_owner(ctx, field)
-			case "jobRunner":
-				return ec.fieldContext_JobRunnerToken_jobRunner(ctx, field)
+			case "jobRunners":
+				return ec.fieldContext_JobRunnerToken_jobRunners(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobRunnerToken", field.Name)
 		},
@@ -400,20 +396,6 @@ func (ec *executionContext) marshalNJobRunnerTokenDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._JobRunnerTokenDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNJobRunnerTokenUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerTokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.JobRunnerTokenUpdatePayload) graphql.Marshaler {
-	return ec._JobRunnerTokenUpdatePayload(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNJobRunnerTokenUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerTokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.JobRunnerTokenUpdatePayload) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._JobRunnerTokenUpdatePayload(ctx, sel, v)
 }
 
 // endregion ***************************** type.gotpl *****************************

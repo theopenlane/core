@@ -33,33 +33,6 @@ func (r *mutationResolver) CreateJobRunnerRegistrationToken(ctx context.Context,
 	}, nil
 }
 
-// UpdateJobRunnerRegistrationToken is the resolver for the updateJobRunnerRegistrationToken field.
-func (r *mutationResolver) UpdateJobRunnerRegistrationToken(ctx context.Context, id string, input generated.UpdateJobRunnerRegistrationTokenInput) (*model.JobRunnerRegistrationTokenUpdatePayload, error) {
-	res, err := withTransactionalMutation(ctx).JobRunnerRegistrationToken.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "jobrunnerregistrationtoken"})
-	}
-
-	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "jobrunnerregistrationtoken"})
-	}
-
-	return &model.JobRunnerRegistrationTokenUpdatePayload{
-		JobRunnerRegistrationToken: res,
-	}, nil
-}
-
 // DeleteJobRunnerRegistrationToken is the resolver for the deleteJobRunnerRegistrationToken field.
 func (r *mutationResolver) DeleteJobRunnerRegistrationToken(ctx context.Context, id string) (*model.JobRunnerRegistrationTokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).JobRunnerRegistrationToken.DeleteOneID(id).Exec(ctx); err != nil {

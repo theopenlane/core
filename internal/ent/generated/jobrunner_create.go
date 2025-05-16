@@ -413,16 +413,16 @@ func (jrc *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 	}
 	if nodes := jrc.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   jobrunner.JobRunnerTokensTable,
-			Columns: []string{jobrunner.JobRunnerTokensColumn},
+			Columns: jobrunner.JobRunnerTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrc.schemaConfig.JobRunnerToken
+		edge.Schema = jrc.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

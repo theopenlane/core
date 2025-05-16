@@ -1253,12 +1253,11 @@ func (j *JobRunnerTokenBuilder) MustNew(ctx context.Context, t *testing.T) *gene
 
 	jobRunner := (&JobRunnerBuilder{client: j.client}).MustNew(ctx, t)
 
-	if j.JobRunnerID == "" {
-		j.JobRunnerID = jobRunner.ID
-	}
+	create := j.client.db.JobRunnerToken.Create()
 
-	create := j.client.db.JobRunnerToken.Create().
-		SetJobRunnerID(j.JobRunnerID)
+	if j.JobRunnerID == "" {
+		create.AddJobRunnerIDs(jobRunner.ID)
+	}
 
 	if j.ExpiresAt != nil {
 		create.SetExpiresAt(*j.ExpiresAt)

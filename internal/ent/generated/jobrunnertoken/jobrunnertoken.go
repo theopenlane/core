@@ -31,8 +31,6 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// FieldJobRunnerID holds the string denoting the job_runner_id field in the database.
-	FieldJobRunnerID = "job_runner_id"
 	// FieldToken holds the string denoting the token field in the database.
 	FieldToken = "token"
 	// FieldExpiresAt holds the string denoting the expires_at field in the database.
@@ -49,8 +47,8 @@ const (
 	FieldRevokedAt = "revoked_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeJobRunner holds the string denoting the job_runner edge name in mutations.
-	EdgeJobRunner = "job_runner"
+	// EdgeJobRunners holds the string denoting the job_runners edge name in mutations.
+	EdgeJobRunners = "job_runners"
 	// Table holds the table name of the jobrunnertoken in the database.
 	Table = "job_runner_tokens"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -60,13 +58,11 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// JobRunnerTable is the table that holds the job_runner relation/edge.
-	JobRunnerTable = "job_runner_tokens"
-	// JobRunnerInverseTable is the table name for the JobRunner entity.
+	// JobRunnersTable is the table that holds the job_runners relation/edge. The primary key declared below.
+	JobRunnersTable = "job_runner_job_runner_tokens"
+	// JobRunnersInverseTable is the table name for the JobRunner entity.
 	// It exists in this package in order to avoid circular dependency with the "jobrunner" package.
-	JobRunnerInverseTable = "job_runners"
-	// JobRunnerColumn is the table column denoting the job_runner relation/edge.
-	JobRunnerColumn = "job_runner_id"
+	JobRunnersInverseTable = "job_runners"
 )
 
 // Columns holds all SQL columns for jobrunnertoken fields.
@@ -80,7 +76,6 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
-	FieldJobRunnerID,
 	FieldToken,
 	FieldExpiresAt,
 	FieldLastUsedAt,
@@ -90,21 +85,16 @@ var Columns = []string{
 	FieldRevokedAt,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "job_runner_tokens"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"job_runner_job_runner_tokens",
-}
+var (
+	// JobRunnersPrimaryKey and JobRunnersColumn2 are the table columns denoting the
+	// primary key for the job_runners relation (M2M).
+	JobRunnersPrimaryKey = []string{"job_runner_id", "job_runner_token_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -181,11 +171,6 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
-// ByJobRunnerID orders the results by the job_runner_id field.
-func ByJobRunnerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldJobRunnerID, opts...).ToFunc()
-}
-
 // ByToken orders the results by the token field.
 func ByToken(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldToken, opts...).ToFunc()
@@ -228,10 +213,17 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByJobRunnerField orders the results by job_runner field.
-func ByJobRunnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByJobRunnersCount orders the results by job_runners count.
+func ByJobRunnersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobRunnerStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newJobRunnersStep(), opts...)
+	}
+}
+
+// ByJobRunners orders the results by job_runners terms.
+func ByJobRunners(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobRunnersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -241,10 +233,10 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-func newJobRunnerStep() *sqlgraph.Step {
+func newJobRunnersStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobRunnerInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, JobRunnerTable, JobRunnerColumn),
+		sqlgraph.To(JobRunnersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, JobRunnersTable, JobRunnersPrimaryKey...),
 	)
 }

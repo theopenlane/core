@@ -1339,7 +1339,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunnertoken.FieldDeletedBy:     {Type: field.TypeString, Column: jobrunnertoken.FieldDeletedBy},
 			jobrunnertoken.FieldTags:          {Type: field.TypeJSON, Column: jobrunnertoken.FieldTags},
 			jobrunnertoken.FieldOwnerID:       {Type: field.TypeString, Column: jobrunnertoken.FieldOwnerID},
-			jobrunnertoken.FieldJobRunnerID:   {Type: field.TypeString, Column: jobrunnertoken.FieldJobRunnerID},
 			jobrunnertoken.FieldToken:         {Type: field.TypeString, Column: jobrunnertoken.FieldToken},
 			jobrunnertoken.FieldExpiresAt:     {Type: field.TypeTime, Column: jobrunnertoken.FieldExpiresAt},
 			jobrunnertoken.FieldLastUsedAt:    {Type: field.TypeTime, Column: jobrunnertoken.FieldLastUsedAt},
@@ -4372,10 +4371,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"job_runner_tokens",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   jobrunner.JobRunnerTokensTable,
-			Columns: []string{jobrunner.JobRunnerTokensColumn},
+			Columns: jobrunner.JobRunnerTokensPrimaryKey,
 			Bidi:    false,
 		},
 		"JobRunner",
@@ -4418,12 +4417,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"job_runner",
+		"job_runners",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   jobrunnertoken.JobRunnerTable,
-			Columns: []string{jobrunnertoken.JobRunnerColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   jobrunnertoken.JobRunnersTable,
+			Columns: jobrunnertoken.JobRunnersPrimaryKey,
 			Bidi:    false,
 		},
 		"JobRunnerToken",
@@ -13771,11 +13770,6 @@ func (f *JobRunnerTokenFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(jobrunnertoken.FieldOwnerID))
 }
 
-// WhereJobRunnerID applies the entql string predicate on the job_runner_id field.
-func (f *JobRunnerTokenFilter) WhereJobRunnerID(p entql.StringP) {
-	f.Where(p.Field(jobrunnertoken.FieldJobRunnerID))
-}
-
 // WhereToken applies the entql string predicate on the token field.
 func (f *JobRunnerTokenFilter) WhereToken(p entql.StringP) {
 	f.Where(p.Field(jobrunnertoken.FieldToken))
@@ -13825,14 +13819,14 @@ func (f *JobRunnerTokenFilter) WhereHasOwnerWith(preds ...predicate.Organization
 	})))
 }
 
-// WhereHasJobRunner applies a predicate to check if query has an edge job_runner.
-func (f *JobRunnerTokenFilter) WhereHasJobRunner() {
-	f.Where(entql.HasEdge("job_runner"))
+// WhereHasJobRunners applies a predicate to check if query has an edge job_runners.
+func (f *JobRunnerTokenFilter) WhereHasJobRunners() {
+	f.Where(entql.HasEdge("job_runners"))
 }
 
-// WhereHasJobRunnerWith applies a predicate to check if query has an edge job_runner with a given conditions (other predicates).
-func (f *JobRunnerTokenFilter) WhereHasJobRunnerWith(preds ...predicate.JobRunner) {
-	f.Where(entql.HasEdgeWith("job_runner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasJobRunnersWith applies a predicate to check if query has an edge job_runners with a given conditions (other predicates).
+func (f *JobRunnerTokenFilter) WhereHasJobRunnersWith(preds ...predicate.JobRunner) {
+	f.Where(entql.HasEdgeWith("job_runners", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

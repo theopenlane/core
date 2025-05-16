@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -23,15 +24,15 @@ import (
 // JobRunnerTokenQuery is the builder for querying JobRunnerToken entities.
 type JobRunnerTokenQuery struct {
 	config
-	ctx           *QueryContext
-	order         []jobrunnertoken.OrderOption
-	inters        []Interceptor
-	predicates    []predicate.JobRunnerToken
-	withOwner     *OrganizationQuery
-	withJobRunner *JobRunnerQuery
-	withFKs       bool
-	loadTotal     []func(context.Context, []*JobRunnerToken) error
-	modifiers     []func(*sql.Selector)
+	ctx                 *QueryContext
+	order               []jobrunnertoken.OrderOption
+	inters              []Interceptor
+	predicates          []predicate.JobRunnerToken
+	withOwner           *OrganizationQuery
+	withJobRunners      *JobRunnerQuery
+	loadTotal           []func(context.Context, []*JobRunnerToken) error
+	modifiers           []func(*sql.Selector)
+	withNamedJobRunners map[string]*JobRunnerQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -93,8 +94,8 @@ func (jrtq *JobRunnerTokenQuery) QueryOwner() *OrganizationQuery {
 	return query
 }
 
-// QueryJobRunner chains the current query on the "job_runner" edge.
-func (jrtq *JobRunnerTokenQuery) QueryJobRunner() *JobRunnerQuery {
+// QueryJobRunners chains the current query on the "job_runners" edge.
+func (jrtq *JobRunnerTokenQuery) QueryJobRunners() *JobRunnerQuery {
 	query := (&JobRunnerClient{config: jrtq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := jrtq.prepareQuery(ctx); err != nil {
@@ -107,11 +108,11 @@ func (jrtq *JobRunnerTokenQuery) QueryJobRunner() *JobRunnerQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(jobrunnertoken.Table, jobrunnertoken.FieldID, selector),
 			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, jobrunnertoken.JobRunnerTable, jobrunnertoken.JobRunnerColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, jobrunnertoken.JobRunnersTable, jobrunnertoken.JobRunnersPrimaryKey...),
 		)
 		schemaConfig := jrtq.schemaConfig
 		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunnerToken
+		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		fromU = sqlgraph.SetNeighbors(jrtq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -305,13 +306,13 @@ func (jrtq *JobRunnerTokenQuery) Clone() *JobRunnerTokenQuery {
 		return nil
 	}
 	return &JobRunnerTokenQuery{
-		config:        jrtq.config,
-		ctx:           jrtq.ctx.Clone(),
-		order:         append([]jobrunnertoken.OrderOption{}, jrtq.order...),
-		inters:        append([]Interceptor{}, jrtq.inters...),
-		predicates:    append([]predicate.JobRunnerToken{}, jrtq.predicates...),
-		withOwner:     jrtq.withOwner.Clone(),
-		withJobRunner: jrtq.withJobRunner.Clone(),
+		config:         jrtq.config,
+		ctx:            jrtq.ctx.Clone(),
+		order:          append([]jobrunnertoken.OrderOption{}, jrtq.order...),
+		inters:         append([]Interceptor{}, jrtq.inters...),
+		predicates:     append([]predicate.JobRunnerToken{}, jrtq.predicates...),
+		withOwner:      jrtq.withOwner.Clone(),
+		withJobRunners: jrtq.withJobRunners.Clone(),
 		// clone intermediate query.
 		sql:       jrtq.sql.Clone(),
 		path:      jrtq.path,
@@ -330,14 +331,14 @@ func (jrtq *JobRunnerTokenQuery) WithOwner(opts ...func(*OrganizationQuery)) *Jo
 	return jrtq
 }
 
-// WithJobRunner tells the query-builder to eager-load the nodes that are connected to
-// the "job_runner" edge. The optional arguments are used to configure the query builder of the edge.
-func (jrtq *JobRunnerTokenQuery) WithJobRunner(opts ...func(*JobRunnerQuery)) *JobRunnerTokenQuery {
+// WithJobRunners tells the query-builder to eager-load the nodes that are connected to
+// the "job_runners" edge. The optional arguments are used to configure the query builder of the edge.
+func (jrtq *JobRunnerTokenQuery) WithJobRunners(opts ...func(*JobRunnerQuery)) *JobRunnerTokenQuery {
 	query := (&JobRunnerClient{config: jrtq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	jrtq.withJobRunner = query
+	jrtq.withJobRunners = query
 	return jrtq
 }
 
@@ -424,16 +425,12 @@ func (jrtq *JobRunnerTokenQuery) prepareQuery(ctx context.Context) error {
 func (jrtq *JobRunnerTokenQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*JobRunnerToken, error) {
 	var (
 		nodes       = []*JobRunnerToken{}
-		withFKs     = jrtq.withFKs
 		_spec       = jrtq.querySpec()
 		loadedTypes = [2]bool{
 			jrtq.withOwner != nil,
-			jrtq.withJobRunner != nil,
+			jrtq.withJobRunners != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, jobrunnertoken.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*JobRunnerToken).scanValues(nil, columns)
 	}
@@ -463,9 +460,17 @@ func (jrtq *JobRunnerTokenQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			return nil, err
 		}
 	}
-	if query := jrtq.withJobRunner; query != nil {
-		if err := jrtq.loadJobRunner(ctx, query, nodes, nil,
-			func(n *JobRunnerToken, e *JobRunner) { n.Edges.JobRunner = e }); err != nil {
+	if query := jrtq.withJobRunners; query != nil {
+		if err := jrtq.loadJobRunners(ctx, query, nodes,
+			func(n *JobRunnerToken) { n.Edges.JobRunners = []*JobRunner{} },
+			func(n *JobRunnerToken, e *JobRunner) { n.Edges.JobRunners = append(n.Edges.JobRunners, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range jrtq.withNamedJobRunners {
+		if err := jrtq.loadJobRunners(ctx, query, nodes,
+			func(n *JobRunnerToken) { n.appendNamedJobRunners(name) },
+			func(n *JobRunnerToken, e *JobRunner) { n.appendNamedJobRunners(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -506,31 +511,64 @@ func (jrtq *JobRunnerTokenQuery) loadOwner(ctx context.Context, query *Organizat
 	}
 	return nil
 }
-func (jrtq *JobRunnerTokenQuery) loadJobRunner(ctx context.Context, query *JobRunnerQuery, nodes []*JobRunnerToken, init func(*JobRunnerToken), assign func(*JobRunnerToken, *JobRunner)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*JobRunnerToken)
-	for i := range nodes {
-		fk := nodes[i].JobRunnerID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
+func (jrtq *JobRunnerTokenQuery) loadJobRunners(ctx context.Context, query *JobRunnerQuery, nodes []*JobRunnerToken, init func(*JobRunnerToken), assign func(*JobRunnerToken, *JobRunner)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*JobRunnerToken)
+	nids := make(map[string]map[*JobRunnerToken]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(jobrunnertoken.JobRunnersTable)
+		joinT.Schema(jrtq.schemaConfig.JobRunnerJobRunnerTokens)
+		s.Join(joinT).On(s.C(jobrunner.FieldID), joinT.C(jobrunnertoken.JobRunnersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(jobrunnertoken.JobRunnersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(jobrunnertoken.JobRunnersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(jobrunner.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*JobRunnerToken]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*JobRunner](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "job_runner_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "job_runners" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -568,9 +606,6 @@ func (jrtq *JobRunnerTokenQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if jrtq.withOwner != nil {
 			_spec.Node.AddColumnOnce(jobrunnertoken.FieldOwnerID)
-		}
-		if jrtq.withJobRunner != nil {
-			_spec.Node.AddColumnOnce(jobrunnertoken.FieldJobRunnerID)
 		}
 	}
 	if ps := jrtq.predicates; len(ps) > 0 {
@@ -638,6 +673,20 @@ func (jrtq *JobRunnerTokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (jrtq *JobRunnerTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *JobRunnerTokenSelect {
 	jrtq.modifiers = append(jrtq.modifiers, modifiers...)
 	return jrtq.Select()
+}
+
+// WithNamedJobRunners tells the query-builder to eager-load the nodes that are connected to the "job_runners"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (jrtq *JobRunnerTokenQuery) WithNamedJobRunners(name string, opts ...func(*JobRunnerQuery)) *JobRunnerTokenQuery {
+	query := (&JobRunnerClient{config: jrtq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if jrtq.withNamedJobRunners == nil {
+		jrtq.withNamedJobRunners = make(map[string]*JobRunnerQuery)
+	}
+	jrtq.withNamedJobRunners[name] = query
+	return jrtq
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs

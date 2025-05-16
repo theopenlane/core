@@ -880,7 +880,6 @@ func adminSearchJobRunnerTokens(ctx context.Context, query string, after *entgql
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				jobrunnertoken.OwnerIDContainsFold(query),       // search by OwnerID
-				jobrunnertoken.JobRunnerIDContainsFold(query),   // search by JobRunnerID
 				jobrunnertoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				jobrunnertoken.RevokedByContainsFold(query),     // search by RevokedBy
 			),

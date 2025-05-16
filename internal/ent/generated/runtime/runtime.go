@@ -2432,11 +2432,11 @@ func init() {
 	// jobrunnertoken.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	jobrunnertoken.OwnerIDValidator = jobrunnertokenDescOwnerID.Validators[0].(func(string) error)
 	// jobrunnertokenDescToken is the schema descriptor for token field.
-	jobrunnertokenDescToken := jobrunnertokenFields[1].Descriptor()
+	jobrunnertokenDescToken := jobrunnertokenFields[0].Descriptor()
 	// jobrunnertoken.DefaultToken holds the default value on creation for the token field.
 	jobrunnertoken.DefaultToken = jobrunnertokenDescToken.Default.(func() string)
 	// jobrunnertokenDescIsActive is the schema descriptor for is_active field.
-	jobrunnertokenDescIsActive := jobrunnertokenFields[4].Descriptor()
+	jobrunnertokenDescIsActive := jobrunnertokenFields[3].Descriptor()
 	// jobrunnertoken.DefaultIsActive holds the default value on creation for the is_active field.
 	jobrunnertoken.DefaultIsActive = jobrunnertokenDescIsActive.Default.(bool)
 	// jobrunnertokenDescID is the schema descriptor for id field.

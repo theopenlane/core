@@ -862,11 +862,11 @@ func HasJobRunnerTokens() predicate.JobRunner {
 	return predicate.JobRunner(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerTokensTable, JobRunnerTokensColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, JobRunnerTokensTable, JobRunnerTokensPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.JobRunnerToken
-		step.Edge.Schema = schemaConfig.JobRunnerToken
+		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -877,7 +877,7 @@ func HasJobRunnerTokensWith(preds ...predicate.JobRunnerToken) predicate.JobRunn
 		step := newJobRunnerTokensStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.JobRunnerToken
-		step.Edge.Schema = schemaConfig.JobRunnerToken
+		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

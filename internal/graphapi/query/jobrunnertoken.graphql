@@ -6,7 +6,6 @@ mutation CreateJobRunnerToken($input: CreateJobRunnerTokenInput!) {
       expiresAt
       id
       isActive
-      jobRunnerID
       lastUsedAt
       ownerID
       revokedAt
@@ -42,7 +41,6 @@ query GetAllJobRunnerTokens {
         expiresAt
         id
         isActive
-        jobRunnerID
         lastUsedAt
         ownerID
         revokedAt
@@ -63,7 +61,6 @@ query GetJobRunnerTokenByID($jobRunnerTokenId: ID!) {
     expiresAt
     id
     isActive
-    jobRunnerID
     lastUsedAt
     ownerID
     revokedAt
@@ -92,7 +89,6 @@ query GetJobRunnerTokens($first: Int, $last: Int, $where: JobRunnerTokenWhereInp
         expiresAt
         id
         isActive
-        jobRunnerID
         lastUsedAt
         ownerID
         revokedAt
@@ -103,27 +99,6 @@ query GetJobRunnerTokens($first: Int, $last: Int, $where: JobRunnerTokenWhereInp
         updatedAt
         updatedBy
       }
-    }
-  }
-}
-mutation UpdateJobRunnerToken($updateJobRunnerTokenId: ID!, $input: UpdateJobRunnerTokenInput!) {
-  updateJobRunnerToken(id: $updateJobRunnerTokenId, input: $input) {
-    jobRunnerToken {
-      createdAt
-      createdBy
-      expiresAt
-      id
-      isActive
-      jobRunnerID
-      lastUsedAt
-      ownerID
-      revokedAt
-      revokedBy
-      revokedReason
-      tags
-      token
-      updatedAt
-      updatedBy
     }
   }
 }

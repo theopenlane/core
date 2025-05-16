@@ -4481,7 +4481,7 @@ type CreateJobRunnerTokenInput struct {
 	RevokedBy     *string
 	RevokedAt     *time.Time
 	OwnerID       *string
-	JobRunnerID   string
+	JobRunnerIDs  []string
 }
 
 // Mutate applies the CreateJobRunnerTokenInput on the JobRunnerTokenMutation builder.
@@ -4510,7 +4510,9 @@ func (i *CreateJobRunnerTokenInput) Mutate(m *JobRunnerTokenMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	m.SetJobRunnerID(i.JobRunnerID)
+	if v := i.JobRunnerIDs; len(v) > 0 {
+		m.AddJobRunnerIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateJobRunnerTokenInput on the JobRunnerTokenCreate builder.
@@ -4536,7 +4538,9 @@ type UpdateJobRunnerTokenInput struct {
 	RevokedAt          *time.Time
 	ClearOwner         bool
 	OwnerID            *string
-	JobRunnerID        *string
+	ClearJobRunners    bool
+	AddJobRunnerIDs    []string
+	RemoveJobRunnerIDs []string
 }
 
 // Mutate applies the UpdateJobRunnerTokenInput on the JobRunnerTokenMutation builder.
@@ -4586,8 +4590,14 @@ func (i *UpdateJobRunnerTokenInput) Mutate(m *JobRunnerTokenMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
+	if i.ClearJobRunners {
+		m.ClearJobRunners()
+	}
+	if v := i.AddJobRunnerIDs; len(v) > 0 {
+		m.AddJobRunnerIDs(v...)
+	}
+	if v := i.RemoveJobRunnerIDs; len(v) > 0 {
+		m.RemoveJobRunnerIDs(v...)
 	}
 }
 

@@ -9236,11 +9236,11 @@ func (c *JobRunnerClient) QueryJobRunnerTokens(jr *JobRunner) *JobRunnerTokenQue
 		step := sqlgraph.NewStep(
 			sqlgraph.From(jobrunner.Table, jobrunner.FieldID, id),
 			sqlgraph.To(jobrunnertoken.Table, jobrunnertoken.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, jobrunner.JobRunnerTokensTable, jobrunner.JobRunnerTokensColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, jobrunner.JobRunnerTokensTable, jobrunner.JobRunnerTokensPrimaryKey...),
 		)
 		schemaConfig := jr.schemaConfig
 		step.To.Schema = schemaConfig.JobRunnerToken
-		step.Edge.Schema = schemaConfig.JobRunnerToken
+		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		fromV = sqlgraph.Neighbors(jr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9708,19 +9708,19 @@ func (c *JobRunnerTokenClient) QueryOwner(jrt *JobRunnerToken) *OrganizationQuer
 	return query
 }
 
-// QueryJobRunner queries the job_runner edge of a JobRunnerToken.
-func (c *JobRunnerTokenClient) QueryJobRunner(jrt *JobRunnerToken) *JobRunnerQuery {
+// QueryJobRunners queries the job_runners edge of a JobRunnerToken.
+func (c *JobRunnerTokenClient) QueryJobRunners(jrt *JobRunnerToken) *JobRunnerQuery {
 	query := (&JobRunnerClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := jrt.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(jobrunnertoken.Table, jobrunnertoken.FieldID, id),
 			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, jobrunnertoken.JobRunnerTable, jobrunnertoken.JobRunnerColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, jobrunnertoken.JobRunnersTable, jobrunnertoken.JobRunnersPrimaryKey...),
 		)
 		schemaConfig := jrt.schemaConfig
 		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunnerToken
+		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		fromV = sqlgraph.Neighbors(jrt.driver.Dialect(), step)
 		return fromV, nil
 	}

@@ -6719,7 +6719,7 @@ input CreateJobRunnerTokenInput {
   """
   revokedAt: Time
   ownerID: ID
-  jobRunnerID: ID!
+  jobRunnerIDs: [ID!]
 }
 """
 CreateMappableDomainInput is used for create MappableDomain object.
@@ -18654,10 +18654,6 @@ type JobRunnerToken implements Node {
   the organization id that owns the object
   """
   ownerID: ID
-  """
-  the ID of the runner this token belongs to
-  """
-  jobRunnerID: ID!
   token: String!
   """
   when the token expires
@@ -18681,7 +18677,37 @@ type JobRunnerToken implements Node {
   """
   revokedAt: Time
   owner: Organization
-  jobRunner: JobRunner!
+  jobRunners(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunners returned from the connection.
+    """
+    orderBy: [JobRunnerOrder!]
+
+    """
+    Filtering options for JobRunners returned from the connection.
+    """
+    where: JobRunnerWhereInput
+  ): JobRunnerConnection!
 }
 """
 A connection to a list of items.
@@ -18868,22 +18894,6 @@ input JobRunnerTokenWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  job_runner_id field predicates
-  """
-  jobRunnerID: ID
-  jobRunnerIDNEQ: ID
-  jobRunnerIDIn: [ID!]
-  jobRunnerIDNotIn: [ID!]
-  jobRunnerIDGT: ID
-  jobRunnerIDGTE: ID
-  jobRunnerIDLT: ID
-  jobRunnerIDLTE: ID
-  jobRunnerIDContains: ID
-  jobRunnerIDHasPrefix: ID
-  jobRunnerIDHasSuffix: ID
-  jobRunnerIDEqualFold: ID
-  jobRunnerIDContainsFold: ID
-  """
   expires_at field predicates
   """
   expiresAt: Time
@@ -18971,10 +18981,10 @@ input JobRunnerTokenWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
-  job_runner edge predicates
+  job_runners edge predicates
   """
-  hasJobRunner: Boolean
-  hasJobRunnerWith: [JobRunnerWhereInput!]
+  hasJobRunners: Boolean
+  hasJobRunnersWith: [JobRunnerWhereInput!]
 }
 """
 JobRunnerWhereInput is used for filtering JobRunner objects.
@@ -39454,7 +39464,9 @@ input UpdateJobRunnerTokenInput {
   clearRevokedAt: Boolean
   ownerID: ID
   clearOwner: Boolean
-  jobRunnerID: ID
+  addJobRunnerIDs: [ID!]
+  removeJobRunnerIDs: [ID!]
+  clearJobRunners: Boolean
 }
 """
 UpdateMappableDomainInput is used for update MappableDomain object.

@@ -102,11 +102,6 @@ func OwnerID(v string) predicate.JobRunnerToken {
 	return predicate.JobRunnerToken(sql.FieldEQ(FieldOwnerID, v))
 }
 
-// JobRunnerID applies equality check predicate on the "job_runner_id" field. It's identical to JobRunnerIDEQ.
-func JobRunnerID(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldEQ(FieldJobRunnerID, v))
-}
-
 // Token applies equality check predicate on the "token" field. It's identical to TokenEQ.
 func Token(v string) predicate.JobRunnerToken {
 	return predicate.JobRunnerToken(sql.FieldEQ(FieldToken, v))
@@ -602,71 +597,6 @@ func OwnerIDContainsFold(v string) predicate.JobRunnerToken {
 	return predicate.JobRunnerToken(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
-// JobRunnerIDEQ applies the EQ predicate on the "job_runner_id" field.
-func JobRunnerIDEQ(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldEQ(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDNEQ applies the NEQ predicate on the "job_runner_id" field.
-func JobRunnerIDNEQ(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldNEQ(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDIn applies the In predicate on the "job_runner_id" field.
-func JobRunnerIDIn(vs ...string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldIn(FieldJobRunnerID, vs...))
-}
-
-// JobRunnerIDNotIn applies the NotIn predicate on the "job_runner_id" field.
-func JobRunnerIDNotIn(vs ...string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldNotIn(FieldJobRunnerID, vs...))
-}
-
-// JobRunnerIDGT applies the GT predicate on the "job_runner_id" field.
-func JobRunnerIDGT(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldGT(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDGTE applies the GTE predicate on the "job_runner_id" field.
-func JobRunnerIDGTE(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldGTE(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDLT applies the LT predicate on the "job_runner_id" field.
-func JobRunnerIDLT(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldLT(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDLTE applies the LTE predicate on the "job_runner_id" field.
-func JobRunnerIDLTE(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldLTE(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDContains applies the Contains predicate on the "job_runner_id" field.
-func JobRunnerIDContains(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldContains(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDHasPrefix applies the HasPrefix predicate on the "job_runner_id" field.
-func JobRunnerIDHasPrefix(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldHasPrefix(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDHasSuffix applies the HasSuffix predicate on the "job_runner_id" field.
-func JobRunnerIDHasSuffix(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldHasSuffix(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDEqualFold applies the EqualFold predicate on the "job_runner_id" field.
-func JobRunnerIDEqualFold(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldEqualFold(FieldJobRunnerID, v))
-}
-
-// JobRunnerIDContainsFold applies the ContainsFold predicate on the "job_runner_id" field.
-func JobRunnerIDContainsFold(v string) predicate.JobRunnerToken {
-	return predicate.JobRunnerToken(sql.FieldContainsFold(FieldJobRunnerID, v))
-}
-
 // TokenEQ applies the EQ predicate on the "token" field.
 func TokenEQ(v string) predicate.JobRunnerToken {
 	return predicate.JobRunnerToken(sql.FieldEQ(FieldToken, v))
@@ -1081,27 +1011,27 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.JobRunnerToken {
 	})
 }
 
-// HasJobRunner applies the HasEdge predicate on the "job_runner" edge.
-func HasJobRunner() predicate.JobRunnerToken {
+// HasJobRunners applies the HasEdge predicate on the "job_runners" edge.
+func HasJobRunners() predicate.JobRunnerToken {
 	return predicate.JobRunnerToken(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, JobRunnerTable, JobRunnerColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, JobRunnersTable, JobRunnersPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunnerToken
+		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasJobRunnerWith applies the HasEdge predicate on the "job_runner" edge with a given conditions (other predicates).
-func HasJobRunnerWith(preds ...predicate.JobRunner) predicate.JobRunnerToken {
+// HasJobRunnersWith applies the HasEdge predicate on the "job_runners" edge with a given conditions (other predicates).
+func HasJobRunnersWith(preds ...predicate.JobRunner) predicate.JobRunnerToken {
 	return predicate.JobRunnerToken(func(s *sql.Selector) {
-		step := newJobRunnerStep()
+		step := newJobRunnersStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunnerToken
+		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

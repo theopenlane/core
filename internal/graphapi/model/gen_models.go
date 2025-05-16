@@ -586,12 +586,6 @@ type JobRunnerRegistrationTokenDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-// Return response for updateJobRunnerRegistrationToken mutation
-type JobRunnerRegistrationTokenUpdatePayload struct {
-	// Updated jobRunnerRegistrationToken
-	JobRunnerRegistrationToken *generated.JobRunnerRegistrationToken `json:"jobRunnerRegistrationToken"`
-}
-
 // Return response for createJobRunnerToken mutation
 type JobRunnerTokenCreatePayload struct {
 	// Created jobRunnerToken

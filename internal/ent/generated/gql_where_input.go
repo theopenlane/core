@@ -37779,21 +37779,6 @@ type JobRunnerTokenWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
-	// "job_runner_id" field predicates.
-	JobRunnerID             *string  `json:"jobRunnerID,omitempty"`
-	JobRunnerIDNEQ          *string  `json:"jobRunnerIDNEQ,omitempty"`
-	JobRunnerIDIn           []string `json:"jobRunnerIDIn,omitempty"`
-	JobRunnerIDNotIn        []string `json:"jobRunnerIDNotIn,omitempty"`
-	JobRunnerIDGT           *string  `json:"jobRunnerIDGT,omitempty"`
-	JobRunnerIDGTE          *string  `json:"jobRunnerIDGTE,omitempty"`
-	JobRunnerIDLT           *string  `json:"jobRunnerIDLT,omitempty"`
-	JobRunnerIDLTE          *string  `json:"jobRunnerIDLTE,omitempty"`
-	JobRunnerIDContains     *string  `json:"jobRunnerIDContains,omitempty"`
-	JobRunnerIDHasPrefix    *string  `json:"jobRunnerIDHasPrefix,omitempty"`
-	JobRunnerIDHasSuffix    *string  `json:"jobRunnerIDHasSuffix,omitempty"`
-	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
-	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
-
 	// "expires_at" field predicates.
 	ExpiresAt       *time.Time  `json:"expiresAt,omitempty"`
 	ExpiresAtNEQ    *time.Time  `json:"expiresAtNEQ,omitempty"`
@@ -37874,9 +37859,9 @@ type JobRunnerTokenWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
-	// "job_runner" edge predicates.
-	HasJobRunner     *bool                  `json:"hasJobRunner,omitempty"`
-	HasJobRunnerWith []*JobRunnerWhereInput `json:"hasJobRunnerWith,omitempty"`
+	// "job_runners" edge predicates.
+	HasJobRunners     *bool                  `json:"hasJobRunners,omitempty"`
+	HasJobRunnersWith []*JobRunnerWhereInput `json:"hasJobRunnersWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -38250,45 +38235,6 @@ func (i *JobRunnerTokenWhereInput) P() (predicate.JobRunnerToken, error) {
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, jobrunnertoken.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
-	if i.JobRunnerID != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDEQ(*i.JobRunnerID))
-	}
-	if i.JobRunnerIDNEQ != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDNEQ(*i.JobRunnerIDNEQ))
-	}
-	if len(i.JobRunnerIDIn) > 0 {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDIn(i.JobRunnerIDIn...))
-	}
-	if len(i.JobRunnerIDNotIn) > 0 {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDNotIn(i.JobRunnerIDNotIn...))
-	}
-	if i.JobRunnerIDGT != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDGT(*i.JobRunnerIDGT))
-	}
-	if i.JobRunnerIDGTE != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDGTE(*i.JobRunnerIDGTE))
-	}
-	if i.JobRunnerIDLT != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDLT(*i.JobRunnerIDLT))
-	}
-	if i.JobRunnerIDLTE != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDLTE(*i.JobRunnerIDLTE))
-	}
-	if i.JobRunnerIDContains != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDContains(*i.JobRunnerIDContains))
-	}
-	if i.JobRunnerIDHasPrefix != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDHasPrefix(*i.JobRunnerIDHasPrefix))
-	}
-	if i.JobRunnerIDHasSuffix != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDHasSuffix(*i.JobRunnerIDHasSuffix))
-	}
-	if i.JobRunnerIDEqualFold != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDEqualFold(*i.JobRunnerIDEqualFold))
-	}
-	if i.JobRunnerIDContainsFold != nil {
-		predicates = append(predicates, jobrunnertoken.JobRunnerIDContainsFold(*i.JobRunnerIDContainsFold))
-	}
 	if i.ExpiresAt != nil {
 		predicates = append(predicates, jobrunnertoken.ExpiresAtEQ(*i.ExpiresAt))
 	}
@@ -38500,23 +38446,23 @@ func (i *JobRunnerTokenWhereInput) P() (predicate.JobRunnerToken, error) {
 		}
 		predicates = append(predicates, jobrunnertoken.HasOwnerWith(with...))
 	}
-	if i.HasJobRunner != nil {
-		p := jobrunnertoken.HasJobRunner()
-		if !*i.HasJobRunner {
+	if i.HasJobRunners != nil {
+		p := jobrunnertoken.HasJobRunners()
+		if !*i.HasJobRunners {
 			p = jobrunnertoken.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasJobRunnerWith) > 0 {
-		with := make([]predicate.JobRunner, 0, len(i.HasJobRunnerWith))
-		for _, w := range i.HasJobRunnerWith {
+	if len(i.HasJobRunnersWith) > 0 {
+		with := make([]predicate.JobRunner, 0, len(i.HasJobRunnersWith))
+		for _, w := range i.HasJobRunnersWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasJobRunnerWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasJobRunnersWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, jobrunnertoken.HasJobRunnerWith(with...))
+		predicates = append(predicates, jobrunnertoken.HasJobRunnersWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

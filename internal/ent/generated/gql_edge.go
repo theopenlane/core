@@ -2323,12 +2323,25 @@ func (jrt *JobRunnerToken) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (jrt *JobRunnerToken) JobRunner(ctx context.Context) (*JobRunner, error) {
-	result, err := jrt.Edges.JobRunnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = jrt.QueryJobRunner().Only(ctx)
+func (jrt *JobRunnerToken) JobRunners(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*JobRunnerOrder, where *JobRunnerWhereInput,
+) (*JobRunnerConnection, error) {
+	opts := []JobRunnerPaginateOption{
+		WithJobRunnerOrder(orderBy),
+		WithJobRunnerFilter(where.Filter),
 	}
-	return result, err
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := jrt.Edges.totalCount[1][alias]
+	if nodes, err := jrt.NamedJobRunners(alias); err == nil || hasTotalCount {
+		pager, err := newJobRunnerPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &JobRunnerConnection{Edges: []*JobRunnerEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return jrt.QueryJobRunners().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (md *MappableDomain) CustomDomains(

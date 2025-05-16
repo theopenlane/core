@@ -21,19 +21,6 @@ extend type Mutation{
         input: CreateJobRunnerTokenInput!
     ): JobRunnerTokenCreatePayload!
     """
-    Update an existing jobRunnerToken
-    """
-    updateJobRunnerToken(
-        """
-        ID of the jobRunnerToken
-        """
-        id: ID!
-        """
-        New values for the jobRunnerToken
-        """
-        input: UpdateJobRunnerTokenInput!
-    ): JobRunnerTokenUpdatePayload!
-    """
     Delete an existing jobRunnerToken
     """
     deleteJobRunnerToken(

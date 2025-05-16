@@ -43,8 +43,6 @@ func (JobRunnerToken) PluralName() string {
 // Fields of the JobRunnerToken
 func (JobRunnerToken) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("job_runner_id").
-			Comment("the ID of the runner this token belongs to"),
 		field.String("token").
 			Immutable().
 			Unique().
@@ -101,12 +99,9 @@ func (j JobRunnerToken) Mixin() []ent.Mixin {
 // Edges of the JobRunnerToken
 func (j JobRunnerToken) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: j,
 			edgeSchema: JobRunner{},
-			field:      "job_runner_id",
-			name:       "runner_id",
-			required:   true,
 		}),
 	}
 }

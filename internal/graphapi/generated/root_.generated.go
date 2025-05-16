@@ -1833,10 +1833,6 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
-	JobRunnerRegistrationTokenUpdatePayload struct {
-		JobRunnerRegistrationToken func(childComplexity int) int
-	}
-
 	JobRunnerToken struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
@@ -1845,8 +1841,7 @@ type ComplexityRoot struct {
 		ExpiresAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
 		IsActive      func(childComplexity int) int
-		JobRunner     func(childComplexity int) int
-		JobRunnerID   func(childComplexity int) int
+		JobRunners    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
 		LastUsedAt    func(childComplexity int) int
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
@@ -2195,8 +2190,6 @@ type ComplexityRoot struct {
 		UpdateInternalPolicy               func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
 		UpdateInvite                       func(childComplexity int, id string, input generated.UpdateInviteInput) int
 		UpdateJobRunner                    func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
-		UpdateJobRunnerRegistrationToken   func(childComplexity int, id string, input generated.UpdateJobRunnerRegistrationTokenInput) int
-		UpdateJobRunnerToken               func(childComplexity int, id string, input generated.UpdateJobRunnerTokenInput) int
 		UpdateMappableDomain               func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
 		UpdateMappedControl                func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
 		UpdateNarrative                    func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
@@ -12562,13 +12555,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunnerRegistrationTokenEdge.Node(childComplexity), true
 
-	case "JobRunnerRegistrationTokenUpdatePayload.jobRunnerRegistrationToken":
-		if e.complexity.JobRunnerRegistrationTokenUpdatePayload.JobRunnerRegistrationToken == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerRegistrationTokenUpdatePayload.JobRunnerRegistrationToken(childComplexity), true
-
 	case "JobRunnerToken.createdAt":
 		if e.complexity.JobRunnerToken.CreatedAt == nil {
 			break
@@ -12618,19 +12604,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunnerToken.IsActive(childComplexity), true
 
-	case "JobRunnerToken.jobRunner":
-		if e.complexity.JobRunnerToken.JobRunner == nil {
+	case "JobRunnerToken.jobRunners":
+		if e.complexity.JobRunnerToken.JobRunners == nil {
 			break
 		}
 
-		return e.complexity.JobRunnerToken.JobRunner(childComplexity), true
-
-	case "JobRunnerToken.jobRunnerID":
-		if e.complexity.JobRunnerToken.JobRunnerID == nil {
-			break
+		args, err := ec.field_JobRunnerToken_jobRunners_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
 		}
 
-		return e.complexity.JobRunnerToken.JobRunnerID(childComplexity), true
+		return e.complexity.JobRunnerToken.JobRunners(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerOrder), args["where"].(*generated.JobRunnerWhereInput)), true
 
 	case "JobRunnerToken.lastUsedAt":
 		if e.complexity.JobRunnerToken.LastUsedAt == nil {
@@ -15380,30 +15364,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateJobRunner(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobRunnerInput)), true
-
-	case "Mutation.updateJobRunnerRegistrationToken":
-		if e.complexity.Mutation.UpdateJobRunnerRegistrationToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateJobRunnerRegistrationToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateJobRunnerRegistrationToken(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobRunnerRegistrationTokenInput)), true
-
-	case "Mutation.updateJobRunnerToken":
-		if e.complexity.Mutation.UpdateJobRunnerToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateJobRunnerToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateJobRunnerToken(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobRunnerTokenInput)), true
 
 	case "Mutation.updateMappableDomain":
 		if e.complexity.Mutation.UpdateMappableDomain == nil {
@@ -35712,7 +35672,7 @@ input CreateJobRunnerTokenInput {
   """
   revokedAt: Time
   ownerID: ID
-  jobRunnerID: ID!
+  jobRunnerIDs: [ID!]
 }
 """
 CreateMappableDomainInput is used for create MappableDomain object.
@@ -47647,10 +47607,6 @@ type JobRunnerToken implements Node {
   the organization id that owns the object
   """
   ownerID: ID
-  """
-  the ID of the runner this token belongs to
-  """
-  jobRunnerID: ID!
   token: String!
   """
   when the token expires
@@ -47674,7 +47630,37 @@ type JobRunnerToken implements Node {
   """
   revokedAt: Time
   owner: Organization
-  jobRunner: JobRunner!
+  jobRunners(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunners returned from the connection.
+    """
+    orderBy: [JobRunnerOrder!]
+
+    """
+    Filtering options for JobRunners returned from the connection.
+    """
+    where: JobRunnerWhereInput
+  ): JobRunnerConnection!
 }
 """
 A connection to a list of items.
@@ -47861,22 +47847,6 @@ input JobRunnerTokenWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  job_runner_id field predicates
-  """
-  jobRunnerID: ID
-  jobRunnerIDNEQ: ID
-  jobRunnerIDIn: [ID!]
-  jobRunnerIDNotIn: [ID!]
-  jobRunnerIDGT: ID
-  jobRunnerIDGTE: ID
-  jobRunnerIDLT: ID
-  jobRunnerIDLTE: ID
-  jobRunnerIDContains: ID
-  jobRunnerIDHasPrefix: ID
-  jobRunnerIDHasSuffix: ID
-  jobRunnerIDEqualFold: ID
-  jobRunnerIDContainsFold: ID
-  """
   expires_at field predicates
   """
   expiresAt: Time
@@ -47964,10 +47934,10 @@ input JobRunnerTokenWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
-  job_runner edge predicates
+  job_runners edge predicates
   """
-  hasJobRunner: Boolean
-  hasJobRunnerWith: [JobRunnerWhereInput!]
+  hasJobRunners: Boolean
+  hasJobRunnersWith: [JobRunnerWhereInput!]
 }
 """
 JobRunnerWhereInput is used for filtering JobRunner objects.
@@ -68447,7 +68417,9 @@ input UpdateJobRunnerTokenInput {
   clearRevokedAt: Boolean
   ownerID: ID
   clearOwner: Boolean
-  jobRunnerID: ID
+  addJobRunnerIDs: [ID!]
+  removeJobRunnerIDs: [ID!]
+  clearJobRunners: Boolean
 }
 """
 UpdateMappableDomainInput is used for update MappableDomain object.
@@ -73238,19 +73210,6 @@ extend type Mutation{
         input: CreateJobRunnerRegistrationTokenInput!
     ): JobRunnerRegistrationTokenCreatePayload!
     """
-    Update an existing jobRunnerRegistrationToken
-    """
-    updateJobRunnerRegistrationToken(
-        """
-        ID of the jobRunnerRegistrationToken
-        """
-        id: ID!
-        """
-        New values for the jobRunnerRegistrationToken
-        """
-        input: UpdateJobRunnerRegistrationTokenInput!
-    ): JobRunnerRegistrationTokenUpdatePayload!
-    """
     Delete an existing jobRunnerRegistrationToken
     """
     deleteJobRunnerRegistrationToken(
@@ -73267,16 +73226,6 @@ Return response for createJobRunnerRegistrationToken mutation
 type JobRunnerRegistrationTokenCreatePayload {
     """
     Created jobRunnerRegistrationToken
-    """
-    jobRunnerRegistrationToken: JobRunnerRegistrationToken!
-}
-
-"""
-Return response for updateJobRunnerRegistrationToken mutation
-"""
-type JobRunnerRegistrationTokenUpdatePayload {
-    """
-    Updated jobRunnerRegistrationToken
     """
     jobRunnerRegistrationToken: JobRunnerRegistrationToken!
 }
@@ -73323,19 +73272,6 @@ extend type Mutation{
         """
         input: CreateJobRunnerTokenInput!
     ): JobRunnerTokenCreatePayload!
-    """
-    Update an existing jobRunnerToken
-    """
-    updateJobRunnerToken(
-        """
-        ID of the jobRunnerToken
-        """
-        id: ID!
-        """
-        New values for the jobRunnerToken
-        """
-        input: UpdateJobRunnerTokenInput!
-    ): JobRunnerTokenUpdatePayload!
     """
     Delete an existing jobRunnerToken
     """

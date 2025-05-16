@@ -208,13 +208,11 @@ type OpenlaneGraphClient interface {
 	GetAllJobRunnerRegistrationTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerRegistrationTokens, error)
 	GetJobRunnerRegistrationTokenByID(ctx context.Context, jobRunnerRegistrationTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerRegistrationTokenByID, error)
 	GetJobRunnerRegistrationTokens(ctx context.Context, first *int64, last *int64, where *JobRunnerRegistrationTokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerRegistrationTokens, error)
-	UpdateJobRunnerRegistrationToken(ctx context.Context, updateJobRunnerRegistrationTokenID string, input UpdateJobRunnerRegistrationTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobRunnerRegistrationToken, error)
 	CreateJobRunnerToken(ctx context.Context, input CreateJobRunnerTokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobRunnerToken, error)
 	DeleteJobRunnerToken(ctx context.Context, deleteJobRunnerTokenID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunnerToken, error)
 	GetAllJobRunnerTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerTokens, error)
 	GetJobRunnerTokenByID(ctx context.Context, jobRunnerTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerTokenByID, error)
 	GetJobRunnerTokens(ctx context.Context, first *int64, last *int64, where *JobRunnerTokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerTokens, error)
-	UpdateJobRunnerToken(ctx context.Context, updateJobRunnerTokenID string, input UpdateJobRunnerTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobRunnerToken, error)
 	CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVMappableDomain, error)
 	CreateBulkMappableDomain(ctx context.Context, input []*CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkMappableDomain, error)
 	CreateMappableDomain(ctx context.Context, input CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateMappableDomain, error)
@@ -4259,7 +4257,6 @@ func (t *AdminSearch_AdminSearch_JobRunnerTokens_PageInfo) GetStartCursor() *str
 type AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node struct {
 	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID            string   "json:\"id\" graphql:\"id\""
-	JobRunnerID   string   "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
 	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
 	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
@@ -4277,12 +4274,6 @@ func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetID() string {
 		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetJobRunnerID() string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
-	}
-	return t.JobRunnerID
 }
 func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetOwnerID() *string {
 	if t == nil {
@@ -35870,105 +35861,12 @@ func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens) GetTotalCou
 	return t.TotalCount
 }
 
-type UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExpiresAt   time.Time  "json:\"expiresAt\" graphql:\"expiresAt\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	JobRunnerID *string    "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
-	LastUsedAt  *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	Token       string     "json:\"token\" graphql:\"token\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetExpiresAt() *time.Time {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return &t.ExpiresAt
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetID() string {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.ID
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetJobRunnerID() *string {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.JobRunnerID
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetLastUsedAt() *time.Time {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.LastUsedAt
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetOwnerID() *string {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.OwnerID
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetTags() []string {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.Tags
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetToken() string {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.Token
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
-	}
-	return t.UpdatedBy
-}
-
-type UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken struct {
-	JobRunnerRegistrationToken UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken "json:\"jobRunnerRegistrationToken\" graphql:\"jobRunnerRegistrationToken\""
-}
-
-func (t *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken) GetJobRunnerRegistrationToken() *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken_JobRunnerRegistrationToken {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken{}
-	}
-	return &t.JobRunnerRegistrationToken
-}
-
 type CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken struct {
 	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID            string     "json:\"id\" graphql:\"id\""
 	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
-	JobRunnerID   string     "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
 	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
 	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
@@ -36009,12 +35907,6 @@ func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetIsActive()
 		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
 	}
 	return t.IsActive
-}
-func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetJobRunnerID() string {
-	if t == nil {
-		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.JobRunnerID
 }
 func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetLastUsedAt() *time.Time {
 	if t == nil {
@@ -36131,7 +36023,6 @@ type GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node struct {
 	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID            string     "json:\"id\" graphql:\"id\""
 	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
-	JobRunnerID   string     "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
 	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
 	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
@@ -36172,12 +36063,6 @@ func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetIsActive() *bool {
 		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
 	}
 	return t.IsActive
-}
-func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetJobRunnerID() string {
-	if t == nil {
-		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
-	}
-	return t.JobRunnerID
 }
 func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetLastUsedAt() *time.Time {
 	if t == nil {
@@ -36276,7 +36161,6 @@ type GetJobRunnerTokenByID_JobRunnerToken struct {
 	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID            string     "json:\"id\" graphql:\"id\""
 	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
-	JobRunnerID   string     "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
 	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
 	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
@@ -36317,12 +36201,6 @@ func (t *GetJobRunnerTokenByID_JobRunnerToken) GetIsActive() *bool {
 		t = &GetJobRunnerTokenByID_JobRunnerToken{}
 	}
 	return t.IsActive
-}
-func (t *GetJobRunnerTokenByID_JobRunnerToken) GetJobRunnerID() string {
-	if t == nil {
-		t = &GetJobRunnerTokenByID_JobRunnerToken{}
-	}
-	return t.JobRunnerID
 }
 func (t *GetJobRunnerTokenByID_JobRunnerToken) GetLastUsedAt() *time.Time {
 	if t == nil {
@@ -36417,7 +36295,6 @@ type GetJobRunnerTokens_JobRunnerTokens_Edges_Node struct {
 	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID            string     "json:\"id\" graphql:\"id\""
 	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
-	JobRunnerID   string     "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
 	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
 	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
@@ -36458,12 +36335,6 @@ func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetIsActive() *bool {
 		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
 	}
 	return t.IsActive
-}
-func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetJobRunnerID() string {
-	if t == nil {
-		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
-	}
-	return t.JobRunnerID
 }
 func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetLastUsedAt() *time.Time {
 	if t == nil {
@@ -36554,126 +36425,6 @@ func (t *GetJobRunnerTokens_JobRunnerTokens) GetTotalCount() int64 {
 		t = &GetJobRunnerTokens_JobRunnerTokens{}
 	}
 	return t.TotalCount
-}
-
-type UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
-	JobRunnerID   string     "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
-	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
-	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
-	RevokedBy     *string    "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
-	RevokedReason *string    "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
-	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	Token         string     "json:\"token\" graphql:\"token\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetExpiresAt() *time.Time {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.ExpiresAt
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetID() string {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.ID
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetIsActive() *bool {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.IsActive
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetJobRunnerID() string {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.JobRunnerID
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetLastUsedAt() *time.Time {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.LastUsedAt
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetOwnerID() *string {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.OwnerID
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetRevokedAt() *time.Time {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.RevokedAt
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetRevokedBy() *string {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.RevokedBy
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetRevokedReason() *string {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.RevokedReason
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetTags() []string {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.Tags
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetToken() string {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.Token
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken{}
-	}
-	return t.UpdatedBy
-}
-
-type UpdateJobRunnerToken_UpdateJobRunnerToken struct {
-	JobRunnerToken UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken "json:\"jobRunnerToken\" graphql:\"jobRunnerToken\""
-}
-
-func (t *UpdateJobRunnerToken_UpdateJobRunnerToken) GetJobRunnerToken() *UpdateJobRunnerToken_UpdateJobRunnerToken_JobRunnerToken {
-	if t == nil {
-		t = &UpdateJobRunnerToken_UpdateJobRunnerToken{}
-	}
-	return &t.JobRunnerToken
 }
 
 type CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains struct {
@@ -74128,17 +73879,6 @@ func (t *GetJobRunnerRegistrationTokens) GetJobRunnerRegistrationTokens() *GetJo
 	return &t.JobRunnerRegistrationTokens
 }
 
-type UpdateJobRunnerRegistrationToken struct {
-	UpdateJobRunnerRegistrationToken UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken "json:\"updateJobRunnerRegistrationToken\" graphql:\"updateJobRunnerRegistrationToken\""
-}
-
-func (t *UpdateJobRunnerRegistrationToken) GetUpdateJobRunnerRegistrationToken() *UpdateJobRunnerRegistrationToken_UpdateJobRunnerRegistrationToken {
-	if t == nil {
-		t = &UpdateJobRunnerRegistrationToken{}
-	}
-	return &t.UpdateJobRunnerRegistrationToken
-}
-
 type CreateJobRunnerToken struct {
 	CreateJobRunnerToken CreateJobRunnerToken_CreateJobRunnerToken "json:\"createJobRunnerToken\" graphql:\"createJobRunnerToken\""
 }
@@ -74192,17 +73932,6 @@ func (t *GetJobRunnerTokens) GetJobRunnerTokens() *GetJobRunnerTokens_JobRunnerT
 		t = &GetJobRunnerTokens{}
 	}
 	return &t.JobRunnerTokens
-}
-
-type UpdateJobRunnerToken struct {
-	UpdateJobRunnerToken UpdateJobRunnerToken_UpdateJobRunnerToken "json:\"updateJobRunnerToken\" graphql:\"updateJobRunnerToken\""
-}
-
-func (t *UpdateJobRunnerToken) GetUpdateJobRunnerToken() *UpdateJobRunnerToken_UpdateJobRunnerToken {
-	if t == nil {
-		t = &UpdateJobRunnerToken{}
-	}
-	return &t.UpdateJobRunnerToken
 }
 
 type CreateBulkCSVMappableDomain struct {
@@ -77069,7 +76798,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					id
 					tags
 					ownerID
-					jobRunnerID
 					revokedReason
 					revokedBy
 				}
@@ -86010,43 +85738,6 @@ func (c *Client) GetJobRunnerRegistrationTokens(ctx context.Context, first *int6
 	return &res, nil
 }
 
-const UpdateJobRunnerRegistrationTokenDocument = `mutation UpdateJobRunnerRegistrationToken ($updateJobRunnerRegistrationTokenId: ID!, $input: UpdateJobRunnerRegistrationTokenInput!) {
-	updateJobRunnerRegistrationToken(id: $updateJobRunnerRegistrationTokenId, input: $input) {
-		jobRunnerRegistrationToken {
-			createdAt
-			createdBy
-			expiresAt
-			id
-			jobRunnerID
-			lastUsedAt
-			ownerID
-			tags
-			token
-			updatedAt
-			updatedBy
-		}
-	}
-}
-`
-
-func (c *Client) UpdateJobRunnerRegistrationToken(ctx context.Context, updateJobRunnerRegistrationTokenID string, input UpdateJobRunnerRegistrationTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobRunnerRegistrationToken, error) {
-	vars := map[string]any{
-		"updateJobRunnerRegistrationTokenId": updateJobRunnerRegistrationTokenID,
-		"input":                              input,
-	}
-
-	var res UpdateJobRunnerRegistrationToken
-	if err := c.Client.Post(ctx, "UpdateJobRunnerRegistrationToken", UpdateJobRunnerRegistrationTokenDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateJobRunnerTokenDocument = `mutation CreateJobRunnerToken ($input: CreateJobRunnerTokenInput!) {
 	createJobRunnerToken(input: $input) {
 		jobRunnerToken {
@@ -86055,7 +85746,6 @@ const CreateJobRunnerTokenDocument = `mutation CreateJobRunnerToken ($input: Cre
 			expiresAt
 			id
 			isActive
-			jobRunnerID
 			lastUsedAt
 			ownerID
 			revokedAt
@@ -86127,7 +85817,6 @@ const GetAllJobRunnerTokensDocument = `query GetAllJobRunnerTokens {
 				expiresAt
 				id
 				isActive
-				jobRunnerID
 				lastUsedAt
 				ownerID
 				revokedAt
@@ -86165,7 +85854,6 @@ const GetJobRunnerTokenByIDDocument = `query GetJobRunnerTokenByID ($jobRunnerTo
 		expiresAt
 		id
 		isActive
-		jobRunnerID
 		lastUsedAt
 		ownerID
 		revokedAt
@@ -86212,7 +85900,6 @@ const GetJobRunnerTokensDocument = `query GetJobRunnerTokens ($first: Int, $last
 				expiresAt
 				id
 				isActive
-				jobRunnerID
 				lastUsedAt
 				ownerID
 				revokedAt
@@ -86237,47 +85924,6 @@ func (c *Client) GetJobRunnerTokens(ctx context.Context, first *int64, last *int
 
 	var res GetJobRunnerTokens
 	if err := c.Client.Post(ctx, "GetJobRunnerTokens", GetJobRunnerTokensDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const UpdateJobRunnerTokenDocument = `mutation UpdateJobRunnerToken ($updateJobRunnerTokenId: ID!, $input: UpdateJobRunnerTokenInput!) {
-	updateJobRunnerToken(id: $updateJobRunnerTokenId, input: $input) {
-		jobRunnerToken {
-			createdAt
-			createdBy
-			expiresAt
-			id
-			isActive
-			jobRunnerID
-			lastUsedAt
-			ownerID
-			revokedAt
-			revokedBy
-			revokedReason
-			tags
-			token
-			updatedAt
-			updatedBy
-		}
-	}
-}
-`
-
-func (c *Client) UpdateJobRunnerToken(ctx context.Context, updateJobRunnerTokenID string, input UpdateJobRunnerTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobRunnerToken, error) {
-	vars := map[string]any{
-		"updateJobRunnerTokenId": updateJobRunnerTokenID,
-		"input":                  input,
-	}
-
-	var res UpdateJobRunnerToken
-	if err := c.Client.Post(ctx, "UpdateJobRunnerToken", UpdateJobRunnerTokenDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -95985,13 +95631,11 @@ var DocumentOperationNames = map[string]string{
 	GetAllJobRunnerRegistrationTokensDocument:    "GetAllJobRunnerRegistrationTokens",
 	GetJobRunnerRegistrationTokenByIDDocument:    "GetJobRunnerRegistrationTokenByID",
 	GetJobRunnerRegistrationTokensDocument:       "GetJobRunnerRegistrationTokens",
-	UpdateJobRunnerRegistrationTokenDocument:     "UpdateJobRunnerRegistrationToken",
 	CreateJobRunnerTokenDocument:                 "CreateJobRunnerToken",
 	DeleteJobRunnerTokenDocument:                 "DeleteJobRunnerToken",
 	GetAllJobRunnerTokensDocument:                "GetAllJobRunnerTokens",
 	GetJobRunnerTokenByIDDocument:                "GetJobRunnerTokenByID",
 	GetJobRunnerTokensDocument:                   "GetJobRunnerTokens",
-	UpdateJobRunnerTokenDocument:                 "UpdateJobRunnerToken",
 	CreateBulkCSVMappableDomainDocument:          "CreateBulkCSVMappableDomain",
 	CreateBulkMappableDomainDocument:             "CreateBulkMappableDomain",
 	CreateMappableDomainDocument:                 "CreateMappableDomain",

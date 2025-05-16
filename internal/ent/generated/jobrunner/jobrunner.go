@@ -57,13 +57,11 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// JobRunnerTokensTable is the table that holds the job_runner_tokens relation/edge.
-	JobRunnerTokensTable = "job_runner_tokens"
+	// JobRunnerTokensTable is the table that holds the job_runner_tokens relation/edge. The primary key declared below.
+	JobRunnerTokensTable = "job_runner_job_runner_tokens"
 	// JobRunnerTokensInverseTable is the table name for the JobRunnerToken entity.
 	// It exists in this package in order to avoid circular dependency with the "jobrunnertoken" package.
 	JobRunnerTokensInverseTable = "job_runner_tokens"
-	// JobRunnerTokensColumn is the table column denoting the job_runner_tokens relation/edge.
-	JobRunnerTokensColumn = "job_runner_job_runner_tokens"
 )
 
 // Columns holds all SQL columns for jobrunner fields.
@@ -83,6 +81,12 @@ var Columns = []string{
 	FieldStatus,
 	FieldIPAddress,
 }
+
+var (
+	// JobRunnerTokensPrimaryKey and JobRunnerTokensColumn2 are the table columns denoting the
+	// primary key for the job_runner_tokens relation (M2M).
+	JobRunnerTokensPrimaryKey = []string{"job_runner_id", "job_runner_token_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -232,7 +236,7 @@ func newJobRunnerTokensStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(JobRunnerTokensInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerTokensTable, JobRunnerTokensColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, JobRunnerTokensTable, JobRunnerTokensPrimaryKey...),
 	)
 }
 

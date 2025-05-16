@@ -21,19 +21,6 @@ extend type Mutation{
         input: CreateJobRunnerRegistrationTokenInput!
     ): JobRunnerRegistrationTokenCreatePayload!
     """
-    Update an existing jobRunnerRegistrationToken
-    """
-    updateJobRunnerRegistrationToken(
-        """
-        ID of the jobRunnerRegistrationToken
-        """
-        id: ID!
-        """
-        New values for the jobRunnerRegistrationToken
-        """
-        input: UpdateJobRunnerRegistrationTokenInput!
-    ): JobRunnerRegistrationTokenUpdatePayload!
-    """
     Delete an existing jobRunnerRegistrationToken
     """
     deleteJobRunnerRegistrationToken(
@@ -50,16 +37,6 @@ Return response for createJobRunnerRegistrationToken mutation
 type JobRunnerRegistrationTokenCreatePayload {
     """
     Created jobRunnerRegistrationToken
-    """
-    jobRunnerRegistrationToken: JobRunnerRegistrationToken!
-}
-
-"""
-Return response for updateJobRunnerRegistrationToken mutation
-"""
-type JobRunnerRegistrationTokenUpdatePayload {
-    """
-    Updated jobRunnerRegistrationToken
     """
     jobRunnerRegistrationToken: JobRunnerRegistrationToken!
 }

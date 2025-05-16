@@ -88,6 +88,7 @@ type SchemaConfig struct {
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
 	JobRunner                        string // JobRunner table.
+	JobRunnerJobRunnerTokens         string // JobRunner-job_runner_tokens->JobRunnerToken table.
 	JobRunnerHistory                 string // JobRunnerHistory table.
 	JobRunnerRegistrationToken       string // JobRunnerRegistrationToken table.
 	JobRunnerToken                   string // JobRunnerToken table.

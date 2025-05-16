@@ -90,20 +90,3 @@ query GetJobRunnerRegistrationTokens($first: Int, $last: Int, $where: JobRunnerR
     }
   }
 }
-mutation UpdateJobRunnerRegistrationToken($updateJobRunnerRegistrationTokenId: ID!, $input: UpdateJobRunnerRegistrationTokenInput!) {
-  updateJobRunnerRegistrationToken(id: $updateJobRunnerRegistrationTokenId, input: $input) {
-    jobRunnerRegistrationToken {
-      createdAt
-      createdBy
-      expiresAt
-      id
-      jobRunnerID
-      lastUsedAt
-      ownerID
-      tags
-      token
-      updatedAt
-      updatedBy
-    }
-  }
-}

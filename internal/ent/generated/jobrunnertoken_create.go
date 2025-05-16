@@ -126,12 +126,6 @@ func (jrtc *JobRunnerTokenCreate) SetNillableOwnerID(s *string) *JobRunnerTokenC
 	return jrtc
 }
 
-// SetJobRunnerID sets the "job_runner_id" field.
-func (jrtc *JobRunnerTokenCreate) SetJobRunnerID(s string) *JobRunnerTokenCreate {
-	jrtc.mutation.SetJobRunnerID(s)
-	return jrtc
-}
-
 // SetToken sets the "token" field.
 func (jrtc *JobRunnerTokenCreate) SetToken(s string) *JobRunnerTokenCreate {
 	jrtc.mutation.SetToken(s)
@@ -249,9 +243,19 @@ func (jrtc *JobRunnerTokenCreate) SetOwner(o *Organization) *JobRunnerTokenCreat
 	return jrtc.SetOwnerID(o.ID)
 }
 
-// SetJobRunner sets the "job_runner" edge to the JobRunner entity.
-func (jrtc *JobRunnerTokenCreate) SetJobRunner(j *JobRunner) *JobRunnerTokenCreate {
-	return jrtc.SetJobRunnerID(j.ID)
+// AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
+func (jrtc *JobRunnerTokenCreate) AddJobRunnerIDs(ids ...string) *JobRunnerTokenCreate {
+	jrtc.mutation.AddJobRunnerIDs(ids...)
+	return jrtc
+}
+
+// AddJobRunners adds the "job_runners" edges to the JobRunner entity.
+func (jrtc *JobRunnerTokenCreate) AddJobRunners(j ...*JobRunner) *JobRunnerTokenCreate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return jrtc.AddJobRunnerIDs(ids...)
 }
 
 // Mutation returns the JobRunnerTokenMutation object of the builder.
@@ -337,14 +341,8 @@ func (jrtc *JobRunnerTokenCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "JobRunnerToken.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := jrtc.mutation.JobRunnerID(); !ok {
-		return &ValidationError{Name: "job_runner_id", err: errors.New(`generated: missing required field "JobRunnerToken.job_runner_id"`)}
-	}
 	if _, ok := jrtc.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "JobRunnerToken.token"`)}
-	}
-	if len(jrtc.mutation.JobRunnerIDs()) == 0 {
-		return &ValidationError{Name: "job_runner", err: errors.New(`generated: missing required edge "JobRunnerToken.job_runner"`)}
 	}
 	return nil
 }
@@ -456,22 +454,21 @@ func (jrtc *JobRunnerTokenCreate) createSpec() (*JobRunnerToken, *sqlgraph.Creat
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := jrtc.mutation.JobRunnerIDs(); len(nodes) > 0 {
+	if nodes := jrtc.mutation.JobRunnersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   jobrunnertoken.JobRunnerTable,
-			Columns: []string{jobrunnertoken.JobRunnerColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   jobrunnertoken.JobRunnersTable,
+			Columns: jobrunnertoken.JobRunnersPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jrtc.schemaConfig.JobRunnerToken
+		edge.Schema = jrtc.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.JobRunnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -378,30 +378,30 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if jru.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   jobrunner.JobRunnerTokensTable,
-			Columns: []string{jobrunner.JobRunnerTokensColumn},
+			Columns: jobrunner.JobRunnerTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobRunnerToken
+		edge.Schema = jru.schemaConfig.JobRunnerJobRunnerTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := jru.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !jru.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   jobrunner.JobRunnerTokensTable,
-			Columns: []string{jobrunner.JobRunnerTokensColumn},
+			Columns: jobrunner.JobRunnerTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobRunnerToken
+		edge.Schema = jru.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -409,16 +409,16 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := jru.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   jobrunner.JobRunnerTokensTable,
-			Columns: []string{jobrunner.JobRunnerTokensColumn},
+			Columns: jobrunner.JobRunnerTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jru.schemaConfig.JobRunnerToken
+		edge.Schema = jru.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -821,30 +821,30 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 	}
 	if jruo.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   jobrunner.JobRunnerTokensTable,
-			Columns: []string{jobrunner.JobRunnerTokensColumn},
+			Columns: jobrunner.JobRunnerTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobRunnerToken
+		edge.Schema = jruo.schemaConfig.JobRunnerJobRunnerTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := jruo.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !jruo.mutation.JobRunnerTokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   jobrunner.JobRunnerTokensTable,
-			Columns: []string{jobrunner.JobRunnerTokensColumn},
+			Columns: jobrunner.JobRunnerTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobRunnerToken
+		edge.Schema = jruo.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -852,16 +852,16 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 	}
 	if nodes := jruo.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   jobrunner.JobRunnerTokensTable,
-			Columns: []string{jobrunner.JobRunnerTokensColumn},
+			Columns: jobrunner.JobRunnerTokensPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = jruo.schemaConfig.JobRunnerToken
+		edge.Schema = jruo.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
