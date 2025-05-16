@@ -18,6 +18,10 @@ import (
 	"github.com/theopenlane/utils/keygen"
 )
 
+const (
+	defaultRunnerRegistrationTokenExpiration = time.Hour * 24
+)
+
 // JobRunnerRegistrationToken holds the schema definition for the JobRunnerRegistrationToken entity
 type JobRunnerRegistrationToken struct {
 	SchemaFuncs
@@ -62,7 +66,7 @@ func (JobRunnerRegistrationToken) Fields() []ent.Field {
 				entgql.OrderField("expires_at"),
 				entgql.Skip(^entgql.SkipType),
 			).
-			Default(time.Now().Add(time.Hour * 24)).
+			Default(time.Now().Add(defaultRunnerRegistrationTokenExpiration)).
 			Immutable(),
 		field.Time("last_used_at").
 			Annotations(
@@ -141,4 +145,3 @@ func (JobRunnerRegistrationToken) Policy() ent.Policy {
 		),
 	)
 }
-

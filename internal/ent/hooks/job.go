@@ -17,7 +17,6 @@ func HookJobRunnerRegistrationToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.JobRunnerRegistrationTokenFunc(
 			func(ctx context.Context, m *generated.JobRunnerRegistrationTokenMutation) (generated.Value, error) {
-
 				runnerID, ok := m.JobRunnerID()
 				if !ok || runnerID == "" {
 					return next.Mutate(ctx, m)
