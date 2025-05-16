@@ -4382,18 +4382,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"JobRunnerToken",
 	)
 	graph.MustAddE(
-		"job_runner",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   jobrunner.JobRunnerTable,
-			Columns: []string{jobrunner.JobRunnerColumn},
-			Bidi:    false,
-		},
-		"JobRunner",
-		"JobRunnerRegistrationToken",
-	)
-	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -13449,20 +13437,6 @@ func (f *JobRunnerFilter) WhereHasJobRunnerTokens() {
 // WhereHasJobRunnerTokensWith applies a predicate to check if query has an edge job_runner_tokens with a given conditions (other predicates).
 func (f *JobRunnerFilter) WhereHasJobRunnerTokensWith(preds ...predicate.JobRunnerToken) {
 	f.Where(entql.HasEdgeWith("job_runner_tokens", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasJobRunner applies a predicate to check if query has an edge job_runner.
-func (f *JobRunnerFilter) WhereHasJobRunner() {
-	f.Where(entql.HasEdge("job_runner"))
-}
-
-// WhereHasJobRunnerWith applies a predicate to check if query has an edge job_runner with a given conditions (other predicates).
-func (f *JobRunnerFilter) WhereHasJobRunnerWith(preds ...predicate.JobRunnerRegistrationToken) {
-	f.Where(entql.HasEdgeWith("job_runner", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

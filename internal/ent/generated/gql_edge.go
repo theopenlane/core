@@ -2299,14 +2299,6 @@ func (jr *JobRunner) JobRunnerTokens(
 	return jr.QueryJobRunnerTokens().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (jr *JobRunner) JobRunner(ctx context.Context) (*JobRunnerRegistrationToken, error) {
-	result, err := jr.Edges.JobRunnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = jr.QueryJobRunner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (jrrt *JobRunnerRegistrationToken) Owner(ctx context.Context) (*Organization, error) {
 	result, err := jrrt.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

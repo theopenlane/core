@@ -4403,7 +4403,6 @@ type CreateJobRunnerInput struct {
 	IPAddress         string   `json:"ipAddress"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
 	JobRunnerTokenIDs []string `json:"jobRunnerTokenIDs,omitempty"`
-	JobRunnerID       *string  `json:"jobRunnerID,omitempty"`
 }
 
 // CreateJobRunnerRegistrationTokenInput is used for create JobRunnerRegistrationToken object.
@@ -12180,10 +12179,9 @@ type JobRunner struct {
 	// the status of this runner
 	Status enums.JobRunnerStatus `json:"status"`
 	// the IP address of this runner
-	IPAddress       string                      `json:"ipAddress"`
-	Owner           *Organization               `json:"owner,omitempty"`
-	JobRunnerTokens *JobRunnerTokenConnection   `json:"jobRunnerTokens"`
-	JobRunner       *JobRunnerRegistrationToken `json:"jobRunner,omitempty"`
+	IPAddress       string                    `json:"ipAddress"`
+	Owner           *Organization             `json:"owner,omitempty"`
+	JobRunnerTokens *JobRunnerTokenConnection `json:"jobRunnerTokens"`
 }
 
 func (JobRunner) IsNode() {}
@@ -13156,9 +13154,6 @@ type JobRunnerWhereInput struct {
 	// job_runner_tokens edge predicates
 	HasJobRunnerTokens     *bool                       `json:"hasJobRunnerTokens,omitempty"`
 	HasJobRunnerTokensWith []*JobRunnerTokenWhereInput `json:"hasJobRunnerTokensWith,omitempty"`
-	// job_runner edge predicates
-	HasJobRunner     *bool                                   `json:"hasJobRunner,omitempty"`
-	HasJobRunnerWith []*JobRunnerRegistrationTokenWhereInput `json:"hasJobRunnerWith,omitempty"`
 }
 
 type MappableDomain struct {
@@ -24635,8 +24630,6 @@ type UpdateJobRunnerInput struct {
 	AddJobRunnerTokenIDs    []string               `json:"addJobRunnerTokenIDs,omitempty"`
 	RemoveJobRunnerTokenIDs []string               `json:"removeJobRunnerTokenIDs,omitempty"`
 	ClearJobRunnerTokens    *bool                  `json:"clearJobRunnerTokens,omitempty"`
-	JobRunnerID             *string                `json:"jobRunnerID,omitempty"`
-	ClearJobRunner          *bool                  `json:"clearJobRunner,omitempty"`
 }
 
 // UpdateJobRunnerRegistrationTokenInput is used for update JobRunnerRegistrationToken object.

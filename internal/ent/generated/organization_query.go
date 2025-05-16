@@ -4475,7 +4475,6 @@ func (oq *OrganizationQuery) loadJobRunners(ctx context.Context, query *JobRunne
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(jobrunner.FieldOwnerID)
 	}

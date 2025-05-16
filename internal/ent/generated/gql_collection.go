@@ -14424,17 +14424,6 @@ func (jr *JobRunnerQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			jr.WithNamedJobRunnerTokens(alias, func(wq *JobRunnerTokenQuery) {
 				*wq = *query
 			})
-
-		case "jobRunner":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&JobRunnerRegistrationTokenClient{config: jr.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerregistrationtokenImplementors)...); err != nil {
-				return err
-			}
-			jr.withJobRunner = query
 		case "createdAt":
 			if _, ok := fieldSeen[jobrunner.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, jobrunner.FieldCreatedAt)

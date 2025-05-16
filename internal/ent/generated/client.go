@@ -9247,25 +9247,6 @@ func (c *JobRunnerClient) QueryJobRunnerTokens(jr *JobRunner) *JobRunnerTokenQue
 	return query
 }
 
-// QueryJobRunner queries the job_runner edge of a JobRunner.
-func (c *JobRunnerClient) QueryJobRunner(jr *JobRunner) *JobRunnerRegistrationTokenQuery {
-	query := (&JobRunnerRegistrationTokenClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := jr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobrunner.Table, jobrunner.FieldID, id),
-			sqlgraph.To(jobrunnerregistrationtoken.Table, jobrunnerregistrationtoken.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, jobrunner.JobRunnerTable, jobrunner.JobRunnerColumn),
-		)
-		schemaConfig := jr.schemaConfig
-		step.To.Schema = schemaConfig.JobRunnerRegistrationToken
-		step.Edge.Schema = schemaConfig.JobRunner
-		fromV = sqlgraph.Neighbors(jr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *JobRunnerClient) Hooks() []Hook {
 	hooks := c.hooks.JobRunner

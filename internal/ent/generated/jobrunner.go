@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -49,9 +48,8 @@ type JobRunner struct {
 	IPAddress string `json:"ip_address,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the JobRunnerQuery when eager-loading is set.
-	Edges                 JobRunnerEdges `json:"edges"`
-	job_runner_job_runner *string
-	selectValues          sql.SelectValues
+	Edges        JobRunnerEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // JobRunnerEdges holds the relations/edges for other nodes in the graph.
@@ -60,13 +58,11 @@ type JobRunnerEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// JobRunnerTokens holds the value of the job_runner_tokens edge.
 	JobRunnerTokens []*JobRunnerToken `json:"job_runner_tokens,omitempty"`
-	// JobRunner holds the value of the job_runner edge.
-	JobRunner *JobRunnerRegistrationToken `json:"job_runner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [2]map[string]int
 
 	namedJobRunnerTokens map[string][]*JobRunnerToken
 }
@@ -91,17 +87,6 @@ func (e JobRunnerEdges) JobRunnerTokensOrErr() ([]*JobRunnerToken, error) {
 	return nil, &NotLoadedError{edge: "job_runner_tokens"}
 }
 
-// JobRunnerOrErr returns the JobRunner value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e JobRunnerEdges) JobRunnerOrErr() (*JobRunnerRegistrationToken, error) {
-	if e.JobRunner != nil {
-		return e.JobRunner, nil
-	} else if e.loadedTypes[2] {
-		return nil, &NotFoundError{label: jobrunnerregistrationtoken.Label}
-	}
-	return nil, &NotLoadedError{edge: "job_runner"}
-}
-
 // scanValues returns the types for scanning values from sql.Rows.
 func (*JobRunner) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -115,8 +100,6 @@ func (*JobRunner) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case jobrunner.FieldCreatedAt, jobrunner.FieldUpdatedAt, jobrunner.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case jobrunner.ForeignKeys[0]: // job_runner_job_runner
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -218,13 +201,6 @@ func (jr *JobRunner) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				jr.IPAddress = value.String
 			}
-		case jobrunner.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field job_runner_job_runner", values[i])
-			} else if value.Valid {
-				jr.job_runner_job_runner = new(string)
-				*jr.job_runner_job_runner = value.String
-			}
 		default:
 			jr.selectValues.Set(columns[i], values[i])
 		}
@@ -246,11 +222,6 @@ func (jr *JobRunner) QueryOwner() *OrganizationQuery {
 // QueryJobRunnerTokens queries the "job_runner_tokens" edge of the JobRunner entity.
 func (jr *JobRunner) QueryJobRunnerTokens() *JobRunnerTokenQuery {
 	return NewJobRunnerClient(jr.config).QueryJobRunnerTokens(jr)
-}
-
-// QueryJobRunner queries the "job_runner" edge of the JobRunner entity.
-func (jr *JobRunner) QueryJobRunner() *JobRunnerRegistrationTokenQuery {
-	return NewJobRunnerClient(jr.config).QueryJobRunner(jr)
 }
 
 // Update returns a builder for updating this JobRunner.

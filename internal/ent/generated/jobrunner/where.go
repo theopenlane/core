@@ -886,35 +886,6 @@ func HasJobRunnerTokensWith(preds ...predicate.JobRunnerToken) predicate.JobRunn
 	})
 }
 
-// HasJobRunner applies the HasEdge predicate on the "job_runner" edge.
-func HasJobRunner() predicate.JobRunner {
-	return predicate.JobRunner(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, JobRunnerTable, JobRunnerColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.JobRunnerRegistrationToken
-		step.Edge.Schema = schemaConfig.JobRunner
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasJobRunnerWith applies the HasEdge predicate on the "job_runner" edge with a given conditions (other predicates).
-func HasJobRunnerWith(preds ...predicate.JobRunnerRegistrationToken) predicate.JobRunner {
-	return predicate.JobRunner(func(s *sql.Selector) {
-		step := newJobRunnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.JobRunnerRegistrationToken
-		step.Edge.Schema = schemaConfig.JobRunner
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.JobRunner) predicate.JobRunner {
 	return predicate.JobRunner(sql.AndPredicates(predicates...))

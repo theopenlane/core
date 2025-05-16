@@ -1748,7 +1748,6 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ONLINE", "OFFLINE"}, Default: "OFFLINE"},
 		{Name: "ip_address", Type: field.TypeString, Unique: true},
-		{Name: "job_runner_job_runner", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// JobRunnersTable holds the schema information for the "job_runners" table.
@@ -1758,14 +1757,8 @@ var (
 		PrimaryKey: []*schema.Column{JobRunnersColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "job_runners_job_runner_registration_tokens_job_runner",
-				Columns:    []*schema.Column{JobRunnersColumns[13]},
-				RefColumns: []*schema.Column{JobRunnerRegistrationTokensColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "job_runners_organizations_job_runners",
-				Columns:    []*schema.Column{JobRunnersColumns[14]},
+				Columns:    []*schema.Column{JobRunnersColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1779,7 +1772,7 @@ var (
 			{
 				Name:    "jobrunner_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[14]},
+				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[13]},
 			},
 		},
 	}
@@ -6251,8 +6244,7 @@ func init() {
 		Table: "internal_policy_history",
 	}
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	JobRunnersTable.ForeignKeys[0].RefTable = JobRunnerRegistrationTokensTable
-	JobRunnersTable.ForeignKeys[1].RefTable = OrganizationsTable
+	JobRunnersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	JobRunnerHistoryTable.Annotation = &entsql.Annotation{
 		Table: "job_runner_history",
 	}

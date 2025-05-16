@@ -6976,7 +6976,6 @@ input CreateJobRunnerInput {
 	ipAddress: String!
 	ownerID: ID
 	jobRunnerTokenIDs: [ID!]
-	jobRunnerID: ID
 }
 """
 CreateJobRunnerRegistrationTokenInput is used for create JobRunnerRegistrationToken object.
@@ -18817,7 +18816,6 @@ type JobRunner implements Node {
 		"""
 		where: JobRunnerTokenWhereInput
 	): JobRunnerTokenConnection!
-	jobRunner: JobRunnerRegistrationToken
 }
 """
 A connection to a list of items.
@@ -20091,11 +20089,6 @@ input JobRunnerWhereInput {
 	"""
 	hasJobRunnerTokens: Boolean
 	hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
-	"""
-	job_runner edge predicates
-	"""
-	hasJobRunner: Boolean
-	hasJobRunnerWith: [JobRunnerRegistrationTokenWhereInput!]
 }
 """
 The builtin Map type
@@ -45704,8 +45697,6 @@ input UpdateJobRunnerInput {
 	addJobRunnerTokenIDs: [ID!]
 	removeJobRunnerTokenIDs: [ID!]
 	clearJobRunnerTokens: Boolean
-	jobRunnerID: ID
-	clearJobRunner: Boolean
 }
 """
 UpdateJobRunnerRegistrationTokenInput is used for update JobRunnerRegistrationToken object.

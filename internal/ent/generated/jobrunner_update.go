@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -194,25 +193,6 @@ func (jru *JobRunnerUpdate) AddJobRunnerTokens(j ...*JobRunnerToken) *JobRunnerU
 	return jru.AddJobRunnerTokenIDs(ids...)
 }
 
-// SetJobRunnerID sets the "job_runner" edge to the JobRunnerRegistrationToken entity by ID.
-func (jru *JobRunnerUpdate) SetJobRunnerID(id string) *JobRunnerUpdate {
-	jru.mutation.SetJobRunnerID(id)
-	return jru
-}
-
-// SetNillableJobRunnerID sets the "job_runner" edge to the JobRunnerRegistrationToken entity by ID if the given value is not nil.
-func (jru *JobRunnerUpdate) SetNillableJobRunnerID(id *string) *JobRunnerUpdate {
-	if id != nil {
-		jru = jru.SetJobRunnerID(*id)
-	}
-	return jru
-}
-
-// SetJobRunner sets the "job_runner" edge to the JobRunnerRegistrationToken entity.
-func (jru *JobRunnerUpdate) SetJobRunner(j *JobRunnerRegistrationToken) *JobRunnerUpdate {
-	return jru.SetJobRunnerID(j.ID)
-}
-
 // Mutation returns the JobRunnerMutation object of the builder.
 func (jru *JobRunnerUpdate) Mutation() *JobRunnerMutation {
 	return jru.mutation
@@ -243,12 +223,6 @@ func (jru *JobRunnerUpdate) RemoveJobRunnerTokens(j ...*JobRunnerToken) *JobRunn
 		ids[i] = j[i].ID
 	}
 	return jru.RemoveJobRunnerTokenIDs(ids...)
-}
-
-// ClearJobRunner clears the "job_runner" edge to the JobRunnerRegistrationToken entity.
-func (jru *JobRunnerUpdate) ClearJobRunner() *JobRunnerUpdate {
-	jru.mutation.ClearJobRunner()
-	return jru
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -450,37 +424,6 @@ func (jru *JobRunnerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if jru.mutation.JobRunnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   jobrunner.JobRunnerTable,
-			Columns: []string{jobrunner.JobRunnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = jru.schemaConfig.JobRunner
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := jru.mutation.JobRunnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   jobrunner.JobRunnerTable,
-			Columns: []string{jobrunner.JobRunnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = jru.schemaConfig.JobRunner
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	_spec.Node.Schema = jru.schemaConfig.JobRunner
 	ctx = internal.NewSchemaConfigContext(ctx, jru.schemaConfig)
 	_spec.AddModifiers(jru.modifiers...)
@@ -663,25 +606,6 @@ func (jruo *JobRunnerUpdateOne) AddJobRunnerTokens(j ...*JobRunnerToken) *JobRun
 	return jruo.AddJobRunnerTokenIDs(ids...)
 }
 
-// SetJobRunnerID sets the "job_runner" edge to the JobRunnerRegistrationToken entity by ID.
-func (jruo *JobRunnerUpdateOne) SetJobRunnerID(id string) *JobRunnerUpdateOne {
-	jruo.mutation.SetJobRunnerID(id)
-	return jruo
-}
-
-// SetNillableJobRunnerID sets the "job_runner" edge to the JobRunnerRegistrationToken entity by ID if the given value is not nil.
-func (jruo *JobRunnerUpdateOne) SetNillableJobRunnerID(id *string) *JobRunnerUpdateOne {
-	if id != nil {
-		jruo = jruo.SetJobRunnerID(*id)
-	}
-	return jruo
-}
-
-// SetJobRunner sets the "job_runner" edge to the JobRunnerRegistrationToken entity.
-func (jruo *JobRunnerUpdateOne) SetJobRunner(j *JobRunnerRegistrationToken) *JobRunnerUpdateOne {
-	return jruo.SetJobRunnerID(j.ID)
-}
-
 // Mutation returns the JobRunnerMutation object of the builder.
 func (jruo *JobRunnerUpdateOne) Mutation() *JobRunnerMutation {
 	return jruo.mutation
@@ -712,12 +636,6 @@ func (jruo *JobRunnerUpdateOne) RemoveJobRunnerTokens(j ...*JobRunnerToken) *Job
 		ids[i] = j[i].ID
 	}
 	return jruo.RemoveJobRunnerTokenIDs(ids...)
-}
-
-// ClearJobRunner clears the "job_runner" edge to the JobRunnerRegistrationToken entity.
-func (jruo *JobRunnerUpdateOne) ClearJobRunner() *JobRunnerUpdateOne {
-	jruo.mutation.ClearJobRunner()
-	return jruo
 }
 
 // Where appends a list predicates to the JobRunnerUpdate builder.
@@ -944,37 +862,6 @@ func (jruo *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, 
 			},
 		}
 		edge.Schema = jruo.schemaConfig.JobRunnerToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if jruo.mutation.JobRunnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   jobrunner.JobRunnerTable,
-			Columns: []string{jobrunner.JobRunnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = jruo.schemaConfig.JobRunner
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := jruo.mutation.JobRunnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   jobrunner.JobRunnerTable,
-			Columns: []string{jobrunner.JobRunnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = jruo.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -4299,7 +4299,6 @@ type CreateJobRunnerInput struct {
 	IPAddress         string
 	OwnerID           *string
 	JobRunnerTokenIDs []string
-	JobRunnerID       *string
 }
 
 // Mutate applies the CreateJobRunnerInput on the JobRunnerMutation builder.
@@ -4317,9 +4316,6 @@ func (i *CreateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 	}
 	if v := i.JobRunnerTokenIDs; len(v) > 0 {
 		m.AddJobRunnerTokenIDs(v...)
-	}
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
 	}
 }
 
@@ -4341,8 +4337,6 @@ type UpdateJobRunnerInput struct {
 	ClearJobRunnerTokens    bool
 	AddJobRunnerTokenIDs    []string
 	RemoveJobRunnerTokenIDs []string
-	ClearJobRunner          bool
-	JobRunnerID             *string
 }
 
 // Mutate applies the UpdateJobRunnerInput on the JobRunnerMutation builder.
@@ -4376,12 +4370,6 @@ func (i *UpdateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 	}
 	if v := i.RemoveJobRunnerTokenIDs; len(v) > 0 {
 		m.RemoveJobRunnerTokenIDs(v...)
-	}
-	if i.ClearJobRunner {
-		m.ClearJobRunner()
-	}
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
 	}
 }
 

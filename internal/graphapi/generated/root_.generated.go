@@ -1735,7 +1735,6 @@ type ComplexityRoot struct {
 		DisplayID       func(childComplexity int) int
 		ID              func(childComplexity int) int
 		IPAddress       func(childComplexity int) int
-		JobRunner       func(childComplexity int) int
 		JobRunnerTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
 		Name            func(childComplexity int) int
 		Owner           func(childComplexity int) int
@@ -12137,13 +12136,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunner.IPAddress(childComplexity), true
-
-	case "JobRunner.jobRunner":
-		if e.complexity.JobRunner.JobRunner == nil {
-			break
-		}
-
-		return e.complexity.JobRunner.JobRunner(childComplexity), true
 
 	case "JobRunner.jobRunnerTokens":
 		if e.complexity.JobRunner.JobRunnerTokens == nil {
@@ -35675,7 +35667,6 @@ input CreateJobRunnerInput {
   ipAddress: String!
   ownerID: ID
   jobRunnerTokenIDs: [ID!]
-  jobRunnerID: ID
 }
 """
 CreateJobRunnerRegistrationTokenInput is used for create JobRunnerRegistrationToken object.
@@ -46990,7 +46981,6 @@ type JobRunner implements Node {
     """
     where: JobRunnerTokenWhereInput
   ): JobRunnerTokenConnection!
-  jobRunner: JobRunnerRegistrationToken
 }
 """
 A connection to a list of items.
@@ -48183,11 +48173,6 @@ input JobRunnerWhereInput {
   """
   hasJobRunnerTokens: Boolean
   hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
-  """
-  job_runner edge predicates
-  """
-  hasJobRunner: Boolean
-  hasJobRunnerWith: [JobRunnerRegistrationTokenWhereInput!]
 }
 """
 The builtin Map type
@@ -68408,8 +68393,6 @@ input UpdateJobRunnerInput {
   addJobRunnerTokenIDs: [ID!]
   removeJobRunnerTokenIDs: [ID!]
   clearJobRunnerTokens: Boolean
-  jobRunnerID: ID
-  clearJobRunner: Boolean
 }
 """
 UpdateJobRunnerRegistrationTokenInput is used for update JobRunnerRegistrationToken object.

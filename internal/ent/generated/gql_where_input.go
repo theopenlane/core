@@ -35623,10 +35623,6 @@ type JobRunnerWhereInput struct {
 	// "job_runner_tokens" edge predicates.
 	HasJobRunnerTokens     *bool                       `json:"hasJobRunnerTokens,omitempty"`
 	HasJobRunnerTokensWith []*JobRunnerTokenWhereInput `json:"hasJobRunnerTokensWith,omitempty"`
-
-	// "job_runner" edge predicates.
-	HasJobRunner     *bool                                   `json:"hasJobRunner,omitempty"`
-	HasJobRunnerWith []*JobRunnerRegistrationTokenWhereInput `json:"hasJobRunnerWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -36177,24 +36173,6 @@ func (i *JobRunnerWhereInput) P() (predicate.JobRunner, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, jobrunner.HasJobRunnerTokensWith(with...))
-	}
-	if i.HasJobRunner != nil {
-		p := jobrunner.HasJobRunner()
-		if !*i.HasJobRunner {
-			p = jobrunner.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasJobRunnerWith) > 0 {
-		with := make([]predicate.JobRunnerRegistrationToken, 0, len(i.HasJobRunnerWith))
-		for _, w := range i.HasJobRunnerWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasJobRunnerWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, jobrunner.HasJobRunnerWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

@@ -144,8 +144,6 @@ func (ec *executionContext) fieldContext_JobRunnerUpdatePayload_jobRunner(_ cont
 				return ec.fieldContext_JobRunner_owner(ctx, field)
 			case "jobRunnerTokens":
 				return ec.fieldContext_JobRunner_jobRunnerTokens(ctx, field)
-			case "jobRunner":
-				return ec.fieldContext_JobRunner_jobRunner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobRunner", field.Name)
 		},

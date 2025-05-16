@@ -14,7 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -31,8 +30,6 @@ type JobRunnerQuery struct {
 	predicates               []predicate.JobRunner
 	withOwner                *OrganizationQuery
 	withJobRunnerTokens      *JobRunnerTokenQuery
-	withJobRunner            *JobRunnerRegistrationTokenQuery
-	withFKs                  bool
 	loadTotal                []func(context.Context, []*JobRunner) error
 	modifiers                []func(*sql.Selector)
 	withNamedJobRunnerTokens map[string]*JobRunnerTokenQuery
@@ -116,31 +113,6 @@ func (jrq *JobRunnerQuery) QueryJobRunnerTokens() *JobRunnerTokenQuery {
 		schemaConfig := jrq.schemaConfig
 		step.To.Schema = schemaConfig.JobRunnerToken
 		step.Edge.Schema = schemaConfig.JobRunnerToken
-		fromU = sqlgraph.SetNeighbors(jrq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobRunner chains the current query on the "job_runner" edge.
-func (jrq *JobRunnerQuery) QueryJobRunner() *JobRunnerRegistrationTokenQuery {
-	query := (&JobRunnerRegistrationTokenClient{config: jrq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := jrq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := jrq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobrunner.Table, jobrunner.FieldID, selector),
-			sqlgraph.To(jobrunnerregistrationtoken.Table, jobrunnerregistrationtoken.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, jobrunner.JobRunnerTable, jobrunner.JobRunnerColumn),
-		)
-		schemaConfig := jrq.schemaConfig
-		step.To.Schema = schemaConfig.JobRunnerRegistrationToken
-		step.Edge.Schema = schemaConfig.JobRunner
 		fromU = sqlgraph.SetNeighbors(jrq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -341,7 +313,6 @@ func (jrq *JobRunnerQuery) Clone() *JobRunnerQuery {
 		predicates:          append([]predicate.JobRunner{}, jrq.predicates...),
 		withOwner:           jrq.withOwner.Clone(),
 		withJobRunnerTokens: jrq.withJobRunnerTokens.Clone(),
-		withJobRunner:       jrq.withJobRunner.Clone(),
 		// clone intermediate query.
 		sql:       jrq.sql.Clone(),
 		path:      jrq.path,
@@ -368,17 +339,6 @@ func (jrq *JobRunnerQuery) WithJobRunnerTokens(opts ...func(*JobRunnerTokenQuery
 		opt(query)
 	}
 	jrq.withJobRunnerTokens = query
-	return jrq
-}
-
-// WithJobRunner tells the query-builder to eager-load the nodes that are connected to
-// the "job_runner" edge. The optional arguments are used to configure the query builder of the edge.
-func (jrq *JobRunnerQuery) WithJobRunner(opts ...func(*JobRunnerRegistrationTokenQuery)) *JobRunnerQuery {
-	query := (&JobRunnerRegistrationTokenClient{config: jrq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	jrq.withJobRunner = query
 	return jrq
 }
 
@@ -465,20 +425,12 @@ func (jrq *JobRunnerQuery) prepareQuery(ctx context.Context) error {
 func (jrq *JobRunnerQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*JobRunner, error) {
 	var (
 		nodes       = []*JobRunner{}
-		withFKs     = jrq.withFKs
 		_spec       = jrq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [2]bool{
 			jrq.withOwner != nil,
 			jrq.withJobRunnerTokens != nil,
-			jrq.withJobRunner != nil,
 		}
 	)
-	if jrq.withJobRunner != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, jobrunner.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*JobRunner).scanValues(nil, columns)
 	}
@@ -512,12 +464,6 @@ func (jrq *JobRunnerQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*J
 		if err := jrq.loadJobRunnerTokens(ctx, query, nodes,
 			func(n *JobRunner) { n.Edges.JobRunnerTokens = []*JobRunnerToken{} },
 			func(n *JobRunner, e *JobRunnerToken) { n.Edges.JobRunnerTokens = append(n.Edges.JobRunnerTokens, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := jrq.withJobRunner; query != nil {
-		if err := jrq.loadJobRunner(ctx, query, nodes, nil,
-			func(n *JobRunner, e *JobRunnerRegistrationToken) { n.Edges.JobRunner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -593,38 +539,6 @@ func (jrq *JobRunnerQuery) loadJobRunnerTokens(ctx context.Context, query *JobRu
 			return fmt.Errorf(`unexpected referenced foreign-key "job_runner_job_runner_tokens" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
-	}
-	return nil
-}
-func (jrq *JobRunnerQuery) loadJobRunner(ctx context.Context, query *JobRunnerRegistrationTokenQuery, nodes []*JobRunner, init func(*JobRunner), assign func(*JobRunner, *JobRunnerRegistrationToken)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*JobRunner)
-	for i := range nodes {
-		if nodes[i].job_runner_job_runner == nil {
-			continue
-		}
-		fk := *nodes[i].job_runner_job_runner
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(jobrunnerregistrationtoken.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "job_runner_job_runner" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
 	}
 	return nil
 }

@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/enums"
@@ -206,25 +205,6 @@ func (jrc *JobRunnerCreate) AddJobRunnerTokens(j ...*JobRunnerToken) *JobRunnerC
 		ids[i] = j[i].ID
 	}
 	return jrc.AddJobRunnerTokenIDs(ids...)
-}
-
-// SetJobRunnerID sets the "job_runner" edge to the JobRunnerRegistrationToken entity by ID.
-func (jrc *JobRunnerCreate) SetJobRunnerID(id string) *JobRunnerCreate {
-	jrc.mutation.SetJobRunnerID(id)
-	return jrc
-}
-
-// SetNillableJobRunnerID sets the "job_runner" edge to the JobRunnerRegistrationToken entity by ID if the given value is not nil.
-func (jrc *JobRunnerCreate) SetNillableJobRunnerID(id *string) *JobRunnerCreate {
-	if id != nil {
-		jrc = jrc.SetJobRunnerID(*id)
-	}
-	return jrc
-}
-
-// SetJobRunner sets the "job_runner" edge to the JobRunnerRegistrationToken entity.
-func (jrc *JobRunnerCreate) SetJobRunner(j *JobRunnerRegistrationToken) *JobRunnerCreate {
-	return jrc.SetJobRunnerID(j.ID)
 }
 
 // Mutation returns the JobRunnerMutation object of the builder.
@@ -446,24 +426,6 @@ func (jrc *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := jrc.mutation.JobRunnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   jobrunner.JobRunnerTable,
-			Columns: []string{jobrunner.JobRunnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = jrc.schemaConfig.JobRunner
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.job_runner_job_runner = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
