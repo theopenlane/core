@@ -28,13 +28,13 @@ func TestQueryJobRunnerRegistrationTokens(t *testing.T) {
 			name:          "happy path user",
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
-			expectedCount: 2,
+			expectedCount: 1,
 		},
 		{
 			name:          "happy path, using personal access token",
 			client:        suite.client.apiWithPAT,
 			ctx:           context.Background(),
-			expectedCount: 2,
+			expectedCount: 1,
 		},
 		{
 			name:          "valid test user 2",
@@ -90,25 +90,27 @@ func TestMutationDeleteJobRunnerRegistrationToken(t *testing.T) {
 		expectedCount int
 	}{
 		{
-			name:          "happy path user",
-			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
-			runnerID:      firstJob.ID,
-			expectedCount: 1,
-		},
-		{
-			name:          "happy path user with pat",
-			client:        suite.client.apiWithPAT,
-			ctx:           context.Background(),
-			runnerID:      secondJob.ID,
-			expectedCount: 0,
-		},
-		{
-			name:     "happy path but cannot delete token no access to",
+			name:     "happy path user",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			runnerID: thirdJob.ID,
+			runnerID: firstJob.ID,
+			// expected, we create the first job then second one.
+			// Our hook clears all existing registration tokens on new one
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "happy path user with pat",
+			client:   suite.client.apiWithPAT,
+			ctx:      context.Background(),
+			runnerID: secondJob.ID,
+		},
+		{
+			name:          "happy path but cannot delete token no access to",
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
+			runnerID:      thirdJob.ID,
+			errorMsg:      notFoundErrorMsg,
+			expectedCount: 1,
 		},
 	}
 
