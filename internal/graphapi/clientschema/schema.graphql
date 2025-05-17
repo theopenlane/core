@@ -7842,15 +7842,15 @@ type CustomDomain implements Node {
 	"""
 	String to be prepended to the cname_record, used to evaluate domain ownership.
 	"""
-	txtRecordSubdomain: String!
+	txtRecordSubdomain: String @deprecated(reason: "Field no longer used")
 	"""
 	Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
 	"""
-	txtRecordValue: String!
+	txtRecordValue: String @deprecated(reason: "Field no longer used")
 	"""
 	Status of the custom domain verification
 	"""
-	status: CustomDomainCustomDomainStatus!
+	status: String @deprecated(reason: "Field no longer used")
 	owner: Organization
 	mappableDomain: MappableDomain!
 }
@@ -7888,15 +7888,6 @@ type CustomDomainCreatePayload {
 	Created customDomain
 	"""
 	customDomain: CustomDomain!
-}
-"""
-CustomDomainCustomDomainStatus is enum for the field status
-"""
-enum CustomDomainCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
-	INVALID
-	VERIFIED
-	FAILED_VERIFY
-	PENDING
 }
 """
 Return response for deleteCustomDomain mutation
@@ -7950,15 +7941,15 @@ type CustomDomainHistory implements Node {
 	"""
 	String to be prepended to the cname_record, used to evaluate domain ownership.
 	"""
-	txtRecordSubdomain: String!
+	txtRecordSubdomain: String @deprecated(reason: "Field no longer used")
 	"""
 	Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
 	"""
-	txtRecordValue: String!
+	txtRecordValue: String @deprecated(reason: "Field no longer used")
 	"""
 	Status of the custom domain verification
 	"""
-	status: CustomDomainHistoryCustomDomainStatus!
+	status: String @deprecated(reason: "Field no longer used")
 }
 """
 A connection to a list of items.
@@ -7976,15 +7967,6 @@ type CustomDomainHistoryConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
-}
-"""
-CustomDomainHistoryCustomDomainStatus is enum for the field status
-"""
-enum CustomDomainHistoryCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
-	INVALID
-	VERIFIED
-	FAILED_VERIFY
-	PENDING
 }
 """
 An edge in a connection.
@@ -8231,10 +8213,21 @@ input CustomDomainHistoryWhereInput {
 	"""
 	status field predicates
 	"""
-	status: CustomDomainHistoryCustomDomainStatus
-	statusNEQ: CustomDomainHistoryCustomDomainStatus
-	statusIn: [CustomDomainHistoryCustomDomainStatus!]
-	statusNotIn: [CustomDomainHistoryCustomDomainStatus!]
+	status: String
+	statusNEQ: String
+	statusIn: [String!]
+	statusNotIn: [String!]
+	statusGT: String
+	statusGTE: String
+	statusLT: String
+	statusLTE: String
+	statusContains: String
+	statusHasPrefix: String
+	statusHasSuffix: String
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+	statusEqualFold: String
+	statusContainsFold: String
 }
 """
 Ordering options for CustomDomain connections
@@ -8433,10 +8426,21 @@ input CustomDomainWhereInput {
 	"""
 	status field predicates
 	"""
-	status: CustomDomainCustomDomainStatus
-	statusNEQ: CustomDomainCustomDomainStatus
-	statusIn: [CustomDomainCustomDomainStatus!]
-	statusNotIn: [CustomDomainCustomDomainStatus!]
+	status: String
+	statusNEQ: String
+	statusIn: [String!]
+	statusNotIn: [String!]
+	statusGT: String
+	statusGTE: String
+	statusLT: String
+	statusLTE: String
+	statusContains: String
+	statusHasPrefix: String
+	statusHasSuffix: String
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+	statusEqualFold: String
+	statusContainsFold: String
 	"""
 	owner edge predicates
 	"""

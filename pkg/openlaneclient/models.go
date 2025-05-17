@@ -4967,13 +4967,13 @@ type CustomDomain struct {
 	// The mappable domain id that this custom domain maps to
 	MappableDomainID string `json:"mappableDomainID"`
 	// String to be prepended to the cname_record, used to evaluate domain ownership.
-	TxtRecordSubdomain string `json:"txtRecordSubdomain"`
+	TxtRecordSubdomain *string `json:"txtRecordSubdomain,omitempty"`
 	// Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
-	TxtRecordValue string `json:"txtRecordValue"`
+	TxtRecordValue *string `json:"txtRecordValue,omitempty"`
 	// Status of the custom domain verification
-	Status         enums.CustomDomainStatus `json:"status"`
-	Owner          *Organization            `json:"owner,omitempty"`
-	MappableDomain *MappableDomain          `json:"mappableDomain"`
+	Status         *string         `json:"status,omitempty"`
+	Owner          *Organization   `json:"owner,omitempty"`
+	MappableDomain *MappableDomain `json:"mappableDomain"`
 }
 
 func (CustomDomain) IsNode() {}
@@ -5034,11 +5034,11 @@ type CustomDomainHistory struct {
 	// The mappable domain id that this custom domain maps to
 	MappableDomainID string `json:"mappableDomainID"`
 	// String to be prepended to the cname_record, used to evaluate domain ownership.
-	TxtRecordSubdomain string `json:"txtRecordSubdomain"`
+	TxtRecordSubdomain *string `json:"txtRecordSubdomain,omitempty"`
 	// Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
-	TxtRecordValue string `json:"txtRecordValue"`
+	TxtRecordValue *string `json:"txtRecordValue,omitempty"`
 	// Status of the custom domain verification
-	Status enums.CustomDomainStatus `json:"status"`
+	Status *string `json:"status,omitempty"`
 }
 
 func (CustomDomainHistory) IsNode() {}
@@ -5242,10 +5242,21 @@ type CustomDomainHistoryWhereInput struct {
 	MappableDomainIDEqualFold    *string  `json:"mappableDomainIDEqualFold,omitempty"`
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
 	// status field predicates
-	Status      *enums.CustomDomainStatus  `json:"status,omitempty"`
-	StatusNeq   *enums.CustomDomainStatus  `json:"statusNEQ,omitempty"`
-	StatusIn    []enums.CustomDomainStatus `json:"statusIn,omitempty"`
-	StatusNotIn []enums.CustomDomainStatus `json:"statusNotIn,omitempty"`
+	Status             *string  `json:"status,omitempty"`
+	StatusNeq          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGt           *string  `json:"statusGT,omitempty"`
+	StatusGte          *string  `json:"statusGTE,omitempty"`
+	StatusLt           *string  `json:"statusLT,omitempty"`
+	StatusLte          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
+	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 }
 
 // Ordering options for CustomDomain connections
@@ -5405,10 +5416,21 @@ type CustomDomainWhereInput struct {
 	MappableDomainIDEqualFold    *string  `json:"mappableDomainIDEqualFold,omitempty"`
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
 	// status field predicates
-	Status      *enums.CustomDomainStatus  `json:"status,omitempty"`
-	StatusNeq   *enums.CustomDomainStatus  `json:"statusNEQ,omitempty"`
-	StatusIn    []enums.CustomDomainStatus `json:"statusIn,omitempty"`
-	StatusNotIn []enums.CustomDomainStatus `json:"statusNotIn,omitempty"`
+	Status             *string  `json:"status,omitempty"`
+	StatusNeq          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGt           *string  `json:"statusGT,omitempty"`
+	StatusGte          *string  `json:"statusGTE,omitempty"`
+	StatusLt           *string  `json:"statusLT,omitempty"`
+	StatusLte          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
+	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`

@@ -2621,6 +2621,7 @@ type AdminSearch_AdminSearch_CustomDomains_Edges_Node struct {
 	ID               string   "json:\"id\" graphql:\"id\""
 	MappableDomainID string   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID          *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status           *string  "json:\"status,omitempty\" graphql:\"status\""
 	Tags             []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
@@ -2653,6 +2654,12 @@ func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetOwnerID() *string 
 		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
 	}
 	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetStatus() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
+	}
+	return t.Status
 }
 func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -15911,18 +15918,18 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 }
 
 type CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains struct {
-	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                 string                   "json:\"id\" graphql:\"id\""
-	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
-	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
-	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
-	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord        string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	MappableDomainID   string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain *string    "json:\"txtRecordSubdomain,omitempty\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     *string    "json:\"txtRecordValue,omitempty\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetCnameRecord() string {
@@ -15961,11 +15968,11 @@ func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetO
 	}
 	return t.OwnerID
 }
-func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetStatus() *enums.CustomDomainStatus {
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetStatus() *string {
 	if t == nil {
 		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
 	}
-	return &t.Status
+	return t.Status
 }
 func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetTags() []string {
 	if t == nil {
@@ -15973,13 +15980,13 @@ func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetT
 	}
 	return t.Tags
 }
-func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetTxtRecordSubdomain() string {
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetTxtRecordSubdomain() *string {
 	if t == nil {
 		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
 	}
 	return t.TxtRecordSubdomain
 }
-func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetTxtRecordValue() string {
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetTxtRecordValue() *string {
 	if t == nil {
 		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
 	}
@@ -16010,18 +16017,18 @@ func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain) GetCustomDomains()
 }
 
 type CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains struct {
-	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                 string                   "json:\"id\" graphql:\"id\""
-	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
-	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
-	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
-	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord        string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	MappableDomainID   string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain *string    "json:\"txtRecordSubdomain,omitempty\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     *string    "json:\"txtRecordValue,omitempty\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetCnameRecord() string {
@@ -16060,11 +16067,11 @@ func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetOwnerID
 	}
 	return t.OwnerID
 }
-func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetStatus() *enums.CustomDomainStatus {
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetStatus() *string {
 	if t == nil {
 		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
 	}
-	return &t.Status
+	return t.Status
 }
 func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetTags() []string {
 	if t == nil {
@@ -16072,13 +16079,13 @@ func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetTags() 
 	}
 	return t.Tags
 }
-func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetTxtRecordSubdomain() string {
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetTxtRecordSubdomain() *string {
 	if t == nil {
 		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
 	}
 	return t.TxtRecordSubdomain
 }
-func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetTxtRecordValue() string {
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetTxtRecordValue() *string {
 	if t == nil {
 		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
 	}
@@ -16109,18 +16116,18 @@ func (t *CreateBulkCustomDomain_CreateBulkCustomDomain) GetCustomDomains() []*Cr
 }
 
 type CreateCustomDomain_CreateCustomDomain_CustomDomain struct {
-	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                 string                   "json:\"id\" graphql:\"id\""
-	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
-	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
-	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
-	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord        string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	MappableDomainID   string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain *string    "json:\"txtRecordSubdomain,omitempty\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     *string    "json:\"txtRecordValue,omitempty\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetCnameRecord() string {
@@ -16159,11 +16166,11 @@ func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetOwnerID() *strin
 	}
 	return t.OwnerID
 }
-func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetStatus() *enums.CustomDomainStatus {
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetStatus() *string {
 	if t == nil {
 		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
 	}
-	return &t.Status
+	return t.Status
 }
 func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetTags() []string {
 	if t == nil {
@@ -16171,13 +16178,13 @@ func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetTags() []string 
 	}
 	return t.Tags
 }
-func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetTxtRecordSubdomain() string {
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetTxtRecordSubdomain() *string {
 	if t == nil {
 		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
 	}
 	return t.TxtRecordSubdomain
 }
-func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetTxtRecordValue() string {
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetTxtRecordValue() *string {
 	if t == nil {
 		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
 	}
@@ -16251,18 +16258,18 @@ func (t *GetAllCustomDomains_CustomDomains_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllCustomDomains_CustomDomains_Edges_Node struct {
-	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                 string                   "json:\"id\" graphql:\"id\""
-	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
-	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
-	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
-	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord        string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	MappableDomainID   string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain *string    "json:\"txtRecordSubdomain,omitempty\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     *string    "json:\"txtRecordValue,omitempty\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetCnameRecord() string {
@@ -16301,11 +16308,11 @@ func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetStatus() *enums.CustomDomainStatus {
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetStatus() *string {
 	if t == nil {
 		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
 	}
-	return &t.Status
+	return t.Status
 }
 func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -16313,13 +16320,13 @@ func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
-func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetTxtRecordSubdomain() string {
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetTxtRecordSubdomain() *string {
 	if t == nil {
 		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
 	}
 	return t.TxtRecordSubdomain
 }
-func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetTxtRecordValue() string {
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetTxtRecordValue() *string {
 	if t == nil {
 		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
 	}
@@ -16375,18 +16382,18 @@ func (t *GetAllCustomDomains_CustomDomains) GetTotalCount() int64 {
 }
 
 type GetCustomDomainByID_CustomDomain struct {
-	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                 string                   "json:\"id\" graphql:\"id\""
-	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
-	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
-	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
-	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord        string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	MappableDomainID   string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain *string    "json:\"txtRecordSubdomain,omitempty\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     *string    "json:\"txtRecordValue,omitempty\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetCustomDomainByID_CustomDomain) GetCnameRecord() string {
@@ -16425,11 +16432,11 @@ func (t *GetCustomDomainByID_CustomDomain) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetCustomDomainByID_CustomDomain) GetStatus() *enums.CustomDomainStatus {
+func (t *GetCustomDomainByID_CustomDomain) GetStatus() *string {
 	if t == nil {
 		t = &GetCustomDomainByID_CustomDomain{}
 	}
-	return &t.Status
+	return t.Status
 }
 func (t *GetCustomDomainByID_CustomDomain) GetTags() []string {
 	if t == nil {
@@ -16437,13 +16444,13 @@ func (t *GetCustomDomainByID_CustomDomain) GetTags() []string {
 	}
 	return t.Tags
 }
-func (t *GetCustomDomainByID_CustomDomain) GetTxtRecordSubdomain() string {
+func (t *GetCustomDomainByID_CustomDomain) GetTxtRecordSubdomain() *string {
 	if t == nil {
 		t = &GetCustomDomainByID_CustomDomain{}
 	}
 	return t.TxtRecordSubdomain
 }
-func (t *GetCustomDomainByID_CustomDomain) GetTxtRecordValue() string {
+func (t *GetCustomDomainByID_CustomDomain) GetTxtRecordValue() *string {
 	if t == nil {
 		t = &GetCustomDomainByID_CustomDomain{}
 	}
@@ -16495,18 +16502,18 @@ func (t *GetCustomDomains_CustomDomains_PageInfo) GetStartCursor() *string {
 }
 
 type GetCustomDomains_CustomDomains_Edges_Node struct {
-	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                 string                   "json:\"id\" graphql:\"id\""
-	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
-	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
-	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
-	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord        string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	MappableDomainID   string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain *string    "json:\"txtRecordSubdomain,omitempty\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     *string    "json:\"txtRecordValue,omitempty\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetCustomDomains_CustomDomains_Edges_Node) GetCnameRecord() string {
@@ -16545,11 +16552,11 @@ func (t *GetCustomDomains_CustomDomains_Edges_Node) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetCustomDomains_CustomDomains_Edges_Node) GetStatus() *enums.CustomDomainStatus {
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetStatus() *string {
 	if t == nil {
 		t = &GetCustomDomains_CustomDomains_Edges_Node{}
 	}
-	return &t.Status
+	return t.Status
 }
 func (t *GetCustomDomains_CustomDomains_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -16557,13 +16564,13 @@ func (t *GetCustomDomains_CustomDomains_Edges_Node) GetTags() []string {
 	}
 	return t.Tags
 }
-func (t *GetCustomDomains_CustomDomains_Edges_Node) GetTxtRecordSubdomain() string {
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetTxtRecordSubdomain() *string {
 	if t == nil {
 		t = &GetCustomDomains_CustomDomains_Edges_Node{}
 	}
 	return t.TxtRecordSubdomain
 }
-func (t *GetCustomDomains_CustomDomains_Edges_Node) GetTxtRecordValue() string {
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetTxtRecordValue() *string {
 	if t == nil {
 		t = &GetCustomDomains_CustomDomains_Edges_Node{}
 	}
@@ -16619,18 +16626,18 @@ func (t *GetCustomDomains_CustomDomains) GetTotalCount() int64 {
 }
 
 type UpdateCustomDomain_UpdateCustomDomain_CustomDomain struct {
-	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID                 string                   "json:\"id\" graphql:\"id\""
-	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
-	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
-	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
-	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord        string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	MappableDomainID   string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status             *string    "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain *string    "json:\"txtRecordSubdomain,omitempty\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     *string    "json:\"txtRecordValue,omitempty\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetCnameRecord() string {
@@ -16669,11 +16676,11 @@ func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetOwnerID() *strin
 	}
 	return t.OwnerID
 }
-func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetStatus() *enums.CustomDomainStatus {
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetStatus() *string {
 	if t == nil {
 		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
 	}
-	return &t.Status
+	return t.Status
 }
 func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetTags() []string {
 	if t == nil {
@@ -16681,13 +16688,13 @@ func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetTags() []string 
 	}
 	return t.Tags
 }
-func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetTxtRecordSubdomain() string {
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetTxtRecordSubdomain() *string {
 	if t == nil {
 		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
 	}
 	return t.TxtRecordSubdomain
 }
-func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetTxtRecordValue() string {
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetTxtRecordValue() *string {
 	if t == nil {
 		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
 	}
@@ -16750,21 +16757,21 @@ func (t *GetAllCustomDomainHistories_CustomDomainHistories_PageInfo) GetStartCur
 }
 
 type GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node struct {
-	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime        time.Time                "json:\"historyTime\" graphql:\"historyTime\""
-	ID                 string                   "json:\"id\" graphql:\"id\""
-	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	Operation          history.OpType           "json:\"operation\" graphql:\"operation\""
-	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref                *string                  "json:\"ref,omitempty\" graphql:\"ref\""
-	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
-	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
-	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
-	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord        string         "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime        time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID                 string         "json:\"id\" graphql:\"id\""
+	MappableDomainID   string         "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	Operation          history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID            *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Status             *string        "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain *string        "json:\"txtRecordSubdomain,omitempty\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     *string        "json:\"txtRecordValue,omitempty\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCnameRecord() string {
@@ -16821,11 +16828,11 @@ func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetRef() 
 	}
 	return t.Ref
 }
-func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetStatus() *enums.CustomDomainStatus {
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetStatus() *string {
 	if t == nil {
 		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
 	}
-	return &t.Status
+	return t.Status
 }
 func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -16833,13 +16840,13 @@ func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTags()
 	}
 	return t.Tags
 }
-func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordSubdomain() string {
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordSubdomain() *string {
 	if t == nil {
 		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
 	}
 	return t.TxtRecordSubdomain
 }
-func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordValue() string {
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordValue() *string {
 	if t == nil {
 		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
 	}
@@ -16927,21 +16934,21 @@ func (t *GetCustomDomainHistories_CustomDomainHistories_PageInfo) GetStartCursor
 }
 
 type GetCustomDomainHistories_CustomDomainHistories_Edges_Node struct {
-	CnameRecord        string                   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt          *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime        time.Time                "json:\"historyTime\" graphql:\"historyTime\""
-	ID                 string                   "json:\"id\" graphql:\"id\""
-	MappableDomainID   string                   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	Operation          history.OpType           "json:\"operation\" graphql:\"operation\""
-	OwnerID            *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref                *string                  "json:\"ref,omitempty\" graphql:\"ref\""
-	Status             enums.CustomDomainStatus "json:\"status\" graphql:\"status\""
-	Tags               []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TxtRecordSubdomain string                   "json:\"txtRecordSubdomain\" graphql:\"txtRecordSubdomain\""
-	TxtRecordValue     string                   "json:\"txtRecordValue\" graphql:\"txtRecordValue\""
-	UpdatedAt          *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord        string         "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt          *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime        time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID                 string         "json:\"id\" graphql:\"id\""
+	MappableDomainID   string         "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	Operation          history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID            *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Status             *string        "json:\"status,omitempty\" graphql:\"status\""
+	Tags               []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	TxtRecordSubdomain *string        "json:\"txtRecordSubdomain,omitempty\" graphql:\"txtRecordSubdomain\""
+	TxtRecordValue     *string        "json:\"txtRecordValue,omitempty\" graphql:\"txtRecordValue\""
+	UpdatedAt          *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCnameRecord() string {
@@ -16998,11 +17005,11 @@ func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetRef() *st
 	}
 	return t.Ref
 }
-func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetStatus() *enums.CustomDomainStatus {
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetStatus() *string {
 	if t == nil {
 		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
 	}
-	return &t.Status
+	return t.Status
 }
 func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -17010,13 +17017,13 @@ func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTags() []
 	}
 	return t.Tags
 }
-func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordSubdomain() string {
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordSubdomain() *string {
 	if t == nil {
 		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
 	}
 	return t.TxtRecordSubdomain
 }
-func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordValue() string {
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetTxtRecordValue() *string {
 	if t == nil {
 		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
 	}
@@ -73803,6 +73810,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					cnameRecord
 					mappableDomainID
+					status
 				}
 			}
 		}

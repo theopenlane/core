@@ -375,6 +375,7 @@ func adminSearchCustomDomains(ctx context.Context, query string, after *entgql.C
 				customdomain.OwnerIDContainsFold(query),          // search by OwnerID
 				customdomain.CnameRecordContainsFold(query),      // search by CnameRecord
 				customdomain.MappableDomainIDContainsFold(query), // search by MappableDomainID
+				customdomain.StatusContainsFold(query),           // search by Status
 			),
 		)
 

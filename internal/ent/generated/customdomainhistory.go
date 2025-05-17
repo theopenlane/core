@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -47,11 +46,17 @@ type CustomDomainHistory struct {
 	// The mappable domain id that this custom domain maps to
 	MappableDomainID string `json:"mappable_domain_id,omitempty"`
 	// String to be prepended to the cname_record, used to evaluate domain ownership.
+	//
+	// Deprecated: Field no longer used
 	TxtRecordSubdomain string `json:"txt_record_subdomain,omitempty"`
 	// Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
+	//
+	// Deprecated: Field no longer used
 	TxtRecordValue string `json:"txt_record_value,omitempty"`
 	// Status of the custom domain verification
-	Status       enums.CustomDomainStatus `json:"status,omitempty"`
+	//
+	// Deprecated: Field no longer used
+	Status       string `json:"status,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -185,7 +190,7 @@ func (cdh *CustomDomainHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				cdh.Status = enums.CustomDomainStatus(value.String)
+				cdh.Status = value.String
 			}
 		default:
 			cdh.selectValues.Set(columns[i], values[i])
@@ -269,7 +274,7 @@ func (cdh *CustomDomainHistory) String() string {
 	builder.WriteString(cdh.TxtRecordValue)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", cdh.Status))
+	builder.WriteString(cdh.Status)
 	builder.WriteByte(')')
 	return builder.String()
 }

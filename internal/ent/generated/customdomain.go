@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // CustomDomain is the model entity for the CustomDomain schema.
@@ -42,11 +41,17 @@ type CustomDomain struct {
 	// The mappable domain id that this custom domain maps to
 	MappableDomainID string `json:"mappable_domain_id,omitempty"`
 	// String to be prepended to the cname_record, used to evaluate domain ownership.
+	//
+	// Deprecated: Field no longer used
 	TxtRecordSubdomain string `json:"txt_record_subdomain,omitempty"`
 	// Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
+	//
+	// Deprecated: Field no longer used
 	TxtRecordValue string `json:"txt_record_value,omitempty"`
 	// Status of the custom domain verification
-	Status enums.CustomDomainStatus `json:"status,omitempty"`
+	//
+	// Deprecated: Field no longer used
+	Status string `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CustomDomainQuery when eager-loading is set.
 	Edges                          CustomDomainEdges `json:"edges"`
@@ -201,7 +206,7 @@ func (cd *CustomDomain) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				cd.Status = enums.CustomDomainStatus(value.String)
+				cd.Status = value.String
 			}
 		case customdomain.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -293,7 +298,7 @@ func (cd *CustomDomain) String() string {
 	builder.WriteString(cd.TxtRecordValue)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", cd.Status))
+	builder.WriteString(cd.Status)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -1192,7 +1192,7 @@ type CustomDomainBuilder struct {
 }
 
 // MustNew custom domain builder is used to create, without authz checks, custom domains in the database
-func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T, status *enums.CustomDomainStatus) *ent.CustomDomain {
+func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T, status *string) *ent.CustomDomain {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	if c.CnameRecord == "" {
@@ -1210,7 +1210,7 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T, status 
 	}
 
 	if status == nil {
-		status = lo.ToPtr(enums.CustomDomainStatusPending)
+		status = lo.ToPtr(enums.CustomDomainStatusPending.String())
 	}
 
 	customDomain, err := c.client.db.CustomDomain.Create().

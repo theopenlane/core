@@ -66,15 +66,15 @@ func (CustomDomain) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Default("_olverify").
-			NotEmpty().
 			Immutable().
+			Optional().
+			Deprecated("Field no longer used").
 			MaxLen(16), //nolint:mnd
 		field.String("txt_record_value").
 			Comment("Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.").
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
-			NotEmpty().
 			Immutable().
 			DefaultFunc(func() string {
 				str, err := hooks.GenerateDomainValidationSecret()
@@ -87,13 +87,16 @@ func (CustomDomain) Fields() []ent.Field {
 				// value back with the Create mutation response
 				return str
 			}).
+			Optional().
+			Deprecated("Field no longer used").
 			MaxLen(maxTXTValueLen),
-		field.Enum("status").
+		field.String("status").
 			Comment("Status of the custom domain verification").
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
-			GoType(enums.CustomDomainStatus("")).
+			Optional().
+			Deprecated("Field no longer used").
 			Default(enums.CustomDomainStatusPending.String()),
 	}
 }

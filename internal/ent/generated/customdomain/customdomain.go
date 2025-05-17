@@ -3,14 +3,11 @@
 package customdomain
 
 import (
-	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -79,9 +76,6 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldCnameRecord,
 	FieldMappableDomainID,
-	FieldTxtRecordSubdomain,
-	FieldTxtRecordValue,
-	FieldStatus,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "custom_domains"
@@ -99,6 +93,11 @@ func ValidColumn(column string) bool {
 	}
 	for i := range ForeignKeys {
 		if column == ForeignKeys[i] {
+			return true
+		}
+	}
+	for _, f := range [...]string{FieldTxtRecordSubdomain, FieldTxtRecordValue, FieldStatus} {
+		if column == f {
 			return true
 		}
 	}
@@ -136,21 +135,11 @@ var (
 	DefaultTxtRecordValue func() string
 	// TxtRecordValueValidator is a validator for the "txt_record_value" field. It is called by the builders before save.
 	TxtRecordValueValidator func(string) error
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
-
-const DefaultStatus enums.CustomDomainStatus = "PENDING"
-
-// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
-func StatusValidator(s enums.CustomDomainStatus) error {
-	switch s.String() {
-	case "INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING":
-		return nil
-	default:
-		return fmt.Errorf("customdomain: invalid enum value for status field: %q", s)
-	}
-}
 
 // OrderOption defines the ordering options for the CustomDomain queries.
 type OrderOption func(*sql.Selector)
@@ -247,10 +236,3 @@ func newMappableDomainStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, MappableDomainTable, MappableDomainColumn),
 	)
 }
-
-var (
-	// enums.CustomDomainStatus must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.CustomDomainStatus)(nil)
-	// enums.CustomDomainStatus must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.CustomDomainStatus)(nil)
-)

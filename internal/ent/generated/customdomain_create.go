@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // CustomDomainCreate is the builder for creating a CustomDomain entity.
@@ -168,15 +167,15 @@ func (cdc *CustomDomainCreate) SetNillableTxtRecordValue(s *string) *CustomDomai
 }
 
 // SetStatus sets the "status" field.
-func (cdc *CustomDomainCreate) SetStatus(eds enums.CustomDomainStatus) *CustomDomainCreate {
-	cdc.mutation.SetStatus(eds)
+func (cdc *CustomDomainCreate) SetStatus(s string) *CustomDomainCreate {
+	cdc.mutation.SetStatus(s)
 	return cdc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cdc *CustomDomainCreate) SetNillableStatus(eds *enums.CustomDomainStatus) *CustomDomainCreate {
-	if eds != nil {
-		cdc.SetStatus(*eds)
+func (cdc *CustomDomainCreate) SetNillableStatus(s *string) *CustomDomainCreate {
+	if s != nil {
+		cdc.SetStatus(*s)
 	}
 	return cdc
 }
@@ -308,28 +307,14 @@ func (cdc *CustomDomainCreate) check() error {
 			return &ValidationError{Name: "mappable_domain_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.mappable_domain_id": %w`, err)}
 		}
 	}
-	if _, ok := cdc.mutation.TxtRecordSubdomain(); !ok {
-		return &ValidationError{Name: "txt_record_subdomain", err: errors.New(`generated: missing required field "CustomDomain.txt_record_subdomain"`)}
-	}
 	if v, ok := cdc.mutation.TxtRecordSubdomain(); ok {
 		if err := customdomain.TxtRecordSubdomainValidator(v); err != nil {
 			return &ValidationError{Name: "txt_record_subdomain", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.txt_record_subdomain": %w`, err)}
 		}
 	}
-	if _, ok := cdc.mutation.TxtRecordValue(); !ok {
-		return &ValidationError{Name: "txt_record_value", err: errors.New(`generated: missing required field "CustomDomain.txt_record_value"`)}
-	}
 	if v, ok := cdc.mutation.TxtRecordValue(); ok {
 		if err := customdomain.TxtRecordValueValidator(v); err != nil {
 			return &ValidationError{Name: "txt_record_value", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.txt_record_value": %w`, err)}
-		}
-	}
-	if _, ok := cdc.mutation.Status(); !ok {
-		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "CustomDomain.status"`)}
-	}
-	if v, ok := cdc.mutation.Status(); ok {
-		if err := customdomain.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.status": %w`, err)}
 		}
 	}
 	if len(cdc.mutation.MappableDomainIDs()) == 0 {
@@ -412,7 +397,7 @@ func (cdc *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec
 		_node.TxtRecordValue = value
 	}
 	if value, ok := cdc.mutation.Status(); ok {
-		_spec.SetField(customdomain.FieldStatus, field.TypeEnum, value)
+		_spec.SetField(customdomain.FieldStatus, field.TypeString, value)
 		_node.Status = value
 	}
 	if nodes := cdc.mutation.OwnerIDs(); len(nodes) > 0 {
