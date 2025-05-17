@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up dnsVerification by ID
+    """
+     dnsVerification(
+        """
+        ID of the dnsVerification
+        """
+        id: ID!
+    ):  DNSVerification!
+}
+
+extend type Mutation{
+    """
+    Create a new dnsVerification
+    """
+    createDNSVerification(
+        """
+        values of the dnsVerification
+        """
+        input: CreateDNSVerificationInput!
+    ): DNSVerificationCreatePayload!
+    """
+    Create multiple new dnsVerifications
+    """
+    createBulkDNSVerification(
+        """
+        values of the dnsVerification
+        """
+        input: [CreateDNSVerificationInput!]
+    ): DNSVerificationBulkCreatePayload!
+    """
+    Create multiple new dnsVerifications via file upload
+    """
+    createBulkCSVDNSVerification(
+        """
+        csv file containing values of the dnsVerification
+        """
+        input: Upload!
+    ): DNSVerificationBulkCreatePayload!
+    """
+    Update an existing dnsVerification
+    """
+    updateDNSVerification(
+        """
+        ID of the dnsVerification
+        """
+        id: ID!
+        """
+        New values for the dnsVerification
+        """
+        input: UpdateDNSVerificationInput!
+    ): DNSVerificationUpdatePayload!
+    """
+    Delete an existing dnsVerification
+    """
+    deleteDNSVerification(
+        """
+        ID of the dnsVerification
+        """
+        id: ID!
+    ): DNSVerificationDeletePayload!
+}
+
+"""
+Return response for createDNSVerification mutation
+"""
+type DNSVerificationCreatePayload {
+    """
+    Created dnsVerification
+    """
+    dnsVerification: DNSVerification!
+}
+
+"""
+Return response for updateDNSVerification mutation
+"""
+type DNSVerificationUpdatePayload {
+    """
+    Updated dnsVerification
+    """
+    dnsVerification: DNSVerification!
+}
+
+"""
+Return response for deleteDNSVerification mutation
+"""
+type DNSVerificationDeletePayload {
+    """
+    Deleted dnsVerification ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDNSVerification mutation
+"""
+type DNSVerificationBulkCreatePayload {
+    """
+    Created dnsVerifications
+    """
+    dnsVerifications: [DNSVerification!]
+}

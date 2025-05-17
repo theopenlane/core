@@ -38,6 +38,10 @@ type Tx struct {
 	CustomDomain *CustomDomainClient
 	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
 	CustomDomainHistory *CustomDomainHistoryClient
+	// DNSVerification is the client for interacting with the DNSVerification builders.
+	DNSVerification *DNSVerificationClient
+	// DNSVerificationHistory is the client for interacting with the DNSVerificationHistory builders.
+	DNSVerificationHistory *DNSVerificationHistoryClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -326,6 +330,8 @@ func (tx *Tx) init() {
 	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
 	tx.CustomDomain = NewCustomDomainClient(tx.config)
 	tx.CustomDomainHistory = NewCustomDomainHistoryClient(tx.config)
+	tx.DNSVerification = NewDNSVerificationClient(tx.config)
+	tx.DNSVerificationHistory = NewDNSVerificationHistoryClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)

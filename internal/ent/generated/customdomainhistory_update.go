@@ -142,6 +142,26 @@ func (cdhu *CustomDomainHistoryUpdate) ClearOwnerID() *CustomDomainHistoryUpdate
 	return cdhu
 }
 
+// SetDNSVerificationID sets the "dns_verification_id" field.
+func (cdhu *CustomDomainHistoryUpdate) SetDNSVerificationID(s string) *CustomDomainHistoryUpdate {
+	cdhu.mutation.SetDNSVerificationID(s)
+	return cdhu
+}
+
+// SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
+func (cdhu *CustomDomainHistoryUpdate) SetNillableDNSVerificationID(s *string) *CustomDomainHistoryUpdate {
+	if s != nil {
+		cdhu.SetDNSVerificationID(*s)
+	}
+	return cdhu
+}
+
+// ClearDNSVerificationID clears the value of the "dns_verification_id" field.
+func (cdhu *CustomDomainHistoryUpdate) ClearDNSVerificationID() *CustomDomainHistoryUpdate {
+	cdhu.mutation.ClearDNSVerificationID()
+	return cdhu
+}
+
 // Mutation returns the CustomDomainHistoryMutation object of the builder.
 func (cdhu *CustomDomainHistoryUpdate) Mutation() *CustomDomainHistoryMutation {
 	return cdhu.mutation
@@ -247,6 +267,12 @@ func (cdhu *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if cdhu.mutation.OwnerIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := cdhu.mutation.DNSVerificationID(); ok {
+		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)
+	}
+	if cdhu.mutation.DNSVerificationIDCleared() {
+		_spec.ClearField(customdomainhistory.FieldDNSVerificationID, field.TypeString)
 	}
 	_spec.Node.Schema = cdhu.schemaConfig.CustomDomainHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cdhu.schemaConfig)
@@ -379,6 +405,26 @@ func (cdhuo *CustomDomainHistoryUpdateOne) SetNillableOwnerID(s *string) *Custom
 // ClearOwnerID clears the value of the "owner_id" field.
 func (cdhuo *CustomDomainHistoryUpdateOne) ClearOwnerID() *CustomDomainHistoryUpdateOne {
 	cdhuo.mutation.ClearOwnerID()
+	return cdhuo
+}
+
+// SetDNSVerificationID sets the "dns_verification_id" field.
+func (cdhuo *CustomDomainHistoryUpdateOne) SetDNSVerificationID(s string) *CustomDomainHistoryUpdateOne {
+	cdhuo.mutation.SetDNSVerificationID(s)
+	return cdhuo
+}
+
+// SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
+func (cdhuo *CustomDomainHistoryUpdateOne) SetNillableDNSVerificationID(s *string) *CustomDomainHistoryUpdateOne {
+	if s != nil {
+		cdhuo.SetDNSVerificationID(*s)
+	}
+	return cdhuo
+}
+
+// ClearDNSVerificationID clears the value of the "dns_verification_id" field.
+func (cdhuo *CustomDomainHistoryUpdateOne) ClearDNSVerificationID() *CustomDomainHistoryUpdateOne {
+	cdhuo.mutation.ClearDNSVerificationID()
 	return cdhuo
 }
 
@@ -517,6 +563,12 @@ func (cdhuo *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if cdhuo.mutation.OwnerIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := cdhuo.mutation.DNSVerificationID(); ok {
+		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)
+	}
+	if cdhuo.mutation.DNSVerificationIDCleared() {
+		_spec.ClearField(customdomainhistory.FieldDNSVerificationID, field.TypeString)
 	}
 	_spec.Node.Schema = cdhuo.schemaConfig.CustomDomainHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cdhuo.schemaConfig)

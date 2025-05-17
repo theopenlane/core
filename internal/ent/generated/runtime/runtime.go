@@ -19,6 +19,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -761,8 +763,6 @@ func init() {
 	_ = customdomainMixinFields2
 	customdomainMixinFields3 := customdomainMixin[3].Fields()
 	_ = customdomainMixinFields3
-	customdomainMixinFields5 := customdomainMixin[5].Fields()
-	_ = customdomainMixinFields5
 	customdomainFields := schema.CustomDomain{}.Fields()
 	_ = customdomainFields
 	// customdomainDescCreatedAt is the schema descriptor for created_at field.
@@ -779,10 +779,6 @@ func init() {
 	customdomainDescTags := customdomainMixinFields3[0].Descriptor()
 	// customdomain.DefaultTags holds the default value on creation for the tags field.
 	customdomain.DefaultTags = customdomainDescTags.Default.([]string)
-	// customdomainDescOwnerID is the schema descriptor for owner_id field.
-	customdomainDescOwnerID := customdomainMixinFields5[0].Descriptor()
-	// customdomain.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	customdomain.OwnerIDValidator = customdomainDescOwnerID.Validators[0].(func(string) error)
 	// customdomainDescCnameRecord is the schema descriptor for cname_record field.
 	customdomainDescCnameRecord := customdomainFields[0].Descriptor()
 	// customdomain.CnameRecordValidator is a validator for the "cname_record" field. It is called by the builders before save.
@@ -836,6 +832,179 @@ func init() {
 	customdomainhistoryDescID := customdomainhistoryFields[9].Descriptor()
 	// customdomainhistory.DefaultID holds the default value on creation for the id field.
 	customdomainhistory.DefaultID = customdomainhistoryDescID.Default.(func() string)
+	dnsverificationMixin := schema.DNSVerification{}.Mixin()
+	dnsverification.Policy = privacy.NewPolicies(schema.DNSVerification{})
+	dnsverification.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := dnsverification.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	dnsverificationMixinHooks0 := dnsverificationMixin[0].Hooks()
+	dnsverificationMixinHooks1 := dnsverificationMixin[1].Hooks()
+	dnsverificationMixinHooks5 := dnsverificationMixin[5].Hooks()
+
+	dnsverification.Hooks[1] = dnsverificationMixinHooks0[0]
+
+	dnsverification.Hooks[2] = dnsverificationMixinHooks1[0]
+
+	dnsverification.Hooks[3] = dnsverificationMixinHooks5[0]
+	dnsverificationMixinInters1 := dnsverificationMixin[1].Interceptors()
+	dnsverificationMixinInters5 := dnsverificationMixin[5].Interceptors()
+	dnsverification.Interceptors[0] = dnsverificationMixinInters1[0]
+	dnsverification.Interceptors[1] = dnsverificationMixinInters5[0]
+	dnsverificationMixinFields0 := dnsverificationMixin[0].Fields()
+	_ = dnsverificationMixinFields0
+	dnsverificationMixinFields2 := dnsverificationMixin[2].Fields()
+	_ = dnsverificationMixinFields2
+	dnsverificationMixinFields3 := dnsverificationMixin[3].Fields()
+	_ = dnsverificationMixinFields3
+	dnsverificationFields := schema.DNSVerification{}.Fields()
+	_ = dnsverificationFields
+	// dnsverificationDescCreatedAt is the schema descriptor for created_at field.
+	dnsverificationDescCreatedAt := dnsverificationMixinFields0[0].Descriptor()
+	// dnsverification.DefaultCreatedAt holds the default value on creation for the created_at field.
+	dnsverification.DefaultCreatedAt = dnsverificationDescCreatedAt.Default.(func() time.Time)
+	// dnsverificationDescUpdatedAt is the schema descriptor for updated_at field.
+	dnsverificationDescUpdatedAt := dnsverificationMixinFields0[1].Descriptor()
+	// dnsverification.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	dnsverification.DefaultUpdatedAt = dnsverificationDescUpdatedAt.Default.(func() time.Time)
+	// dnsverification.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	dnsverification.UpdateDefaultUpdatedAt = dnsverificationDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// dnsverificationDescTags is the schema descriptor for tags field.
+	dnsverificationDescTags := dnsverificationMixinFields3[0].Descriptor()
+	// dnsverification.DefaultTags holds the default value on creation for the tags field.
+	dnsverification.DefaultTags = dnsverificationDescTags.Default.([]string)
+	// dnsverificationDescCloudflareHostnameID is the schema descriptor for cloudflare_hostname_id field.
+	dnsverificationDescCloudflareHostnameID := dnsverificationFields[0].Descriptor()
+	// dnsverification.CloudflareHostnameIDValidator is a validator for the "cloudflare_hostname_id" field. It is called by the builders before save.
+	dnsverification.CloudflareHostnameIDValidator = func() func(string) error {
+		validators := dnsverificationDescCloudflareHostnameID.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(cloudflare_hostname_id string) error {
+			for _, fn := range fns {
+				if err := fn(cloudflare_hostname_id); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// dnsverificationDescDNSTxtRecord is the schema descriptor for dns_txt_record field.
+	dnsverificationDescDNSTxtRecord := dnsverificationFields[1].Descriptor()
+	// dnsverification.DNSTxtRecordValidator is a validator for the "dns_txt_record" field. It is called by the builders before save.
+	dnsverification.DNSTxtRecordValidator = func() func(string) error {
+		validators := dnsverificationDescDNSTxtRecord.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(dns_txt_record string) error {
+			for _, fn := range fns {
+				if err := fn(dns_txt_record); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// dnsverificationDescDNSTxtValue is the schema descriptor for dns_txt_value field.
+	dnsverificationDescDNSTxtValue := dnsverificationFields[2].Descriptor()
+	// dnsverification.DNSTxtValueValidator is a validator for the "dns_txt_value" field. It is called by the builders before save.
+	dnsverification.DNSTxtValueValidator = func() func(string) error {
+		validators := dnsverificationDescDNSTxtValue.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(dns_txt_value string) error {
+			for _, fn := range fns {
+				if err := fn(dns_txt_value); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// dnsverificationDescDNSVerificationStatusReason is the schema descriptor for dns_verification_status_reason field.
+	dnsverificationDescDNSVerificationStatusReason := dnsverificationFields[4].Descriptor()
+	// dnsverification.DNSVerificationStatusReasonValidator is a validator for the "dns_verification_status_reason" field. It is called by the builders before save.
+	dnsverification.DNSVerificationStatusReasonValidator = dnsverificationDescDNSVerificationStatusReason.Validators[0].(func(string) error)
+	// dnsverificationDescSslTxtRecord is the schema descriptor for ssl_txt_record field.
+	dnsverificationDescSslTxtRecord := dnsverificationFields[5].Descriptor()
+	// dnsverification.SslTxtRecordValidator is a validator for the "ssl_txt_record" field. It is called by the builders before save.
+	dnsverification.SslTxtRecordValidator = func() func(string) error {
+		validators := dnsverificationDescSslTxtRecord.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(ssl_txt_record string) error {
+			for _, fn := range fns {
+				if err := fn(ssl_txt_record); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// dnsverificationDescSslTxtValue is the schema descriptor for ssl_txt_value field.
+	dnsverificationDescSslTxtValue := dnsverificationFields[6].Descriptor()
+	// dnsverification.SslTxtValueValidator is a validator for the "ssl_txt_value" field. It is called by the builders before save.
+	dnsverification.SslTxtValueValidator = func() func(string) error {
+		validators := dnsverificationDescSslTxtValue.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(ssl_txt_value string) error {
+			for _, fn := range fns {
+				if err := fn(ssl_txt_value); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// dnsverificationDescSslCertStatusReason is the schema descriptor for ssl_cert_status_reason field.
+	dnsverificationDescSslCertStatusReason := dnsverificationFields[8].Descriptor()
+	// dnsverification.SslCertStatusReasonValidator is a validator for the "ssl_cert_status_reason" field. It is called by the builders before save.
+	dnsverification.SslCertStatusReasonValidator = dnsverificationDescSslCertStatusReason.Validators[0].(func(string) error)
+	// dnsverificationDescID is the schema descriptor for id field.
+	dnsverificationDescID := dnsverificationMixinFields2[0].Descriptor()
+	// dnsverification.DefaultID holds the default value on creation for the id field.
+	dnsverification.DefaultID = dnsverificationDescID.Default.(func() string)
+	dnsverificationhistoryInters := schema.DNSVerificationHistory{}.Interceptors()
+	dnsverificationhistory.Interceptors[0] = dnsverificationhistoryInters[0]
+	dnsverificationhistoryFields := schema.DNSVerificationHistory{}.Fields()
+	_ = dnsverificationhistoryFields
+	// dnsverificationhistoryDescHistoryTime is the schema descriptor for history_time field.
+	dnsverificationhistoryDescHistoryTime := dnsverificationhistoryFields[0].Descriptor()
+	// dnsverificationhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	dnsverificationhistory.DefaultHistoryTime = dnsverificationhistoryDescHistoryTime.Default.(func() time.Time)
+	// dnsverificationhistoryDescCreatedAt is the schema descriptor for created_at field.
+	dnsverificationhistoryDescCreatedAt := dnsverificationhistoryFields[3].Descriptor()
+	// dnsverificationhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	dnsverificationhistory.DefaultCreatedAt = dnsverificationhistoryDescCreatedAt.Default.(func() time.Time)
+	// dnsverificationhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	dnsverificationhistoryDescUpdatedAt := dnsverificationhistoryFields[4].Descriptor()
+	// dnsverificationhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	dnsverificationhistory.DefaultUpdatedAt = dnsverificationhistoryDescUpdatedAt.Default.(func() time.Time)
+	// dnsverificationhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	dnsverificationhistory.UpdateDefaultUpdatedAt = dnsverificationhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// dnsverificationhistoryDescTags is the schema descriptor for tags field.
+	dnsverificationhistoryDescTags := dnsverificationhistoryFields[10].Descriptor()
+	// dnsverificationhistory.DefaultTags holds the default value on creation for the tags field.
+	dnsverificationhistory.DefaultTags = dnsverificationhistoryDescTags.Default.([]string)
+	// dnsverificationhistoryDescID is the schema descriptor for id field.
+	dnsverificationhistoryDescID := dnsverificationhistoryFields[9].Descriptor()
+	// dnsverificationhistory.DefaultID holds the default value on creation for the id field.
+	dnsverificationhistory.DefaultID = dnsverificationhistoryDescID.Default.(func() string)
 	documentdataMixin := schema.DocumentData{}.Mixin()
 	documentdata.Policy = privacy.NewPolicies(schema.DocumentData{})
 	documentdata.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -2461,6 +2630,10 @@ func init() {
 			return nil
 		}
 	}()
+	// mappabledomainDescZoneID is the schema descriptor for zone_id field.
+	mappabledomainDescZoneID := mappabledomainFields[1].Descriptor()
+	// mappabledomain.ZoneIDValidator is a validator for the "zone_id" field. It is called by the builders before save.
+	mappabledomain.ZoneIDValidator = mappabledomainDescZoneID.Validators[0].(func(string) error)
 	// mappabledomainDescID is the schema descriptor for id field.
 	mappabledomainDescID := mappabledomainMixinFields2[0].Descriptor()
 	// mappabledomain.DefaultID holds the default value on creation for the id field.

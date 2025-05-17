@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
@@ -529,6 +530,9 @@ func (cdh *CustomDomainHistory) changes(new *CustomDomainHistory) []Change {
 	if !reflect.DeepEqual(cdh.MappableDomainID, new.MappableDomainID) {
 		changes = append(changes, NewChange(customdomainhistory.FieldMappableDomainID, cdh.MappableDomainID, new.MappableDomainID))
 	}
+	if !reflect.DeepEqual(cdh.DNSVerificationID, new.DNSVerificationID) {
+		changes = append(changes, NewChange(customdomainhistory.FieldDNSVerificationID, cdh.DNSVerificationID, new.DNSVerificationID))
+	}
 	return changes
 }
 
@@ -552,6 +556,84 @@ func (cdh *CustomDomainHistory) Diff(history *CustomDomainHistory) (*HistoryDiff
 			Old:     history,
 			New:     cdh,
 			Changes: history.changes(cdh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (dvh *DNSVerificationHistory) changes(new *DNSVerificationHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(dvh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldCreatedAt, dvh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(dvh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldUpdatedAt, dvh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(dvh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldCreatedBy, dvh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(dvh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDeletedAt, dvh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(dvh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDeletedBy, dvh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(dvh.Tags, new.Tags) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldTags, dvh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(dvh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldOwnerID, dvh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(dvh.CloudflareHostnameID, new.CloudflareHostnameID) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldCloudflareHostnameID, dvh.CloudflareHostnameID, new.CloudflareHostnameID))
+	}
+	if !reflect.DeepEqual(dvh.DNSTxtRecord, new.DNSTxtRecord) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSTxtRecord, dvh.DNSTxtRecord, new.DNSTxtRecord))
+	}
+	if !reflect.DeepEqual(dvh.DNSTxtValue, new.DNSTxtValue) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSTxtValue, dvh.DNSTxtValue, new.DNSTxtValue))
+	}
+	if !reflect.DeepEqual(dvh.DNSVerificationStatus, new.DNSVerificationStatus) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSVerificationStatus, dvh.DNSVerificationStatus, new.DNSVerificationStatus))
+	}
+	if !reflect.DeepEqual(dvh.DNSVerificationStatusReason, new.DNSVerificationStatusReason) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSVerificationStatusReason, dvh.DNSVerificationStatusReason, new.DNSVerificationStatusReason))
+	}
+	if !reflect.DeepEqual(dvh.SslTxtRecord, new.SslTxtRecord) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldSslTxtRecord, dvh.SslTxtRecord, new.SslTxtRecord))
+	}
+	if !reflect.DeepEqual(dvh.SslTxtValue, new.SslTxtValue) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldSslTxtValue, dvh.SslTxtValue, new.SslTxtValue))
+	}
+	if !reflect.DeepEqual(dvh.SslCertStatus, new.SslCertStatus) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldSslCertStatus, dvh.SslCertStatus, new.SslCertStatus))
+	}
+	if !reflect.DeepEqual(dvh.SslCertStatusReason, new.SslCertStatusReason) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldSslCertStatusReason, dvh.SslCertStatusReason, new.SslCertStatusReason))
+	}
+	return changes
+}
+
+func (dvh *DNSVerificationHistory) Diff(history *DNSVerificationHistory) (*HistoryDiff[DNSVerificationHistory], error) {
+	if dvh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	dvhUnix, historyUnix := dvh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	dvhOlder := dvhUnix < historyUnix || (dvhUnix == historyUnix && dvh.ID < history.ID)
+	historyOlder := dvhUnix > historyUnix || (dvhUnix == historyUnix && dvh.ID > history.ID)
+
+	if dvhOlder {
+		return &HistoryDiff[DNSVerificationHistory]{
+			Old:     dvh,
+			New:     history,
+			Changes: dvh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[DNSVerificationHistory]{
+			Old:     history,
+			New:     dvh,
+			Changes: history.changes(dvh),
 		}, nil
 	}
 	return nil, IdenticalHistoryError
@@ -1446,6 +1528,9 @@ func (mdh *MappableDomainHistory) changes(new *MappableDomainHistory) []Change {
 	}
 	if !reflect.DeepEqual(mdh.Name, new.Name) {
 		changes = append(changes, NewChange(mappabledomainhistory.FieldName, mdh.Name, new.Name))
+	}
+	if !reflect.DeepEqual(mdh.ZoneID, new.ZoneID) {
+		changes = append(changes, NewChange(mappabledomainhistory.FieldZoneID, mdh.ZoneID, new.ZoneID))
 	}
 	return changes
 }
@@ -2856,6 +2941,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditDNSVerificationHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditDocumentDataHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -3099,6 +3190,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("CustomDomainHistory", "History") {
 		record, err = auditCustomDomainHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("DNSVerificationHistory", "History") {
+		record, err = auditDNSVerificationHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -3725,6 +3825,59 @@ func auditCustomDomainHistory(ctx context.Context, config config) ([][]string, e
 			default:
 				if i == 0 {
 					record.Changes = (&CustomDomainHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type dnsverificationhistoryref struct {
+	Ref string
+}
+
+func auditDNSVerificationHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []dnsverificationhistoryref
+	client := NewDNSVerificationHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(dnsverificationhistory.ByRef()).
+		Select(dnsverificationhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(dnsverificationhistory.Ref(currRef.Ref)).
+			Order(dnsverificationhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "DNSVerificationHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&DNSVerificationHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&DNSVerificationHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&DNSVerificationHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

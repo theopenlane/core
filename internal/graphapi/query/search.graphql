@@ -120,6 +120,21 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    dnsVerifications {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
     documentData {
       totalCount
       pageInfo {

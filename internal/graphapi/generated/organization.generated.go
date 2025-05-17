@@ -187,6 +187,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_jobRunnerTokens(ctx, field)
 			case "jobRunnerRegistrationTokens":
 				return ec.fieldContext_Organization_jobRunnerRegistrationTokens(ctx, field)
+			case "dnsVerifications":
+				return ec.fieldContext_Organization_dnsVerifications(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -357,6 +359,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_jobRunnerTokens(ctx, field)
 			case "jobRunnerRegistrationTokens":
 				return ec.fieldContext_Organization_jobRunnerRegistrationTokens(ctx, field)
+			case "dnsVerifications":
+				return ec.fieldContext_Organization_dnsVerifications(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -571,6 +575,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_jobRunnerTokens(ctx, field)
 			case "jobRunnerRegistrationTokens":
 				return ec.fieldContext_Organization_jobRunnerRegistrationTokens(ctx, field)
+			case "dnsVerifications":
+				return ec.fieldContext_Organization_dnsVerifications(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}

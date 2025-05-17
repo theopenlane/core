@@ -110,6 +110,11 @@ func Name(v string) predicate.MappableDomainHistory {
 	return predicate.MappableDomainHistory(sql.FieldEQ(FieldName, v))
 }
 
+// ZoneID applies equality check predicate on the "zone_id" field. It's identical to ZoneIDEQ.
+func ZoneID(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldEQ(FieldZoneID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.MappableDomainHistory {
 	return predicate.MappableDomainHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -693,6 +698,71 @@ func NameEqualFold(v string) predicate.MappableDomainHistory {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.MappableDomainHistory {
 	return predicate.MappableDomainHistory(sql.FieldContainsFold(FieldName, v))
+}
+
+// ZoneIDEQ applies the EQ predicate on the "zone_id" field.
+func ZoneIDEQ(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldEQ(FieldZoneID, v))
+}
+
+// ZoneIDNEQ applies the NEQ predicate on the "zone_id" field.
+func ZoneIDNEQ(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldNEQ(FieldZoneID, v))
+}
+
+// ZoneIDIn applies the In predicate on the "zone_id" field.
+func ZoneIDIn(vs ...string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldIn(FieldZoneID, vs...))
+}
+
+// ZoneIDNotIn applies the NotIn predicate on the "zone_id" field.
+func ZoneIDNotIn(vs ...string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldNotIn(FieldZoneID, vs...))
+}
+
+// ZoneIDGT applies the GT predicate on the "zone_id" field.
+func ZoneIDGT(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldGT(FieldZoneID, v))
+}
+
+// ZoneIDGTE applies the GTE predicate on the "zone_id" field.
+func ZoneIDGTE(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldGTE(FieldZoneID, v))
+}
+
+// ZoneIDLT applies the LT predicate on the "zone_id" field.
+func ZoneIDLT(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldLT(FieldZoneID, v))
+}
+
+// ZoneIDLTE applies the LTE predicate on the "zone_id" field.
+func ZoneIDLTE(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldLTE(FieldZoneID, v))
+}
+
+// ZoneIDContains applies the Contains predicate on the "zone_id" field.
+func ZoneIDContains(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldContains(FieldZoneID, v))
+}
+
+// ZoneIDHasPrefix applies the HasPrefix predicate on the "zone_id" field.
+func ZoneIDHasPrefix(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldHasPrefix(FieldZoneID, v))
+}
+
+// ZoneIDHasSuffix applies the HasSuffix predicate on the "zone_id" field.
+func ZoneIDHasSuffix(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldHasSuffix(FieldZoneID, v))
+}
+
+// ZoneIDEqualFold applies the EqualFold predicate on the "zone_id" field.
+func ZoneIDEqualFold(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldEqualFold(FieldZoneID, v))
+}
+
+// ZoneIDContainsFold applies the ContainsFold predicate on the "zone_id" field.
+func ZoneIDContainsFold(v string) predicate.MappableDomainHistory {
+	return predicate.MappableDomainHistory(sql.FieldContainsFold(FieldZoneID, v))
 }
 
 // And groups predicates with the AND operator between them.

@@ -1,3 +1,4 @@
+
 mutation CreateBulkCSVMappableDomain($input: Upload!) {
   createBulkCSVMappableDomain(input: $input) {
     mappableDomains {
@@ -8,6 +9,7 @@ mutation CreateBulkCSVMappableDomain($input: Upload!) {
       tags
       updatedAt
       updatedBy
+      zoneID
     }
   }
 }
@@ -22,6 +24,7 @@ mutation CreateBulkMappableDomain($input: [CreateMappableDomainInput!]) {
       tags
       updatedAt
       updatedBy
+      zoneID
     }
   }
 }
@@ -36,6 +39,7 @@ mutation CreateMappableDomain($input: CreateMappableDomainInput!) {
       tags
       updatedAt
       updatedBy
+      zoneID
     }
   }
 }
@@ -64,11 +68,11 @@ query GetAllMappableDomains {
         tags
         updatedAt
         updatedBy
+        zoneID
       }
     }
   }
 }
-
 query GetMappableDomainByID($mappableDomainId: ID!) {
   mappableDomain(id: $mappableDomainId) {
     createdAt
@@ -78,6 +82,7 @@ query GetMappableDomainByID($mappableDomainId: ID!) {
     tags
     updatedAt
     updatedBy
+    zoneID
   }
 }
 
@@ -99,11 +104,11 @@ query GetMappableDomains($first: Int, $last: Int, $where: MappableDomainWhereInp
         tags
         updatedAt
         updatedBy
+        zoneID
       }
     }
   }
 }
-
 mutation UpdateMappableDomain($updateMappableDomainId: ID!, $input: UpdateMappableDomainInput!) {
   updateMappableDomain(id: $updateMappableDomainId, input: $input) {
     mappableDomain {
@@ -114,6 +119,7 @@ mutation UpdateMappableDomain($updateMappableDomainId: ID!, $input: UpdateMappab
       tags
       updatedAt
       updatedBy
+      zoneID
     }
   }
 }

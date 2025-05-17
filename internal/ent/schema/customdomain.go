@@ -9,8 +9,10 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
@@ -25,7 +27,6 @@ const (
 	// SchemaCustomDomain is the name of the CustomDomain schema.
 	SchemaCustomDomain = "custom_domain"
 	maxDomainNameLen   = 255
-	maxTXTValueLen     = 64
 )
 
 // Name returns the name of the CustomDomain schema.
@@ -59,6 +60,13 @@ func (CustomDomain) Fields() []ent.Field {
 			Comment("The mappable domain id that this custom domain maps to").
 			NotEmpty().
 			Immutable(),
+		// TODO skip
+		field.String("dns_verification_id").
+			Comment("The ID of the dns verification record").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			).
+			Optional(),
 	}
 }
 
@@ -66,7 +74,7 @@ func (CustomDomain) Fields() []ent.Field {
 func (e CustomDomain) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(e),
+			newOrgOwnedMixin(e, withSkipForSystemAdmin(true)),
 		},
 	}.getMixins()
 }
@@ -80,6 +88,13 @@ func (e CustomDomain) Edges() []ent.Edge {
 			field:      "mappable_domain_id",
 			required:   true,
 			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: DNSVerification{},
+			field:      "dns_verification_id",
+			required:   false,
+			immutable:  false,
 		}),
 	}
 }
@@ -99,8 +114,15 @@ func (CustomDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			policy.CheckOrgReadAccess(),
+			rule.AllowQueryIfSystemAdmin(),
 		),
-		policy.WithMutationRules(
+		policy.WithOnMutationRules(
+			ent.OpUpdateOne|ent.OpUpdate,
+			rule.AllowMutationIfSystemAdmin(),
+			privacy.AlwaysDenyRule(),
+		),
+		policy.WithOnMutationRules(
+			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,
 			policy.CheckOrgWriteAccess(),
 		),
 	)
