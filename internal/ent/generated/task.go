@@ -86,13 +86,15 @@ type TaskEdges struct {
 	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// Risks holds the value of the risks edge.
+	Risks []*Risk `json:"risks,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [13]map[string]int
 
 	namedComments          map[string][]*Note
 	namedGroups            map[string][]*Group
@@ -102,6 +104,7 @@ type TaskEdges struct {
 	namedSubcontrols       map[string][]*Subcontrol
 	namedControlObjectives map[string][]*ControlObjective
 	namedPrograms          map[string][]*Program
+	namedRisks             map[string][]*Risk
 	namedEvidence          map[string][]*Evidence
 }
 
@@ -210,10 +213,19 @@ func (e TaskEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
+// RisksOrErr returns the Risks value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) RisksOrErr() ([]*Risk, error) {
+	if e.loadedTypes[11] {
+		return e.Risks, nil
+	}
+	return nil, &NotLoadedError{edge: "risks"}
+}
+
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -423,6 +435,11 @@ func (t *Task) QueryControlObjectives() *ControlObjectiveQuery {
 // QueryPrograms queries the "programs" edge of the Task entity.
 func (t *Task) QueryPrograms() *ProgramQuery {
 	return NewTaskClient(t.config).QueryPrograms(t)
+}
+
+// QueryRisks queries the "risks" edge of the Task entity.
+func (t *Task) QueryRisks() *RiskQuery {
+	return NewTaskClient(t.config).QueryRisks(t)
 }
 
 // QueryEvidence queries the "evidence" edge of the Task entity.
@@ -696,6 +713,30 @@ func (t *Task) appendNamedPrograms(name string, edges ...*Program) {
 		t.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		t.Edges.namedPrograms[name] = append(t.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedRisks returns the Risks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (t *Task) NamedRisks(name string) ([]*Risk, error) {
+	if t.Edges.namedRisks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := t.Edges.namedRisks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (t *Task) appendNamedRisks(name string, edges ...*Risk) {
+	if t.Edges.namedRisks == nil {
+		t.Edges.namedRisks = make(map[string][]*Risk)
+	}
+	if len(edges) == 0 {
+		t.Edges.namedRisks[name] = []*Risk{}
+	} else {
+		t.Edges.namedRisks[name] = append(t.Edges.namedRisks[name], edges...)
 	}
 }
 

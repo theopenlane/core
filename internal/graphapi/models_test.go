@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -159,6 +158,7 @@ type TaskBuilder struct {
 	AssigneeID string
 	Due        time.Time
 	GroupID    string
+	RiskID     string
 }
 
 type ProgramBuilder struct {
@@ -781,6 +781,10 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 
 	if c.GroupID != "" {
 		taskCreate.AddGroupIDs(c.GroupID)
+	}
+
+	if c.RiskID != "" {
+		taskCreate.AddRiskIDs(c.RiskID)
 	}
 
 	task, err := taskCreate.Save(ctx)

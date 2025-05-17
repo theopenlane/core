@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -506,6 +507,21 @@ func (ru *RiskUpdate) AddActionPlans(a ...*ActionPlan) *RiskUpdate {
 	return ru.AddActionPlanIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (ru *RiskUpdate) AddTaskIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddTaskIDs(ids...)
+	return ru
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (ru *RiskUpdate) AddTasks(t ...*Task) *RiskUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ru.AddTaskIDs(ids...)
+}
+
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
 func (ru *RiskUpdate) SetStakeholder(g *Group) *RiskUpdate {
 	return ru.SetStakeholderID(g.ID)
@@ -708,6 +724,27 @@ func (ru *RiskUpdate) RemoveActionPlans(a ...*ActionPlan) *RiskUpdate {
 		ids[i] = a[i].ID
 	}
 	return ru.RemoveActionPlanIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (ru *RiskUpdate) ClearTasks() *RiskUpdate {
+	ru.mutation.ClearTasks()
+	return ru
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (ru *RiskUpdate) RemoveTaskIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveTaskIDs(ids...)
+	return ru
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (ru *RiskUpdate) RemoveTasks(t ...*Task) *RiskUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ru.RemoveTaskIDs(ids...)
 }
 
 // ClearStakeholder clears the "stakeholder" edge to the Group entity.
@@ -1340,6 +1377,54 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ru.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.TasksTable,
+			Columns: risk.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ru.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.TasksTable,
+			Columns: risk.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.TasksTable,
+			Columns: risk.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ru.mutation.StakeholderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1892,6 +1977,21 @@ func (ruo *RiskUpdateOne) AddActionPlans(a ...*ActionPlan) *RiskUpdateOne {
 	return ruo.AddActionPlanIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (ruo *RiskUpdateOne) AddTaskIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddTaskIDs(ids...)
+	return ruo
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (ruo *RiskUpdateOne) AddTasks(t ...*Task) *RiskUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ruo.AddTaskIDs(ids...)
+}
+
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
 func (ruo *RiskUpdateOne) SetStakeholder(g *Group) *RiskUpdateOne {
 	return ruo.SetStakeholderID(g.ID)
@@ -2094,6 +2194,27 @@ func (ruo *RiskUpdateOne) RemoveActionPlans(a ...*ActionPlan) *RiskUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return ruo.RemoveActionPlanIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (ruo *RiskUpdateOne) ClearTasks() *RiskUpdateOne {
+	ruo.mutation.ClearTasks()
+	return ruo
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (ruo *RiskUpdateOne) RemoveTaskIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveTaskIDs(ids...)
+	return ruo
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (ruo *RiskUpdateOne) RemoveTasks(t ...*Task) *RiskUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ruo.RemoveTaskIDs(ids...)
 }
 
 // ClearStakeholder clears the "stakeholder" edge to the Group entity.
@@ -2751,6 +2872,54 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 			},
 		}
 		edge.Schema = ruo.schemaConfig.RiskActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.TasksTable,
+			Columns: risk.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ruo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.TasksTable,
+			Columns: risk.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.TasksTable,
+			Columns: risk.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -6746,6 +6746,7 @@ type CreateRiskInput struct {
 	InternalPolicyIDs []string
 	ProgramIDs        []string
 	ActionPlanIDs     []string
+	TaskIDs           []string
 	StakeholderID     *string
 	DelegateID        *string
 }
@@ -6813,6 +6814,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
 	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
 	if v := i.StakeholderID; v != nil {
 		m.SetStakeholderID(*v)
 	}
@@ -6878,6 +6882,9 @@ type UpdateRiskInput struct {
 	ClearActionPlans        bool
 	AddActionPlanIDs        []string
 	RemoveActionPlanIDs     []string
+	ClearTasks              bool
+	AddTaskIDs              []string
+	RemoveTaskIDs           []string
 	ClearStakeholder        bool
 	StakeholderID           *string
 	ClearDelegate           bool
@@ -7032,6 +7039,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveActionPlanIDs; len(v) > 0 {
 		m.RemoveActionPlanIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
 	}
 	if i.ClearStakeholder {
 		m.ClearStakeholder()
@@ -7943,6 +7959,7 @@ type CreateTaskInput struct {
 	SubcontrolIDs       []string
 	ControlObjectiveIDs []string
 	ProgramIDs          []string
+	RiskIDs             []string
 	EvidenceIDs         []string
 }
 
@@ -8000,6 +8017,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
 	}
@@ -8054,6 +8074,9 @@ type UpdateTaskInput struct {
 	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
+	ClearRisks                bool
+	AddRiskIDs                []string
+	RemoveRiskIDs             []string
 	ClearEvidence             bool
 	AddEvidenceIDs            []string
 	RemoveEvidenceIDs         []string
@@ -8183,6 +8206,15 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()

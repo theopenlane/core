@@ -5613,6 +5613,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"ActionPlan",
 	)
 	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.TasksTable,
+			Columns: risk.TasksPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Task",
+	)
+	graph.MustAddE(
 		"stakeholder",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -5995,6 +6007,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Task",
 		"Program",
+	)
+	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.RisksTable,
+			Columns: task.RisksPrimaryKey,
+			Bidi:    false,
+		},
+		"Task",
+		"Risk",
 	)
 	graph.MustAddE(
 		"evidence",
@@ -17700,6 +17724,20 @@ func (f *RiskFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
 	})))
 }
 
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *RiskFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasStakeholder applies a predicate to check if query has an edge stakeholder.
 func (f *RiskFilter) WhereHasStakeholder() {
 	f.Where(entql.HasEdge("stakeholder"))
@@ -19372,6 +19410,20 @@ func (f *TaskFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *TaskFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *TaskFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

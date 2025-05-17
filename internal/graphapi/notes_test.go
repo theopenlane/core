@@ -179,8 +179,7 @@ func TestMutationDeleteNote(t *testing.T) {
 
 			noteID := *request.DeleteComment
 			_, err = tc.client.GetNoteByID(tc.ctx, noteID)
-			assert.Check(t, is.ErrorContains(err, ""))
-			assert.ErrorContains(t, err, "note not found")
+			assert.Check(t, is.ErrorContains(err, notFoundErrorMsg))
 		})
 	}
 
