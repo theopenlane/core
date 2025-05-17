@@ -1,0 +1,63 @@
+package mappabledomain
+
+import (
+	"context"
+
+	"github.com/spf13/cobra"
+
+	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/openlaneclient"
+)
+
+var createCmd = &cobra.Command{
+	Use:   "create",
+	Short: "create a new mappable domain",
+	Run: func(cmd *cobra.Command, args []string) {
+		err := create(cmd.Context())
+		cobra.CheckErr(err)
+	},
+}
+
+func init() {
+	command.AddCommand(createCmd)
+
+	createCmd.Flags().StringP("name", "n", "", "name of the mappable domain")
+	createCmd.Flags().StringSliceP("tags", "t", []string{}, "tags for the mappable domain")
+}
+
+// createValidation validates the required fields for the command
+func createValidation() (input openlaneclient.CreateMappableDomainInput, err error) {
+	name := cmd.Config.String("name")
+	if name == "" {
+		return input, cmd.NewRequiredFieldMissingError("name")
+	}
+
+	input.Name = name
+
+	tags := cmd.Config.Strings("tags")
+	if len(tags) > 0 {
+		input.Tags = tags
+	}
+
+	return input, nil
+}
+
+// create a new mappable domain
+func create(ctx context.Context) error {
+	// attempt to setup with token, otherwise fall back to JWT with session
+	client, err := cmd.TokenAuth(ctx, cmd.Config)
+	if err != nil || client == nil {
+		// setup http client
+		client, err = cmd.SetupClientWithAuth(ctx)
+		cobra.CheckErr(err)
+		defer cmd.StoreSessionCookies(client)
+	}
+
+	input, err := createValidation()
+	cobra.CheckErr(err)
+
+	o, err := client.CreateMappableDomain(ctx, input)
+	cobra.CheckErr(err)
+
+	return consoleOutput(o)
+}
