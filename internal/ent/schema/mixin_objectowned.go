@@ -293,7 +293,7 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			objectIDs, err := interceptors.GetAuthorizedObjectIDs(ctx, strcase.SnakeCase(m.Type()), true)
+			objectIDs, err := interceptors.GetAuthorizedObjectIDs(ctx, strcase.SnakeCase(m.Type()), fgax.CanEdit)
 			if err != nil {
 				return nil, err
 			}

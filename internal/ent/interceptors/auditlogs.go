@@ -54,7 +54,7 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 		}
 
 		if objectOwner != "" {
-			filter, err := GetAuthorizedObjectIDs(ctx, objectOwner, false)
+			filter, err := GetAuthorizedObjectIDs(ctx, objectOwner, fgax.CanViewAuditLog)
 			if err != nil {
 				return err
 			}
