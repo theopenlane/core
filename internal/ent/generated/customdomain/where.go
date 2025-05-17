@@ -112,6 +112,11 @@ func MappableDomainID(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldEQ(FieldMappableDomainID, v))
 }
 
+// DNSVerificationID applies equality check predicate on the "dns_verification_id" field. It's identical to DNSVerificationIDEQ.
+func DNSVerificationID(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldEQ(FieldDNSVerificationID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldEQ(FieldCreatedAt, v))
@@ -702,6 +707,81 @@ func MappableDomainIDContainsFold(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldContainsFold(FieldMappableDomainID, v))
 }
 
+// DNSVerificationIDEQ applies the EQ predicate on the "dns_verification_id" field.
+func DNSVerificationIDEQ(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldEQ(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDNEQ applies the NEQ predicate on the "dns_verification_id" field.
+func DNSVerificationIDNEQ(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNEQ(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDIn applies the In predicate on the "dns_verification_id" field.
+func DNSVerificationIDIn(vs ...string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldIn(FieldDNSVerificationID, vs...))
+}
+
+// DNSVerificationIDNotIn applies the NotIn predicate on the "dns_verification_id" field.
+func DNSVerificationIDNotIn(vs ...string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNotIn(FieldDNSVerificationID, vs...))
+}
+
+// DNSVerificationIDGT applies the GT predicate on the "dns_verification_id" field.
+func DNSVerificationIDGT(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldGT(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDGTE applies the GTE predicate on the "dns_verification_id" field.
+func DNSVerificationIDGTE(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldGTE(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDLT applies the LT predicate on the "dns_verification_id" field.
+func DNSVerificationIDLT(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldLT(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDLTE applies the LTE predicate on the "dns_verification_id" field.
+func DNSVerificationIDLTE(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldLTE(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDContains applies the Contains predicate on the "dns_verification_id" field.
+func DNSVerificationIDContains(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldContains(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDHasPrefix applies the HasPrefix predicate on the "dns_verification_id" field.
+func DNSVerificationIDHasPrefix(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldHasPrefix(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDHasSuffix applies the HasSuffix predicate on the "dns_verification_id" field.
+func DNSVerificationIDHasSuffix(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldHasSuffix(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDIsNil applies the IsNil predicate on the "dns_verification_id" field.
+func DNSVerificationIDIsNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldIsNull(FieldDNSVerificationID))
+}
+
+// DNSVerificationIDNotNil applies the NotNil predicate on the "dns_verification_id" field.
+func DNSVerificationIDNotNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNotNull(FieldDNSVerificationID))
+}
+
+// DNSVerificationIDEqualFold applies the EqualFold predicate on the "dns_verification_id" field.
+func DNSVerificationIDEqualFold(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldEqualFold(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDContainsFold applies the ContainsFold predicate on the "dns_verification_id" field.
+func DNSVerificationIDContainsFold(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldContainsFold(FieldDNSVerificationID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.CustomDomain {
 	return predicate.CustomDomain(func(s *sql.Selector) {
@@ -751,6 +831,35 @@ func HasMappableDomainWith(preds ...predicate.MappableDomain) predicate.CustomDo
 		step := newMappableDomainStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.MappableDomain
+		step.Edge.Schema = schemaConfig.CustomDomain
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDNSVerification applies the HasEdge predicate on the "dns_verification" edge.
+func HasDNSVerification() predicate.CustomDomain {
+	return predicate.CustomDomain(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DNSVerificationTable, DNSVerificationColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DNSVerification
+		step.Edge.Schema = schemaConfig.CustomDomain
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDNSVerificationWith applies the HasEdge predicate on the "dns_verification" edge with a given conditions (other predicates).
+func HasDNSVerificationWith(preds ...predicate.DNSVerification) predicate.CustomDomain {
+	return predicate.CustomDomain(func(s *sql.Selector) {
+		step := newDNSVerificationStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DNSVerification
 		step.Edge.Schema = schemaConfig.CustomDomain
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

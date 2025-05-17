@@ -292,7 +292,8 @@ type MappableDomainBuilder struct {
 	client *client
 
 	// Fields
-	Name string
+	Name   string
+	ZoneID string
 }
 
 // Faker structs with random injected data
@@ -1192,9 +1193,13 @@ func (e *MappableDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 	if e.Name == "" {
 		e.Name = gofakeit.DomainName()
 	}
+	if e.ZoneID == "" {
+		e.ZoneID = gofakeit.UUID()
+	}
 
 	mappableDomain, err := e.client.db.MappableDomain.Create().
 		SetName(e.Name).
+		SetZoneID(e.ZoneID).
 		Save(ctx)
 	assert.NilError(t, err)
 
@@ -1209,6 +1214,23 @@ type CustomDomainBuilder struct {
 	CnameRecord      string
 	MappableDomainID string
 	OwnerID          string
+}
+
+// DNSVerificationBuilder is used to create DNS verifications
+type DNSVerificationBuilder struct {
+	client *client
+
+	// Fields
+	CloudflareHostnameID        string
+	DNSTxtRecord                string
+	DNSTxtValue                 string
+	DNSVerificationStatus       *enums.CustomDomainStatus
+	DNSVerificationStatusReason *string
+	SslTxtRecord                string
+	SslTxtValue                 string
+	SslCertStatus               *enums.CustomDomainStatus
+	OwnerID                     string
+	CustomDomainIDs             []string
 }
 
 // MustNew custom domain builder is used to create, without authz checks, custom domains in the database
@@ -1291,4 +1313,63 @@ func (j *JobRunnerRegistrationTokenBuilder) MustNew(ctx context.Context, t *test
 	assert.NilError(t, err)
 
 	return token
+}
+
+// MustNew DNS verification builder is used to create, without authz checks, DNS verifications in the database
+func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.DNSVerification {
+	ctx = setContext(ctx, d.client.db)
+
+	if d.CloudflareHostnameID == "" {
+		d.CloudflareHostnameID = gofakeit.UUID()
+	}
+
+	if d.DNSTxtRecord == "" {
+		d.DNSTxtRecord = "_cf-verify." + gofakeit.DomainName()
+	}
+
+	if d.DNSTxtValue == "" {
+		d.DNSTxtValue = gofakeit.UUID()
+	}
+
+	if d.SslTxtRecord == "" {
+		d.SslTxtRecord = "_acme-challenge." + gofakeit.DomainName()
+	}
+
+	if d.SslTxtValue == "" {
+		d.SslTxtValue = gofakeit.UUID()
+	}
+
+	if d.OwnerID == "" {
+		// Use the organization ID from the test user
+		d.OwnerID = testUser1.OrganizationID
+	}
+
+	mutation := d.client.db.DNSVerification.Create().
+		SetCloudflareHostnameID(d.CloudflareHostnameID).
+		SetDNSTxtRecord(d.DNSTxtRecord).
+		SetDNSTxtValue(d.DNSTxtValue).
+		SetSslTxtRecord(d.SslTxtRecord).
+		SetSslTxtValue(d.SslTxtValue).
+		SetOwnerID(d.OwnerID)
+
+	if d.DNSVerificationStatus != nil {
+		mutation.SetDNSVerificationStatus(*d.DNSVerificationStatus)
+	}
+
+	if d.DNSVerificationStatusReason != nil {
+		mutation.SetDNSVerificationStatusReason(*d.DNSVerificationStatusReason)
+	}
+
+	if d.SslCertStatus != nil {
+		mutation.SetSslCertStatus(*d.SslCertStatus)
+	}
+
+	if len(d.CustomDomainIDs) > 0 {
+		mutation.AddCustomDomainIDs(d.CustomDomainIDs...)
+	}
+
+	dnsVerification, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return dnsVerification
 }

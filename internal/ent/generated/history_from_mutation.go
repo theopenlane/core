@@ -1571,6 +1571,10 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetMappableDomainID(mappableDomainID)
 	}
 
+	if dnsVerificationID, exists := m.DNSVerificationID(); exists {
+		create = create.SetDNSVerificationID(dnsVerificationID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -1661,6 +1665,12 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetMappableDomainID(customdomain.MappableDomainID)
 		}
 
+		if dnsVerificationID, exists := m.DNSVerificationID(); exists {
+			create = create.SetDNSVerificationID(dnsVerificationID)
+		} else {
+			create = create.SetDNSVerificationID(customdomain.DNSVerificationID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1703,6 +1713,280 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetOwnerID(customdomain.OwnerID).
 			SetCnameRecord(customdomain.CnameRecord).
 			SetMappableDomainID(customdomain.MappableDomainID).
+			SetDNSVerificationID(customdomain.DNSVerificationID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DNSVerificationMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.DNSVerificationHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if cloudflareHostnameID, exists := m.CloudflareHostnameID(); exists {
+		create = create.SetCloudflareHostnameID(cloudflareHostnameID)
+	}
+
+	if dnsTxtRecord, exists := m.DNSTxtRecord(); exists {
+		create = create.SetDNSTxtRecord(dnsTxtRecord)
+	}
+
+	if dnsTxtValue, exists := m.DNSTxtValue(); exists {
+		create = create.SetDNSTxtValue(dnsTxtValue)
+	}
+
+	if dnsVerificationStatus, exists := m.DNSVerificationStatus(); exists {
+		create = create.SetDNSVerificationStatus(dnsVerificationStatus)
+	}
+
+	if dnsVerificationStatusReason, exists := m.DNSVerificationStatusReason(); exists {
+		create = create.SetDNSVerificationStatusReason(dnsVerificationStatusReason)
+	}
+
+	if sslTxtRecord, exists := m.SslTxtRecord(); exists {
+		create = create.SetSslTxtRecord(sslTxtRecord)
+	}
+
+	if sslTxtValue, exists := m.SslTxtValue(); exists {
+		create = create.SetSslTxtValue(sslTxtValue)
+	}
+
+	if sslCertStatus, exists := m.SslCertStatus(); exists {
+		create = create.SetSslCertStatus(sslCertStatus)
+	}
+
+	if sslCertStatusReason, exists := m.SslCertStatusReason(); exists {
+		create = create.SetSslCertStatusReason(sslCertStatusReason)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *DNSVerificationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		dnsverification, err := client.DNSVerification.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DNSVerificationHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(dnsverification.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(dnsverification.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(dnsverification.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(dnsverification.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(dnsverification.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(dnsverification.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(dnsverification.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(dnsverification.OwnerID)
+		}
+
+		if cloudflareHostnameID, exists := m.CloudflareHostnameID(); exists {
+			create = create.SetCloudflareHostnameID(cloudflareHostnameID)
+		} else {
+			create = create.SetCloudflareHostnameID(dnsverification.CloudflareHostnameID)
+		}
+
+		if dnsTxtRecord, exists := m.DNSTxtRecord(); exists {
+			create = create.SetDNSTxtRecord(dnsTxtRecord)
+		} else {
+			create = create.SetDNSTxtRecord(dnsverification.DNSTxtRecord)
+		}
+
+		if dnsTxtValue, exists := m.DNSTxtValue(); exists {
+			create = create.SetDNSTxtValue(dnsTxtValue)
+		} else {
+			create = create.SetDNSTxtValue(dnsverification.DNSTxtValue)
+		}
+
+		if dnsVerificationStatus, exists := m.DNSVerificationStatus(); exists {
+			create = create.SetDNSVerificationStatus(dnsVerificationStatus)
+		} else {
+			create = create.SetDNSVerificationStatus(dnsverification.DNSVerificationStatus)
+		}
+
+		if dnsVerificationStatusReason, exists := m.DNSVerificationStatusReason(); exists {
+			create = create.SetDNSVerificationStatusReason(dnsVerificationStatusReason)
+		} else {
+			create = create.SetDNSVerificationStatusReason(dnsverification.DNSVerificationStatusReason)
+		}
+
+		if sslTxtRecord, exists := m.SslTxtRecord(); exists {
+			create = create.SetSslTxtRecord(sslTxtRecord)
+		} else {
+			create = create.SetSslTxtRecord(dnsverification.SslTxtRecord)
+		}
+
+		if sslTxtValue, exists := m.SslTxtValue(); exists {
+			create = create.SetSslTxtValue(sslTxtValue)
+		} else {
+			create = create.SetSslTxtValue(dnsverification.SslTxtValue)
+		}
+
+		if sslCertStatus, exists := m.SslCertStatus(); exists {
+			create = create.SetSslCertStatus(sslCertStatus)
+		} else {
+			create = create.SetSslCertStatus(dnsverification.SslCertStatus)
+		}
+
+		if sslCertStatusReason, exists := m.SslCertStatusReason(); exists {
+			create = create.SetSslCertStatusReason(sslCertStatusReason)
+		} else {
+			create = create.SetSslCertStatusReason(dnsverification.SslCertStatusReason)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DNSVerificationMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		dnsverification, err := client.DNSVerification.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DNSVerificationHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(dnsverification.CreatedAt).
+			SetUpdatedAt(dnsverification.UpdatedAt).
+			SetCreatedBy(dnsverification.CreatedBy).
+			SetUpdatedBy(dnsverification.UpdatedBy).
+			SetDeletedAt(dnsverification.DeletedAt).
+			SetDeletedBy(dnsverification.DeletedBy).
+			SetTags(dnsverification.Tags).
+			SetOwnerID(dnsverification.OwnerID).
+			SetCloudflareHostnameID(dnsverification.CloudflareHostnameID).
+			SetDNSTxtRecord(dnsverification.DNSTxtRecord).
+			SetDNSTxtValue(dnsverification.DNSTxtValue).
+			SetDNSVerificationStatus(dnsverification.DNSVerificationStatus).
+			SetDNSVerificationStatusReason(dnsverification.DNSVerificationStatusReason).
+			SetSslTxtRecord(dnsverification.SslTxtRecord).
+			SetSslTxtValue(dnsverification.SslTxtValue).
+			SetSslCertStatus(dnsverification.SslCertStatus).
+			SetSslCertStatusReason(dnsverification.SslCertStatusReason).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4769,6 +5053,10 @@ func (m *MappableDomainMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetName(name)
 	}
 
+	if zoneID, exists := m.ZoneID(); exists {
+		create = create.SetZoneID(zoneID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4847,6 +5135,12 @@ func (m *MappableDomainMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetName(mappabledomain.Name)
 		}
 
+		if zoneID, exists := m.ZoneID(); exists {
+			create = create.SetZoneID(zoneID)
+		} else {
+			create = create.SetZoneID(mappabledomain.ZoneID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4887,6 +5181,7 @@ func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedBy(mappabledomain.DeletedBy).
 			SetTags(mappabledomain.Tags).
 			SetName(mappabledomain.Name).
+			SetZoneID(mappabledomain.ZoneID).
 			Save(ctx)
 		if err != nil {
 			return err

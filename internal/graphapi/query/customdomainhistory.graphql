@@ -1,5 +1,3 @@
-
-
 query GetAllCustomDomainHistories {
   customDomainHistories {
     totalCount
@@ -14,6 +12,7 @@ query GetAllCustomDomainHistories {
         cnameRecord
         createdAt
         createdBy
+        dnsVerificationID
         historyTime
         id
         mappableDomainID
@@ -42,6 +41,7 @@ query GetCustomDomainHistories($first: Int, $last: Int, $where: CustomDomainHist
         cnameRecord
         createdAt
         createdBy
+        dnsVerificationID
         historyTime
         id
         mappableDomainID

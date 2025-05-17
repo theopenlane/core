@@ -54,6 +54,10 @@ func (MappableDomain) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("name"),
 			),
+		field.String("zone_id").
+			Comment("DNS Zone ID of the mappable domain.").
+			NotEmpty().
+			Immutable(),
 	}
 }
 

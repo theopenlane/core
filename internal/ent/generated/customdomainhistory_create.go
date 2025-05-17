@@ -171,6 +171,20 @@ func (cdhc *CustomDomainHistoryCreate) SetMappableDomainID(s string) *CustomDoma
 	return cdhc
 }
 
+// SetDNSVerificationID sets the "dns_verification_id" field.
+func (cdhc *CustomDomainHistoryCreate) SetDNSVerificationID(s string) *CustomDomainHistoryCreate {
+	cdhc.mutation.SetDNSVerificationID(s)
+	return cdhc
+}
+
+// SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
+func (cdhc *CustomDomainHistoryCreate) SetNillableDNSVerificationID(s *string) *CustomDomainHistoryCreate {
+	if s != nil {
+		cdhc.SetDNSVerificationID(*s)
+	}
+	return cdhc
+}
+
 // SetID sets the "id" field.
 func (cdhc *CustomDomainHistoryCreate) SetID(s string) *CustomDomainHistoryCreate {
 	cdhc.mutation.SetID(s)
@@ -348,6 +362,10 @@ func (cdhc *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlg
 	if value, ok := cdhc.mutation.MappableDomainID(); ok {
 		_spec.SetField(customdomainhistory.FieldMappableDomainID, field.TypeString, value)
 		_node.MappableDomainID = value
+	}
+	if value, ok := cdhc.mutation.DNSVerificationID(); ok {
+		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)
+		_node.DNSVerificationID = value
 	}
 	return _node, _spec
 }

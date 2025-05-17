@@ -120,6 +120,11 @@ func MappableDomainID(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldEQ(FieldMappableDomainID, v))
 }
 
+// DNSVerificationID applies equality check predicate on the "dns_verification_id" field. It's identical to DNSVerificationIDEQ.
+func DNSVerificationID(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldEQ(FieldDNSVerificationID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -843,6 +848,81 @@ func MappableDomainIDEqualFold(v string) predicate.CustomDomainHistory {
 // MappableDomainIDContainsFold applies the ContainsFold predicate on the "mappable_domain_id" field.
 func MappableDomainIDContainsFold(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldContainsFold(FieldMappableDomainID, v))
+}
+
+// DNSVerificationIDEQ applies the EQ predicate on the "dns_verification_id" field.
+func DNSVerificationIDEQ(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldEQ(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDNEQ applies the NEQ predicate on the "dns_verification_id" field.
+func DNSVerificationIDNEQ(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNEQ(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDIn applies the In predicate on the "dns_verification_id" field.
+func DNSVerificationIDIn(vs ...string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldIn(FieldDNSVerificationID, vs...))
+}
+
+// DNSVerificationIDNotIn applies the NotIn predicate on the "dns_verification_id" field.
+func DNSVerificationIDNotIn(vs ...string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNotIn(FieldDNSVerificationID, vs...))
+}
+
+// DNSVerificationIDGT applies the GT predicate on the "dns_verification_id" field.
+func DNSVerificationIDGT(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldGT(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDGTE applies the GTE predicate on the "dns_verification_id" field.
+func DNSVerificationIDGTE(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldGTE(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDLT applies the LT predicate on the "dns_verification_id" field.
+func DNSVerificationIDLT(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldLT(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDLTE applies the LTE predicate on the "dns_verification_id" field.
+func DNSVerificationIDLTE(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldLTE(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDContains applies the Contains predicate on the "dns_verification_id" field.
+func DNSVerificationIDContains(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldContains(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDHasPrefix applies the HasPrefix predicate on the "dns_verification_id" field.
+func DNSVerificationIDHasPrefix(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldHasPrefix(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDHasSuffix applies the HasSuffix predicate on the "dns_verification_id" field.
+func DNSVerificationIDHasSuffix(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldHasSuffix(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDIsNil applies the IsNil predicate on the "dns_verification_id" field.
+func DNSVerificationIDIsNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldIsNull(FieldDNSVerificationID))
+}
+
+// DNSVerificationIDNotNil applies the NotNil predicate on the "dns_verification_id" field.
+func DNSVerificationIDNotNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNotNull(FieldDNSVerificationID))
+}
+
+// DNSVerificationIDEqualFold applies the EqualFold predicate on the "dns_verification_id" field.
+func DNSVerificationIDEqualFold(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldEqualFold(FieldDNSVerificationID, v))
+}
+
+// DNSVerificationIDContainsFold applies the ContainsFold predicate on the "dns_verification_id" field.
+func DNSVerificationIDContainsFold(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldContainsFold(FieldDNSVerificationID, v))
 }
 
 // And groups predicates with the AND operator between them.

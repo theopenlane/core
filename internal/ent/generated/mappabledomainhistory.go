@@ -40,7 +40,9 @@ type MappableDomainHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// Name of the mappable domain
-	Name         string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
+	// DNS Zone ID of the mappable domain.
+	ZoneID       string `json:"zone_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -53,7 +55,7 @@ func (*MappableDomainHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case mappabledomainhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case mappabledomainhistory.FieldID, mappabledomainhistory.FieldRef, mappabledomainhistory.FieldCreatedBy, mappabledomainhistory.FieldUpdatedBy, mappabledomainhistory.FieldDeletedBy, mappabledomainhistory.FieldName:
+		case mappabledomainhistory.FieldID, mappabledomainhistory.FieldRef, mappabledomainhistory.FieldCreatedBy, mappabledomainhistory.FieldUpdatedBy, mappabledomainhistory.FieldDeletedBy, mappabledomainhistory.FieldName, mappabledomainhistory.FieldZoneID:
 			values[i] = new(sql.NullString)
 		case mappabledomainhistory.FieldHistoryTime, mappabledomainhistory.FieldCreatedAt, mappabledomainhistory.FieldUpdatedAt, mappabledomainhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -146,6 +148,12 @@ func (mdh *MappableDomainHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				mdh.Name = value.String
 			}
+		case mappabledomainhistory.FieldZoneID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field zone_id", values[i])
+			} else if value.Valid {
+				mdh.ZoneID = value.String
+			}
 		default:
 			mdh.selectValues.Set(columns[i], values[i])
 		}
@@ -214,6 +222,9 @@ func (mdh *MappableDomainHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(mdh.Name)
+	builder.WriteString(", ")
+	builder.WriteString("zone_id=")
+	builder.WriteString(mdh.ZoneID)
 	builder.WriteByte(')')
 	return builder.String()
 }

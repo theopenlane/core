@@ -22,6 +22,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -163,6 +165,16 @@ var customdomainhistoryImplementors = []string{"CustomDomainHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*CustomDomainHistory) IsNode() {}
+
+var dnsverificationImplementors = []string{"DNSVerification", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DNSVerification) IsNode() {}
+
+var dnsverificationhistoryImplementors = []string{"DNSVerificationHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DNSVerificationHistory) IsNode() {}
 
 var documentdataImplementors = []string{"DocumentData", "Node"}
 
@@ -685,6 +697,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(customdomainhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, customdomainhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case dnsverification.Table:
+		query := c.DNSVerification.Query().
+			Where(dnsverification.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, dnsverificationImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case dnsverificationhistory.Table:
+		query := c.DNSVerificationHistory.Query().
+			Where(dnsverificationhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, dnsverificationhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1588,6 +1618,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.CustomDomainHistory.Query().
 			Where(customdomainhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, customdomainhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case dnsverification.Table:
+		query := c.DNSVerification.Query().
+			Where(dnsverification.IDIn(ids...))
+		query, err := query.CollectFields(ctx, dnsverificationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case dnsverificationhistory.Table:
+		query := c.DNSVerificationHistory.Query().
+			Where(dnsverificationhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, dnsverificationhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
