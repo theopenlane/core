@@ -62,37 +62,3 @@ func (r *queryResolver) JobRunnerToken(ctx context.Context, id string) (*generat
 
 	return res, nil
 }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-/*
-	func (r *mutationResolver) UpdateJobRunnerToken(ctx context.Context, id string, input generated.UpdateJobRunnerTokenInput) (*model.JobRunnerTokenUpdatePayload, error) {
-	res, err := withTransactionalMutation(ctx).JobRunnerToken.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "jobrunnertoken"})
-	}
-
-	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "jobrunnertoken"})
-	}
-
-	return &model.JobRunnerTokenUpdatePayload{
-		JobRunnerToken: res,
-	}, nil
-}
-*/
