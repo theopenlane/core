@@ -45,6 +45,12 @@ type CustomDomain func(*sql.Selector)
 // CustomDomainHistory is the predicate function for customdomainhistory builders.
 type CustomDomainHistory func(*sql.Selector)
 
+// DNSVerification is the predicate function for dnsverification builders.
+type DNSVerification func(*sql.Selector)
+
+// DNSVerificationHistory is the predicate function for dnsverificationhistory builders.
+type DNSVerificationHistory func(*sql.Selector)
+
 // DocumentData is the predicate function for documentdata builders.
 type DocumentData func(*sql.Selector)
 

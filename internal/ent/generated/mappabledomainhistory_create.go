@@ -151,6 +151,12 @@ func (mdhc *MappableDomainHistoryCreate) SetName(s string) *MappableDomainHistor
 	return mdhc
 }
 
+// SetZoneID sets the "zone_id" field.
+func (mdhc *MappableDomainHistoryCreate) SetZoneID(s string) *MappableDomainHistoryCreate {
+	mdhc.mutation.SetZoneID(s)
+	return mdhc
+}
+
 // SetID sets the "id" field.
 func (mdhc *MappableDomainHistoryCreate) SetID(s string) *MappableDomainHistoryCreate {
 	mdhc.mutation.SetID(s)
@@ -238,6 +244,9 @@ func (mdhc *MappableDomainHistoryCreate) check() error {
 	if _, ok := mdhc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "MappableDomainHistory.name"`)}
 	}
+	if _, ok := mdhc.mutation.ZoneID(); !ok {
+		return &ValidationError{Name: "zone_id", err: errors.New(`generated: missing required field "MappableDomainHistory.zone_id"`)}
+	}
 	return nil
 }
 
@@ -317,6 +326,10 @@ func (mdhc *MappableDomainHistoryCreate) createSpec() (*MappableDomainHistory, *
 	if value, ok := mdhc.mutation.Name(); ok {
 		_spec.SetField(mappabledomainhistory.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := mdhc.mutation.ZoneID(); ok {
+		_spec.SetField(mappabledomainhistory.FieldZoneID, field.TypeString, value)
+		_node.ZoneID = value
 	}
 	return _node, _spec
 }

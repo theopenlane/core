@@ -20,6 +20,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -11330,6 +11332,23 @@ type CustomDomainWhereInput struct {
 	MappableDomainIDEqualFold    *string  `json:"mappableDomainIDEqualFold,omitempty"`
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
 
+	// "dns_verification_id" field predicates.
+	DNSVerificationID             *string  `json:"dnsVerificationID,omitempty"`
+	DNSVerificationIDNEQ          *string  `json:"dnsVerificationIDNEQ,omitempty"`
+	DNSVerificationIDIn           []string `json:"dnsVerificationIDIn,omitempty"`
+	DNSVerificationIDNotIn        []string `json:"dnsVerificationIDNotIn,omitempty"`
+	DNSVerificationIDGT           *string  `json:"dnsVerificationIDGT,omitempty"`
+	DNSVerificationIDGTE          *string  `json:"dnsVerificationIDGTE,omitempty"`
+	DNSVerificationIDLT           *string  `json:"dnsVerificationIDLT,omitempty"`
+	DNSVerificationIDLTE          *string  `json:"dnsVerificationIDLTE,omitempty"`
+	DNSVerificationIDContains     *string  `json:"dnsVerificationIDContains,omitempty"`
+	DNSVerificationIDHasPrefix    *string  `json:"dnsVerificationIDHasPrefix,omitempty"`
+	DNSVerificationIDHasSuffix    *string  `json:"dnsVerificationIDHasSuffix,omitempty"`
+	DNSVerificationIDIsNil        bool     `json:"dnsVerificationIDIsNil,omitempty"`
+	DNSVerificationIDNotNil       bool     `json:"dnsVerificationIDNotNil,omitempty"`
+	DNSVerificationIDEqualFold    *string  `json:"dnsVerificationIDEqualFold,omitempty"`
+	DNSVerificationIDContainsFold *string  `json:"dnsVerificationIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -11337,6 +11356,10 @@ type CustomDomainWhereInput struct {
 	// "mappable_domain" edge predicates.
 	HasMappableDomain     *bool                       `json:"hasMappableDomain,omitempty"`
 	HasMappableDomainWith []*MappableDomainWhereInput `json:"hasMappableDomainWith,omitempty"`
+
+	// "dns_verification" edge predicates.
+	HasDNSVerification     *bool                        `json:"hasDNSVerification,omitempty"`
+	HasDNSVerificationWith []*DNSVerificationWhereInput `json:"hasDNSVerificationWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -11713,6 +11736,51 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 	if i.MappableDomainIDContainsFold != nil {
 		predicates = append(predicates, customdomain.MappableDomainIDContainsFold(*i.MappableDomainIDContainsFold))
 	}
+	if i.DNSVerificationID != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDEQ(*i.DNSVerificationID))
+	}
+	if i.DNSVerificationIDNEQ != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDNEQ(*i.DNSVerificationIDNEQ))
+	}
+	if len(i.DNSVerificationIDIn) > 0 {
+		predicates = append(predicates, customdomain.DNSVerificationIDIn(i.DNSVerificationIDIn...))
+	}
+	if len(i.DNSVerificationIDNotIn) > 0 {
+		predicates = append(predicates, customdomain.DNSVerificationIDNotIn(i.DNSVerificationIDNotIn...))
+	}
+	if i.DNSVerificationIDGT != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDGT(*i.DNSVerificationIDGT))
+	}
+	if i.DNSVerificationIDGTE != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDGTE(*i.DNSVerificationIDGTE))
+	}
+	if i.DNSVerificationIDLT != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDLT(*i.DNSVerificationIDLT))
+	}
+	if i.DNSVerificationIDLTE != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDLTE(*i.DNSVerificationIDLTE))
+	}
+	if i.DNSVerificationIDContains != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDContains(*i.DNSVerificationIDContains))
+	}
+	if i.DNSVerificationIDHasPrefix != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDHasPrefix(*i.DNSVerificationIDHasPrefix))
+	}
+	if i.DNSVerificationIDHasSuffix != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDHasSuffix(*i.DNSVerificationIDHasSuffix))
+	}
+	if i.DNSVerificationIDIsNil {
+		predicates = append(predicates, customdomain.DNSVerificationIDIsNil())
+	}
+	if i.DNSVerificationIDNotNil {
+		predicates = append(predicates, customdomain.DNSVerificationIDNotNil())
+	}
+	if i.DNSVerificationIDEqualFold != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDEqualFold(*i.DNSVerificationIDEqualFold))
+	}
+	if i.DNSVerificationIDContainsFold != nil {
+		predicates = append(predicates, customdomain.DNSVerificationIDContainsFold(*i.DNSVerificationIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := customdomain.HasOwner()
@@ -11749,6 +11817,24 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, customdomain.HasMappableDomainWith(with...))
+	}
+	if i.HasDNSVerification != nil {
+		p := customdomain.HasDNSVerification()
+		if !*i.HasDNSVerification {
+			p = customdomain.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDNSVerificationWith) > 0 {
+		with := make([]predicate.DNSVerification, 0, len(i.HasDNSVerificationWith))
+		for _, w := range i.HasDNSVerificationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDNSVerificationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, customdomain.HasDNSVerificationWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -11916,6 +12002,23 @@ type CustomDomainHistoryWhereInput struct {
 	MappableDomainIDHasSuffix    *string  `json:"mappableDomainIDHasSuffix,omitempty"`
 	MappableDomainIDEqualFold    *string  `json:"mappableDomainIDEqualFold,omitempty"`
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
+
+	// "dns_verification_id" field predicates.
+	DNSVerificationID             *string  `json:"dnsVerificationID,omitempty"`
+	DNSVerificationIDNEQ          *string  `json:"dnsVerificationIDNEQ,omitempty"`
+	DNSVerificationIDIn           []string `json:"dnsVerificationIDIn,omitempty"`
+	DNSVerificationIDNotIn        []string `json:"dnsVerificationIDNotIn,omitempty"`
+	DNSVerificationIDGT           *string  `json:"dnsVerificationIDGT,omitempty"`
+	DNSVerificationIDGTE          *string  `json:"dnsVerificationIDGTE,omitempty"`
+	DNSVerificationIDLT           *string  `json:"dnsVerificationIDLT,omitempty"`
+	DNSVerificationIDLTE          *string  `json:"dnsVerificationIDLTE,omitempty"`
+	DNSVerificationIDContains     *string  `json:"dnsVerificationIDContains,omitempty"`
+	DNSVerificationIDHasPrefix    *string  `json:"dnsVerificationIDHasPrefix,omitempty"`
+	DNSVerificationIDHasSuffix    *string  `json:"dnsVerificationIDHasSuffix,omitempty"`
+	DNSVerificationIDIsNil        bool     `json:"dnsVerificationIDIsNil,omitempty"`
+	DNSVerificationIDNotNil       bool     `json:"dnsVerificationIDNotNil,omitempty"`
+	DNSVerificationIDEqualFold    *string  `json:"dnsVerificationIDEqualFold,omitempty"`
+	DNSVerificationIDContainsFold *string  `json:"dnsVerificationIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -12373,6 +12476,51 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	if i.MappableDomainIDContainsFold != nil {
 		predicates = append(predicates, customdomainhistory.MappableDomainIDContainsFold(*i.MappableDomainIDContainsFold))
 	}
+	if i.DNSVerificationID != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDEQ(*i.DNSVerificationID))
+	}
+	if i.DNSVerificationIDNEQ != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDNEQ(*i.DNSVerificationIDNEQ))
+	}
+	if len(i.DNSVerificationIDIn) > 0 {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDIn(i.DNSVerificationIDIn...))
+	}
+	if len(i.DNSVerificationIDNotIn) > 0 {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDNotIn(i.DNSVerificationIDNotIn...))
+	}
+	if i.DNSVerificationIDGT != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDGT(*i.DNSVerificationIDGT))
+	}
+	if i.DNSVerificationIDGTE != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDGTE(*i.DNSVerificationIDGTE))
+	}
+	if i.DNSVerificationIDLT != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDLT(*i.DNSVerificationIDLT))
+	}
+	if i.DNSVerificationIDLTE != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDLTE(*i.DNSVerificationIDLTE))
+	}
+	if i.DNSVerificationIDContains != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDContains(*i.DNSVerificationIDContains))
+	}
+	if i.DNSVerificationIDHasPrefix != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDHasPrefix(*i.DNSVerificationIDHasPrefix))
+	}
+	if i.DNSVerificationIDHasSuffix != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDHasSuffix(*i.DNSVerificationIDHasSuffix))
+	}
+	if i.DNSVerificationIDIsNil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDIsNil())
+	}
+	if i.DNSVerificationIDNotNil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDNotNil())
+	}
+	if i.DNSVerificationIDEqualFold != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDEqualFold(*i.DNSVerificationIDEqualFold))
+	}
+	if i.DNSVerificationIDContainsFold != nil {
+		predicates = append(predicates, customdomainhistory.DNSVerificationIDContainsFold(*i.DNSVerificationIDContainsFold))
+	}
 
 	switch len(predicates) {
 	case 0:
@@ -12381,6 +12529,1828 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 		return predicates[0], nil
 	default:
 		return customdomainhistory.And(predicates...), nil
+	}
+}
+
+// DNSVerificationWhereInput represents a where input for filtering DNSVerification queries.
+type DNSVerificationWhereInput struct {
+	Predicates []predicate.DNSVerification  `json:"-"`
+	Not        *DNSVerificationWhereInput   `json:"not,omitempty"`
+	Or         []*DNSVerificationWhereInput `json:"or,omitempty"`
+	And        []*DNSVerificationWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "cloudflare_hostname_id" field predicates.
+	CloudflareHostnameID             *string  `json:"cloudflareHostnameID,omitempty"`
+	CloudflareHostnameIDNEQ          *string  `json:"cloudflareHostnameIDNEQ,omitempty"`
+	CloudflareHostnameIDIn           []string `json:"cloudflareHostnameIDIn,omitempty"`
+	CloudflareHostnameIDNotIn        []string `json:"cloudflareHostnameIDNotIn,omitempty"`
+	CloudflareHostnameIDGT           *string  `json:"cloudflareHostnameIDGT,omitempty"`
+	CloudflareHostnameIDGTE          *string  `json:"cloudflareHostnameIDGTE,omitempty"`
+	CloudflareHostnameIDLT           *string  `json:"cloudflareHostnameIDLT,omitempty"`
+	CloudflareHostnameIDLTE          *string  `json:"cloudflareHostnameIDLTE,omitempty"`
+	CloudflareHostnameIDContains     *string  `json:"cloudflareHostnameIDContains,omitempty"`
+	CloudflareHostnameIDHasPrefix    *string  `json:"cloudflareHostnameIDHasPrefix,omitempty"`
+	CloudflareHostnameIDHasSuffix    *string  `json:"cloudflareHostnameIDHasSuffix,omitempty"`
+	CloudflareHostnameIDEqualFold    *string  `json:"cloudflareHostnameIDEqualFold,omitempty"`
+	CloudflareHostnameIDContainsFold *string  `json:"cloudflareHostnameIDContainsFold,omitempty"`
+
+	// "dns_txt_record" field predicates.
+	DNSTxtRecord             *string  `json:"dnsTxtRecord,omitempty"`
+	DNSTxtRecordNEQ          *string  `json:"dnsTxtRecordNEQ,omitempty"`
+	DNSTxtRecordIn           []string `json:"dnsTxtRecordIn,omitempty"`
+	DNSTxtRecordNotIn        []string `json:"dnsTxtRecordNotIn,omitempty"`
+	DNSTxtRecordGT           *string  `json:"dnsTxtRecordGT,omitempty"`
+	DNSTxtRecordGTE          *string  `json:"dnsTxtRecordGTE,omitempty"`
+	DNSTxtRecordLT           *string  `json:"dnsTxtRecordLT,omitempty"`
+	DNSTxtRecordLTE          *string  `json:"dnsTxtRecordLTE,omitempty"`
+	DNSTxtRecordContains     *string  `json:"dnsTxtRecordContains,omitempty"`
+	DNSTxtRecordHasPrefix    *string  `json:"dnsTxtRecordHasPrefix,omitempty"`
+	DNSTxtRecordHasSuffix    *string  `json:"dnsTxtRecordHasSuffix,omitempty"`
+	DNSTxtRecordEqualFold    *string  `json:"dnsTxtRecordEqualFold,omitempty"`
+	DNSTxtRecordContainsFold *string  `json:"dnsTxtRecordContainsFold,omitempty"`
+
+	// "dns_txt_value" field predicates.
+	DNSTxtValue             *string  `json:"dnsTxtValue,omitempty"`
+	DNSTxtValueNEQ          *string  `json:"dnsTxtValueNEQ,omitempty"`
+	DNSTxtValueIn           []string `json:"dnsTxtValueIn,omitempty"`
+	DNSTxtValueNotIn        []string `json:"dnsTxtValueNotIn,omitempty"`
+	DNSTxtValueGT           *string  `json:"dnsTxtValueGT,omitempty"`
+	DNSTxtValueGTE          *string  `json:"dnsTxtValueGTE,omitempty"`
+	DNSTxtValueLT           *string  `json:"dnsTxtValueLT,omitempty"`
+	DNSTxtValueLTE          *string  `json:"dnsTxtValueLTE,omitempty"`
+	DNSTxtValueContains     *string  `json:"dnsTxtValueContains,omitempty"`
+	DNSTxtValueHasPrefix    *string  `json:"dnsTxtValueHasPrefix,omitempty"`
+	DNSTxtValueHasSuffix    *string  `json:"dnsTxtValueHasSuffix,omitempty"`
+	DNSTxtValueEqualFold    *string  `json:"dnsTxtValueEqualFold,omitempty"`
+	DNSTxtValueContainsFold *string  `json:"dnsTxtValueContainsFold,omitempty"`
+
+	// "dns_verification_status" field predicates.
+	DNSVerificationStatus      *enums.CustomDomainStatus  `json:"dnsVerificationStatus,omitempty"`
+	DNSVerificationStatusNEQ   *enums.CustomDomainStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
+	DNSVerificationStatusIn    []enums.CustomDomainStatus `json:"dnsVerificationStatusIn,omitempty"`
+	DNSVerificationStatusNotIn []enums.CustomDomainStatus `json:"dnsVerificationStatusNotIn,omitempty"`
+
+	// "dns_verification_status_reason" field predicates.
+	DNSVerificationStatusReason             *string  `json:"dnsVerificationStatusReason,omitempty"`
+	DNSVerificationStatusReasonNEQ          *string  `json:"dnsVerificationStatusReasonNEQ,omitempty"`
+	DNSVerificationStatusReasonIn           []string `json:"dnsVerificationStatusReasonIn,omitempty"`
+	DNSVerificationStatusReasonNotIn        []string `json:"dnsVerificationStatusReasonNotIn,omitempty"`
+	DNSVerificationStatusReasonGT           *string  `json:"dnsVerificationStatusReasonGT,omitempty"`
+	DNSVerificationStatusReasonGTE          *string  `json:"dnsVerificationStatusReasonGTE,omitempty"`
+	DNSVerificationStatusReasonLT           *string  `json:"dnsVerificationStatusReasonLT,omitempty"`
+	DNSVerificationStatusReasonLTE          *string  `json:"dnsVerificationStatusReasonLTE,omitempty"`
+	DNSVerificationStatusReasonContains     *string  `json:"dnsVerificationStatusReasonContains,omitempty"`
+	DNSVerificationStatusReasonHasPrefix    *string  `json:"dnsVerificationStatusReasonHasPrefix,omitempty"`
+	DNSVerificationStatusReasonHasSuffix    *string  `json:"dnsVerificationStatusReasonHasSuffix,omitempty"`
+	DNSVerificationStatusReasonIsNil        bool     `json:"dnsVerificationStatusReasonIsNil,omitempty"`
+	DNSVerificationStatusReasonNotNil       bool     `json:"dnsVerificationStatusReasonNotNil,omitempty"`
+	DNSVerificationStatusReasonEqualFold    *string  `json:"dnsVerificationStatusReasonEqualFold,omitempty"`
+	DNSVerificationStatusReasonContainsFold *string  `json:"dnsVerificationStatusReasonContainsFold,omitempty"`
+
+	// "ssl_txt_record" field predicates.
+	SslTxtRecord             *string  `json:"sslTxtRecord,omitempty"`
+	SslTxtRecordNEQ          *string  `json:"sslTxtRecordNEQ,omitempty"`
+	SslTxtRecordIn           []string `json:"sslTxtRecordIn,omitempty"`
+	SslTxtRecordNotIn        []string `json:"sslTxtRecordNotIn,omitempty"`
+	SslTxtRecordGT           *string  `json:"sslTxtRecordGT,omitempty"`
+	SslTxtRecordGTE          *string  `json:"sslTxtRecordGTE,omitempty"`
+	SslTxtRecordLT           *string  `json:"sslTxtRecordLT,omitempty"`
+	SslTxtRecordLTE          *string  `json:"sslTxtRecordLTE,omitempty"`
+	SslTxtRecordContains     *string  `json:"sslTxtRecordContains,omitempty"`
+	SslTxtRecordHasPrefix    *string  `json:"sslTxtRecordHasPrefix,omitempty"`
+	SslTxtRecordHasSuffix    *string  `json:"sslTxtRecordHasSuffix,omitempty"`
+	SslTxtRecordEqualFold    *string  `json:"sslTxtRecordEqualFold,omitempty"`
+	SslTxtRecordContainsFold *string  `json:"sslTxtRecordContainsFold,omitempty"`
+
+	// "ssl_txt_value" field predicates.
+	SslTxtValue             *string  `json:"sslTxtValue,omitempty"`
+	SslTxtValueNEQ          *string  `json:"sslTxtValueNEQ,omitempty"`
+	SslTxtValueIn           []string `json:"sslTxtValueIn,omitempty"`
+	SslTxtValueNotIn        []string `json:"sslTxtValueNotIn,omitempty"`
+	SslTxtValueGT           *string  `json:"sslTxtValueGT,omitempty"`
+	SslTxtValueGTE          *string  `json:"sslTxtValueGTE,omitempty"`
+	SslTxtValueLT           *string  `json:"sslTxtValueLT,omitempty"`
+	SslTxtValueLTE          *string  `json:"sslTxtValueLTE,omitempty"`
+	SslTxtValueContains     *string  `json:"sslTxtValueContains,omitempty"`
+	SslTxtValueHasPrefix    *string  `json:"sslTxtValueHasPrefix,omitempty"`
+	SslTxtValueHasSuffix    *string  `json:"sslTxtValueHasSuffix,omitempty"`
+	SslTxtValueEqualFold    *string  `json:"sslTxtValueEqualFold,omitempty"`
+	SslTxtValueContainsFold *string  `json:"sslTxtValueContainsFold,omitempty"`
+
+	// "ssl_cert_status" field predicates.
+	SslCertStatus      *enums.CustomDomainStatus  `json:"sslCertStatus,omitempty"`
+	SslCertStatusNEQ   *enums.CustomDomainStatus  `json:"sslCertStatusNEQ,omitempty"`
+	SslCertStatusIn    []enums.CustomDomainStatus `json:"sslCertStatusIn,omitempty"`
+	SslCertStatusNotIn []enums.CustomDomainStatus `json:"sslCertStatusNotIn,omitempty"`
+
+	// "ssl_cert_status_reason" field predicates.
+	SslCertStatusReason             *string  `json:"sslCertStatusReason,omitempty"`
+	SslCertStatusReasonNEQ          *string  `json:"sslCertStatusReasonNEQ,omitempty"`
+	SslCertStatusReasonIn           []string `json:"sslCertStatusReasonIn,omitempty"`
+	SslCertStatusReasonNotIn        []string `json:"sslCertStatusReasonNotIn,omitempty"`
+	SslCertStatusReasonGT           *string  `json:"sslCertStatusReasonGT,omitempty"`
+	SslCertStatusReasonGTE          *string  `json:"sslCertStatusReasonGTE,omitempty"`
+	SslCertStatusReasonLT           *string  `json:"sslCertStatusReasonLT,omitempty"`
+	SslCertStatusReasonLTE          *string  `json:"sslCertStatusReasonLTE,omitempty"`
+	SslCertStatusReasonContains     *string  `json:"sslCertStatusReasonContains,omitempty"`
+	SslCertStatusReasonHasPrefix    *string  `json:"sslCertStatusReasonHasPrefix,omitempty"`
+	SslCertStatusReasonHasSuffix    *string  `json:"sslCertStatusReasonHasSuffix,omitempty"`
+	SslCertStatusReasonIsNil        bool     `json:"sslCertStatusReasonIsNil,omitempty"`
+	SslCertStatusReasonNotNil       bool     `json:"sslCertStatusReasonNotNil,omitempty"`
+	SslCertStatusReasonEqualFold    *string  `json:"sslCertStatusReasonEqualFold,omitempty"`
+	SslCertStatusReasonContainsFold *string  `json:"sslCertStatusReasonContainsFold,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "custom_domains" edge predicates.
+	HasCustomDomains     *bool                     `json:"hasCustomDomains,omitempty"`
+	HasCustomDomainsWith []*CustomDomainWhereInput `json:"hasCustomDomainsWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *DNSVerificationWhereInput) AddPredicates(predicates ...predicate.DNSVerification) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the DNSVerificationWhereInput filter on the DNSVerificationQuery builder.
+func (i *DNSVerificationWhereInput) Filter(q *DNSVerificationQuery) (*DNSVerificationQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyDNSVerificationWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyDNSVerificationWhereInput is returned in case the DNSVerificationWhereInput is empty.
+var ErrEmptyDNSVerificationWhereInput = errors.New("generated: empty predicate DNSVerificationWhereInput")
+
+// P returns a predicate for filtering dnsverifications.
+// An error is returned if the input is empty or invalid.
+func (i *DNSVerificationWhereInput) P() (predicate.DNSVerification, error) {
+	var predicates []predicate.DNSVerification
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, dnsverification.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.DNSVerification, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, dnsverification.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.DNSVerification, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, dnsverification.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, dnsverification.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, dnsverification.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, dnsverification.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, dnsverification.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, dnsverification.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, dnsverification.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, dnsverification.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, dnsverification.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, dnsverification.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, dnsverification.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, dnsverification.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, dnsverification.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, dnsverification.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, dnsverification.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, dnsverification.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, dnsverification.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, dnsverification.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, dnsverification.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, dnsverification.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, dnsverification.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, dnsverification.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, dnsverification.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, dnsverification.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, dnsverification.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, dnsverification.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, dnsverification.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, dnsverification.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, dnsverification.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, dnsverification.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, dnsverification.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, dnsverification.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, dnsverification.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, dnsverification.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, dnsverification.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, dnsverification.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, dnsverification.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, dnsverification.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, dnsverification.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, dnsverification.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, dnsverification.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, dnsverification.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, dnsverification.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, dnsverification.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, dnsverification.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, dnsverification.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, dnsverification.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, dnsverification.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, dnsverification.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, dnsverification.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, dnsverification.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, dnsverification.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, dnsverification.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, dnsverification.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, dnsverification.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, dnsverification.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, dnsverification.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, dnsverification.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, dnsverification.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, dnsverification.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, dnsverification.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, dnsverification.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, dnsverification.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, dnsverification.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, dnsverification.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, dnsverification.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, dnsverification.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, dnsverification.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, dnsverification.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, dnsverification.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, dnsverification.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, dnsverification.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, dnsverification.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, dnsverification.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, dnsverification.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, dnsverification.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.CloudflareHostnameID != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDEQ(*i.CloudflareHostnameID))
+	}
+	if i.CloudflareHostnameIDNEQ != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDNEQ(*i.CloudflareHostnameIDNEQ))
+	}
+	if len(i.CloudflareHostnameIDIn) > 0 {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDIn(i.CloudflareHostnameIDIn...))
+	}
+	if len(i.CloudflareHostnameIDNotIn) > 0 {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDNotIn(i.CloudflareHostnameIDNotIn...))
+	}
+	if i.CloudflareHostnameIDGT != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDGT(*i.CloudflareHostnameIDGT))
+	}
+	if i.CloudflareHostnameIDGTE != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDGTE(*i.CloudflareHostnameIDGTE))
+	}
+	if i.CloudflareHostnameIDLT != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDLT(*i.CloudflareHostnameIDLT))
+	}
+	if i.CloudflareHostnameIDLTE != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDLTE(*i.CloudflareHostnameIDLTE))
+	}
+	if i.CloudflareHostnameIDContains != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDContains(*i.CloudflareHostnameIDContains))
+	}
+	if i.CloudflareHostnameIDHasPrefix != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDHasPrefix(*i.CloudflareHostnameIDHasPrefix))
+	}
+	if i.CloudflareHostnameIDHasSuffix != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDHasSuffix(*i.CloudflareHostnameIDHasSuffix))
+	}
+	if i.CloudflareHostnameIDEqualFold != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDEqualFold(*i.CloudflareHostnameIDEqualFold))
+	}
+	if i.CloudflareHostnameIDContainsFold != nil {
+		predicates = append(predicates, dnsverification.CloudflareHostnameIDContainsFold(*i.CloudflareHostnameIDContainsFold))
+	}
+	if i.DNSTxtRecord != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordEQ(*i.DNSTxtRecord))
+	}
+	if i.DNSTxtRecordNEQ != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordNEQ(*i.DNSTxtRecordNEQ))
+	}
+	if len(i.DNSTxtRecordIn) > 0 {
+		predicates = append(predicates, dnsverification.DNSTxtRecordIn(i.DNSTxtRecordIn...))
+	}
+	if len(i.DNSTxtRecordNotIn) > 0 {
+		predicates = append(predicates, dnsverification.DNSTxtRecordNotIn(i.DNSTxtRecordNotIn...))
+	}
+	if i.DNSTxtRecordGT != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordGT(*i.DNSTxtRecordGT))
+	}
+	if i.DNSTxtRecordGTE != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordGTE(*i.DNSTxtRecordGTE))
+	}
+	if i.DNSTxtRecordLT != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordLT(*i.DNSTxtRecordLT))
+	}
+	if i.DNSTxtRecordLTE != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordLTE(*i.DNSTxtRecordLTE))
+	}
+	if i.DNSTxtRecordContains != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordContains(*i.DNSTxtRecordContains))
+	}
+	if i.DNSTxtRecordHasPrefix != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordHasPrefix(*i.DNSTxtRecordHasPrefix))
+	}
+	if i.DNSTxtRecordHasSuffix != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordHasSuffix(*i.DNSTxtRecordHasSuffix))
+	}
+	if i.DNSTxtRecordEqualFold != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordEqualFold(*i.DNSTxtRecordEqualFold))
+	}
+	if i.DNSTxtRecordContainsFold != nil {
+		predicates = append(predicates, dnsverification.DNSTxtRecordContainsFold(*i.DNSTxtRecordContainsFold))
+	}
+	if i.DNSTxtValue != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueEQ(*i.DNSTxtValue))
+	}
+	if i.DNSTxtValueNEQ != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueNEQ(*i.DNSTxtValueNEQ))
+	}
+	if len(i.DNSTxtValueIn) > 0 {
+		predicates = append(predicates, dnsverification.DNSTxtValueIn(i.DNSTxtValueIn...))
+	}
+	if len(i.DNSTxtValueNotIn) > 0 {
+		predicates = append(predicates, dnsverification.DNSTxtValueNotIn(i.DNSTxtValueNotIn...))
+	}
+	if i.DNSTxtValueGT != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueGT(*i.DNSTxtValueGT))
+	}
+	if i.DNSTxtValueGTE != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueGTE(*i.DNSTxtValueGTE))
+	}
+	if i.DNSTxtValueLT != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueLT(*i.DNSTxtValueLT))
+	}
+	if i.DNSTxtValueLTE != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueLTE(*i.DNSTxtValueLTE))
+	}
+	if i.DNSTxtValueContains != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueContains(*i.DNSTxtValueContains))
+	}
+	if i.DNSTxtValueHasPrefix != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueHasPrefix(*i.DNSTxtValueHasPrefix))
+	}
+	if i.DNSTxtValueHasSuffix != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueHasSuffix(*i.DNSTxtValueHasSuffix))
+	}
+	if i.DNSTxtValueEqualFold != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueEqualFold(*i.DNSTxtValueEqualFold))
+	}
+	if i.DNSTxtValueContainsFold != nil {
+		predicates = append(predicates, dnsverification.DNSTxtValueContainsFold(*i.DNSTxtValueContainsFold))
+	}
+	if i.DNSVerificationStatus != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusEQ(*i.DNSVerificationStatus))
+	}
+	if i.DNSVerificationStatusNEQ != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusNEQ(*i.DNSVerificationStatusNEQ))
+	}
+	if len(i.DNSVerificationStatusIn) > 0 {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusIn(i.DNSVerificationStatusIn...))
+	}
+	if len(i.DNSVerificationStatusNotIn) > 0 {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusNotIn(i.DNSVerificationStatusNotIn...))
+	}
+	if i.DNSVerificationStatusReason != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonEQ(*i.DNSVerificationStatusReason))
+	}
+	if i.DNSVerificationStatusReasonNEQ != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonNEQ(*i.DNSVerificationStatusReasonNEQ))
+	}
+	if len(i.DNSVerificationStatusReasonIn) > 0 {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonIn(i.DNSVerificationStatusReasonIn...))
+	}
+	if len(i.DNSVerificationStatusReasonNotIn) > 0 {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonNotIn(i.DNSVerificationStatusReasonNotIn...))
+	}
+	if i.DNSVerificationStatusReasonGT != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonGT(*i.DNSVerificationStatusReasonGT))
+	}
+	if i.DNSVerificationStatusReasonGTE != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonGTE(*i.DNSVerificationStatusReasonGTE))
+	}
+	if i.DNSVerificationStatusReasonLT != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonLT(*i.DNSVerificationStatusReasonLT))
+	}
+	if i.DNSVerificationStatusReasonLTE != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonLTE(*i.DNSVerificationStatusReasonLTE))
+	}
+	if i.DNSVerificationStatusReasonContains != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonContains(*i.DNSVerificationStatusReasonContains))
+	}
+	if i.DNSVerificationStatusReasonHasPrefix != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonHasPrefix(*i.DNSVerificationStatusReasonHasPrefix))
+	}
+	if i.DNSVerificationStatusReasonHasSuffix != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonHasSuffix(*i.DNSVerificationStatusReasonHasSuffix))
+	}
+	if i.DNSVerificationStatusReasonIsNil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonIsNil())
+	}
+	if i.DNSVerificationStatusReasonNotNil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonNotNil())
+	}
+	if i.DNSVerificationStatusReasonEqualFold != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonEqualFold(*i.DNSVerificationStatusReasonEqualFold))
+	}
+	if i.DNSVerificationStatusReasonContainsFold != nil {
+		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonContainsFold(*i.DNSVerificationStatusReasonContainsFold))
+	}
+	if i.SslTxtRecord != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordEQ(*i.SslTxtRecord))
+	}
+	if i.SslTxtRecordNEQ != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordNEQ(*i.SslTxtRecordNEQ))
+	}
+	if len(i.SslTxtRecordIn) > 0 {
+		predicates = append(predicates, dnsverification.SslTxtRecordIn(i.SslTxtRecordIn...))
+	}
+	if len(i.SslTxtRecordNotIn) > 0 {
+		predicates = append(predicates, dnsverification.SslTxtRecordNotIn(i.SslTxtRecordNotIn...))
+	}
+	if i.SslTxtRecordGT != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordGT(*i.SslTxtRecordGT))
+	}
+	if i.SslTxtRecordGTE != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordGTE(*i.SslTxtRecordGTE))
+	}
+	if i.SslTxtRecordLT != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordLT(*i.SslTxtRecordLT))
+	}
+	if i.SslTxtRecordLTE != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordLTE(*i.SslTxtRecordLTE))
+	}
+	if i.SslTxtRecordContains != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordContains(*i.SslTxtRecordContains))
+	}
+	if i.SslTxtRecordHasPrefix != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordHasPrefix(*i.SslTxtRecordHasPrefix))
+	}
+	if i.SslTxtRecordHasSuffix != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordHasSuffix(*i.SslTxtRecordHasSuffix))
+	}
+	if i.SslTxtRecordEqualFold != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordEqualFold(*i.SslTxtRecordEqualFold))
+	}
+	if i.SslTxtRecordContainsFold != nil {
+		predicates = append(predicates, dnsverification.SslTxtRecordContainsFold(*i.SslTxtRecordContainsFold))
+	}
+	if i.SslTxtValue != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueEQ(*i.SslTxtValue))
+	}
+	if i.SslTxtValueNEQ != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueNEQ(*i.SslTxtValueNEQ))
+	}
+	if len(i.SslTxtValueIn) > 0 {
+		predicates = append(predicates, dnsverification.SslTxtValueIn(i.SslTxtValueIn...))
+	}
+	if len(i.SslTxtValueNotIn) > 0 {
+		predicates = append(predicates, dnsverification.SslTxtValueNotIn(i.SslTxtValueNotIn...))
+	}
+	if i.SslTxtValueGT != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueGT(*i.SslTxtValueGT))
+	}
+	if i.SslTxtValueGTE != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueGTE(*i.SslTxtValueGTE))
+	}
+	if i.SslTxtValueLT != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueLT(*i.SslTxtValueLT))
+	}
+	if i.SslTxtValueLTE != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueLTE(*i.SslTxtValueLTE))
+	}
+	if i.SslTxtValueContains != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueContains(*i.SslTxtValueContains))
+	}
+	if i.SslTxtValueHasPrefix != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueHasPrefix(*i.SslTxtValueHasPrefix))
+	}
+	if i.SslTxtValueHasSuffix != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueHasSuffix(*i.SslTxtValueHasSuffix))
+	}
+	if i.SslTxtValueEqualFold != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueEqualFold(*i.SslTxtValueEqualFold))
+	}
+	if i.SslTxtValueContainsFold != nil {
+		predicates = append(predicates, dnsverification.SslTxtValueContainsFold(*i.SslTxtValueContainsFold))
+	}
+	if i.SslCertStatus != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusEQ(*i.SslCertStatus))
+	}
+	if i.SslCertStatusNEQ != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusNEQ(*i.SslCertStatusNEQ))
+	}
+	if len(i.SslCertStatusIn) > 0 {
+		predicates = append(predicates, dnsverification.SslCertStatusIn(i.SslCertStatusIn...))
+	}
+	if len(i.SslCertStatusNotIn) > 0 {
+		predicates = append(predicates, dnsverification.SslCertStatusNotIn(i.SslCertStatusNotIn...))
+	}
+	if i.SslCertStatusReason != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonEQ(*i.SslCertStatusReason))
+	}
+	if i.SslCertStatusReasonNEQ != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonNEQ(*i.SslCertStatusReasonNEQ))
+	}
+	if len(i.SslCertStatusReasonIn) > 0 {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonIn(i.SslCertStatusReasonIn...))
+	}
+	if len(i.SslCertStatusReasonNotIn) > 0 {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonNotIn(i.SslCertStatusReasonNotIn...))
+	}
+	if i.SslCertStatusReasonGT != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonGT(*i.SslCertStatusReasonGT))
+	}
+	if i.SslCertStatusReasonGTE != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonGTE(*i.SslCertStatusReasonGTE))
+	}
+	if i.SslCertStatusReasonLT != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonLT(*i.SslCertStatusReasonLT))
+	}
+	if i.SslCertStatusReasonLTE != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonLTE(*i.SslCertStatusReasonLTE))
+	}
+	if i.SslCertStatusReasonContains != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonContains(*i.SslCertStatusReasonContains))
+	}
+	if i.SslCertStatusReasonHasPrefix != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonHasPrefix(*i.SslCertStatusReasonHasPrefix))
+	}
+	if i.SslCertStatusReasonHasSuffix != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonHasSuffix(*i.SslCertStatusReasonHasSuffix))
+	}
+	if i.SslCertStatusReasonIsNil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonIsNil())
+	}
+	if i.SslCertStatusReasonNotNil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonNotNil())
+	}
+	if i.SslCertStatusReasonEqualFold != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonEqualFold(*i.SslCertStatusReasonEqualFold))
+	}
+	if i.SslCertStatusReasonContainsFold != nil {
+		predicates = append(predicates, dnsverification.SslCertStatusReasonContainsFold(*i.SslCertStatusReasonContainsFold))
+	}
+
+	if i.HasOwner != nil {
+		p := dnsverification.HasOwner()
+		if !*i.HasOwner {
+			p = dnsverification.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, dnsverification.HasOwnerWith(with...))
+	}
+	if i.HasCustomDomains != nil {
+		p := dnsverification.HasCustomDomains()
+		if !*i.HasCustomDomains {
+			p = dnsverification.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCustomDomainsWith) > 0 {
+		with := make([]predicate.CustomDomain, 0, len(i.HasCustomDomainsWith))
+		for _, w := range i.HasCustomDomainsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCustomDomainsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, dnsverification.HasCustomDomainsWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyDNSVerificationWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return dnsverification.And(predicates...), nil
+	}
+}
+
+// DNSVerificationHistoryWhereInput represents a where input for filtering DNSVerificationHistory queries.
+type DNSVerificationHistoryWhereInput struct {
+	Predicates []predicate.DNSVerificationHistory  `json:"-"`
+	Not        *DNSVerificationHistoryWhereInput   `json:"not,omitempty"`
+	Or         []*DNSVerificationHistoryWhereInput `json:"or,omitempty"`
+	And        []*DNSVerificationHistoryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "history_time" field predicates.
+	HistoryTime      *time.Time  `json:"historyTime,omitempty"`
+	HistoryTimeNEQ   *time.Time  `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGT    *time.Time  `json:"historyTimeGT,omitempty"`
+	HistoryTimeGTE   *time.Time  `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLT    *time.Time  `json:"historyTimeLT,omitempty"`
+	HistoryTimeLTE   *time.Time  `json:"historyTimeLTE,omitempty"`
+
+	// "ref" field predicates.
+	Ref             *string  `json:"ref,omitempty"`
+	RefNEQ          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGT           *string  `json:"refGT,omitempty"`
+	RefGTE          *string  `json:"refGTE,omitempty"`
+	RefLT           *string  `json:"refLT,omitempty"`
+	RefLTE          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        bool     `json:"refIsNil,omitempty"`
+	RefNotNil       bool     `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+
+	// "operation" field predicates.
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "cloudflare_hostname_id" field predicates.
+	CloudflareHostnameID             *string  `json:"cloudflareHostnameID,omitempty"`
+	CloudflareHostnameIDNEQ          *string  `json:"cloudflareHostnameIDNEQ,omitempty"`
+	CloudflareHostnameIDIn           []string `json:"cloudflareHostnameIDIn,omitempty"`
+	CloudflareHostnameIDNotIn        []string `json:"cloudflareHostnameIDNotIn,omitempty"`
+	CloudflareHostnameIDGT           *string  `json:"cloudflareHostnameIDGT,omitempty"`
+	CloudflareHostnameIDGTE          *string  `json:"cloudflareHostnameIDGTE,omitempty"`
+	CloudflareHostnameIDLT           *string  `json:"cloudflareHostnameIDLT,omitempty"`
+	CloudflareHostnameIDLTE          *string  `json:"cloudflareHostnameIDLTE,omitempty"`
+	CloudflareHostnameIDContains     *string  `json:"cloudflareHostnameIDContains,omitempty"`
+	CloudflareHostnameIDHasPrefix    *string  `json:"cloudflareHostnameIDHasPrefix,omitempty"`
+	CloudflareHostnameIDHasSuffix    *string  `json:"cloudflareHostnameIDHasSuffix,omitempty"`
+	CloudflareHostnameIDEqualFold    *string  `json:"cloudflareHostnameIDEqualFold,omitempty"`
+	CloudflareHostnameIDContainsFold *string  `json:"cloudflareHostnameIDContainsFold,omitempty"`
+
+	// "dns_txt_record" field predicates.
+	DNSTxtRecord             *string  `json:"dnsTxtRecord,omitempty"`
+	DNSTxtRecordNEQ          *string  `json:"dnsTxtRecordNEQ,omitempty"`
+	DNSTxtRecordIn           []string `json:"dnsTxtRecordIn,omitempty"`
+	DNSTxtRecordNotIn        []string `json:"dnsTxtRecordNotIn,omitempty"`
+	DNSTxtRecordGT           *string  `json:"dnsTxtRecordGT,omitempty"`
+	DNSTxtRecordGTE          *string  `json:"dnsTxtRecordGTE,omitempty"`
+	DNSTxtRecordLT           *string  `json:"dnsTxtRecordLT,omitempty"`
+	DNSTxtRecordLTE          *string  `json:"dnsTxtRecordLTE,omitempty"`
+	DNSTxtRecordContains     *string  `json:"dnsTxtRecordContains,omitempty"`
+	DNSTxtRecordHasPrefix    *string  `json:"dnsTxtRecordHasPrefix,omitempty"`
+	DNSTxtRecordHasSuffix    *string  `json:"dnsTxtRecordHasSuffix,omitempty"`
+	DNSTxtRecordEqualFold    *string  `json:"dnsTxtRecordEqualFold,omitempty"`
+	DNSTxtRecordContainsFold *string  `json:"dnsTxtRecordContainsFold,omitempty"`
+
+	// "dns_txt_value" field predicates.
+	DNSTxtValue             *string  `json:"dnsTxtValue,omitempty"`
+	DNSTxtValueNEQ          *string  `json:"dnsTxtValueNEQ,omitempty"`
+	DNSTxtValueIn           []string `json:"dnsTxtValueIn,omitempty"`
+	DNSTxtValueNotIn        []string `json:"dnsTxtValueNotIn,omitempty"`
+	DNSTxtValueGT           *string  `json:"dnsTxtValueGT,omitempty"`
+	DNSTxtValueGTE          *string  `json:"dnsTxtValueGTE,omitempty"`
+	DNSTxtValueLT           *string  `json:"dnsTxtValueLT,omitempty"`
+	DNSTxtValueLTE          *string  `json:"dnsTxtValueLTE,omitempty"`
+	DNSTxtValueContains     *string  `json:"dnsTxtValueContains,omitempty"`
+	DNSTxtValueHasPrefix    *string  `json:"dnsTxtValueHasPrefix,omitempty"`
+	DNSTxtValueHasSuffix    *string  `json:"dnsTxtValueHasSuffix,omitempty"`
+	DNSTxtValueEqualFold    *string  `json:"dnsTxtValueEqualFold,omitempty"`
+	DNSTxtValueContainsFold *string  `json:"dnsTxtValueContainsFold,omitempty"`
+
+	// "dns_verification_status" field predicates.
+	DNSVerificationStatus      *enums.CustomDomainStatus  `json:"dnsVerificationStatus,omitempty"`
+	DNSVerificationStatusNEQ   *enums.CustomDomainStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
+	DNSVerificationStatusIn    []enums.CustomDomainStatus `json:"dnsVerificationStatusIn,omitempty"`
+	DNSVerificationStatusNotIn []enums.CustomDomainStatus `json:"dnsVerificationStatusNotIn,omitempty"`
+
+	// "dns_verification_status_reason" field predicates.
+	DNSVerificationStatusReason             *string  `json:"dnsVerificationStatusReason,omitempty"`
+	DNSVerificationStatusReasonNEQ          *string  `json:"dnsVerificationStatusReasonNEQ,omitempty"`
+	DNSVerificationStatusReasonIn           []string `json:"dnsVerificationStatusReasonIn,omitempty"`
+	DNSVerificationStatusReasonNotIn        []string `json:"dnsVerificationStatusReasonNotIn,omitempty"`
+	DNSVerificationStatusReasonGT           *string  `json:"dnsVerificationStatusReasonGT,omitempty"`
+	DNSVerificationStatusReasonGTE          *string  `json:"dnsVerificationStatusReasonGTE,omitempty"`
+	DNSVerificationStatusReasonLT           *string  `json:"dnsVerificationStatusReasonLT,omitempty"`
+	DNSVerificationStatusReasonLTE          *string  `json:"dnsVerificationStatusReasonLTE,omitempty"`
+	DNSVerificationStatusReasonContains     *string  `json:"dnsVerificationStatusReasonContains,omitempty"`
+	DNSVerificationStatusReasonHasPrefix    *string  `json:"dnsVerificationStatusReasonHasPrefix,omitempty"`
+	DNSVerificationStatusReasonHasSuffix    *string  `json:"dnsVerificationStatusReasonHasSuffix,omitempty"`
+	DNSVerificationStatusReasonIsNil        bool     `json:"dnsVerificationStatusReasonIsNil,omitempty"`
+	DNSVerificationStatusReasonNotNil       bool     `json:"dnsVerificationStatusReasonNotNil,omitempty"`
+	DNSVerificationStatusReasonEqualFold    *string  `json:"dnsVerificationStatusReasonEqualFold,omitempty"`
+	DNSVerificationStatusReasonContainsFold *string  `json:"dnsVerificationStatusReasonContainsFold,omitempty"`
+
+	// "ssl_txt_record" field predicates.
+	SslTxtRecord             *string  `json:"sslTxtRecord,omitempty"`
+	SslTxtRecordNEQ          *string  `json:"sslTxtRecordNEQ,omitempty"`
+	SslTxtRecordIn           []string `json:"sslTxtRecordIn,omitempty"`
+	SslTxtRecordNotIn        []string `json:"sslTxtRecordNotIn,omitempty"`
+	SslTxtRecordGT           *string  `json:"sslTxtRecordGT,omitempty"`
+	SslTxtRecordGTE          *string  `json:"sslTxtRecordGTE,omitempty"`
+	SslTxtRecordLT           *string  `json:"sslTxtRecordLT,omitempty"`
+	SslTxtRecordLTE          *string  `json:"sslTxtRecordLTE,omitempty"`
+	SslTxtRecordContains     *string  `json:"sslTxtRecordContains,omitempty"`
+	SslTxtRecordHasPrefix    *string  `json:"sslTxtRecordHasPrefix,omitempty"`
+	SslTxtRecordHasSuffix    *string  `json:"sslTxtRecordHasSuffix,omitempty"`
+	SslTxtRecordEqualFold    *string  `json:"sslTxtRecordEqualFold,omitempty"`
+	SslTxtRecordContainsFold *string  `json:"sslTxtRecordContainsFold,omitempty"`
+
+	// "ssl_txt_value" field predicates.
+	SslTxtValue             *string  `json:"sslTxtValue,omitempty"`
+	SslTxtValueNEQ          *string  `json:"sslTxtValueNEQ,omitempty"`
+	SslTxtValueIn           []string `json:"sslTxtValueIn,omitempty"`
+	SslTxtValueNotIn        []string `json:"sslTxtValueNotIn,omitempty"`
+	SslTxtValueGT           *string  `json:"sslTxtValueGT,omitempty"`
+	SslTxtValueGTE          *string  `json:"sslTxtValueGTE,omitempty"`
+	SslTxtValueLT           *string  `json:"sslTxtValueLT,omitempty"`
+	SslTxtValueLTE          *string  `json:"sslTxtValueLTE,omitempty"`
+	SslTxtValueContains     *string  `json:"sslTxtValueContains,omitempty"`
+	SslTxtValueHasPrefix    *string  `json:"sslTxtValueHasPrefix,omitempty"`
+	SslTxtValueHasSuffix    *string  `json:"sslTxtValueHasSuffix,omitempty"`
+	SslTxtValueEqualFold    *string  `json:"sslTxtValueEqualFold,omitempty"`
+	SslTxtValueContainsFold *string  `json:"sslTxtValueContainsFold,omitempty"`
+
+	// "ssl_cert_status" field predicates.
+	SslCertStatus      *enums.CustomDomainStatus  `json:"sslCertStatus,omitempty"`
+	SslCertStatusNEQ   *enums.CustomDomainStatus  `json:"sslCertStatusNEQ,omitempty"`
+	SslCertStatusIn    []enums.CustomDomainStatus `json:"sslCertStatusIn,omitempty"`
+	SslCertStatusNotIn []enums.CustomDomainStatus `json:"sslCertStatusNotIn,omitempty"`
+
+	// "ssl_cert_status_reason" field predicates.
+	SslCertStatusReason             *string  `json:"sslCertStatusReason,omitempty"`
+	SslCertStatusReasonNEQ          *string  `json:"sslCertStatusReasonNEQ,omitempty"`
+	SslCertStatusReasonIn           []string `json:"sslCertStatusReasonIn,omitempty"`
+	SslCertStatusReasonNotIn        []string `json:"sslCertStatusReasonNotIn,omitempty"`
+	SslCertStatusReasonGT           *string  `json:"sslCertStatusReasonGT,omitempty"`
+	SslCertStatusReasonGTE          *string  `json:"sslCertStatusReasonGTE,omitempty"`
+	SslCertStatusReasonLT           *string  `json:"sslCertStatusReasonLT,omitempty"`
+	SslCertStatusReasonLTE          *string  `json:"sslCertStatusReasonLTE,omitempty"`
+	SslCertStatusReasonContains     *string  `json:"sslCertStatusReasonContains,omitempty"`
+	SslCertStatusReasonHasPrefix    *string  `json:"sslCertStatusReasonHasPrefix,omitempty"`
+	SslCertStatusReasonHasSuffix    *string  `json:"sslCertStatusReasonHasSuffix,omitempty"`
+	SslCertStatusReasonIsNil        bool     `json:"sslCertStatusReasonIsNil,omitempty"`
+	SslCertStatusReasonNotNil       bool     `json:"sslCertStatusReasonNotNil,omitempty"`
+	SslCertStatusReasonEqualFold    *string  `json:"sslCertStatusReasonEqualFold,omitempty"`
+	SslCertStatusReasonContainsFold *string  `json:"sslCertStatusReasonContainsFold,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *DNSVerificationHistoryWhereInput) AddPredicates(predicates ...predicate.DNSVerificationHistory) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the DNSVerificationHistoryWhereInput filter on the DNSVerificationHistoryQuery builder.
+func (i *DNSVerificationHistoryWhereInput) Filter(q *DNSVerificationHistoryQuery) (*DNSVerificationHistoryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyDNSVerificationHistoryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyDNSVerificationHistoryWhereInput is returned in case the DNSVerificationHistoryWhereInput is empty.
+var ErrEmptyDNSVerificationHistoryWhereInput = errors.New("generated: empty predicate DNSVerificationHistoryWhereInput")
+
+// P returns a predicate for filtering dnsverificationhistories.
+// An error is returned if the input is empty or invalid.
+func (i *DNSVerificationHistoryWhereInput) P() (predicate.DNSVerificationHistory, error) {
+	var predicates []predicate.DNSVerificationHistory
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, dnsverificationhistory.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.DNSVerificationHistory, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, dnsverificationhistory.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.DNSVerificationHistory, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, dnsverificationhistory.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, dnsverificationhistory.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, dnsverificationhistory.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, dnsverificationhistory.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.HistoryTime != nil {
+		predicates = append(predicates, dnsverificationhistory.HistoryTimeEQ(*i.HistoryTime))
+	}
+	if i.HistoryTimeNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.HistoryTimeNEQ(*i.HistoryTimeNEQ))
+	}
+	if len(i.HistoryTimeIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.HistoryTimeIn(i.HistoryTimeIn...))
+	}
+	if len(i.HistoryTimeNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.HistoryTimeNotIn(i.HistoryTimeNotIn...))
+	}
+	if i.HistoryTimeGT != nil {
+		predicates = append(predicates, dnsverificationhistory.HistoryTimeGT(*i.HistoryTimeGT))
+	}
+	if i.HistoryTimeGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.HistoryTimeGTE(*i.HistoryTimeGTE))
+	}
+	if i.HistoryTimeLT != nil {
+		predicates = append(predicates, dnsverificationhistory.HistoryTimeLT(*i.HistoryTimeLT))
+	}
+	if i.HistoryTimeLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.HistoryTimeLTE(*i.HistoryTimeLTE))
+	}
+	if i.Ref != nil {
+		predicates = append(predicates, dnsverificationhistory.RefEQ(*i.Ref))
+	}
+	if i.RefNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.RefNEQ(*i.RefNEQ))
+	}
+	if len(i.RefIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.RefIn(i.RefIn...))
+	}
+	if len(i.RefNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.RefNotIn(i.RefNotIn...))
+	}
+	if i.RefGT != nil {
+		predicates = append(predicates, dnsverificationhistory.RefGT(*i.RefGT))
+	}
+	if i.RefGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.RefGTE(*i.RefGTE))
+	}
+	if i.RefLT != nil {
+		predicates = append(predicates, dnsverificationhistory.RefLT(*i.RefLT))
+	}
+	if i.RefLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.RefLTE(*i.RefLTE))
+	}
+	if i.RefContains != nil {
+		predicates = append(predicates, dnsverificationhistory.RefContains(*i.RefContains))
+	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
+	if i.RefHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.RefHasSuffix(*i.RefHasSuffix))
+	}
+	if i.RefIsNil {
+		predicates = append(predicates, dnsverificationhistory.RefIsNil())
+	}
+	if i.RefNotNil {
+		predicates = append(predicates, dnsverificationhistory.RefNotNil())
+	}
+	if i.RefEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.RefEqualFold(*i.RefEqualFold))
+	}
+	if i.RefContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.RefContainsFold(*i.RefContainsFold))
+	}
+	if i.Operation != nil {
+		predicates = append(predicates, dnsverificationhistory.OperationEQ(*i.Operation))
+	}
+	if i.OperationNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.OperationNEQ(*i.OperationNEQ))
+	}
+	if len(i.OperationIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.OperationIn(i.OperationIn...))
+	}
+	if len(i.OperationNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.OperationNotIn(i.OperationNotIn...))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, dnsverificationhistory.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.CloudflareHostnameID != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDEQ(*i.CloudflareHostnameID))
+	}
+	if i.CloudflareHostnameIDNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDNEQ(*i.CloudflareHostnameIDNEQ))
+	}
+	if len(i.CloudflareHostnameIDIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDIn(i.CloudflareHostnameIDIn...))
+	}
+	if len(i.CloudflareHostnameIDNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDNotIn(i.CloudflareHostnameIDNotIn...))
+	}
+	if i.CloudflareHostnameIDGT != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDGT(*i.CloudflareHostnameIDGT))
+	}
+	if i.CloudflareHostnameIDGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDGTE(*i.CloudflareHostnameIDGTE))
+	}
+	if i.CloudflareHostnameIDLT != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDLT(*i.CloudflareHostnameIDLT))
+	}
+	if i.CloudflareHostnameIDLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDLTE(*i.CloudflareHostnameIDLTE))
+	}
+	if i.CloudflareHostnameIDContains != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDContains(*i.CloudflareHostnameIDContains))
+	}
+	if i.CloudflareHostnameIDHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDHasPrefix(*i.CloudflareHostnameIDHasPrefix))
+	}
+	if i.CloudflareHostnameIDHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDHasSuffix(*i.CloudflareHostnameIDHasSuffix))
+	}
+	if i.CloudflareHostnameIDEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDEqualFold(*i.CloudflareHostnameIDEqualFold))
+	}
+	if i.CloudflareHostnameIDContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.CloudflareHostnameIDContainsFold(*i.CloudflareHostnameIDContainsFold))
+	}
+	if i.DNSTxtRecord != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordEQ(*i.DNSTxtRecord))
+	}
+	if i.DNSTxtRecordNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordNEQ(*i.DNSTxtRecordNEQ))
+	}
+	if len(i.DNSTxtRecordIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordIn(i.DNSTxtRecordIn...))
+	}
+	if len(i.DNSTxtRecordNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordNotIn(i.DNSTxtRecordNotIn...))
+	}
+	if i.DNSTxtRecordGT != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordGT(*i.DNSTxtRecordGT))
+	}
+	if i.DNSTxtRecordGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordGTE(*i.DNSTxtRecordGTE))
+	}
+	if i.DNSTxtRecordLT != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordLT(*i.DNSTxtRecordLT))
+	}
+	if i.DNSTxtRecordLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordLTE(*i.DNSTxtRecordLTE))
+	}
+	if i.DNSTxtRecordContains != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordContains(*i.DNSTxtRecordContains))
+	}
+	if i.DNSTxtRecordHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordHasPrefix(*i.DNSTxtRecordHasPrefix))
+	}
+	if i.DNSTxtRecordHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordHasSuffix(*i.DNSTxtRecordHasSuffix))
+	}
+	if i.DNSTxtRecordEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordEqualFold(*i.DNSTxtRecordEqualFold))
+	}
+	if i.DNSTxtRecordContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtRecordContainsFold(*i.DNSTxtRecordContainsFold))
+	}
+	if i.DNSTxtValue != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueEQ(*i.DNSTxtValue))
+	}
+	if i.DNSTxtValueNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueNEQ(*i.DNSTxtValueNEQ))
+	}
+	if len(i.DNSTxtValueIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueIn(i.DNSTxtValueIn...))
+	}
+	if len(i.DNSTxtValueNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueNotIn(i.DNSTxtValueNotIn...))
+	}
+	if i.DNSTxtValueGT != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueGT(*i.DNSTxtValueGT))
+	}
+	if i.DNSTxtValueGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueGTE(*i.DNSTxtValueGTE))
+	}
+	if i.DNSTxtValueLT != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueLT(*i.DNSTxtValueLT))
+	}
+	if i.DNSTxtValueLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueLTE(*i.DNSTxtValueLTE))
+	}
+	if i.DNSTxtValueContains != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueContains(*i.DNSTxtValueContains))
+	}
+	if i.DNSTxtValueHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueHasPrefix(*i.DNSTxtValueHasPrefix))
+	}
+	if i.DNSTxtValueHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueHasSuffix(*i.DNSTxtValueHasSuffix))
+	}
+	if i.DNSTxtValueEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueEqualFold(*i.DNSTxtValueEqualFold))
+	}
+	if i.DNSTxtValueContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSTxtValueContainsFold(*i.DNSTxtValueContainsFold))
+	}
+	if i.DNSVerificationStatus != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusEQ(*i.DNSVerificationStatus))
+	}
+	if i.DNSVerificationStatusNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusNEQ(*i.DNSVerificationStatusNEQ))
+	}
+	if len(i.DNSVerificationStatusIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusIn(i.DNSVerificationStatusIn...))
+	}
+	if len(i.DNSVerificationStatusNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusNotIn(i.DNSVerificationStatusNotIn...))
+	}
+	if i.DNSVerificationStatusReason != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonEQ(*i.DNSVerificationStatusReason))
+	}
+	if i.DNSVerificationStatusReasonNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonNEQ(*i.DNSVerificationStatusReasonNEQ))
+	}
+	if len(i.DNSVerificationStatusReasonIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonIn(i.DNSVerificationStatusReasonIn...))
+	}
+	if len(i.DNSVerificationStatusReasonNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonNotIn(i.DNSVerificationStatusReasonNotIn...))
+	}
+	if i.DNSVerificationStatusReasonGT != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonGT(*i.DNSVerificationStatusReasonGT))
+	}
+	if i.DNSVerificationStatusReasonGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonGTE(*i.DNSVerificationStatusReasonGTE))
+	}
+	if i.DNSVerificationStatusReasonLT != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonLT(*i.DNSVerificationStatusReasonLT))
+	}
+	if i.DNSVerificationStatusReasonLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonLTE(*i.DNSVerificationStatusReasonLTE))
+	}
+	if i.DNSVerificationStatusReasonContains != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonContains(*i.DNSVerificationStatusReasonContains))
+	}
+	if i.DNSVerificationStatusReasonHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonHasPrefix(*i.DNSVerificationStatusReasonHasPrefix))
+	}
+	if i.DNSVerificationStatusReasonHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonHasSuffix(*i.DNSVerificationStatusReasonHasSuffix))
+	}
+	if i.DNSVerificationStatusReasonIsNil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonIsNil())
+	}
+	if i.DNSVerificationStatusReasonNotNil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonNotNil())
+	}
+	if i.DNSVerificationStatusReasonEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonEqualFold(*i.DNSVerificationStatusReasonEqualFold))
+	}
+	if i.DNSVerificationStatusReasonContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonContainsFold(*i.DNSVerificationStatusReasonContainsFold))
+	}
+	if i.SslTxtRecord != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordEQ(*i.SslTxtRecord))
+	}
+	if i.SslTxtRecordNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordNEQ(*i.SslTxtRecordNEQ))
+	}
+	if len(i.SslTxtRecordIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordIn(i.SslTxtRecordIn...))
+	}
+	if len(i.SslTxtRecordNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordNotIn(i.SslTxtRecordNotIn...))
+	}
+	if i.SslTxtRecordGT != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordGT(*i.SslTxtRecordGT))
+	}
+	if i.SslTxtRecordGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordGTE(*i.SslTxtRecordGTE))
+	}
+	if i.SslTxtRecordLT != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordLT(*i.SslTxtRecordLT))
+	}
+	if i.SslTxtRecordLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordLTE(*i.SslTxtRecordLTE))
+	}
+	if i.SslTxtRecordContains != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordContains(*i.SslTxtRecordContains))
+	}
+	if i.SslTxtRecordHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordHasPrefix(*i.SslTxtRecordHasPrefix))
+	}
+	if i.SslTxtRecordHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordHasSuffix(*i.SslTxtRecordHasSuffix))
+	}
+	if i.SslTxtRecordEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordEqualFold(*i.SslTxtRecordEqualFold))
+	}
+	if i.SslTxtRecordContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtRecordContainsFold(*i.SslTxtRecordContainsFold))
+	}
+	if i.SslTxtValue != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueEQ(*i.SslTxtValue))
+	}
+	if i.SslTxtValueNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueNEQ(*i.SslTxtValueNEQ))
+	}
+	if len(i.SslTxtValueIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueIn(i.SslTxtValueIn...))
+	}
+	if len(i.SslTxtValueNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueNotIn(i.SslTxtValueNotIn...))
+	}
+	if i.SslTxtValueGT != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueGT(*i.SslTxtValueGT))
+	}
+	if i.SslTxtValueGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueGTE(*i.SslTxtValueGTE))
+	}
+	if i.SslTxtValueLT != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueLT(*i.SslTxtValueLT))
+	}
+	if i.SslTxtValueLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueLTE(*i.SslTxtValueLTE))
+	}
+	if i.SslTxtValueContains != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueContains(*i.SslTxtValueContains))
+	}
+	if i.SslTxtValueHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueHasPrefix(*i.SslTxtValueHasPrefix))
+	}
+	if i.SslTxtValueHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueHasSuffix(*i.SslTxtValueHasSuffix))
+	}
+	if i.SslTxtValueEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueEqualFold(*i.SslTxtValueEqualFold))
+	}
+	if i.SslTxtValueContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.SslTxtValueContainsFold(*i.SslTxtValueContainsFold))
+	}
+	if i.SslCertStatus != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusEQ(*i.SslCertStatus))
+	}
+	if i.SslCertStatusNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusNEQ(*i.SslCertStatusNEQ))
+	}
+	if len(i.SslCertStatusIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusIn(i.SslCertStatusIn...))
+	}
+	if len(i.SslCertStatusNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusNotIn(i.SslCertStatusNotIn...))
+	}
+	if i.SslCertStatusReason != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonEQ(*i.SslCertStatusReason))
+	}
+	if i.SslCertStatusReasonNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonNEQ(*i.SslCertStatusReasonNEQ))
+	}
+	if len(i.SslCertStatusReasonIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonIn(i.SslCertStatusReasonIn...))
+	}
+	if len(i.SslCertStatusReasonNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonNotIn(i.SslCertStatusReasonNotIn...))
+	}
+	if i.SslCertStatusReasonGT != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonGT(*i.SslCertStatusReasonGT))
+	}
+	if i.SslCertStatusReasonGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonGTE(*i.SslCertStatusReasonGTE))
+	}
+	if i.SslCertStatusReasonLT != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonLT(*i.SslCertStatusReasonLT))
+	}
+	if i.SslCertStatusReasonLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonLTE(*i.SslCertStatusReasonLTE))
+	}
+	if i.SslCertStatusReasonContains != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonContains(*i.SslCertStatusReasonContains))
+	}
+	if i.SslCertStatusReasonHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonHasPrefix(*i.SslCertStatusReasonHasPrefix))
+	}
+	if i.SslCertStatusReasonHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonHasSuffix(*i.SslCertStatusReasonHasSuffix))
+	}
+	if i.SslCertStatusReasonIsNil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonIsNil())
+	}
+	if i.SslCertStatusReasonNotNil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonNotNil())
+	}
+	if i.SslCertStatusReasonEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonEqualFold(*i.SslCertStatusReasonEqualFold))
+	}
+	if i.SslCertStatusReasonContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonContainsFold(*i.SslCertStatusReasonContainsFold))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyDNSVerificationHistoryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return dnsverificationhistory.And(predicates...), nil
 	}
 }
 
@@ -34370,6 +36340,21 @@ type MappableDomainWhereInput struct {
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 
+	// "zone_id" field predicates.
+	ZoneID             *string  `json:"zoneID,omitempty"`
+	ZoneIDNEQ          *string  `json:"zoneIDNEQ,omitempty"`
+	ZoneIDIn           []string `json:"zoneIDIn,omitempty"`
+	ZoneIDNotIn        []string `json:"zoneIDNotIn,omitempty"`
+	ZoneIDGT           *string  `json:"zoneIDGT,omitempty"`
+	ZoneIDGTE          *string  `json:"zoneIDGTE,omitempty"`
+	ZoneIDLT           *string  `json:"zoneIDLT,omitempty"`
+	ZoneIDLTE          *string  `json:"zoneIDLTE,omitempty"`
+	ZoneIDContains     *string  `json:"zoneIDContains,omitempty"`
+	ZoneIDHasPrefix    *string  `json:"zoneIDHasPrefix,omitempty"`
+	ZoneIDHasSuffix    *string  `json:"zoneIDHasSuffix,omitempty"`
+	ZoneIDEqualFold    *string  `json:"zoneIDEqualFold,omitempty"`
+	ZoneIDContainsFold *string  `json:"zoneIDContainsFold,omitempty"`
+
 	// "custom_domains" edge predicates.
 	HasCustomDomains     *bool                     `json:"hasCustomDomains,omitempty"`
 	HasCustomDomainsWith []*CustomDomainWhereInput `json:"hasCustomDomainsWith,omitempty"`
@@ -34665,6 +36650,45 @@ func (i *MappableDomainWhereInput) P() (predicate.MappableDomain, error) {
 	if i.NameContainsFold != nil {
 		predicates = append(predicates, mappabledomain.NameContainsFold(*i.NameContainsFold))
 	}
+	if i.ZoneID != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDEQ(*i.ZoneID))
+	}
+	if i.ZoneIDNEQ != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDNEQ(*i.ZoneIDNEQ))
+	}
+	if len(i.ZoneIDIn) > 0 {
+		predicates = append(predicates, mappabledomain.ZoneIDIn(i.ZoneIDIn...))
+	}
+	if len(i.ZoneIDNotIn) > 0 {
+		predicates = append(predicates, mappabledomain.ZoneIDNotIn(i.ZoneIDNotIn...))
+	}
+	if i.ZoneIDGT != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDGT(*i.ZoneIDGT))
+	}
+	if i.ZoneIDGTE != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDGTE(*i.ZoneIDGTE))
+	}
+	if i.ZoneIDLT != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDLT(*i.ZoneIDLT))
+	}
+	if i.ZoneIDLTE != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDLTE(*i.ZoneIDLTE))
+	}
+	if i.ZoneIDContains != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDContains(*i.ZoneIDContains))
+	}
+	if i.ZoneIDHasPrefix != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDHasPrefix(*i.ZoneIDHasPrefix))
+	}
+	if i.ZoneIDHasSuffix != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDHasSuffix(*i.ZoneIDHasSuffix))
+	}
+	if i.ZoneIDEqualFold != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDEqualFold(*i.ZoneIDEqualFold))
+	}
+	if i.ZoneIDContainsFold != nil {
+		predicates = append(predicates, mappabledomain.ZoneIDContainsFold(*i.ZoneIDContainsFold))
+	}
 
 	if i.HasCustomDomains != nil {
 		p := mappabledomain.HasCustomDomains()
@@ -34818,6 +36842,21 @@ type MappableDomainHistoryWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "zone_id" field predicates.
+	ZoneID             *string  `json:"zoneID,omitempty"`
+	ZoneIDNEQ          *string  `json:"zoneIDNEQ,omitempty"`
+	ZoneIDIn           []string `json:"zoneIDIn,omitempty"`
+	ZoneIDNotIn        []string `json:"zoneIDNotIn,omitempty"`
+	ZoneIDGT           *string  `json:"zoneIDGT,omitempty"`
+	ZoneIDGTE          *string  `json:"zoneIDGTE,omitempty"`
+	ZoneIDLT           *string  `json:"zoneIDLT,omitempty"`
+	ZoneIDLTE          *string  `json:"zoneIDLTE,omitempty"`
+	ZoneIDContains     *string  `json:"zoneIDContains,omitempty"`
+	ZoneIDHasPrefix    *string  `json:"zoneIDHasPrefix,omitempty"`
+	ZoneIDHasSuffix    *string  `json:"zoneIDHasSuffix,omitempty"`
+	ZoneIDEqualFold    *string  `json:"zoneIDEqualFold,omitempty"`
+	ZoneIDContainsFold *string  `json:"zoneIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -35190,6 +37229,45 @@ func (i *MappableDomainHistoryWhereInput) P() (predicate.MappableDomainHistory, 
 	}
 	if i.NameContainsFold != nil {
 		predicates = append(predicates, mappabledomainhistory.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.ZoneID != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDEQ(*i.ZoneID))
+	}
+	if i.ZoneIDNEQ != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDNEQ(*i.ZoneIDNEQ))
+	}
+	if len(i.ZoneIDIn) > 0 {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDIn(i.ZoneIDIn...))
+	}
+	if len(i.ZoneIDNotIn) > 0 {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDNotIn(i.ZoneIDNotIn...))
+	}
+	if i.ZoneIDGT != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDGT(*i.ZoneIDGT))
+	}
+	if i.ZoneIDGTE != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDGTE(*i.ZoneIDGTE))
+	}
+	if i.ZoneIDLT != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDLT(*i.ZoneIDLT))
+	}
+	if i.ZoneIDLTE != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDLTE(*i.ZoneIDLTE))
+	}
+	if i.ZoneIDContains != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDContains(*i.ZoneIDContains))
+	}
+	if i.ZoneIDHasPrefix != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDHasPrefix(*i.ZoneIDHasPrefix))
+	}
+	if i.ZoneIDHasSuffix != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDHasSuffix(*i.ZoneIDHasSuffix))
+	}
+	if i.ZoneIDEqualFold != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDEqualFold(*i.ZoneIDEqualFold))
+	}
+	if i.ZoneIDContainsFold != nil {
+		predicates = append(predicates, mappabledomainhistory.ZoneIDContainsFold(*i.ZoneIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -42707,6 +44785,10 @@ type OrganizationWhereInput struct {
 	HasJobRunnerRegistrationTokens     *bool                                   `json:"hasJobRunnerRegistrationTokens,omitempty"`
 	HasJobRunnerRegistrationTokensWith []*JobRunnerRegistrationTokenWhereInput `json:"hasJobRunnerRegistrationTokensWith,omitempty"`
 
+	// "dns_verifications" edge predicates.
+	HasDNSVerifications     *bool                        `json:"hasDNSVerifications,omitempty"`
+	HasDNSVerificationsWith []*DNSVerificationWhereInput `json:"hasDNSVerificationsWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -44025,6 +46107,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasJobRunnerRegistrationTokensWith(with...))
+	}
+	if i.HasDNSVerifications != nil {
+		p := organization.HasDNSVerifications()
+		if !*i.HasDNSVerifications {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDNSVerificationsWith) > 0 {
+		with := make([]predicate.DNSVerification, 0, len(i.HasDNSVerificationsWith))
+		for _, w := range i.HasDNSVerificationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDNSVerificationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasDNSVerificationsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
@@ -138,6 +139,20 @@ func (cdc *CustomDomainCreate) SetMappableDomainID(s string) *CustomDomainCreate
 	return cdc
 }
 
+// SetDNSVerificationID sets the "dns_verification_id" field.
+func (cdc *CustomDomainCreate) SetDNSVerificationID(s string) *CustomDomainCreate {
+	cdc.mutation.SetDNSVerificationID(s)
+	return cdc
+}
+
+// SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
+func (cdc *CustomDomainCreate) SetNillableDNSVerificationID(s *string) *CustomDomainCreate {
+	if s != nil {
+		cdc.SetDNSVerificationID(*s)
+	}
+	return cdc
+}
+
 // SetID sets the "id" field.
 func (cdc *CustomDomainCreate) SetID(s string) *CustomDomainCreate {
 	cdc.mutation.SetID(s)
@@ -160,6 +175,11 @@ func (cdc *CustomDomainCreate) SetOwner(o *Organization) *CustomDomainCreate {
 // SetMappableDomain sets the "mappable_domain" edge to the MappableDomain entity.
 func (cdc *CustomDomainCreate) SetMappableDomain(m *MappableDomain) *CustomDomainCreate {
 	return cdc.SetMappableDomainID(m.ID)
+}
+
+// SetDNSVerification sets the "dns_verification" edge to the DNSVerification entity.
+func (cdc *CustomDomainCreate) SetDNSVerification(d *DNSVerification) *CustomDomainCreate {
+	return cdc.SetDNSVerificationID(d.ID)
 }
 
 // Mutation returns the CustomDomainMutation object of the builder.
@@ -229,11 +249,6 @@ func (cdc *CustomDomainCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cdc *CustomDomainCreate) check() error {
-	if v, ok := cdc.mutation.OwnerID(); ok {
-		if err := customdomain.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := cdc.mutation.CnameRecord(); !ok {
 		return &ValidationError{Name: "cname_record", err: errors.New(`generated: missing required field "CustomDomain.cname_record"`)}
 	}
@@ -355,6 +370,24 @@ func (cdc *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.MappableDomainID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cdc.mutation.DNSVerificationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   customdomain.DNSVerificationTable,
+			Columns: []string{customdomain.DNSVerificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cdc.schemaConfig.CustomDomain
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DNSVerificationID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

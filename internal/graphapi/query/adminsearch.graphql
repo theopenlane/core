@@ -155,6 +155,30 @@ query AdminSearch($query: String!) {
           ownerID
           cnameRecord
           mappableDomainID
+          dnsVerificationID
+        }
+      }
+    }
+    dnsVerifications {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          cloudflareHostnameID
+          dnsTxtRecord
+          dnsTxtValue
+          dnsVerificationStatusReason
+          sslTxtRecord
+          sslTxtValue
+          sslCertStatusReason
         }
       }
     }
@@ -426,6 +450,7 @@ query AdminSearch($query: String!) {
           id
           tags
           name
+          zoneID
         }
       }
     }

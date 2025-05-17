@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -368,9 +369,50 @@ func adminSearchCustomDomains(ctx context.Context, query string, after *entgql.C
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				customdomain.OwnerIDContainsFold(query),          // search by OwnerID
-				customdomain.CnameRecordContainsFold(query),      // search by CnameRecord
-				customdomain.MappableDomainIDContainsFold(query), // search by MappableDomainID
+				customdomain.OwnerIDContainsFold(query),           // search by OwnerID
+				customdomain.CnameRecordContainsFold(query),       // search by CnameRecord
+				customdomain.MappableDomainIDContainsFold(query),  // search by MappableDomainID
+				customdomain.DNSVerificationIDContainsFold(query), // search by DNSVerificationID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchDNSVerification searches for DNSVerification based on the query string looking for matches
+func searchDNSVerifications(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DNSVerificationConnection, error) {
+	request := withTransactionalMutation(ctx).DNSVerification.Query().
+		Where(
+			dnsverification.Or(
+				dnsverification.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchDNSVerification searches for DNSVerification based on the query string looking for matches
+func adminSearchDNSVerifications(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DNSVerificationConnection, error) {
+	request := withTransactionalMutation(ctx).DNSVerification.Query().
+		Where(
+			dnsverification.Or(
+				dnsverification.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				dnsverification.OwnerIDContainsFold(query),                     // search by OwnerID
+				dnsverification.CloudflareHostnameIDContainsFold(query),        // search by CloudflareHostnameID
+				dnsverification.DNSTxtRecordContainsFold(query),                // search by DNSTxtRecord
+				dnsverification.DNSTxtValueContainsFold(query),                 // search by DNSTxtValue
+				dnsverification.DNSVerificationStatusReasonContainsFold(query), // search by DNSVerificationStatusReason
+				dnsverification.SslTxtRecordContainsFold(query),                // search by SslTxtRecord
+				dnsverification.SslTxtValueContainsFold(query),                 // search by SslTxtValue
+				dnsverification.SslCertStatusReasonContainsFold(query),         // search by SslCertStatusReason
 			),
 		)
 
@@ -895,7 +937,8 @@ func adminSearchMappableDomains(ctx context.Context, query string, after *entgql
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				mappabledomain.NameContainsFold(query), // search by Name
+				mappabledomain.NameContainsFold(query),   // search by Name
+				mappabledomain.ZoneIDContainsFold(query), // search by ZoneID
 			),
 		)
 

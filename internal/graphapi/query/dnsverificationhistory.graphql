@@ -1,0 +1,71 @@
+
+
+query GetAllDNSVerificationHistories {
+  dnsVerificationHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cloudflareHostnameID
+        createdAt
+        createdBy
+        dnsTxtRecord
+        dnsTxtValue
+        dnsVerificationStatus
+        dnsVerificationStatusReason
+        historyTime
+        id
+        operation
+        ownerID
+        ref
+        sslCertStatus
+        sslCertStatusReason
+        sslTxtRecord
+        sslTxtValue
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetDNSVerificationHistories($first: Int, $last: Int, $where: DNSVerificationHistoryWhereInput) {
+  dnsVerificationHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cloudflareHostnameID
+        createdAt
+        createdBy
+        dnsTxtRecord
+        dnsTxtValue
+        dnsVerificationStatus
+        dnsVerificationStatusReason
+        historyTime
+        id
+        operation
+        ownerID
+        ref
+        sslCertStatus
+        sslCertStatusReason
+        sslTxtRecord
+        sslTxtValue
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

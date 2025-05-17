@@ -45,7 +45,9 @@ type CustomDomainHistory struct {
 	CnameRecord string `json:"cname_record,omitempty"`
 	// The mappable domain id that this custom domain maps to
 	MappableDomainID string `json:"mappable_domain_id,omitempty"`
-	selectValues     sql.SelectValues
+	// The ID of the dns verification record
+	DNSVerificationID string `json:"dns_verification_id,omitempty"`
+	selectValues      sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -57,7 +59,7 @@ func (*CustomDomainHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case customdomainhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case customdomainhistory.FieldID, customdomainhistory.FieldRef, customdomainhistory.FieldCreatedBy, customdomainhistory.FieldUpdatedBy, customdomainhistory.FieldDeletedBy, customdomainhistory.FieldOwnerID, customdomainhistory.FieldCnameRecord, customdomainhistory.FieldMappableDomainID:
+		case customdomainhistory.FieldID, customdomainhistory.FieldRef, customdomainhistory.FieldCreatedBy, customdomainhistory.FieldUpdatedBy, customdomainhistory.FieldDeletedBy, customdomainhistory.FieldOwnerID, customdomainhistory.FieldCnameRecord, customdomainhistory.FieldMappableDomainID, customdomainhistory.FieldDNSVerificationID:
 			values[i] = new(sql.NullString)
 		case customdomainhistory.FieldHistoryTime, customdomainhistory.FieldCreatedAt, customdomainhistory.FieldUpdatedAt, customdomainhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -162,6 +164,12 @@ func (cdh *CustomDomainHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				cdh.MappableDomainID = value.String
 			}
+		case customdomainhistory.FieldDNSVerificationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dns_verification_id", values[i])
+			} else if value.Valid {
+				cdh.DNSVerificationID = value.String
+			}
 		default:
 			cdh.selectValues.Set(columns[i], values[i])
 		}
@@ -236,6 +244,9 @@ func (cdh *CustomDomainHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("mappable_domain_id=")
 	builder.WriteString(cdh.MappableDomainID)
+	builder.WriteString(", ")
+	builder.WriteString("dns_verification_id=")
+	builder.WriteString(cdh.DNSVerificationID)
 	builder.WriteByte(')')
 	return builder.String()
 }

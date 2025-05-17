@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -993,6 +994,21 @@ func (oc *OrganizationCreate) AddJobRunnerRegistrationTokens(j ...*JobRunnerRegi
 		ids[i] = j[i].ID
 	}
 	return oc.AddJobRunnerRegistrationTokenIDs(ids...)
+}
+
+// AddDNSVerificationIDs adds the "dns_verifications" edge to the DNSVerification entity by IDs.
+func (oc *OrganizationCreate) AddDNSVerificationIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddDNSVerificationIDs(ids...)
+	return oc
+}
+
+// AddDNSVerifications adds the "dns_verifications" edges to the DNSVerification entity.
+func (oc *OrganizationCreate) AddDNSVerifications(d ...*DNSVerification) *OrganizationCreate {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return oc.AddDNSVerificationIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2015,6 +2031,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.JobRunnerRegistrationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DNSVerificationsTable,
+			Columns: []string{organization.DNSVerificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -117,6 +117,12 @@ func (mdc *MappableDomainCreate) SetName(s string) *MappableDomainCreate {
 	return mdc
 }
 
+// SetZoneID sets the "zone_id" field.
+func (mdc *MappableDomainCreate) SetZoneID(s string) *MappableDomainCreate {
+	mdc.mutation.SetZoneID(s)
+	return mdc
+}
+
 // SetID sets the "id" field.
 func (mdc *MappableDomainCreate) SetID(s string) *MappableDomainCreate {
 	mdc.mutation.SetID(s)
@@ -221,6 +227,14 @@ func (mdc *MappableDomainCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "MappableDomain.name": %w`, err)}
 		}
 	}
+	if _, ok := mdc.mutation.ZoneID(); !ok {
+		return &ValidationError{Name: "zone_id", err: errors.New(`generated: missing required field "MappableDomain.zone_id"`)}
+	}
+	if v, ok := mdc.mutation.ZoneID(); ok {
+		if err := mappabledomain.ZoneIDValidator(v); err != nil {
+			return &ValidationError{Name: "zone_id", err: fmt.Errorf(`generated: validator failed for field "MappableDomain.zone_id": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -288,6 +302,10 @@ func (mdc *MappableDomainCreate) createSpec() (*MappableDomain, *sqlgraph.Create
 	if value, ok := mdc.mutation.Name(); ok {
 		_spec.SetField(mappabledomain.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := mdc.mutation.ZoneID(); ok {
+		_spec.SetField(mappabledomain.FieldZoneID, field.TypeString, value)
+		_node.ZoneID = value
 	}
 	if nodes := mdc.mutation.CustomDomainsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

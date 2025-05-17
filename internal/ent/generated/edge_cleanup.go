@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -136,6 +137,18 @@ func CustomDomainEdgeCleanup(ctx context.Context, id string) error {
 
 func CustomDomainHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomainhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func DNSVerificationEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup dnsverification edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func DNSVerificationHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup dnsverificationhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -656,6 +669,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).JobRunnerRegistrationToken.Query().Where((jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobrunnerregistrationtokenCount, err := FromContext(ctx).JobRunnerRegistrationToken.Delete().Where(jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", jobrunnerregistrationtokenCount).Msg("deleting jobrunnerregistrationtoken")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).DNSVerification.Query().Where((dnsverification.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if dnsverificationCount, err := FromContext(ctx).DNSVerification.Delete().Where(dnsverification.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", dnsverificationCount).Msg("deleting dnsverification")
 			return err
 		}
 	}
