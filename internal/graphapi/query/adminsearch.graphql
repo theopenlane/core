@@ -162,6 +162,7 @@ query AdminSearch($query: String!) {
           ownerID
           cnameRecord
           mappableDomainID
+          status
         }
       }
     }

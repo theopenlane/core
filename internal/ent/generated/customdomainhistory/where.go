@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -129,6 +128,11 @@ func TxtRecordSubdomain(v string) predicate.CustomDomainHistory {
 // TxtRecordValue applies equality check predicate on the "txt_record_value" field. It's identical to TxtRecordValueEQ.
 func TxtRecordValue(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldEQ(FieldTxtRecordValue, v))
+}
+
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldEQ(FieldStatus, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -911,6 +915,16 @@ func TxtRecordSubdomainHasSuffix(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldHasSuffix(FieldTxtRecordSubdomain, v))
 }
 
+// TxtRecordSubdomainIsNil applies the IsNil predicate on the "txt_record_subdomain" field.
+func TxtRecordSubdomainIsNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldIsNull(FieldTxtRecordSubdomain))
+}
+
+// TxtRecordSubdomainNotNil applies the NotNil predicate on the "txt_record_subdomain" field.
+func TxtRecordSubdomainNotNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNotNull(FieldTxtRecordSubdomain))
+}
+
 // TxtRecordSubdomainEqualFold applies the EqualFold predicate on the "txt_record_subdomain" field.
 func TxtRecordSubdomainEqualFold(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldEqualFold(FieldTxtRecordSubdomain, v))
@@ -976,6 +990,16 @@ func TxtRecordValueHasSuffix(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldHasSuffix(FieldTxtRecordValue, v))
 }
 
+// TxtRecordValueIsNil applies the IsNil predicate on the "txt_record_value" field.
+func TxtRecordValueIsNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldIsNull(FieldTxtRecordValue))
+}
+
+// TxtRecordValueNotNil applies the NotNil predicate on the "txt_record_value" field.
+func TxtRecordValueNotNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNotNull(FieldTxtRecordValue))
+}
+
 // TxtRecordValueEqualFold applies the EqualFold predicate on the "txt_record_value" field.
 func TxtRecordValueEqualFold(v string) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldEqualFold(FieldTxtRecordValue, v))
@@ -987,33 +1011,78 @@ func TxtRecordValueContainsFold(v string) predicate.CustomDomainHistory {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v enums.CustomDomainStatus) predicate.CustomDomainHistory {
-	vc := v
-	return predicate.CustomDomainHistory(sql.FieldEQ(FieldStatus, vc))
+func StatusEQ(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v enums.CustomDomainStatus) predicate.CustomDomainHistory {
-	vc := v
-	return predicate.CustomDomainHistory(sql.FieldNEQ(FieldStatus, vc))
+func StatusNEQ(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...enums.CustomDomainStatus) predicate.CustomDomainHistory {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.CustomDomainHistory(sql.FieldIn(FieldStatus, v...))
+func StatusIn(vs ...string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...enums.CustomDomainStatus) predicate.CustomDomainHistory {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.CustomDomainHistory(sql.FieldNotIn(FieldStatus, v...))
+func StatusNotIn(vs ...string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusContains applies the Contains predicate on the "status" field.
+func StatusContains(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldContains(FieldStatus, v))
+}
+
+// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
+func StatusHasPrefix(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldHasPrefix(FieldStatus, v))
+}
+
+// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
+func StatusHasSuffix(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldHasSuffix(FieldStatus, v))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldNotNull(FieldStatus))
+}
+
+// StatusEqualFold applies the EqualFold predicate on the "status" field.
+func StatusEqualFold(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldEqualFold(FieldStatus, v))
+}
+
+// StatusContainsFold applies the ContainsFold predicate on the "status" field.
+func StatusContainsFold(v string) predicate.CustomDomainHistory {
+	return predicate.CustomDomainHistory(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // And groups predicates with the AND operator between them.

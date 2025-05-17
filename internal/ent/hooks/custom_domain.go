@@ -22,32 +22,8 @@ func HookCustomDomain() ent.Hook {
 	return hook.If(
 		func(next ent.Mutator) ent.Mutator {
 			return hook.CustomDomainFunc(func(ctx context.Context, m *generated.CustomDomainMutation) (generated.Value, error) {
-				secretString, err := GenerateDomainValidationSecret()
-				if err != nil {
-					return nil, err
-				}
-
-				// Hash the secret with bcrypt to store in the DB
-				hashedSecret, err := bcrypt.GenerateFromPassword([]byte(secretString), bcrypt.DefaultCost)
-				if err != nil {
-					return nil, err
-				}
-
-				m.SetTxtRecordValue(string(hashedSecret))
-
-				u, err := next.Mutate(ctx, m)
-
-				if err != nil {
-					return nil, err
-				}
-
-				if u, ok := u.(*generated.CustomDomain); ok {
-					// Return the original secretString to the caller, not the hashed value
-					// this will be readable only in the Create mutation response, and not retrievable later
-					u.TxtRecordValue = secretString
-				}
-
-				return u, err
+				// TODO(acookin): implement cloudflare domain validation
+				return next.Mutate(ctx, m)
 			})
 		},
 		hook.HasOp(ent.OpCreate),

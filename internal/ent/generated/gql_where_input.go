@@ -12500,10 +12500,21 @@ type CustomDomainWhereInput struct {
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
 
 	// "status" field predicates.
-	Status      *enums.CustomDomainStatus  `json:"status,omitempty"`
-	StatusNEQ   *enums.CustomDomainStatus  `json:"statusNEQ,omitempty"`
-	StatusIn    []enums.CustomDomainStatus `json:"statusIn,omitempty"`
-	StatusNotIn []enums.CustomDomainStatus `json:"statusNotIn,omitempty"`
+	Status             *string  `json:"status,omitempty"`
+	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGT           *string  `json:"statusGT,omitempty"`
+	StatusGTE          *string  `json:"statusGTE,omitempty"`
+	StatusLT           *string  `json:"statusLT,omitempty"`
+	StatusLTE          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        bool     `json:"statusIsNil,omitempty"`
+	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -12975,6 +12986,39 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, customdomain.StatusNotIn(i.StatusNotIn...))
 	}
+	if i.StatusGT != nil {
+		predicates = append(predicates, customdomain.StatusGT(*i.StatusGT))
+	}
+	if i.StatusGTE != nil {
+		predicates = append(predicates, customdomain.StatusGTE(*i.StatusGTE))
+	}
+	if i.StatusLT != nil {
+		predicates = append(predicates, customdomain.StatusLT(*i.StatusLT))
+	}
+	if i.StatusLTE != nil {
+		predicates = append(predicates, customdomain.StatusLTE(*i.StatusLTE))
+	}
+	if i.StatusContains != nil {
+		predicates = append(predicates, customdomain.StatusContains(*i.StatusContains))
+	}
+	if i.StatusHasPrefix != nil {
+		predicates = append(predicates, customdomain.StatusHasPrefix(*i.StatusHasPrefix))
+	}
+	if i.StatusHasSuffix != nil {
+		predicates = append(predicates, customdomain.StatusHasSuffix(*i.StatusHasSuffix))
+	}
+	if i.StatusIsNil {
+		predicates = append(predicates, customdomain.StatusIsNil())
+	}
+	if i.StatusNotNil {
+		predicates = append(predicates, customdomain.StatusNotNil())
+	}
+	if i.StatusEqualFold != nil {
+		predicates = append(predicates, customdomain.StatusEqualFold(*i.StatusEqualFold))
+	}
+	if i.StatusContainsFold != nil {
+		predicates = append(predicates, customdomain.StatusContainsFold(*i.StatusContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := customdomain.HasOwner()
@@ -13209,10 +13253,21 @@ type CustomDomainHistoryWhereInput struct {
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
 
 	// "status" field predicates.
-	Status      *enums.CustomDomainStatus  `json:"status,omitempty"`
-	StatusNEQ   *enums.CustomDomainStatus  `json:"statusNEQ,omitempty"`
-	StatusIn    []enums.CustomDomainStatus `json:"statusIn,omitempty"`
-	StatusNotIn []enums.CustomDomainStatus `json:"statusNotIn,omitempty"`
+	Status             *string  `json:"status,omitempty"`
+	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
+	StatusIn           []string `json:"statusIn,omitempty"`
+	StatusNotIn        []string `json:"statusNotIn,omitempty"`
+	StatusGT           *string  `json:"statusGT,omitempty"`
+	StatusGTE          *string  `json:"statusGTE,omitempty"`
+	StatusLT           *string  `json:"statusLT,omitempty"`
+	StatusLTE          *string  `json:"statusLTE,omitempty"`
+	StatusContains     *string  `json:"statusContains,omitempty"`
+	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
+	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
+	StatusIsNil        bool     `json:"statusIsNil,omitempty"`
+	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
+	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
+	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -13756,6 +13811,39 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	}
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, customdomainhistory.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.StatusGT != nil {
+		predicates = append(predicates, customdomainhistory.StatusGT(*i.StatusGT))
+	}
+	if i.StatusGTE != nil {
+		predicates = append(predicates, customdomainhistory.StatusGTE(*i.StatusGTE))
+	}
+	if i.StatusLT != nil {
+		predicates = append(predicates, customdomainhistory.StatusLT(*i.StatusLT))
+	}
+	if i.StatusLTE != nil {
+		predicates = append(predicates, customdomainhistory.StatusLTE(*i.StatusLTE))
+	}
+	if i.StatusContains != nil {
+		predicates = append(predicates, customdomainhistory.StatusContains(*i.StatusContains))
+	}
+	if i.StatusHasPrefix != nil {
+		predicates = append(predicates, customdomainhistory.StatusHasPrefix(*i.StatusHasPrefix))
+	}
+	if i.StatusHasSuffix != nil {
+		predicates = append(predicates, customdomainhistory.StatusHasSuffix(*i.StatusHasSuffix))
+	}
+	if i.StatusIsNil {
+		predicates = append(predicates, customdomainhistory.StatusIsNil())
+	}
+	if i.StatusNotNil {
+		predicates = append(predicates, customdomainhistory.StatusNotNil())
+	}
+	if i.StatusEqualFold != nil {
+		predicates = append(predicates, customdomainhistory.StatusEqualFold(*i.StatusEqualFold))
+	}
+	if i.StatusContainsFold != nil {
+		predicates = append(predicates, customdomainhistory.StatusContainsFold(*i.StatusContainsFold))
 	}
 
 	switch len(predicates) {

@@ -486,7 +486,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomain.FieldMappableDomainID:   {Type: field.TypeString, Column: customdomain.FieldMappableDomainID},
 			customdomain.FieldTxtRecordSubdomain: {Type: field.TypeString, Column: customdomain.FieldTxtRecordSubdomain},
 			customdomain.FieldTxtRecordValue:     {Type: field.TypeString, Column: customdomain.FieldTxtRecordValue},
-			customdomain.FieldStatus:             {Type: field.TypeEnum, Column: customdomain.FieldStatus},
+			customdomain.FieldStatus:             {Type: field.TypeString, Column: customdomain.FieldStatus},
 		},
 	}
 	graph.Nodes[12] = &sqlgraph.Node{
@@ -515,7 +515,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomainhistory.FieldMappableDomainID:   {Type: field.TypeString, Column: customdomainhistory.FieldMappableDomainID},
 			customdomainhistory.FieldTxtRecordSubdomain: {Type: field.TypeString, Column: customdomainhistory.FieldTxtRecordSubdomain},
 			customdomainhistory.FieldTxtRecordValue:     {Type: field.TypeString, Column: customdomainhistory.FieldTxtRecordValue},
-			customdomainhistory.FieldStatus:             {Type: field.TypeEnum, Column: customdomainhistory.FieldStatus},
+			customdomainhistory.FieldStatus:             {Type: field.TypeString, Column: customdomainhistory.FieldStatus},
 		},
 	}
 	graph.Nodes[13] = &sqlgraph.Node{

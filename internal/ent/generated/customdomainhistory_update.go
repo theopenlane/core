@@ -14,7 +14,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -144,16 +143,22 @@ func (cdhu *CustomDomainHistoryUpdate) ClearOwnerID() *CustomDomainHistoryUpdate
 }
 
 // SetStatus sets the "status" field.
-func (cdhu *CustomDomainHistoryUpdate) SetStatus(eds enums.CustomDomainStatus) *CustomDomainHistoryUpdate {
-	cdhu.mutation.SetStatus(eds)
+func (cdhu *CustomDomainHistoryUpdate) SetStatus(s string) *CustomDomainHistoryUpdate {
+	cdhu.mutation.SetStatus(s)
 	return cdhu
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cdhu *CustomDomainHistoryUpdate) SetNillableStatus(eds *enums.CustomDomainStatus) *CustomDomainHistoryUpdate {
-	if eds != nil {
-		cdhu.SetStatus(*eds)
+func (cdhu *CustomDomainHistoryUpdate) SetNillableStatus(s *string) *CustomDomainHistoryUpdate {
+	if s != nil {
+		cdhu.SetStatus(*s)
 	}
+	return cdhu
+}
+
+// ClearStatus clears the value of the "status" field.
+func (cdhu *CustomDomainHistoryUpdate) ClearStatus() *CustomDomainHistoryUpdate {
+	cdhu.mutation.ClearStatus()
 	return cdhu
 }
 
@@ -198,16 +203,6 @@ func (cdhu *CustomDomainHistoryUpdate) defaults() {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (cdhu *CustomDomainHistoryUpdate) check() error {
-	if v, ok := cdhu.mutation.Status(); ok {
-		if err := customdomainhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CustomDomainHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (cdhu *CustomDomainHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CustomDomainHistoryUpdate {
 	cdhu.modifiers = append(cdhu.modifiers, modifiers...)
@@ -215,9 +210,6 @@ func (cdhu *CustomDomainHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBui
 }
 
 func (cdhu *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := cdhu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(customdomainhistory.Table, customdomainhistory.Columns, sqlgraph.NewFieldSpec(customdomainhistory.FieldID, field.TypeString))
 	if ps := cdhu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -276,8 +268,17 @@ func (cdhu *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if cdhu.mutation.OwnerIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldOwnerID, field.TypeString)
 	}
+	if cdhu.mutation.TxtRecordSubdomainCleared() {
+		_spec.ClearField(customdomainhistory.FieldTxtRecordSubdomain, field.TypeString)
+	}
+	if cdhu.mutation.TxtRecordValueCleared() {
+		_spec.ClearField(customdomainhistory.FieldTxtRecordValue, field.TypeString)
+	}
 	if value, ok := cdhu.mutation.Status(); ok {
-		_spec.SetField(customdomainhistory.FieldStatus, field.TypeEnum, value)
+		_spec.SetField(customdomainhistory.FieldStatus, field.TypeString, value)
+	}
+	if cdhu.mutation.StatusCleared() {
+		_spec.ClearField(customdomainhistory.FieldStatus, field.TypeString)
 	}
 	_spec.Node.Schema = cdhu.schemaConfig.CustomDomainHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cdhu.schemaConfig)
@@ -414,16 +415,22 @@ func (cdhuo *CustomDomainHistoryUpdateOne) ClearOwnerID() *CustomDomainHistoryUp
 }
 
 // SetStatus sets the "status" field.
-func (cdhuo *CustomDomainHistoryUpdateOne) SetStatus(eds enums.CustomDomainStatus) *CustomDomainHistoryUpdateOne {
-	cdhuo.mutation.SetStatus(eds)
+func (cdhuo *CustomDomainHistoryUpdateOne) SetStatus(s string) *CustomDomainHistoryUpdateOne {
+	cdhuo.mutation.SetStatus(s)
 	return cdhuo
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cdhuo *CustomDomainHistoryUpdateOne) SetNillableStatus(eds *enums.CustomDomainStatus) *CustomDomainHistoryUpdateOne {
-	if eds != nil {
-		cdhuo.SetStatus(*eds)
+func (cdhuo *CustomDomainHistoryUpdateOne) SetNillableStatus(s *string) *CustomDomainHistoryUpdateOne {
+	if s != nil {
+		cdhuo.SetStatus(*s)
 	}
+	return cdhuo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (cdhuo *CustomDomainHistoryUpdateOne) ClearStatus() *CustomDomainHistoryUpdateOne {
+	cdhuo.mutation.ClearStatus()
 	return cdhuo
 }
 
@@ -481,16 +488,6 @@ func (cdhuo *CustomDomainHistoryUpdateOne) defaults() {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (cdhuo *CustomDomainHistoryUpdateOne) check() error {
-	if v, ok := cdhuo.mutation.Status(); ok {
-		if err := customdomainhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CustomDomainHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (cdhuo *CustomDomainHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CustomDomainHistoryUpdateOne {
 	cdhuo.modifiers = append(cdhuo.modifiers, modifiers...)
@@ -498,9 +495,6 @@ func (cdhuo *CustomDomainHistoryUpdateOne) Modify(modifiers ...func(u *sql.Updat
 }
 
 func (cdhuo *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *CustomDomainHistory, err error) {
-	if err := cdhuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(customdomainhistory.Table, customdomainhistory.Columns, sqlgraph.NewFieldSpec(customdomainhistory.FieldID, field.TypeString))
 	id, ok := cdhuo.mutation.ID()
 	if !ok {
@@ -576,8 +570,17 @@ func (cdhuo *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if cdhuo.mutation.OwnerIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldOwnerID, field.TypeString)
 	}
+	if cdhuo.mutation.TxtRecordSubdomainCleared() {
+		_spec.ClearField(customdomainhistory.FieldTxtRecordSubdomain, field.TypeString)
+	}
+	if cdhuo.mutation.TxtRecordValueCleared() {
+		_spec.ClearField(customdomainhistory.FieldTxtRecordValue, field.TypeString)
+	}
 	if value, ok := cdhuo.mutation.Status(); ok {
-		_spec.SetField(customdomainhistory.FieldStatus, field.TypeEnum, value)
+		_spec.SetField(customdomainhistory.FieldStatus, field.TypeString, value)
+	}
+	if cdhuo.mutation.StatusCleared() {
+		_spec.ClearField(customdomainhistory.FieldStatus, field.TypeString)
 	}
 	_spec.Node.Schema = cdhuo.schemaConfig.CustomDomainHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cdhuo.schemaConfig)

@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -201,15 +200,15 @@ func (cdhc *CustomDomainHistoryCreate) SetNillableTxtRecordValue(s *string) *Cus
 }
 
 // SetStatus sets the "status" field.
-func (cdhc *CustomDomainHistoryCreate) SetStatus(eds enums.CustomDomainStatus) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetStatus(eds)
+func (cdhc *CustomDomainHistoryCreate) SetStatus(s string) *CustomDomainHistoryCreate {
+	cdhc.mutation.SetStatus(s)
 	return cdhc
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableStatus(eds *enums.CustomDomainStatus) *CustomDomainHistoryCreate {
-	if eds != nil {
-		cdhc.SetStatus(*eds)
+func (cdhc *CustomDomainHistoryCreate) SetNillableStatus(s *string) *CustomDomainHistoryCreate {
+	if s != nil {
+		cdhc.SetStatus(*s)
 	}
 	return cdhc
 }
@@ -316,20 +315,6 @@ func (cdhc *CustomDomainHistoryCreate) check() error {
 	if _, ok := cdhc.mutation.MappableDomainID(); !ok {
 		return &ValidationError{Name: "mappable_domain_id", err: errors.New(`generated: missing required field "CustomDomainHistory.mappable_domain_id"`)}
 	}
-	if _, ok := cdhc.mutation.TxtRecordSubdomain(); !ok {
-		return &ValidationError{Name: "txt_record_subdomain", err: errors.New(`generated: missing required field "CustomDomainHistory.txt_record_subdomain"`)}
-	}
-	if _, ok := cdhc.mutation.TxtRecordValue(); !ok {
-		return &ValidationError{Name: "txt_record_value", err: errors.New(`generated: missing required field "CustomDomainHistory.txt_record_value"`)}
-	}
-	if _, ok := cdhc.mutation.Status(); !ok {
-		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "CustomDomainHistory.status"`)}
-	}
-	if v, ok := cdhc.mutation.Status(); ok {
-		if err := customdomainhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CustomDomainHistory.status": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -427,7 +412,7 @@ func (cdhc *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlg
 		_node.TxtRecordValue = value
 	}
 	if value, ok := cdhc.mutation.Status(); ok {
-		_spec.SetField(customdomainhistory.FieldStatus, field.TypeEnum, value)
+		_spec.SetField(customdomainhistory.FieldStatus, field.TypeString, value)
 		_node.Status = value
 	}
 	return _node, _spec

@@ -540,9 +540,9 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
-		{Name: "txt_record_subdomain", Type: field.TypeString, Size: 16, Default: "_olverify"},
-		{Name: "txt_record_value", Type: field.TypeString, Size: 64},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "txt_record_subdomain", Type: field.TypeString, Nullable: true, Size: 16, Default: "_olverify"},
+		{Name: "txt_record_value", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "status", Type: field.TypeString, Nullable: true, Default: "PENDING"},
 		{Name: "mappable_domain_id", Type: field.TypeString},
 		{Name: "mappable_domain_custom_domains", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -612,9 +612,9 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
 		{Name: "mappable_domain_id", Type: field.TypeString},
-		{Name: "txt_record_subdomain", Type: field.TypeString, Size: 16, Default: "_olverify"},
-		{Name: "txt_record_value", Type: field.TypeString, Size: 64},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "txt_record_subdomain", Type: field.TypeString, Nullable: true, Size: 16, Default: "_olverify"},
+		{Name: "txt_record_value", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "status", Type: field.TypeString, Nullable: true, Default: "PENDING"},
 	}
 	// CustomDomainHistoryTable holds the schema information for the "custom_domain_history" table.
 	CustomDomainHistoryTable = &schema.Table{

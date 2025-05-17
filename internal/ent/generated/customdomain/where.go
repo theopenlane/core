@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -121,6 +120,11 @@ func TxtRecordSubdomain(v string) predicate.CustomDomain {
 // TxtRecordValue applies equality check predicate on the "txt_record_value" field. It's identical to TxtRecordValueEQ.
 func TxtRecordValue(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldEQ(FieldTxtRecordValue, v))
+}
+
+// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
+func Status(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldEQ(FieldStatus, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -768,6 +772,16 @@ func TxtRecordSubdomainHasSuffix(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldHasSuffix(FieldTxtRecordSubdomain, v))
 }
 
+// TxtRecordSubdomainIsNil applies the IsNil predicate on the "txt_record_subdomain" field.
+func TxtRecordSubdomainIsNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldIsNull(FieldTxtRecordSubdomain))
+}
+
+// TxtRecordSubdomainNotNil applies the NotNil predicate on the "txt_record_subdomain" field.
+func TxtRecordSubdomainNotNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNotNull(FieldTxtRecordSubdomain))
+}
+
 // TxtRecordSubdomainEqualFold applies the EqualFold predicate on the "txt_record_subdomain" field.
 func TxtRecordSubdomainEqualFold(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldEqualFold(FieldTxtRecordSubdomain, v))
@@ -833,6 +847,16 @@ func TxtRecordValueHasSuffix(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldHasSuffix(FieldTxtRecordValue, v))
 }
 
+// TxtRecordValueIsNil applies the IsNil predicate on the "txt_record_value" field.
+func TxtRecordValueIsNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldIsNull(FieldTxtRecordValue))
+}
+
+// TxtRecordValueNotNil applies the NotNil predicate on the "txt_record_value" field.
+func TxtRecordValueNotNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNotNull(FieldTxtRecordValue))
+}
+
 // TxtRecordValueEqualFold applies the EqualFold predicate on the "txt_record_value" field.
 func TxtRecordValueEqualFold(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldEqualFold(FieldTxtRecordValue, v))
@@ -844,33 +868,78 @@ func TxtRecordValueContainsFold(v string) predicate.CustomDomain {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v enums.CustomDomainStatus) predicate.CustomDomain {
-	vc := v
-	return predicate.CustomDomain(sql.FieldEQ(FieldStatus, vc))
+func StatusEQ(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldEQ(FieldStatus, v))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v enums.CustomDomainStatus) predicate.CustomDomain {
-	vc := v
-	return predicate.CustomDomain(sql.FieldNEQ(FieldStatus, vc))
+func StatusNEQ(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNEQ(FieldStatus, v))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...enums.CustomDomainStatus) predicate.CustomDomain {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.CustomDomain(sql.FieldIn(FieldStatus, v...))
+func StatusIn(vs ...string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldIn(FieldStatus, vs...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...enums.CustomDomainStatus) predicate.CustomDomain {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.CustomDomain(sql.FieldNotIn(FieldStatus, v...))
+func StatusNotIn(vs ...string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusGT applies the GT predicate on the "status" field.
+func StatusGT(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldGT(FieldStatus, v))
+}
+
+// StatusGTE applies the GTE predicate on the "status" field.
+func StatusGTE(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldGTE(FieldStatus, v))
+}
+
+// StatusLT applies the LT predicate on the "status" field.
+func StatusLT(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldLT(FieldStatus, v))
+}
+
+// StatusLTE applies the LTE predicate on the "status" field.
+func StatusLTE(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldLTE(FieldStatus, v))
+}
+
+// StatusContains applies the Contains predicate on the "status" field.
+func StatusContains(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldContains(FieldStatus, v))
+}
+
+// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
+func StatusHasPrefix(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldHasPrefix(FieldStatus, v))
+}
+
+// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
+func StatusHasSuffix(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldHasSuffix(FieldStatus, v))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNotNull(FieldStatus))
+}
+
+// StatusEqualFold applies the EqualFold predicate on the "status" field.
+func StatusEqualFold(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldEqualFold(FieldStatus, v))
+}
+
+// StatusContainsFold applies the ContainsFold predicate on the "status" field.
+func StatusContainsFold(v string) predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
