@@ -80,6 +80,14 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
       tags
       updatedAt
       updatedBy
+      controls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
       editors {
         id
         name

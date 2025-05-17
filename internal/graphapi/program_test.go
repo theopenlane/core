@@ -15,38 +15,49 @@ import (
 )
 
 func TestQueryProgram(t *testing.T) {
-	// create program with a linked procedure and policy
-	program := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
+	// create program1 with a linked procedure and policy
+	program1 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(adminUser.UserCtx, t)
 
 	testCases := []struct {
-		name     string
-		queryID  string
-		client   *openlaneclient.OpenlaneClient
-		ctx      context.Context
-		errorMsg string
+		name           string
+		queryID        string
+		client         *openlaneclient.OpenlaneClient
+		ctx            context.Context
+		expectedResult *generated.Program
+		errorMsg       string
 	}{
 		{
-			name:    "happy path",
-			queryID: program.ID,
-			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			name:           "happy path",
+			queryID:        program1.ID,
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedResult: program1,
 		},
 		{
-			name:    "happy path using personal access token",
-			queryID: program.ID,
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
+			name:           "happy path, program created by admin user",
+			queryID:        program2.ID,
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedResult: program2,
+		},
+		{
+			name:           "happy path using personal access token",
+			queryID:        program1.ID,
+			client:         suite.client.apiWithPAT,
+			ctx:            context.Background(),
+			expectedResult: program1,
 		},
 		{
 			name:     "no access, user of same org",
-			queryID:  program.ID,
+			queryID:  program1.ID,
 			client:   suite.client.api,
 			ctx:      viewOnlyUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "no access, user of different org",
-			queryID:  program.ID,
+			queryID:  program1.ID,
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
@@ -67,22 +78,22 @@ func TestQueryProgram(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			assert.Check(t, is.Equal(program.ID, resp.Program.ID))
-			assert.Check(t, is.Equal(program.Name, resp.Program.Name))
+			assert.Check(t, is.Equal(tc.expectedResult.ID, resp.Program.ID))
+			assert.Check(t, is.Equal(tc.expectedResult.Name, resp.Program.Name))
 			assert.Check(t, is.Len(resp.Program.Procedures.Edges, 1))
 			assert.Check(t, is.Len(resp.Program.InternalPolicies.Edges, 1))
 		})
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
 	// cleanup procedure and policy
 	procedureIDs := []string{}
-	for _, p := range program.Edges.Procedures {
+	for _, p := range program1.Edges.Procedures {
 		procedureIDs = append(procedureIDs, p.ID)
 	}
 	policyIDs := []string{}
-	for _, p := range program.Edges.InternalPolicies {
+	for _, p := range program1.Edges.InternalPolicies {
 		policyIDs = append(policyIDs, p.ID)
 	}
 
