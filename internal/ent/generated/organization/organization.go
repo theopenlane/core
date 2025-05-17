@@ -135,6 +135,12 @@ const (
 	EdgeActionPlans = "action_plans"
 	// EdgeCustomDomains holds the string denoting the custom_domains edge name in mutations.
 	EdgeCustomDomains = "custom_domains"
+	// EdgeJobRunners holds the string denoting the job_runners edge name in mutations.
+	EdgeJobRunners = "job_runners"
+	// EdgeJobRunnerTokens holds the string denoting the job_runner_tokens edge name in mutations.
+	EdgeJobRunnerTokens = "job_runner_tokens"
+	// EdgeJobRunnerRegistrationTokens holds the string denoting the job_runner_registration_tokens edge name in mutations.
+	EdgeJobRunnerRegistrationTokens = "job_runner_registration_tokens"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -433,6 +439,27 @@ const (
 	CustomDomainsInverseTable = "custom_domains"
 	// CustomDomainsColumn is the table column denoting the custom_domains relation/edge.
 	CustomDomainsColumn = "owner_id"
+	// JobRunnersTable is the table that holds the job_runners relation/edge.
+	JobRunnersTable = "job_runners"
+	// JobRunnersInverseTable is the table name for the JobRunner entity.
+	// It exists in this package in order to avoid circular dependency with the "jobrunner" package.
+	JobRunnersInverseTable = "job_runners"
+	// JobRunnersColumn is the table column denoting the job_runners relation/edge.
+	JobRunnersColumn = "owner_id"
+	// JobRunnerTokensTable is the table that holds the job_runner_tokens relation/edge.
+	JobRunnerTokensTable = "job_runner_tokens"
+	// JobRunnerTokensInverseTable is the table name for the JobRunnerToken entity.
+	// It exists in this package in order to avoid circular dependency with the "jobrunnertoken" package.
+	JobRunnerTokensInverseTable = "job_runner_tokens"
+	// JobRunnerTokensColumn is the table column denoting the job_runner_tokens relation/edge.
+	JobRunnerTokensColumn = "owner_id"
+	// JobRunnerRegistrationTokensTable is the table that holds the job_runner_registration_tokens relation/edge.
+	JobRunnerRegistrationTokensTable = "job_runner_registration_tokens"
+	// JobRunnerRegistrationTokensInverseTable is the table name for the JobRunnerRegistrationToken entity.
+	// It exists in this package in order to avoid circular dependency with the "jobrunnerregistrationtoken" package.
+	JobRunnerRegistrationTokensInverseTable = "job_runner_registration_tokens"
+	// JobRunnerRegistrationTokensColumn is the table column denoting the job_runner_registration_tokens relation/edge.
+	JobRunnerRegistrationTokensColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1203,6 +1230,48 @@ func ByCustomDomains(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByJobRunnersCount orders the results by job_runners count.
+func ByJobRunnersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newJobRunnersStep(), opts...)
+	}
+}
+
+// ByJobRunners orders the results by job_runners terms.
+func ByJobRunners(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobRunnersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByJobRunnerTokensCount orders the results by job_runner_tokens count.
+func ByJobRunnerTokensCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newJobRunnerTokensStep(), opts...)
+	}
+}
+
+// ByJobRunnerTokens orders the results by job_runner_tokens terms.
+func ByJobRunnerTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobRunnerTokensStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByJobRunnerRegistrationTokensCount orders the results by job_runner_registration_tokens count.
+func ByJobRunnerRegistrationTokensCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newJobRunnerRegistrationTokensStep(), opts...)
+	}
+}
+
+// ByJobRunnerRegistrationTokens orders the results by job_runner_registration_tokens terms.
+func ByJobRunnerRegistrationTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobRunnerRegistrationTokensStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1522,6 +1591,27 @@ func newCustomDomainsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CustomDomainsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, CustomDomainsTable, CustomDomainsColumn),
+	)
+}
+func newJobRunnersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(JobRunnersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnersTable, JobRunnersColumn),
+	)
+}
+func newJobRunnerTokensStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(JobRunnerTokensInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerTokensTable, JobRunnerTokensColumn),
+	)
+}
+func newJobRunnerRegistrationTokensStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(JobRunnerRegistrationTokensInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerRegistrationTokensTable, JobRunnerRegistrationTokensColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
@@ -1361,6 +1362,72 @@ func (iph *InternalPolicyHistory) Diff(history *InternalPolicyHistory) (*History
 			Old:     history,
 			New:     iph,
 			Changes: history.changes(iph),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (jrh *JobRunnerHistory) changes(new *JobRunnerHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(jrh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldCreatedAt, jrh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(jrh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldUpdatedAt, jrh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(jrh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldCreatedBy, jrh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(jrh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldDeletedAt, jrh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(jrh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldDeletedBy, jrh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(jrh.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldDisplayID, jrh.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(jrh.Tags, new.Tags) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldTags, jrh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(jrh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldOwnerID, jrh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(jrh.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldSystemOwned, jrh.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(jrh.Name, new.Name) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldName, jrh.Name, new.Name))
+	}
+	if !reflect.DeepEqual(jrh.Status, new.Status) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldStatus, jrh.Status, new.Status))
+	}
+	if !reflect.DeepEqual(jrh.IPAddress, new.IPAddress) {
+		changes = append(changes, NewChange(jobrunnerhistory.FieldIPAddress, jrh.IPAddress, new.IPAddress))
+	}
+	return changes
+}
+
+func (jrh *JobRunnerHistory) Diff(history *JobRunnerHistory) (*HistoryDiff[JobRunnerHistory], error) {
+	if jrh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	jrhUnix, historyUnix := jrh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	jrhOlder := jrhUnix < historyUnix || (jrhUnix == historyUnix && jrh.ID < history.ID)
+	historyOlder := jrhUnix > historyUnix || (jrhUnix == historyUnix && jrh.ID > history.ID)
+
+	if jrhOlder {
+		return &HistoryDiff[JobRunnerHistory]{
+			Old:     jrh,
+			New:     history,
+			Changes: jrh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[JobRunnerHistory]{
+			Old:     history,
+			New:     jrh,
+			Changes: history.changes(jrh),
 		}, nil
 	}
 	return nil, IdenticalHistoryError
@@ -2870,6 +2937,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditJobRunnerHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditMappableDomainHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -3143,6 +3216,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("InternalPolicyHistory", "History") {
 		record, err = auditInternalPolicyHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("JobRunnerHistory", "History") {
+		record, err = auditJobRunnerHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -4288,6 +4370,59 @@ func auditInternalPolicyHistory(ctx context.Context, config config) ([][]string,
 			default:
 				if i == 0 {
 					record.Changes = (&InternalPolicyHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type jobrunnerhistoryref struct {
+	Ref string
+}
+
+func auditJobRunnerHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []jobrunnerhistoryref
+	client := NewJobRunnerHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(jobrunnerhistory.ByRef()).
+		Select(jobrunnerhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(jobrunnerhistory.Ref(currRef.Ref)).
+			Order(jobrunnerhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "JobRunnerHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&JobRunnerHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&JobRunnerHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&JobRunnerHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
@@ -871,6 +872,52 @@ func (iphq *InternalPolicyHistoryQuery) AsOf(ctx context.Context, time time.Time
 	return iphq.
 		Where(internalpolicyhistory.HistoryTimeLTE(time)).
 		Order(internalpolicyhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (jr *JobRunner) History() *JobRunnerHistoryQuery {
+	historyClient := NewJobRunnerHistoryClient(jr.config)
+	return historyClient.Query().Where(jobrunnerhistory.Ref(jr.ID))
+}
+
+func (jrh *JobRunnerHistory) Next(ctx context.Context) (*JobRunnerHistory, error) {
+	client := NewJobRunnerHistoryClient(jrh.config)
+	return client.Query().
+		Where(
+			jobrunnerhistory.Ref(jrh.Ref),
+			jobrunnerhistory.HistoryTimeGT(jrh.HistoryTime),
+		).
+		Order(jobrunnerhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (jrh *JobRunnerHistory) Prev(ctx context.Context) (*JobRunnerHistory, error) {
+	client := NewJobRunnerHistoryClient(jrh.config)
+	return client.Query().
+		Where(
+			jobrunnerhistory.Ref(jrh.Ref),
+			jobrunnerhistory.HistoryTimeLT(jrh.HistoryTime),
+		).
+		Order(jobrunnerhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (jrhq *JobRunnerHistoryQuery) Earliest(ctx context.Context) (*JobRunnerHistory, error) {
+	return jrhq.
+		Order(jobrunnerhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (jrhq *JobRunnerHistoryQuery) Latest(ctx context.Context) (*JobRunnerHistory, error) {
+	return jrhq.
+		Order(jobrunnerhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (jrhq *JobRunnerHistoryQuery) AsOf(ctx context.Context, time time.Time) (*JobRunnerHistory, error) {
+	return jrhq.
+		Where(jobrunnerhistory.HistoryTimeLTE(time)).
+		Order(jobrunnerhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

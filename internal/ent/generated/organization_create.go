@@ -28,6 +28,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -945,6 +948,51 @@ func (oc *OrganizationCreate) AddCustomDomains(c ...*CustomDomain) *Organization
 		ids[i] = c[i].ID
 	}
 	return oc.AddCustomDomainIDs(ids...)
+}
+
+// AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
+func (oc *OrganizationCreate) AddJobRunnerIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddJobRunnerIDs(ids...)
+	return oc
+}
+
+// AddJobRunners adds the "job_runners" edges to the JobRunner entity.
+func (oc *OrganizationCreate) AddJobRunners(j ...*JobRunner) *OrganizationCreate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return oc.AddJobRunnerIDs(ids...)
+}
+
+// AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
+func (oc *OrganizationCreate) AddJobRunnerTokenIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddJobRunnerTokenIDs(ids...)
+	return oc
+}
+
+// AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
+func (oc *OrganizationCreate) AddJobRunnerTokens(j ...*JobRunnerToken) *OrganizationCreate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return oc.AddJobRunnerTokenIDs(ids...)
+}
+
+// AddJobRunnerRegistrationTokenIDs adds the "job_runner_registration_tokens" edge to the JobRunnerRegistrationToken entity by IDs.
+func (oc *OrganizationCreate) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
+	return oc
+}
+
+// AddJobRunnerRegistrationTokens adds the "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
+func (oc *OrganizationCreate) AddJobRunnerRegistrationTokens(j ...*JobRunnerRegistrationToken) *OrganizationCreate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return oc.AddJobRunnerRegistrationTokenIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1916,6 +1964,57 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.CustomDomain
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.JobRunnersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnersTable,
+			Columns: []string{organization.JobRunnersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.JobRunner
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerTokensTable,
+			Columns: []string{organization.JobRunnerTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.JobRunnerToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokensTable,
+			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

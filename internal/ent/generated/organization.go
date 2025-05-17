@@ -148,56 +148,65 @@ type OrganizationEdges struct {
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// CustomDomains holds the value of the custom_domains edge.
 	CustomDomains []*CustomDomain `json:"custom_domains,omitempty"`
+	// JobRunners holds the value of the job_runners edge.
+	JobRunners []*JobRunner `json:"job_runners,omitempty"`
+	// JobRunnerTokens holds the value of the job_runner_tokens edge.
+	JobRunnerTokens []*JobRunnerToken `json:"job_runner_tokens,omitempty"`
+	// JobRunnerRegistrationTokens holds the value of the job_runner_registration_tokens edge.
+	JobRunnerRegistrationTokens []*JobRunnerRegistrationToken `json:"job_runner_registration_tokens,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [45]bool
+	loadedTypes [48]bool
 	// totalCount holds the count of the edges above.
-	totalCount [45]map[string]int
+	totalCount [48]map[string]int
 
-	namedControlCreators          map[string][]*Group
-	namedControlObjectiveCreators map[string][]*Group
-	namedGroupCreators            map[string][]*Group
-	namedInternalPolicyCreators   map[string][]*Group
-	namedNarrativeCreators        map[string][]*Group
-	namedProcedureCreators        map[string][]*Group
-	namedProgramCreators          map[string][]*Group
-	namedRiskCreators             map[string][]*Group
-	namedTemplateCreators         map[string][]*Group
-	namedChildren                 map[string][]*Organization
-	namedPersonalAccessTokens     map[string][]*PersonalAccessToken
-	namedAPITokens                map[string][]*APIToken
-	namedUsers                    map[string][]*User
-	namedFiles                    map[string][]*File
-	namedEvents                   map[string][]*Event
-	namedSecrets                  map[string][]*Hush
-	namedGroups                   map[string][]*Group
-	namedTemplates                map[string][]*Template
-	namedIntegrations             map[string][]*Integration
-	namedDocuments                map[string][]*DocumentData
-	namedOrgSubscriptions         map[string][]*OrgSubscription
-	namedInvites                  map[string][]*Invite
-	namedSubscribers              map[string][]*Subscriber
-	namedEntities                 map[string][]*Entity
-	namedEntityTypes              map[string][]*EntityType
-	namedContacts                 map[string][]*Contact
-	namedNotes                    map[string][]*Note
-	namedTasks                    map[string][]*Task
-	namedPrograms                 map[string][]*Program
-	namedProcedures               map[string][]*Procedure
-	namedInternalPolicies         map[string][]*InternalPolicy
-	namedRisks                    map[string][]*Risk
-	namedControlObjectives        map[string][]*ControlObjective
-	namedNarratives               map[string][]*Narrative
-	namedControls                 map[string][]*Control
-	namedSubcontrols              map[string][]*Subcontrol
-	namedControlImplementations   map[string][]*ControlImplementation
-	namedEvidence                 map[string][]*Evidence
-	namedStandards                map[string][]*Standard
-	namedActionPlans              map[string][]*ActionPlan
-	namedCustomDomains            map[string][]*CustomDomain
-	namedMembers                  map[string][]*OrgMembership
+	namedControlCreators             map[string][]*Group
+	namedControlObjectiveCreators    map[string][]*Group
+	namedGroupCreators               map[string][]*Group
+	namedInternalPolicyCreators      map[string][]*Group
+	namedNarrativeCreators           map[string][]*Group
+	namedProcedureCreators           map[string][]*Group
+	namedProgramCreators             map[string][]*Group
+	namedRiskCreators                map[string][]*Group
+	namedTemplateCreators            map[string][]*Group
+	namedChildren                    map[string][]*Organization
+	namedPersonalAccessTokens        map[string][]*PersonalAccessToken
+	namedAPITokens                   map[string][]*APIToken
+	namedUsers                       map[string][]*User
+	namedFiles                       map[string][]*File
+	namedEvents                      map[string][]*Event
+	namedSecrets                     map[string][]*Hush
+	namedGroups                      map[string][]*Group
+	namedTemplates                   map[string][]*Template
+	namedIntegrations                map[string][]*Integration
+	namedDocuments                   map[string][]*DocumentData
+	namedOrgSubscriptions            map[string][]*OrgSubscription
+	namedInvites                     map[string][]*Invite
+	namedSubscribers                 map[string][]*Subscriber
+	namedEntities                    map[string][]*Entity
+	namedEntityTypes                 map[string][]*EntityType
+	namedContacts                    map[string][]*Contact
+	namedNotes                       map[string][]*Note
+	namedTasks                       map[string][]*Task
+	namedPrograms                    map[string][]*Program
+	namedProcedures                  map[string][]*Procedure
+	namedInternalPolicies            map[string][]*InternalPolicy
+	namedRisks                       map[string][]*Risk
+	namedControlObjectives           map[string][]*ControlObjective
+	namedNarratives                  map[string][]*Narrative
+	namedControls                    map[string][]*Control
+	namedSubcontrols                 map[string][]*Subcontrol
+	namedControlImplementations      map[string][]*ControlImplementation
+	namedEvidence                    map[string][]*Evidence
+	namedStandards                   map[string][]*Standard
+	namedActionPlans                 map[string][]*ActionPlan
+	namedCustomDomains               map[string][]*CustomDomain
+	namedJobRunners                  map[string][]*JobRunner
+	namedJobRunnerTokens             map[string][]*JobRunnerToken
+	namedJobRunnerRegistrationTokens map[string][]*JobRunnerRegistrationToken
+	namedMembers                     map[string][]*OrgMembership
 }
 
 // ControlCreatorsOrErr returns the ControlCreators value or an error if the edge
@@ -602,10 +611,37 @@ func (e OrganizationEdges) CustomDomainsOrErr() ([]*CustomDomain, error) {
 	return nil, &NotLoadedError{edge: "custom_domains"}
 }
 
+// JobRunnersOrErr returns the JobRunners value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) JobRunnersOrErr() ([]*JobRunner, error) {
+	if e.loadedTypes[44] {
+		return e.JobRunners, nil
+	}
+	return nil, &NotLoadedError{edge: "job_runners"}
+}
+
+// JobRunnerTokensOrErr returns the JobRunnerTokens value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) JobRunnerTokensOrErr() ([]*JobRunnerToken, error) {
+	if e.loadedTypes[45] {
+		return e.JobRunnerTokens, nil
+	}
+	return nil, &NotLoadedError{edge: "job_runner_tokens"}
+}
+
+// JobRunnerRegistrationTokensOrErr returns the JobRunnerRegistrationTokens value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) JobRunnerRegistrationTokensOrErr() ([]*JobRunnerRegistrationToken, error) {
+	if e.loadedTypes[46] {
+		return e.JobRunnerRegistrationTokens, nil
+	}
+	return nil, &NotLoadedError{edge: "job_runner_registration_tokens"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[44] {
+	if e.loadedTypes[47] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -977,6 +1013,21 @@ func (o *Organization) QueryActionPlans() *ActionPlanQuery {
 // QueryCustomDomains queries the "custom_domains" edge of the Organization entity.
 func (o *Organization) QueryCustomDomains() *CustomDomainQuery {
 	return NewOrganizationClient(o.config).QueryCustomDomains(o)
+}
+
+// QueryJobRunners queries the "job_runners" edge of the Organization entity.
+func (o *Organization) QueryJobRunners() *JobRunnerQuery {
+	return NewOrganizationClient(o.config).QueryJobRunners(o)
+}
+
+// QueryJobRunnerTokens queries the "job_runner_tokens" edge of the Organization entity.
+func (o *Organization) QueryJobRunnerTokens() *JobRunnerTokenQuery {
+	return NewOrganizationClient(o.config).QueryJobRunnerTokens(o)
+}
+
+// QueryJobRunnerRegistrationTokens queries the "job_runner_registration_tokens" edge of the Organization entity.
+func (o *Organization) QueryJobRunnerRegistrationTokens() *JobRunnerRegistrationTokenQuery {
+	return NewOrganizationClient(o.config).QueryJobRunnerRegistrationTokens(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2045,6 +2096,78 @@ func (o *Organization) appendNamedCustomDomains(name string, edges ...*CustomDom
 		o.Edges.namedCustomDomains[name] = []*CustomDomain{}
 	} else {
 		o.Edges.namedCustomDomains[name] = append(o.Edges.namedCustomDomains[name], edges...)
+	}
+}
+
+// NamedJobRunners returns the JobRunners named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedJobRunners(name string) ([]*JobRunner, error) {
+	if o.Edges.namedJobRunners == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedJobRunners[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedJobRunners(name string, edges ...*JobRunner) {
+	if o.Edges.namedJobRunners == nil {
+		o.Edges.namedJobRunners = make(map[string][]*JobRunner)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedJobRunners[name] = []*JobRunner{}
+	} else {
+		o.Edges.namedJobRunners[name] = append(o.Edges.namedJobRunners[name], edges...)
+	}
+}
+
+// NamedJobRunnerTokens returns the JobRunnerTokens named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedJobRunnerTokens(name string) ([]*JobRunnerToken, error) {
+	if o.Edges.namedJobRunnerTokens == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedJobRunnerTokens[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedJobRunnerTokens(name string, edges ...*JobRunnerToken) {
+	if o.Edges.namedJobRunnerTokens == nil {
+		o.Edges.namedJobRunnerTokens = make(map[string][]*JobRunnerToken)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedJobRunnerTokens[name] = []*JobRunnerToken{}
+	} else {
+		o.Edges.namedJobRunnerTokens[name] = append(o.Edges.namedJobRunnerTokens[name], edges...)
+	}
+}
+
+// NamedJobRunnerRegistrationTokens returns the JobRunnerRegistrationTokens named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedJobRunnerRegistrationTokens(name string) ([]*JobRunnerRegistrationToken, error) {
+	if o.Edges.namedJobRunnerRegistrationTokens == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedJobRunnerRegistrationTokens[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedJobRunnerRegistrationTokens(name string, edges ...*JobRunnerRegistrationToken) {
+	if o.Edges.namedJobRunnerRegistrationTokens == nil {
+		o.Edges.namedJobRunnerRegistrationTokens = make(map[string][]*JobRunnerRegistrationToken)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedJobRunnerRegistrationTokens[name] = []*JobRunnerRegistrationToken{}
+	} else {
+		o.Edges.namedJobRunnerRegistrationTokens[name] = append(o.Edges.namedJobRunnerRegistrationTokens[name], edges...)
 	}
 }
 

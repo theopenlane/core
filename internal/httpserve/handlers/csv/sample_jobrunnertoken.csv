@@ -1,0 +1,2 @@
+Tags,ExpiresAt,LastUsedAt,IsActive,RevokedReason,RevokedBy,RevokedAt,OwnerId,JobRunnerId
+example_tags,example_expiresat,example_lastusedat,example_isactive,example_revokedreason,example_revokedby,example_revokedat,example_ownerid,example_jobrunnerid

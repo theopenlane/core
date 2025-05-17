@@ -27,42 +27,45 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
 	var (
-		errors                       []error
-		apitokenResults              *generated.APITokenConnection
-		actionplanResults            *generated.ActionPlanConnection
-		contactResults               *generated.ContactConnection
-		controlResults               *generated.ControlConnection
-		controlimplementationResults *generated.ControlImplementationConnection
-		controlobjectiveResults      *generated.ControlObjectiveConnection
-		customdomainResults          *generated.CustomDomainConnection
-		documentdataResults          *generated.DocumentDataConnection
-		entityResults                *generated.EntityConnection
-		entitytypeResults            *generated.EntityTypeConnection
-		eventResults                 *generated.EventConnection
-		evidenceResults              *generated.EvidenceConnection
-		fileResults                  *generated.FileConnection
-		groupResults                 *generated.GroupConnection
-		integrationResults           *generated.IntegrationConnection
-		internalpolicyResults        *generated.InternalPolicyConnection
-		inviteResults                *generated.InviteConnection
-		mappabledomainResults        *generated.MappableDomainConnection
-		mappedcontrolResults         *generated.MappedControlConnection
-		narrativeResults             *generated.NarrativeConnection
-		orgsubscriptionResults       *generated.OrgSubscriptionConnection
-		organizationResults          *generated.OrganizationConnection
-		organizationsettingResults   *generated.OrganizationSettingConnection
-		personalaccesstokenResults   *generated.PersonalAccessTokenConnection
-		procedureResults             *generated.ProcedureConnection
-		programResults               *generated.ProgramConnection
-		riskResults                  *generated.RiskConnection
-		standardResults              *generated.StandardConnection
-		subcontrolResults            *generated.SubcontrolConnection
-		subscriberResults            *generated.SubscriberConnection
-		taskResults                  *generated.TaskConnection
-		templateResults              *generated.TemplateConnection
-		userResults                  *generated.UserConnection
-		usersettingResults           *generated.UserSettingConnection
-		webauthnResults              *generated.WebauthnConnection
+		errors                            []error
+		apitokenResults                   *generated.APITokenConnection
+		actionplanResults                 *generated.ActionPlanConnection
+		contactResults                    *generated.ContactConnection
+		controlResults                    *generated.ControlConnection
+		controlimplementationResults      *generated.ControlImplementationConnection
+		controlobjectiveResults           *generated.ControlObjectiveConnection
+		customdomainResults               *generated.CustomDomainConnection
+		documentdataResults               *generated.DocumentDataConnection
+		entityResults                     *generated.EntityConnection
+		entitytypeResults                 *generated.EntityTypeConnection
+		eventResults                      *generated.EventConnection
+		evidenceResults                   *generated.EvidenceConnection
+		fileResults                       *generated.FileConnection
+		groupResults                      *generated.GroupConnection
+		integrationResults                *generated.IntegrationConnection
+		internalpolicyResults             *generated.InternalPolicyConnection
+		inviteResults                     *generated.InviteConnection
+		jobrunnerResults                  *generated.JobRunnerConnection
+		jobrunnerregistrationtokenResults *generated.JobRunnerRegistrationTokenConnection
+		jobrunnertokenResults             *generated.JobRunnerTokenConnection
+		mappabledomainResults             *generated.MappableDomainConnection
+		mappedcontrolResults              *generated.MappedControlConnection
+		narrativeResults                  *generated.NarrativeConnection
+		orgsubscriptionResults            *generated.OrgSubscriptionConnection
+		organizationResults               *generated.OrganizationConnection
+		organizationsettingResults        *generated.OrganizationSettingConnection
+		personalaccesstokenResults        *generated.PersonalAccessTokenConnection
+		procedureResults                  *generated.ProcedureConnection
+		programResults                    *generated.ProgramConnection
+		riskResults                       *generated.RiskConnection
+		standardResults                   *generated.StandardConnection
+		subcontrolResults                 *generated.SubcontrolConnection
+		subscriberResults                 *generated.SubscriberConnection
+		taskResults                       *generated.TaskConnection
+		templateResults                   *generated.TemplateConnection
+		userResults                       *generated.UserConnection
+		usersettingResults                *generated.UserSettingConnection
+		webauthnResults                   *generated.WebauthnConnection
 	)
 
 	r.withPool().SubmitMultipleAndWait([]func(){
@@ -181,6 +184,27 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		func() {
 			var err error
 			inviteResults, err = searchInvites(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			jobrunnerResults, err = searchJobRunners(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			jobrunnerregistrationtokenResults, err = searchJobRunnerRegistrationTokens(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			jobrunnertokenResults, err = searchJobRunnerTokens(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -406,6 +430,21 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.Invites = inviteResults
 
 		res.TotalCount += inviteResults.TotalCount
+	}
+	if jobrunnerResults != nil && len(jobrunnerResults.Edges) > 0 {
+		res.JobRunners = jobrunnerResults
+
+		res.TotalCount += jobrunnerResults.TotalCount
+	}
+	if jobrunnerregistrationtokenResults != nil && len(jobrunnerregistrationtokenResults.Edges) > 0 {
+		res.JobRunnerRegistrationTokens = jobrunnerregistrationtokenResults
+
+		res.TotalCount += jobrunnerregistrationtokenResults.TotalCount
+	}
+	if jobrunnertokenResults != nil && len(jobrunnertokenResults.Edges) > 0 {
+		res.JobRunnerTokens = jobrunnertokenResults
+
+		res.TotalCount += jobrunnertokenResults.TotalCount
 	}
 	if mappabledomainResults != nil && len(mappabledomainResults.Edges) > 0 {
 		res.MappableDomains = mappabledomainResults
@@ -805,6 +844,60 @@ func (r *queryResolver) AdminInviteSearch(ctx context.Context, query string, aft
 
 	// return the results
 	return inviteResults, nil
+}
+func (r *queryResolver) AdminJobRunnerSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	jobrunnerResults, err := adminSearchJobRunners(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return jobrunnerResults, nil
+}
+func (r *queryResolver) AdminJobRunnerRegistrationTokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerRegistrationTokenConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	jobrunnerregistrationtokenResults, err := adminSearchJobRunnerRegistrationTokens(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return jobrunnerregistrationtokenResults, nil
+}
+func (r *queryResolver) AdminJobRunnerTokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerTokenConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	jobrunnertokenResults, err := adminSearchJobRunnerTokens(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return jobrunnertokenResults, nil
 }
 func (r *queryResolver) AdminMappableDomainSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappableDomainConnection, error) {
 	// ensure the user is a system admin

@@ -983,6 +983,106 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 	return res, err
 }
 
+// JobRunners is the resolver for the jobRunners field.
+func (r *queryResolver) JobRunners(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) (*generated.JobRunnerConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).JobRunner.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunner"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithJobRunnerOrder(orderBy),
+		generated.WithJobRunnerFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunner"})
+	}
+
+	return res, err
+}
+
+// JobRunnerHistories is the resolver for the jobRunnerHistories field.
+func (r *queryResolver) JobRunnerHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.JobRunnerHistoryOrder, where *generated.JobRunnerHistoryWhereInput) (*generated.JobRunnerHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).JobRunnerHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithJobRunnerHistoryOrder(orderBy),
+		generated.WithJobRunnerHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerhistory"})
+	}
+
+	return res, err
+}
+
+// JobRunnerRegistrationTokens is the resolver for the jobRunnerRegistrationTokens field.
+func (r *queryResolver) JobRunnerRegistrationTokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) (*generated.JobRunnerRegistrationTokenConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).JobRunnerRegistrationToken.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithJobRunnerRegistrationTokenOrder(orderBy),
+		generated.WithJobRunnerRegistrationTokenFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
+	}
+
+	return res, err
+}
+
+// JobRunnerTokens is the resolver for the jobRunnerTokens field.
+func (r *queryResolver) JobRunnerTokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) (*generated.JobRunnerTokenConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).JobRunnerToken.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnertoken"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithJobRunnerTokenOrder(orderBy),
+		generated.WithJobRunnerTokenFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnertoken"})
+	}
+
+	return res, err
+}
+
 // MappableDomains is the resolver for the mappableDomains field.
 func (r *queryResolver) MappableDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappableDomainOrder, where *generated.MappableDomainWhereInput) (*generated.MappableDomainConnection, error) {
 	// set page limit if nothing was set
