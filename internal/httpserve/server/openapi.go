@@ -206,6 +206,7 @@ var openAPISchemas = map[string]any{
 	"AccountRolesReply":                 &models.AccountRolesReply{},
 	"AccountRolesOrganizationRequest":   &models.AccountRolesOrganizationRequest{},
 	"AccountRolesOrganizationReply":     &models.AccountRolesOrganizationReply{},
+	"AccountFeaturesReply":              &models.AccountFeaturesReply{},
 	"TFARequest":                        &models.TFARequest{},
 	"TFAReply":                          &models.TFAReply{},
 	"WebauthnRegistrationRequest":       &models.WebauthnRegistrationRequest{},
