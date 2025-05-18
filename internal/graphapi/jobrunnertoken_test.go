@@ -27,19 +27,19 @@ func TestQueryJobRunnerTokens(t *testing.T) {
 			name:          "happy path user",
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
-			expectedCount: 2,
+			expectedCount: 4, // we created 2 runners, by default, each runner has it's own token, then we make 2 more tokens
 		},
 		{
 			name:          "happy path, using personal access token",
 			client:        suite.client.apiWithPAT,
 			ctx:           context.Background(),
-			expectedCount: 2,
+			expectedCount: 4,
 		},
 		{
 			name:          "valid test user 2",
 			client:        suite.client.api,
 			ctx:           testUser2.UserCtx,
-			expectedCount: 1,
+			expectedCount: 2,
 		},
 		{
 			name:     "no auth",
@@ -90,7 +90,7 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
 			tokenID:       firstToken.ID,
-			expectedCount: 1,
+			expectedCount: 3,
 		},
 		{
 			// the first test case should have deleted the token
@@ -105,7 +105,7 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 			client:        suite.client.apiWithPAT,
 			ctx:           context.Background(),
 			tokenID:       secondToken.ID,
-			expectedCount: 0,
+			expectedCount: 2,
 		},
 	}
 

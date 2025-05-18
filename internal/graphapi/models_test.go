@@ -466,6 +466,7 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 
 // MustNew JobRunner settings builder is used to create runners
 func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRunner {
+	ctx = setContext(ctx, w.client.db)
 	wn, err := w.client.db.JobRunner.Create().
 		SetName(randomName(t)).
 		SetIPAddress(gofakeit.IPv4Address()).

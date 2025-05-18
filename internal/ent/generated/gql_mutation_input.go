@@ -4295,7 +4295,6 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 type CreateJobRunnerInput struct {
 	Tags              []string
 	Name              string
-	Status            *enums.JobRunnerStatus
 	IPAddress         string
 	OwnerID           *string
 	JobRunnerTokenIDs []string
@@ -4307,9 +4306,6 @@ func (i *CreateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
 	m.SetIPAddress(i.IPAddress)
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -4331,7 +4327,6 @@ type UpdateJobRunnerInput struct {
 	Tags                    []string
 	AppendTags              []string
 	Name                    *string
-	Status                  *enums.JobRunnerStatus
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearJobRunnerTokens    bool
@@ -4352,9 +4347,6 @@ func (i *UpdateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

@@ -42,15 +42,45 @@ func HookJobRunnerRegistrationToken() ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
-				userID, err := auth.GetSubjectIDFromContext(ctx)
-				if err != nil {
-					return m, err
-				}
-
 				m.SetDeletedAt(time.Now())
-				m.SetDeletedBy(userID)
 
 				return next.Mutate(ctx, m)
 			})
 	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
+}
+
+// HookJobRunnerCreate makes sure there is always a token for
+// the job runner node when a new runner is created
+//
+// This also deletes the registration token
+func HookJobRunnerCreate() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.JobRunnerFunc(
+			func(ctx context.Context, m *generated.JobRunnerMutation) (generated.Value, error) {
+				v, err := next.Mutate(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+
+				runner := v.(*generated.JobRunner)
+
+				// make sure we cannot reuse the registration token
+				// for cases where there is no "registration token"
+				// like an admin creating a runner via api
+				// or even tests.
+				// Only check the error and make sure it is not a "not found".
+				err = m.Client().JobRunnerRegistrationToken.DeleteOneID(runner.CreatedBy).
+					Exec(ctx)
+				if err != nil && !generated.IsNotFound(err) {
+					return nil, err
+				}
+
+				return v, m.Client().JobRunnerToken.Create().
+					AddJobRunnerIDs(runner.ID).
+					SetOwnerID(runner.OwnerID).
+					SetCreatedBy(runner.CreatedBy).
+					SetUpdatedBy(runner.UpdatedBy).
+					Exec(ctx)
+			})
+	}, ent.OpCreate)
 }

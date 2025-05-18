@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/keygen"
 )
@@ -87,7 +88,7 @@ func (JobRunnerRegistrationToken) Fields() []ent.Field {
 func (j JobRunnerRegistrationToken) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(j),
+			newOrgOwnedMixin(j, withSkipTokenTypesObjects(&token.JobRunnerRegistrationToken{})),
 		},
 	}.getMixins()
 }
@@ -137,9 +138,11 @@ func (JobRunnerRegistrationToken) Interceptors() []ent.Interceptor {
 func (JobRunnerRegistrationToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
+			rule.AllowAfterApplyingPrivacyTokenFilter[*token.JobRunnerRegistrationToken](),
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckOrgWriteAccess(),
 		),

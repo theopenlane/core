@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/keygen"
 )
@@ -91,7 +92,8 @@ func (JobRunnerToken) Fields() []ent.Field {
 func (j JobRunnerToken) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(j),
+			newOrgOwnedMixin(j,
+				withSkipTokenTypesObjects(&token.JobRunnerRegistrationToken{})),
 		},
 	}.getMixins()
 }
@@ -139,7 +141,9 @@ func (JobRunnerToken) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
 			rule.AllowIfContextAllowRule(),
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

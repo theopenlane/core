@@ -2228,6 +2228,7 @@ func init() {
 	jobrunnerMixinHooks2 := jobrunnerMixin[2].Hooks()
 	jobrunnerMixinHooks5 := jobrunnerMixin[5].Hooks()
 	jobrunnerMixinHooks6 := jobrunnerMixin[6].Hooks()
+	jobrunnerHooks := schema.JobRunner{}.Hooks()
 
 	jobrunner.Hooks[1] = jobrunnerMixinHooks0[0]
 
@@ -2238,6 +2239,8 @@ func init() {
 	jobrunner.Hooks[4] = jobrunnerMixinHooks5[0]
 
 	jobrunner.Hooks[5] = jobrunnerMixinHooks6[0]
+
+	jobrunner.Hooks[6] = jobrunnerHooks[0]
 	jobrunnerMixinInters1 := jobrunnerMixin[1].Interceptors()
 	jobrunnerMixinInters5 := jobrunnerMixin[5].Interceptors()
 	jobrunner.Interceptors[0] = jobrunnerMixinInters1[0]

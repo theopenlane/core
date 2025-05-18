@@ -35618,10 +35618,6 @@ input CreateJobRunnerInput {
   """
   name: String!
   """
-  the status of this runner
-  """
-  status: JobRunnerJobRunnerStatus
-  """
   the IP address of this runner
   """
   ipAddress: String!
@@ -68354,10 +68350,6 @@ input UpdateJobRunnerInput {
   the name of the runner
   """
   name: String
-  """
-  the status of this runner
-  """
-  status: JobRunnerJobRunnerStatus
   ownerID: ID
   clearOwner: Boolean
   addJobRunnerTokenIDs: [ID!]

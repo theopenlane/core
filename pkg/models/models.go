@@ -912,3 +912,59 @@ func (r *ExampleCSVRequest) Validate() error {
 var ExampleExampleCSVRequest = ExampleCSVRequest{
 	Filename: "actionplan",
 }
+
+// =========
+// JOB RUNNERS
+// =========
+
+// AgentNodeRegistrationRequest is the request to register a new node
+type AgentNodeRegistrationRequest struct {
+	IPAddress string   `json:"ip_address" description:"The IP address of the node being registered"`
+	Token     string   `json:"token" description:"Your agent registration token"`
+	Name      string   `json:"name" description:"the name of your job runner node"`
+	Tags      []string `json:"tags" description:"The tags for your runner node"`
+}
+
+// Validate ensures the required fields are set on the AgentNodeRegistrationRequest
+func (r *AgentNodeRegistrationRequest) Validate() error {
+	if r.IPAddress == "" {
+		return rout.NewMissingRequiredFieldError("ip_address")
+	}
+
+	if r.Token == "" {
+		return rout.NewMissingRequiredFieldError("token")
+	}
+
+	if r.Name == "" {
+		return rout.NewMissingRequiredFieldError("name")
+	}
+
+	if len(r.Tags) == 0 {
+		r.Tags = append(r.Tags, "self-hosted")
+	}
+
+	return nil
+}
+
+// WebauthnBeginRegistrationResponse is the response to begin a webauthn login
+// this includes the credential creation options and the session token
+type AgentNodeRegistrationResponse struct {
+	Reply   rout.Reply
+	Message string `json:"message"`
+}
+
+// ExampleAgentNodeRegistrationRequest is an example of a successful job runner
+// registration request
+var ExampleAgentNodeRegistrationRequest = AgentNodeRegistrationRequest{
+	IPAddress: "192.168.0.1",
+	Name:      "ubuntu-eu-west-2",
+	Token:     "registration_tokenhere",
+	Tags:      []string{"self-hosted", "eu-west-2", "gcp", "kubernetes"},
+}
+
+// ExampleAgentNodeRegistrationResponse is an example of a successful job runner
+// registration response
+var ExampleAgentNodeRegistrationResponse = AgentNodeRegistrationResponse{
+	Reply:   rout.Reply{Success: true},
+	Message: "Job runner node registered",
+}

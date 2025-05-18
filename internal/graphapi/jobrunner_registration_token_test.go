@@ -11,10 +11,14 @@ import (
 )
 
 func TestQueryJobRunnerRegistrationTokens(t *testing.T) {
-	firstJob := (&JobRunnerRegistrationTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	// auto cleaned up when the second job is created
+	_ = (&JobRunnerRegistrationTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	secondJob := (&JobRunnerRegistrationTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	thirdJob := (&JobRunnerRegistrationTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	fourthJob := (&JobRunnerRegistrationTokenBuilder{client: suite.client, WithRunner: true}).MustNew(testUser2.UserCtx, t)
+
+	// auto cleaned up by hook when the last job is created
+	// the last job itself is deleted since we are attaching it to a runner
+	_ = (&JobRunnerRegistrationTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	_ = (&JobRunnerRegistrationTokenBuilder{client: suite.client, WithRunner: true}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -40,7 +44,7 @@ func TestQueryJobRunnerRegistrationTokens(t *testing.T) {
 			name:          "valid test user 2",
 			client:        suite.client.api,
 			ctx:           testUser2.UserCtx,
-			expectedCount: 1, // 1 still since the hook should delete a token with a job_runner_id and the interceptor should filter
+			expectedCount: 0, // 0 since the fourthJob sets a runner so it should be deleted too in the hook
 		},
 		{
 			name:     "no auth",
@@ -68,10 +72,7 @@ func TestQueryJobRunnerRegistrationTokens(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.JobRunnerRegistrationTokenDeleteOne]{client: suite.client.db.JobRunnerRegistrationToken, ID: firstJob.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.JobRunnerRegistrationTokenDeleteOne]{client: suite.client.db.JobRunnerRegistrationToken, ID: secondJob.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.JobRunnerRegistrationTokenDeleteOne]{client: suite.client.db.JobRunnerRegistrationToken, ID: thirdJob.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.JobRunnerRegistrationTokenDeleteOne]{client: suite.client.db.JobRunnerRegistrationToken, ID: fourthJob.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestMutationDeleteJobRunnerRegistrationToken(t *testing.T) {

@@ -1,9 +1,6 @@
 package schema
 
 import (
-	"errors"
-	"net"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -11,10 +8,13 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
@@ -57,28 +57,16 @@ func (JobRunner) Fields() []ent.Field {
 		field.Enum("status").
 			GoType(enums.JobRunnerStatus("")).
 			Default(enums.JobRunnerStatusOffline.String()).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			).
 			Comment("the status of this runner"),
 
 		field.String("ip_address").
 			Immutable().
 			Unique().
 			Comment("the IP address of this runner").
-			Validate(func(s string) error {
-				ip := net.ParseIP(s)
-				if ip == nil {
-					return errors.New("invalid ip address") // nolint: err113
-				}
-
-				if ip.IsLoopback() {
-					return errors.New("you cannot use a loopback address") // nolint: err113
-				}
-
-				if ip.IsUnspecified() {
-					return errors.New("you cannot use an unspecified IP like 0.0.0.0 and others") // nolint: err113
-				}
-
-				return nil
-			}),
+			Validate(func(s string) error { return models.ValidateIP(s) }),
 	}
 }
 
@@ -89,6 +77,7 @@ func (j JobRunner) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(j,
 				withSkipForSystemAdmin(true),
+				withSkipTokenTypesObjects(&token.JobRunnerRegistrationToken{}),
 			),
 			mixin.SystemOwnedMixin{},
 		},
@@ -118,7 +107,9 @@ func (JobRunner) Annotations() []schema.Annotation {
 
 // Hooks of the JobRunner
 func (JobRunner) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookJobRunnerCreate(),
+	}
 }
 
 // Interceptors of the JobRunner
@@ -133,7 +124,10 @@ func (JobRunner) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
+			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
+			rule.AllowMutationAfterApplyingOwnerFilter(),
 			rule.SystemOwnedJobRunner(),
+			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
