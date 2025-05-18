@@ -3,14 +3,11 @@
 package customdomain
 
 import (
-	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -38,12 +35,6 @@ const (
 	FieldCnameRecord = "cname_record"
 	// FieldMappableDomainID holds the string denoting the mappable_domain_id field in the database.
 	FieldMappableDomainID = "mappable_domain_id"
-	// FieldTxtRecordSubdomain holds the string denoting the txt_record_subdomain field in the database.
-	FieldTxtRecordSubdomain = "txt_record_subdomain"
-	// FieldTxtRecordValue holds the string denoting the txt_record_value field in the database.
-	FieldTxtRecordValue = "txt_record_value"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeMappableDomain holds the string denoting the mappable_domain edge name in mutations.
@@ -79,9 +70,6 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldCnameRecord,
 	FieldMappableDomainID,
-	FieldTxtRecordSubdomain,
-	FieldTxtRecordValue,
-	FieldStatus,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "custom_domains"
@@ -128,29 +116,9 @@ var (
 	CnameRecordValidator func(string) error
 	// MappableDomainIDValidator is a validator for the "mappable_domain_id" field. It is called by the builders before save.
 	MappableDomainIDValidator func(string) error
-	// DefaultTxtRecordSubdomain holds the default value on creation for the "txt_record_subdomain" field.
-	DefaultTxtRecordSubdomain string
-	// TxtRecordSubdomainValidator is a validator for the "txt_record_subdomain" field. It is called by the builders before save.
-	TxtRecordSubdomainValidator func(string) error
-	// DefaultTxtRecordValue holds the default value on creation for the "txt_record_value" field.
-	DefaultTxtRecordValue func() string
-	// TxtRecordValueValidator is a validator for the "txt_record_value" field. It is called by the builders before save.
-	TxtRecordValueValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
-
-const DefaultStatus enums.CustomDomainStatus = "PENDING"
-
-// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
-func StatusValidator(s enums.CustomDomainStatus) error {
-	switch s.String() {
-	case "INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING":
-		return nil
-	default:
-		return fmt.Errorf("customdomain: invalid enum value for status field: %q", s)
-	}
-}
 
 // OrderOption defines the ordering options for the CustomDomain queries.
 type OrderOption func(*sql.Selector)
@@ -205,21 +173,6 @@ func ByMappableDomainID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappableDomainID, opts...).ToFunc()
 }
 
-// ByTxtRecordSubdomain orders the results by the txt_record_subdomain field.
-func ByTxtRecordSubdomain(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTxtRecordSubdomain, opts...).ToFunc()
-}
-
-// ByTxtRecordValue orders the results by the txt_record_value field.
-func ByTxtRecordValue(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTxtRecordValue, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -247,10 +200,3 @@ func newMappableDomainStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, MappableDomainTable, MappableDomainColumn),
 	)
 }
-
-var (
-	// enums.CustomDomainStatus must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.CustomDomainStatus)(nil)
-	// enums.CustomDomainStatus must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.CustomDomainStatus)(nil)
-)

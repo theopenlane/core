@@ -528,15 +528,6 @@ func (cdh *CustomDomainHistory) changes(new *CustomDomainHistory) []Change {
 	if !reflect.DeepEqual(cdh.MappableDomainID, new.MappableDomainID) {
 		changes = append(changes, NewChange(customdomainhistory.FieldMappableDomainID, cdh.MappableDomainID, new.MappableDomainID))
 	}
-	if !reflect.DeepEqual(cdh.TxtRecordSubdomain, new.TxtRecordSubdomain) {
-		changes = append(changes, NewChange(customdomainhistory.FieldTxtRecordSubdomain, cdh.TxtRecordSubdomain, new.TxtRecordSubdomain))
-	}
-	if !reflect.DeepEqual(cdh.TxtRecordValue, new.TxtRecordValue) {
-		changes = append(changes, NewChange(customdomainhistory.FieldTxtRecordValue, cdh.TxtRecordValue, new.TxtRecordValue))
-	}
-	if !reflect.DeepEqual(cdh.Status, new.Status) {
-		changes = append(changes, NewChange(customdomainhistory.FieldStatus, cdh.Status, new.Status))
-	}
 	return changes
 }
 

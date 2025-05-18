@@ -7841,18 +7841,6 @@ type CustomDomain implements Node {
 	The mappable domain id that this custom domain maps to
 	"""
 	mappableDomainID: ID!
-	"""
-	String to be prepended to the cname_record, used to evaluate domain ownership.
-	"""
-	txtRecordSubdomain: String!
-	"""
-	Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
-	"""
-	txtRecordValue: String!
-	"""
-	Status of the custom domain verification
-	"""
-	status: CustomDomainCustomDomainStatus!
 	owner: Organization
 	mappableDomain: MappableDomain!
 }
@@ -7890,15 +7878,6 @@ type CustomDomainCreatePayload {
 	Created customDomain
 	"""
 	customDomain: CustomDomain!
-}
-"""
-CustomDomainCustomDomainStatus is enum for the field status
-"""
-enum CustomDomainCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
-	INVALID
-	VERIFIED
-	FAILED_VERIFY
-	PENDING
 }
 """
 Return response for deleteCustomDomain mutation
@@ -7949,18 +7928,6 @@ type CustomDomainHistory implements Node {
 	The mappable domain id that this custom domain maps to
 	"""
 	mappableDomainID: String!
-	"""
-	String to be prepended to the cname_record, used to evaluate domain ownership.
-	"""
-	txtRecordSubdomain: String!
-	"""
-	Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
-	"""
-	txtRecordValue: String!
-	"""
-	Status of the custom domain verification
-	"""
-	status: CustomDomainHistoryCustomDomainStatus!
 }
 """
 A connection to a list of items.
@@ -7978,15 +7945,6 @@ type CustomDomainHistoryConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
-}
-"""
-CustomDomainHistoryCustomDomainStatus is enum for the field status
-"""
-enum CustomDomainHistoryCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
-	INVALID
-	VERIFIED
-	FAILED_VERIFY
-	PENDING
 }
 """
 An edge in a connection.
@@ -8230,13 +8188,6 @@ input CustomDomainHistoryWhereInput {
 	mappableDomainIDHasSuffix: String
 	mappableDomainIDEqualFold: String
 	mappableDomainIDContainsFold: String
-	"""
-	status field predicates
-	"""
-	status: CustomDomainHistoryCustomDomainStatus
-	statusNEQ: CustomDomainHistoryCustomDomainStatus
-	statusIn: [CustomDomainHistoryCustomDomainStatus!]
-	statusNotIn: [CustomDomainHistoryCustomDomainStatus!]
 }
 """
 Ordering options for CustomDomain connections
@@ -8432,13 +8383,6 @@ input CustomDomainWhereInput {
 	mappableDomainIDHasSuffix: ID
 	mappableDomainIDEqualFold: ID
 	mappableDomainIDContainsFold: ID
-	"""
-	status field predicates
-	"""
-	status: CustomDomainCustomDomainStatus
-	statusNEQ: CustomDomainCustomDomainStatus
-	statusIn: [CustomDomainCustomDomainStatus!]
-	statusNotIn: [CustomDomainCustomDomainStatus!]
 	"""
 	owner edge predicates
 	"""

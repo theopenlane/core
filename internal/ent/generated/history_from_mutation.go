@@ -1571,18 +1571,6 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetMappableDomainID(mappableDomainID)
 	}
 
-	if txtRecordSubdomain, exists := m.TxtRecordSubdomain(); exists {
-		create = create.SetTxtRecordSubdomain(txtRecordSubdomain)
-	}
-
-	if txtRecordValue, exists := m.TxtRecordValue(); exists {
-		create = create.SetTxtRecordValue(txtRecordValue)
-	}
-
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
 	_, err := create.Save(ctx)
 
 	return err
@@ -1673,24 +1661,6 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetMappableDomainID(customdomain.MappableDomainID)
 		}
 
-		if txtRecordSubdomain, exists := m.TxtRecordSubdomain(); exists {
-			create = create.SetTxtRecordSubdomain(txtRecordSubdomain)
-		} else {
-			create = create.SetTxtRecordSubdomain(customdomain.TxtRecordSubdomain)
-		}
-
-		if txtRecordValue, exists := m.TxtRecordValue(); exists {
-			create = create.SetTxtRecordValue(txtRecordValue)
-		} else {
-			create = create.SetTxtRecordValue(customdomain.TxtRecordValue)
-		}
-
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(customdomain.Status)
-		}
-
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1733,9 +1703,6 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetOwnerID(customdomain.OwnerID).
 			SetCnameRecord(customdomain.CnameRecord).
 			SetMappableDomainID(customdomain.MappableDomainID).
-			SetTxtRecordSubdomain(customdomain.TxtRecordSubdomain).
-			SetTxtRecordValue(customdomain.TxtRecordValue).
-			SetStatus(customdomain.Status).
 			Save(ctx)
 		if err != nil {
 			return err
