@@ -4397,8 +4397,6 @@ type CreateJobRunnerInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the name of the runner
 	Name string `json:"name"`
-	// the status of this runner
-	Status *enums.JobRunnerStatus `json:"status,omitempty"`
 	// the IP address of this runner
 	IPAddress         string   `json:"ipAddress"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
@@ -24610,14 +24608,12 @@ type UpdateJobRunnerInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name of the runner
-	Name *string `json:"name,omitempty"`
-	// the status of this runner
-	Status                  *enums.JobRunnerStatus `json:"status,omitempty"`
-	OwnerID                 *string                `json:"ownerID,omitempty"`
-	ClearOwner              *bool                  `json:"clearOwner,omitempty"`
-	AddJobRunnerTokenIDs    []string               `json:"addJobRunnerTokenIDs,omitempty"`
-	RemoveJobRunnerTokenIDs []string               `json:"removeJobRunnerTokenIDs,omitempty"`
-	ClearJobRunnerTokens    *bool                  `json:"clearJobRunnerTokens,omitempty"`
+	Name                    *string  `json:"name,omitempty"`
+	OwnerID                 *string  `json:"ownerID,omitempty"`
+	ClearOwner              *bool    `json:"clearOwner,omitempty"`
+	AddJobRunnerTokenIDs    []string `json:"addJobRunnerTokenIDs,omitempty"`
+	RemoveJobRunnerTokenIDs []string `json:"removeJobRunnerTokenIDs,omitempty"`
+	ClearJobRunnerTokens    *bool    `json:"clearJobRunnerTokens,omitempty"`
 }
 
 // UpdateJobRunnerRegistrationTokenInput is used for update JobRunnerRegistrationToken object.
