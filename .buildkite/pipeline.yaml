@@ -396,6 +396,7 @@ steps:
     steps:
       - label: ":graphql: publish graphql schema"
         key: "apollo-publish-schema"
+        skip: true # skip until I fix our apollo or create a new one
         if: build.tag != null
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
