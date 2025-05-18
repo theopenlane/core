@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -44,12 +43,6 @@ const (
 	FieldCnameRecord = "cname_record"
 	// FieldMappableDomainID holds the string denoting the mappable_domain_id field in the database.
 	FieldMappableDomainID = "mappable_domain_id"
-	// FieldTxtRecordSubdomain holds the string denoting the txt_record_subdomain field in the database.
-	FieldTxtRecordSubdomain = "txt_record_subdomain"
-	// FieldTxtRecordValue holds the string denoting the txt_record_value field in the database.
-	FieldTxtRecordValue = "txt_record_value"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// Table holds the table name of the customdomainhistory in the database.
 	Table = "custom_domain_history"
 )
@@ -70,9 +63,6 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldCnameRecord,
 	FieldMappableDomainID,
-	FieldTxtRecordSubdomain,
-	FieldTxtRecordValue,
-	FieldStatus,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -102,10 +92,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// DefaultTxtRecordSubdomain holds the default value on creation for the "txt_record_subdomain" field.
-	DefaultTxtRecordSubdomain string
-	// DefaultTxtRecordValue holds the default value on creation for the "txt_record_value" field.
-	DefaultTxtRecordValue func() string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -117,18 +103,6 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("customdomainhistory: invalid enum value for operation field: %q", o)
-	}
-}
-
-const DefaultStatus enums.CustomDomainStatus = "PENDING"
-
-// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
-func StatusValidator(s enums.CustomDomainStatus) error {
-	switch s.String() {
-	case "INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING":
-		return nil
-	default:
-		return fmt.Errorf("customdomainhistory: invalid enum value for status field: %q", s)
 	}
 }
 
@@ -200,31 +174,9 @@ func ByMappableDomainID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappableDomainID, opts...).ToFunc()
 }
 
-// ByTxtRecordSubdomain orders the results by the txt_record_subdomain field.
-func ByTxtRecordSubdomain(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTxtRecordSubdomain, opts...).ToFunc()
-}
-
-// ByTxtRecordValue orders the results by the txt_record_value field.
-func ByTxtRecordValue(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTxtRecordValue, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
-)
-
-var (
-	// enums.CustomDomainStatus must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.CustomDomainStatus)(nil)
-	// enums.CustomDomainStatus must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.CustomDomainStatus)(nil)
 )

@@ -12499,12 +12499,6 @@ type CustomDomainWhereInput struct {
 	MappableDomainIDEqualFold    *string  `json:"mappableDomainIDEqualFold,omitempty"`
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
 
-	// "status" field predicates.
-	Status      *enums.CustomDomainStatus  `json:"status,omitempty"`
-	StatusNEQ   *enums.CustomDomainStatus  `json:"statusNEQ,omitempty"`
-	StatusIn    []enums.CustomDomainStatus `json:"statusIn,omitempty"`
-	StatusNotIn []enums.CustomDomainStatus `json:"statusNotIn,omitempty"`
-
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -12963,18 +12957,6 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 	if i.MappableDomainIDContainsFold != nil {
 		predicates = append(predicates, customdomain.MappableDomainIDContainsFold(*i.MappableDomainIDContainsFold))
 	}
-	if i.Status != nil {
-		predicates = append(predicates, customdomain.StatusEQ(*i.Status))
-	}
-	if i.StatusNEQ != nil {
-		predicates = append(predicates, customdomain.StatusNEQ(*i.StatusNEQ))
-	}
-	if len(i.StatusIn) > 0 {
-		predicates = append(predicates, customdomain.StatusIn(i.StatusIn...))
-	}
-	if len(i.StatusNotIn) > 0 {
-		predicates = append(predicates, customdomain.StatusNotIn(i.StatusNotIn...))
-	}
 
 	if i.HasOwner != nil {
 		p := customdomain.HasOwner()
@@ -13207,12 +13189,6 @@ type CustomDomainHistoryWhereInput struct {
 	MappableDomainIDHasSuffix    *string  `json:"mappableDomainIDHasSuffix,omitempty"`
 	MappableDomainIDEqualFold    *string  `json:"mappableDomainIDEqualFold,omitempty"`
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
-
-	// "status" field predicates.
-	Status      *enums.CustomDomainStatus  `json:"status,omitempty"`
-	StatusNEQ   *enums.CustomDomainStatus  `json:"statusNEQ,omitempty"`
-	StatusIn    []enums.CustomDomainStatus `json:"statusIn,omitempty"`
-	StatusNotIn []enums.CustomDomainStatus `json:"statusNotIn,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -13744,18 +13720,6 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	}
 	if i.MappableDomainIDContainsFold != nil {
 		predicates = append(predicates, customdomainhistory.MappableDomainIDContainsFold(*i.MappableDomainIDContainsFold))
-	}
-	if i.Status != nil {
-		predicates = append(predicates, customdomainhistory.StatusEQ(*i.Status))
-	}
-	if i.StatusNEQ != nil {
-		predicates = append(predicates, customdomainhistory.StatusNEQ(*i.StatusNEQ))
-	}
-	if len(i.StatusIn) > 0 {
-		predicates = append(predicates, customdomainhistory.StatusIn(i.StatusIn...))
-	}
-	if len(i.StatusNotIn) > 0 {
-		predicates = append(predicates, customdomainhistory.StatusNotIn(i.StatusNotIn...))
 	}
 
 	switch len(predicates) {

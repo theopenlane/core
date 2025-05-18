@@ -87,12 +87,6 @@ func (ec *executionContext) fieldContext_CustomDomainBulkCreatePayload_customDom
 				return ec.fieldContext_CustomDomain_cnameRecord(ctx, field)
 			case "mappableDomainID":
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
-			case "txtRecordSubdomain":
-				return ec.fieldContext_CustomDomain_txtRecordSubdomain(ctx, field)
-			case "txtRecordValue":
-				return ec.fieldContext_CustomDomain_txtRecordValue(ctx, field)
-			case "status":
-				return ec.fieldContext_CustomDomain_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
@@ -165,12 +159,6 @@ func (ec *executionContext) fieldContext_CustomDomainCreatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_cnameRecord(ctx, field)
 			case "mappableDomainID":
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
-			case "txtRecordSubdomain":
-				return ec.fieldContext_CustomDomain_txtRecordSubdomain(ctx, field)
-			case "txtRecordValue":
-				return ec.fieldContext_CustomDomain_txtRecordValue(ctx, field)
-			case "status":
-				return ec.fieldContext_CustomDomain_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
@@ -287,12 +275,6 @@ func (ec *executionContext) fieldContext_CustomDomainUpdatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_cnameRecord(ctx, field)
 			case "mappableDomainID":
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
-			case "txtRecordSubdomain":
-				return ec.fieldContext_CustomDomain_txtRecordSubdomain(ctx, field)
-			case "txtRecordValue":
-				return ec.fieldContext_CustomDomain_txtRecordValue(ctx, field)
-			case "status":
-				return ec.fieldContext_CustomDomain_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":

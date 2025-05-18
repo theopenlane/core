@@ -7,10 +7,7 @@ mutation CreateBulkCSVCustomDomain($input: Upload!) {
       id
       mappableDomainID
       ownerID
-      status
       tags
-      txtRecordSubdomain
-      txtRecordValue
       updatedAt
       updatedBy
     }
@@ -26,10 +23,7 @@ mutation CreateBulkCustomDomain($input: [CreateCustomDomainInput!]) {
       id
       mappableDomainID
       ownerID
-      status
       tags
-      txtRecordSubdomain
-      txtRecordValue
       updatedAt
       updatedBy
     }
@@ -45,10 +39,7 @@ mutation CreateCustomDomain($input: CreateCustomDomainInput!) {
       id
       mappableDomainID
       ownerID
-      status
       tags
-      txtRecordSubdomain
-      txtRecordValue
       updatedAt
       updatedBy
     }
@@ -78,10 +69,7 @@ query GetAllCustomDomains {
         id
         mappableDomainID
         ownerID
-        status
         tags
-        txtRecordSubdomain
-        txtRecordValue
         updatedAt
         updatedBy
       }
@@ -97,10 +85,7 @@ query GetCustomDomainByID($customDomainId: ID!) {
     id
     mappableDomainID
     ownerID
-    status
     tags
-    txtRecordSubdomain
-    txtRecordValue
     updatedAt
     updatedBy
   }
@@ -123,10 +108,7 @@ query GetCustomDomains($first: Int, $last: Int, $where: CustomDomainWhereInput) 
         id
         mappableDomainID
         ownerID
-        status
         tags
-        txtRecordSubdomain
-        txtRecordValue
         updatedAt
         updatedBy
       }
@@ -143,10 +125,7 @@ mutation UpdateCustomDomain($updateCustomDomainId: ID!, $input: UpdateCustomDoma
       id
       mappableDomainID
       ownerID
-      status
       tags
-      txtRecordSubdomain
-      txtRecordValue
       updatedAt
       updatedBy
     }
