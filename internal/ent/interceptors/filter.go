@@ -49,7 +49,7 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 
 	objectType := getFGAObjectType(q)
 
-	objectIDs, err := GetAuthorizedObjectIDs(ctx, objectType)
+	objectIDs, err := GetAuthorizedObjectIDs(ctx, objectType, fgax.CanView)
 	if err != nil {
 		return err
 	}
@@ -76,7 +76,7 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 
 // GetAuthorizedObjectIDs does a list objects request to pull all ids the current user
 // has access to within the FGA system
-func GetAuthorizedObjectIDs(ctx context.Context, queryType string) ([]string, error) {
+func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax.Relation) ([]string, error) {
 	user, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return []string{}, nil
@@ -89,6 +89,7 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string) ([]string, er
 		SubjectID:   user.SubjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		ObjectType:  strcase.SnakeCase(objectType),
+		Relation:    relation.String(),
 		// add email domain to satisfy any list requests with organization conditions
 		ConditionContext: utils.NewOrganizationContextKey(user.SubjectEmail),
 	}
