@@ -1256,11 +1256,10 @@ type JobRunnerTokenBuilder struct {
 func (j *JobRunnerTokenBuilder) MustNew(ctx context.Context, t *testing.T) *generated.JobRunnerToken {
 	ctx = setContext(ctx, j.client.db)
 
-	jobRunner := (&JobRunnerBuilder{client: j.client}).MustNew(ctx, t)
-
 	create := j.client.db.JobRunnerToken.Create()
 
 	if j.JobRunnerID == "" {
+		jobRunner := (&JobRunnerBuilder{client: j.client}).MustNew(ctx, t)
 		create.AddJobRunnerIDs(jobRunner.ID)
 	}
 

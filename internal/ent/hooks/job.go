@@ -2,12 +2,15 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -63,6 +66,12 @@ func HookJobRunnerCreate() ent.Hook {
 
 				runner := v.(*generated.JobRunner)
 
+				// if system owned, no registration token to delete
+				// also no token to create
+				if runner.SystemOwned {
+					return v, err
+				}
+
 				subjectID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil {
 					return nil, err
@@ -88,4 +97,49 @@ func HookJobRunnerCreate() ent.Hook {
 					Exec(ctx)
 			})
 	}, ent.OpCreate)
+}
+
+// HookJobRunnerDelete deletes all token associated with a runner when the runner is deleted
+func HookJobRunnerDelete() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.JobRunnerFunc(
+			func(ctx context.Context, m *generated.JobRunnerMutation) (generated.Value, error) {
+
+				if !entx.CheckIsSoftDelete(ctx) {
+					return next.Mutate(ctx, m)
+				}
+
+				id, _ := m.ID()
+
+				runner, err := m.Client().JobRunner.Get(ctx, id)
+				if err != nil {
+					return nil, err
+				}
+
+				tokens, err := runner.QueryJobRunnerTokens().All(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				if len(tokens) == 0 {
+					return next.Mutate(ctx, m)
+				}
+
+				var ids []string
+
+				for _, token := range tokens {
+					ids = append(ids, token.ID)
+				}
+
+				//  Then delete the actual tokens
+				_, err = m.Client().JobRunnerToken.Delete().
+					Where(jobrunnertoken.IDIn(ids...)).
+					Exec(ctx)
+				if err != nil {
+					return nil, fmt.Errorf("failed to delete job runner tokens: %w", err)
+				}
+
+				return next.Mutate(ctx, m)
+			})
+	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne)
 }

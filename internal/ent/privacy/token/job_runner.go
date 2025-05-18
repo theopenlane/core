@@ -29,7 +29,7 @@ func (token *JobRunnerRegistrationToken) SetToken(s string) {
 	token.token = s
 }
 
-// NewContextWithJobRunnerRegistrationToken  returns a new context with the job runner registration token
+// NewContextWithJobRunnerRegistrationToken returns a new context with the job runner registration token
 func NewContextWithJobRunnerRegistrationToken(parent context.Context, token string) context.Context {
 	return contextx.With(parent, &JobRunnerRegistrationToken{
 		token: token,

@@ -17,6 +17,10 @@ import (
 // and denys if it is and the user is not a system admin
 func SystemOwnedJobRunner() privacy.JobRunnerMutationRuleFunc {
 	return privacy.JobRunnerMutationRuleFunc(func(ctx context.Context, m *generated.JobRunnerMutation) error {
+		if m.Op() == ent.OpCreate {
+			return privacy.Allow
+		}
+
 		isAdmin, err := CheckIsSystemAdmin(ctx, m)
 		if err != nil {
 			return err
@@ -26,13 +30,13 @@ func SystemOwnedJobRunner() privacy.JobRunnerMutationRuleFunc {
 			return privacy.Allow
 		}
 
-		if m.Op() == ent.OpCreate {
-			return privacy.Allow
-		}
-
 		ids, err := m.IDs(ctx)
 		if err != nil {
 			return err
+		}
+
+		if len(ids) == 0 {
+			return privacy.Allow
 		}
 
 		runners, err := m.Client().JobRunner.Query().

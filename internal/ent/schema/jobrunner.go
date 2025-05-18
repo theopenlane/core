@@ -109,6 +109,7 @@ func (JobRunner) Annotations() []schema.Annotation {
 func (JobRunner) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookJobRunnerCreate(),
+		hooks.HookJobRunnerDelete(),
 	}
 }
 
@@ -125,7 +126,6 @@ func (JobRunner) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
-			rule.AllowMutationAfterApplyingOwnerFilter(),
 			rule.SystemOwnedJobRunner(),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),

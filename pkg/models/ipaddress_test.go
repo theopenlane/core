@@ -33,6 +33,26 @@ func TestValidateIP(t *testing.T) {
 			ip:       "192.168.0.1",
 			hasError: false,
 		},
+		{
+			name:     "::1 not allowed (loopback IPv6)",
+			ip:       "::1",
+			hasError: true,
+		},
+		{
+			name:     ":: (unspecified IPv6) not allowed",
+			ip:       "::",
+			hasError: true,
+		},
+		{
+			name:     "valid IPv6 address",
+			ip:       "2001:db8::1",
+			hasError: false,
+		},
+		{
+			name:     "invalid IPv6 address",
+			ip:       "2001:db8:::1",
+			hasError: true,
+		},
 	}
 
 	for _, v := range tt {

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -69,9 +70,8 @@ func TestQueryJobRunners(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: systemJob.ID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: firstJob.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: secondJob.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: thirdJob.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, IDs: []string{firstJob.ID, secondJob.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteJobRunner(t *testing.T) {
@@ -91,7 +91,7 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 		{
 			name:          "happy path user",
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           rule.WithInternalContext(testUser1.UserCtx),
 			runnerID:      firstJob.ID,
 			expectedCount: 2, // we are deleting 1, but an existing system runner exists
 		},
@@ -99,14 +99,14 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 			// the first test case should have deleted the runner
 			name:     "happy path, but deleted job runner",
 			client:   suite.client.apiWithPAT,
-			ctx:      context.Background(),
+			ctx:      rule.WithInternalContext(context.Background()),
 			runnerID: firstJob.ID,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:          "happy path user with pat",
 			client:        suite.client.apiWithPAT,
-			ctx:           context.Background(),
+			ctx:           rule.WithInternalContext(context.Background()),
 			runnerID:      secondJob.ID,
 			expectedCount: 1, // left with the system runner
 		},
@@ -115,12 +115,13 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
 			runnerID: systemJob.ID,
-			errorMsg: notAuthorizedErrorMsg,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
+
 			resp, err := tc.client.DeleteJobRunner(tc.ctx, tc.runnerID)
 
 			if tc.errorMsg != "" {
