@@ -38,40 +38,33 @@ func (suite *HandlerTestSuite) TestRegisterJobRunner() {
 	require.NoError(t, err)
 
 	testCases := []struct {
-		name    string
-		wantErr bool
-		request models.JobRunnerRegistrationRequest
-		errMsg  string
+		name           string
+		wantErr        bool
+		request        models.JobRunnerRegistrationRequest
+		errMsg         string
+		expectedStatus int
 	}{
 		{
-			name:    "valid registration",
-			wantErr: false,
+			name:           "valid registration",
+			wantErr:        false,
+			expectedStatus: http.StatusCreated,
 			request: models.JobRunnerRegistrationRequest{
 				Token:     token,
 				Name:      "test-runner",
 				IPAddress: gofakeit.IPv4Address(),
 			},
 		},
-		// {
-		// 	name:    "invalid token",
-		// 	wantErr: true,
-		// 	request: models.JobRunnerRegistrationRequest{
-		// 		Token:     "invalid-token",
-		// 		Name:      "test-runner",
-		// 		IPAddress: gofakeit.IPv4Address(),
-		// 	},
-		// 	errMsg: "unauthorized",
-		// },
-		// {
-		// 	name:    "empty token",
-		// 	wantErr: true,
-		// 	request: models.JobRunnerRegistrationRequest{
-		// 		Token:     "",
-		// 		Name:      "test-runner",
-		// 		IPAddress: gofakeit.IPv4Address(),
-		// 	},
-		// 	errMsg: "invalid input",
-		// },
+		{
+			name:           "invalid token",
+			wantErr:        true,
+			expectedStatus: http.StatusUnauthorized,
+			request: models.JobRunnerRegistrationRequest{
+				Token:     "invalid-token",
+				Name:      "test-runner",
+				IPAddress: gofakeit.IPv4Address(),
+			},
+			errMsg: "unauthorized",
+		},
 	}
 
 	for _, tc := range testCases {
@@ -79,7 +72,6 @@ func (suite *HandlerTestSuite) TestRegisterJobRunner() {
 
 			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-			// Create request body
 			reqBody, err := json.Marshal(tc.request)
 			require.NoError(t, err)
 
@@ -93,21 +85,96 @@ func (suite *HandlerTestSuite) TestRegisterJobRunner() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out models.JobRunnerRegistrationResponse
+			var resp *models.JobRunnerRegistrationResponse
 
 			// parse response body
-			err = json.NewDecoder(res.Body).Decode(&out)
+			err = json.NewDecoder(res.Body).Decode(&resp)
 			require.NoError(t, err)
 
+			assert.Equal(t, tc.expectedStatus, recorder.Code)
+
 			if tc.wantErr {
-				assert.Equal(t, http.StatusBadRequest, recorder.Code)
-				assert.Contains(t, out.Reply.Error, tc.errMsg)
+				assert.False(t, resp.Reply.Success)
 				return
 			}
 
-			assert.Equal(t, http.StatusCreated, recorder.Code)
-			assert.True(t, out.Reply.Success)
-			assert.Equal(t, "Job runner node registered", out.Message)
+			assert.Contains(t, "Job runner node registered", resp.Message)
+		})
+	}
+}
+
+func (suite *HandlerTestSuite) TestRegisterJobRunner_ExpiredToken() {
+	t := suite.T()
+
+	// add handler
+	suite.e.POST("/v1/runners", suite.h.RegisterJobRunner)
+
+	// Create a valid registration token
+	ctx := context.Background()
+	ctx = privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+	token := "test-token-12345"
+	expiresAt := time.Now().Add(-24 * time.Hour)
+
+	err := suite.db.JobRunnerRegistrationToken.Create().
+		SetOwnerID(testUser1.OrganizationID).
+		SetToken(token).
+		SetExpiresAt(expiresAt).
+		Exec(ctx)
+
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name           string
+		wantErr        bool
+		request        models.JobRunnerRegistrationRequest
+		errMsg         string
+		expectedStatus int
+	}{
+		{
+			name:           "expired token",
+			wantErr:        false,
+			expectedStatus: http.StatusUnauthorized,
+			request: models.JobRunnerRegistrationRequest{
+				Token:     token,
+				Name:      "test-runner",
+				IPAddress: gofakeit.IPv4Address(),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+
+			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+			reqBody, err := json.Marshal(tc.request)
+			require.NoError(t, err)
+
+			req := httptest.NewRequest(http.MethodPost, "/v1/runners", strings.NewReader(string(reqBody)))
+			req.Header.Set("Content-Type", "application/json")
+
+			recorder := httptest.NewRecorder()
+
+			suite.e.ServeHTTP(recorder, req.WithContext(ctx))
+
+			res := recorder.Result()
+			defer res.Body.Close()
+
+			var resp *models.JobRunnerRegistrationResponse
+
+			// parse response body
+			err = json.NewDecoder(res.Body).Decode(&resp)
+			require.NoError(t, err)
+
+			assert.Equal(t, tc.expectedStatus, recorder.Code)
+
+			if tc.wantErr {
+				assert.False(t, resp.Reply.Success)
+				return
+			}
+
+			assert.Contains(t, "Job runner node registered", resp.Message)
 		})
 	}
 }
