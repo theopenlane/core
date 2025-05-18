@@ -63,12 +63,20 @@ func HookJobRunnerCreate() ent.Hook {
 
 				runner := v.(*generated.JobRunner)
 
+				subjectID, err := auth.GetSubjectIDFromContext(ctx)
+				if err != nil {
+					return nil, err
+				}
+
 				// make sure we cannot reuse the registration token
 				// for cases where there is no "registration token"
 				// like an admin creating a runner via api
 				// or even tests.
 				// Only check the error and make sure it is not a "not found".
-				err = m.Client().JobRunnerRegistrationToken.DeleteOneID(runner.CreatedBy).
+				err = m.Client().JobRunnerRegistrationToken.UpdateOneID(runner.CreatedBy).
+					SetJobRunnerID(runner.ID).
+					SetDeletedAt(time.Now()).
+					SetDeletedBy(subjectID).
 					Exec(ctx)
 				if err != nil && !generated.IsNotFound(err) {
 					return nil, err
@@ -77,8 +85,6 @@ func HookJobRunnerCreate() ent.Hook {
 				return v, m.Client().JobRunnerToken.Create().
 					AddJobRunnerIDs(runner.ID).
 					SetOwnerID(runner.OwnerID).
-					SetCreatedBy(runner.CreatedBy).
-					SetUpdatedBy(runner.UpdatedBy).
 					Exec(ctx)
 			})
 	}, ent.OpCreate)
