@@ -474,19 +474,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "CustomDomain",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			customdomain.FieldCreatedAt:          {Type: field.TypeTime, Column: customdomain.FieldCreatedAt},
-			customdomain.FieldUpdatedAt:          {Type: field.TypeTime, Column: customdomain.FieldUpdatedAt},
-			customdomain.FieldCreatedBy:          {Type: field.TypeString, Column: customdomain.FieldCreatedBy},
-			customdomain.FieldUpdatedBy:          {Type: field.TypeString, Column: customdomain.FieldUpdatedBy},
-			customdomain.FieldDeletedAt:          {Type: field.TypeTime, Column: customdomain.FieldDeletedAt},
-			customdomain.FieldDeletedBy:          {Type: field.TypeString, Column: customdomain.FieldDeletedBy},
-			customdomain.FieldTags:               {Type: field.TypeJSON, Column: customdomain.FieldTags},
-			customdomain.FieldOwnerID:            {Type: field.TypeString, Column: customdomain.FieldOwnerID},
-			customdomain.FieldCnameRecord:        {Type: field.TypeString, Column: customdomain.FieldCnameRecord},
-			customdomain.FieldMappableDomainID:   {Type: field.TypeString, Column: customdomain.FieldMappableDomainID},
-			customdomain.FieldTxtRecordSubdomain: {Type: field.TypeString, Column: customdomain.FieldTxtRecordSubdomain},
-			customdomain.FieldTxtRecordValue:     {Type: field.TypeString, Column: customdomain.FieldTxtRecordValue},
-			customdomain.FieldStatus:             {Type: field.TypeEnum, Column: customdomain.FieldStatus},
+			customdomain.FieldCreatedAt:        {Type: field.TypeTime, Column: customdomain.FieldCreatedAt},
+			customdomain.FieldUpdatedAt:        {Type: field.TypeTime, Column: customdomain.FieldUpdatedAt},
+			customdomain.FieldCreatedBy:        {Type: field.TypeString, Column: customdomain.FieldCreatedBy},
+			customdomain.FieldUpdatedBy:        {Type: field.TypeString, Column: customdomain.FieldUpdatedBy},
+			customdomain.FieldDeletedAt:        {Type: field.TypeTime, Column: customdomain.FieldDeletedAt},
+			customdomain.FieldDeletedBy:        {Type: field.TypeString, Column: customdomain.FieldDeletedBy},
+			customdomain.FieldTags:             {Type: field.TypeJSON, Column: customdomain.FieldTags},
+			customdomain.FieldOwnerID:          {Type: field.TypeString, Column: customdomain.FieldOwnerID},
+			customdomain.FieldCnameRecord:      {Type: field.TypeString, Column: customdomain.FieldCnameRecord},
+			customdomain.FieldMappableDomainID: {Type: field.TypeString, Column: customdomain.FieldMappableDomainID},
 		},
 	}
 	graph.Nodes[12] = &sqlgraph.Node{
@@ -500,22 +497,19 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "CustomDomainHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			customdomainhistory.FieldHistoryTime:        {Type: field.TypeTime, Column: customdomainhistory.FieldHistoryTime},
-			customdomainhistory.FieldRef:                {Type: field.TypeString, Column: customdomainhistory.FieldRef},
-			customdomainhistory.FieldOperation:          {Type: field.TypeEnum, Column: customdomainhistory.FieldOperation},
-			customdomainhistory.FieldCreatedAt:          {Type: field.TypeTime, Column: customdomainhistory.FieldCreatedAt},
-			customdomainhistory.FieldUpdatedAt:          {Type: field.TypeTime, Column: customdomainhistory.FieldUpdatedAt},
-			customdomainhistory.FieldCreatedBy:          {Type: field.TypeString, Column: customdomainhistory.FieldCreatedBy},
-			customdomainhistory.FieldUpdatedBy:          {Type: field.TypeString, Column: customdomainhistory.FieldUpdatedBy},
-			customdomainhistory.FieldDeletedAt:          {Type: field.TypeTime, Column: customdomainhistory.FieldDeletedAt},
-			customdomainhistory.FieldDeletedBy:          {Type: field.TypeString, Column: customdomainhistory.FieldDeletedBy},
-			customdomainhistory.FieldTags:               {Type: field.TypeJSON, Column: customdomainhistory.FieldTags},
-			customdomainhistory.FieldOwnerID:            {Type: field.TypeString, Column: customdomainhistory.FieldOwnerID},
-			customdomainhistory.FieldCnameRecord:        {Type: field.TypeString, Column: customdomainhistory.FieldCnameRecord},
-			customdomainhistory.FieldMappableDomainID:   {Type: field.TypeString, Column: customdomainhistory.FieldMappableDomainID},
-			customdomainhistory.FieldTxtRecordSubdomain: {Type: field.TypeString, Column: customdomainhistory.FieldTxtRecordSubdomain},
-			customdomainhistory.FieldTxtRecordValue:     {Type: field.TypeString, Column: customdomainhistory.FieldTxtRecordValue},
-			customdomainhistory.FieldStatus:             {Type: field.TypeEnum, Column: customdomainhistory.FieldStatus},
+			customdomainhistory.FieldHistoryTime:      {Type: field.TypeTime, Column: customdomainhistory.FieldHistoryTime},
+			customdomainhistory.FieldRef:              {Type: field.TypeString, Column: customdomainhistory.FieldRef},
+			customdomainhistory.FieldOperation:        {Type: field.TypeEnum, Column: customdomainhistory.FieldOperation},
+			customdomainhistory.FieldCreatedAt:        {Type: field.TypeTime, Column: customdomainhistory.FieldCreatedAt},
+			customdomainhistory.FieldUpdatedAt:        {Type: field.TypeTime, Column: customdomainhistory.FieldUpdatedAt},
+			customdomainhistory.FieldCreatedBy:        {Type: field.TypeString, Column: customdomainhistory.FieldCreatedBy},
+			customdomainhistory.FieldUpdatedBy:        {Type: field.TypeString, Column: customdomainhistory.FieldUpdatedBy},
+			customdomainhistory.FieldDeletedAt:        {Type: field.TypeTime, Column: customdomainhistory.FieldDeletedAt},
+			customdomainhistory.FieldDeletedBy:        {Type: field.TypeString, Column: customdomainhistory.FieldDeletedBy},
+			customdomainhistory.FieldTags:             {Type: field.TypeJSON, Column: customdomainhistory.FieldTags},
+			customdomainhistory.FieldOwnerID:          {Type: field.TypeString, Column: customdomainhistory.FieldOwnerID},
+			customdomainhistory.FieldCnameRecord:      {Type: field.TypeString, Column: customdomainhistory.FieldCnameRecord},
+			customdomainhistory.FieldMappableDomainID: {Type: field.TypeString, Column: customdomainhistory.FieldMappableDomainID},
 		},
 	}
 	graph.Nodes[13] = &sqlgraph.Node{
@@ -8652,21 +8646,6 @@ func (f *CustomDomainFilter) WhereMappableDomainID(p entql.StringP) {
 	f.Where(p.Field(customdomain.FieldMappableDomainID))
 }
 
-// WhereTxtRecordSubdomain applies the entql string predicate on the txt_record_subdomain field.
-func (f *CustomDomainFilter) WhereTxtRecordSubdomain(p entql.StringP) {
-	f.Where(p.Field(customdomain.FieldTxtRecordSubdomain))
-}
-
-// WhereTxtRecordValue applies the entql string predicate on the txt_record_value field.
-func (f *CustomDomainFilter) WhereTxtRecordValue(p entql.StringP) {
-	f.Where(p.Field(customdomain.FieldTxtRecordValue))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *CustomDomainFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(customdomain.FieldStatus))
-}
-
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *CustomDomainFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -8798,21 +8777,6 @@ func (f *CustomDomainHistoryFilter) WhereCnameRecord(p entql.StringP) {
 // WhereMappableDomainID applies the entql string predicate on the mappable_domain_id field.
 func (f *CustomDomainHistoryFilter) WhereMappableDomainID(p entql.StringP) {
 	f.Where(p.Field(customdomainhistory.FieldMappableDomainID))
-}
-
-// WhereTxtRecordSubdomain applies the entql string predicate on the txt_record_subdomain field.
-func (f *CustomDomainHistoryFilter) WhereTxtRecordSubdomain(p entql.StringP) {
-	f.Where(p.Field(customdomainhistory.FieldTxtRecordSubdomain))
-}
-
-// WhereTxtRecordValue applies the entql string predicate on the txt_record_value field.
-func (f *CustomDomainHistoryFilter) WhereTxtRecordValue(p entql.StringP) {
-	f.Where(p.Field(customdomainhistory.FieldTxtRecordValue))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *CustomDomainHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(customdomainhistory.FieldStatus))
 }
 
 // addPredicate implements the predicateAdder interface.

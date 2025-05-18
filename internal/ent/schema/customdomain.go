@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // CustomDomain holds the schema definition for the CustomDomain
@@ -60,41 +59,6 @@ func (CustomDomain) Fields() []ent.Field {
 			Comment("The mappable domain id that this custom domain maps to").
 			NotEmpty().
 			Immutable(),
-		field.String("txt_record_subdomain").
-			Comment("String to be prepended to the cname_record, used to evaluate domain ownership.").
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-			).
-			Default("_olverify").
-			NotEmpty().
-			Immutable().
-			MaxLen(16), //nolint:mnd
-		field.String("txt_record_value").
-			Comment("Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.").
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-			).
-			NotEmpty().
-			Immutable().
-			DefaultFunc(func() string {
-				str, err := hooks.GenerateDomainValidationSecret()
-				if err != nil {
-					// validators will catch this
-					return ""
-				}
-				// This will get hashed by the hook before being stored in the DB
-				// We want hash this in the hook so that we can send the unhashed
-				// value back with the Create mutation response
-				return str
-			}).
-			MaxLen(maxTXTValueLen),
-		field.Enum("status").
-			Comment("Status of the custom domain verification").
-			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-			).
-			GoType(enums.CustomDomainStatus("")).
-			Default(enums.CustomDomainStatusPending.String()),
 	}
 }
 

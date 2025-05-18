@@ -6,14 +6,13 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestQueryCustomDomainByID(t *testing.T) {
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, nil)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -79,9 +78,9 @@ func TestQueryCustomDomains(t *testing.T) {
 	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 	mappableDomain2 := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
-	customDomain1 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain2.ID}).MustNew(testUser1.UserCtx, t, nil)
-	customDomain2 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(testUser1.UserCtx, t, lo.ToPtr(enums.CustomDomainStatusVerified))
-	customDomain3 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(testUser2.UserCtx, t, lo.ToPtr(enums.CustomDomainStatusVerified))
+	customDomain1 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain2.ID}).MustNew(testUser1.UserCtx, t)
+	customDomain2 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(testUser1.UserCtx, t)
+	customDomain3 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(testUser2.UserCtx, t)
 
 	nonExistentDomain := "nonexistent.example.com"
 
@@ -128,15 +127,6 @@ func TestQueryCustomDomains(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 			where: &openlaneclient.CustomDomainWhereInput{
 				MappableDomainID: &customDomain1.MappableDomainID,
-			},
-			expectedResults: 1,
-		},
-		{
-			name:   "query by status",
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-			where: &openlaneclient.CustomDomainWhereInput{
-				Status: lo.ToPtr(enums.CustomDomainStatusPending),
 			},
 			expectedResults: 1,
 		},
@@ -242,10 +232,6 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.request.CnameRecord, resp.CreateCustomDomain.CustomDomain.CnameRecord))
 			assert.Check(t, is.Equal(tc.request.MappableDomainID, resp.CreateCustomDomain.CustomDomain.MappableDomainID))
-			assert.Check(t, is.Equal(enums.CustomDomainStatusPending, resp.CreateCustomDomain.CustomDomain.Status))
-			assert.Check(t, is.Equal(resp.CreateCustomDomain.CustomDomain.TxtRecordSubdomain, "_olverify"))
-			assert.Check(t, len(resp.CreateCustomDomain.CustomDomain.TxtRecordSubdomain) != 0)
-			assert.Check(t, len(resp.CreateCustomDomain.CustomDomain.TxtRecordValue) != 0)
 
 			// Clean up
 			(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateCustomDomain.CustomDomain.ID}).MustDelete(tc.ctx, t)
@@ -256,9 +242,9 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 }
 
 func TestMutationDeleteCustomDomain(t *testing.T) {
-	customDomain := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t, nil)
-	customDomain2 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t, nil)
-	customDomain3 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t, nil)
+	customDomain := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	customDomain2 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	customDomain3 := (&CustomDomainBuilder{client: suite.client, OwnerID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
 	nonExistentID := "non-existent-id"
 
 	testCases := []struct {
@@ -321,7 +307,7 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 }
 
 func TestUpdateCustomDomain(t *testing.T) {
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, nil)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -488,9 +474,6 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 			for i, request := range tc.requests {
 				assert.Check(t, is.Equal(request.CnameRecord, resp.CreateBulkCustomDomain.CustomDomains[i].CnameRecord))
 				assert.Check(t, is.Equal(request.MappableDomainID, resp.CreateBulkCustomDomain.CustomDomains[i].MappableDomainID))
-				assert.Check(t, is.Equal(enums.CustomDomainStatusPending, resp.CreateBulkCustomDomain.CustomDomains[i].Status))
-				assert.Check(t, is.Equal(resp.CreateBulkCustomDomain.CustomDomains[i].TxtRecordSubdomain, "_olverify"))
-				assert.Check(t, len(resp.CreateBulkCustomDomain.CustomDomains[i].TxtRecordValue) != 0)
 			}
 
 			// Clean up created domains
@@ -514,19 +497,19 @@ func TestGetAllCustomDomains(t *testing.T) {
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
 		OwnerID:          testUser1.OrganizationID,
-	}).MustNew(testUser1.UserCtx, t, nil)
+	}).MustNew(testUser1.UserCtx, t)
 
 	customDomain2 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
 		OwnerID:          testUser1.OrganizationID,
-	}).MustNew(testUser1.UserCtx, t, lo.ToPtr(enums.CustomDomainStatusVerified))
+	}).MustNew(testUser1.UserCtx, t)
 
 	customDomain3 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
 		OwnerID:          testUser2.OrganizationID,
-	}).MustNew(testUser2.UserCtx, t, lo.ToPtr(enums.CustomDomainStatusVerified))
+	}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -590,9 +573,6 @@ func TestGetAllCustomDomains(t *testing.T) {
 				assert.Check(t, len(firstNode.MappableDomainID) != 0)
 				assert.Check(t, firstNode.OwnerID != nil)
 				assert.Check(t, firstNode.CreatedAt != nil)
-				assert.Check(t, len(firstNode.Status) != 0)
-				assert.Check(t, len(firstNode.TxtRecordSubdomain) != 0)
-				assert.Check(t, len(firstNode.TxtRecordValue) != 0)
 			}
 
 			// Verify that users only see domains from their organization

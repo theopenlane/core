@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -172,48 +171,6 @@ func (cdhc *CustomDomainHistoryCreate) SetMappableDomainID(s string) *CustomDoma
 	return cdhc
 }
 
-// SetTxtRecordSubdomain sets the "txt_record_subdomain" field.
-func (cdhc *CustomDomainHistoryCreate) SetTxtRecordSubdomain(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetTxtRecordSubdomain(s)
-	return cdhc
-}
-
-// SetNillableTxtRecordSubdomain sets the "txt_record_subdomain" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableTxtRecordSubdomain(s *string) *CustomDomainHistoryCreate {
-	if s != nil {
-		cdhc.SetTxtRecordSubdomain(*s)
-	}
-	return cdhc
-}
-
-// SetTxtRecordValue sets the "txt_record_value" field.
-func (cdhc *CustomDomainHistoryCreate) SetTxtRecordValue(s string) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetTxtRecordValue(s)
-	return cdhc
-}
-
-// SetNillableTxtRecordValue sets the "txt_record_value" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableTxtRecordValue(s *string) *CustomDomainHistoryCreate {
-	if s != nil {
-		cdhc.SetTxtRecordValue(*s)
-	}
-	return cdhc
-}
-
-// SetStatus sets the "status" field.
-func (cdhc *CustomDomainHistoryCreate) SetStatus(eds enums.CustomDomainStatus) *CustomDomainHistoryCreate {
-	cdhc.mutation.SetStatus(eds)
-	return cdhc
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (cdhc *CustomDomainHistoryCreate) SetNillableStatus(eds *enums.CustomDomainStatus) *CustomDomainHistoryCreate {
-	if eds != nil {
-		cdhc.SetStatus(*eds)
-	}
-	return cdhc
-}
-
 // SetID sets the "id" field.
 func (cdhc *CustomDomainHistoryCreate) SetID(s string) *CustomDomainHistoryCreate {
 	cdhc.mutation.SetID(s)
@@ -279,18 +236,6 @@ func (cdhc *CustomDomainHistoryCreate) defaults() {
 		v := customdomainhistory.DefaultTags
 		cdhc.mutation.SetTags(v)
 	}
-	if _, ok := cdhc.mutation.TxtRecordSubdomain(); !ok {
-		v := customdomainhistory.DefaultTxtRecordSubdomain
-		cdhc.mutation.SetTxtRecordSubdomain(v)
-	}
-	if _, ok := cdhc.mutation.TxtRecordValue(); !ok {
-		v := customdomainhistory.DefaultTxtRecordValue()
-		cdhc.mutation.SetTxtRecordValue(v)
-	}
-	if _, ok := cdhc.mutation.Status(); !ok {
-		v := customdomainhistory.DefaultStatus
-		cdhc.mutation.SetStatus(v)
-	}
 	if _, ok := cdhc.mutation.ID(); !ok {
 		v := customdomainhistory.DefaultID()
 		cdhc.mutation.SetID(v)
@@ -315,20 +260,6 @@ func (cdhc *CustomDomainHistoryCreate) check() error {
 	}
 	if _, ok := cdhc.mutation.MappableDomainID(); !ok {
 		return &ValidationError{Name: "mappable_domain_id", err: errors.New(`generated: missing required field "CustomDomainHistory.mappable_domain_id"`)}
-	}
-	if _, ok := cdhc.mutation.TxtRecordSubdomain(); !ok {
-		return &ValidationError{Name: "txt_record_subdomain", err: errors.New(`generated: missing required field "CustomDomainHistory.txt_record_subdomain"`)}
-	}
-	if _, ok := cdhc.mutation.TxtRecordValue(); !ok {
-		return &ValidationError{Name: "txt_record_value", err: errors.New(`generated: missing required field "CustomDomainHistory.txt_record_value"`)}
-	}
-	if _, ok := cdhc.mutation.Status(); !ok {
-		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "CustomDomainHistory.status"`)}
-	}
-	if v, ok := cdhc.mutation.Status(); ok {
-		if err := customdomainhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CustomDomainHistory.status": %w`, err)}
-		}
 	}
 	return nil
 }
@@ -417,18 +348,6 @@ func (cdhc *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlg
 	if value, ok := cdhc.mutation.MappableDomainID(); ok {
 		_spec.SetField(customdomainhistory.FieldMappableDomainID, field.TypeString, value)
 		_node.MappableDomainID = value
-	}
-	if value, ok := cdhc.mutation.TxtRecordSubdomain(); ok {
-		_spec.SetField(customdomainhistory.FieldTxtRecordSubdomain, field.TypeString, value)
-		_node.TxtRecordSubdomain = value
-	}
-	if value, ok := cdhc.mutation.TxtRecordValue(); ok {
-		_spec.SetField(customdomainhistory.FieldTxtRecordValue, field.TypeString, value)
-		_node.TxtRecordValue = value
-	}
-	if value, ok := cdhc.mutation.Status(); ok {
-		_spec.SetField(customdomainhistory.FieldStatus, field.TypeEnum, value)
-		_node.Status = value
 	}
 	return _node, _spec
 }
