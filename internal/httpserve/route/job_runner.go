@@ -6,7 +6,7 @@ import (
 	echo "github.com/theopenlane/echox"
 )
 
-func registerAgentNodeRegistrationHandler(router *Router) (err error) {
+func registerJobRunnerRegistrationHandler(router *Router) (err error) {
 	path := "/runners"
 	method := http.MethodPost
 	name := "AgentNodeRegistration"
@@ -17,10 +17,11 @@ func registerAgentNodeRegistrationHandler(router *Router) (err error) {
 		Path:        path,
 		Middlewares: mw,
 		Handler: func(c echo.Context) error {
-			return router.Handler.RegisterAgentNode(c)
+			return router.Handler.RegisterJobRunner(c)
 		},
 	}
 
 	op := router.Handler.BindRegisterRunnerNode()
+
 	return router.AddV1Route(path, method, op, route)
 }

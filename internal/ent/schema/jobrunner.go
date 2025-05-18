@@ -66,7 +66,7 @@ func (JobRunner) Fields() []ent.Field {
 			Immutable().
 			Unique().
 			Comment("the IP address of this runner").
-			Validate(func(s string) error { return models.ValidateIP(s) }),
+			Validate(models.ValidateIP),
 	}
 }
 

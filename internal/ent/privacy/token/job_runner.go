@@ -21,8 +21,8 @@ func (token *JobRunnerRegistrationToken) GetToken() string {
 	return token.token
 }
 
-func (t *JobRunnerRegistrationToken) SetToken(token string) {
-	t.token = token
+func (token *JobRunnerRegistrationToken) SetToken(s string) {
+	token.token = s
 }
 
 func NewContextWithJobRunnerRegistrationToken(parent context.Context, token string) context.Context {

@@ -2,13 +2,10 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 	"github.com/rs/zerolog/log"
-
-	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -564,16 +561,15 @@ func (h *Handler) getOrgByJobRunnerVerificationToken(ctx context.Context, token 
 	return registrationToken, nil
 }
 
-func (h *Handler) createJobRunner(ctx context.Context, token *generated.JobRunnerRegistrationToken,
-	req models.AgentNodeRegistrationRequest) error {
-
-	input := generated.CreateJobRunnerInput{
+func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegistrationToken,
+	req models.JobRunnerRegistrationRequest) error {
+	input := ent.CreateJobRunnerInput{
 		IPAddress: req.IPAddress,
 		Name:      req.Name,
 		Tags:      req.Tags,
 		OwnerID:   &token.OwnerID,
 	}
-	fmt.Println(token.ID)
+
 	err := transaction.FromContext(ctx).JobRunner.Create().
 		SetInput(input).
 		SetCreatedBy(token.ID).

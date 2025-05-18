@@ -14,8 +14,7 @@ import (
 // tokens
 func InterceptorJobRunnerRegistrationToken() ent.Interceptor {
 	return intercept.TraverseJobRunnerRegistrationToken(
-		func(ctx context.Context, q *generated.JobRunnerRegistrationTokenQuery) error {
-
+		func(_ context.Context, q *generated.JobRunnerRegistrationTokenQuery) error {
 			q.Where(
 				jobrunnerregistrationtoken.And(
 					jobrunnerregistrationtoken.ExpiresAtGT(time.Now()),

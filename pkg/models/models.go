@@ -917,8 +917,8 @@ var ExampleExampleCSVRequest = ExampleCSVRequest{
 // JOB RUNNERS
 // =========
 
-// AgentNodeRegistrationRequest is the request to register a new node
-type AgentNodeRegistrationRequest struct {
+// JobRunnerRegistrationRequest is the request to register a new node
+type JobRunnerRegistrationRequest struct {
 	IPAddress string   `json:"ip_address" description:"The IP address of the node being registered"`
 	Token     string   `json:"token" description:"Your agent registration token"`
 	Name      string   `json:"name" description:"the name of your job runner node"`
@@ -926,7 +926,7 @@ type AgentNodeRegistrationRequest struct {
 }
 
 // Validate ensures the required fields are set on the AgentNodeRegistrationRequest
-func (r *AgentNodeRegistrationRequest) Validate() error {
+func (r *JobRunnerRegistrationRequest) Validate() error {
 	if r.IPAddress == "" {
 		return rout.NewMissingRequiredFieldError("ip_address")
 	}
@@ -946,25 +946,25 @@ func (r *AgentNodeRegistrationRequest) Validate() error {
 	return nil
 }
 
-// WebauthnBeginRegistrationResponse is the response to begin a webauthn login
+// JobRunnerRegistrationResponse is the response to begin a webauthn login
 // this includes the credential creation options and the session token
-type AgentNodeRegistrationResponse struct {
+type JobRunnerRegistrationResponse struct {
 	Reply   rout.Reply
 	Message string `json:"message"`
 }
 
-// ExampleAgentNodeRegistrationRequest is an example of a successful job runner
+// ExampleJobRunnerRegistrationRequest is an example of a successful job runner
 // registration request
-var ExampleAgentNodeRegistrationRequest = AgentNodeRegistrationRequest{
+var ExampleJobRunnerRegistrationRequest = JobRunnerRegistrationRequest{
 	IPAddress: "192.168.0.1",
 	Name:      "ubuntu-eu-west-2",
 	Token:     "registration_tokenhere",
 	Tags:      []string{"self-hosted", "eu-west-2", "gcp", "kubernetes"},
 }
 
-// ExampleAgentNodeRegistrationResponse is an example of a successful job runner
+// ExampleJobRunnerRegistrationResponse is an example of a successful job runner
 // registration response
-var ExampleAgentNodeRegistrationResponse = AgentNodeRegistrationResponse{
+var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationResponse{
 	Reply:   rout.Reply{Success: true},
 	Message: "Job runner node registered",
 }

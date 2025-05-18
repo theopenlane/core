@@ -21,16 +21,16 @@ func (h *Handler) BindRegisterRunnerNode() *openapi3.Operation {
 	registerJobRunner.OperationID = "RegisterRunnerNode"
 	registerJobRunner.Security = &openapi3.SecurityRequirements{}
 
-	h.AddRequestBody("RegisterRunner", models.ExampleAgentNodeRegistrationRequest, registerJobRunner)
-	h.AddResponse("RegisterRunnerReply", "success", models.ExampleAgentNodeRegistrationResponse, registerJobRunner, http.StatusOK)
+	h.AddRequestBody("RegisterRunner", models.ExampleJobRunnerRegistrationRequest, registerJobRunner)
+	h.AddResponse("RegisterRunnerReply", "success", models.ExampleJobRunnerRegistrationResponse, registerJobRunner, http.StatusOK)
 	registerJobRunner.AddResponse(http.StatusBadRequest, badRequest())
 	registerJobRunner.AddResponse(http.StatusBadRequest, invalidInput())
 
 	return registerJobRunner
 }
 
-func (h *Handler) RegisterAgentNode(ctx echo.Context) error {
-	var r models.AgentNodeRegistrationRequest
+func (h *Handler) RegisterJobRunner(ctx echo.Context) error {
+	var r models.JobRunnerRegistrationRequest
 	if err := ctx.Bind(&r); err != nil {
 		return h.InvalidInput(ctx, err)
 	}
@@ -50,6 +50,7 @@ func (h *Handler) RegisterAgentNode(ctx echo.Context) error {
 		}
 
 		log.Error().Err(err).Msg("error retrieving job runner registration token")
+
 		return h.InternalServerError(ctx, ErrUnableToRegisterJobRunner)
 	}
 
@@ -73,12 +74,12 @@ func (h *Handler) RegisterAgentNode(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrUnableToRegisterJobRunner)
 	}
 
-	out := &models.AgentNodeRegistrationResponse{
+	out := &models.JobRunnerRegistrationResponse{
 		Reply: rout.Reply{
 			Success: true,
 		},
 		Message: "Job runner node registered",
 	}
 
-	return h.Success(ctx, out)
+	return h.Created(ctx, out)
 }

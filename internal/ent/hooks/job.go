@@ -20,7 +20,6 @@ func HookJobRunnerRegistrationToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.JobRunnerRegistrationTokenFunc(
 			func(ctx context.Context, m *generated.JobRunnerRegistrationTokenMutation) (generated.Value, error) {
-
 				if m.Op().Is(ent.OpCreate) {
 					orgID, err := auth.GetOrganizationIDFromContext(ctx)
 					if err != nil {

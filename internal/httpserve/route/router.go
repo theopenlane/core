@@ -212,7 +212,7 @@ func RegisterRoutes(router *Router) error {
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into
 		// it's own service/binary
-		registerAgentNodeRegistrationHandler,
+		registerJobRunnerRegistrationHandler,
 	}
 
 	if router.LocalFilePath != "" {
