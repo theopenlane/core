@@ -237,6 +237,13 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // if the context has the managed group key, the interceptor is skipped
 // if the query is for a token and explicitly allowed, the interceptor is skipped
 func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
+	if o.AllowEmptyForSystemAdmin {
+		allow, err := rule.CheckIsSystemAdminWithContext(ctx)
+		if err == nil && allow {
+			return true
+		}
+	}
+
 	if entx.CheckSkipSoftDelete(ctx) {
 		return true
 	}

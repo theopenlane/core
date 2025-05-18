@@ -9,8 +9,10 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -27,6 +29,8 @@ const (
 	SchemaCustomDomain = "custom_domain"
 	maxDomainNameLen   = 255
 	maxTXTValueLen     = 64
+	cloudflareIDMaxLen = 64
+	maxStatusReasonLen = 255
 )
 
 // Name returns the name of the CustomDomain schema.
@@ -60,6 +64,42 @@ func (CustomDomain) Fields() []ent.Field {
 			Comment("The mappable domain id that this custom domain maps to").
 			NotEmpty().
 			Immutable(),
+		// TODO skip
+		field.String("cloudflare_hostname_id").
+			Comment("The ID of the custom domain in cloudflare").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			).
+			Optional().
+			MaxLen(cloudflareIDMaxLen),
+		field.Enum("dns_verification_status").
+			Comment("Status of the custom domain verification").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			).
+			Default(enums.CustomDomainStatusPending.String()).
+			GoType(enums.CustomDomainStatus("")),
+		field.String("dns_verification_status_reason").
+			Comment("Reason of the dns verification status, for giving the user diagnostic info").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			).
+			MaxLen(maxStatusReasonLen).
+			Optional(),
+		field.Enum("ssl_cert_status").
+			Comment("Status of the ssl cert issuance").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			).
+			Default(enums.CustomDomainStatusPending.String()).
+			GoType(enums.CustomDomainStatus("")),
+		field.String("ssl_cert_status_reason").
+			Comment("Reason of the cert status, for giving the user diagnostic info").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			).
+			MaxLen(maxStatusReasonLen).
+			Optional(),
 		field.String("txt_record_subdomain").
 			Comment("String to be prepended to the cname_record, used to evaluate domain ownership.").
 			Annotations(
@@ -105,7 +145,7 @@ func (CustomDomain) Fields() []ent.Field {
 func (e CustomDomain) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(e),
+			newOrgOwnedMixin(e, withSkipForSystemAdmin(true)),
 		},
 	}.getMixins()
 }
@@ -137,9 +177,16 @@ func (CustomDomain) Indexes() []ent.Index {
 func (CustomDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
+			rule.AllowQueryIfSystemAdmin(),
 			policy.CheckOrgReadAccess(),
 		),
-		policy.WithMutationRules(
+		policy.WithOnMutationRules(
+			ent.OpUpdateOne|ent.OpUpdate,
+			rule.AllowMutationIfSystemAdmin(),
+			privacy.AlwaysDenyRule(),
+		),
+		policy.WithOnMutationRules(
+			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,
 			policy.CheckOrgWriteAccess(),
 		),
 	)

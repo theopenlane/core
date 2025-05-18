@@ -91,9 +91,9 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.CustomDomain) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "CNAME", "Created At")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "CNAME", "DNS Status", "DNS Status Reason", "SSL Cert Status", "SSL Cert Status Reason", "Created At")
 	for _, i := range out {
-		writer.AddRow(i.ID, i.CnameRecord, i.CreatedAt)
+		writer.AddRow(i.ID, i.CnameRecord, i.DNSVerificationStatus, i.DNSVerificationStatusReason, i.SslCertStatus, i.SslCertStatusReason, i.CreatedAt)
 	}
 
 	writer.Render()
