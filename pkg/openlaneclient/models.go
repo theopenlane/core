@@ -4765,6 +4765,7 @@ type CreateRiskInput struct {
 	InternalPolicyIDs []string `json:"internalPolicyIDs,omitempty"`
 	ProgramIDs        []string `json:"programIDs,omitempty"`
 	ActionPlanIDs     []string `json:"actionPlanIDs,omitempty"`
+	TaskIDs           []string `json:"taskIDs,omitempty"`
 	StakeholderID     *string  `json:"stakeholderID,omitempty"`
 	DelegateID        *string  `json:"delegateID,omitempty"`
 }
@@ -4909,6 +4910,7 @@ type CreateTaskInput struct {
 	SubcontrolIDs       []string         `json:"subcontrolIDs,omitempty"`
 	ControlObjectiveIDs []string         `json:"controlObjectiveIDs,omitempty"`
 	ProgramIDs          []string         `json:"programIDs,omitempty"`
+	RiskIDs             []string         `json:"riskIDs,omitempty"`
 	EvidenceIDs         []string         `json:"evidenceIDs,omitempty"`
 }
 
@@ -19616,6 +19618,7 @@ type Risk struct {
 	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
 	Programs         *ProgramConnection        `json:"programs"`
 	ActionPlans      *ActionPlanConnection     `json:"actionPlans"`
+	Tasks            *TaskConnection           `json:"tasks"`
 	// the group of users who are responsible for risk oversight
 	Stakeholder *Group `json:"stakeholder,omitempty"`
 	// temporary delegates for the risk, used for temporary ownership
@@ -20379,6 +20382,9 @@ type RiskWhereInput struct {
 	// action_plans edge predicates
 	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
 	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 	// stakeholder edge predicates
 	HasStakeholder     *bool              `json:"hasStakeholder,omitempty"`
 	HasStakeholderWith []*GroupWhereInput `json:"hasStakeholderWith,omitempty"`
@@ -22597,6 +22603,7 @@ type Task struct {
 	Subcontrols       *SubcontrolConnection       `json:"subcontrols"`
 	ControlObjectives *ControlObjectiveConnection `json:"controlObjectives"`
 	Programs          *ProgramConnection          `json:"programs"`
+	Risks             *RiskConnection             `json:"risks"`
 	Evidence          *EvidenceConnection         `json:"evidence"`
 }
 
@@ -23246,6 +23253,9 @@ type TaskWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// risks edge predicates
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -25196,6 +25206,9 @@ type UpdateRiskInput struct {
 	AddActionPlanIDs        []string `json:"addActionPlanIDs,omitempty"`
 	RemoveActionPlanIDs     []string `json:"removeActionPlanIDs,omitempty"`
 	ClearActionPlans        *bool    `json:"clearActionPlans,omitempty"`
+	AddTaskIDs              []string `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool    `json:"clearTasks,omitempty"`
 	StakeholderID           *string  `json:"stakeholderID,omitempty"`
 	ClearStakeholder        *bool    `json:"clearStakeholder,omitempty"`
 	DelegateID              *string  `json:"delegateID,omitempty"`
@@ -25444,6 +25457,9 @@ type UpdateTaskInput struct {
 	AddProgramIDs             []string         `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs          []string         `json:"removeProgramIDs,omitempty"`
 	ClearPrograms             *bool            `json:"clearPrograms,omitempty"`
+	AddRiskIDs                []string         `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs             []string         `json:"removeRiskIDs,omitempty"`
+	ClearRisks                *bool            `json:"clearRisks,omitempty"`
 	AddEvidenceIDs            []string         `json:"addEvidenceIDs,omitempty"`
 	RemoveEvidenceIDs         []string         `json:"removeEvidenceIDs,omitempty"`
 	ClearEvidence             *bool            `json:"clearEvidence,omitempty"`

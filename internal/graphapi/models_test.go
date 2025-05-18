@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -163,6 +162,7 @@ type TaskBuilder struct {
 	AssigneeID string
 	Due        time.Time
 	GroupID    string
+	RiskID     string
 }
 
 type ProgramBuilder struct {
@@ -799,6 +799,10 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 		taskCreate.AddGroupIDs(c.GroupID)
 	}
 
+	if c.RiskID != "" {
+		taskCreate.AddRiskIDs(c.RiskID)
+	}
+
 	task, err := taskCreate.Save(ctx)
 	assert.NilError(t, err)
 
@@ -1152,7 +1156,7 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 
 // MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database
 func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ControlImplementation {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, e.client.db)
 
 	if e.Details == "" {
 		e.Details = gofakeit.Paragraph(3, 4, 300, "<br />")
@@ -1183,7 +1187,7 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 
 // MustNew mappable domain builder is used to create, without authz checks, mappable domains in the database
 func (e *MappableDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.MappableDomain {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, e.client.db)
 
 	if e.Name == "" {
 		e.Name = gofakeit.DomainName()
@@ -1209,7 +1213,7 @@ type CustomDomainBuilder struct {
 
 // MustNew custom domain builder is used to create, without authz checks, custom domains in the database
 func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T, status *enums.CustomDomainStatus) *ent.CustomDomain {
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = setContext(ctx, c.client.db)
 
 	if c.CnameRecord == "" {
 		c.CnameRecord = gofakeit.DomainName()

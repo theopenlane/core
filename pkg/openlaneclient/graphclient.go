@@ -32575,6 +32575,46 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy) GetInternalPolicies(
 	return t.InternalPolicies
 }
 
+type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges_Node struct {
+	ID      string "json:\"id\" graphql:\"id\""
+	RefCode string "json:\"refCode\" graphql:\"refCode\""
+}
+
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+
+type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges struct {
+	Node *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges) GetNode() *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges_Node {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls struct {
+	Edges []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls) GetEdges() []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls{}
+	}
+	return t.Edges
+}
+
 type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -32651,6 +32691,7 @@ type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
 	ApprovalRequired *bool                                                                     "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
 	Approver         *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Approver        "json:\"approver,omitempty\" graphql:\"approver\""
 	BlockedGroups    []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+	Controls         CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls         "json:\"controls\" graphql:\"controls\""
 	CreatedAt        *time.Time                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Delegate         *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Delegate        "json:\"delegate,omitempty\" graphql:\"delegate\""
@@ -32688,6 +32729,12 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetBlockedGro
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
 	return t.BlockedGroups
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetControls() *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return &t.Controls
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -84660,6 +84707,14 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 			tags
 			updatedAt
 			updatedBy
+			controls {
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
 			editors {
 				id
 				name

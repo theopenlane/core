@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -412,6 +413,21 @@ func (tu *TaskUpdate) AddPrograms(p ...*Program) *TaskUpdate {
 	return tu.AddProgramIDs(ids...)
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (tu *TaskUpdate) AddRiskIDs(ids ...string) *TaskUpdate {
+	tu.mutation.AddRiskIDs(ids...)
+	return tu
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (tu *TaskUpdate) AddRisks(r ...*Risk) *TaskUpdate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tu.AddRiskIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (tu *TaskUpdate) AddEvidenceIDs(ids ...string) *TaskUpdate {
 	tu.mutation.AddEvidenceIDs(ids...)
@@ -610,6 +626,27 @@ func (tu *TaskUpdate) RemovePrograms(p ...*Program) *TaskUpdate {
 		ids[i] = p[i].ID
 	}
 	return tu.RemoveProgramIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (tu *TaskUpdate) ClearRisks() *TaskUpdate {
+	tu.mutation.ClearRisks()
+	return tu
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (tu *TaskUpdate) RemoveRiskIDs(ids ...string) *TaskUpdate {
+	tu.mutation.RemoveRiskIDs(ids...)
+	return tu
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (tu *TaskUpdate) RemoveRisks(r ...*Risk) *TaskUpdate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tu.RemoveRiskIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
@@ -1225,6 +1262,54 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if tu.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.RisksTable,
+			Columns: task.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.RiskTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedRisksIDs(); len(nodes) > 0 && !tu.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.RisksTable,
+			Columns: task.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.RisksTable,
+			Columns: task.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if tu.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1665,6 +1750,21 @@ func (tuo *TaskUpdateOne) AddPrograms(p ...*Program) *TaskUpdateOne {
 	return tuo.AddProgramIDs(ids...)
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (tuo *TaskUpdateOne) AddRiskIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.AddRiskIDs(ids...)
+	return tuo
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (tuo *TaskUpdateOne) AddRisks(r ...*Risk) *TaskUpdateOne {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tuo.AddRiskIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (tuo *TaskUpdateOne) AddEvidenceIDs(ids ...string) *TaskUpdateOne {
 	tuo.mutation.AddEvidenceIDs(ids...)
@@ -1863,6 +1963,27 @@ func (tuo *TaskUpdateOne) RemovePrograms(p ...*Program) *TaskUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return tuo.RemoveProgramIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (tuo *TaskUpdateOne) ClearRisks() *TaskUpdateOne {
+	tuo.mutation.ClearRisks()
+	return tuo
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (tuo *TaskUpdateOne) RemoveRiskIDs(ids ...string) *TaskUpdateOne {
+	tuo.mutation.RemoveRiskIDs(ids...)
+	return tuo
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (tuo *TaskUpdateOne) RemoveRisks(r ...*Risk) *TaskUpdateOne {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tuo.RemoveRiskIDs(ids...)
 }
 
 // ClearEvidence clears all "evidence" edges to the Evidence entity.
@@ -2503,6 +2624,54 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 			},
 		}
 		edge.Schema = tuo.schemaConfig.ProgramTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.RisksTable,
+			Columns: task.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.RiskTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedRisksIDs(); len(nodes) > 0 && !tuo.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.RisksTable,
+			Columns: task.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.RisksTable,
+			Columns: task.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.RiskTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

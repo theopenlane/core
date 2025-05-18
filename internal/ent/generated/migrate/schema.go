@@ -5678,6 +5678,31 @@ var (
 			},
 		},
 	}
+	// RiskTasksColumns holds the columns for the "risk_tasks" table.
+	RiskTasksColumns = []*schema.Column{
+		{Name: "risk_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// RiskTasksTable holds the schema information for the "risk_tasks" table.
+	RiskTasksTable = &schema.Table{
+		Name:       "risk_tasks",
+		Columns:    RiskTasksColumns,
+		PrimaryKey: []*schema.Column{RiskTasksColumns[0], RiskTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "risk_tasks_risk_id",
+				Columns:    []*schema.Column{RiskTasksColumns[0]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "risk_tasks_task_id",
+				Columns:    []*schema.Column{RiskTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubcontrolControlObjectivesColumns holds the columns for the "subcontrol_control_objectives" table.
 	SubcontrolControlObjectivesColumns = []*schema.Column{
 		{Name: "subcontrol_id", Type: field.TypeString},
@@ -6141,6 +6166,7 @@ var (
 		RiskEditorsTable,
 		RiskViewersTable,
 		RiskActionPlansTable,
+		RiskTasksTable,
 		SubcontrolControlObjectivesTable,
 		SubcontrolTasksTable,
 		SubcontrolRisksTable,
@@ -6514,6 +6540,8 @@ func init() {
 	RiskViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	RiskActionPlansTable.ForeignKeys[0].RefTable = RisksTable
 	RiskActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	RiskTasksTable.ForeignKeys[0].RefTable = RisksTable
+	RiskTasksTable.ForeignKeys[1].RefTable = TasksTable
 	SubcontrolControlObjectivesTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	SubcontrolTasksTable.ForeignKeys[0].RefTable = SubcontrolsTable

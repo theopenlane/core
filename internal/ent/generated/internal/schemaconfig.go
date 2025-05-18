@@ -152,6 +152,7 @@ type SchemaConfig struct {
 	RiskEditors                      string // Risk-editors->Group table.
 	RiskViewers                      string // Risk-viewers->Group table.
 	RiskActionPlans                  string // Risk-action_plans->ActionPlan table.
+	RiskTasks                        string // Risk-tasks->Task table.
 	RiskHistory                      string // RiskHistory table.
 	Standard                         string // Standard table.
 	StandardHistory                  string // StandardHistory table.

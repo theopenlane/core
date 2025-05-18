@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -394,6 +395,21 @@ func (tc *TaskCreate) AddPrograms(p ...*Program) *TaskCreate {
 		ids[i] = p[i].ID
 	}
 	return tc.AddProgramIDs(ids...)
+}
+
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (tc *TaskCreate) AddRiskIDs(ids ...string) *TaskCreate {
+	tc.mutation.AddRiskIDs(ids...)
+	return tc
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (tc *TaskCreate) AddRisks(r ...*Risk) *TaskCreate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return tc.AddRiskIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
@@ -788,6 +804,23 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = tc.schemaConfig.ProgramTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.RisksTable,
+			Columns: task.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.RiskTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

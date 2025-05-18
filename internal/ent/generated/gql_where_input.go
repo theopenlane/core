@@ -59888,6 +59888,10 @@ type RiskWhereInput struct {
 	HasActionPlans     *bool                   `json:"hasActionPlans,omitempty"`
 	HasActionPlansWith []*ActionPlanWhereInput `json:"hasActionPlansWith,omitempty"`
 
+	// "tasks" edge predicates.
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+
 	// "stakeholder" edge predicates.
 	HasStakeholder     *bool              `json:"hasStakeholder,omitempty"`
 	HasStakeholderWith []*GroupWhereInput `json:"hasStakeholderWith,omitempty"`
@@ -60925,6 +60929,24 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, risk.HasActionPlansWith(with...))
+	}
+	if i.HasTasks != nil {
+		p := risk.HasTasks()
+		if !*i.HasTasks {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTasksWith) > 0 {
+		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		for _, w := range i.HasTasksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTasksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasTasksWith(with...))
 	}
 	if i.HasStakeholder != nil {
 		p := risk.HasStakeholder()
@@ -69243,6 +69265,10 @@ type TaskWhereInput struct {
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 
+	// "risks" edge predicates.
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+
 	// "evidence" edge predicates.
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -70147,6 +70173,24 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, task.HasProgramsWith(with...))
+	}
+	if i.HasRisks != nil {
+		p := task.HasRisks()
+		if !*i.HasRisks {
+			p = task.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRisksWith) > 0 {
+		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		for _, w := range i.HasRisksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRisksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, task.HasRisksWith(with...))
 	}
 	if i.HasEvidence != nil {
 		p := task.HasEvidence()

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -143,6 +144,11 @@ func TestQueryInternalPolicies(t *testing.T) {
 }
 
 func TestMutationCreateInternalPolicy(t *testing.T) {
+	// create a system owned standard with a control
+	systemStandard := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	// create a control and add it to the system standard
+	systemControl := (&ControlBuilder{client: suite.client, StandardID: systemStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+
 	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// group for the view only user
@@ -158,12 +164,13 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name          string
-		request       openlaneclient.CreateInternalPolicyInput
-		addGroupToOrg bool
-		client        *openlaneclient.OpenlaneClient
-		ctx           context.Context
-		expectedErr   string
+		name                       string
+		request                    openlaneclient.CreateInternalPolicyInput
+		addGroupToOrg              bool
+		controlEdgeShouldBeCreated bool
+		client                     *openlaneclient.OpenlaneClient
+		ctx                        context.Context
+		expectedErr                string
 	}{
 		{
 			name: "happy path, minimal input",
@@ -213,8 +220,20 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				SubcontrolIDs: []string{subcontrol.ID},
 				TaskIDs:       []string{task.ID},
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:                     suite.client.api,
+			ctx:                        testUser1.UserCtx,
+			controlEdgeShouldBeCreated: true,
+		},
+		{
+			name: "should not be allowed to add system standard control",
+			request: openlaneclient.CreateInternalPolicyInput{
+				Name:       "Releasing a new version",
+				Status:     &enums.DocumentDraft,
+				ControlIDs: []string{systemControl.ID},
+			},
+			client:                     suite.client.api,
+			ctx:                        testUser1.UserCtx,
+			controlEdgeShouldBeCreated: false, // user does not have edit access to the control, it is owned by the system
 		},
 		{
 			name: "happy path, add editor group",
@@ -240,8 +259,9 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				Name:       "Test Policy",
 				ControlIDs: []string{control.ID},
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:                     suite.client.api,
+			ctx:                        testUser1.UserCtx,
+			controlEdgeShouldBeCreated: true,
 		},
 		{
 			name: "happy path, add same sub control to another policy",
@@ -318,6 +338,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				assert.NilError(t, err)
 			}
 
+			log.Error().Str("control_id", systemControl.ID).Msg("system control id")
 			resp, err := tc.client.CreateInternalPolicy(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -374,6 +395,20 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				assert.Check(t, resp.CreateInternalPolicy.InternalPolicy.Delegate == nil)
 			}
 
+			if tc.request.ControlIDs != nil {
+				for _, controlID := range tc.request.ControlIDs {
+					controlFound := false
+					for _, edge := range resp.CreateInternalPolicy.InternalPolicy.Controls.Edges {
+						if controlID == edge.Node.ID {
+							controlFound = true
+							break
+						}
+					}
+
+					assert.Check(t, is.Equal(controlFound, tc.controlEdgeShouldBeCreated), "control not found in edges")
+				}
+			}
+
 			// cleanup
 			(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{resp.CreateInternalPolicy.InternalPolicy.ID}}).MustDelete(testUser1.UserCtx, t)
 		})
@@ -384,6 +419,10 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{anotherGroup.ID, groupMember.GroupID, approverGroup.ID, delegateGroup.ID}}).MustDelete(testUser1.UserCtx, t)
+
+	// cleanup the system standard and control
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{systemStandard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemControl.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateInternalPolicy(t *testing.T) {

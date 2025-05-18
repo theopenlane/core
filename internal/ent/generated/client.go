@@ -15448,6 +15448,25 @@ func (c *RiskClient) QueryActionPlans(r *Risk) *ActionPlanQuery {
 	return query
 }
 
+// QueryTasks queries the tasks edge of a Risk.
+func (c *RiskClient) QueryTasks(r *Risk) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, risk.TasksTable, risk.TasksPrimaryKey...),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.RiskTasks
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryStakeholder queries the stakeholder edge of a Risk.
 func (c *RiskClient) QueryStakeholder(r *Risk) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -17127,6 +17146,25 @@ func (c *TaskClient) QueryPrograms(t *Task) *ProgramQuery {
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramTasks
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisks queries the risks edge of a Task.
+func (c *TaskClient) QueryRisks(t *Task) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.RisksTable, task.RisksPrimaryKey...),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.RiskTasks
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
 	}

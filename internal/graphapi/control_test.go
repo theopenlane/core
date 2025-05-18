@@ -121,7 +121,7 @@ func TestQueryControls(t *testing.T) {
 	controlsToCreate := int64(11)
 	controlIDs := []string{}
 	for range controlsToCreate { // set to 11 to ensure pagination is tested
-		control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 		controlIDs = append(controlIDs, control.ID)
 	}
 
@@ -141,6 +141,12 @@ func TestQueryControls(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: testutils.MaxResultLimit,
+		},
+		{
+			name:            "happy path, admin user",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
@@ -857,8 +863,8 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 
 	// cleanup created controls and standards
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: orgOwnedControl.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 

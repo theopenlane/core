@@ -3308,6 +3308,7 @@ type ComplexityRoot struct {
 		Status           func(childComplexity int) int
 		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
 		Viewers          func(childComplexity int) int
@@ -3750,6 +3751,7 @@ type ComplexityRoot struct {
 		OwnerID           func(childComplexity int) int
 		Procedures        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Risks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Status            func(childComplexity int) int
 		Subcontrols       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Tags              func(childComplexity int) int
@@ -22712,6 +22714,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.Tags(childComplexity), true
 
+	case "Risk.tasks":
+		if e.complexity.Risk.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
 	case "Risk.updatedAt":
 		if e.complexity.Risk.UpdatedAt == nil {
 			break
@@ -25002,6 +25016,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Task.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+
+	case "Task.risks":
+		if e.complexity.Task.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_Task_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Task.status":
 		if e.complexity.Task.Status == nil {
@@ -36146,6 +36172,7 @@ input CreateRiskInput {
   internalPolicyIDs: [ID!]
   programIDs: [ID!]
   actionPlanIDs: [ID!]
+  taskIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
 }
@@ -36383,6 +36410,7 @@ input CreateTaskInput {
   subcontrolIDs: [ID!]
   controlObjectiveIDs: [ID!]
   programIDs: [ID!]
+  riskIDs: [ID!]
   evidenceIDs: [ID!]
 }
 """
@@ -61257,6 +61285,37 @@ type Risk implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
   """
   the group of users who are responsible for risk oversight
   """
@@ -62263,6 +62322,11 @@ input RiskWhereInput {
   """
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
   """
   stakeholder edge predicates
   """
@@ -65684,6 +65748,37 @@ type Task implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -66540,6 +66635,11 @@ input TaskWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
   """
   evidence edge predicates
   """
@@ -69089,6 +69189,9 @@ input UpdateRiskInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
   stakeholderID: ID
   clearStakeholder: Boolean
   delegateID: ID
@@ -69431,6 +69534,9 @@ input UpdateTaskInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
