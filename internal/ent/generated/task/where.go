@@ -1483,6 +1483,35 @@ func HasProgramsWith(preds ...predicate.Program) predicate.Task {
 	})
 }
 
+// HasRisks applies the HasEdge predicate on the "risks" edge.
+func HasRisks() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RisksTable, RisksPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.RiskTasks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRisksWith applies the HasEdge predicate on the "risks" edge with a given conditions (other predicates).
+func HasRisksWith(preds ...predicate.Risk) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newRisksStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.RiskTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEvidence applies the HasEdge predicate on the "evidence" edge.
 func HasEvidence() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {

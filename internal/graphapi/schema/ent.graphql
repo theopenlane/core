@@ -7124,6 +7124,7 @@ input CreateRiskInput {
   internalPolicyIDs: [ID!]
   programIDs: [ID!]
   actionPlanIDs: [ID!]
+  taskIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
 }
@@ -7361,6 +7362,7 @@ input CreateTaskInput {
   subcontrolIDs: [ID!]
   controlObjectiveIDs: [ID!]
   programIDs: [ID!]
+  riskIDs: [ID!]
   evidenceIDs: [ID!]
 }
 """
@@ -30732,6 +30734,37 @@ type Risk implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
   """
   the group of users who are responsible for risk oversight
   """
@@ -31738,6 +31771,11 @@ input RiskWhereInput {
   """
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
   """
   stakeholder edge predicates
   """
@@ -35159,6 +35197,37 @@ type Task implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -36015,6 +36084,11 @@ input TaskWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
   """
   evidence edge predicates
   """
@@ -38477,6 +38551,9 @@ input UpdateRiskInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
   stakeholderID: ID
   clearStakeholder: Boolean
   delegateID: ID
@@ -38819,6 +38896,9 @@ input UpdateTaskInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean

@@ -98,6 +98,11 @@ func TestQueryTasks(t *testing.T) {
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
 	taskPersonal := (&TaskBuilder{client: suite.client, AssigneeID: testUser1.ID}).MustNew(userCtxPersonalOrg, t)
 
+	risk := (&RiskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	taskWithRisk := (&TaskBuilder{client: suite.client, RiskID: risk.ID}).MustNew(testUser1.UserCtx, t)
+
+	org1TaskIDs = append(org1TaskIDs, taskWithRisk.ID)
+
 	testCases := []struct {
 		name            string
 		client          *openlaneclient.OpenlaneClient
@@ -110,7 +115,7 @@ func TestQueryTasks(t *testing.T) {
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
-			totalCount:      30,
+			totalCount:      31,
 		},
 		{
 			name:            "happy path, view only user",
@@ -120,11 +125,18 @@ func TestQueryTasks(t *testing.T) {
 			totalCount:      10,
 		},
 		{
+			name:            "happy path, admin user",
+			client:          suite.client.api,
+			ctx:             adminUser.UserCtx,
+			expectedResults: testutils.MaxResultLimit,
+			totalCount:      11,
+		},
+		{
 			name:            "happy path, using pat - which should have access to all tasks because its authorized to the personal org",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
 			expectedResults: testutils.MaxResultLimit,
-			totalCount:      31,
+			totalCount:      32,
 		},
 		{
 			name:            "another user, no entities should be returned",
@@ -325,6 +337,10 @@ func TestMutationUpdateTask(t *testing.T) {
 	assignee := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(testUser1.UserCtx, t, &assignee, enums.RoleMember, testUser1.OrganizationID)
 
+	// add parents to ensure permissions are inherited
+	risk := (&RiskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	taskRisk := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	// make sure the user cannot can see the task before they are the assigner
 	taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, task.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
@@ -335,10 +351,16 @@ func TestMutationUpdateTask(t *testing.T) {
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 	assert.Check(t, is.Nil(taskResp))
 
+	// make sure the user cannot see the task before the risk is added
+	taskResp, err = suite.client.api.GetTaskByID(adminUser.UserCtx, taskRisk.ID)
+	assert.ErrorContains(t, err, notFoundErrorMsg)
+	assert.Check(t, is.Nil(taskResp))
+
 	// NOTE: the tests and checks are ordered due to dependencies between updates
 	// if you update cases, they will most likely need to be added to the end of the list
 	testCases := []struct {
 		name                 string
+		taskID               string
 		request              *openlaneclient.UpdateTaskInput
 		updateCommentRequest *openlaneclient.UpdateNoteInput
 		files                []*graphql.Upload
@@ -347,7 +369,8 @@ func TestMutationUpdateTask(t *testing.T) {
 		expectedErr          string
 	}{
 		{
-			name: "happy path, update details",
+			name:   "happy path, update details",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				Details:    lo.ToPtr(("makin' a list, checkin' it twice")),
 				AssigneeID: &adminUser.ID,
@@ -356,7 +379,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "happy path, add comment",
+			name:   "happy path, add comment",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				AddComment: &openlaneclient.CreateNoteInput{
 					Text: "matt is the best",
@@ -366,7 +390,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "happy path, update comment with files",
+			name:   "happy path, update comment with files",
+			taskID: task.ID,
 			updateCommentRequest: &openlaneclient.UpdateNoteInput{
 				Text: lo.ToPtr("sarah is better"),
 			},
@@ -382,7 +407,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "happy path, update comment with file using PAT",
+			name:   "happy path, update comment with file using PAT",
+			taskID: task.ID,
 			updateCommentRequest: &openlaneclient.UpdateNoteInput{
 				Text: lo.ToPtr("sarah is still better"),
 			},
@@ -398,7 +424,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "happy path, delete comment",
+			name:   "happy path, delete comment",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				DeleteComment: &taskCommentID,
 			},
@@ -406,7 +433,17 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "update category using pat of owner",
+			name:   "happy path, add risk",
+			taskID: taskRisk.ID,
+			request: &openlaneclient.UpdateTaskInput{
+				AddRiskIDs: []string{risk.ID},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:   "update category using pat of owner",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				Category: lo.ToPtr("risk review"),
 			},
@@ -414,7 +451,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "update assignee to user not in org should fail",
+			name:   "update assignee to user not in org should fail",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(testUser2.ID),
 			},
@@ -423,7 +461,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			expectedErr: "user not in organization",
 		},
 		{
-			name: "update assignee to view only user",
+			name:   "update assignee to view only user",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(assignee.ID),
 			},
@@ -431,7 +470,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "update assignee to same user, should not error",
+			name:   "update assignee to same user, should not error",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(assignee.ID),
 			},
@@ -439,7 +479,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "update status and details",
+			name:   "update status and details",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				Status:  &enums.TaskStatusInProgress,
 				Details: lo.ToPtr("do all the things for the thing"),
@@ -448,7 +489,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "add to group",
+			name:   "add to group",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				AddGroupIDs: []string{group.ID},
 			},
@@ -456,7 +498,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "update assigner to another org member, this user should still be able to see it because they originally created it",
+			name:   "update assigner to another org member, this user should still be able to see it because they originally created it",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				AssignerID: lo.ToPtr(viewOnlyUser2.ID),
 			},
@@ -464,7 +507,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "clear assignee",
+			name:   "clear assignee",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				ClearAssignee: lo.ToPtr(true),
 			},
@@ -472,7 +516,8 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "clear assigner",
+			name:   "clear assigner",
+			taskID: task.ID,
 			request: &openlaneclient.UpdateTaskInput{
 				ClearAssigner: lo.ToPtr(true),
 			},
@@ -490,7 +535,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			)
 
 			if tc.request != nil {
-				resp, err = tc.client.UpdateTask(tc.ctx, task.ID, *tc.request)
+				resp, err = tc.client.UpdateTask(tc.ctx, tc.taskID, *tc.request)
 			} else if tc.updateCommentRequest != nil {
 				if len(tc.files) > 0 {
 					expectUploadNillable(t, suite.client.objectStore.Storage, tc.files)
@@ -532,7 +577,7 @@ func TestMutationUpdateTask(t *testing.T) {
 
 					// the previous assignee should no longer be able to see the task
 					taskResp, err := suite.client.api.GetTaskByID(assignee.UserCtx, resp.UpdateTask.Task.ID)
-					assert.Check(t, is.ErrorContains(err, ""))
+					assert.Check(t, is.ErrorContains(err, notFoundErrorMsg))
 					assert.Check(t, is.Nil(taskResp))
 				}
 
@@ -541,8 +586,14 @@ func TestMutationUpdateTask(t *testing.T) {
 
 					// the previous assigner should no longer be able to see the task
 					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
-					assert.Check(t, is.ErrorContains(err, ""))
+					assert.Check(t, is.ErrorContains(err, notFoundErrorMsg))
 					assert.Check(t, is.Nil(taskResp))
+				}
+
+				if tc.request.AddRiskIDs != nil {
+					taskResp, err := suite.client.api.GetTaskByID(adminUser.UserCtx, resp.UpdateTask.Task.ID)
+					assert.Check(t, is.Nil(err))
+					assert.Check(t, is.Equal(taskResp.Task.ID, tc.taskID))
 				}
 
 				if tc.request.AssignerID != nil {
@@ -570,7 +621,7 @@ func TestMutationUpdateTask(t *testing.T) {
 
 					// user shouldn't be able to see the comment
 					checkResp, err := suite.client.api.GetNoteByID(assignee.UserCtx, taskCommentID)
-					assert.Check(t, is.ErrorContains(err, ""))
+					assert.Check(t, is.ErrorContains(err, notFoundErrorMsg))
 					assert.Check(t, is.Nil(checkResp))
 
 					// user should be able to see the comment since they created the task

@@ -99,7 +99,7 @@ func (t Task) Mixin() []ent.Mixin {
 		prefix: "TSK",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Task](t,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Risk{}),
 				withOrganizationOwner(false),
 			),
 		},
@@ -136,6 +136,7 @@ func (t Task) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(t, Subcontrol{}),
 		defaultEdgeFromWithPagination(t, ControlObjective{}),
 		defaultEdgeFromWithPagination(t, Program{}),
+		defaultEdgeFromWithPagination(t, Risk{}),
 		defaultEdgeToWithPagination(t, Evidence{}),
 	}
 }

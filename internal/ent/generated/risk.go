@@ -92,15 +92,17 @@ type RiskEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// the group of users who are responsible for risk oversight
 	Stakeholder *Group `json:"stakeholder,omitempty"`
 	// temporary delegates for the risk, used for temporary ownership
 	Delegate *Group `json:"delegate,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [13]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -111,6 +113,7 @@ type RiskEdges struct {
 	namedInternalPolicies map[string][]*InternalPolicy
 	namedPrograms         map[string][]*Program
 	namedActionPlans      map[string][]*ActionPlan
+	namedTasks            map[string][]*Task
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -205,12 +208,21 @@ func (e RiskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[10] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
 // StakeholderOrErr returns the Stakeholder value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 	if e.Stakeholder != nil {
 		return e.Stakeholder, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "stakeholder"}
@@ -221,7 +233,7 @@ func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 func (e RiskEdges) DelegateOrErr() (*Group, error) {
 	if e.Delegate != nil {
 		return e.Delegate, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "delegate"}
@@ -459,6 +471,11 @@ func (r *Risk) QueryPrograms() *ProgramQuery {
 // QueryActionPlans queries the "action_plans" edge of the Risk entity.
 func (r *Risk) QueryActionPlans() *ActionPlanQuery {
 	return NewRiskClient(r.config).QueryActionPlans(r)
+}
+
+// QueryTasks queries the "tasks" edge of the Risk entity.
+func (r *Risk) QueryTasks() *TaskQuery {
+	return NewRiskClient(r.config).QueryTasks(r)
 }
 
 // QueryStakeholder queries the "stakeholder" edge of the Risk entity.
@@ -773,6 +790,30 @@ func (r *Risk) appendNamedActionPlans(name string, edges ...*ActionPlan) {
 		r.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
 		r.Edges.namedActionPlans[name] = append(r.Edges.namedActionPlans[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedTasks(name string) ([]*Task, error) {
+	if r.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedTasks(name string, edges ...*Task) {
+	if r.Edges.namedTasks == nil {
+		r.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedTasks[name] = []*Task{}
+	} else {
+		r.Edges.namedTasks[name] = append(r.Edges.namedTasks[name], edges...)
 	}
 }
 

@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -48,6 +49,7 @@ type TaskQuery struct {
 	withSubcontrols            *SubcontrolQuery
 	withControlObjectives      *ControlObjectiveQuery
 	withPrograms               *ProgramQuery
+	withRisks                  *RiskQuery
 	withEvidence               *EvidenceQuery
 	loadTotal                  []func(context.Context, []*Task) error
 	modifiers                  []func(*sql.Selector)
@@ -59,6 +61,7 @@ type TaskQuery struct {
 	withNamedSubcontrols       map[string]*SubcontrolQuery
 	withNamedControlObjectives map[string]*ControlObjectiveQuery
 	withNamedPrograms          map[string]*ProgramQuery
+	withNamedRisks             map[string]*RiskQuery
 	withNamedEvidence          map[string]*EvidenceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -371,6 +374,31 @@ func (tq *TaskQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryRisks chains the current query on the "risks" edge.
+func (tq *TaskQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.RisksTable, task.RisksPrimaryKey...),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.RiskTasks
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryEvidence chains the current query on the "evidence" edge.
 func (tq *TaskQuery) QueryEvidence() *EvidenceQuery {
 	query := (&EvidenceClient{config: tq.config}).Query()
@@ -599,6 +627,7 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 		withSubcontrols:       tq.withSubcontrols.Clone(),
 		withControlObjectives: tq.withControlObjectives.Clone(),
 		withPrograms:          tq.withPrograms.Clone(),
+		withRisks:             tq.withRisks.Clone(),
 		withEvidence:          tq.withEvidence.Clone(),
 		// clone intermediate query.
 		sql:       tq.sql.Clone(),
@@ -728,6 +757,17 @@ func (tq *TaskQuery) WithPrograms(opts ...func(*ProgramQuery)) *TaskQuery {
 	return tq
 }
 
+// WithRisks tells the query-builder to eager-load the nodes that are connected to
+// the "risks" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithRisks(opts ...func(*RiskQuery)) *TaskQuery {
+	query := (&RiskClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withRisks = query
+	return tq
+}
+
 // WithEvidence tells the query-builder to eager-load the nodes that are connected to
 // the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
 func (tq *TaskQuery) WithEvidence(opts ...func(*EvidenceQuery)) *TaskQuery {
@@ -823,7 +863,7 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	var (
 		nodes       = []*Task{}
 		_spec       = tq.querySpec()
-		loadedTypes = [12]bool{
+		loadedTypes = [13]bool{
 			tq.withOwner != nil,
 			tq.withAssigner != nil,
 			tq.withAssignee != nil,
@@ -835,6 +875,7 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			tq.withSubcontrols != nil,
 			tq.withControlObjectives != nil,
 			tq.withPrograms != nil,
+			tq.withRisks != nil,
 			tq.withEvidence != nil,
 		}
 	)
@@ -935,6 +976,13 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			return nil, err
 		}
 	}
+	if query := tq.withRisks; query != nil {
+		if err := tq.loadRisks(ctx, query, nodes,
+			func(n *Task) { n.Edges.Risks = []*Risk{} },
+			func(n *Task, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := tq.withEvidence; query != nil {
 		if err := tq.loadEvidence(ctx, query, nodes,
 			func(n *Task) { n.Edges.Evidence = []*Evidence{} },
@@ -995,6 +1043,13 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		if err := tq.loadPrograms(ctx, query, nodes,
 			func(n *Task) { n.appendNamedPrograms(name) },
 			func(n *Task, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tq.withNamedRisks {
+		if err := tq.loadRisks(ctx, query, nodes,
+			func(n *Task) { n.appendNamedRisks(name) },
+			func(n *Task, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1565,6 +1620,68 @@ func (tq *TaskQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 	}
 	return nil
 }
+func (tq *TaskQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Task, init func(*Task), assign func(*Task, *Risk)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Task)
+	nids := make(map[string]map[*Task]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(task.RisksTable)
+		joinT.Schema(tq.schemaConfig.RiskTasks)
+		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(task.RisksPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(task.RisksPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(task.RisksPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Task]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Risk](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "risks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (tq *TaskQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Task, init func(*Task), assign func(*Task, *Evidence)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Task)
@@ -1844,6 +1961,20 @@ func (tq *TaskQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery))
 		tq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	tq.withNamedPrograms[name] = query
+	return tq
+}
+
+// WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *TaskQuery {
+	query := (&RiskClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tq.withNamedRisks == nil {
+		tq.withNamedRisks = make(map[string]*RiskQuery)
+	}
+	tq.withNamedRisks[name] = query
 	return tq
 }
 

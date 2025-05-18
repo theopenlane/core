@@ -158,6 +158,7 @@ type TaskBuilder struct {
 	AssigneeID string
 	Due        time.Time
 	GroupID    string
+	RiskID     string
 }
 
 type ProgramBuilder struct {
@@ -780,6 +781,10 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 
 	if c.GroupID != "" {
 		taskCreate.AddGroupIDs(c.GroupID)
+	}
+
+	if c.RiskID != "" {
+		taskCreate.AddRiskIDs(c.RiskID)
 	}
 
 	task, err := taskCreate.Save(ctx)

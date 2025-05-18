@@ -4186,6 +4186,27 @@ func (r *Risk) ActionPlans(
 	return r.QueryActionPlans().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (r *Risk) Tasks(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TaskOrder, where *TaskWhereInput,
+) (*TaskConnection, error) {
+	opts := []TaskPaginateOption{
+		WithTaskOrder(orderBy),
+		WithTaskFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := r.Edges.totalCount[10][alias]
+	if nodes, err := r.NamedTasks(alias); err == nil || hasTotalCount {
+		pager, err := newTaskPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TaskConnection{Edges: []*TaskEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return r.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (r *Risk) Stakeholder(ctx context.Context) (*Group, error) {
 	result, err := r.Edges.StakeholderOrErr()
 	if IsNotLoaded(err) {
@@ -4702,6 +4723,27 @@ func (t *Task) Programs(
 	return t.QueryPrograms().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (t *Task) Risks(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*RiskOrder, where *RiskWhereInput,
+) (*RiskConnection, error) {
+	opts := []RiskPaginateOption{
+		WithRiskOrder(orderBy),
+		WithRiskFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := t.Edges.totalCount[11][alias]
+	if nodes, err := t.NamedRisks(alias); err == nil || hasTotalCount {
+		pager, err := newRiskPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &RiskConnection{Edges: []*RiskEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return t.QueryRisks().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (t *Task) Evidence(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EvidenceOrder, where *EvidenceWhereInput,
 ) (*EvidenceConnection, error) {
@@ -4710,7 +4752,7 @@ func (t *Task) Evidence(
 		WithEvidenceFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := t.Edges.totalCount[11][alias]
+	totalCount, hasTotalCount := t.Edges.totalCount[12][alias]
 	if nodes, err := t.NamedEvidence(alias); err == nil || hasTotalCount {
 		pager, err := newEvidencePager(opts, last != nil)
 		if err != nil {
