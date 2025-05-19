@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"entgo.io/ent"
@@ -104,7 +103,6 @@ func HookJobRunnerDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.JobRunnerFunc(
 			func(ctx context.Context, m *generated.JobRunnerMutation) (generated.Value, error) {
-
 				if !entx.CheckIsSoftDelete(ctx) {
 					return next.Mutate(ctx, m)
 				}
@@ -136,7 +134,7 @@ func HookJobRunnerDelete() ent.Hook {
 					Where(jobrunnertoken.IDIn(ids...)).
 					Exec(ctx)
 				if err != nil {
-					return nil, fmt.Errorf("failed to delete job runner tokens: %w", err)
+					return nil, err
 				}
 
 				return next.Mutate(ctx, m)

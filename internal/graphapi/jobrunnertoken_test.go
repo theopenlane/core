@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -71,12 +70,6 @@ func TestQueryJobRunnerTokens(t *testing.T) {
 	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, ID: firstToken.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, ID: secondToken.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, ID: thirdToken.ID}).MustDelete(testUser2.UserCtx, t)
-
-	_, err := suite.client.db.JobRunner.Delete().Exec(testUser1.UserCtx)
-	assert.NilError(t, err)
-
-	_, err = suite.client.db.JobRunner.Delete().Exec(testUser2.UserCtx)
-	assert.NilError(t, err)
 }
 
 func TestMutationDeleteJobRunnerToken(t *testing.T) {
@@ -135,7 +128,4 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 			assert.Check(t, is.Len(tokens.JobRunnerTokens.Edges, tc.expectedCount))
 		})
 	}
-
-	_, err := suite.client.db.JobRunner.Delete().Exec(rule.WithInternalContext(testUser1.UserCtx))
-	assert.NilError(t, err)
 }

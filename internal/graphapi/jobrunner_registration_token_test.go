@@ -18,7 +18,7 @@ func TestQueryJobRunnerRegistrationTokens(t *testing.T) {
 	// auto cleaned up by hook when the last job is created
 	// the last job itself is deleted since we are attaching it to a runner
 	_ = (&JobRunnerRegistrationTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	_ = (&JobRunnerRegistrationTokenBuilder{client: suite.client, WithRunner: true}).MustNew(testUser2.UserCtx, t)
+	lastJob := (&JobRunnerRegistrationTokenBuilder{client: suite.client, WithRunner: true}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -73,6 +73,7 @@ func TestQueryJobRunnerRegistrationTokens(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.JobRunnerRegistrationTokenDeleteOne]{client: suite.client.db.JobRunnerRegistrationToken, ID: secondJob.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: lastJob.JobRunnerID}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestMutationDeleteJobRunnerRegistrationToken(t *testing.T) {
