@@ -4,16 +4,15 @@ import (
 	"context"
 	"testing"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestQueryJobRunnerTokens(t *testing.T) {
-	firstToken := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	secondToken := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	thirdToken := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	_ = (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	_ = (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	_ = (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -66,10 +65,6 @@ func TestQueryJobRunnerTokens(t *testing.T) {
 			assert.Check(t, is.Len(resp.JobRunnerTokens.Edges, tc.expectedCount))
 		})
 	}
-
-	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, ID: firstToken.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, ID: secondToken.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, ID: thirdToken.ID}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestMutationDeleteJobRunnerToken(t *testing.T) {
@@ -86,11 +81,10 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 		expectedCount int
 	}{
 		{
-			name:          "happy path user",
-			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
-			tokenID:       firstToken.ID,
-			expectedCount: 3,
+			name:    "happy path user",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			tokenID: firstToken.ID,
 		},
 		{
 			// the first test case should have deleted the token
@@ -101,11 +95,10 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:          "happy path user with pat",
-			client:        suite.client.apiWithPAT,
-			ctx:           context.Background(),
-			tokenID:       secondToken.ID,
-			expectedCount: 2,
+			name:    "happy path user with pat",
+			client:  suite.client.apiWithPAT,
+			ctx:     context.Background(),
+			tokenID: secondToken.ID,
 		},
 	}
 
@@ -123,9 +116,8 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			tokens, err := tc.client.GetAllJobRunnerTokens(tc.ctx)
-			assert.NilError(t, err)
-			assert.Check(t, is.Len(tokens.JobRunnerTokens.Edges, tc.expectedCount))
+			_, err = tc.client.GetJobRunnerTokenByID(tc.ctx, tc.tokenID)
+			assert.Assert(t, err != nil)
 		})
 	}
 }

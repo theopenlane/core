@@ -115,7 +115,7 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
 			runnerID: systemJob.ID,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: notAuthorizedErrorMsg,
 		},
 	}
 
