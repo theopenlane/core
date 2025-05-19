@@ -4291,6 +4291,320 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 	return c
 }
 
+// CreateJobRunnerInput represents a mutation input for creating jobrunners.
+type CreateJobRunnerInput struct {
+	Tags              []string
+	Name              string
+	IPAddress         string
+	OwnerID           *string
+	JobRunnerTokenIDs []string
+}
+
+// Mutate applies the CreateJobRunnerInput on the JobRunnerMutation builder.
+func (i *CreateJobRunnerInput) Mutate(m *JobRunnerMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	m.SetIPAddress(i.IPAddress)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.JobRunnerTokenIDs; len(v) > 0 {
+		m.AddJobRunnerTokenIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateJobRunnerInput on the JobRunnerCreate builder.
+func (c *JobRunnerCreate) SetInput(i CreateJobRunnerInput) *JobRunnerCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateJobRunnerInput represents a mutation input for updating jobrunners.
+type UpdateJobRunnerInput struct {
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	Name                    *string
+	ClearOwner              bool
+	OwnerID                 *string
+	ClearJobRunnerTokens    bool
+	AddJobRunnerTokenIDs    []string
+	RemoveJobRunnerTokenIDs []string
+}
+
+// Mutate applies the UpdateJobRunnerInput on the JobRunnerMutation builder.
+func (i *UpdateJobRunnerInput) Mutate(m *JobRunnerMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearJobRunnerTokens {
+		m.ClearJobRunnerTokens()
+	}
+	if v := i.AddJobRunnerTokenIDs; len(v) > 0 {
+		m.AddJobRunnerTokenIDs(v...)
+	}
+	if v := i.RemoveJobRunnerTokenIDs; len(v) > 0 {
+		m.RemoveJobRunnerTokenIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateJobRunnerInput on the JobRunnerUpdate builder.
+func (c *JobRunnerUpdate) SetInput(i UpdateJobRunnerInput) *JobRunnerUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateJobRunnerInput on the JobRunnerUpdateOne builder.
+func (c *JobRunnerUpdateOne) SetInput(i UpdateJobRunnerInput) *JobRunnerUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateJobRunnerRegistrationTokenInput represents a mutation input for creating jobrunnerregistrationtokens.
+type CreateJobRunnerRegistrationTokenInput struct {
+	Tags        []string
+	LastUsedAt  *time.Time
+	OwnerID     *string
+	JobRunnerID *string
+}
+
+// Mutate applies the CreateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenMutation builder.
+func (i *CreateJobRunnerRegistrationTokenInput) Mutate(m *JobRunnerRegistrationTokenMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.LastUsedAt; v != nil {
+		m.SetLastUsedAt(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.JobRunnerID; v != nil {
+		m.SetJobRunnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenCreate builder.
+func (c *JobRunnerRegistrationTokenCreate) SetInput(i CreateJobRunnerRegistrationTokenInput) *JobRunnerRegistrationTokenCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateJobRunnerRegistrationTokenInput represents a mutation input for updating jobrunnerregistrationtokens.
+type UpdateJobRunnerRegistrationTokenInput struct {
+	ClearTags       bool
+	Tags            []string
+	AppendTags      []string
+	ClearLastUsedAt bool
+	LastUsedAt      *time.Time
+	ClearOwner      bool
+	OwnerID         *string
+	ClearJobRunner  bool
+	JobRunnerID     *string
+}
+
+// Mutate applies the UpdateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenMutation builder.
+func (i *UpdateJobRunnerRegistrationTokenInput) Mutate(m *JobRunnerRegistrationTokenMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearLastUsedAt {
+		m.ClearLastUsedAt()
+	}
+	if v := i.LastUsedAt; v != nil {
+		m.SetLastUsedAt(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearJobRunner {
+		m.ClearJobRunner()
+	}
+	if v := i.JobRunnerID; v != nil {
+		m.SetJobRunnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenUpdate builder.
+func (c *JobRunnerRegistrationTokenUpdate) SetInput(i UpdateJobRunnerRegistrationTokenInput) *JobRunnerRegistrationTokenUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenUpdateOne builder.
+func (c *JobRunnerRegistrationTokenUpdateOne) SetInput(i UpdateJobRunnerRegistrationTokenInput) *JobRunnerRegistrationTokenUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateJobRunnerTokenInput represents a mutation input for creating jobrunnertokens.
+type CreateJobRunnerTokenInput struct {
+	Tags          []string
+	ExpiresAt     *time.Time
+	LastUsedAt    *time.Time
+	IsActive      *bool
+	RevokedReason *string
+	RevokedBy     *string
+	RevokedAt     *time.Time
+	OwnerID       *string
+	JobRunnerIDs  []string
+}
+
+// Mutate applies the CreateJobRunnerTokenInput on the JobRunnerTokenMutation builder.
+func (i *CreateJobRunnerTokenInput) Mutate(m *JobRunnerTokenMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
+	}
+	if v := i.LastUsedAt; v != nil {
+		m.SetLastUsedAt(*v)
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.JobRunnerIDs; len(v) > 0 {
+		m.AddJobRunnerIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateJobRunnerTokenInput on the JobRunnerTokenCreate builder.
+func (c *JobRunnerTokenCreate) SetInput(i CreateJobRunnerTokenInput) *JobRunnerTokenCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateJobRunnerTokenInput represents a mutation input for updating jobrunnertokens.
+type UpdateJobRunnerTokenInput struct {
+	ClearTags          bool
+	Tags               []string
+	AppendTags         []string
+	ClearLastUsedAt    bool
+	LastUsedAt         *time.Time
+	ClearIsActive      bool
+	IsActive           *bool
+	ClearRevokedReason bool
+	RevokedReason      *string
+	ClearRevokedBy     bool
+	RevokedBy          *string
+	ClearRevokedAt     bool
+	RevokedAt          *time.Time
+	ClearOwner         bool
+	OwnerID            *string
+	ClearJobRunners    bool
+	AddJobRunnerIDs    []string
+	RemoveJobRunnerIDs []string
+}
+
+// Mutate applies the UpdateJobRunnerTokenInput on the JobRunnerTokenMutation builder.
+func (i *UpdateJobRunnerTokenInput) Mutate(m *JobRunnerTokenMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearLastUsedAt {
+		m.ClearLastUsedAt()
+	}
+	if v := i.LastUsedAt; v != nil {
+		m.SetLastUsedAt(*v)
+	}
+	if i.ClearIsActive {
+		m.ClearIsActive()
+	}
+	if v := i.IsActive; v != nil {
+		m.SetIsActive(*v)
+	}
+	if i.ClearRevokedReason {
+		m.ClearRevokedReason()
+	}
+	if v := i.RevokedReason; v != nil {
+		m.SetRevokedReason(*v)
+	}
+	if i.ClearRevokedBy {
+		m.ClearRevokedBy()
+	}
+	if v := i.RevokedBy; v != nil {
+		m.SetRevokedBy(*v)
+	}
+	if i.ClearRevokedAt {
+		m.ClearRevokedAt()
+	}
+	if v := i.RevokedAt; v != nil {
+		m.SetRevokedAt(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearJobRunners {
+		m.ClearJobRunners()
+	}
+	if v := i.AddJobRunnerIDs; len(v) > 0 {
+		m.AddJobRunnerIDs(v...)
+	}
+	if v := i.RemoveJobRunnerIDs; len(v) > 0 {
+		m.RemoveJobRunnerIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateJobRunnerTokenInput on the JobRunnerTokenUpdate builder.
+func (c *JobRunnerTokenUpdate) SetInput(i UpdateJobRunnerTokenInput) *JobRunnerTokenUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateJobRunnerTokenInput on the JobRunnerTokenUpdateOne builder.
+func (c *JobRunnerTokenUpdateOne) SetInput(i UpdateJobRunnerTokenInput) *JobRunnerTokenUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateMappableDomainInput represents a mutation input for creating mappabledomains.
 type CreateMappableDomainInput struct {
 	Tags            []string
@@ -4833,56 +5147,59 @@ func (c *OrgMembershipUpdateOne) SetInput(i UpdateOrgMembershipInput) *OrgMember
 
 // CreateOrganizationInput represents a mutation input for creating organizations.
 type CreateOrganizationInput struct {
-	Tags                       []string
-	Name                       string
-	DisplayName                *string
-	Description                *string
-	PersonalOrg                *bool
-	AvatarRemoteURL            *string
-	AvatarUpdatedAt            *time.Time
-	DedicatedDb                *bool
-	ControlCreatorIDs          []string
-	ControlObjectiveCreatorIDs []string
-	GroupCreatorIDs            []string
-	InternalPolicyCreatorIDs   []string
-	NarrativeCreatorIDs        []string
-	ProcedureCreatorIDs        []string
-	ProgramCreatorIDs          []string
-	RiskCreatorIDs             []string
-	TemplateCreatorIDs         []string
-	ParentID                   *string
-	SettingID                  *string
-	PersonalAccessTokenIDs     []string
-	APITokenIDs                []string
-	FileIDs                    []string
-	EventIDs                   []string
-	SecretIDs                  []string
-	AvatarFileID               *string
-	GroupIDs                   []string
-	TemplateIDs                []string
-	IntegrationIDs             []string
-	DocumentIDs                []string
-	OrgSubscriptionIDs         []string
-	InviteIDs                  []string
-	SubscriberIDs              []string
-	EntityIDs                  []string
-	EntityTypeIDs              []string
-	ContactIDs                 []string
-	NoteIDs                    []string
-	TaskIDs                    []string
-	ProgramIDs                 []string
-	ProcedureIDs               []string
-	InternalPolicyIDs          []string
-	RiskIDs                    []string
-	ControlObjectiveIDs        []string
-	NarrativeIDs               []string
-	ControlIDs                 []string
-	SubcontrolIDs              []string
-	ControlImplementationIDs   []string
-	EvidenceIDs                []string
-	StandardIDs                []string
-	ActionPlanIDs              []string
-	CustomDomainIDs            []string
+	Tags                          []string
+	Name                          string
+	DisplayName                   *string
+	Description                   *string
+	PersonalOrg                   *bool
+	AvatarRemoteURL               *string
+	AvatarUpdatedAt               *time.Time
+	DedicatedDb                   *bool
+	ControlCreatorIDs             []string
+	ControlObjectiveCreatorIDs    []string
+	GroupCreatorIDs               []string
+	InternalPolicyCreatorIDs      []string
+	NarrativeCreatorIDs           []string
+	ProcedureCreatorIDs           []string
+	ProgramCreatorIDs             []string
+	RiskCreatorIDs                []string
+	TemplateCreatorIDs            []string
+	ParentID                      *string
+	SettingID                     *string
+	PersonalAccessTokenIDs        []string
+	APITokenIDs                   []string
+	FileIDs                       []string
+	EventIDs                      []string
+	SecretIDs                     []string
+	AvatarFileID                  *string
+	GroupIDs                      []string
+	TemplateIDs                   []string
+	IntegrationIDs                []string
+	DocumentIDs                   []string
+	OrgSubscriptionIDs            []string
+	InviteIDs                     []string
+	SubscriberIDs                 []string
+	EntityIDs                     []string
+	EntityTypeIDs                 []string
+	ContactIDs                    []string
+	NoteIDs                       []string
+	TaskIDs                       []string
+	ProgramIDs                    []string
+	ProcedureIDs                  []string
+	InternalPolicyIDs             []string
+	RiskIDs                       []string
+	ControlObjectiveIDs           []string
+	NarrativeIDs                  []string
+	ControlIDs                    []string
+	SubcontrolIDs                 []string
+	ControlImplementationIDs      []string
+	EvidenceIDs                   []string
+	StandardIDs                   []string
+	ActionPlanIDs                 []string
+	CustomDomainIDs               []string
+	JobRunnerIDs                  []string
+	JobRunnerTokenIDs             []string
+	JobRunnerRegistrationTokenIDs []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -5035,6 +5352,15 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.CustomDomainIDs; len(v) > 0 {
 		m.AddCustomDomainIDs(v...)
 	}
+	if v := i.JobRunnerIDs; len(v) > 0 {
+		m.AddJobRunnerIDs(v...)
+	}
+	if v := i.JobRunnerTokenIDs; len(v) > 0 {
+		m.AddJobRunnerTokenIDs(v...)
+	}
+	if v := i.JobRunnerRegistrationTokenIDs; len(v) > 0 {
+		m.AddJobRunnerRegistrationTokenIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -5045,138 +5371,147 @@ func (c *OrganizationCreate) SetInput(i CreateOrganizationInput) *OrganizationCr
 
 // UpdateOrganizationInput represents a mutation input for updating organizations.
 type UpdateOrganizationInput struct {
-	ClearTags                        bool
-	Tags                             []string
-	AppendTags                       []string
-	Name                             *string
-	DisplayName                      *string
-	ClearDescription                 bool
-	Description                      *string
-	ClearAvatarRemoteURL             bool
-	AvatarRemoteURL                  *string
-	ClearAvatarUpdatedAt             bool
-	AvatarUpdatedAt                  *time.Time
-	ClearControlCreators             bool
-	AddControlCreatorIDs             []string
-	RemoveControlCreatorIDs          []string
-	ClearControlObjectiveCreators    bool
-	AddControlObjectiveCreatorIDs    []string
-	RemoveControlObjectiveCreatorIDs []string
-	ClearGroupCreators               bool
-	AddGroupCreatorIDs               []string
-	RemoveGroupCreatorIDs            []string
-	ClearInternalPolicyCreators      bool
-	AddInternalPolicyCreatorIDs      []string
-	RemoveInternalPolicyCreatorIDs   []string
-	ClearNarrativeCreators           bool
-	AddNarrativeCreatorIDs           []string
-	RemoveNarrativeCreatorIDs        []string
-	ClearProcedureCreators           bool
-	AddProcedureCreatorIDs           []string
-	RemoveProcedureCreatorIDs        []string
-	ClearProgramCreators             bool
-	AddProgramCreatorIDs             []string
-	RemoveProgramCreatorIDs          []string
-	ClearRiskCreators                bool
-	AddRiskCreatorIDs                []string
-	RemoveRiskCreatorIDs             []string
-	ClearTemplateCreators            bool
-	AddTemplateCreatorIDs            []string
-	RemoveTemplateCreatorIDs         []string
-	ClearSetting                     bool
-	SettingID                        *string
-	ClearPersonalAccessTokens        bool
-	AddPersonalAccessTokenIDs        []string
-	RemovePersonalAccessTokenIDs     []string
-	ClearAPITokens                   bool
-	AddAPITokenIDs                   []string
-	RemoveAPITokenIDs                []string
-	ClearFiles                       bool
-	AddFileIDs                       []string
-	RemoveFileIDs                    []string
-	ClearEvents                      bool
-	AddEventIDs                      []string
-	RemoveEventIDs                   []string
-	ClearSecrets                     bool
-	AddSecretIDs                     []string
-	RemoveSecretIDs                  []string
-	ClearAvatarFile                  bool
-	AvatarFileID                     *string
-	ClearGroups                      bool
-	AddGroupIDs                      []string
-	RemoveGroupIDs                   []string
-	ClearTemplates                   bool
-	AddTemplateIDs                   []string
-	RemoveTemplateIDs                []string
-	ClearIntegrations                bool
-	AddIntegrationIDs                []string
-	RemoveIntegrationIDs             []string
-	ClearDocuments                   bool
-	AddDocumentIDs                   []string
-	RemoveDocumentIDs                []string
-	ClearOrgSubscriptions            bool
-	AddOrgSubscriptionIDs            []string
-	RemoveOrgSubscriptionIDs         []string
-	ClearInvites                     bool
-	AddInviteIDs                     []string
-	RemoveInviteIDs                  []string
-	ClearSubscribers                 bool
-	AddSubscriberIDs                 []string
-	RemoveSubscriberIDs              []string
-	ClearEntities                    bool
-	AddEntityIDs                     []string
-	RemoveEntityIDs                  []string
-	ClearEntityTypes                 bool
-	AddEntityTypeIDs                 []string
-	RemoveEntityTypeIDs              []string
-	ClearContacts                    bool
-	AddContactIDs                    []string
-	RemoveContactIDs                 []string
-	ClearNotes                       bool
-	AddNoteIDs                       []string
-	RemoveNoteIDs                    []string
-	ClearTasks                       bool
-	AddTaskIDs                       []string
-	RemoveTaskIDs                    []string
-	ClearPrograms                    bool
-	AddProgramIDs                    []string
-	RemoveProgramIDs                 []string
-	ClearProcedures                  bool
-	AddProcedureIDs                  []string
-	RemoveProcedureIDs               []string
-	ClearInternalPolicies            bool
-	AddInternalPolicyIDs             []string
-	RemoveInternalPolicyIDs          []string
-	ClearRisks                       bool
-	AddRiskIDs                       []string
-	RemoveRiskIDs                    []string
-	ClearControlObjectives           bool
-	AddControlObjectiveIDs           []string
-	RemoveControlObjectiveIDs        []string
-	ClearNarratives                  bool
-	AddNarrativeIDs                  []string
-	RemoveNarrativeIDs               []string
-	ClearControls                    bool
-	AddControlIDs                    []string
-	RemoveControlIDs                 []string
-	ClearSubcontrols                 bool
-	AddSubcontrolIDs                 []string
-	RemoveSubcontrolIDs              []string
-	ClearControlImplementations      bool
-	AddControlImplementationIDs      []string
-	RemoveControlImplementationIDs   []string
-	ClearEvidence                    bool
-	AddEvidenceIDs                   []string
-	RemoveEvidenceIDs                []string
-	ClearStandards                   bool
-	AddStandardIDs                   []string
-	RemoveStandardIDs                []string
-	ClearActionPlans                 bool
-	AddActionPlanIDs                 []string
-	RemoveActionPlanIDs              []string
-	ClearCustomDomains               bool
-	AddCustomDomainIDs               []string
-	RemoveCustomDomainIDs            []string
+	ClearTags                           bool
+	Tags                                []string
+	AppendTags                          []string
+	Name                                *string
+	DisplayName                         *string
+	ClearDescription                    bool
+	Description                         *string
+	ClearAvatarRemoteURL                bool
+	AvatarRemoteURL                     *string
+	ClearAvatarUpdatedAt                bool
+	AvatarUpdatedAt                     *time.Time
+	ClearControlCreators                bool
+	AddControlCreatorIDs                []string
+	RemoveControlCreatorIDs             []string
+	ClearControlObjectiveCreators       bool
+	AddControlObjectiveCreatorIDs       []string
+	RemoveControlObjectiveCreatorIDs    []string
+	ClearGroupCreators                  bool
+	AddGroupCreatorIDs                  []string
+	RemoveGroupCreatorIDs               []string
+	ClearInternalPolicyCreators         bool
+	AddInternalPolicyCreatorIDs         []string
+	RemoveInternalPolicyCreatorIDs      []string
+	ClearNarrativeCreators              bool
+	AddNarrativeCreatorIDs              []string
+	RemoveNarrativeCreatorIDs           []string
+	ClearProcedureCreators              bool
+	AddProcedureCreatorIDs              []string
+	RemoveProcedureCreatorIDs           []string
+	ClearProgramCreators                bool
+	AddProgramCreatorIDs                []string
+	RemoveProgramCreatorIDs             []string
+	ClearRiskCreators                   bool
+	AddRiskCreatorIDs                   []string
+	RemoveRiskCreatorIDs                []string
+	ClearTemplateCreators               bool
+	AddTemplateCreatorIDs               []string
+	RemoveTemplateCreatorIDs            []string
+	ClearSetting                        bool
+	SettingID                           *string
+	ClearPersonalAccessTokens           bool
+	AddPersonalAccessTokenIDs           []string
+	RemovePersonalAccessTokenIDs        []string
+	ClearAPITokens                      bool
+	AddAPITokenIDs                      []string
+	RemoveAPITokenIDs                   []string
+	ClearFiles                          bool
+	AddFileIDs                          []string
+	RemoveFileIDs                       []string
+	ClearEvents                         bool
+	AddEventIDs                         []string
+	RemoveEventIDs                      []string
+	ClearSecrets                        bool
+	AddSecretIDs                        []string
+	RemoveSecretIDs                     []string
+	ClearAvatarFile                     bool
+	AvatarFileID                        *string
+	ClearGroups                         bool
+	AddGroupIDs                         []string
+	RemoveGroupIDs                      []string
+	ClearTemplates                      bool
+	AddTemplateIDs                      []string
+	RemoveTemplateIDs                   []string
+	ClearIntegrations                   bool
+	AddIntegrationIDs                   []string
+	RemoveIntegrationIDs                []string
+	ClearDocuments                      bool
+	AddDocumentIDs                      []string
+	RemoveDocumentIDs                   []string
+	ClearOrgSubscriptions               bool
+	AddOrgSubscriptionIDs               []string
+	RemoveOrgSubscriptionIDs            []string
+	ClearInvites                        bool
+	AddInviteIDs                        []string
+	RemoveInviteIDs                     []string
+	ClearSubscribers                    bool
+	AddSubscriberIDs                    []string
+	RemoveSubscriberIDs                 []string
+	ClearEntities                       bool
+	AddEntityIDs                        []string
+	RemoveEntityIDs                     []string
+	ClearEntityTypes                    bool
+	AddEntityTypeIDs                    []string
+	RemoveEntityTypeIDs                 []string
+	ClearContacts                       bool
+	AddContactIDs                       []string
+	RemoveContactIDs                    []string
+	ClearNotes                          bool
+	AddNoteIDs                          []string
+	RemoveNoteIDs                       []string
+	ClearTasks                          bool
+	AddTaskIDs                          []string
+	RemoveTaskIDs                       []string
+	ClearPrograms                       bool
+	AddProgramIDs                       []string
+	RemoveProgramIDs                    []string
+	ClearProcedures                     bool
+	AddProcedureIDs                     []string
+	RemoveProcedureIDs                  []string
+	ClearInternalPolicies               bool
+	AddInternalPolicyIDs                []string
+	RemoveInternalPolicyIDs             []string
+	ClearRisks                          bool
+	AddRiskIDs                          []string
+	RemoveRiskIDs                       []string
+	ClearControlObjectives              bool
+	AddControlObjectiveIDs              []string
+	RemoveControlObjectiveIDs           []string
+	ClearNarratives                     bool
+	AddNarrativeIDs                     []string
+	RemoveNarrativeIDs                  []string
+	ClearControls                       bool
+	AddControlIDs                       []string
+	RemoveControlIDs                    []string
+	ClearSubcontrols                    bool
+	AddSubcontrolIDs                    []string
+	RemoveSubcontrolIDs                 []string
+	ClearControlImplementations         bool
+	AddControlImplementationIDs         []string
+	RemoveControlImplementationIDs      []string
+	ClearEvidence                       bool
+	AddEvidenceIDs                      []string
+	RemoveEvidenceIDs                   []string
+	ClearStandards                      bool
+	AddStandardIDs                      []string
+	RemoveStandardIDs                   []string
+	ClearActionPlans                    bool
+	AddActionPlanIDs                    []string
+	RemoveActionPlanIDs                 []string
+	ClearCustomDomains                  bool
+	AddCustomDomainIDs                  []string
+	RemoveCustomDomainIDs               []string
+	ClearJobRunners                     bool
+	AddJobRunnerIDs                     []string
+	RemoveJobRunnerIDs                  []string
+	ClearJobRunnerTokens                bool
+	AddJobRunnerTokenIDs                []string
+	RemoveJobRunnerTokenIDs             []string
+	ClearJobRunnerRegistrationTokens    bool
+	AddJobRunnerRegistrationTokenIDs    []string
+	RemoveJobRunnerRegistrationTokenIDs []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5576,6 +5911,33 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveCustomDomainIDs; len(v) > 0 {
 		m.RemoveCustomDomainIDs(v...)
+	}
+	if i.ClearJobRunners {
+		m.ClearJobRunners()
+	}
+	if v := i.AddJobRunnerIDs; len(v) > 0 {
+		m.AddJobRunnerIDs(v...)
+	}
+	if v := i.RemoveJobRunnerIDs; len(v) > 0 {
+		m.RemoveJobRunnerIDs(v...)
+	}
+	if i.ClearJobRunnerTokens {
+		m.ClearJobRunnerTokens()
+	}
+	if v := i.AddJobRunnerTokenIDs; len(v) > 0 {
+		m.AddJobRunnerTokenIDs(v...)
+	}
+	if v := i.RemoveJobRunnerTokenIDs; len(v) > 0 {
+		m.RemoveJobRunnerTokenIDs(v...)
+	}
+	if i.ClearJobRunnerRegistrationTokens {
+		m.ClearJobRunnerRegistrationTokens()
+	}
+	if v := i.AddJobRunnerRegistrationTokenIDs; len(v) > 0 {
+		m.AddJobRunnerRegistrationTokenIDs(v...)
+	}
+	if v := i.RemoveJobRunnerRegistrationTokenIDs; len(v) > 0 {
+		m.RemoveJobRunnerRegistrationTokenIDs(v...)
 	}
 }
 

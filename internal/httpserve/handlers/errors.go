@@ -69,6 +69,12 @@ var (
 	ErrInvalidRecoveryCode = errors.New("invalid code provided")
 	// ErrUnsupportedEventType is returned when the event type is not supported
 	ErrUnsupportedEventType = errors.New("unsupported event type")
+	// ErrUnableToRegisterJobRunner is returned when the job runner node cannot be registered
+	ErrUnableToRegisterJobRunner = errors.New("could not register your job runner at this time")
+	// ErrJobRunnerRegistrationTokenExpired is returned when a token has expired
+	ErrJobRunnerRegistrationTokenExpired = errors.New("job runner registration token expired")
+	// ErrJobRunnerAlreadyRegistered is returned when we hit the ip address unique constraint
+	ErrJobRunnerAlreadyRegistered = errors.New("this job runner node exists and cannot be registered twice")
 )
 
 var (

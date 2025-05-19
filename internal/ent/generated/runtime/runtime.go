@@ -45,6 +45,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -2161,6 +2165,243 @@ func init() {
 	inviteDescID := inviteMixinFields2[0].Descriptor()
 	// invite.DefaultID holds the default value on creation for the id field.
 	invite.DefaultID = inviteDescID.Default.(func() string)
+	jobrunnerMixin := schema.JobRunner{}.Mixin()
+	jobrunner.Policy = privacy.NewPolicies(schema.JobRunner{})
+	jobrunner.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := jobrunner.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	jobrunnerMixinHooks0 := jobrunnerMixin[0].Hooks()
+	jobrunnerMixinHooks1 := jobrunnerMixin[1].Hooks()
+	jobrunnerMixinHooks2 := jobrunnerMixin[2].Hooks()
+	jobrunnerMixinHooks5 := jobrunnerMixin[5].Hooks()
+	jobrunnerMixinHooks6 := jobrunnerMixin[6].Hooks()
+	jobrunnerHooks := schema.JobRunner{}.Hooks()
+
+	jobrunner.Hooks[1] = jobrunnerMixinHooks0[0]
+
+	jobrunner.Hooks[2] = jobrunnerMixinHooks1[0]
+
+	jobrunner.Hooks[3] = jobrunnerMixinHooks2[0]
+
+	jobrunner.Hooks[4] = jobrunnerMixinHooks5[0]
+
+	jobrunner.Hooks[5] = jobrunnerMixinHooks6[0]
+
+	jobrunner.Hooks[6] = jobrunnerHooks[0]
+
+	jobrunner.Hooks[7] = jobrunnerHooks[1]
+	jobrunnerMixinInters1 := jobrunnerMixin[1].Interceptors()
+	jobrunnerMixinInters5 := jobrunnerMixin[5].Interceptors()
+	jobrunnerInters := schema.JobRunner{}.Interceptors()
+	jobrunner.Interceptors[0] = jobrunnerMixinInters1[0]
+	jobrunner.Interceptors[1] = jobrunnerMixinInters5[0]
+	jobrunner.Interceptors[2] = jobrunnerInters[0]
+	jobrunnerMixinFields0 := jobrunnerMixin[0].Fields()
+	_ = jobrunnerMixinFields0
+	jobrunnerMixinFields2 := jobrunnerMixin[2].Fields()
+	_ = jobrunnerMixinFields2
+	jobrunnerMixinFields3 := jobrunnerMixin[3].Fields()
+	_ = jobrunnerMixinFields3
+	jobrunnerMixinFields6 := jobrunnerMixin[6].Fields()
+	_ = jobrunnerMixinFields6
+	jobrunnerFields := schema.JobRunner{}.Fields()
+	_ = jobrunnerFields
+	// jobrunnerDescCreatedAt is the schema descriptor for created_at field.
+	jobrunnerDescCreatedAt := jobrunnerMixinFields0[0].Descriptor()
+	// jobrunner.DefaultCreatedAt holds the default value on creation for the created_at field.
+	jobrunner.DefaultCreatedAt = jobrunnerDescCreatedAt.Default.(func() time.Time)
+	// jobrunnerDescUpdatedAt is the schema descriptor for updated_at field.
+	jobrunnerDescUpdatedAt := jobrunnerMixinFields0[1].Descriptor()
+	// jobrunner.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	jobrunner.DefaultUpdatedAt = jobrunnerDescUpdatedAt.Default.(func() time.Time)
+	// jobrunner.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	jobrunner.UpdateDefaultUpdatedAt = jobrunnerDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// jobrunnerDescDisplayID is the schema descriptor for display_id field.
+	jobrunnerDescDisplayID := jobrunnerMixinFields2[1].Descriptor()
+	// jobrunner.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	jobrunner.DisplayIDValidator = jobrunnerDescDisplayID.Validators[0].(func(string) error)
+	// jobrunnerDescTags is the schema descriptor for tags field.
+	jobrunnerDescTags := jobrunnerMixinFields3[0].Descriptor()
+	// jobrunner.DefaultTags holds the default value on creation for the tags field.
+	jobrunner.DefaultTags = jobrunnerDescTags.Default.([]string)
+	// jobrunnerDescSystemOwned is the schema descriptor for system_owned field.
+	jobrunnerDescSystemOwned := jobrunnerMixinFields6[0].Descriptor()
+	// jobrunner.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	jobrunner.DefaultSystemOwned = jobrunnerDescSystemOwned.Default.(bool)
+	// jobrunnerDescIPAddress is the schema descriptor for ip_address field.
+	jobrunnerDescIPAddress := jobrunnerFields[2].Descriptor()
+	// jobrunner.IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.
+	jobrunner.IPAddressValidator = jobrunnerDescIPAddress.Validators[0].(func(string) error)
+	// jobrunnerDescID is the schema descriptor for id field.
+	jobrunnerDescID := jobrunnerMixinFields2[0].Descriptor()
+	// jobrunner.DefaultID holds the default value on creation for the id field.
+	jobrunner.DefaultID = jobrunnerDescID.Default.(func() string)
+	jobrunnerhistoryInters := schema.JobRunnerHistory{}.Interceptors()
+	jobrunnerhistory.Interceptors[0] = jobrunnerhistoryInters[0]
+	jobrunnerhistoryFields := schema.JobRunnerHistory{}.Fields()
+	_ = jobrunnerhistoryFields
+	// jobrunnerhistoryDescHistoryTime is the schema descriptor for history_time field.
+	jobrunnerhistoryDescHistoryTime := jobrunnerhistoryFields[0].Descriptor()
+	// jobrunnerhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	jobrunnerhistory.DefaultHistoryTime = jobrunnerhistoryDescHistoryTime.Default.(func() time.Time)
+	// jobrunnerhistoryDescCreatedAt is the schema descriptor for created_at field.
+	jobrunnerhistoryDescCreatedAt := jobrunnerhistoryFields[3].Descriptor()
+	// jobrunnerhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	jobrunnerhistory.DefaultCreatedAt = jobrunnerhistoryDescCreatedAt.Default.(func() time.Time)
+	// jobrunnerhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	jobrunnerhistoryDescUpdatedAt := jobrunnerhistoryFields[4].Descriptor()
+	// jobrunnerhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	jobrunnerhistory.DefaultUpdatedAt = jobrunnerhistoryDescUpdatedAt.Default.(func() time.Time)
+	// jobrunnerhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	jobrunnerhistory.UpdateDefaultUpdatedAt = jobrunnerhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// jobrunnerhistoryDescTags is the schema descriptor for tags field.
+	jobrunnerhistoryDescTags := jobrunnerhistoryFields[11].Descriptor()
+	// jobrunnerhistory.DefaultTags holds the default value on creation for the tags field.
+	jobrunnerhistory.DefaultTags = jobrunnerhistoryDescTags.Default.([]string)
+	// jobrunnerhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	jobrunnerhistoryDescSystemOwned := jobrunnerhistoryFields[13].Descriptor()
+	// jobrunnerhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	jobrunnerhistory.DefaultSystemOwned = jobrunnerhistoryDescSystemOwned.Default.(bool)
+	// jobrunnerhistoryDescID is the schema descriptor for id field.
+	jobrunnerhistoryDescID := jobrunnerhistoryFields[9].Descriptor()
+	// jobrunnerhistory.DefaultID holds the default value on creation for the id field.
+	jobrunnerhistory.DefaultID = jobrunnerhistoryDescID.Default.(func() string)
+	jobrunnerregistrationtokenMixin := schema.JobRunnerRegistrationToken{}.Mixin()
+	jobrunnerregistrationtoken.Policy = privacy.NewPolicies(schema.JobRunnerRegistrationToken{})
+	jobrunnerregistrationtoken.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := jobrunnerregistrationtoken.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	jobrunnerregistrationtokenMixinHooks0 := jobrunnerregistrationtokenMixin[0].Hooks()
+	jobrunnerregistrationtokenMixinHooks1 := jobrunnerregistrationtokenMixin[1].Hooks()
+	jobrunnerregistrationtokenMixinHooks5 := jobrunnerregistrationtokenMixin[5].Hooks()
+	jobrunnerregistrationtokenHooks := schema.JobRunnerRegistrationToken{}.Hooks()
+
+	jobrunnerregistrationtoken.Hooks[1] = jobrunnerregistrationtokenMixinHooks0[0]
+
+	jobrunnerregistrationtoken.Hooks[2] = jobrunnerregistrationtokenMixinHooks1[0]
+
+	jobrunnerregistrationtoken.Hooks[3] = jobrunnerregistrationtokenMixinHooks5[0]
+
+	jobrunnerregistrationtoken.Hooks[4] = jobrunnerregistrationtokenHooks[0]
+	jobrunnerregistrationtokenMixinInters1 := jobrunnerregistrationtokenMixin[1].Interceptors()
+	jobrunnerregistrationtokenMixinInters5 := jobrunnerregistrationtokenMixin[5].Interceptors()
+	jobrunnerregistrationtokenInters := schema.JobRunnerRegistrationToken{}.Interceptors()
+	jobrunnerregistrationtoken.Interceptors[0] = jobrunnerregistrationtokenMixinInters1[0]
+	jobrunnerregistrationtoken.Interceptors[1] = jobrunnerregistrationtokenMixinInters5[0]
+	jobrunnerregistrationtoken.Interceptors[2] = jobrunnerregistrationtokenInters[0]
+	jobrunnerregistrationtokenMixinFields0 := jobrunnerregistrationtokenMixin[0].Fields()
+	_ = jobrunnerregistrationtokenMixinFields0
+	jobrunnerregistrationtokenMixinFields2 := jobrunnerregistrationtokenMixin[2].Fields()
+	_ = jobrunnerregistrationtokenMixinFields2
+	jobrunnerregistrationtokenMixinFields3 := jobrunnerregistrationtokenMixin[3].Fields()
+	_ = jobrunnerregistrationtokenMixinFields3
+	jobrunnerregistrationtokenMixinFields5 := jobrunnerregistrationtokenMixin[5].Fields()
+	_ = jobrunnerregistrationtokenMixinFields5
+	jobrunnerregistrationtokenFields := schema.JobRunnerRegistrationToken{}.Fields()
+	_ = jobrunnerregistrationtokenFields
+	// jobrunnerregistrationtokenDescCreatedAt is the schema descriptor for created_at field.
+	jobrunnerregistrationtokenDescCreatedAt := jobrunnerregistrationtokenMixinFields0[0].Descriptor()
+	// jobrunnerregistrationtoken.DefaultCreatedAt holds the default value on creation for the created_at field.
+	jobrunnerregistrationtoken.DefaultCreatedAt = jobrunnerregistrationtokenDescCreatedAt.Default.(func() time.Time)
+	// jobrunnerregistrationtokenDescUpdatedAt is the schema descriptor for updated_at field.
+	jobrunnerregistrationtokenDescUpdatedAt := jobrunnerregistrationtokenMixinFields0[1].Descriptor()
+	// jobrunnerregistrationtoken.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	jobrunnerregistrationtoken.DefaultUpdatedAt = jobrunnerregistrationtokenDescUpdatedAt.Default.(func() time.Time)
+	// jobrunnerregistrationtoken.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	jobrunnerregistrationtoken.UpdateDefaultUpdatedAt = jobrunnerregistrationtokenDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// jobrunnerregistrationtokenDescTags is the schema descriptor for tags field.
+	jobrunnerregistrationtokenDescTags := jobrunnerregistrationtokenMixinFields3[0].Descriptor()
+	// jobrunnerregistrationtoken.DefaultTags holds the default value on creation for the tags field.
+	jobrunnerregistrationtoken.DefaultTags = jobrunnerregistrationtokenDescTags.Default.([]string)
+	// jobrunnerregistrationtokenDescOwnerID is the schema descriptor for owner_id field.
+	jobrunnerregistrationtokenDescOwnerID := jobrunnerregistrationtokenMixinFields5[0].Descriptor()
+	// jobrunnerregistrationtoken.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	jobrunnerregistrationtoken.OwnerIDValidator = jobrunnerregistrationtokenDescOwnerID.Validators[0].(func(string) error)
+	// jobrunnerregistrationtokenDescToken is the schema descriptor for token field.
+	jobrunnerregistrationtokenDescToken := jobrunnerregistrationtokenFields[0].Descriptor()
+	// jobrunnerregistrationtoken.DefaultToken holds the default value on creation for the token field.
+	jobrunnerregistrationtoken.DefaultToken = jobrunnerregistrationtokenDescToken.Default.(func() string)
+	// jobrunnerregistrationtokenDescExpiresAt is the schema descriptor for expires_at field.
+	jobrunnerregistrationtokenDescExpiresAt := jobrunnerregistrationtokenFields[1].Descriptor()
+	// jobrunnerregistrationtoken.DefaultExpiresAt holds the default value on creation for the expires_at field.
+	jobrunnerregistrationtoken.DefaultExpiresAt = jobrunnerregistrationtokenDescExpiresAt.Default.(time.Time)
+	// jobrunnerregistrationtokenDescID is the schema descriptor for id field.
+	jobrunnerregistrationtokenDescID := jobrunnerregistrationtokenMixinFields2[0].Descriptor()
+	// jobrunnerregistrationtoken.DefaultID holds the default value on creation for the id field.
+	jobrunnerregistrationtoken.DefaultID = jobrunnerregistrationtokenDescID.Default.(func() string)
+	jobrunnertokenMixin := schema.JobRunnerToken{}.Mixin()
+	jobrunnertoken.Policy = privacy.NewPolicies(schema.JobRunnerToken{})
+	jobrunnertoken.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := jobrunnertoken.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	jobrunnertokenMixinHooks0 := jobrunnertokenMixin[0].Hooks()
+	jobrunnertokenMixinHooks1 := jobrunnertokenMixin[1].Hooks()
+	jobrunnertokenMixinHooks5 := jobrunnertokenMixin[5].Hooks()
+
+	jobrunnertoken.Hooks[1] = jobrunnertokenMixinHooks0[0]
+
+	jobrunnertoken.Hooks[2] = jobrunnertokenMixinHooks1[0]
+
+	jobrunnertoken.Hooks[3] = jobrunnertokenMixinHooks5[0]
+	jobrunnertokenMixinInters1 := jobrunnertokenMixin[1].Interceptors()
+	jobrunnertokenMixinInters5 := jobrunnertokenMixin[5].Interceptors()
+	jobrunnertoken.Interceptors[0] = jobrunnertokenMixinInters1[0]
+	jobrunnertoken.Interceptors[1] = jobrunnertokenMixinInters5[0]
+	jobrunnertokenMixinFields0 := jobrunnertokenMixin[0].Fields()
+	_ = jobrunnertokenMixinFields0
+	jobrunnertokenMixinFields2 := jobrunnertokenMixin[2].Fields()
+	_ = jobrunnertokenMixinFields2
+	jobrunnertokenMixinFields3 := jobrunnertokenMixin[3].Fields()
+	_ = jobrunnertokenMixinFields3
+	jobrunnertokenMixinFields5 := jobrunnertokenMixin[5].Fields()
+	_ = jobrunnertokenMixinFields5
+	jobrunnertokenFields := schema.JobRunnerToken{}.Fields()
+	_ = jobrunnertokenFields
+	// jobrunnertokenDescCreatedAt is the schema descriptor for created_at field.
+	jobrunnertokenDescCreatedAt := jobrunnertokenMixinFields0[0].Descriptor()
+	// jobrunnertoken.DefaultCreatedAt holds the default value on creation for the created_at field.
+	jobrunnertoken.DefaultCreatedAt = jobrunnertokenDescCreatedAt.Default.(func() time.Time)
+	// jobrunnertokenDescUpdatedAt is the schema descriptor for updated_at field.
+	jobrunnertokenDescUpdatedAt := jobrunnertokenMixinFields0[1].Descriptor()
+	// jobrunnertoken.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	jobrunnertoken.DefaultUpdatedAt = jobrunnertokenDescUpdatedAt.Default.(func() time.Time)
+	// jobrunnertoken.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	jobrunnertoken.UpdateDefaultUpdatedAt = jobrunnertokenDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// jobrunnertokenDescTags is the schema descriptor for tags field.
+	jobrunnertokenDescTags := jobrunnertokenMixinFields3[0].Descriptor()
+	// jobrunnertoken.DefaultTags holds the default value on creation for the tags field.
+	jobrunnertoken.DefaultTags = jobrunnertokenDescTags.Default.([]string)
+	// jobrunnertokenDescOwnerID is the schema descriptor for owner_id field.
+	jobrunnertokenDescOwnerID := jobrunnertokenMixinFields5[0].Descriptor()
+	// jobrunnertoken.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	jobrunnertoken.OwnerIDValidator = jobrunnertokenDescOwnerID.Validators[0].(func(string) error)
+	// jobrunnertokenDescToken is the schema descriptor for token field.
+	jobrunnertokenDescToken := jobrunnertokenFields[0].Descriptor()
+	// jobrunnertoken.DefaultToken holds the default value on creation for the token field.
+	jobrunnertoken.DefaultToken = jobrunnertokenDescToken.Default.(func() string)
+	// jobrunnertokenDescIsActive is the schema descriptor for is_active field.
+	jobrunnertokenDescIsActive := jobrunnertokenFields[3].Descriptor()
+	// jobrunnertoken.DefaultIsActive holds the default value on creation for the is_active field.
+	jobrunnertoken.DefaultIsActive = jobrunnertokenDescIsActive.Default.(bool)
+	// jobrunnertokenDescID is the schema descriptor for id field.
+	jobrunnertokenDescID := jobrunnertokenMixinFields2[0].Descriptor()
+	// jobrunnertoken.DefaultID holds the default value on creation for the id field.
+	jobrunnertoken.DefaultID = jobrunnertokenDescID.Default.(func() string)
 	mappabledomainMixin := schema.MappableDomain{}.Mixin()
 	mappabledomain.Policy = privacy.NewPolicies(schema.MappableDomain{})
 	mappabledomain.Hooks[0] = func(next ent.Mutator) ent.Mutator {

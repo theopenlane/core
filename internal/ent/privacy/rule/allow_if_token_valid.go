@@ -90,6 +90,8 @@ func SkipTokenInContext(ctx context.Context, skipTypes []token.PrivacyToken) boo
 			return ContextHasPrivacyTokenOfType[*token.OauthTooToken](ctx)
 		case reflect.TypeOf(&token.ResetToken{}):
 			return ContextHasPrivacyTokenOfType[*token.ResetToken](ctx)
+		case reflect.TypeOf(&token.JobRunnerRegistrationToken{}):
+			return ContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](ctx)
 		}
 	}
 

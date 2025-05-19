@@ -90,6 +90,14 @@ type Tx struct {
 	InternalPolicyHistory *InternalPolicyHistoryClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
+	// JobRunner is the client for interacting with the JobRunner builders.
+	JobRunner *JobRunnerClient
+	// JobRunnerHistory is the client for interacting with the JobRunnerHistory builders.
+	JobRunnerHistory *JobRunnerHistoryClient
+	// JobRunnerRegistrationToken is the client for interacting with the JobRunnerRegistrationToken builders.
+	JobRunnerRegistrationToken *JobRunnerRegistrationTokenClient
+	// JobRunnerToken is the client for interacting with the JobRunnerToken builders.
+	JobRunnerToken *JobRunnerTokenClient
 	// MappableDomain is the client for interacting with the MappableDomain builders.
 	MappableDomain *MappableDomainClient
 	// MappableDomainHistory is the client for interacting with the MappableDomainHistory builders.
@@ -344,6 +352,10 @@ func (tx *Tx) init() {
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)
 	tx.InternalPolicyHistory = NewInternalPolicyHistoryClient(tx.config)
 	tx.Invite = NewInviteClient(tx.config)
+	tx.JobRunner = NewJobRunnerClient(tx.config)
+	tx.JobRunnerHistory = NewJobRunnerHistoryClient(tx.config)
+	tx.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(tx.config)
+	tx.JobRunnerToken = NewJobRunnerTokenClient(tx.config)
 	tx.MappableDomain = NewMappableDomainClient(tx.config)
 	tx.MappableDomainHistory = NewMappableDomainHistoryClient(tx.config)
 	tx.MappedControl = NewMappedControlClient(tx.config)

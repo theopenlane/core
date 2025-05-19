@@ -196,6 +196,23 @@ type OpenlaneGraphClient interface {
 	GetAllInvites(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInvites, error)
 	GetInviteByID(ctx context.Context, inviteID string, interceptors ...clientv2.RequestInterceptor) (*GetInviteByID, error)
 	InvitesByOrgID(ctx context.Context, where *InviteWhereInput, interceptors ...clientv2.RequestInterceptor) (*InvitesByOrgID, error)
+	DeleteJobRunner(ctx context.Context, deleteJobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunner, error)
+	GetAllJobRunners(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunners, error)
+	GetJobRunnerByID(ctx context.Context, jobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerByID, error)
+	GetJobRunners(ctx context.Context, first *int64, last *int64, where *JobRunnerWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunners, error)
+	UpdateJobRunner(ctx context.Context, updateJobRunnerID string, input UpdateJobRunnerInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobRunner, error)
+	GetAllJobRunnerHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerHistories, error)
+	GetJobRunnerHistories(ctx context.Context, first *int64, last *int64, where *JobRunnerHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerHistories, error)
+	CreateJobRunnerRegistrationToken(ctx context.Context, input CreateJobRunnerRegistrationTokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobRunnerRegistrationToken, error)
+	DeleteJobRunnerRegistrationToken(ctx context.Context, deleteJobRunnerRegistrationTokenID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunnerRegistrationToken, error)
+	GetAllJobRunnerRegistrationTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerRegistrationTokens, error)
+	GetJobRunnerRegistrationTokenByID(ctx context.Context, jobRunnerRegistrationTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerRegistrationTokenByID, error)
+	GetJobRunnerRegistrationTokens(ctx context.Context, first *int64, last *int64, where *JobRunnerRegistrationTokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerRegistrationTokens, error)
+	CreateJobRunnerToken(ctx context.Context, input CreateJobRunnerTokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobRunnerToken, error)
+	DeleteJobRunnerToken(ctx context.Context, deleteJobRunnerTokenID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunnerToken, error)
+	GetAllJobRunnerTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerTokens, error)
+	GetJobRunnerTokenByID(ctx context.Context, jobRunnerTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerTokenByID, error)
+	GetJobRunnerTokens(ctx context.Context, first *int64, last *int64, where *JobRunnerTokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerTokens, error)
 	CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVMappableDomain, error)
 	CreateBulkMappableDomain(ctx context.Context, input []*CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkMappableDomain, error)
 	CreateMappableDomain(ctx context.Context, input CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateMappableDomain, error)
@@ -3977,6 +3994,348 @@ func (t *AdminSearch_AdminSearch_Invites) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_JobRunners_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunners_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_JobRunners_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_JobRunners_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_JobRunners_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_JobRunners_Edges_Node struct {
+	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	IPAddress string   "json:\"ipAddress\" graphql:\"ipAddress\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunners_Edges_Node) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_Edges_Node{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_JobRunners_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *AdminSearch_AdminSearch_JobRunners_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_JobRunners_Edges_Node) GetIPAddress() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_Edges_Node{}
+	}
+	return t.IPAddress
+}
+func (t *AdminSearch_AdminSearch_JobRunners_Edges_Node) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_JobRunners_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_JobRunners_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_JobRunners_Edges struct {
+	Node *AdminSearch_AdminSearch_JobRunners_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunners_Edges) GetNode() *AdminSearch_AdminSearch_JobRunners_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_JobRunners struct {
+	Edges      []*AdminSearch_AdminSearch_JobRunners_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_JobRunners_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunners) GetEdges() []*AdminSearch_AdminSearch_JobRunners_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_JobRunners) GetPageInfo() *AdminSearch_AdminSearch_JobRunners_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_JobRunners) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunners{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node struct {
+	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	JobRunnerID *string  "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node) GetJobRunnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.JobRunnerID
+}
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges struct {
+	Node *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges) GetNode() *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_JobRunnerRegistrationTokens struct {
+	Edges      []*AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens) GetEdges() []*AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens) GetPageInfo() *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_JobRunnerTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node struct {
+	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetRevokedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
+	}
+	return t.RevokedBy
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetRevokedReason() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
+	}
+	return t.RevokedReason
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_JobRunnerTokens_Edges struct {
+	Node *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges) GetNode() *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_JobRunnerTokens struct {
+	Edges      []*AdminSearch_AdminSearch_JobRunnerTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_JobRunnerTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_JobRunnerTokens) GetEdges() []*AdminSearch_AdminSearch_JobRunnerTokens_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens) GetPageInfo() *AdminSearch_AdminSearch_JobRunnerTokens_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_JobRunnerTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_JobRunnerTokens{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch_MappableDomains_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -6450,42 +6809,45 @@ func (t *AdminSearch_AdminSearch_Webauthns) GetTotalCount() int64 {
 }
 
 type AdminSearch_AdminSearch struct {
-	ActionPlans            *AdminSearch_AdminSearch_ActionPlans            "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
-	APITokens              *AdminSearch_AdminSearch_APITokens              "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
-	Contacts               *AdminSearch_AdminSearch_Contacts               "json:\"contacts,omitempty\" graphql:\"contacts\""
-	ControlImplementations *AdminSearch_AdminSearch_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
-	ControlObjectives      *AdminSearch_AdminSearch_ControlObjectives      "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
-	Controls               *AdminSearch_AdminSearch_Controls               "json:\"controls,omitempty\" graphql:\"controls\""
-	CustomDomains          *AdminSearch_AdminSearch_CustomDomains          "json:\"customDomains,omitempty\" graphql:\"customDomains\""
-	DocumentData           *AdminSearch_AdminSearch_DocumentData           "json:\"documentData,omitempty\" graphql:\"documentData\""
-	Entities               *AdminSearch_AdminSearch_Entities               "json:\"entities,omitempty\" graphql:\"entities\""
-	EntityTypes            *AdminSearch_AdminSearch_EntityTypes            "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
-	Events                 *AdminSearch_AdminSearch_Events                 "json:\"events,omitempty\" graphql:\"events\""
-	Evidences              *AdminSearch_AdminSearch_Evidences              "json:\"evidences,omitempty\" graphql:\"evidences\""
-	Files                  *AdminSearch_AdminSearch_Files                  "json:\"files,omitempty\" graphql:\"files\""
-	Groups                 *AdminSearch_AdminSearch_Groups                 "json:\"groups,omitempty\" graphql:\"groups\""
-	Integrations           *AdminSearch_AdminSearch_Integrations           "json:\"integrations,omitempty\" graphql:\"integrations\""
-	InternalPolicies       *AdminSearch_AdminSearch_InternalPolicies       "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
-	Invites                *AdminSearch_AdminSearch_Invites                "json:\"invites,omitempty\" graphql:\"invites\""
-	MappableDomains        *AdminSearch_AdminSearch_MappableDomains        "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
-	MappedControls         *AdminSearch_AdminSearch_MappedControls         "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
-	Narratives             *AdminSearch_AdminSearch_Narratives             "json:\"narratives,omitempty\" graphql:\"narratives\""
-	OrgSubscriptions       *AdminSearch_AdminSearch_OrgSubscriptions       "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
-	OrganizationSettings   *AdminSearch_AdminSearch_OrganizationSettings   "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
-	Organizations          *AdminSearch_AdminSearch_Organizations          "json:\"organizations,omitempty\" graphql:\"organizations\""
-	PersonalAccessTokens   *AdminSearch_AdminSearch_PersonalAccessTokens   "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
-	Procedures             *AdminSearch_AdminSearch_Procedures             "json:\"procedures,omitempty\" graphql:\"procedures\""
-	Programs               *AdminSearch_AdminSearch_Programs               "json:\"programs,omitempty\" graphql:\"programs\""
-	Risks                  *AdminSearch_AdminSearch_Risks                  "json:\"risks,omitempty\" graphql:\"risks\""
-	Standards              *AdminSearch_AdminSearch_Standards              "json:\"standards,omitempty\" graphql:\"standards\""
-	Subcontrols            *AdminSearch_AdminSearch_Subcontrols            "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
-	Subscribers            *AdminSearch_AdminSearch_Subscribers            "json:\"subscribers,omitempty\" graphql:\"subscribers\""
-	Tasks                  *AdminSearch_AdminSearch_Tasks                  "json:\"tasks,omitempty\" graphql:\"tasks\""
-	Templates              *AdminSearch_AdminSearch_Templates              "json:\"templates,omitempty\" graphql:\"templates\""
-	TotalCount             int64                                           "json:\"totalCount\" graphql:\"totalCount\""
-	UserSettings           *AdminSearch_AdminSearch_UserSettings           "json:\"userSettings,omitempty\" graphql:\"userSettings\""
-	Users                  *AdminSearch_AdminSearch_Users                  "json:\"users,omitempty\" graphql:\"users\""
-	Webauthns              *AdminSearch_AdminSearch_Webauthns              "json:\"webauthns,omitempty\" graphql:\"webauthns\""
+	ActionPlans                 *AdminSearch_AdminSearch_ActionPlans                 "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
+	APITokens                   *AdminSearch_AdminSearch_APITokens                   "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+	Contacts                    *AdminSearch_AdminSearch_Contacts                    "json:\"contacts,omitempty\" graphql:\"contacts\""
+	ControlImplementations      *AdminSearch_AdminSearch_ControlImplementations      "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
+	ControlObjectives           *AdminSearch_AdminSearch_ControlObjectives           "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+	Controls                    *AdminSearch_AdminSearch_Controls                    "json:\"controls,omitempty\" graphql:\"controls\""
+	CustomDomains               *AdminSearch_AdminSearch_CustomDomains               "json:\"customDomains,omitempty\" graphql:\"customDomains\""
+	DocumentData                *AdminSearch_AdminSearch_DocumentData                "json:\"documentData,omitempty\" graphql:\"documentData\""
+	Entities                    *AdminSearch_AdminSearch_Entities                    "json:\"entities,omitempty\" graphql:\"entities\""
+	EntityTypes                 *AdminSearch_AdminSearch_EntityTypes                 "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
+	Events                      *AdminSearch_AdminSearch_Events                      "json:\"events,omitempty\" graphql:\"events\""
+	Evidences                   *AdminSearch_AdminSearch_Evidences                   "json:\"evidences,omitempty\" graphql:\"evidences\""
+	Files                       *AdminSearch_AdminSearch_Files                       "json:\"files,omitempty\" graphql:\"files\""
+	Groups                      *AdminSearch_AdminSearch_Groups                      "json:\"groups,omitempty\" graphql:\"groups\""
+	Integrations                *AdminSearch_AdminSearch_Integrations                "json:\"integrations,omitempty\" graphql:\"integrations\""
+	InternalPolicies            *AdminSearch_AdminSearch_InternalPolicies            "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	Invites                     *AdminSearch_AdminSearch_Invites                     "json:\"invites,omitempty\" graphql:\"invites\""
+	JobRunnerRegistrationTokens *AdminSearch_AdminSearch_JobRunnerRegistrationTokens "json:\"jobRunnerRegistrationTokens,omitempty\" graphql:\"jobRunnerRegistrationTokens\""
+	JobRunnerTokens             *AdminSearch_AdminSearch_JobRunnerTokens             "json:\"jobRunnerTokens,omitempty\" graphql:\"jobRunnerTokens\""
+	JobRunners                  *AdminSearch_AdminSearch_JobRunners                  "json:\"jobRunners,omitempty\" graphql:\"jobRunners\""
+	MappableDomains             *AdminSearch_AdminSearch_MappableDomains             "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
+	MappedControls              *AdminSearch_AdminSearch_MappedControls              "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
+	Narratives                  *AdminSearch_AdminSearch_Narratives                  "json:\"narratives,omitempty\" graphql:\"narratives\""
+	OrgSubscriptions            *AdminSearch_AdminSearch_OrgSubscriptions            "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
+	OrganizationSettings        *AdminSearch_AdminSearch_OrganizationSettings        "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
+	Organizations               *AdminSearch_AdminSearch_Organizations               "json:\"organizations,omitempty\" graphql:\"organizations\""
+	PersonalAccessTokens        *AdminSearch_AdminSearch_PersonalAccessTokens        "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
+	Procedures                  *AdminSearch_AdminSearch_Procedures                  "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Programs                    *AdminSearch_AdminSearch_Programs                    "json:\"programs,omitempty\" graphql:\"programs\""
+	Risks                       *AdminSearch_AdminSearch_Risks                       "json:\"risks,omitempty\" graphql:\"risks\""
+	Standards                   *AdminSearch_AdminSearch_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
+	Subcontrols                 *AdminSearch_AdminSearch_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Subscribers                 *AdminSearch_AdminSearch_Subscribers                 "json:\"subscribers,omitempty\" graphql:\"subscribers\""
+	Tasks                       *AdminSearch_AdminSearch_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
+	Templates                   *AdminSearch_AdminSearch_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
+	TotalCount                  int64                                                "json:\"totalCount\" graphql:\"totalCount\""
+	UserSettings                *AdminSearch_AdminSearch_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
+	Users                       *AdminSearch_AdminSearch_Users                       "json:\"users,omitempty\" graphql:\"users\""
+	Webauthns                   *AdminSearch_AdminSearch_Webauthns                   "json:\"webauthns,omitempty\" graphql:\"webauthns\""
 }
 
 func (t *AdminSearch_AdminSearch) GetActionPlans() *AdminSearch_AdminSearch_ActionPlans {
@@ -6589,6 +6951,24 @@ func (t *AdminSearch_AdminSearch) GetInvites() *AdminSearch_AdminSearch_Invites 
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.Invites
+}
+func (t *AdminSearch_AdminSearch) GetJobRunnerRegistrationTokens() *AdminSearch_AdminSearch_JobRunnerRegistrationTokens {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.JobRunnerRegistrationTokens
+}
+func (t *AdminSearch_AdminSearch) GetJobRunnerTokens() *AdminSearch_AdminSearch_JobRunnerTokens {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.JobRunnerTokens
+}
+func (t *AdminSearch_AdminSearch) GetJobRunners() *AdminSearch_AdminSearch_JobRunners {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.JobRunners
 }
 func (t *AdminSearch_AdminSearch) GetMappableDomains() *AdminSearch_AdminSearch_MappableDomains {
 	if t == nil {
@@ -34035,6 +34415,1876 @@ func (t *InvitesByOrgID_Invites) GetEdges() []*InvitesByOrgID_Invites_Edges {
 	return t.Edges
 }
 
+type DeleteJobRunner_DeleteJobRunner struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteJobRunner_DeleteJobRunner) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteJobRunner_DeleteJobRunner{}
+	}
+	return t.DeletedID
+}
+
+type GetAllJobRunners_JobRunners_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllJobRunners_JobRunners_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllJobRunners_JobRunners_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllJobRunners_JobRunners_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllJobRunners_JobRunners_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllJobRunners_JobRunners_Edges_Node struct {
+	CreatedAt *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                "json:\"displayID\" graphql:\"displayID\""
+	ID        string                "json:\"id\" graphql:\"id\""
+	IPAddress string                "json:\"ipAddress\" graphql:\"ipAddress\""
+	Name      string                "json:\"name\" graphql:\"name\""
+	OwnerID   *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status    enums.JobRunnerStatus "json:\"status\" graphql:\"status\""
+	Tags      []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetIPAddress() string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.IPAddress
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetStatus() *enums.JobRunnerStatus {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllJobRunners_JobRunners_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllJobRunners_JobRunners_Edges struct {
+	Node *GetAllJobRunners_JobRunners_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllJobRunners_JobRunners_Edges) GetNode() *GetAllJobRunners_JobRunners_Edges_Node {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllJobRunners_JobRunners struct {
+	Edges      []*GetAllJobRunners_JobRunners_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllJobRunners_JobRunners_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllJobRunners_JobRunners) GetEdges() []*GetAllJobRunners_JobRunners_Edges {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners{}
+	}
+	return t.Edges
+}
+func (t *GetAllJobRunners_JobRunners) GetPageInfo() *GetAllJobRunners_JobRunners_PageInfo {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllJobRunners_JobRunners) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllJobRunners_JobRunners{}
+	}
+	return t.TotalCount
+}
+
+type GetJobRunnerByID_JobRunner struct {
+	CreatedAt *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                "json:\"displayID\" graphql:\"displayID\""
+	ID        string                "json:\"id\" graphql:\"id\""
+	IPAddress string                "json:\"ipAddress\" graphql:\"ipAddress\""
+	Name      string                "json:\"name\" graphql:\"name\""
+	OwnerID   *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status    enums.JobRunnerStatus "json:\"status\" graphql:\"status\""
+	Tags      []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobRunnerByID_JobRunner) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobRunnerByID_JobRunner) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobRunnerByID_JobRunner) GetDisplayID() string {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.DisplayID
+}
+func (t *GetJobRunnerByID_JobRunner) GetID() string {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.ID
+}
+func (t *GetJobRunnerByID_JobRunner) GetIPAddress() string {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.IPAddress
+}
+func (t *GetJobRunnerByID_JobRunner) GetName() string {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.Name
+}
+func (t *GetJobRunnerByID_JobRunner) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobRunnerByID_JobRunner) GetStatus() *enums.JobRunnerStatus {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return &t.Status
+}
+func (t *GetJobRunnerByID_JobRunner) GetTags() []string {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.Tags
+}
+func (t *GetJobRunnerByID_JobRunner) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobRunnerByID_JobRunner) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerByID_JobRunner{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobRunners_JobRunners_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetJobRunners_JobRunners_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetJobRunners_JobRunners_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetJobRunners_JobRunners_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetJobRunners_JobRunners_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetJobRunners_JobRunners_Edges_Node struct {
+	CreatedAt *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                "json:\"displayID\" graphql:\"displayID\""
+	ID        string                "json:\"id\" graphql:\"id\""
+	IPAddress string                "json:\"ipAddress\" graphql:\"ipAddress\""
+	Name      string                "json:\"name\" graphql:\"name\""
+	OwnerID   *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status    enums.JobRunnerStatus "json:\"status\" graphql:\"status\""
+	Tags      []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobRunners_JobRunners_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetIPAddress() string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.IPAddress
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetStatus() *enums.JobRunnerStatus {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobRunners_JobRunners_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobRunners_JobRunners_Edges struct {
+	Node *GetJobRunners_JobRunners_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetJobRunners_JobRunners_Edges) GetNode() *GetJobRunners_JobRunners_Edges_Node {
+	if t == nil {
+		t = &GetJobRunners_JobRunners_Edges{}
+	}
+	return t.Node
+}
+
+type GetJobRunners_JobRunners struct {
+	Edges      []*GetJobRunners_JobRunners_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetJobRunners_JobRunners_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetJobRunners_JobRunners) GetEdges() []*GetJobRunners_JobRunners_Edges {
+	if t == nil {
+		t = &GetJobRunners_JobRunners{}
+	}
+	return t.Edges
+}
+func (t *GetJobRunners_JobRunners) GetPageInfo() *GetJobRunners_JobRunners_PageInfo {
+	if t == nil {
+		t = &GetJobRunners_JobRunners{}
+	}
+	return &t.PageInfo
+}
+func (t *GetJobRunners_JobRunners) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetJobRunners_JobRunners{}
+	}
+	return t.TotalCount
+}
+
+type UpdateJobRunner_UpdateJobRunner_JobRunner struct {
+	CreatedAt *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string                "json:\"displayID\" graphql:\"displayID\""
+	ID        string                "json:\"id\" graphql:\"id\""
+	IPAddress string                "json:\"ipAddress\" graphql:\"ipAddress\""
+	Name      string                "json:\"name\" graphql:\"name\""
+	OwnerID   *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Status    enums.JobRunnerStatus "json:\"status\" graphql:\"status\""
+	Tags      []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetID() string {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.ID
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetIPAddress() string {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.IPAddress
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetName() string {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.Name
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetStatus() *enums.JobRunnerStatus {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return &t.Status
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetTags() []string {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.Tags
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateJobRunner_UpdateJobRunner_JobRunner) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner_JobRunner{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateJobRunner_UpdateJobRunner struct {
+	JobRunner UpdateJobRunner_UpdateJobRunner_JobRunner "json:\"jobRunner\" graphql:\"jobRunner\""
+}
+
+func (t *UpdateJobRunner_UpdateJobRunner) GetJobRunner() *UpdateJobRunner_UpdateJobRunner_JobRunner {
+	if t == nil {
+		t = &UpdateJobRunner_UpdateJobRunner{}
+	}
+	return &t.JobRunner
+}
+
+type GetAllJobRunnerHistories_JobRunnerHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node struct {
+	CreatedAt   *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID   string                "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string                "json:\"id\" graphql:\"id\""
+	IPAddress   string                "json:\"ipAddress\" graphql:\"ipAddress\""
+	Name        string                "json:\"name\" graphql:\"name\""
+	Operation   history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	Status      enums.JobRunnerStatus "json:\"status\" graphql:\"status\""
+	Tags        []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetIPAddress() string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.IPAddress
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetStatus() *enums.JobRunnerStatus {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllJobRunnerHistories_JobRunnerHistories_Edges struct {
+	Node *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges) GetNode() *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllJobRunnerHistories_JobRunnerHistories struct {
+	Edges      []*GetAllJobRunnerHistories_JobRunnerHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllJobRunnerHistories_JobRunnerHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllJobRunnerHistories_JobRunnerHistories) GetEdges() []*GetAllJobRunnerHistories_JobRunnerHistories_Edges {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories) GetPageInfo() *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllJobRunnerHistories_JobRunnerHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllJobRunnerHistories_JobRunnerHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetJobRunnerHistories_JobRunnerHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetJobRunnerHistories_JobRunnerHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetJobRunnerHistories_JobRunnerHistories_Edges_Node struct {
+	CreatedAt   *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID   string                "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string                "json:\"id\" graphql:\"id\""
+	IPAddress   string                "json:\"ipAddress\" graphql:\"ipAddress\""
+	Name        string                "json:\"name\" graphql:\"name\""
+	Operation   history.OpType        "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	Status      enums.JobRunnerStatus "json:\"status\" graphql:\"status\""
+	Tags        []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetIPAddress() string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.IPAddress
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetStatus() *enums.JobRunnerStatus {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobRunnerHistories_JobRunnerHistories_Edges struct {
+	Node *GetJobRunnerHistories_JobRunnerHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetJobRunnerHistories_JobRunnerHistories_Edges) GetNode() *GetJobRunnerHistories_JobRunnerHistories_Edges_Node {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetJobRunnerHistories_JobRunnerHistories struct {
+	Edges      []*GetJobRunnerHistories_JobRunnerHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetJobRunnerHistories_JobRunnerHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetJobRunnerHistories_JobRunnerHistories) GetEdges() []*GetJobRunnerHistories_JobRunnerHistories_Edges {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories{}
+	}
+	return t.Edges
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories) GetPageInfo() *GetJobRunnerHistories_JobRunnerHistories_PageInfo {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetJobRunnerHistories_JobRunnerHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetJobRunnerHistories_JobRunnerHistories{}
+	}
+	return t.TotalCount
+}
+
+type CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt   time.Time  "json:\"expiresAt\" graphql:\"expiresAt\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	JobRunnerID *string    "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	LastUsedAt  *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token       string     "json:\"token\" graphql:\"token\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return &t.ExpiresAt
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetID() string {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.ID
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetJobRunnerID() *string {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.JobRunnerID
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.LastUsedAt
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.OwnerID
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetTags() []string {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.Tags
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetToken() string {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.Token
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken struct {
+	JobRunnerRegistrationToken CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken "json:\"jobRunnerRegistrationToken\" graphql:\"jobRunnerRegistrationToken\""
+}
+
+func (t *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken) GetJobRunnerRegistrationToken() *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken{}
+	}
+	return &t.JobRunnerRegistrationToken
+}
+
+type DeleteJobRunnerRegistrationToken_DeleteJobRunnerRegistrationToken struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteJobRunnerRegistrationToken_DeleteJobRunnerRegistrationToken) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteJobRunnerRegistrationToken_DeleteJobRunnerRegistrationToken{}
+	}
+	return t.DeletedID
+}
+
+type GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt   time.Time  "json:\"expiresAt\" graphql:\"expiresAt\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	JobRunnerID *string    "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	LastUsedAt  *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token       string     "json:\"token\" graphql:\"token\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return &t.ExpiresAt
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetToken() string {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.Token
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges struct {
+	Node *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges) GetNode() *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens struct {
+	Edges      []*GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens) GetEdges() []*GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens{}
+	}
+	return t.Edges
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens) GetPageInfo() *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens{}
+	}
+	return t.TotalCount
+}
+
+type GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt   time.Time  "json:\"expiresAt\" graphql:\"expiresAt\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	JobRunnerID *string    "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	LastUsedAt  *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token       string     "json:\"token\" graphql:\"token\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return &t.ExpiresAt
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetID() string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.ID
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetTags() []string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.Tags
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetToken() string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.Token
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt   time.Time  "json:\"expiresAt\" graphql:\"expiresAt\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	JobRunnerID *string    "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	LastUsedAt  *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token       string     "json:\"token\" graphql:\"token\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return &t.ExpiresAt
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetToken() string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.Token
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges struct {
+	Node *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges) GetNode() *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges_Node {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges{}
+	}
+	return t.Node
+}
+
+type GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens struct {
+	Edges      []*GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens) GetEdges() []*GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_Edges {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens{}
+	}
+	return t.Edges
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens) GetPageInfo() *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens_PageInfo {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens{}
+	}
+	return t.TotalCount
+}
+
+type CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken struct {
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string    "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string    "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string     "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.ExpiresAt
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetID() string {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.ID
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetIsActive() *bool {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.IsActive
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.LastUsedAt
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.OwnerID
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.RevokedAt
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetRevokedBy() *string {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.RevokedBy
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetRevokedReason() *string {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.RevokedReason
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetTags() []string {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.Tags
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetToken() string {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.Token
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateJobRunnerToken_CreateJobRunnerToken struct {
+	JobRunnerToken CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken "json:\"jobRunnerToken\" graphql:\"jobRunnerToken\""
+}
+
+func (t *CreateJobRunnerToken_CreateJobRunnerToken) GetJobRunnerToken() *CreateJobRunnerToken_CreateJobRunnerToken_JobRunnerToken {
+	if t == nil {
+		t = &CreateJobRunnerToken_CreateJobRunnerToken{}
+	}
+	return &t.JobRunnerToken
+}
+
+type DeleteJobRunnerToken_DeleteJobRunnerToken struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteJobRunnerToken_DeleteJobRunnerToken) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteJobRunnerToken_DeleteJobRunnerToken{}
+	}
+	return t.DeletedID
+}
+
+type GetAllJobRunnerTokens_JobRunnerTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node struct {
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string    "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string    "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string     "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.ExpiresAt
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetIsActive() *bool {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.IsActive
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.RevokedBy
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.RevokedReason
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetToken() string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.Token
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllJobRunnerTokens_JobRunnerTokens_Edges struct {
+	Node *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllJobRunnerTokens_JobRunnerTokens_Edges) GetNode() *GetAllJobRunnerTokens_JobRunnerTokens_Edges_Node {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllJobRunnerTokens_JobRunnerTokens struct {
+	Edges      []*GetAllJobRunnerTokens_JobRunnerTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllJobRunnerTokens_JobRunnerTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllJobRunnerTokens_JobRunnerTokens) GetEdges() []*GetAllJobRunnerTokens_JobRunnerTokens_Edges {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens{}
+	}
+	return t.Edges
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens) GetPageInfo() *GetAllJobRunnerTokens_JobRunnerTokens_PageInfo {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllJobRunnerTokens_JobRunnerTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllJobRunnerTokens_JobRunnerTokens{}
+	}
+	return t.TotalCount
+}
+
+type GetJobRunnerTokenByID_JobRunnerToken struct {
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string    "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string    "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string     "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.ExpiresAt
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetID() string {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.ID
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetIsActive() *bool {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.IsActive
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.RevokedAt
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.RevokedBy
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.RevokedReason
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetTags() []string {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.Tags
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetToken() string {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.Token
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobRunnerTokenByID_JobRunnerToken) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerTokenByID_JobRunnerToken{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobRunnerTokens_JobRunnerTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetJobRunnerTokens_JobRunnerTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetJobRunnerTokens_JobRunnerTokens_Edges_Node struct {
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExpiresAt     *time.Time "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	IsActive      *bool      "json:\"isActive,omitempty\" graphql:\"isActive\""
+	LastUsedAt    *time.Time "json:\"lastUsedAt,omitempty\" graphql:\"lastUsedAt\""
+	OwnerID       *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedAt     *time.Time "json:\"revokedAt,omitempty\" graphql:\"revokedAt\""
+	RevokedBy     *string    "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason *string    "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Tags          []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	Token         string     "json:\"token\" graphql:\"token\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.ExpiresAt
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetIsActive() *bool {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.IsActive
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetLastUsedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.LastUsedAt
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetRevokedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.RevokedAt
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetRevokedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.RevokedBy
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetRevokedReason() *string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.RevokedReason
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetToken() string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.Token
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobRunnerTokens_JobRunnerTokens_Edges struct {
+	Node *GetJobRunnerTokens_JobRunnerTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetJobRunnerTokens_JobRunnerTokens_Edges) GetNode() *GetJobRunnerTokens_JobRunnerTokens_Edges_Node {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens_Edges{}
+	}
+	return t.Node
+}
+
+type GetJobRunnerTokens_JobRunnerTokens struct {
+	Edges      []*GetJobRunnerTokens_JobRunnerTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetJobRunnerTokens_JobRunnerTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetJobRunnerTokens_JobRunnerTokens) GetEdges() []*GetJobRunnerTokens_JobRunnerTokens_Edges {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens{}
+	}
+	return t.Edges
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens) GetPageInfo() *GetJobRunnerTokens_JobRunnerTokens_PageInfo {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *GetJobRunnerTokens_JobRunnerTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetJobRunnerTokens_JobRunnerTokens{}
+	}
+	return t.TotalCount
+}
+
 type CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains struct {
 	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -55745,6 +57995,278 @@ func (t *GlobalSearch_Search_Invites) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_JobRunners_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_JobRunners_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_JobRunners_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_JobRunners_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_JobRunners_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_JobRunners_Edges_Node struct {
+	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_JobRunners_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GlobalSearch_Search_JobRunners_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_JobRunners_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GlobalSearch_Search_JobRunners_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_JobRunners_Edges struct {
+	Node *GlobalSearch_Search_JobRunners_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_JobRunners_Edges) GetNode() *GlobalSearch_Search_JobRunners_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_JobRunners struct {
+	Edges      []*GlobalSearch_Search_JobRunners_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_JobRunners_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_JobRunners) GetEdges() []*GlobalSearch_Search_JobRunners_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_JobRunners) GetPageInfo() *GlobalSearch_Search_JobRunners_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_JobRunners) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunners{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_JobRunnerRegistrationTokens_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_JobRunnerRegistrationTokens_Edges struct {
+	Node *GlobalSearch_Search_JobRunnerRegistrationTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens_Edges) GetNode() *GlobalSearch_Search_JobRunnerRegistrationTokens_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_JobRunnerRegistrationTokens struct {
+	Edges      []*GlobalSearch_Search_JobRunnerRegistrationTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens) GetEdges() []*GlobalSearch_Search_JobRunnerRegistrationTokens_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens) GetPageInfo() *GlobalSearch_Search_JobRunnerRegistrationTokens_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_JobRunnerRegistrationTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerRegistrationTokens{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_JobRunnerTokens_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_JobRunnerTokens_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_JobRunnerTokens_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_JobRunnerTokens_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_JobRunnerTokens_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_JobRunnerTokens_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_JobRunnerTokens_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_JobRunnerTokens_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_JobRunnerTokens_Edges struct {
+	Node *GlobalSearch_Search_JobRunnerTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_JobRunnerTokens_Edges) GetNode() *GlobalSearch_Search_JobRunnerTokens_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_JobRunnerTokens struct {
+	Edges      []*GlobalSearch_Search_JobRunnerTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_JobRunnerTokens_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_JobRunnerTokens) GetEdges() []*GlobalSearch_Search_JobRunnerTokens_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_JobRunnerTokens) GetPageInfo() *GlobalSearch_Search_JobRunnerTokens_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_JobRunnerTokens) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_JobRunnerTokens{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_MappableDomains_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -57504,42 +60026,45 @@ func (t *GlobalSearch_Search_Webauthns) GetTotalCount() int64 {
 }
 
 type GlobalSearch_Search struct {
-	ActionPlans            *GlobalSearch_Search_ActionPlans            "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
-	APITokens              *GlobalSearch_Search_APITokens              "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
-	Contacts               *GlobalSearch_Search_Contacts               "json:\"contacts,omitempty\" graphql:\"contacts\""
-	ControlImplementations *GlobalSearch_Search_ControlImplementations "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
-	ControlObjectives      *GlobalSearch_Search_ControlObjectives      "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
-	Controls               *GlobalSearch_Search_Controls               "json:\"controls,omitempty\" graphql:\"controls\""
-	CustomDomains          *GlobalSearch_Search_CustomDomains          "json:\"customDomains,omitempty\" graphql:\"customDomains\""
-	DocumentData           *GlobalSearch_Search_DocumentData           "json:\"documentData,omitempty\" graphql:\"documentData\""
-	Entities               *GlobalSearch_Search_Entities               "json:\"entities,omitempty\" graphql:\"entities\""
-	EntityTypes            *GlobalSearch_Search_EntityTypes            "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
-	Events                 *GlobalSearch_Search_Events                 "json:\"events,omitempty\" graphql:\"events\""
-	Evidences              *GlobalSearch_Search_Evidences              "json:\"evidences,omitempty\" graphql:\"evidences\""
-	Files                  *GlobalSearch_Search_Files                  "json:\"files,omitempty\" graphql:\"files\""
-	Groups                 *GlobalSearch_Search_Groups                 "json:\"groups,omitempty\" graphql:\"groups\""
-	Integrations           *GlobalSearch_Search_Integrations           "json:\"integrations,omitempty\" graphql:\"integrations\""
-	InternalPolicies       *GlobalSearch_Search_InternalPolicies       "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
-	Invites                *GlobalSearch_Search_Invites                "json:\"invites,omitempty\" graphql:\"invites\""
-	MappableDomains        *GlobalSearch_Search_MappableDomains        "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
-	MappedControls         *GlobalSearch_Search_MappedControls         "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
-	Narratives             *GlobalSearch_Search_Narratives             "json:\"narratives,omitempty\" graphql:\"narratives\""
-	OrgSubscriptions       *GlobalSearch_Search_OrgSubscriptions       "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
-	OrganizationSettings   *GlobalSearch_Search_OrganizationSettings   "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
-	Organizations          *GlobalSearch_Search_Organizations          "json:\"organizations,omitempty\" graphql:\"organizations\""
-	PersonalAccessTokens   *GlobalSearch_Search_PersonalAccessTokens   "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
-	Procedures             *GlobalSearch_Search_Procedures             "json:\"procedures,omitempty\" graphql:\"procedures\""
-	Programs               *GlobalSearch_Search_Programs               "json:\"programs,omitempty\" graphql:\"programs\""
-	Risks                  *GlobalSearch_Search_Risks                  "json:\"risks,omitempty\" graphql:\"risks\""
-	Standards              *GlobalSearch_Search_Standards              "json:\"standards,omitempty\" graphql:\"standards\""
-	Subcontrols            *GlobalSearch_Search_Subcontrols            "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
-	Subscribers            *GlobalSearch_Search_Subscribers            "json:\"subscribers,omitempty\" graphql:\"subscribers\""
-	Tasks                  *GlobalSearch_Search_Tasks                  "json:\"tasks,omitempty\" graphql:\"tasks\""
-	Templates              *GlobalSearch_Search_Templates              "json:\"templates,omitempty\" graphql:\"templates\""
-	TotalCount             int64                                       "json:\"totalCount\" graphql:\"totalCount\""
-	UserSettings           *GlobalSearch_Search_UserSettings           "json:\"userSettings,omitempty\" graphql:\"userSettings\""
-	Users                  *GlobalSearch_Search_Users                  "json:\"users,omitempty\" graphql:\"users\""
-	Webauthns              *GlobalSearch_Search_Webauthns              "json:\"webauthns,omitempty\" graphql:\"webauthns\""
+	ActionPlans                 *GlobalSearch_Search_ActionPlans                 "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
+	APITokens                   *GlobalSearch_Search_APITokens                   "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+	Contacts                    *GlobalSearch_Search_Contacts                    "json:\"contacts,omitempty\" graphql:\"contacts\""
+	ControlImplementations      *GlobalSearch_Search_ControlImplementations      "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
+	ControlObjectives           *GlobalSearch_Search_ControlObjectives           "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
+	Controls                    *GlobalSearch_Search_Controls                    "json:\"controls,omitempty\" graphql:\"controls\""
+	CustomDomains               *GlobalSearch_Search_CustomDomains               "json:\"customDomains,omitempty\" graphql:\"customDomains\""
+	DocumentData                *GlobalSearch_Search_DocumentData                "json:\"documentData,omitempty\" graphql:\"documentData\""
+	Entities                    *GlobalSearch_Search_Entities                    "json:\"entities,omitempty\" graphql:\"entities\""
+	EntityTypes                 *GlobalSearch_Search_EntityTypes                 "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
+	Events                      *GlobalSearch_Search_Events                      "json:\"events,omitempty\" graphql:\"events\""
+	Evidences                   *GlobalSearch_Search_Evidences                   "json:\"evidences,omitempty\" graphql:\"evidences\""
+	Files                       *GlobalSearch_Search_Files                       "json:\"files,omitempty\" graphql:\"files\""
+	Groups                      *GlobalSearch_Search_Groups                      "json:\"groups,omitempty\" graphql:\"groups\""
+	Integrations                *GlobalSearch_Search_Integrations                "json:\"integrations,omitempty\" graphql:\"integrations\""
+	InternalPolicies            *GlobalSearch_Search_InternalPolicies            "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	Invites                     *GlobalSearch_Search_Invites                     "json:\"invites,omitempty\" graphql:\"invites\""
+	JobRunnerRegistrationTokens *GlobalSearch_Search_JobRunnerRegistrationTokens "json:\"jobRunnerRegistrationTokens,omitempty\" graphql:\"jobRunnerRegistrationTokens\""
+	JobRunnerTokens             *GlobalSearch_Search_JobRunnerTokens             "json:\"jobRunnerTokens,omitempty\" graphql:\"jobRunnerTokens\""
+	JobRunners                  *GlobalSearch_Search_JobRunners                  "json:\"jobRunners,omitempty\" graphql:\"jobRunners\""
+	MappableDomains             *GlobalSearch_Search_MappableDomains             "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
+	MappedControls              *GlobalSearch_Search_MappedControls              "json:\"mappedControls,omitempty\" graphql:\"mappedControls\""
+	Narratives                  *GlobalSearch_Search_Narratives                  "json:\"narratives,omitempty\" graphql:\"narratives\""
+	OrgSubscriptions            *GlobalSearch_Search_OrgSubscriptions            "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
+	OrganizationSettings        *GlobalSearch_Search_OrganizationSettings        "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
+	Organizations               *GlobalSearch_Search_Organizations               "json:\"organizations,omitempty\" graphql:\"organizations\""
+	PersonalAccessTokens        *GlobalSearch_Search_PersonalAccessTokens        "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
+	Procedures                  *GlobalSearch_Search_Procedures                  "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Programs                    *GlobalSearch_Search_Programs                    "json:\"programs,omitempty\" graphql:\"programs\""
+	Risks                       *GlobalSearch_Search_Risks                       "json:\"risks,omitempty\" graphql:\"risks\""
+	Standards                   *GlobalSearch_Search_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
+	Subcontrols                 *GlobalSearch_Search_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Subscribers                 *GlobalSearch_Search_Subscribers                 "json:\"subscribers,omitempty\" graphql:\"subscribers\""
+	Tasks                       *GlobalSearch_Search_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
+	Templates                   *GlobalSearch_Search_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
+	TotalCount                  int64                                            "json:\"totalCount\" graphql:\"totalCount\""
+	UserSettings                *GlobalSearch_Search_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
+	Users                       *GlobalSearch_Search_Users                       "json:\"users,omitempty\" graphql:\"users\""
+	Webauthns                   *GlobalSearch_Search_Webauthns                   "json:\"webauthns,omitempty\" graphql:\"webauthns\""
 }
 
 func (t *GlobalSearch_Search) GetActionPlans() *GlobalSearch_Search_ActionPlans {
@@ -57643,6 +60168,24 @@ func (t *GlobalSearch_Search) GetInvites() *GlobalSearch_Search_Invites {
 		t = &GlobalSearch_Search{}
 	}
 	return t.Invites
+}
+func (t *GlobalSearch_Search) GetJobRunnerRegistrationTokens() *GlobalSearch_Search_JobRunnerRegistrationTokens {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.JobRunnerRegistrationTokens
+}
+func (t *GlobalSearch_Search) GetJobRunnerTokens() *GlobalSearch_Search_JobRunnerTokens {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.JobRunnerTokens
+}
+func (t *GlobalSearch_Search) GetJobRunners() *GlobalSearch_Search_JobRunners {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.JobRunners
 }
 func (t *GlobalSearch_Search) GetMappableDomains() *GlobalSearch_Search_MappableDomains {
 	if t == nil {
@@ -71062,6 +73605,193 @@ func (t *InvitesByOrgID) GetInvites() *InvitesByOrgID_Invites {
 	return &t.Invites
 }
 
+type DeleteJobRunner struct {
+	DeleteJobRunner DeleteJobRunner_DeleteJobRunner "json:\"deleteJobRunner\" graphql:\"deleteJobRunner\""
+}
+
+func (t *DeleteJobRunner) GetDeleteJobRunner() *DeleteJobRunner_DeleteJobRunner {
+	if t == nil {
+		t = &DeleteJobRunner{}
+	}
+	return &t.DeleteJobRunner
+}
+
+type GetAllJobRunners struct {
+	JobRunners GetAllJobRunners_JobRunners "json:\"jobRunners\" graphql:\"jobRunners\""
+}
+
+func (t *GetAllJobRunners) GetJobRunners() *GetAllJobRunners_JobRunners {
+	if t == nil {
+		t = &GetAllJobRunners{}
+	}
+	return &t.JobRunners
+}
+
+type GetJobRunnerByID struct {
+	JobRunner GetJobRunnerByID_JobRunner "json:\"jobRunner\" graphql:\"jobRunner\""
+}
+
+func (t *GetJobRunnerByID) GetJobRunner() *GetJobRunnerByID_JobRunner {
+	if t == nil {
+		t = &GetJobRunnerByID{}
+	}
+	return &t.JobRunner
+}
+
+type GetJobRunners struct {
+	JobRunners GetJobRunners_JobRunners "json:\"jobRunners\" graphql:\"jobRunners\""
+}
+
+func (t *GetJobRunners) GetJobRunners() *GetJobRunners_JobRunners {
+	if t == nil {
+		t = &GetJobRunners{}
+	}
+	return &t.JobRunners
+}
+
+type UpdateJobRunner struct {
+	UpdateJobRunner UpdateJobRunner_UpdateJobRunner "json:\"updateJobRunner\" graphql:\"updateJobRunner\""
+}
+
+func (t *UpdateJobRunner) GetUpdateJobRunner() *UpdateJobRunner_UpdateJobRunner {
+	if t == nil {
+		t = &UpdateJobRunner{}
+	}
+	return &t.UpdateJobRunner
+}
+
+type GetAllJobRunnerHistories struct {
+	JobRunnerHistories GetAllJobRunnerHistories_JobRunnerHistories "json:\"jobRunnerHistories\" graphql:\"jobRunnerHistories\""
+}
+
+func (t *GetAllJobRunnerHistories) GetJobRunnerHistories() *GetAllJobRunnerHistories_JobRunnerHistories {
+	if t == nil {
+		t = &GetAllJobRunnerHistories{}
+	}
+	return &t.JobRunnerHistories
+}
+
+type GetJobRunnerHistories struct {
+	JobRunnerHistories GetJobRunnerHistories_JobRunnerHistories "json:\"jobRunnerHistories\" graphql:\"jobRunnerHistories\""
+}
+
+func (t *GetJobRunnerHistories) GetJobRunnerHistories() *GetJobRunnerHistories_JobRunnerHistories {
+	if t == nil {
+		t = &GetJobRunnerHistories{}
+	}
+	return &t.JobRunnerHistories
+}
+
+type CreateJobRunnerRegistrationToken struct {
+	CreateJobRunnerRegistrationToken CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken "json:\"createJobRunnerRegistrationToken\" graphql:\"createJobRunnerRegistrationToken\""
+}
+
+func (t *CreateJobRunnerRegistrationToken) GetCreateJobRunnerRegistrationToken() *CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken {
+	if t == nil {
+		t = &CreateJobRunnerRegistrationToken{}
+	}
+	return &t.CreateJobRunnerRegistrationToken
+}
+
+type DeleteJobRunnerRegistrationToken struct {
+	DeleteJobRunnerRegistrationToken DeleteJobRunnerRegistrationToken_DeleteJobRunnerRegistrationToken "json:\"deleteJobRunnerRegistrationToken\" graphql:\"deleteJobRunnerRegistrationToken\""
+}
+
+func (t *DeleteJobRunnerRegistrationToken) GetDeleteJobRunnerRegistrationToken() *DeleteJobRunnerRegistrationToken_DeleteJobRunnerRegistrationToken {
+	if t == nil {
+		t = &DeleteJobRunnerRegistrationToken{}
+	}
+	return &t.DeleteJobRunnerRegistrationToken
+}
+
+type GetAllJobRunnerRegistrationTokens struct {
+	JobRunnerRegistrationTokens GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens "json:\"jobRunnerRegistrationTokens\" graphql:\"jobRunnerRegistrationTokens\""
+}
+
+func (t *GetAllJobRunnerRegistrationTokens) GetJobRunnerRegistrationTokens() *GetAllJobRunnerRegistrationTokens_JobRunnerRegistrationTokens {
+	if t == nil {
+		t = &GetAllJobRunnerRegistrationTokens{}
+	}
+	return &t.JobRunnerRegistrationTokens
+}
+
+type GetJobRunnerRegistrationTokenByID struct {
+	JobRunnerRegistrationToken GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken "json:\"jobRunnerRegistrationToken\" graphql:\"jobRunnerRegistrationToken\""
+}
+
+func (t *GetJobRunnerRegistrationTokenByID) GetJobRunnerRegistrationToken() *GetJobRunnerRegistrationTokenByID_JobRunnerRegistrationToken {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokenByID{}
+	}
+	return &t.JobRunnerRegistrationToken
+}
+
+type GetJobRunnerRegistrationTokens struct {
+	JobRunnerRegistrationTokens GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens "json:\"jobRunnerRegistrationTokens\" graphql:\"jobRunnerRegistrationTokens\""
+}
+
+func (t *GetJobRunnerRegistrationTokens) GetJobRunnerRegistrationTokens() *GetJobRunnerRegistrationTokens_JobRunnerRegistrationTokens {
+	if t == nil {
+		t = &GetJobRunnerRegistrationTokens{}
+	}
+	return &t.JobRunnerRegistrationTokens
+}
+
+type CreateJobRunnerToken struct {
+	CreateJobRunnerToken CreateJobRunnerToken_CreateJobRunnerToken "json:\"createJobRunnerToken\" graphql:\"createJobRunnerToken\""
+}
+
+func (t *CreateJobRunnerToken) GetCreateJobRunnerToken() *CreateJobRunnerToken_CreateJobRunnerToken {
+	if t == nil {
+		t = &CreateJobRunnerToken{}
+	}
+	return &t.CreateJobRunnerToken
+}
+
+type DeleteJobRunnerToken struct {
+	DeleteJobRunnerToken DeleteJobRunnerToken_DeleteJobRunnerToken "json:\"deleteJobRunnerToken\" graphql:\"deleteJobRunnerToken\""
+}
+
+func (t *DeleteJobRunnerToken) GetDeleteJobRunnerToken() *DeleteJobRunnerToken_DeleteJobRunnerToken {
+	if t == nil {
+		t = &DeleteJobRunnerToken{}
+	}
+	return &t.DeleteJobRunnerToken
+}
+
+type GetAllJobRunnerTokens struct {
+	JobRunnerTokens GetAllJobRunnerTokens_JobRunnerTokens "json:\"jobRunnerTokens\" graphql:\"jobRunnerTokens\""
+}
+
+func (t *GetAllJobRunnerTokens) GetJobRunnerTokens() *GetAllJobRunnerTokens_JobRunnerTokens {
+	if t == nil {
+		t = &GetAllJobRunnerTokens{}
+	}
+	return &t.JobRunnerTokens
+}
+
+type GetJobRunnerTokenByID struct {
+	JobRunnerToken GetJobRunnerTokenByID_JobRunnerToken "json:\"jobRunnerToken\" graphql:\"jobRunnerToken\""
+}
+
+func (t *GetJobRunnerTokenByID) GetJobRunnerToken() *GetJobRunnerTokenByID_JobRunnerToken {
+	if t == nil {
+		t = &GetJobRunnerTokenByID{}
+	}
+	return &t.JobRunnerToken
+}
+
+type GetJobRunnerTokens struct {
+	JobRunnerTokens GetJobRunnerTokens_JobRunnerTokens "json:\"jobRunnerTokens\" graphql:\"jobRunnerTokens\""
+}
+
+func (t *GetJobRunnerTokens) GetJobRunnerTokens() *GetJobRunnerTokens_JobRunnerTokens {
+	if t == nil {
+		t = &GetJobRunnerTokens{}
+	}
+	return &t.JobRunnerTokens
+}
+
 type CreateBulkCSVMappableDomain struct {
 	CreateBulkCSVMappableDomain CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain "json:\"createBulkCSVMappableDomain\" graphql:\"createBulkCSVMappableDomain\""
 }
@@ -73871,6 +76601,63 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					recipient
 					requestorID
+				}
+			}
+		}
+		jobRunners {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					deletedBy
+					id
+					displayID
+					tags
+					ownerID
+					name
+					ipAddress
+				}
+			}
+		}
+		jobRunnerRegistrationTokens {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					deletedBy
+					id
+					tags
+					ownerID
+					jobRunnerID
+				}
+			}
+		}
+		jobRunnerTokens {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					deletedBy
+					id
+					tags
+					ownerID
+					revokedReason
+					revokedBy
 				}
 			}
 		}
@@ -82325,6 +85112,667 @@ func (c *Client) InvitesByOrgID(ctx context.Context, where *InviteWhereInput, in
 	return &res, nil
 }
 
+const DeleteJobRunnerDocument = `mutation DeleteJobRunner ($deleteJobRunnerId: ID!) {
+	deleteJobRunner(id: $deleteJobRunnerId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteJobRunner(ctx context.Context, deleteJobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunner, error) {
+	vars := map[string]any{
+		"deleteJobRunnerId": deleteJobRunnerID,
+	}
+
+	var res DeleteJobRunner
+	if err := c.Client.Post(ctx, "DeleteJobRunner", DeleteJobRunnerDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllJobRunnersDocument = `query GetAllJobRunners {
+	jobRunners {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				ipAddress
+				name
+				ownerID
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllJobRunners(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunners, error) {
+	vars := map[string]any{}
+
+	var res GetAllJobRunners
+	if err := c.Client.Post(ctx, "GetAllJobRunners", GetAllJobRunnersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobRunnerByIDDocument = `query GetJobRunnerByID ($jobRunnerId: ID!) {
+	jobRunner(id: $jobRunnerId) {
+		createdAt
+		createdBy
+		displayID
+		id
+		ipAddress
+		name
+		ownerID
+		status
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetJobRunnerByID(ctx context.Context, jobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerByID, error) {
+	vars := map[string]any{
+		"jobRunnerId": jobRunnerID,
+	}
+
+	var res GetJobRunnerByID
+	if err := c.Client.Post(ctx, "GetJobRunnerByID", GetJobRunnerByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobRunnersDocument = `query GetJobRunners ($first: Int, $last: Int, $where: JobRunnerWhereInput) {
+	jobRunners(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				ipAddress
+				name
+				ownerID
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetJobRunners(ctx context.Context, first *int64, last *int64, where *JobRunnerWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunners, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetJobRunners
+	if err := c.Client.Post(ctx, "GetJobRunners", GetJobRunnersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateJobRunnerDocument = `mutation UpdateJobRunner ($updateJobRunnerId: ID!, $input: UpdateJobRunnerInput!) {
+	updateJobRunner(id: $updateJobRunnerId, input: $input) {
+		jobRunner {
+			createdAt
+			createdBy
+			displayID
+			id
+			ipAddress
+			name
+			ownerID
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateJobRunner(ctx context.Context, updateJobRunnerID string, input UpdateJobRunnerInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobRunner, error) {
+	vars := map[string]any{
+		"updateJobRunnerId": updateJobRunnerID,
+		"input":             input,
+	}
+
+	var res UpdateJobRunner
+	if err := c.Client.Post(ctx, "UpdateJobRunner", UpdateJobRunnerDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllJobRunnerHistoriesDocument = `query GetAllJobRunnerHistories {
+	jobRunnerHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				historyTime
+				id
+				ipAddress
+				name
+				operation
+				ownerID
+				ref
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllJobRunnerHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllJobRunnerHistories
+	if err := c.Client.Post(ctx, "GetAllJobRunnerHistories", GetAllJobRunnerHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobRunnerHistoriesDocument = `query GetJobRunnerHistories ($first: Int, $last: Int, $where: JobRunnerHistoryWhereInput) {
+	jobRunnerHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				historyTime
+				id
+				ipAddress
+				name
+				operation
+				ownerID
+				ref
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetJobRunnerHistories(ctx context.Context, first *int64, last *int64, where *JobRunnerHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetJobRunnerHistories
+	if err := c.Client.Post(ctx, "GetJobRunnerHistories", GetJobRunnerHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateJobRunnerRegistrationTokenDocument = `mutation CreateJobRunnerRegistrationToken ($input: CreateJobRunnerRegistrationTokenInput!) {
+	createJobRunnerRegistrationToken(input: $input) {
+		jobRunnerRegistrationToken {
+			createdAt
+			createdBy
+			expiresAt
+			id
+			jobRunnerID
+			lastUsedAt
+			ownerID
+			tags
+			token
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateJobRunnerRegistrationToken(ctx context.Context, input CreateJobRunnerRegistrationTokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobRunnerRegistrationToken, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateJobRunnerRegistrationToken
+	if err := c.Client.Post(ctx, "CreateJobRunnerRegistrationToken", CreateJobRunnerRegistrationTokenDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteJobRunnerRegistrationTokenDocument = `mutation DeleteJobRunnerRegistrationToken ($deleteJobRunnerRegistrationTokenId: ID!) {
+	deleteJobRunnerRegistrationToken(id: $deleteJobRunnerRegistrationTokenId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteJobRunnerRegistrationToken(ctx context.Context, deleteJobRunnerRegistrationTokenID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunnerRegistrationToken, error) {
+	vars := map[string]any{
+		"deleteJobRunnerRegistrationTokenId": deleteJobRunnerRegistrationTokenID,
+	}
+
+	var res DeleteJobRunnerRegistrationToken
+	if err := c.Client.Post(ctx, "DeleteJobRunnerRegistrationToken", DeleteJobRunnerRegistrationTokenDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllJobRunnerRegistrationTokensDocument = `query GetAllJobRunnerRegistrationTokens {
+	jobRunnerRegistrationTokens {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				expiresAt
+				id
+				jobRunnerID
+				lastUsedAt
+				ownerID
+				tags
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllJobRunnerRegistrationTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerRegistrationTokens, error) {
+	vars := map[string]any{}
+
+	var res GetAllJobRunnerRegistrationTokens
+	if err := c.Client.Post(ctx, "GetAllJobRunnerRegistrationTokens", GetAllJobRunnerRegistrationTokensDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobRunnerRegistrationTokenByIDDocument = `query GetJobRunnerRegistrationTokenByID ($jobRunnerRegistrationTokenId: ID!) {
+	jobRunnerRegistrationToken(id: $jobRunnerRegistrationTokenId) {
+		createdAt
+		createdBy
+		expiresAt
+		id
+		jobRunnerID
+		lastUsedAt
+		ownerID
+		tags
+		token
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetJobRunnerRegistrationTokenByID(ctx context.Context, jobRunnerRegistrationTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerRegistrationTokenByID, error) {
+	vars := map[string]any{
+		"jobRunnerRegistrationTokenId": jobRunnerRegistrationTokenID,
+	}
+
+	var res GetJobRunnerRegistrationTokenByID
+	if err := c.Client.Post(ctx, "GetJobRunnerRegistrationTokenByID", GetJobRunnerRegistrationTokenByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobRunnerRegistrationTokensDocument = `query GetJobRunnerRegistrationTokens ($first: Int, $last: Int, $where: JobRunnerRegistrationTokenWhereInput) {
+	jobRunnerRegistrationTokens(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				expiresAt
+				id
+				jobRunnerID
+				lastUsedAt
+				ownerID
+				tags
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetJobRunnerRegistrationTokens(ctx context.Context, first *int64, last *int64, where *JobRunnerRegistrationTokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerRegistrationTokens, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetJobRunnerRegistrationTokens
+	if err := c.Client.Post(ctx, "GetJobRunnerRegistrationTokens", GetJobRunnerRegistrationTokensDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateJobRunnerTokenDocument = `mutation CreateJobRunnerToken ($input: CreateJobRunnerTokenInput!) {
+	createJobRunnerToken(input: $input) {
+		jobRunnerToken {
+			createdAt
+			createdBy
+			expiresAt
+			id
+			isActive
+			lastUsedAt
+			ownerID
+			revokedAt
+			revokedBy
+			revokedReason
+			tags
+			token
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateJobRunnerToken(ctx context.Context, input CreateJobRunnerTokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobRunnerToken, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateJobRunnerToken
+	if err := c.Client.Post(ctx, "CreateJobRunnerToken", CreateJobRunnerTokenDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteJobRunnerTokenDocument = `mutation DeleteJobRunnerToken ($deleteJobRunnerTokenId: ID!) {
+	deleteJobRunnerToken(id: $deleteJobRunnerTokenId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteJobRunnerToken(ctx context.Context, deleteJobRunnerTokenID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunnerToken, error) {
+	vars := map[string]any{
+		"deleteJobRunnerTokenId": deleteJobRunnerTokenID,
+	}
+
+	var res DeleteJobRunnerToken
+	if err := c.Client.Post(ctx, "DeleteJobRunnerToken", DeleteJobRunnerTokenDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllJobRunnerTokensDocument = `query GetAllJobRunnerTokens {
+	jobRunnerTokens {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				expiresAt
+				id
+				isActive
+				lastUsedAt
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				tags
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllJobRunnerTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerTokens, error) {
+	vars := map[string]any{}
+
+	var res GetAllJobRunnerTokens
+	if err := c.Client.Post(ctx, "GetAllJobRunnerTokens", GetAllJobRunnerTokensDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobRunnerTokenByIDDocument = `query GetJobRunnerTokenByID ($jobRunnerTokenId: ID!) {
+	jobRunnerToken(id: $jobRunnerTokenId) {
+		createdAt
+		createdBy
+		expiresAt
+		id
+		isActive
+		lastUsedAt
+		ownerID
+		revokedAt
+		revokedBy
+		revokedReason
+		tags
+		token
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetJobRunnerTokenByID(ctx context.Context, jobRunnerTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerTokenByID, error) {
+	vars := map[string]any{
+		"jobRunnerTokenId": jobRunnerTokenID,
+	}
+
+	var res GetJobRunnerTokenByID
+	if err := c.Client.Post(ctx, "GetJobRunnerTokenByID", GetJobRunnerTokenByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobRunnerTokensDocument = `query GetJobRunnerTokens ($first: Int, $last: Int, $where: JobRunnerTokenWhereInput) {
+	jobRunnerTokens(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				expiresAt
+				id
+				isActive
+				lastUsedAt
+				ownerID
+				revokedAt
+				revokedBy
+				revokedReason
+				tags
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetJobRunnerTokens(ctx context.Context, first *int64, last *int64, where *JobRunnerTokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerTokens, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetJobRunnerTokens
+	if err := c.Client.Post(ctx, "GetJobRunnerTokens", GetJobRunnerTokensDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVMappableDomainDocument = `mutation CreateBulkCSVMappableDomain ($input: Upload!) {
 	createBulkCSVMappableDomain(input: $input) {
 		mappableDomains {
@@ -88285,6 +91733,53 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		jobRunners {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					displayID
+					id
+					name
+					tags
+				}
+			}
+		}
+		jobRunnerRegistrationTokens {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
+		jobRunnerTokens {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
 		mappableDomains {
 			totalCount
 			pageInfo {
@@ -91963,6 +95458,23 @@ var DocumentOperationNames = map[string]string{
 	GetAllInvitesDocument:                        "GetAllInvites",
 	GetInviteByIDDocument:                        "GetInviteByID",
 	InvitesByOrgIDDocument:                       "InvitesByOrgID",
+	DeleteJobRunnerDocument:                      "DeleteJobRunner",
+	GetAllJobRunnersDocument:                     "GetAllJobRunners",
+	GetJobRunnerByIDDocument:                     "GetJobRunnerByID",
+	GetJobRunnersDocument:                        "GetJobRunners",
+	UpdateJobRunnerDocument:                      "UpdateJobRunner",
+	GetAllJobRunnerHistoriesDocument:             "GetAllJobRunnerHistories",
+	GetJobRunnerHistoriesDocument:                "GetJobRunnerHistories",
+	CreateJobRunnerRegistrationTokenDocument:     "CreateJobRunnerRegistrationToken",
+	DeleteJobRunnerRegistrationTokenDocument:     "DeleteJobRunnerRegistrationToken",
+	GetAllJobRunnerRegistrationTokensDocument:    "GetAllJobRunnerRegistrationTokens",
+	GetJobRunnerRegistrationTokenByIDDocument:    "GetJobRunnerRegistrationTokenByID",
+	GetJobRunnerRegistrationTokensDocument:       "GetJobRunnerRegistrationTokens",
+	CreateJobRunnerTokenDocument:                 "CreateJobRunnerToken",
+	DeleteJobRunnerTokenDocument:                 "DeleteJobRunnerToken",
+	GetAllJobRunnerTokensDocument:                "GetAllJobRunnerTokens",
+	GetJobRunnerTokenByIDDocument:                "GetJobRunnerTokenByID",
+	GetJobRunnerTokensDocument:                   "GetJobRunnerTokens",
 	CreateBulkCSVMappableDomainDocument:          "CreateBulkCSVMappableDomain",
 	CreateBulkMappableDomainDocument:             "CreateBulkMappableDomain",
 	CreateMappableDomainDocument:                 "CreateMappableDomain",

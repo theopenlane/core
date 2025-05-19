@@ -1721,6 +1721,160 @@ type ComplexityRoot struct {
 		Invite func(childComplexity int) int
 	}
 
+	JobRunner struct {
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		DeletedAt       func(childComplexity int) int
+		DeletedBy       func(childComplexity int) int
+		DisplayID       func(childComplexity int) int
+		ID              func(childComplexity int) int
+		IPAddress       func(childComplexity int) int
+		JobRunnerTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		Name            func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Status          func(childComplexity int) int
+		SystemOwned     func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+	}
+
+	JobRunnerConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	JobRunnerDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	JobRunnerEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	JobRunnerHistory struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		DeletedAt   func(childComplexity int) int
+		DeletedBy   func(childComplexity int) int
+		DisplayID   func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		ID          func(childComplexity int) int
+		IPAddress   func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		Ref         func(childComplexity int) int
+		Status      func(childComplexity int) int
+		SystemOwned func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	JobRunnerHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	JobRunnerHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	JobRunnerRegistrationToken struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		DeletedAt   func(childComplexity int) int
+		DeletedBy   func(childComplexity int) int
+		ExpiresAt   func(childComplexity int) int
+		ID          func(childComplexity int) int
+		JobRunner   func(childComplexity int) int
+		JobRunnerID func(childComplexity int) int
+		LastUsedAt  func(childComplexity int) int
+		Owner       func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		Token       func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	JobRunnerRegistrationTokenBulkCreatePayload struct {
+		JobRunnerRegistrationTokens func(childComplexity int) int
+	}
+
+	JobRunnerRegistrationTokenConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	JobRunnerRegistrationTokenCreatePayload struct {
+		JobRunnerRegistrationToken func(childComplexity int) int
+	}
+
+	JobRunnerRegistrationTokenDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	JobRunnerRegistrationTokenEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	JobRunnerToken struct {
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DeletedAt     func(childComplexity int) int
+		DeletedBy     func(childComplexity int) int
+		ExpiresAt     func(childComplexity int) int
+		ID            func(childComplexity int) int
+		IsActive      func(childComplexity int) int
+		JobRunners    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
+		LastUsedAt    func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		RevokedAt     func(childComplexity int) int
+		RevokedBy     func(childComplexity int) int
+		RevokedReason func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Token         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+	}
+
+	JobRunnerTokenConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	JobRunnerTokenCreatePayload struct {
+		JobRunnerToken func(childComplexity int) int
+	}
+
+	JobRunnerTokenDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	JobRunnerTokenEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	JobRunnerTokenUpdatePayload struct {
+		JobRunnerToken func(childComplexity int) int
+	}
+
+	JobRunnerUpdatePayload struct {
+		JobRunner func(childComplexity int) int
+	}
+
 	MappableDomain struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
@@ -1945,6 +2099,8 @@ type ComplexityRoot struct {
 		CreateIntegration                  func(childComplexity int, input generated.CreateIntegrationInput) int
 		CreateInternalPolicy               func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                       func(childComplexity int, input generated.CreateInviteInput) int
+		CreateJobRunnerRegistrationToken   func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
+		CreateJobRunnerToken               func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
 		CreateMappableDomain               func(childComplexity int, input generated.CreateMappableDomainInput) int
 		CreateMappedControl                func(childComplexity int, input generated.CreateMappedControlInput) int
 		CreateNarrative                    func(childComplexity int, input generated.CreateNarrativeInput) int
@@ -1987,6 +2143,9 @@ type ComplexityRoot struct {
 		DeleteIntegration                  func(childComplexity int, id string) int
 		DeleteInternalPolicy               func(childComplexity int, id string) int
 		DeleteInvite                       func(childComplexity int, id string) int
+		DeleteJobRunner                    func(childComplexity int, id string) int
+		DeleteJobRunnerRegistrationToken   func(childComplexity int, id string) int
+		DeleteJobRunnerToken               func(childComplexity int, id string) int
 		DeleteMappableDomain               func(childComplexity int, id string) int
 		DeleteMappedControl                func(childComplexity int, id string) int
 		DeleteNarrative                    func(childComplexity int, id string) int
@@ -2024,6 +2183,7 @@ type ComplexityRoot struct {
 		UpdateIntegration                  func(childComplexity int, id string, input generated.UpdateIntegrationInput) int
 		UpdateInternalPolicy               func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
 		UpdateInvite                       func(childComplexity int, id string, input generated.UpdateInviteInput) int
+		UpdateJobRunner                    func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
 		UpdateMappableDomain               func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
 		UpdateMappedControl                func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
 		UpdateNarrative                    func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
@@ -2349,67 +2509,70 @@ type ComplexityRoot struct {
 	}
 
 	Organization struct {
-		APITokens                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
-		ActionPlans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		AvatarFile               func(childComplexity int) int
-		AvatarLocalFileID        func(childComplexity int) int
-		AvatarRemoteURL          func(childComplexity int) int
-		AvatarUpdatedAt          func(childComplexity int) int
-		Children                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		Contacts                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		ControlCreators          func(childComplexity int) int
-		ControlImplementations   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjectiveCreators func(childComplexity int) int
-		ControlObjectives        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		Controls                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt                func(childComplexity int) int
-		CreatedBy                func(childComplexity int) int
-		CustomDomains            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
-		DedicatedDb              func(childComplexity int) int
-		DeletedAt                func(childComplexity int) int
-		DeletedBy                func(childComplexity int) int
-		Description              func(childComplexity int) int
-		DisplayName              func(childComplexity int) int
-		Documents                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Entities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		EntityTypes              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
-		Events                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Evidence                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
-		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		GroupCreators            func(childComplexity int) int
-		Groups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID                       func(childComplexity int) int
-		Integrations             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalPolicies         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		InternalPolicyCreators   func(childComplexity int) int
-		Invites                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
-		Members                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
-		Name                     func(childComplexity int) int
-		NarrativeCreators        func(childComplexity int) int
-		Narratives               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Notes                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		OrgSubscriptions         func(childComplexity int) int
-		Parent                   func(childComplexity int) int
-		PersonalAccessTokens     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
-		PersonalOrg              func(childComplexity int) int
-		ProcedureCreators        func(childComplexity int) int
-		Procedures               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		ProgramCreators          func(childComplexity int) int
-		Programs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RiskCreators             func(childComplexity int) int
-		Risks                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Secrets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		Setting                  func(childComplexity int) int
-		Standards                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
-		Subcontrols              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Subscribers              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
-		Tags                     func(childComplexity int) int
-		Tasks                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		TemplateCreators         func(childComplexity int) int
-		Templates                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
-		UpdatedAt                func(childComplexity int) int
-		UpdatedBy                func(childComplexity int) int
-		Users                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		APITokens                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
+		ActionPlans                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AvatarFile                  func(childComplexity int) int
+		AvatarLocalFileID           func(childComplexity int) int
+		AvatarRemoteURL             func(childComplexity int) int
+		AvatarUpdatedAt             func(childComplexity int) int
+		Children                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		Contacts                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		ControlCreators             func(childComplexity int) int
+		ControlImplementations      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjectiveCreators    func(childComplexity int) int
+		ControlObjectives           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		Controls                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                   func(childComplexity int) int
+		CreatedBy                   func(childComplexity int) int
+		CustomDomains               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		DedicatedDb                 func(childComplexity int) int
+		DeletedAt                   func(childComplexity int) int
+		DeletedBy                   func(childComplexity int) int
+		Description                 func(childComplexity int) int
+		DisplayName                 func(childComplexity int) int
+		Documents                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Entities                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityTypes                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
+		Events                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Evidence                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Files                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		GroupCreators               func(childComplexity int) int
+		Groups                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                          func(childComplexity int) int
+		Integrations                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalPolicies            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		InternalPolicyCreators      func(childComplexity int) int
+		Invites                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
+		JobRunnerRegistrationTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
+		JobRunnerTokens             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		JobRunners                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
+		Members                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
+		Name                        func(childComplexity int) int
+		NarrativeCreators           func(childComplexity int) int
+		Narratives                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Notes                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		OrgSubscriptions            func(childComplexity int) int
+		Parent                      func(childComplexity int) int
+		PersonalAccessTokens        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
+		PersonalOrg                 func(childComplexity int) int
+		ProcedureCreators           func(childComplexity int) int
+		Procedures                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProgramCreators             func(childComplexity int) int
+		Programs                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RiskCreators                func(childComplexity int) int
+		Risks                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Secrets                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		Setting                     func(childComplexity int) int
+		Standards                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		Subcontrols                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Subscribers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
+		Tags                        func(childComplexity int) int
+		Tasks                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		TemplateCreators            func(childComplexity int) int
+		Templates                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		UpdatedAt                   func(childComplexity int) int
+		UpdatedBy                   func(childComplexity int) int
+		Users                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	OrganizationBulkCreatePayload struct {
@@ -2897,201 +3060,214 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		APIToken                         func(childComplexity int, id string) int
-		APITokenSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		APITokens                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
-		ActionPlan                       func(childComplexity int, id string) int
-		ActionPlanHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ActionPlanHistoryOrder, where *generated.ActionPlanHistoryWhereInput) int
-		ActionPlanSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ActionPlans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		AdminAPITokenSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminActionPlanSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminContactSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminControlImplementationSearch func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminControlObjectiveSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminControlSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminCustomDomainSearch          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminDocumentDataSearch          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminEntitySearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminEntityTypeSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminEventSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminEvidenceSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminFileSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminGroupSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminIntegrationSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminInternalPolicySearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminInviteSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminMappableDomainSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminMappedControlSearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminNarrativeSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminOrgSubscriptionSearch       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminOrganizationSearch          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminOrganizationSettingSearch   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminPersonalAccessTokenSearch   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminProcedureSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminProgramSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminRiskSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminStandardSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminSubcontrolSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminSubscriberSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminTaskSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminTemplateSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminUserSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminUserSettingSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminWebauthnSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AuditLogs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *model.AuditLogWhereInput) int
-		Contact                          func(childComplexity int, id string) int
-		ContactHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) int
-		ContactSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Contacts                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		Control                          func(childComplexity int, id string) int
-		ControlHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) int
-		ControlImplementation            func(childComplexity int, id string) int
-		ControlImplementationHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) int
-		ControlImplementationSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ControlImplementations           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjective                 func(childComplexity int, id string) int
-		ControlObjectiveHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlObjectiveHistoryOrder, where *generated.ControlObjectiveHistoryWhereInput) int
-		ControlObjectiveSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ControlObjectives                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		ControlSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Controls                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CustomDomain                     func(childComplexity int, id string) int
-		CustomDomainHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) int
-		CustomDomainSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		CustomDomains                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
-		DocumentData                     func(childComplexity int, id string) int
-		DocumentDataHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) int
-		DocumentDataSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		DocumentDataSlice                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Entities                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Entity                           func(childComplexity int, id string) int
-		EntityHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityHistoryOrder, where *generated.EntityHistoryWhereInput) int
-		EntitySearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		EntityType                       func(childComplexity int, id string) int
-		EntityTypeHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeHistoryOrder, where *generated.EntityTypeHistoryWhereInput) int
-		EntityTypeSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		EntityTypes                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
-		Event                            func(childComplexity int, id string) int
-		EventHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EventHistoryOrder, where *generated.EventHistoryWhereInput) int
-		EventSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Events                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Evidence                         func(childComplexity int, id string) int
-		EvidenceHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EvidenceHistoryOrder, where *generated.EvidenceHistoryWhereInput) int
-		EvidenceSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Evidences                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
-		File                             func(childComplexity int, id string) int
-		FileHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FileHistoryOrder, where *generated.FileHistoryWhereInput) int
-		FileSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Files                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Group                            func(childComplexity int, id string) int
-		GroupHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) int
-		GroupMembership                  func(childComplexity int, id string) int
-		GroupMembershipHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipHistoryOrder, where *generated.GroupMembershipHistoryWhereInput) int
-		GroupMemberships                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
-		GroupSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		GroupSetting                     func(childComplexity int, id string) int
-		GroupSettingHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupSettingHistoryOrder, where *generated.GroupSettingHistoryWhereInput) int
-		GroupSettings                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupSettingOrder, where *generated.GroupSettingWhereInput) int
-		Groups                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Hush                             func(childComplexity int, id string) int
-		HushHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) int
-		Hushes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		Integration                      func(childComplexity int, id string) int
-		IntegrationHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) int
-		IntegrationSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Integrations                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalPolicies                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		InternalPolicy                   func(childComplexity int, id string) int
-		InternalPolicyHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.InternalPolicyHistoryOrder, where *generated.InternalPolicyHistoryWhereInput) int
-		InternalPolicySearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Invite                           func(childComplexity int, id string) int
-		InviteSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Invites                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
-		MappableDomain                   func(childComplexity int, id string) int
-		MappableDomainHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappableDomainHistoryOrder, where *generated.MappableDomainHistoryWhereInput) int
-		MappableDomainSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		MappableDomains                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappableDomainOrder, where *generated.MappableDomainWhereInput) int
-		MappedControl                    func(childComplexity int, id string) int
-		MappedControlHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlHistoryOrder, where *generated.MappedControlHistoryWhereInput) int
-		MappedControlSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		MappedControls                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
-		Narrative                        func(childComplexity int, id string) int
-		NarrativeHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeHistoryOrder, where *generated.NarrativeHistoryWhereInput) int
-		NarrativeSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Narratives                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Node                             func(childComplexity int, id string) int
-		Nodes                            func(childComplexity int, ids []string) int
-		Note                             func(childComplexity int, id string) int
-		NoteHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NoteHistoryOrder, where *generated.NoteHistoryWhereInput) int
-		Notes                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		OrgMembership                    func(childComplexity int, id string) int
-		OrgMembershipHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipHistoryOrder, where *generated.OrgMembershipHistoryWhereInput) int
-		OrgMemberships                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
-		OrgSubscription                  func(childComplexity int, id string) int
-		OrgSubscriptionHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionHistoryOrder, where *generated.OrgSubscriptionHistoryWhereInput) int
-		OrgSubscriptionSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		OrgSubscriptions                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
-		Organization                     func(childComplexity int, id string) int
-		OrganizationHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) int
-		OrganizationSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		OrganizationSetting              func(childComplexity int, id string) int
-		OrganizationSettingHistories     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationSettingHistoryOrder, where *generated.OrganizationSettingHistoryWhereInput) int
-		OrganizationSettingSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		OrganizationSettings             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationSettingOrder, where *generated.OrganizationSettingWhereInput) int
-		Organizations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		PersonalAccessToken              func(childComplexity int, id string) int
-		PersonalAccessTokenSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		PersonalAccessTokens             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
-		Procedure                        func(childComplexity int, id string) int
-		ProcedureHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProcedureHistoryOrder, where *generated.ProcedureHistoryWhereInput) int
-		ProcedureSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Procedures                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		Program                          func(childComplexity int, id string) int
-		ProgramHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramHistoryOrder, where *generated.ProgramHistoryWhereInput) int
-		ProgramMembership                func(childComplexity int, id string) int
-		ProgramMembershipHistories       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipHistoryOrder, where *generated.ProgramMembershipHistoryWhereInput) int
-		ProgramMemberships               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
-		ProgramSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Programs                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Risk                             func(childComplexity int, id string) int
-		RiskHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) int
-		RiskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Risks                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Search                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Self                             func(childComplexity int) int
-		Standard                         func(childComplexity int, id string) int
-		StandardHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.StandardHistoryOrder, where *generated.StandardHistoryWhereInput) int
-		StandardSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Standards                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
-		Subcontrol                       func(childComplexity int, id string) int
-		SubcontrolHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubcontrolHistoryOrder, where *generated.SubcontrolHistoryWhereInput) int
-		SubcontrolSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Subcontrols                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Subscriber                       func(childComplexity int, email string) int
-		SubscriberSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Subscribers                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
-		Task                             func(childComplexity int, id string) int
-		TaskHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TaskHistoryOrder, where *generated.TaskHistoryWhereInput) int
-		TaskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Tasks                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		Template                         func(childComplexity int, id string) int
-		TemplateHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) int
-		TemplateSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Templates                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
-		TfaSetting                       func(childComplexity int, id *string) int
-		TfaSettings                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) int
-		User                             func(childComplexity int, id string) int
-		UserHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) int
-		UserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		UserSetting                      func(childComplexity int, id string) int
-		UserSettingHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserSettingHistoryOrder, where *generated.UserSettingHistoryWhereInput) int
-		UserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		UserSettings                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserSettingOrder, where *generated.UserSettingWhereInput) int
-		Users                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
-		WebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Webauthns                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
+		APIToken                              func(childComplexity int, id string) int
+		APITokenSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		APITokens                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
+		ActionPlan                            func(childComplexity int, id string) int
+		ActionPlanHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ActionPlanHistoryOrder, where *generated.ActionPlanHistoryWhereInput) int
+		ActionPlanSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ActionPlans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AdminAPITokenSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminActionPlanSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminContactSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminControlImplementationSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminControlObjectiveSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminControlSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminCustomDomainSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminDocumentDataSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminEntitySearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminEntityTypeSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminEventSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminEvidenceSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminFileSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminGroupSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminIntegrationSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminInternalPolicySearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminInviteSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminJobRunnerRegistrationTokenSearch func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminJobRunnerSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminJobRunnerTokenSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminMappableDomainSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminMappedControlSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminNarrativeSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminOrgSubscriptionSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminOrganizationSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminOrganizationSettingSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminPersonalAccessTokenSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminProcedureSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminProgramSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminRiskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminStandardSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminSubcontrolSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminSubscriberSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminTaskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminTemplateSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminUserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminWebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AuditLogs                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *model.AuditLogWhereInput) int
+		Contact                               func(childComplexity int, id string) int
+		ContactHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) int
+		ContactSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		Control                               func(childComplexity int, id string) int
+		ControlHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) int
+		ControlImplementation                 func(childComplexity int, id string) int
+		ControlImplementationHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) int
+		ControlImplementationSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ControlImplementations                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjective                      func(childComplexity int, id string) int
+		ControlObjectiveHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlObjectiveHistoryOrder, where *generated.ControlObjectiveHistoryWhereInput) int
+		ControlObjectiveSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ControlObjectives                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Controls                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CustomDomain                          func(childComplexity int, id string) int
+		CustomDomainHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) int
+		CustomDomainSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		CustomDomains                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		DocumentData                          func(childComplexity int, id string) int
+		DocumentDataHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) int
+		DocumentDataSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		DocumentDataSlice                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Entities                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Entity                                func(childComplexity int, id string) int
+		EntityHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityHistoryOrder, where *generated.EntityHistoryWhereInput) int
+		EntitySearch                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		EntityType                            func(childComplexity int, id string) int
+		EntityTypeHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeHistoryOrder, where *generated.EntityTypeHistoryWhereInput) int
+		EntityTypeSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		EntityTypes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
+		Event                                 func(childComplexity int, id string) int
+		EventHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EventHistoryOrder, where *generated.EventHistoryWhereInput) int
+		EventSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Events                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Evidence                              func(childComplexity int, id string) int
+		EvidenceHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EvidenceHistoryOrder, where *generated.EvidenceHistoryWhereInput) int
+		EvidenceSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Evidences                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		File                                  func(childComplexity int, id string) int
+		FileHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FileHistoryOrder, where *generated.FileHistoryWhereInput) int
+		FileSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Files                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Group                                 func(childComplexity int, id string) int
+		GroupHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) int
+		GroupMembership                       func(childComplexity int, id string) int
+		GroupMembershipHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipHistoryOrder, where *generated.GroupMembershipHistoryWhereInput) int
+		GroupMemberships                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
+		GroupSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		GroupSetting                          func(childComplexity int, id string) int
+		GroupSettingHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupSettingHistoryOrder, where *generated.GroupSettingHistoryWhereInput) int
+		GroupSettings                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupSettingOrder, where *generated.GroupSettingWhereInput) int
+		Groups                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Hush                                  func(childComplexity int, id string) int
+		HushHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) int
+		Hushes                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		Integration                           func(childComplexity int, id string) int
+		IntegrationHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) int
+		IntegrationSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Integrations                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalPolicies                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		InternalPolicy                        func(childComplexity int, id string) int
+		InternalPolicyHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.InternalPolicyHistoryOrder, where *generated.InternalPolicyHistoryWhereInput) int
+		InternalPolicySearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Invite                                func(childComplexity int, id string) int
+		InviteSearch                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Invites                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
+		JobRunner                             func(childComplexity int, id string) int
+		JobRunnerHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.JobRunnerHistoryOrder, where *generated.JobRunnerHistoryWhereInput) int
+		JobRunnerRegistrationToken            func(childComplexity int, id string) int
+		JobRunnerRegistrationTokenSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		JobRunnerRegistrationTokens           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
+		JobRunnerSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		JobRunnerToken                        func(childComplexity int, id string) int
+		JobRunnerTokenSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		JobRunnerTokens                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		JobRunners                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
+		MappableDomain                        func(childComplexity int, id string) int
+		MappableDomainHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappableDomainHistoryOrder, where *generated.MappableDomainHistoryWhereInput) int
+		MappableDomainSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		MappableDomains                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappableDomainOrder, where *generated.MappableDomainWhereInput) int
+		MappedControl                         func(childComplexity int, id string) int
+		MappedControlHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlHistoryOrder, where *generated.MappedControlHistoryWhereInput) int
+		MappedControlSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		MappedControls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
+		Narrative                             func(childComplexity int, id string) int
+		NarrativeHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeHistoryOrder, where *generated.NarrativeHistoryWhereInput) int
+		NarrativeSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Narratives                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Node                                  func(childComplexity int, id string) int
+		Nodes                                 func(childComplexity int, ids []string) int
+		Note                                  func(childComplexity int, id string) int
+		NoteHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NoteHistoryOrder, where *generated.NoteHistoryWhereInput) int
+		Notes                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		OrgMembership                         func(childComplexity int, id string) int
+		OrgMembershipHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipHistoryOrder, where *generated.OrgMembershipHistoryWhereInput) int
+		OrgMemberships                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
+		OrgSubscription                       func(childComplexity int, id string) int
+		OrgSubscriptionHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionHistoryOrder, where *generated.OrgSubscriptionHistoryWhereInput) int
+		OrgSubscriptionSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		OrgSubscriptions                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
+		Organization                          func(childComplexity int, id string) int
+		OrganizationHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) int
+		OrganizationSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		OrganizationSetting                   func(childComplexity int, id string) int
+		OrganizationSettingHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationSettingHistoryOrder, where *generated.OrganizationSettingHistoryWhereInput) int
+		OrganizationSettingSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		OrganizationSettings                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationSettingOrder, where *generated.OrganizationSettingWhereInput) int
+		Organizations                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		PersonalAccessToken                   func(childComplexity int, id string) int
+		PersonalAccessTokenSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		PersonalAccessTokens                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
+		Procedure                             func(childComplexity int, id string) int
+		ProcedureHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProcedureHistoryOrder, where *generated.ProcedureHistoryWhereInput) int
+		ProcedureSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Procedures                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Program                               func(childComplexity int, id string) int
+		ProgramHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramHistoryOrder, where *generated.ProgramHistoryWhereInput) int
+		ProgramMembership                     func(childComplexity int, id string) int
+		ProgramMembershipHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipHistoryOrder, where *generated.ProgramMembershipHistoryWhereInput) int
+		ProgramMemberships                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
+		ProgramSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Programs                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Risk                                  func(childComplexity int, id string) int
+		RiskHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) int
+		RiskSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Risks                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Search                                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Self                                  func(childComplexity int) int
+		Standard                              func(childComplexity int, id string) int
+		StandardHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.StandardHistoryOrder, where *generated.StandardHistoryWhereInput) int
+		StandardSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Standards                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		Subcontrol                            func(childComplexity int, id string) int
+		SubcontrolHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubcontrolHistoryOrder, where *generated.SubcontrolHistoryWhereInput) int
+		SubcontrolSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Subcontrols                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Subscriber                            func(childComplexity int, email string) int
+		SubscriberSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Subscribers                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
+		Task                                  func(childComplexity int, id string) int
+		TaskHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TaskHistoryOrder, where *generated.TaskHistoryWhereInput) int
+		TaskSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Tasks                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Template                              func(childComplexity int, id string) int
+		TemplateHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) int
+		TemplateSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Templates                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		TfaSetting                            func(childComplexity int, id *string) int
+		TfaSettings                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) int
+		User                                  func(childComplexity int, id string) int
+		UserHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) int
+		UserSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		UserSetting                           func(childComplexity int, id string) int
+		UserSettingHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserSettingHistoryOrder, where *generated.UserSettingHistoryWhereInput) int
+		UserSettingSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		UserSettings                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserSettingOrder, where *generated.UserSettingWhereInput) int
+		Users                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		WebauthnSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Webauthns                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
 	}
 
 	Risk struct {
@@ -3199,43 +3375,46 @@ type ComplexityRoot struct {
 	}
 
 	SearchResults struct {
-		APITokens              func(childComplexity int) int
-		ActionPlans            func(childComplexity int) int
-		Contacts               func(childComplexity int) int
-		ControlImplementations func(childComplexity int) int
-		ControlObjectives      func(childComplexity int) int
-		Controls               func(childComplexity int) int
-		CustomDomains          func(childComplexity int) int
-		DocumentData           func(childComplexity int) int
-		Entities               func(childComplexity int) int
-		EntityTypes            func(childComplexity int) int
-		Events                 func(childComplexity int) int
-		Evidences              func(childComplexity int) int
-		Files                  func(childComplexity int) int
-		Groups                 func(childComplexity int) int
-		Integrations           func(childComplexity int) int
-		InternalPolicies       func(childComplexity int) int
-		Invites                func(childComplexity int) int
-		MappableDomains        func(childComplexity int) int
-		MappedControls         func(childComplexity int) int
-		Narratives             func(childComplexity int) int
-		OrgSubscriptions       func(childComplexity int) int
-		OrganizationSettings   func(childComplexity int) int
-		Organizations          func(childComplexity int) int
-		Page                   func(childComplexity int) int
-		PersonalAccessTokens   func(childComplexity int) int
-		Procedures             func(childComplexity int) int
-		Programs               func(childComplexity int) int
-		Risks                  func(childComplexity int) int
-		Standards              func(childComplexity int) int
-		Subcontrols            func(childComplexity int) int
-		Subscribers            func(childComplexity int) int
-		Tasks                  func(childComplexity int) int
-		Templates              func(childComplexity int) int
-		TotalCount             func(childComplexity int) int
-		UserSettings           func(childComplexity int) int
-		Users                  func(childComplexity int) int
-		Webauthns              func(childComplexity int) int
+		APITokens                   func(childComplexity int) int
+		ActionPlans                 func(childComplexity int) int
+		Contacts                    func(childComplexity int) int
+		ControlImplementations      func(childComplexity int) int
+		ControlObjectives           func(childComplexity int) int
+		Controls                    func(childComplexity int) int
+		CustomDomains               func(childComplexity int) int
+		DocumentData                func(childComplexity int) int
+		Entities                    func(childComplexity int) int
+		EntityTypes                 func(childComplexity int) int
+		Events                      func(childComplexity int) int
+		Evidences                   func(childComplexity int) int
+		Files                       func(childComplexity int) int
+		Groups                      func(childComplexity int) int
+		Integrations                func(childComplexity int) int
+		InternalPolicies            func(childComplexity int) int
+		Invites                     func(childComplexity int) int
+		JobRunnerRegistrationTokens func(childComplexity int) int
+		JobRunnerTokens             func(childComplexity int) int
+		JobRunners                  func(childComplexity int) int
+		MappableDomains             func(childComplexity int) int
+		MappedControls              func(childComplexity int) int
+		Narratives                  func(childComplexity int) int
+		OrgSubscriptions            func(childComplexity int) int
+		OrganizationSettings        func(childComplexity int) int
+		Organizations               func(childComplexity int) int
+		Page                        func(childComplexity int) int
+		PersonalAccessTokens        func(childComplexity int) int
+		Procedures                  func(childComplexity int) int
+		Programs                    func(childComplexity int) int
+		Risks                       func(childComplexity int) int
+		Standards                   func(childComplexity int) int
+		Subcontrols                 func(childComplexity int) int
+		Subscribers                 func(childComplexity int) int
+		Tasks                       func(childComplexity int) int
+		Templates                   func(childComplexity int) int
+		TotalCount                  func(childComplexity int) int
+		UserSettings                func(childComplexity int) int
+		Users                       func(childComplexity int) int
+		Webauthns                   func(childComplexity int) int
 	}
 
 	Standard struct {
@@ -11856,6 +12035,674 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InviteUpdatePayload.Invite(childComplexity), true
 
+	case "JobRunner.createdAt":
+		if e.complexity.JobRunner.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.CreatedAt(childComplexity), true
+
+	case "JobRunner.createdBy":
+		if e.complexity.JobRunner.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.CreatedBy(childComplexity), true
+
+	case "JobRunner.deletedAt":
+		if e.complexity.JobRunner.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.DeletedAt(childComplexity), true
+
+	case "JobRunner.deletedBy":
+		if e.complexity.JobRunner.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.DeletedBy(childComplexity), true
+
+	case "JobRunner.displayID":
+		if e.complexity.JobRunner.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.DisplayID(childComplexity), true
+
+	case "JobRunner.id":
+		if e.complexity.JobRunner.ID == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.ID(childComplexity), true
+
+	case "JobRunner.ipAddress":
+		if e.complexity.JobRunner.IPAddress == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.IPAddress(childComplexity), true
+
+	case "JobRunner.jobRunnerTokens":
+		if e.complexity.JobRunner.JobRunnerTokens == nil {
+			break
+		}
+
+		args, err := ec.field_JobRunner_jobRunnerTokens_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobRunner.JobRunnerTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerTokenOrder), args["where"].(*generated.JobRunnerTokenWhereInput)), true
+
+	case "JobRunner.name":
+		if e.complexity.JobRunner.Name == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.Name(childComplexity), true
+
+	case "JobRunner.owner":
+		if e.complexity.JobRunner.Owner == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.Owner(childComplexity), true
+
+	case "JobRunner.ownerID":
+		if e.complexity.JobRunner.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.OwnerID(childComplexity), true
+
+	case "JobRunner.status":
+		if e.complexity.JobRunner.Status == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.Status(childComplexity), true
+
+	case "JobRunner.systemOwned":
+		if e.complexity.JobRunner.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.SystemOwned(childComplexity), true
+
+	case "JobRunner.tags":
+		if e.complexity.JobRunner.Tags == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.Tags(childComplexity), true
+
+	case "JobRunner.updatedAt":
+		if e.complexity.JobRunner.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.UpdatedAt(childComplexity), true
+
+	case "JobRunner.updatedBy":
+		if e.complexity.JobRunner.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.UpdatedBy(childComplexity), true
+
+	case "JobRunnerConnection.edges":
+		if e.complexity.JobRunnerConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerConnection.Edges(childComplexity), true
+
+	case "JobRunnerConnection.pageInfo":
+		if e.complexity.JobRunnerConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerConnection.PageInfo(childComplexity), true
+
+	case "JobRunnerConnection.totalCount":
+		if e.complexity.JobRunnerConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerConnection.TotalCount(childComplexity), true
+
+	case "JobRunnerDeletePayload.deletedID":
+		if e.complexity.JobRunnerDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerDeletePayload.DeletedID(childComplexity), true
+
+	case "JobRunnerEdge.cursor":
+		if e.complexity.JobRunnerEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerEdge.Cursor(childComplexity), true
+
+	case "JobRunnerEdge.node":
+		if e.complexity.JobRunnerEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerEdge.Node(childComplexity), true
+
+	case "JobRunnerHistory.createdAt":
+		if e.complexity.JobRunnerHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.CreatedAt(childComplexity), true
+
+	case "JobRunnerHistory.createdBy":
+		if e.complexity.JobRunnerHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.CreatedBy(childComplexity), true
+
+	case "JobRunnerHistory.deletedAt":
+		if e.complexity.JobRunnerHistory.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.DeletedAt(childComplexity), true
+
+	case "JobRunnerHistory.deletedBy":
+		if e.complexity.JobRunnerHistory.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.DeletedBy(childComplexity), true
+
+	case "JobRunnerHistory.displayID":
+		if e.complexity.JobRunnerHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.DisplayID(childComplexity), true
+
+	case "JobRunnerHistory.historyTime":
+		if e.complexity.JobRunnerHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.HistoryTime(childComplexity), true
+
+	case "JobRunnerHistory.id":
+		if e.complexity.JobRunnerHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.ID(childComplexity), true
+
+	case "JobRunnerHistory.ipAddress":
+		if e.complexity.JobRunnerHistory.IPAddress == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.IPAddress(childComplexity), true
+
+	case "JobRunnerHistory.name":
+		if e.complexity.JobRunnerHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.Name(childComplexity), true
+
+	case "JobRunnerHistory.operation":
+		if e.complexity.JobRunnerHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.Operation(childComplexity), true
+
+	case "JobRunnerHistory.ownerID":
+		if e.complexity.JobRunnerHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.OwnerID(childComplexity), true
+
+	case "JobRunnerHistory.ref":
+		if e.complexity.JobRunnerHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.Ref(childComplexity), true
+
+	case "JobRunnerHistory.status":
+		if e.complexity.JobRunnerHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.Status(childComplexity), true
+
+	case "JobRunnerHistory.systemOwned":
+		if e.complexity.JobRunnerHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.SystemOwned(childComplexity), true
+
+	case "JobRunnerHistory.tags":
+		if e.complexity.JobRunnerHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.Tags(childComplexity), true
+
+	case "JobRunnerHistory.updatedAt":
+		if e.complexity.JobRunnerHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.UpdatedAt(childComplexity), true
+
+	case "JobRunnerHistory.updatedBy":
+		if e.complexity.JobRunnerHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistory.UpdatedBy(childComplexity), true
+
+	case "JobRunnerHistoryConnection.edges":
+		if e.complexity.JobRunnerHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistoryConnection.Edges(childComplexity), true
+
+	case "JobRunnerHistoryConnection.pageInfo":
+		if e.complexity.JobRunnerHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistoryConnection.PageInfo(childComplexity), true
+
+	case "JobRunnerHistoryConnection.totalCount":
+		if e.complexity.JobRunnerHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistoryConnection.TotalCount(childComplexity), true
+
+	case "JobRunnerHistoryEdge.cursor":
+		if e.complexity.JobRunnerHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistoryEdge.Cursor(childComplexity), true
+
+	case "JobRunnerHistoryEdge.node":
+		if e.complexity.JobRunnerHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerHistoryEdge.Node(childComplexity), true
+
+	case "JobRunnerRegistrationToken.createdAt":
+		if e.complexity.JobRunnerRegistrationToken.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.CreatedAt(childComplexity), true
+
+	case "JobRunnerRegistrationToken.createdBy":
+		if e.complexity.JobRunnerRegistrationToken.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.CreatedBy(childComplexity), true
+
+	case "JobRunnerRegistrationToken.deletedAt":
+		if e.complexity.JobRunnerRegistrationToken.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.DeletedAt(childComplexity), true
+
+	case "JobRunnerRegistrationToken.deletedBy":
+		if e.complexity.JobRunnerRegistrationToken.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.DeletedBy(childComplexity), true
+
+	case "JobRunnerRegistrationToken.expiresAt":
+		if e.complexity.JobRunnerRegistrationToken.ExpiresAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.ExpiresAt(childComplexity), true
+
+	case "JobRunnerRegistrationToken.id":
+		if e.complexity.JobRunnerRegistrationToken.ID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.ID(childComplexity), true
+
+	case "JobRunnerRegistrationToken.jobRunner":
+		if e.complexity.JobRunnerRegistrationToken.JobRunner == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.JobRunner(childComplexity), true
+
+	case "JobRunnerRegistrationToken.jobRunnerID":
+		if e.complexity.JobRunnerRegistrationToken.JobRunnerID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.JobRunnerID(childComplexity), true
+
+	case "JobRunnerRegistrationToken.lastUsedAt":
+		if e.complexity.JobRunnerRegistrationToken.LastUsedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.LastUsedAt(childComplexity), true
+
+	case "JobRunnerRegistrationToken.owner":
+		if e.complexity.JobRunnerRegistrationToken.Owner == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.Owner(childComplexity), true
+
+	case "JobRunnerRegistrationToken.ownerID":
+		if e.complexity.JobRunnerRegistrationToken.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.OwnerID(childComplexity), true
+
+	case "JobRunnerRegistrationToken.tags":
+		if e.complexity.JobRunnerRegistrationToken.Tags == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.Tags(childComplexity), true
+
+	case "JobRunnerRegistrationToken.token":
+		if e.complexity.JobRunnerRegistrationToken.Token == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.Token(childComplexity), true
+
+	case "JobRunnerRegistrationToken.updatedAt":
+		if e.complexity.JobRunnerRegistrationToken.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.UpdatedAt(childComplexity), true
+
+	case "JobRunnerRegistrationToken.updatedBy":
+		if e.complexity.JobRunnerRegistrationToken.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationToken.UpdatedBy(childComplexity), true
+
+	case "JobRunnerRegistrationTokenBulkCreatePayload.jobRunnerRegistrationTokens":
+		if e.complexity.JobRunnerRegistrationTokenBulkCreatePayload.JobRunnerRegistrationTokens == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationTokenBulkCreatePayload.JobRunnerRegistrationTokens(childComplexity), true
+
+	case "JobRunnerRegistrationTokenConnection.edges":
+		if e.complexity.JobRunnerRegistrationTokenConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationTokenConnection.Edges(childComplexity), true
+
+	case "JobRunnerRegistrationTokenConnection.pageInfo":
+		if e.complexity.JobRunnerRegistrationTokenConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationTokenConnection.PageInfo(childComplexity), true
+
+	case "JobRunnerRegistrationTokenConnection.totalCount":
+		if e.complexity.JobRunnerRegistrationTokenConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationTokenConnection.TotalCount(childComplexity), true
+
+	case "JobRunnerRegistrationTokenCreatePayload.jobRunnerRegistrationToken":
+		if e.complexity.JobRunnerRegistrationTokenCreatePayload.JobRunnerRegistrationToken == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationTokenCreatePayload.JobRunnerRegistrationToken(childComplexity), true
+
+	case "JobRunnerRegistrationTokenDeletePayload.deletedID":
+		if e.complexity.JobRunnerRegistrationTokenDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationTokenDeletePayload.DeletedID(childComplexity), true
+
+	case "JobRunnerRegistrationTokenEdge.cursor":
+		if e.complexity.JobRunnerRegistrationTokenEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationTokenEdge.Cursor(childComplexity), true
+
+	case "JobRunnerRegistrationTokenEdge.node":
+		if e.complexity.JobRunnerRegistrationTokenEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerRegistrationTokenEdge.Node(childComplexity), true
+
+	case "JobRunnerToken.createdAt":
+		if e.complexity.JobRunnerToken.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.CreatedAt(childComplexity), true
+
+	case "JobRunnerToken.createdBy":
+		if e.complexity.JobRunnerToken.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.CreatedBy(childComplexity), true
+
+	case "JobRunnerToken.deletedAt":
+		if e.complexity.JobRunnerToken.DeletedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.DeletedAt(childComplexity), true
+
+	case "JobRunnerToken.deletedBy":
+		if e.complexity.JobRunnerToken.DeletedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.DeletedBy(childComplexity), true
+
+	case "JobRunnerToken.expiresAt":
+		if e.complexity.JobRunnerToken.ExpiresAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.ExpiresAt(childComplexity), true
+
+	case "JobRunnerToken.id":
+		if e.complexity.JobRunnerToken.ID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.ID(childComplexity), true
+
+	case "JobRunnerToken.isActive":
+		if e.complexity.JobRunnerToken.IsActive == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.IsActive(childComplexity), true
+
+	case "JobRunnerToken.jobRunners":
+		if e.complexity.JobRunnerToken.JobRunners == nil {
+			break
+		}
+
+		args, err := ec.field_JobRunnerToken_jobRunners_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobRunnerToken.JobRunners(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerOrder), args["where"].(*generated.JobRunnerWhereInput)), true
+
+	case "JobRunnerToken.lastUsedAt":
+		if e.complexity.JobRunnerToken.LastUsedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.LastUsedAt(childComplexity), true
+
+	case "JobRunnerToken.owner":
+		if e.complexity.JobRunnerToken.Owner == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.Owner(childComplexity), true
+
+	case "JobRunnerToken.ownerID":
+		if e.complexity.JobRunnerToken.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.OwnerID(childComplexity), true
+
+	case "JobRunnerToken.revokedAt":
+		if e.complexity.JobRunnerToken.RevokedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.RevokedAt(childComplexity), true
+
+	case "JobRunnerToken.revokedBy":
+		if e.complexity.JobRunnerToken.RevokedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.RevokedBy(childComplexity), true
+
+	case "JobRunnerToken.revokedReason":
+		if e.complexity.JobRunnerToken.RevokedReason == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.RevokedReason(childComplexity), true
+
+	case "JobRunnerToken.tags":
+		if e.complexity.JobRunnerToken.Tags == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.Tags(childComplexity), true
+
+	case "JobRunnerToken.token":
+		if e.complexity.JobRunnerToken.Token == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.Token(childComplexity), true
+
+	case "JobRunnerToken.updatedAt":
+		if e.complexity.JobRunnerToken.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.UpdatedAt(childComplexity), true
+
+	case "JobRunnerToken.updatedBy":
+		if e.complexity.JobRunnerToken.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerToken.UpdatedBy(childComplexity), true
+
+	case "JobRunnerTokenConnection.edges":
+		if e.complexity.JobRunnerTokenConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerTokenConnection.Edges(childComplexity), true
+
+	case "JobRunnerTokenConnection.pageInfo":
+		if e.complexity.JobRunnerTokenConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerTokenConnection.PageInfo(childComplexity), true
+
+	case "JobRunnerTokenConnection.totalCount":
+		if e.complexity.JobRunnerTokenConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerTokenConnection.TotalCount(childComplexity), true
+
+	case "JobRunnerTokenCreatePayload.jobRunnerToken":
+		if e.complexity.JobRunnerTokenCreatePayload.JobRunnerToken == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerTokenCreatePayload.JobRunnerToken(childComplexity), true
+
+	case "JobRunnerTokenDeletePayload.deletedID":
+		if e.complexity.JobRunnerTokenDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerTokenDeletePayload.DeletedID(childComplexity), true
+
+	case "JobRunnerTokenEdge.cursor":
+		if e.complexity.JobRunnerTokenEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerTokenEdge.Cursor(childComplexity), true
+
+	case "JobRunnerTokenEdge.node":
+		if e.complexity.JobRunnerTokenEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerTokenEdge.Node(childComplexity), true
+
+	case "JobRunnerTokenUpdatePayload.jobRunnerToken":
+		if e.complexity.JobRunnerTokenUpdatePayload.JobRunnerToken == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerTokenUpdatePayload.JobRunnerToken(childComplexity), true
+
+	case "JobRunnerUpdatePayload.jobRunner":
+		if e.complexity.JobRunnerUpdatePayload.JobRunner == nil {
+			break
+		}
+
+		return e.complexity.JobRunnerUpdatePayload.JobRunner(childComplexity), true
+
 	case "MappableDomain.createdAt":
 		if e.complexity.MappableDomain.CreatedAt == nil {
 			break
@@ -13452,6 +14299,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateInvite(childComplexity, args["input"].(generated.CreateInviteInput)), true
 
+	case "Mutation.createJobRunnerRegistrationToken":
+		if e.complexity.Mutation.CreateJobRunnerRegistrationToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createJobRunnerRegistrationToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateJobRunnerRegistrationToken(childComplexity, args["input"].(generated.CreateJobRunnerRegistrationTokenInput)), true
+
+	case "Mutation.createJobRunnerToken":
+		if e.complexity.Mutation.CreateJobRunnerToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createJobRunnerToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateJobRunnerToken(childComplexity, args["input"].(generated.CreateJobRunnerTokenInput)), true
+
 	case "Mutation.createMappableDomain":
 		if e.complexity.Mutation.CreateMappableDomain == nil {
 			break
@@ -13956,6 +14827,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteInvite(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteJobRunner":
+		if e.complexity.Mutation.DeleteJobRunner == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteJobRunner_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteJobRunner(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteJobRunnerRegistrationToken":
+		if e.complexity.Mutation.DeleteJobRunnerRegistrationToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteJobRunnerRegistrationToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteJobRunnerRegistrationToken(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteJobRunnerToken":
+		if e.complexity.Mutation.DeleteJobRunnerToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteJobRunnerToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteJobRunnerToken(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteMappableDomain":
 		if e.complexity.Mutation.DeleteMappableDomain == nil {
 			break
@@ -14399,6 +15306,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateInvite(childComplexity, args["id"].(string), args["input"].(generated.UpdateInviteInput)), true
+
+	case "Mutation.updateJobRunner":
+		if e.complexity.Mutation.UpdateJobRunner == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateJobRunner_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateJobRunner(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobRunnerInput)), true
 
 	case "Mutation.updateMappableDomain":
 		if e.complexity.Mutation.UpdateMappableDomain == nil {
@@ -16402,6 +17321,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Invites(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InviteOrder), args["where"].(*generated.InviteWhereInput)), true
+
+	case "Organization.jobRunnerRegistrationTokens":
+		if e.complexity.Organization.JobRunnerRegistrationTokens == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_jobRunnerRegistrationTokens_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.JobRunnerRegistrationTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerRegistrationTokenOrder), args["where"].(*generated.JobRunnerRegistrationTokenWhereInput)), true
+
+	case "Organization.jobRunnerTokens":
+		if e.complexity.Organization.JobRunnerTokens == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_jobRunnerTokens_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.JobRunnerTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerTokenOrder), args["where"].(*generated.JobRunnerTokenWhereInput)), true
+
+	case "Organization.jobRunners":
+		if e.complexity.Organization.JobRunners == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_jobRunners_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.JobRunners(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerOrder), args["where"].(*generated.JobRunnerWhereInput)), true
 
 	case "Organization.members":
 		if e.complexity.Organization.Members == nil {
@@ -19261,6 +20216,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminInviteSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminJobRunnerRegistrationTokenSearch":
+		if e.complexity.Query.AdminJobRunnerRegistrationTokenSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminJobRunnerRegistrationTokenSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminJobRunnerRegistrationTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminJobRunnerSearch":
+		if e.complexity.Query.AdminJobRunnerSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminJobRunnerSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminJobRunnerSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminJobRunnerTokenSearch":
+		if e.complexity.Query.AdminJobRunnerTokenSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminJobRunnerTokenSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminJobRunnerTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminMappableDomainSearch":
 		if e.complexity.Query.AdminMappableDomainSearch == nil {
 			break
@@ -20316,6 +21307,126 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Invites(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InviteOrder), args["where"].(*generated.InviteWhereInput)), true
+
+	case "Query.jobRunner":
+		if e.complexity.Query.JobRunner == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunner_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunner(childComplexity, args["id"].(string)), true
+
+	case "Query.jobRunnerHistories":
+		if e.complexity.Query.JobRunnerHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunnerHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunnerHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.JobRunnerHistoryOrder), args["where"].(*generated.JobRunnerHistoryWhereInput)), true
+
+	case "Query.jobRunnerRegistrationToken":
+		if e.complexity.Query.JobRunnerRegistrationToken == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunnerRegistrationToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunnerRegistrationToken(childComplexity, args["id"].(string)), true
+
+	case "Query.jobRunnerRegistrationTokenSearch":
+		if e.complexity.Query.JobRunnerRegistrationTokenSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunnerRegistrationTokenSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunnerRegistrationTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.jobRunnerRegistrationTokens":
+		if e.complexity.Query.JobRunnerRegistrationTokens == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunnerRegistrationTokens_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunnerRegistrationTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerRegistrationTokenOrder), args["where"].(*generated.JobRunnerRegistrationTokenWhereInput)), true
+
+	case "Query.jobRunnerSearch":
+		if e.complexity.Query.JobRunnerSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunnerSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunnerSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.jobRunnerToken":
+		if e.complexity.Query.JobRunnerToken == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunnerToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunnerToken(childComplexity, args["id"].(string)), true
+
+	case "Query.jobRunnerTokenSearch":
+		if e.complexity.Query.JobRunnerTokenSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunnerTokenSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunnerTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.jobRunnerTokens":
+		if e.complexity.Query.JobRunnerTokens == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunnerTokens_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunnerTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerTokenOrder), args["where"].(*generated.JobRunnerTokenWhereInput)), true
+
+	case "Query.jobRunners":
+		if e.complexity.Query.JobRunners == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobRunners_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobRunners(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerOrder), args["where"].(*generated.JobRunnerWhereInput)), true
 
 	case "Query.mappableDomain":
 		if e.complexity.Query.MappableDomain == nil {
@@ -21979,6 +23090,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Invites(childComplexity), true
+
+	case "SearchResults.jobRunnerRegistrationTokens":
+		if e.complexity.SearchResults.JobRunnerRegistrationTokens == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.JobRunnerRegistrationTokens(childComplexity), true
+
+	case "SearchResults.jobRunnerTokens":
+		if e.complexity.SearchResults.JobRunnerTokens == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.JobRunnerTokens(childComplexity), true
+
+	case "SearchResults.jobRunners":
+		if e.complexity.SearchResults.JobRunners == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.JobRunners(childComplexity), true
 
 	case "SearchResults.mappableDomains":
 		if e.complexity.SearchResults.MappableDomains == nil {
@@ -25612,6 +26744,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateIntegrationInput,
 		ec.unmarshalInputCreateInternalPolicyInput,
 		ec.unmarshalInputCreateInviteInput,
+		ec.unmarshalInputCreateJobRunnerInput,
+		ec.unmarshalInputCreateJobRunnerRegistrationTokenInput,
+		ec.unmarshalInputCreateJobRunnerTokenInput,
 		ec.unmarshalInputCreateMappableDomainInput,
 		ec.unmarshalInputCreateMappedControlInput,
 		ec.unmarshalInputCreateMemberWithProgramInput,
@@ -25690,6 +26825,14 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputInternalPolicyWhereInput,
 		ec.unmarshalInputInviteOrder,
 		ec.unmarshalInputInviteWhereInput,
+		ec.unmarshalInputJobRunnerHistoryOrder,
+		ec.unmarshalInputJobRunnerHistoryWhereInput,
+		ec.unmarshalInputJobRunnerOrder,
+		ec.unmarshalInputJobRunnerRegistrationTokenOrder,
+		ec.unmarshalInputJobRunnerRegistrationTokenWhereInput,
+		ec.unmarshalInputJobRunnerTokenOrder,
+		ec.unmarshalInputJobRunnerTokenWhereInput,
+		ec.unmarshalInputJobRunnerWhereInput,
 		ec.unmarshalInputMappableDomainHistoryOrder,
 		ec.unmarshalInputMappableDomainHistoryWhereInput,
 		ec.unmarshalInputMappableDomainOrder,
@@ -25782,6 +26925,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateIntegrationInput,
 		ec.unmarshalInputUpdateInternalPolicyInput,
 		ec.unmarshalInputUpdateInviteInput,
+		ec.unmarshalInputUpdateJobRunnerInput,
+		ec.unmarshalInputUpdateJobRunnerRegistrationTokenInput,
+		ec.unmarshalInputUpdateJobRunnerTokenInput,
 		ec.unmarshalInputUpdateMappableDomainInput,
 		ec.unmarshalInputUpdateMappedControlInput,
 		ec.unmarshalInputUpdateNarrativeInput,
@@ -26438,6 +27584,81 @@ type ActionPlanBulkCreatePayload {
         """
         last: Int
     ): InviteConnection
+    """
+    Search across JobRunner objects
+    """
+    adminJobRunnerSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): JobRunnerConnection
+    """
+    Search across JobRunnerRegistrationToken objects
+    """
+    adminJobRunnerRegistrationTokenSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): JobRunnerRegistrationTokenConnection
+    """
+    Search across JobRunnerToken objects
+    """
+    adminJobRunnerTokenSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): JobRunnerTokenConnection
     """
     Search across MappableDomain objects
     """
@@ -34362,6 +35583,72 @@ input CreateInviteInput {
   eventIDs: [ID!]
 }
 """
+CreateJobRunnerInput is used for create JobRunner object.
+Input was generated by ent.
+"""
+input CreateJobRunnerInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the name of the runner
+  """
+  name: String!
+  """
+  the IP address of this runner
+  """
+  ipAddress: String!
+  ownerID: ID
+  jobRunnerTokenIDs: [ID!]
+}
+"""
+CreateJobRunnerRegistrationTokenInput is used for create JobRunnerRegistrationToken object.
+Input was generated by ent.
+"""
+input CreateJobRunnerRegistrationTokenInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  lastUsedAt: Time
+  ownerID: ID
+  jobRunnerID: ID
+}
+"""
+CreateJobRunnerTokenInput is used for create JobRunnerToken object.
+Input was generated by ent.
+"""
+input CreateJobRunnerTokenInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  when the token expires
+  """
+  expiresAt: Time
+  lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
+  ownerID: ID
+  jobRunnerIDs: [ID!]
+}
+"""
 CreateMappableDomainInput is used for create MappableDomain object.
 Input was generated by ent.
 """
@@ -34555,6 +35842,9 @@ input CreateOrganizationInput {
   standardIDs: [ID!]
   actionPlanIDs: [ID!]
   customDomainIDs: [ID!]
+  jobRunnerIDs: [ID!]
+  jobRunnerTokenIDs: [ID!]
+  jobRunnerRegistrationTokenIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -45503,6 +46793,1277 @@ input InviteWhereInput {
 A valid JSON string.
 """
 scalar JSON
+type JobRunner implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  the name of the runner
+  """
+  name: String!
+  """
+  the status of this runner
+  """
+  status: JobRunnerJobRunnerStatus!
+  """
+  the IP address of this runner
+  """
+  ipAddress: String!
+  owner: Organization
+  jobRunnerTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunnerTokens returned from the connection.
+    """
+    orderBy: [JobRunnerTokenOrder!]
+
+    """
+    Filtering options for JobRunnerTokens returned from the connection.
+    """
+    where: JobRunnerTokenWhereInput
+  ): JobRunnerTokenConnection!
+}
+"""
+A connection to a list of items.
+"""
+type JobRunnerConnection {
+  """
+  A list of edges.
+  """
+  edges: [JobRunnerEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type JobRunnerEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: JobRunner
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type JobRunnerHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: JobRunnerHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  the name of the runner
+  """
+  name: String!
+  """
+  the status of this runner
+  """
+  status: JobRunnerHistoryJobRunnerStatus!
+  """
+  the IP address of this runner
+  """
+  ipAddress: String!
+}
+"""
+A connection to a list of items.
+"""
+type JobRunnerHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [JobRunnerHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type JobRunnerHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: JobRunnerHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+JobRunnerHistoryJobRunnerStatus is enum for the field status
+"""
+enum JobRunnerHistoryJobRunnerStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.JobRunnerStatus") {
+  ONLINE
+  OFFLINE
+}
+"""
+JobRunnerHistoryOpType is enum for the field operation
+"""
+enum JobRunnerHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for JobRunnerHistory connections
+"""
+input JobRunnerHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order JobRunnerHistories.
+  """
+  field: JobRunnerHistoryOrderField!
+}
+"""
+Properties by which JobRunnerHistory connections can be ordered.
+"""
+enum JobRunnerHistoryOrderField {
+  created_at
+  updated_at
+  name
+}
+"""
+JobRunnerHistoryWhereInput is used for filtering JobRunnerHistory objects.
+Input was generated by ent.
+"""
+input JobRunnerHistoryWhereInput {
+  not: JobRunnerHistoryWhereInput
+  and: [JobRunnerHistoryWhereInput!]
+  or: [JobRunnerHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: JobRunnerHistoryOpType
+  operationNEQ: JobRunnerHistoryOpType
+  operationIn: [JobRunnerHistoryOpType!]
+  operationNotIn: [JobRunnerHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  status field predicates
+  """
+  status: JobRunnerHistoryJobRunnerStatus
+  statusNEQ: JobRunnerHistoryJobRunnerStatus
+  statusIn: [JobRunnerHistoryJobRunnerStatus!]
+  statusNotIn: [JobRunnerHistoryJobRunnerStatus!]
+  """
+  ip_address field predicates
+  """
+  ipAddress: String
+  ipAddressNEQ: String
+  ipAddressIn: [String!]
+  ipAddressNotIn: [String!]
+  ipAddressGT: String
+  ipAddressGTE: String
+  ipAddressLT: String
+  ipAddressLTE: String
+  ipAddressContains: String
+  ipAddressHasPrefix: String
+  ipAddressHasSuffix: String
+  ipAddressEqualFold: String
+  ipAddressContainsFold: String
+}
+"""
+JobRunnerJobRunnerStatus is enum for the field status
+"""
+enum JobRunnerJobRunnerStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.JobRunnerStatus") {
+  ONLINE
+  OFFLINE
+}
+"""
+Ordering options for JobRunner connections
+"""
+input JobRunnerOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order JobRunners.
+  """
+  field: JobRunnerOrderField!
+}
+"""
+Properties by which JobRunner connections can be ordered.
+"""
+enum JobRunnerOrderField {
+  created_at
+  updated_at
+  name
+}
+type JobRunnerRegistrationToken implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  token: String!
+  """
+  when the token expires
+  """
+  expiresAt: Time!
+  lastUsedAt: Time
+  """
+  the ID of the runner this token was used to register
+  """
+  jobRunnerID: ID
+  owner: Organization
+  jobRunner: JobRunner
+}
+"""
+A connection to a list of items.
+"""
+type JobRunnerRegistrationTokenConnection {
+  """
+  A list of edges.
+  """
+  edges: [JobRunnerRegistrationTokenEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type JobRunnerRegistrationTokenEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: JobRunnerRegistrationToken
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for JobRunnerRegistrationToken connections
+"""
+input JobRunnerRegistrationTokenOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order JobRunnerRegistrationTokens.
+  """
+  field: JobRunnerRegistrationTokenOrderField!
+}
+"""
+Properties by which JobRunnerRegistrationToken connections can be ordered.
+"""
+enum JobRunnerRegistrationTokenOrderField {
+  created_at
+  updated_at
+  last_used_at
+}
+"""
+JobRunnerRegistrationTokenWhereInput is used for filtering JobRunnerRegistrationToken objects.
+Input was generated by ent.
+"""
+input JobRunnerRegistrationTokenWhereInput {
+  not: JobRunnerRegistrationTokenWhereInput
+  and: [JobRunnerRegistrationTokenWhereInput!]
+  or: [JobRunnerRegistrationTokenWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtNEQ: Time
+  lastUsedAtIn: [Time!]
+  lastUsedAtNotIn: [Time!]
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  job_runner_id field predicates
+  """
+  jobRunnerID: ID
+  jobRunnerIDNEQ: ID
+  jobRunnerIDIn: [ID!]
+  jobRunnerIDNotIn: [ID!]
+  jobRunnerIDGT: ID
+  jobRunnerIDGTE: ID
+  jobRunnerIDLT: ID
+  jobRunnerIDLTE: ID
+  jobRunnerIDContains: ID
+  jobRunnerIDHasPrefix: ID
+  jobRunnerIDHasSuffix: ID
+  jobRunnerIDIsNil: Boolean
+  jobRunnerIDNotNil: Boolean
+  jobRunnerIDEqualFold: ID
+  jobRunnerIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  job_runner edge predicates
+  """
+  hasJobRunner: Boolean
+  hasJobRunnerWith: [JobRunnerWhereInput!]
+}
+type JobRunnerToken implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  deletedAt: Time
+  deletedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  token: String!
+  """
+  when the token expires
+  """
+  expiresAt: Time
+  lastUsedAt: Time
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
+  owner: Organization
+  jobRunners(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunners returned from the connection.
+    """
+    orderBy: [JobRunnerOrder!]
+
+    """
+    Filtering options for JobRunners returned from the connection.
+    """
+    where: JobRunnerWhereInput
+  ): JobRunnerConnection!
+}
+"""
+A connection to a list of items.
+"""
+type JobRunnerTokenConnection {
+  """
+  A list of edges.
+  """
+  edges: [JobRunnerTokenEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type JobRunnerTokenEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: JobRunnerToken
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for JobRunnerToken connections
+"""
+input JobRunnerTokenOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order JobRunnerTokens.
+  """
+  field: JobRunnerTokenOrderField!
+}
+"""
+Properties by which JobRunnerToken connections can be ordered.
+"""
+enum JobRunnerTokenOrderField {
+  created_at
+  updated_at
+  expires_at
+  last_used_at
+}
+"""
+JobRunnerTokenWhereInput is used for filtering JobRunnerToken objects.
+Input was generated by ent.
+"""
+input JobRunnerTokenWhereInput {
+  not: JobRunnerTokenWhereInput
+  and: [JobRunnerTokenWhereInput!]
+  or: [JobRunnerTokenWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  expires_at field predicates
+  """
+  expiresAt: Time
+  expiresAtNEQ: Time
+  expiresAtIn: [Time!]
+  expiresAtNotIn: [Time!]
+  expiresAtGT: Time
+  expiresAtGTE: Time
+  expiresAtLT: Time
+  expiresAtLTE: Time
+  expiresAtIsNil: Boolean
+  expiresAtNotNil: Boolean
+  """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtNEQ: Time
+  lastUsedAtIn: [Time!]
+  lastUsedAtNotIn: [Time!]
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  is_active field predicates
+  """
+  isActive: Boolean
+  isActiveNEQ: Boolean
+  isActiveIsNil: Boolean
+  isActiveNotNil: Boolean
+  """
+  revoked_reason field predicates
+  """
+  revokedReason: String
+  revokedReasonNEQ: String
+  revokedReasonIn: [String!]
+  revokedReasonNotIn: [String!]
+  revokedReasonGT: String
+  revokedReasonGTE: String
+  revokedReasonLT: String
+  revokedReasonLTE: String
+  revokedReasonContains: String
+  revokedReasonHasPrefix: String
+  revokedReasonHasSuffix: String
+  revokedReasonIsNil: Boolean
+  revokedReasonNotNil: Boolean
+  revokedReasonEqualFold: String
+  revokedReasonContainsFold: String
+  """
+  revoked_by field predicates
+  """
+  revokedBy: String
+  revokedByNEQ: String
+  revokedByIn: [String!]
+  revokedByNotIn: [String!]
+  revokedByGT: String
+  revokedByGTE: String
+  revokedByLT: String
+  revokedByLTE: String
+  revokedByContains: String
+  revokedByHasPrefix: String
+  revokedByHasSuffix: String
+  revokedByIsNil: Boolean
+  revokedByNotNil: Boolean
+  revokedByEqualFold: String
+  revokedByContainsFold: String
+  """
+  revoked_at field predicates
+  """
+  revokedAt: Time
+  revokedAtNEQ: Time
+  revokedAtIn: [Time!]
+  revokedAtNotIn: [Time!]
+  revokedAtGT: Time
+  revokedAtGTE: Time
+  revokedAtLT: Time
+  revokedAtLTE: Time
+  revokedAtIsNil: Boolean
+  revokedAtNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  job_runners edge predicates
+  """
+  hasJobRunners: Boolean
+  hasJobRunnersWith: [JobRunnerWhereInput!]
+}
+"""
+JobRunnerWhereInput is used for filtering JobRunner objects.
+Input was generated by ent.
+"""
+input JobRunnerWhereInput {
+  not: JobRunnerWhereInput
+  and: [JobRunnerWhereInput!]
+  or: [JobRunnerWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  deleted_at field predicates
+  """
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """
+  deleted_by field predicates
+  """
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  status field predicates
+  """
+  status: JobRunnerJobRunnerStatus
+  statusNEQ: JobRunnerJobRunnerStatus
+  statusIn: [JobRunnerJobRunnerStatus!]
+  statusNotIn: [JobRunnerJobRunnerStatus!]
+  """
+  ip_address field predicates
+  """
+  ipAddress: String
+  ipAddressNEQ: String
+  ipAddressIn: [String!]
+  ipAddressNotIn: [String!]
+  ipAddressGT: String
+  ipAddressGTE: String
+  ipAddressLT: String
+  ipAddressLTE: String
+  ipAddressContains: String
+  ipAddressHasPrefix: String
+  ipAddressHasSuffix: String
+  ipAddressEqualFold: String
+  ipAddressContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  job_runner_tokens edge predicates
+  """
+  hasJobRunnerTokens: Boolean
+  hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
+}
 """
 The builtin Map type
 """
@@ -50496,6 +53057,99 @@ type Organization implements Node {
     """
     where: CustomDomainWhereInput
   ): CustomDomainConnection!
+  jobRunners(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunners returned from the connection.
+    """
+    orderBy: [JobRunnerOrder!]
+
+    """
+    Filtering options for JobRunners returned from the connection.
+    """
+    where: JobRunnerWhereInput
+  ): JobRunnerConnection!
+  jobRunnerTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunnerTokens returned from the connection.
+    """
+    orderBy: [JobRunnerTokenOrder!]
+
+    """
+    Filtering options for JobRunnerTokens returned from the connection.
+    """
+    where: JobRunnerTokenWhereInput
+  ): JobRunnerTokenConnection!
+  jobRunnerRegistrationTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunnerRegistrationTokens returned from the connection.
+    """
+    orderBy: [JobRunnerRegistrationTokenOrder!]
+
+    """
+    Filtering options for JobRunnerRegistrationTokens returned from the connection.
+    """
+    where: JobRunnerRegistrationTokenWhereInput
+  ): JobRunnerRegistrationTokenConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -52102,6 +54756,21 @@ input OrganizationWhereInput {
   """
   hasCustomDomains: Boolean
   hasCustomDomainsWith: [CustomDomainWhereInput!]
+  """
+  job_runners edge predicates
+  """
+  hasJobRunners: Boolean
+  hasJobRunnersWith: [JobRunnerWhereInput!]
+  """
+  job_runner_tokens edge predicates
+  """
+  hasJobRunnerTokens: Boolean
+  hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
+  """
+  job_runner_registration_tokens edge predicates
+  """
+  hasJobRunnerRegistrationTokens: Boolean
+  hasJobRunnerRegistrationTokensWith: [JobRunnerRegistrationTokenWhereInput!]
   """
   members edge predicates
   """
@@ -56880,6 +59549,130 @@ type Query {
     """
     where: InviteWhereInput
   ): InviteConnection!
+  jobRunners(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunners returned from the connection.
+    """
+    orderBy: [JobRunnerOrder!]
+
+    """
+    Filtering options for JobRunners returned from the connection.
+    """
+    where: JobRunnerWhereInput
+  ): JobRunnerConnection!
+  jobRunnerHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunnerHistories returned from the connection.
+    """
+    orderBy: JobRunnerHistoryOrder
+
+    """
+    Filtering options for JobRunnerHistories returned from the connection.
+    """
+    where: JobRunnerHistoryWhereInput
+  ): JobRunnerHistoryConnection!
+  jobRunnerRegistrationTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunnerRegistrationTokens returned from the connection.
+    """
+    orderBy: [JobRunnerRegistrationTokenOrder!]
+
+    """
+    Filtering options for JobRunnerRegistrationTokens returned from the connection.
+    """
+    where: JobRunnerRegistrationTokenWhereInput
+  ): JobRunnerRegistrationTokenConnection!
+  jobRunnerTokens(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobRunnerTokens returned from the connection.
+    """
+    orderBy: [JobRunnerTokenOrder!]
+
+    """
+    Filtering options for JobRunnerTokens returned from the connection.
+    """
+    where: JobRunnerTokenWhereInput
+  ): JobRunnerTokenConnection!
   mappableDomains(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -65539,6 +68332,84 @@ input UpdateInviteInput {
   clearEvents: Boolean
 }
 """
+UpdateJobRunnerInput is used for update JobRunner object.
+Input was generated by ent.
+"""
+input UpdateJobRunnerInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the name of the runner
+  """
+  name: String
+  ownerID: ID
+  clearOwner: Boolean
+  addJobRunnerTokenIDs: [ID!]
+  removeJobRunnerTokenIDs: [ID!]
+  clearJobRunnerTokens: Boolean
+}
+"""
+UpdateJobRunnerRegistrationTokenInput is used for update JobRunnerRegistrationToken object.
+Input was generated by ent.
+"""
+input UpdateJobRunnerRegistrationTokenInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  lastUsedAt: Time
+  clearLastUsedAt: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  jobRunnerID: ID
+  clearJobRunner: Boolean
+}
+"""
+UpdateJobRunnerTokenInput is used for update JobRunnerToken object.
+Input was generated by ent.
+"""
+input UpdateJobRunnerTokenInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  lastUsedAt: Time
+  clearLastUsedAt: Boolean
+  """
+  whether the token is active
+  """
+  isActive: Boolean
+  clearIsActive: Boolean
+  """
+  the reason the token was revoked
+  """
+  revokedReason: String
+  clearRevokedReason: Boolean
+  """
+  the user who revoked the token
+  """
+  revokedBy: String
+  clearRevokedBy: Boolean
+  """
+  when the token was revoked
+  """
+  revokedAt: Time
+  clearRevokedAt: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addJobRunnerIDs: [ID!]
+  removeJobRunnerIDs: [ID!]
+  clearJobRunners: Boolean
+}
+"""
 UpdateMappableDomainInput is used for update MappableDomain object.
 Input was generated by ent.
 """
@@ -65808,6 +68679,15 @@ input UpdateOrganizationInput {
   addCustomDomainIDs: [ID!]
   removeCustomDomainIDs: [ID!]
   clearCustomDomains: Boolean
+  addJobRunnerIDs: [ID!]
+  removeJobRunnerIDs: [ID!]
+  clearJobRunners: Boolean
+  addJobRunnerTokenIDs: [ID!]
+  removeJobRunnerTokenIDs: [ID!]
+  clearJobRunnerTokens: Boolean
+  addJobRunnerRegistrationTokenIDs: [ID!]
+  removeJobRunnerRegistrationTokenIDs: [ID!]
+  clearJobRunnerRegistrationTokens: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -70243,6 +73123,190 @@ type InviteBulkCreatePayload {
     """
     invites: [Invite!]
 }`, BuiltIn: false},
+	{Name: "../schema/jobrunner.graphql", Input: `extend type Query {
+    """
+    Look up jobRunner by ID
+    """
+     jobRunner(
+        """
+        ID of the jobRunner
+        """
+        id: ID!
+    ):  JobRunner!
+}
+
+extend type Mutation{
+    """
+    Update an existing jobRunner
+    """
+    updateJobRunner(
+        """
+        ID of the jobRunner
+        """
+        id: ID!
+        """
+        New values for the jobRunner
+        """
+        input: UpdateJobRunnerInput!
+    ): JobRunnerUpdatePayload!
+    """
+    Delete an existing jobRunner
+    """
+    deleteJobRunner(
+        """
+        ID of the jobRunner
+        """
+        id: ID!
+    ): JobRunnerDeletePayload!
+}
+
+
+"""
+Return response for updateJobRunner mutation
+"""
+type JobRunnerUpdatePayload {
+    """
+    Updated jobRunner
+    """
+    jobRunner: JobRunner!
+}
+
+"""
+Return response for deleteJobRunner mutation
+"""
+type JobRunnerDeletePayload {
+    """
+    Deleted jobRunner ID
+    """
+    deletedID: ID!
+}
+`, BuiltIn: false},
+	{Name: "../schema/jobrunnerregistrationtoken.graphql", Input: `extend type Query {
+    """
+    Look up jobRunnerRegistrationToken by ID
+    """
+     jobRunnerRegistrationToken(
+        """
+        ID of the jobRunnerRegistrationToken
+        """
+        id: ID!
+    ):  JobRunnerRegistrationToken!
+}
+
+extend type Mutation{
+    """
+    Create a new jobRunnerRegistrationToken
+    """
+    createJobRunnerRegistrationToken(
+        """
+        values of the jobRunnerRegistrationToken
+        """
+        input: CreateJobRunnerRegistrationTokenInput!
+    ): JobRunnerRegistrationTokenCreatePayload!
+    """
+    Delete an existing jobRunnerRegistrationToken
+    """
+    deleteJobRunnerRegistrationToken(
+        """
+        ID of the jobRunnerRegistrationToken
+        """
+        id: ID!
+    ): JobRunnerRegistrationTokenDeletePayload!
+}
+
+"""
+Return response for createJobRunnerRegistrationToken mutation
+"""
+type JobRunnerRegistrationTokenCreatePayload {
+    """
+    Created jobRunnerRegistrationToken
+    """
+    jobRunnerRegistrationToken: JobRunnerRegistrationToken!
+}
+
+"""
+Return response for deleteJobRunnerRegistrationToken mutation
+"""
+type JobRunnerRegistrationTokenDeletePayload {
+    """
+    Deleted jobRunnerRegistrationToken ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkJobRunnerRegistrationToken mutation
+"""
+type JobRunnerRegistrationTokenBulkCreatePayload {
+    """
+    Created jobRunnerRegistrationTokens
+    """
+    jobRunnerRegistrationTokens: [JobRunnerRegistrationToken!]
+}
+`, BuiltIn: false},
+	{Name: "../schema/jobrunnertoken.graphql", Input: `extend type Query {
+    """
+    Look up jobRunnerToken by ID
+    """
+     jobRunnerToken(
+        """
+        ID of the jobRunnerToken
+        """
+        id: ID!
+    ):  JobRunnerToken!
+}
+
+extend type Mutation{
+    """
+    Create a new jobRunnerToken
+    """
+    createJobRunnerToken(
+        """
+        values of the jobRunnerToken
+        """
+        input: CreateJobRunnerTokenInput!
+    ): JobRunnerTokenCreatePayload!
+    """
+    Delete an existing jobRunnerToken
+    """
+    deleteJobRunnerToken(
+        """
+        ID of the jobRunnerToken
+        """
+        id: ID!
+    ): JobRunnerTokenDeletePayload!
+}
+
+"""
+Return response for createJobRunnerToken mutation
+"""
+type JobRunnerTokenCreatePayload {
+    """
+    Created jobRunnerToken
+    """
+    jobRunnerToken: JobRunnerToken!
+}
+
+"""
+Return response for updateJobRunnerToken mutation
+"""
+type JobRunnerTokenUpdatePayload {
+    """
+    Updated jobRunnerToken
+    """
+    jobRunnerToken: JobRunnerToken!
+}
+
+"""
+Return response for deleteJobRunnerToken mutation
+"""
+type JobRunnerTokenDeletePayload {
+    """
+    Deleted jobRunnerToken ID
+    """
+    deletedID: ID!
+}
+`, BuiltIn: false},
 	{Name: "../schema/mappabledomain.graphql", Input: `extend type Query {
     """
     Look up mappableDomain by ID
@@ -72024,6 +75088,81 @@ scalar AAGUID
         last: Int
     ): InviteConnection
     """
+    Search across JobRunner objects
+    """
+    jobRunnerSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): JobRunnerConnection
+    """
+    Search across JobRunnerRegistrationToken objects
+    """
+    jobRunnerRegistrationTokenSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): JobRunnerRegistrationTokenConnection
+    """
+    Search across JobRunnerToken objects
+    """
+    jobRunnerTokenSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): JobRunnerTokenConnection
+    """
     Search across MappableDomain objects
     """
     mappableDomainSearch(
@@ -72500,6 +75639,9 @@ type SearchResults{
   integrations: IntegrationConnection
   internalPolicies: InternalPolicyConnection
   invites: InviteConnection
+  jobRunners: JobRunnerConnection
+  jobRunnerRegistrationTokens: JobRunnerRegistrationTokenConnection
+  jobRunnerTokens: JobRunnerTokenConnection
   mappableDomains: MappableDomainConnection
   mappedControls: MappedControlConnection
   narratives: NarrativeConnection

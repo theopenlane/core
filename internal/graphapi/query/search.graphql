@@ -281,6 +281,53 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    jobRunners {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
+    jobRunnerRegistrationTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
+    jobRunnerTokens {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
     mappableDomains {
       totalCount
       pageInfo {

@@ -562,6 +562,54 @@ type InviteUpdatePayload struct {
 	Invite *generated.Invite `json:"invite"`
 }
 
+// Return response for deleteJobRunner mutation
+type JobRunnerDeletePayload struct {
+	// Deleted jobRunner ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkJobRunnerRegistrationToken mutation
+type JobRunnerRegistrationTokenBulkCreatePayload struct {
+	// Created jobRunnerRegistrationTokens
+	JobRunnerRegistrationTokens []*generated.JobRunnerRegistrationToken `json:"jobRunnerRegistrationTokens,omitempty"`
+}
+
+// Return response for createJobRunnerRegistrationToken mutation
+type JobRunnerRegistrationTokenCreatePayload struct {
+	// Created jobRunnerRegistrationToken
+	JobRunnerRegistrationToken *generated.JobRunnerRegistrationToken `json:"jobRunnerRegistrationToken"`
+}
+
+// Return response for deleteJobRunnerRegistrationToken mutation
+type JobRunnerRegistrationTokenDeletePayload struct {
+	// Deleted jobRunnerRegistrationToken ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createJobRunnerToken mutation
+type JobRunnerTokenCreatePayload struct {
+	// Created jobRunnerToken
+	JobRunnerToken *generated.JobRunnerToken `json:"jobRunnerToken"`
+}
+
+// Return response for deleteJobRunnerToken mutation
+type JobRunnerTokenDeletePayload struct {
+	// Deleted jobRunnerToken ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateJobRunnerToken mutation
+type JobRunnerTokenUpdatePayload struct {
+	// Updated jobRunnerToken
+	JobRunnerToken *generated.JobRunnerToken `json:"jobRunnerToken"`
+}
+
+// Return response for updateJobRunner mutation
+type JobRunnerUpdatePayload struct {
+	// Updated jobRunner
+	JobRunner *generated.JobRunner `json:"jobRunner"`
+}
+
 // Return response for createBulkMappableDomain mutation
 type MappableDomainBulkCreatePayload struct {
 	// Created mappableDomains
@@ -843,42 +891,45 @@ type SearchResults struct {
 	// Information to aid in pagination.
 	Page *entgql.PageInfo[string] `json:"page"`
 	// Identifies the total count of items in the connection.
-	TotalCount             int                                        `json:"totalCount"`
-	APITokens              *generated.APITokenConnection              `json:"apiTokens,omitempty"`
-	ActionPlans            *generated.ActionPlanConnection            `json:"actionPlans,omitempty"`
-	Contacts               *generated.ContactConnection               `json:"contacts,omitempty"`
-	Controls               *generated.ControlConnection               `json:"controls,omitempty"`
-	ControlImplementations *generated.ControlImplementationConnection `json:"controlImplementations,omitempty"`
-	ControlObjectives      *generated.ControlObjectiveConnection      `json:"controlObjectives,omitempty"`
-	CustomDomains          *generated.CustomDomainConnection          `json:"customDomains,omitempty"`
-	DocumentData           *generated.DocumentDataConnection          `json:"documentData,omitempty"`
-	Entities               *generated.EntityConnection                `json:"entities,omitempty"`
-	EntityTypes            *generated.EntityTypeConnection            `json:"entityTypes,omitempty"`
-	Events                 *generated.EventConnection                 `json:"events,omitempty"`
-	Evidences              *generated.EvidenceConnection              `json:"evidences,omitempty"`
-	Files                  *generated.FileConnection                  `json:"files,omitempty"`
-	Groups                 *generated.GroupConnection                 `json:"groups,omitempty"`
-	Integrations           *generated.IntegrationConnection           `json:"integrations,omitempty"`
-	InternalPolicies       *generated.InternalPolicyConnection        `json:"internalPolicies,omitempty"`
-	Invites                *generated.InviteConnection                `json:"invites,omitempty"`
-	MappableDomains        *generated.MappableDomainConnection        `json:"mappableDomains,omitempty"`
-	MappedControls         *generated.MappedControlConnection         `json:"mappedControls,omitempty"`
-	Narratives             *generated.NarrativeConnection             `json:"narratives,omitempty"`
-	OrgSubscriptions       *generated.OrgSubscriptionConnection       `json:"orgSubscriptions,omitempty"`
-	Organizations          *generated.OrganizationConnection          `json:"organizations,omitempty"`
-	OrganizationSettings   *generated.OrganizationSettingConnection   `json:"organizationSettings,omitempty"`
-	PersonalAccessTokens   *generated.PersonalAccessTokenConnection   `json:"personalAccessTokens,omitempty"`
-	Procedures             *generated.ProcedureConnection             `json:"procedures,omitempty"`
-	Programs               *generated.ProgramConnection               `json:"programs,omitempty"`
-	Risks                  *generated.RiskConnection                  `json:"risks,omitempty"`
-	Standards              *generated.StandardConnection              `json:"standards,omitempty"`
-	Subcontrols            *generated.SubcontrolConnection            `json:"subcontrols,omitempty"`
-	Subscribers            *generated.SubscriberConnection            `json:"subscribers,omitempty"`
-	Tasks                  *generated.TaskConnection                  `json:"tasks,omitempty"`
-	Templates              *generated.TemplateConnection              `json:"templates,omitempty"`
-	Users                  *generated.UserConnection                  `json:"users,omitempty"`
-	UserSettings           *generated.UserSettingConnection           `json:"userSettings,omitempty"`
-	Webauthns              *generated.WebauthnConnection              `json:"webauthns,omitempty"`
+	TotalCount                  int                                             `json:"totalCount"`
+	APITokens                   *generated.APITokenConnection                   `json:"apiTokens,omitempty"`
+	ActionPlans                 *generated.ActionPlanConnection                 `json:"actionPlans,omitempty"`
+	Contacts                    *generated.ContactConnection                    `json:"contacts,omitempty"`
+	Controls                    *generated.ControlConnection                    `json:"controls,omitempty"`
+	ControlImplementations      *generated.ControlImplementationConnection      `json:"controlImplementations,omitempty"`
+	ControlObjectives           *generated.ControlObjectiveConnection           `json:"controlObjectives,omitempty"`
+	CustomDomains               *generated.CustomDomainConnection               `json:"customDomains,omitempty"`
+	DocumentData                *generated.DocumentDataConnection               `json:"documentData,omitempty"`
+	Entities                    *generated.EntityConnection                     `json:"entities,omitempty"`
+	EntityTypes                 *generated.EntityTypeConnection                 `json:"entityTypes,omitempty"`
+	Events                      *generated.EventConnection                      `json:"events,omitempty"`
+	Evidences                   *generated.EvidenceConnection                   `json:"evidences,omitempty"`
+	Files                       *generated.FileConnection                       `json:"files,omitempty"`
+	Groups                      *generated.GroupConnection                      `json:"groups,omitempty"`
+	Integrations                *generated.IntegrationConnection                `json:"integrations,omitempty"`
+	InternalPolicies            *generated.InternalPolicyConnection             `json:"internalPolicies,omitempty"`
+	Invites                     *generated.InviteConnection                     `json:"invites,omitempty"`
+	JobRunners                  *generated.JobRunnerConnection                  `json:"jobRunners,omitempty"`
+	JobRunnerRegistrationTokens *generated.JobRunnerRegistrationTokenConnection `json:"jobRunnerRegistrationTokens,omitempty"`
+	JobRunnerTokens             *generated.JobRunnerTokenConnection             `json:"jobRunnerTokens,omitempty"`
+	MappableDomains             *generated.MappableDomainConnection             `json:"mappableDomains,omitempty"`
+	MappedControls              *generated.MappedControlConnection              `json:"mappedControls,omitempty"`
+	Narratives                  *generated.NarrativeConnection                  `json:"narratives,omitempty"`
+	OrgSubscriptions            *generated.OrgSubscriptionConnection            `json:"orgSubscriptions,omitempty"`
+	Organizations               *generated.OrganizationConnection               `json:"organizations,omitempty"`
+	OrganizationSettings        *generated.OrganizationSettingConnection        `json:"organizationSettings,omitempty"`
+	PersonalAccessTokens        *generated.PersonalAccessTokenConnection        `json:"personalAccessTokens,omitempty"`
+	Procedures                  *generated.ProcedureConnection                  `json:"procedures,omitempty"`
+	Programs                    *generated.ProgramConnection                    `json:"programs,omitempty"`
+	Risks                       *generated.RiskConnection                       `json:"risks,omitempty"`
+	Standards                   *generated.StandardConnection                   `json:"standards,omitempty"`
+	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`
+	Subscribers                 *generated.SubscriberConnection                 `json:"subscribers,omitempty"`
+	Tasks                       *generated.TaskConnection                       `json:"tasks,omitempty"`
+	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
+	Users                       *generated.UserConnection                       `json:"users,omitempty"`
+	UserSettings                *generated.UserSettingConnection                `json:"userSettings,omitempty"`
+	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
 }
 
 // Return response for createBulkStandard mutation

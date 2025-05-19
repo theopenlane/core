@@ -62,6 +62,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*InternalPolicyMutation]() {
 		c.InternalPolicy.Use(hook)
 	}
+	for _, hook := range history.Hooks[*JobRunnerMutation]() {
+		c.JobRunner.Use(hook)
+	}
 	for _, hook := range history.Hooks[*MappableDomainMutation]() {
 		c.MappableDomain.Use(hook)
 	}

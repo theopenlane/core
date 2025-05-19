@@ -961,6 +961,153 @@ func (ec *executionContext) fieldContext_SearchResults_invites(_ context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_jobRunners(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SearchResults_jobRunners(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.JobRunners, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*generated.JobRunnerConnection)
+	fc.Result = res
+	return ec.marshalOJobRunnerConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_jobRunners(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_JobRunnerConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_JobRunnerConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_JobRunnerConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type JobRunnerConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResults_jobRunnerRegistrationTokens(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SearchResults_jobRunnerRegistrationTokens(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.JobRunnerRegistrationTokens, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*generated.JobRunnerRegistrationTokenConnection)
+	fc.Result = res
+	return ec.marshalOJobRunnerRegistrationTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationTokenConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_jobRunnerRegistrationTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_JobRunnerRegistrationTokenConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_JobRunnerRegistrationTokenConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_JobRunnerRegistrationTokenConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type JobRunnerRegistrationTokenConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResults_jobRunnerTokens(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SearchResults_jobRunnerTokens(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.JobRunnerTokens, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*generated.JobRunnerTokenConnection)
+	fc.Result = res
+	return ec.marshalOJobRunnerTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerTokenConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_jobRunnerTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_JobRunnerTokenConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_JobRunnerTokenConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_JobRunnerTokenConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type JobRunnerTokenConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_mappableDomains(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SearchResults_mappableDomains(ctx, field)
 	if err != nil {
@@ -1910,6 +2057,12 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_internalPolicies(ctx, field, obj)
 		case "invites":
 			out.Values[i] = ec._SearchResults_invites(ctx, field, obj)
+		case "jobRunners":
+			out.Values[i] = ec._SearchResults_jobRunners(ctx, field, obj)
+		case "jobRunnerRegistrationTokens":
+			out.Values[i] = ec._SearchResults_jobRunnerRegistrationTokens(ctx, field, obj)
+		case "jobRunnerTokens":
+			out.Values[i] = ec._SearchResults_jobRunnerTokens(ctx, field, obj)
 		case "mappableDomains":
 			out.Values[i] = ec._SearchResults_mappableDomains(ctx, field, obj)
 		case "mappedControls":

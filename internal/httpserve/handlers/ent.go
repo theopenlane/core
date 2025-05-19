@@ -6,11 +6,11 @@ import (
 
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 	"github.com/rs/zerolog/log"
-
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -543,4 +543,42 @@ func (h *Handler) checkForEventID(ctx context.Context, id string) (bool, error) 
 	}
 
 	return exists, nil
+}
+
+func (h *Handler) getOrgByJobRunnerVerificationToken(ctx context.Context, token string) (*ent.JobRunnerRegistrationToken, error) {
+	registrationToken, err := transaction.FromContext(ctx).
+		JobRunnerRegistrationToken.Query().
+		Where(
+			jobrunnerregistrationtoken.Token(token),
+		).
+		Only(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error fetching runner registration token from database")
+
+		return nil, err
+	}
+
+	return registrationToken, nil
+}
+
+func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegistrationToken,
+	req models.JobRunnerRegistrationRequest) error {
+	input := ent.CreateJobRunnerInput{
+		IPAddress: req.IPAddress,
+		Name:      req.Name,
+		Tags:      req.Tags,
+		OwnerID:   &token.OwnerID,
+	}
+
+	err := transaction.FromContext(ctx).JobRunner.Create().
+		SetInput(input).
+		SetCreatedBy(token.ID).
+		SetUpdatedBy(token.ID).
+		Exec(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("could not create job runner")
+		return err
+	}
+
+	return nil
 }
