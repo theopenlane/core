@@ -7,7 +7,9 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // InterceptorJobRunnerRegistrationToken is middleware to only list non expired
@@ -22,6 +24,27 @@ func InterceptorJobRunnerRegistrationToken() ent.Interceptor {
 				),
 			)
 
+			return nil
+		},
+	)
+}
+
+// InterceptorJobRunnerFilterSystemOwned makes sure to always filter out
+// system owned runners from responses except the request is from an admin
+func InterceptorJobRunnerFilterSystemOwned() ent.Interceptor {
+	return intercept.TraverseJobRunner(
+		func(ctx context.Context, q *generated.JobRunnerQuery) error {
+
+			isAdmin, err := rule.CheckIsSystemAdmin(ctx, nil)
+			if err != nil {
+				return err
+			}
+
+			if isAdmin {
+				return nil
+			}
+
+			q.Where(jobrunner.OwnerIDNotNil())
 			return nil
 		},
 	)

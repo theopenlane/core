@@ -29,19 +29,19 @@ func TestQueryJobRunners(t *testing.T) {
 			name:          "happy path user",
 			client:        suite.client.api,
 			ctx:           testUser1.UserCtx,
-			expectedCount: 3, // system runner
+			expectedCount: 2,
 		},
 		{
 			name:          "happy path, using personal access token",
 			client:        suite.client.apiWithPAT,
 			ctx:           context.Background(),
-			expectedCount: 3, // system runner
+			expectedCount: 2,
 		},
 		{
 			name:          "valid test user 2",
 			client:        suite.client.api,
 			ctx:           testUser2.UserCtx,
-			expectedCount: 2, // includes system runner
+			expectedCount: 1,
 		},
 		{
 			name:     "no auth",
@@ -93,7 +93,7 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 			client:        suite.client.api,
 			ctx:           rule.WithInternalContext(testUser1.UserCtx),
 			runnerID:      firstJob.ID,
-			expectedCount: 2, // we are deleting 1, but an existing system runner exists
+			expectedCount: 1,
 		},
 		{
 			// the first test case should have deleted the runner
@@ -108,14 +108,14 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 			client:        suite.client.apiWithPAT,
 			ctx:           rule.WithInternalContext(context.Background()),
 			runnerID:      secondJob.ID,
-			expectedCount: 1, // left with the system runner
+			expectedCount: 0,
 		},
 		{
 			name:     "happy path but cannot delete system runner",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
 			runnerID: systemJob.ID,
-			errorMsg: notAuthorizedErrorMsg,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 

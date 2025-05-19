@@ -2197,8 +2197,10 @@ func init() {
 	jobrunner.Hooks[7] = jobrunnerHooks[1]
 	jobrunnerMixinInters1 := jobrunnerMixin[1].Interceptors()
 	jobrunnerMixinInters5 := jobrunnerMixin[5].Interceptors()
+	jobrunnerInters := schema.JobRunner{}.Interceptors()
 	jobrunner.Interceptors[0] = jobrunnerMixinInters1[0]
 	jobrunner.Interceptors[1] = jobrunnerMixinInters5[0]
+	jobrunner.Interceptors[2] = jobrunnerInters[0]
 	jobrunnerMixinFields0 := jobrunnerMixin[0].Fields()
 	_ = jobrunnerMixinFields0
 	jobrunnerMixinFields2 := jobrunnerMixin[2].Fields()
