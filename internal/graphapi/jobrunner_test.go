@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -91,7 +90,7 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 		{
 			name:          "happy path user",
 			client:        suite.client.api,
-			ctx:           rule.WithInternalContext(testUser1.UserCtx),
+			ctx:           testUser1.UserCtx,
 			runnerID:      firstJob.ID,
 			expectedCount: 1,
 		},
@@ -99,14 +98,14 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 			// the first test case should have deleted the runner
 			name:     "happy path, but deleted job runner",
 			client:   suite.client.apiWithPAT,
-			ctx:      rule.WithInternalContext(context.Background()),
+			ctx:      context.Background(),
 			runnerID: firstJob.ID,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:          "happy path user with pat",
 			client:        suite.client.apiWithPAT,
-			ctx:           rule.WithInternalContext(context.Background()),
+			ctx:           context.Background(),
 			runnerID:      secondJob.ID,
 			expectedCount: 0,
 		},
