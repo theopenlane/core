@@ -806,46 +806,6 @@ func init() {
 	customdomainDescMappableDomainID := customdomainFields[1].Descriptor()
 	// customdomain.MappableDomainIDValidator is a validator for the "mappable_domain_id" field. It is called by the builders before save.
 	customdomain.MappableDomainIDValidator = customdomainDescMappableDomainID.Validators[0].(func(string) error)
-	// customdomainDescTxtRecordSubdomain is the schema descriptor for txt_record_subdomain field.
-	customdomainDescTxtRecordSubdomain := customdomainFields[2].Descriptor()
-	// customdomain.DefaultTxtRecordSubdomain holds the default value on creation for the txt_record_subdomain field.
-	customdomain.DefaultTxtRecordSubdomain = customdomainDescTxtRecordSubdomain.Default.(string)
-	// customdomain.TxtRecordSubdomainValidator is a validator for the "txt_record_subdomain" field. It is called by the builders before save.
-	customdomain.TxtRecordSubdomainValidator = func() func(string) error {
-		validators := customdomainDescTxtRecordSubdomain.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(txt_record_subdomain string) error {
-			for _, fn := range fns {
-				if err := fn(txt_record_subdomain); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
-	// customdomainDescTxtRecordValue is the schema descriptor for txt_record_value field.
-	customdomainDescTxtRecordValue := customdomainFields[3].Descriptor()
-	// customdomain.DefaultTxtRecordValue holds the default value on creation for the txt_record_value field.
-	customdomain.DefaultTxtRecordValue = customdomainDescTxtRecordValue.Default.(func() string)
-	// customdomain.TxtRecordValueValidator is a validator for the "txt_record_value" field. It is called by the builders before save.
-	customdomain.TxtRecordValueValidator = func() func(string) error {
-		validators := customdomainDescTxtRecordValue.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(txt_record_value string) error {
-			for _, fn := range fns {
-				if err := fn(txt_record_value); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
 	// customdomainDescID is the schema descriptor for id field.
 	customdomainDescID := customdomainMixinFields2[0].Descriptor()
 	// customdomain.DefaultID holds the default value on creation for the id field.
@@ -872,14 +832,6 @@ func init() {
 	customdomainhistoryDescTags := customdomainhistoryFields[10].Descriptor()
 	// customdomainhistory.DefaultTags holds the default value on creation for the tags field.
 	customdomainhistory.DefaultTags = customdomainhistoryDescTags.Default.([]string)
-	// customdomainhistoryDescTxtRecordSubdomain is the schema descriptor for txt_record_subdomain field.
-	customdomainhistoryDescTxtRecordSubdomain := customdomainhistoryFields[14].Descriptor()
-	// customdomainhistory.DefaultTxtRecordSubdomain holds the default value on creation for the txt_record_subdomain field.
-	customdomainhistory.DefaultTxtRecordSubdomain = customdomainhistoryDescTxtRecordSubdomain.Default.(string)
-	// customdomainhistoryDescTxtRecordValue is the schema descriptor for txt_record_value field.
-	customdomainhistoryDescTxtRecordValue := customdomainhistoryFields[15].Descriptor()
-	// customdomainhistory.DefaultTxtRecordValue holds the default value on creation for the txt_record_value field.
-	customdomainhistory.DefaultTxtRecordValue = customdomainhistoryDescTxtRecordValue.Default.(func() string)
 	// customdomainhistoryDescID is the schema descriptor for id field.
 	customdomainhistoryDescID := customdomainhistoryFields[9].Descriptor()
 	// customdomainhistory.DefaultID holds the default value on creation for the id field.

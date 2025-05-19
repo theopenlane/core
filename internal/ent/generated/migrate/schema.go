@@ -540,9 +540,6 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
-		{Name: "txt_record_subdomain", Type: field.TypeString, Size: 16, Default: "_olverify"},
-		{Name: "txt_record_value", Type: field.TypeString, Size: 64},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
 		{Name: "mappable_domain_id", Type: field.TypeString},
 		{Name: "mappable_domain_custom_domains", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -555,19 +552,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "custom_domains_mappable_domains_mappable_domain",
-				Columns:    []*schema.Column{CustomDomainsColumns[12]},
+				Columns:    []*schema.Column{CustomDomainsColumns[9]},
 				RefColumns: []*schema.Column{MappableDomainsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "custom_domains_mappable_domains_custom_domains",
-				Columns:    []*schema.Column{CustomDomainsColumns[13]},
+				Columns:    []*schema.Column{CustomDomainsColumns[10]},
 				RefColumns: []*schema.Column{MappableDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "custom_domains_organizations_custom_domains",
-				Columns:    []*schema.Column{CustomDomainsColumns[14]},
+				Columns:    []*schema.Column{CustomDomainsColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -589,7 +586,7 @@ var (
 			{
 				Name:    "customdomain_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{CustomDomainsColumns[14]},
+				Columns: []*schema.Column{CustomDomainsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -612,9 +609,6 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
 		{Name: "mappable_domain_id", Type: field.TypeString},
-		{Name: "txt_record_subdomain", Type: field.TypeString, Size: 16, Default: "_olverify"},
-		{Name: "txt_record_value", Type: field.TypeString, Size: 64},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
 	}
 	// CustomDomainHistoryTable holds the schema information for the "custom_domain_history" table.
 	CustomDomainHistoryTable = &schema.Table{

@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // CustomDomain is the model entity for the CustomDomain schema.
@@ -41,12 +40,6 @@ type CustomDomain struct {
 	CnameRecord string `json:"cname_record,omitempty"`
 	// The mappable domain id that this custom domain maps to
 	MappableDomainID string `json:"mappable_domain_id,omitempty"`
-	// String to be prepended to the cname_record, used to evaluate domain ownership.
-	TxtRecordSubdomain string `json:"txt_record_subdomain,omitempty"`
-	// Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
-	TxtRecordValue string `json:"txt_record_value,omitempty"`
-	// Status of the custom domain verification
-	Status enums.CustomDomainStatus `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CustomDomainQuery when eager-loading is set.
 	Edges                          CustomDomainEdges `json:"edges"`
@@ -96,7 +89,7 @@ func (*CustomDomain) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case customdomain.FieldTags:
 			values[i] = new([]byte)
-		case customdomain.FieldID, customdomain.FieldCreatedBy, customdomain.FieldUpdatedBy, customdomain.FieldDeletedBy, customdomain.FieldOwnerID, customdomain.FieldCnameRecord, customdomain.FieldMappableDomainID, customdomain.FieldTxtRecordSubdomain, customdomain.FieldTxtRecordValue, customdomain.FieldStatus:
+		case customdomain.FieldID, customdomain.FieldCreatedBy, customdomain.FieldUpdatedBy, customdomain.FieldDeletedBy, customdomain.FieldOwnerID, customdomain.FieldCnameRecord, customdomain.FieldMappableDomainID:
 			values[i] = new(sql.NullString)
 		case customdomain.FieldCreatedAt, customdomain.FieldUpdatedAt, customdomain.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -185,24 +178,6 @@ func (cd *CustomDomain) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				cd.MappableDomainID = value.String
 			}
-		case customdomain.FieldTxtRecordSubdomain:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field txt_record_subdomain", values[i])
-			} else if value.Valid {
-				cd.TxtRecordSubdomain = value.String
-			}
-		case customdomain.FieldTxtRecordValue:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field txt_record_value", values[i])
-			} else if value.Valid {
-				cd.TxtRecordValue = value.String
-			}
-		case customdomain.FieldStatus:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field status", values[i])
-			} else if value.Valid {
-				cd.Status = enums.CustomDomainStatus(value.String)
-			}
 		case customdomain.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mappable_domain_custom_domains", values[i])
@@ -285,15 +260,6 @@ func (cd *CustomDomain) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("mappable_domain_id=")
 	builder.WriteString(cd.MappableDomainID)
-	builder.WriteString(", ")
-	builder.WriteString("txt_record_subdomain=")
-	builder.WriteString(cd.TxtRecordSubdomain)
-	builder.WriteString(", ")
-	builder.WriteString("txt_record_value=")
-	builder.WriteString(cd.TxtRecordValue)
-	builder.WriteString(", ")
-	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", cd.Status))
 	builder.WriteByte(')')
 	return builder.String()
 }

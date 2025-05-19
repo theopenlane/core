@@ -612,22 +612,19 @@ type ComplexityRoot struct {
 	}
 
 	CustomDomain struct {
-		CnameRecord        func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		DeletedAt          func(childComplexity int) int
-		DeletedBy          func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		MappableDomain     func(childComplexity int) int
-		MappableDomainID   func(childComplexity int) int
-		Owner              func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		Status             func(childComplexity int) int
-		Tags               func(childComplexity int) int
-		TxtRecordSubdomain func(childComplexity int) int
-		TxtRecordValue     func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
+		CnameRecord      func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DeletedAt        func(childComplexity int) int
+		DeletedBy        func(childComplexity int) int
+		ID               func(childComplexity int) int
+		MappableDomain   func(childComplexity int) int
+		MappableDomainID func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	CustomDomainBulkCreatePayload struct {
@@ -654,23 +651,20 @@ type ComplexityRoot struct {
 	}
 
 	CustomDomainHistory struct {
-		CnameRecord        func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		DeletedAt          func(childComplexity int) int
-		DeletedBy          func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		MappableDomainID   func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		Status             func(childComplexity int) int
-		Tags               func(childComplexity int) int
-		TxtRecordSubdomain func(childComplexity int) int
-		TxtRecordValue     func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
+		CnameRecord      func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DeletedAt        func(childComplexity int) int
+		DeletedBy        func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		MappableDomainID func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
 	}
 
 	CustomDomainHistoryConnection struct {
@@ -6951,33 +6945,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomain.OwnerID(childComplexity), true
 
-	case "CustomDomain.status":
-		if e.complexity.CustomDomain.Status == nil {
-			break
-		}
-
-		return e.complexity.CustomDomain.Status(childComplexity), true
-
 	case "CustomDomain.tags":
 		if e.complexity.CustomDomain.Tags == nil {
 			break
 		}
 
 		return e.complexity.CustomDomain.Tags(childComplexity), true
-
-	case "CustomDomain.txtRecordSubdomain":
-		if e.complexity.CustomDomain.TxtRecordSubdomain == nil {
-			break
-		}
-
-		return e.complexity.CustomDomain.TxtRecordSubdomain(childComplexity), true
-
-	case "CustomDomain.txtRecordValue":
-		if e.complexity.CustomDomain.TxtRecordValue == nil {
-			break
-		}
-
-		return e.complexity.CustomDomain.TxtRecordValue(childComplexity), true
 
 	case "CustomDomain.updatedAt":
 		if e.complexity.CustomDomain.UpdatedAt == nil {
@@ -7126,33 +7099,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomainHistory.Ref(childComplexity), true
 
-	case "CustomDomainHistory.status":
-		if e.complexity.CustomDomainHistory.Status == nil {
-			break
-		}
-
-		return e.complexity.CustomDomainHistory.Status(childComplexity), true
-
 	case "CustomDomainHistory.tags":
 		if e.complexity.CustomDomainHistory.Tags == nil {
 			break
 		}
 
 		return e.complexity.CustomDomainHistory.Tags(childComplexity), true
-
-	case "CustomDomainHistory.txtRecordSubdomain":
-		if e.complexity.CustomDomainHistory.TxtRecordSubdomain == nil {
-			break
-		}
-
-		return e.complexity.CustomDomainHistory.TxtRecordSubdomain(childComplexity), true
-
-	case "CustomDomainHistory.txtRecordValue":
-		if e.complexity.CustomDomainHistory.TxtRecordValue == nil {
-			break
-		}
-
-		return e.complexity.CustomDomainHistory.TxtRecordValue(childComplexity), true
 
 	case "CustomDomainHistory.updatedAt":
 		if e.complexity.CustomDomainHistory.UpdatedAt == nil {
@@ -36577,18 +36529,6 @@ type CustomDomain implements Node {
   The mappable domain id that this custom domain maps to
   """
   mappableDomainID: ID!
-  """
-  String to be prepended to the cname_record, used to evaluate domain ownership.
-  """
-  txtRecordSubdomain: String!
-  """
-  Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
-  """
-  txtRecordValue: String!
-  """
-  Status of the custom domain verification
-  """
-  status: CustomDomainCustomDomainStatus!
   owner: Organization
   mappableDomain: MappableDomain!
 }
@@ -36608,15 +36548,6 @@ type CustomDomainConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
-}
-"""
-CustomDomainCustomDomainStatus is enum for the field status
-"""
-enum CustomDomainCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
-  INVALID
-  VERIFIED
-  FAILED_VERIFY
-  PENDING
 }
 """
 An edge in a connection.
@@ -36658,18 +36589,6 @@ type CustomDomainHistory implements Node {
   The mappable domain id that this custom domain maps to
   """
   mappableDomainID: String!
-  """
-  String to be prepended to the cname_record, used to evaluate domain ownership.
-  """
-  txtRecordSubdomain: String!
-  """
-  Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
-  """
-  txtRecordValue: String!
-  """
-  Status of the custom domain verification
-  """
-  status: CustomDomainHistoryCustomDomainStatus!
 }
 """
 A connection to a list of items.
@@ -36687,15 +36606,6 @@ type CustomDomainHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
-}
-"""
-CustomDomainHistoryCustomDomainStatus is enum for the field status
-"""
-enum CustomDomainHistoryCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
-  INVALID
-  VERIFIED
-  FAILED_VERIFY
-  PENDING
 }
 """
 An edge in a connection.
@@ -36939,13 +36849,6 @@ input CustomDomainHistoryWhereInput {
   mappableDomainIDHasSuffix: String
   mappableDomainIDEqualFold: String
   mappableDomainIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: CustomDomainHistoryCustomDomainStatus
-  statusNEQ: CustomDomainHistoryCustomDomainStatus
-  statusIn: [CustomDomainHistoryCustomDomainStatus!]
-  statusNotIn: [CustomDomainHistoryCustomDomainStatus!]
 }
 """
 Ordering options for CustomDomain connections
@@ -37132,13 +37035,6 @@ input CustomDomainWhereInput {
   mappableDomainIDHasSuffix: ID
   mappableDomainIDEqualFold: ID
   mappableDomainIDContainsFold: ID
-  """
-  status field predicates
-  """
-  status: CustomDomainCustomDomainStatus
-  statusNEQ: CustomDomainCustomDomainStatus
-  statusIn: [CustomDomainCustomDomainStatus!]
-  statusNotIn: [CustomDomainCustomDomainStatus!]
   """
   owner edge predicates
   """

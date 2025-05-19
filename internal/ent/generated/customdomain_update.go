@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -144,20 +143,6 @@ func (cdu *CustomDomainUpdate) ClearOwnerID() *CustomDomainUpdate {
 	return cdu
 }
 
-// SetStatus sets the "status" field.
-func (cdu *CustomDomainUpdate) SetStatus(eds enums.CustomDomainStatus) *CustomDomainUpdate {
-	cdu.mutation.SetStatus(eds)
-	return cdu
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (cdu *CustomDomainUpdate) SetNillableStatus(eds *enums.CustomDomainStatus) *CustomDomainUpdate {
-	if eds != nil {
-		cdu.SetStatus(*eds)
-	}
-	return cdu
-}
-
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cdu *CustomDomainUpdate) SetOwner(o *Organization) *CustomDomainUpdate {
 	return cdu.SetOwnerID(o.ID)
@@ -221,11 +206,6 @@ func (cdu *CustomDomainUpdate) check() error {
 	if v, ok := cdu.mutation.OwnerID(); ok {
 		if err := customdomain.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.owner_id": %w`, err)}
-		}
-	}
-	if v, ok := cdu.mutation.Status(); ok {
-		if err := customdomain.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.status": %w`, err)}
 		}
 	}
 	if cdu.mutation.MappableDomainCleared() && len(cdu.mutation.MappableDomainIDs()) > 0 {
@@ -292,9 +272,6 @@ func (cdu *CustomDomainUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cdu.mutation.TagsCleared() {
 		_spec.ClearField(customdomain.FieldTags, field.TypeJSON)
-	}
-	if value, ok := cdu.mutation.Status(); ok {
-		_spec.SetField(customdomain.FieldStatus, field.TypeEnum, value)
 	}
 	if cdu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -461,20 +438,6 @@ func (cduo *CustomDomainUpdateOne) ClearOwnerID() *CustomDomainUpdateOne {
 	return cduo
 }
 
-// SetStatus sets the "status" field.
-func (cduo *CustomDomainUpdateOne) SetStatus(eds enums.CustomDomainStatus) *CustomDomainUpdateOne {
-	cduo.mutation.SetStatus(eds)
-	return cduo
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (cduo *CustomDomainUpdateOne) SetNillableStatus(eds *enums.CustomDomainStatus) *CustomDomainUpdateOne {
-	if eds != nil {
-		cduo.SetStatus(*eds)
-	}
-	return cduo
-}
-
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cduo *CustomDomainUpdateOne) SetOwner(o *Organization) *CustomDomainUpdateOne {
 	return cduo.SetOwnerID(o.ID)
@@ -551,11 +514,6 @@ func (cduo *CustomDomainUpdateOne) check() error {
 	if v, ok := cduo.mutation.OwnerID(); ok {
 		if err := customdomain.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.owner_id": %w`, err)}
-		}
-	}
-	if v, ok := cduo.mutation.Status(); ok {
-		if err := customdomain.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.status": %w`, err)}
 		}
 	}
 	if cduo.mutation.MappableDomainCleared() && len(cduo.mutation.MappableDomainIDs()) > 0 {
@@ -639,9 +597,6 @@ func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDo
 	}
 	if cduo.mutation.TagsCleared() {
 		_spec.ClearField(customdomain.FieldTags, field.TypeJSON)
-	}
-	if value, ok := cduo.mutation.Status(); ok {
-		_spec.SetField(customdomain.FieldStatus, field.TypeEnum, value)
 	}
 	if cduo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

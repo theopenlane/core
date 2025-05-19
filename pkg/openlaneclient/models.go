@@ -5013,15 +5013,9 @@ type CustomDomain struct {
 	// the name of the custom domain
 	CnameRecord string `json:"cnameRecord"`
 	// The mappable domain id that this custom domain maps to
-	MappableDomainID string `json:"mappableDomainID"`
-	// String to be prepended to the cname_record, used to evaluate domain ownership.
-	TxtRecordSubdomain string `json:"txtRecordSubdomain"`
-	// Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
-	TxtRecordValue string `json:"txtRecordValue"`
-	// Status of the custom domain verification
-	Status         enums.CustomDomainStatus `json:"status"`
-	Owner          *Organization            `json:"owner,omitempty"`
-	MappableDomain *MappableDomain          `json:"mappableDomain"`
+	MappableDomainID string          `json:"mappableDomainID"`
+	Owner            *Organization   `json:"owner,omitempty"`
+	MappableDomain   *MappableDomain `json:"mappableDomain"`
 }
 
 func (CustomDomain) IsNode() {}
@@ -5081,12 +5075,6 @@ type CustomDomainHistory struct {
 	CnameRecord string `json:"cnameRecord"`
 	// The mappable domain id that this custom domain maps to
 	MappableDomainID string `json:"mappableDomainID"`
-	// String to be prepended to the cname_record, used to evaluate domain ownership.
-	TxtRecordSubdomain string `json:"txtRecordSubdomain"`
-	// Hashed expected value of the TXT record. This is a random string that is generated on creation and is used to verify ownership of the domain.
-	TxtRecordValue string `json:"txtRecordValue"`
-	// Status of the custom domain verification
-	Status enums.CustomDomainStatus `json:"status"`
 }
 
 func (CustomDomainHistory) IsNode() {}
@@ -5289,11 +5277,6 @@ type CustomDomainHistoryWhereInput struct {
 	MappableDomainIDHasSuffix    *string  `json:"mappableDomainIDHasSuffix,omitempty"`
 	MappableDomainIDEqualFold    *string  `json:"mappableDomainIDEqualFold,omitempty"`
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
-	// status field predicates
-	Status      *enums.CustomDomainStatus  `json:"status,omitempty"`
-	StatusNeq   *enums.CustomDomainStatus  `json:"statusNEQ,omitempty"`
-	StatusIn    []enums.CustomDomainStatus `json:"statusIn,omitempty"`
-	StatusNotIn []enums.CustomDomainStatus `json:"statusNotIn,omitempty"`
 }
 
 // Ordering options for CustomDomain connections
@@ -5452,11 +5435,6 @@ type CustomDomainWhereInput struct {
 	MappableDomainIDHasSuffix    *string  `json:"mappableDomainIDHasSuffix,omitempty"`
 	MappableDomainIDEqualFold    *string  `json:"mappableDomainIDEqualFold,omitempty"`
 	MappableDomainIDContainsFold *string  `json:"mappableDomainIDContainsFold,omitempty"`
-	// status field predicates
-	Status      *enums.CustomDomainStatus  `json:"status,omitempty"`
-	StatusNeq   *enums.CustomDomainStatus  `json:"statusNEQ,omitempty"`
-	StatusIn    []enums.CustomDomainStatus `json:"statusIn,omitempty"`
-	StatusNotIn []enums.CustomDomainStatus `json:"statusNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`

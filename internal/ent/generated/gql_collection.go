@@ -5205,21 +5205,6 @@ func (cd *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, customdomain.FieldMappableDomainID)
 				fieldSeen[customdomain.FieldMappableDomainID] = struct{}{}
 			}
-		case "txtRecordSubdomain":
-			if _, ok := fieldSeen[customdomain.FieldTxtRecordSubdomain]; !ok {
-				selectedFields = append(selectedFields, customdomain.FieldTxtRecordSubdomain)
-				fieldSeen[customdomain.FieldTxtRecordSubdomain] = struct{}{}
-			}
-		case "txtRecordValue":
-			if _, ok := fieldSeen[customdomain.FieldTxtRecordValue]; !ok {
-				selectedFields = append(selectedFields, customdomain.FieldTxtRecordValue)
-				fieldSeen[customdomain.FieldTxtRecordValue] = struct{}{}
-			}
-		case "status":
-			if _, ok := fieldSeen[customdomain.FieldStatus]; !ok {
-				selectedFields = append(selectedFields, customdomain.FieldStatus)
-				fieldSeen[customdomain.FieldStatus] = struct{}{}
-			}
 		case "id":
 		case "__typename":
 		default:
@@ -5374,21 +5359,6 @@ func (cdh *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[customdomainhistory.FieldMappableDomainID]; !ok {
 				selectedFields = append(selectedFields, customdomainhistory.FieldMappableDomainID)
 				fieldSeen[customdomainhistory.FieldMappableDomainID] = struct{}{}
-			}
-		case "txtRecordSubdomain":
-			if _, ok := fieldSeen[customdomainhistory.FieldTxtRecordSubdomain]; !ok {
-				selectedFields = append(selectedFields, customdomainhistory.FieldTxtRecordSubdomain)
-				fieldSeen[customdomainhistory.FieldTxtRecordSubdomain] = struct{}{}
-			}
-		case "txtRecordValue":
-			if _, ok := fieldSeen[customdomainhistory.FieldTxtRecordValue]; !ok {
-				selectedFields = append(selectedFields, customdomainhistory.FieldTxtRecordValue)
-				fieldSeen[customdomainhistory.FieldTxtRecordValue] = struct{}{}
-			}
-		case "status":
-			if _, ok := fieldSeen[customdomainhistory.FieldStatus]; !ok {
-				selectedFields = append(selectedFields, customdomainhistory.FieldStatus)
-				fieldSeen[customdomainhistory.FieldStatus] = struct{}{}
 			}
 		case "id":
 		case "__typename":
