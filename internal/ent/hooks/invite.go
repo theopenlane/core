@@ -152,7 +152,7 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			invite := emailtemplates.InviteTemplateData{
-				OrganizationName: org.Name,
+				OrganizationName: org.DisplayName,
 				Role:             string(role),
 			}
 
@@ -272,7 +272,7 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 
 	case auth.ServiceSubjectType:
 		// default to org name
-		inviterName = org.Name
+		inviterName = org.DisplayName
 
 	default:
 		// should never really get here
@@ -281,7 +281,7 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 
 	invite := emailtemplates.InviteTemplateData{
 		InviterName:      inviterName,
-		OrganizationName: org.Name,
+		OrganizationName: org.DisplayName,
 		Role:             string(role),
 	}
 
