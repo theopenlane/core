@@ -326,6 +326,16 @@ func (o Organization) Edges() []ent.Edge {
 			edgeSchema:         JobRunnerRegistrationToken{},
 			cascadeDeleteOwner: true,
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         ScheduledJob{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         ControlScheduledJob{},
+			cascadeDeleteOwner: true,
+		}),
 	}
 }
 

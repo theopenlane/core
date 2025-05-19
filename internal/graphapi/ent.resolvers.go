@@ -308,6 +308,31 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 	return res, err
 }
 
+// ControlScheduledJobs is the resolver for the controlScheduledJobs field.
+func (r *queryResolver) ControlScheduledJobs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) (*generated.ControlScheduledJobConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).ControlScheduledJob.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjob"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithControlScheduledJobOrder(orderBy),
+		generated.WithControlScheduledJobFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjob"})
+	}
+
+	return res, err
+}
+
 // CustomDomains is the resolver for the customDomains field.
 func (r *queryResolver) CustomDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) (*generated.CustomDomainConnection, error) {
 	// set page limit if nothing was set
@@ -1703,6 +1728,31 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithRiskHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "riskhistory"})
+	}
+
+	return res, err
+}
+
+// ScheduledJobs is the resolver for the scheduledJobs field.
+func (r *queryResolver) ScheduledJobs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) (*generated.ScheduledJobConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).ScheduledJob.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScheduledJobOrder(orderBy),
+		generated.WithScheduledJobFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
 	}
 
 	return res, err

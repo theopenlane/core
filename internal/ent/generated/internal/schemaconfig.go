@@ -33,6 +33,7 @@ type SchemaConfig struct {
 	ControlObjectiveViewers          string // ControlObjective-viewers->Group table.
 	ControlObjectiveTasks            string // ControlObjective-tasks->Task table.
 	ControlObjectiveHistory          string // ControlObjectiveHistory table.
+	ControlScheduledJob              string // ControlScheduledJob table.
 	CustomDomain                     string // CustomDomain table.
 	CustomDomainHistory              string // CustomDomainHistory table.
 	DocumentData                     string // DocumentData table.
@@ -154,6 +155,7 @@ type SchemaConfig struct {
 	RiskActionPlans                  string // Risk-action_plans->ActionPlan table.
 	RiskTasks                        string // Risk-tasks->Task table.
 	RiskHistory                      string // RiskHistory table.
+	ScheduledJob                     string // ScheduledJob table.
 	Standard                         string // Standard table.
 	StandardHistory                  string // StandardHistory table.
 	Subcontrol                       string // Subcontrol table.

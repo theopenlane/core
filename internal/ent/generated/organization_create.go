@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -41,6 +42,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -993,6 +995,36 @@ func (oc *OrganizationCreate) AddJobRunnerRegistrationTokens(j ...*JobRunnerRegi
 		ids[i] = j[i].ID
 	}
 	return oc.AddJobRunnerRegistrationTokenIDs(ids...)
+}
+
+// AddJobIDs adds the "jobs" edge to the ScheduledJob entity by IDs.
+func (oc *OrganizationCreate) AddJobIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddJobIDs(ids...)
+	return oc
+}
+
+// AddJobs adds the "jobs" edges to the ScheduledJob entity.
+func (oc *OrganizationCreate) AddJobs(s ...*ScheduledJob) *OrganizationCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return oc.AddJobIDs(ids...)
+}
+
+// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ControlScheduledJob entity by IDs.
+func (oc *OrganizationCreate) AddScheduledJobIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddScheduledJobIDs(ids...)
+	return oc
+}
+
+// AddScheduledJobs adds the "scheduled_jobs" edges to the ControlScheduledJob entity.
+func (oc *OrganizationCreate) AddScheduledJobs(c ...*ControlScheduledJob) *OrganizationCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return oc.AddScheduledJobIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2015,6 +2047,40 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.JobRunnerRegistrationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.JobsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobsTable,
+			Columns: []string{organization.JobsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.ScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScheduledJobsTable,
+			Columns: []string{organization.ScheduledJobsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.ControlScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

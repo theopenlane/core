@@ -123,6 +123,25 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 	}, nil
 }
 
+// bulkCreateControlScheduledJob uses the CreateBulk function to create multiple ControlScheduledJob entities
+func (r *mutationResolver) bulkCreateControlScheduledJob(ctx context.Context, input []*generated.CreateControlScheduledJobInput) (*model.ControlScheduledJobBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ControlScheduledJobCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ControlScheduledJob.Create().SetInput(*data)
+	}
+
+	res, err := c.ControlScheduledJob.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlscheduledjob"})
+	}
+
+	// return response
+	return &model.ControlScheduledJobBulkCreatePayload{
+		ControlScheduledJobs: res,
+	}, nil
+}
+
 // bulkCreateCustomDomain uses the CreateBulk function to create multiple CustomDomain entities
 func (r *mutationResolver) bulkCreateCustomDomain(ctx context.Context, input []*generated.CreateCustomDomainInput) (*model.CustomDomainBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -519,6 +538,25 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 	// return response
 	return &model.RiskBulkCreatePayload{
 		Risks: res,
+	}, nil
+}
+
+// bulkCreateScheduledJob uses the CreateBulk function to create multiple ScheduledJob entities
+func (r *mutationResolver) bulkCreateScheduledJob(ctx context.Context, input []*generated.CreateScheduledJobInput) (*model.ScheduledJobBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ScheduledJobCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ScheduledJob.Create().SetInput(*data)
+	}
+
+	res, err := c.ScheduledJob.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "scheduledjob"})
+	}
+
+	// return response
+	return &model.ScheduledJobBulkCreatePayload{
+		ScheduledJobs: res,
 	}, nil
 }
 

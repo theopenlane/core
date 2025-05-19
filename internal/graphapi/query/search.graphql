@@ -491,6 +491,24 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    scheduledJobs {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayID
+          id
+          tags
+          title
+        }
+      }
+    }
     standards {
       totalCount
       pageInfo {

@@ -1,0 +1,125 @@
+
+mutation CreateBulkCSVControlScheduledJob($input: Upload!) {
+  createBulkCSVControlScheduledJob(input: $input) {
+    controlScheduledJobs {
+      createdAt
+      createdBy
+      cron
+      id
+      ownerID
+      scheduledJobID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkControlScheduledJob($input: [CreateControlScheduledJobInput!]) {
+  createBulkControlScheduledJob(input: $input) {
+    controlScheduledJobs {
+      createdAt
+      createdBy
+      cron
+      id
+      ownerID
+      scheduledJobID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateControlScheduledJob($input: CreateControlScheduledJobInput!) {
+  createControlScheduledJob(input: $input) {
+    controlScheduledJob {
+      createdAt
+      createdBy
+      cron
+      id
+      ownerID
+      scheduledJobID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteControlScheduledJob($deleteControlScheduledJobId: ID!) {
+  deleteControlScheduledJob(id: $deleteControlScheduledJobId) {
+    deletedID
+  }
+}
+
+query GetAllControlScheduledJobs {
+  controlScheduledJobs {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        cron
+        id
+        ownerID
+        scheduledJobID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetControlScheduledJobByID($controlScheduledJobId: ID!) {
+  controlScheduledJob(id: $controlScheduledJobId) {
+    createdAt
+    createdBy
+    cron
+    id
+    ownerID
+    scheduledJobID
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetControlScheduledJobs($first: Int, $last: Int, $where: ControlScheduledJobWhereInput) {
+  controlScheduledJobs(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        cron
+        id
+        ownerID
+        scheduledJobID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateControlScheduledJob($updateControlScheduledJobId: ID!, $input: UpdateControlScheduledJobInput!) {
+  updateControlScheduledJob(id: $updateControlScheduledJobId, input: $input) {
+    controlScheduledJob {
+      createdAt
+      createdBy
+      cron
+      id
+      ownerID
+      scheduledJobID
+      updatedAt
+      updatedBy
+    }
+  }
+}

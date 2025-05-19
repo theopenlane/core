@@ -141,6 +141,10 @@ const (
 	EdgeJobRunnerTokens = "job_runner_tokens"
 	// EdgeJobRunnerRegistrationTokens holds the string denoting the job_runner_registration_tokens edge name in mutations.
 	EdgeJobRunnerRegistrationTokens = "job_runner_registration_tokens"
+	// EdgeJobs holds the string denoting the jobs edge name in mutations.
+	EdgeJobs = "jobs"
+	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
+	EdgeScheduledJobs = "scheduled_jobs"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -460,6 +464,20 @@ const (
 	JobRunnerRegistrationTokensInverseTable = "job_runner_registration_tokens"
 	// JobRunnerRegistrationTokensColumn is the table column denoting the job_runner_registration_tokens relation/edge.
 	JobRunnerRegistrationTokensColumn = "owner_id"
+	// JobsTable is the table that holds the jobs relation/edge.
+	JobsTable = "scheduled_jobs"
+	// JobsInverseTable is the table name for the ScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
+	JobsInverseTable = "scheduled_jobs"
+	// JobsColumn is the table column denoting the jobs relation/edge.
+	JobsColumn = "owner_id"
+	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge.
+	ScheduledJobsTable = "control_scheduled_jobs"
+	// ScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
+	ScheduledJobsInverseTable = "control_scheduled_jobs"
+	// ScheduledJobsColumn is the table column denoting the scheduled_jobs relation/edge.
+	ScheduledJobsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1272,6 +1290,34 @@ func ByJobRunnerRegistrationTokens(term sql.OrderTerm, terms ...sql.OrderTerm) O
 	}
 }
 
+// ByJobsCount orders the results by jobs count.
+func ByJobsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newJobsStep(), opts...)
+	}
+}
+
+// ByJobs orders the results by jobs terms.
+func ByJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByScheduledJobsCount orders the results by scheduled_jobs count.
+func ByScheduledJobsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScheduledJobsStep(), opts...)
+	}
+}
+
+// ByScheduledJobs orders the results by scheduled_jobs terms.
+func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1612,6 +1658,20 @@ func newJobRunnerRegistrationTokensStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(JobRunnerRegistrationTokensInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerRegistrationTokensTable, JobRunnerRegistrationTokensColumn),
+	)
+}
+func newJobsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(JobsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, JobsTable, JobsColumn),
+	)
+}
+func newScheduledJobsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobsTable, ScheduledJobsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {
