@@ -51,7 +51,7 @@ func (h *Handler) sendSubscriberEmail(ctx context.Context, user *User, orgID str
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
-	}, org.Name, user.GetVerificationToken())
+	}, org.DisplayName, user.GetVerificationToken())
 	if err != nil {
 		log.Error().Err(err).Msg("error creating email verification")
 

@@ -98,7 +98,7 @@ func tableOutput(out []openlaneclient.OrganizationSetting) {
 	)
 	for _, i := range out {
 		writer.AddRow(i.ID,
-			i.Organization.Name,
+			i.Organization.DisplayName,
 			*i.BillingContact,
 			i.BillingAddress.String(),
 			*i.BillingEmail,
