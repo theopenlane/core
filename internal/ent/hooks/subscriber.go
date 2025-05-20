@@ -107,7 +107,7 @@ func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) 
 
 	email, err := m.Emailer.NewSubscriberEmail(emailtemplates.Recipient{
 		Email: e,
-	}, org.Name, tok)
+	}, org.DisplayName, tok)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error rendering email")
 

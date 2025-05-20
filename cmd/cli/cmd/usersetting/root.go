@@ -81,7 +81,7 @@ func tableOutput(out []openlaneclient.UserSetting) {
 		defaultOrgID := ""
 
 		if i.DefaultOrg != nil {
-			defaultOrgName = i.DefaultOrg.Name
+			defaultOrgName = i.DefaultOrg.DisplayName
 			defaultOrgID = i.DefaultOrg.ID
 		}
 

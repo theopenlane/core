@@ -44815,21 +44815,21 @@ func (t *GetOrganizationHistories_OrganizationHistories) GetEdges() []*GetOrgani
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
 }
 
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization) GetDisplayName() string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization{}
+	}
+	return t.DisplayName
+}
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization) GetID() string {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization{}
 	}
 	return t.ID
-}
-func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization) GetName() string {
-	if t == nil {
-		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization{}
-	}
-	return t.Name
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
@@ -44964,21 +44964,21 @@ func (t *GetAllOrganizationSettings_OrganizationSettings) GetEdges() []*GetAllOr
 }
 
 type GetOrganizationSettingByID_OrganizationSetting_Organization struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
 }
 
+func (t *GetOrganizationSettingByID_OrganizationSetting_Organization) GetDisplayName() string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting_Organization{}
+	}
+	return t.DisplayName
+}
 func (t *GetOrganizationSettingByID_OrganizationSetting_Organization) GetID() string {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting_Organization{}
 	}
 	return t.ID
-}
-func (t *GetOrganizationSettingByID_OrganizationSetting_Organization) GetName() string {
-	if t == nil {
-		t = &GetOrganizationSettingByID_OrganizationSetting_Organization{}
-	}
-	return t.Name
 }
 
 type GetOrganizationSettingByID_OrganizationSetting struct {
@@ -45091,21 +45091,21 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetUpdatedBy() *string 
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
 }
 
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization) GetDisplayName() string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization{}
+	}
+	return t.DisplayName
+}
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization) GetID() string {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization{}
 	}
 	return t.ID
-}
-func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization) GetName() string {
-	if t == nil {
-		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization{}
-	}
-	return t.Name
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
@@ -45240,21 +45240,21 @@ func (t *GetOrganizationSettings_OrganizationSettings) GetEdges() []*GetOrganiza
 }
 
 type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
 }
 
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization) GetDisplayName() string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization{}
+	}
+	return t.DisplayName
+}
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization) GetID() string {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization{}
 	}
 	return t.ID
-}
-func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization) GetName() string {
-	if t == nil {
-		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization{}
-	}
-	return t.Name
 }
 
 type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting struct {
@@ -90207,7 +90207,7 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 				updatedBy
 				organization {
 					id
-					name
+					displayName
 				}
 			}
 		}
@@ -90248,7 +90248,7 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 		updatedBy
 		organization {
 			id
-			name
+			displayName
 		}
 	}
 }
@@ -90291,7 +90291,7 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 				updatedBy
 				organization {
 					id
-					name
+					displayName
 				}
 			}
 		}
@@ -90335,7 +90335,7 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			updatedBy
 			organization {
 				id
-				name
+				displayName
 			}
 		}
 	}
