@@ -22,6 +22,16 @@ type SSLJobConfig struct {
 	URL string `json:"url"`
 }
 
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (a SSLJobConfig) MarshalGQL(w io.Writer) {
+	marshalGQLJSON(w, a)
+}
+
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (a *SSLJobConfig) UnmarshalGQL(v interface{}) error {
+	return unmarshalGQLJSON(v, a)
+}
+
 type JobConfiguration struct {
 	SSL SSLJobConfig `json:"ssl"`
 }
@@ -29,6 +39,10 @@ type JobConfiguration struct {
 // MarshalGQL implement the Marshaler interface for gqlgen
 func (a JobConfiguration) MarshalGQL(w io.Writer) {
 	marshalGQLJSON(w, a)
+}
+
+func (a JobConfiguration) String() string {
+	return ""
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen

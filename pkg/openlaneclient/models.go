@@ -4995,6 +4995,10 @@ type CreateScheduledJobInput struct {
 	JobType *enums.JobType `json:"jobType,omitempty"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
+	// the configuration to run this job
+	Configuration models.JobConfiguration `json:"configuration"`
+	// the schedule to run this job
+	Cadence *models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
 	Cron    *string `json:"cron,omitempty"`
 	OwnerID *string `json:"ownerID,omitempty"`
@@ -20633,6 +20637,10 @@ type ScheduledJob struct {
 	JobType enums.JobType `json:"jobType"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
+	// the configuration to run this job
+	Configuration models.JobConfiguration `json:"configuration"`
+	// the schedule to run this job
+	Cadence *models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
 	Cron  *string       `json:"cron,omitempty"`
 	Owner *Organization `json:"owner,omitempty"`
@@ -25719,6 +25727,11 @@ type UpdateScheduledJobInput struct {
 	// the script to run
 	Script      *string `json:"script,omitempty"`
 	ClearScript *bool   `json:"clearScript,omitempty"`
+	// the configuration to run this job
+	Configuration *models.JobConfiguration `json:"configuration,omitempty"`
+	// the schedule to run this job
+	Cadence      *models.JobCadence `json:"cadence,omitempty"`
+	ClearCadence *bool              `json:"clearCadence,omitempty"`
 	// cron syntax
 	Cron       *string `json:"cron,omitempty"`
 	ClearCron  *bool   `json:"clearCron,omitempty"`

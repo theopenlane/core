@@ -14,6 +14,8 @@ type JobCadence struct {
 	Frequency enums.JobCadenceFrequency `json:"frequency,omitempty"`
 }
 
+func (j JobCadence) String() string { return "" }
+
 // MarshalGQL implement the Marshaler interface for gqlgen
 func (j JobCadence) MarshalGQL(w io.Writer) {
 	marshalGQLJSON(w, j)

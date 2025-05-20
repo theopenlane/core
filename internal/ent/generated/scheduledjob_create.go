@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ScheduledJobCreate is the builder for creating a ScheduledJob entity.
@@ -194,6 +195,26 @@ func (sjc *ScheduledJobCreate) SetNillableScript(s *string) *ScheduledJobCreate 
 	return sjc
 }
 
+// SetConfiguration sets the "configuration" field.
+func (sjc *ScheduledJobCreate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobCreate {
+	sjc.mutation.SetConfiguration(mc)
+	return sjc
+}
+
+// SetCadence sets the "cadence" field.
+func (sjc *ScheduledJobCreate) SetCadence(mc models.JobCadence) *ScheduledJobCreate {
+	sjc.mutation.SetCadence(mc)
+	return sjc
+}
+
+// SetNillableCadence sets the "cadence" field if the given value is not nil.
+func (sjc *ScheduledJobCreate) SetNillableCadence(mc *models.JobCadence) *ScheduledJobCreate {
+	if mc != nil {
+		sjc.SetCadence(*mc)
+	}
+	return sjc
+}
+
 // SetCron sets the "cron" field.
 func (sjc *ScheduledJobCreate) SetCron(s string) *ScheduledJobCreate {
 	sjc.mutation.SetCron(s)
@@ -326,6 +347,9 @@ func (sjc *ScheduledJobCreate) check() error {
 			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_type": %w`, err)}
 		}
 	}
+	if _, ok := sjc.mutation.Configuration(); !ok {
+		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ScheduledJob.configuration"`)}
+	}
 	return nil
 }
 
@@ -413,6 +437,14 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 	if value, ok := sjc.mutation.Script(); ok {
 		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
 		_node.Script = value
+	}
+	if value, ok := sjc.mutation.Configuration(); ok {
+		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
+		_node.Configuration = value
+	}
+	if value, ok := sjc.mutation.Cadence(); ok {
+		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
+		_node.Cadence = value
 	}
 	if value, ok := sjc.mutation.Cron(); ok {
 		_spec.SetField(scheduledjob.FieldCron, field.TypeString, value)

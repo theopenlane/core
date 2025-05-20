@@ -7810,6 +7810,14 @@ input CreateScheduledJobInput {
 	"""
 	script: String
 	"""
+	the configuration to run this job
+	"""
+	configuration: JobConfiguration!
+	"""
+	the schedule to run this job
+	"""
+	cadence: JobCadence
+	"""
 	cron syntax
 	"""
 	cron: String
@@ -18996,6 +19004,8 @@ input InviteWhereInput {
 A valid JSON string.
 """
 scalar JSON
+scalar JobCadence
+scalar JobConfiguration
 type JobRunner implements Node {
 	id: ID!
 	createdAt: Time
@@ -39957,6 +39967,14 @@ type ScheduledJob implements Node {
 	"""
 	script: String
 	"""
+	the configuration to run this job
+	"""
+	configuration: JobConfiguration!
+	"""
+	the schedule to run this job
+	"""
+	cadence: JobCadence
+	"""
 	cron syntax
 	"""
 	cron: String
@@ -47437,6 +47455,15 @@ input UpdateScheduledJobInput {
 	"""
 	script: String
 	clearScript: Boolean
+	"""
+	the configuration to run this job
+	"""
+	configuration: JobConfiguration
+	"""
+	the schedule to run this job
+	"""
+	cadence: JobCadence
+	clearCadence: Boolean
 	"""
 	cron syntax
 	"""

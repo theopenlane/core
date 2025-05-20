@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ScheduledJob is the model entity for the ScheduledJob schema.
@@ -48,6 +49,10 @@ type ScheduledJob struct {
 	JobType enums.JobType `json:"job_type,omitempty"`
 	// the script to run
 	Script string `json:"script,omitempty"`
+	// the configuration to run this job
+	Configuration models.JobConfiguration `json:"configuration,omitempty"`
+	// the schedule to run this job
+	Cadence models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
 	Cron *string `json:"cron,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -83,7 +88,7 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case scheduledjob.FieldTags:
+		case scheduledjob.FieldTags, scheduledjob.FieldConfiguration, scheduledjob.FieldCadence:
 			values[i] = new([]byte)
 		case scheduledjob.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
@@ -198,6 +203,22 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sj.Script = value.String
 			}
+		case scheduledjob.FieldConfiguration:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field configuration", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &sj.Configuration); err != nil {
+					return fmt.Errorf("unmarshal field configuration: %w", err)
+				}
+			}
+		case scheduledjob.FieldCadence:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field cadence", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &sj.Cadence); err != nil {
+					return fmt.Errorf("unmarshal field cadence: %w", err)
+				}
+			}
 		case scheduledjob.FieldCron:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
@@ -287,6 +308,12 @@ func (sj *ScheduledJob) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script=")
 	builder.WriteString(sj.Script)
+	builder.WriteString(", ")
+	builder.WriteString("configuration=")
+	builder.WriteString(fmt.Sprintf("%v", sj.Configuration))
+	builder.WriteString(", ")
+	builder.WriteString("cadence=")
+	builder.WriteString(fmt.Sprintf("%v", sj.Cadence))
 	builder.WriteString(", ")
 	if v := sj.Cron; v != nil {
 		builder.WriteString("cron=")

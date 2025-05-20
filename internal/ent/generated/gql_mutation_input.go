@@ -7541,13 +7541,15 @@ func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
 
 // CreateScheduledJobInput represents a mutation input for creating scheduledjobs.
 type CreateScheduledJobInput struct {
-	Tags        []string
-	Title       string
-	Description *string
-	JobType     *enums.JobType
-	Script      *string
-	Cron        *string
-	OwnerID     *string
+	Tags          []string
+	Title         string
+	Description   *string
+	JobType       *enums.JobType
+	Script        *string
+	Configuration models.JobConfiguration
+	Cadence       *models.JobCadence
+	Cron          *string
+	OwnerID       *string
 }
 
 // Mutate applies the CreateScheduledJobInput on the ScheduledJobMutation builder.
@@ -7564,6 +7566,10 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.Script; v != nil {
 		m.SetScript(*v)
+	}
+	m.SetConfiguration(i.Configuration)
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
 	}
 	if v := i.Cron; v != nil {
 		m.SetCron(*v)
@@ -7590,6 +7596,9 @@ type UpdateScheduledJobInput struct {
 	JobType          *enums.JobType
 	ClearScript      bool
 	Script           *string
+	Configuration    *models.JobConfiguration
+	ClearCadence     bool
+	Cadence          *models.JobCadence
 	ClearCron        bool
 	Cron             *string
 	ClearOwner       bool
@@ -7624,6 +7633,15 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.Script; v != nil {
 		m.SetScript(*v)
+	}
+	if v := i.Configuration; v != nil {
+		m.SetConfiguration(*v)
+	}
+	if i.ClearCadence {
+		m.ClearCadence()
+	}
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
 	}
 	if i.ClearCron {
 		m.ClearCron()

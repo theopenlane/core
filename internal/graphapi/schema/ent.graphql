@@ -7462,6 +7462,14 @@ input CreateScheduledJobInput {
   """
   script: String
   """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration!
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
+  """
   cron syntax
   """
   cron: String
@@ -33748,6 +33756,14 @@ type ScheduledJob implements Node {
   """
   script: String
   """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration!
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
+  """
   cron syntax
   """
   cron: String
@@ -40922,6 +40938,15 @@ input UpdateScheduledJobInput {
   """
   script: String
   clearScript: Boolean
+  """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
+  clearCadence: Boolean
   """
   cron syntax
   """

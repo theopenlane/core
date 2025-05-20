@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
@@ -72,18 +73,12 @@ func (ScheduledJob) Fields() []ent.Field {
 			Optional(),
 
 		// Default config values
-		// field.JSON("configuration", models.JobConfiguration{}).
-		// 	Annotations(
-		// 		entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
-		// 	).
-		// 	Comment("the configuration to run this job"),
-		//
-		// field.JSON("cadence", models.JobCadence{}).
-		// 	Comment("the schedule to run this job").
-		// 	Annotations(
-		// 		entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
-		// 	).
-		// 	Optional(),
+		field.JSON("configuration", models.JobConfiguration{}).
+			Comment("the configuration to run this job"),
+
+		field.JSON("cadence", models.JobCadence{}).
+			Comment("the schedule to run this job").
+			Optional(),
 
 		field.String("cron").
 			Comment("cron syntax").

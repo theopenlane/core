@@ -46,6 +46,10 @@ const (
 	FieldJobType = "job_type"
 	// FieldScript holds the string denoting the script field in the database.
 	FieldScript = "script"
+	// FieldConfiguration holds the string denoting the configuration field in the database.
+	FieldConfiguration = "configuration"
+	// FieldCadence holds the string denoting the cadence field in the database.
+	FieldCadence = "cadence"
 	// FieldCron holds the string denoting the cron field in the database.
 	FieldCron = "cron"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -78,6 +82,8 @@ var Columns = []string{
 	FieldDescription,
 	FieldJobType,
 	FieldScript,
+	FieldConfiguration,
+	FieldCadence,
 	FieldCron,
 }
 

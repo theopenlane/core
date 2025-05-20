@@ -923,6 +923,16 @@ func ScriptContainsFold(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldContainsFold(FieldScript, v))
 }
 
+// CadenceIsNil applies the IsNil predicate on the "cadence" field.
+func CadenceIsNil() predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldIsNull(FieldCadence))
+}
+
+// CadenceNotNil applies the NotNil predicate on the "cadence" field.
+func CadenceNotNil() predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNotNull(FieldCadence))
+}
+
 // CronEQ applies the EQ predicate on the "cron" field.
 func CronEQ(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldCron, v))

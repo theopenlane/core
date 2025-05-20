@@ -3434,23 +3434,25 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJob struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Cron        func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
-		Description func(childComplexity int) int
-		DisplayID   func(childComplexity int) int
-		ID          func(childComplexity int) int
-		JobType     func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Script      func(childComplexity int) int
-		SystemOwned func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Cadence       func(childComplexity int) int
+		Configuration func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Cron          func(childComplexity int) int
+		DeletedAt     func(childComplexity int) int
+		DeletedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
+		ID            func(childComplexity int) int
+		JobType       func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Script        func(childComplexity int) int
+		SystemOwned   func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	ScheduledJobBulkCreatePayload struct {
@@ -23435,6 +23437,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RiskUpdatePayload.Risk(childComplexity), true
 
+	case "ScheduledJob.cadence":
+		if e.complexity.ScheduledJob.Cadence == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Cadence(childComplexity), true
+
+	case "ScheduledJob.configuration":
+		if e.complexity.ScheduledJob.Configuration == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Configuration(childComplexity), true
+
 	case "ScheduledJob.createdAt":
 		if e.complexity.ScheduledJob.CreatedAt == nil {
 			break
@@ -37180,6 +37196,14 @@ input CreateScheduledJobInput {
   the script to run
   """
   script: String
+  """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration!
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
   """
   cron syntax
   """
@@ -63467,6 +63491,14 @@ type ScheduledJob implements Node {
   """
   script: String
   """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration!
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
+  """
   cron syntax
   """
   cron: String
@@ -70642,6 +70674,15 @@ input UpdateScheduledJobInput {
   script: String
   clearScript: Boolean
   """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
+  clearCadence: Boolean
+  """
   cron syntax
   """
   cron: String
@@ -76216,6 +76257,10 @@ DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-0
 scalar DateTime
 
 scalar AAGUID
+
+scalar JobConfiguration
+
+scalar JobCadence
 `, BuiltIn: false},
 	{Name: "../schema/scheduledjob.graphql", Input: `extend type Query {
     """

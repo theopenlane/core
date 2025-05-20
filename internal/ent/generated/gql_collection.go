@@ -27348,6 +27348,16 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, scheduledjob.FieldScript)
 				fieldSeen[scheduledjob.FieldScript] = struct{}{}
 			}
+		case "configuration":
+			if _, ok := fieldSeen[scheduledjob.FieldConfiguration]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldConfiguration)
+				fieldSeen[scheduledjob.FieldConfiguration] = struct{}{}
+			}
+		case "cadence":
+			if _, ok := fieldSeen[scheduledjob.FieldCadence]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldCadence)
+				fieldSeen[scheduledjob.FieldCadence] = struct{}{}
+			}
 		case "cron":
 			if _, ok := fieldSeen[scheduledjob.FieldCron]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldCron)

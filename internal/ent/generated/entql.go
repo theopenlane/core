@@ -2147,21 +2147,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ScheduledJob",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			scheduledjob.FieldCreatedAt:   {Type: field.TypeTime, Column: scheduledjob.FieldCreatedAt},
-			scheduledjob.FieldUpdatedAt:   {Type: field.TypeTime, Column: scheduledjob.FieldUpdatedAt},
-			scheduledjob.FieldCreatedBy:   {Type: field.TypeString, Column: scheduledjob.FieldCreatedBy},
-			scheduledjob.FieldUpdatedBy:   {Type: field.TypeString, Column: scheduledjob.FieldUpdatedBy},
-			scheduledjob.FieldDeletedAt:   {Type: field.TypeTime, Column: scheduledjob.FieldDeletedAt},
-			scheduledjob.FieldDeletedBy:   {Type: field.TypeString, Column: scheduledjob.FieldDeletedBy},
-			scheduledjob.FieldDisplayID:   {Type: field.TypeString, Column: scheduledjob.FieldDisplayID},
-			scheduledjob.FieldTags:        {Type: field.TypeJSON, Column: scheduledjob.FieldTags},
-			scheduledjob.FieldOwnerID:     {Type: field.TypeString, Column: scheduledjob.FieldOwnerID},
-			scheduledjob.FieldSystemOwned: {Type: field.TypeBool, Column: scheduledjob.FieldSystemOwned},
-			scheduledjob.FieldTitle:       {Type: field.TypeString, Column: scheduledjob.FieldTitle},
-			scheduledjob.FieldDescription: {Type: field.TypeString, Column: scheduledjob.FieldDescription},
-			scheduledjob.FieldJobType:     {Type: field.TypeEnum, Column: scheduledjob.FieldJobType},
-			scheduledjob.FieldScript:      {Type: field.TypeString, Column: scheduledjob.FieldScript},
-			scheduledjob.FieldCron:        {Type: field.TypeString, Column: scheduledjob.FieldCron},
+			scheduledjob.FieldCreatedAt:     {Type: field.TypeTime, Column: scheduledjob.FieldCreatedAt},
+			scheduledjob.FieldUpdatedAt:     {Type: field.TypeTime, Column: scheduledjob.FieldUpdatedAt},
+			scheduledjob.FieldCreatedBy:     {Type: field.TypeString, Column: scheduledjob.FieldCreatedBy},
+			scheduledjob.FieldUpdatedBy:     {Type: field.TypeString, Column: scheduledjob.FieldUpdatedBy},
+			scheduledjob.FieldDeletedAt:     {Type: field.TypeTime, Column: scheduledjob.FieldDeletedAt},
+			scheduledjob.FieldDeletedBy:     {Type: field.TypeString, Column: scheduledjob.FieldDeletedBy},
+			scheduledjob.FieldDisplayID:     {Type: field.TypeString, Column: scheduledjob.FieldDisplayID},
+			scheduledjob.FieldTags:          {Type: field.TypeJSON, Column: scheduledjob.FieldTags},
+			scheduledjob.FieldOwnerID:       {Type: field.TypeString, Column: scheduledjob.FieldOwnerID},
+			scheduledjob.FieldSystemOwned:   {Type: field.TypeBool, Column: scheduledjob.FieldSystemOwned},
+			scheduledjob.FieldTitle:         {Type: field.TypeString, Column: scheduledjob.FieldTitle},
+			scheduledjob.FieldDescription:   {Type: field.TypeString, Column: scheduledjob.FieldDescription},
+			scheduledjob.FieldJobType:       {Type: field.TypeEnum, Column: scheduledjob.FieldJobType},
+			scheduledjob.FieldScript:        {Type: field.TypeString, Column: scheduledjob.FieldScript},
+			scheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjob.FieldConfiguration},
+			scheduledjob.FieldCadence:       {Type: field.TypeJSON, Column: scheduledjob.FieldCadence},
+			scheduledjob.FieldCron:          {Type: field.TypeString, Column: scheduledjob.FieldCron},
 		},
 	}
 	graph.Nodes[72] = &sqlgraph.Node{
@@ -19011,6 +19013,16 @@ func (f *ScheduledJobFilter) WhereJobType(p entql.StringP) {
 // WhereScript applies the entql string predicate on the script field.
 func (f *ScheduledJobFilter) WhereScript(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldScript))
+}
+
+// WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
+func (f *ScheduledJobFilter) WhereConfiguration(p entql.BytesP) {
+	f.Where(p.Field(scheduledjob.FieldConfiguration))
+}
+
+// WhereCadence applies the entql json.RawMessage predicate on the cadence field.
+func (f *ScheduledJobFilter) WhereCadence(p entql.BytesP) {
+	f.Where(p.Field(scheduledjob.FieldCadence))
 }
 
 // WhereCron applies the entql string predicate on the cron field.

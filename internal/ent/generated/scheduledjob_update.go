@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -212,6 +213,40 @@ func (sju *ScheduledJobUpdate) ClearScript() *ScheduledJobUpdate {
 	return sju
 }
 
+// SetConfiguration sets the "configuration" field.
+func (sju *ScheduledJobUpdate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobUpdate {
+	sju.mutation.SetConfiguration(mc)
+	return sju
+}
+
+// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
+func (sju *ScheduledJobUpdate) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobUpdate {
+	if mc != nil {
+		sju.SetConfiguration(*mc)
+	}
+	return sju
+}
+
+// SetCadence sets the "cadence" field.
+func (sju *ScheduledJobUpdate) SetCadence(mc models.JobCadence) *ScheduledJobUpdate {
+	sju.mutation.SetCadence(mc)
+	return sju
+}
+
+// SetNillableCadence sets the "cadence" field if the given value is not nil.
+func (sju *ScheduledJobUpdate) SetNillableCadence(mc *models.JobCadence) *ScheduledJobUpdate {
+	if mc != nil {
+		sju.SetCadence(*mc)
+	}
+	return sju
+}
+
+// ClearCadence clears the value of the "cadence" field.
+func (sju *ScheduledJobUpdate) ClearCadence() *ScheduledJobUpdate {
+	sju.mutation.ClearCadence()
+	return sju
+}
+
 // SetCron sets the "cron" field.
 func (sju *ScheduledJobUpdate) SetCron(s string) *ScheduledJobUpdate {
 	sju.mutation.SetCron(s)
@@ -384,6 +419,15 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if sju.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
+	}
+	if value, ok := sju.mutation.Configuration(); ok {
+		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sju.mutation.Cadence(); ok {
+		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
+	}
+	if sju.mutation.CadenceCleared() {
+		_spec.ClearField(scheduledjob.FieldCadence, field.TypeJSON)
 	}
 	if value, ok := sju.mutation.Cron(); ok {
 		_spec.SetField(scheduledjob.FieldCron, field.TypeString, value)
@@ -624,6 +668,40 @@ func (sjuo *ScheduledJobUpdateOne) ClearScript() *ScheduledJobUpdateOne {
 	return sjuo
 }
 
+// SetConfiguration sets the "configuration" field.
+func (sjuo *ScheduledJobUpdateOne) SetConfiguration(mc models.JobConfiguration) *ScheduledJobUpdateOne {
+	sjuo.mutation.SetConfiguration(mc)
+	return sjuo
+}
+
+// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
+func (sjuo *ScheduledJobUpdateOne) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobUpdateOne {
+	if mc != nil {
+		sjuo.SetConfiguration(*mc)
+	}
+	return sjuo
+}
+
+// SetCadence sets the "cadence" field.
+func (sjuo *ScheduledJobUpdateOne) SetCadence(mc models.JobCadence) *ScheduledJobUpdateOne {
+	sjuo.mutation.SetCadence(mc)
+	return sjuo
+}
+
+// SetNillableCadence sets the "cadence" field if the given value is not nil.
+func (sjuo *ScheduledJobUpdateOne) SetNillableCadence(mc *models.JobCadence) *ScheduledJobUpdateOne {
+	if mc != nil {
+		sjuo.SetCadence(*mc)
+	}
+	return sjuo
+}
+
+// ClearCadence clears the value of the "cadence" field.
+func (sjuo *ScheduledJobUpdateOne) ClearCadence() *ScheduledJobUpdateOne {
+	sjuo.mutation.ClearCadence()
+	return sjuo
+}
+
 // SetCron sets the "cron" field.
 func (sjuo *ScheduledJobUpdateOne) SetCron(s string) *ScheduledJobUpdateOne {
 	sjuo.mutation.SetCron(s)
@@ -826,6 +904,15 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	}
 	if sjuo.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
+	}
+	if value, ok := sjuo.mutation.Configuration(); ok {
+		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sjuo.mutation.Cadence(); ok {
+		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
+	}
+	if sjuo.mutation.CadenceCleared() {
+		_spec.ClearField(scheduledjob.FieldCadence, field.TypeJSON)
 	}
 	if value, ok := sjuo.mutation.Cron(); ok {
 		_spec.SetField(scheduledjob.FieldCron, field.TypeString, value)

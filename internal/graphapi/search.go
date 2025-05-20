@@ -1347,6 +1347,14 @@ func adminSearchScheduledJobs(ctx context.Context, query string, after *entgql.C
 				scheduledjob.OwnerIDContainsFold(query),     // search by OwnerID
 				scheduledjob.TitleContainsFold(query),       // search by Title
 				scheduledjob.DescriptionContainsFold(query), // search by Description
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(configuration)::text LIKE $8", likeQuery)) // search by Configuration
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(cadence)::text LIKE $9", likeQuery)) // search by Cadence
+				},
 			),
 		)
 

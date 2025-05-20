@@ -5735,15 +5735,29 @@ func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetStartCursor() *strin
 }
 
 type AdminSearch_AdminSearch_ScheduledJobs_Edges_Node struct {
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Description *string  "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
-	ID          string   "json:\"id\" graphql:\"id\""
-	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
-	Title       string   "json:\"title\" graphql:\"title\""
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	DeletedBy     *string                 "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
 }
 
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return &t.Configuration
+}
 func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetDeletedBy() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
@@ -78848,6 +78862,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					title
 					description
+					configuration
+					cadence
 				}
 			}
 		}
