@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -37,21 +38,20 @@ func (ControlScheduledJob) PluralName() string {
 // Fields of the ControlScheduledJob
 func (ControlScheduledJob) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("scheduled_job_id").
-			Optional(),
+		field.String("job_id"),
 
-		// field.JSON("configuration", models.JobConfiguration{}).
-		// 	Annotations(
-		// 		entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
-		// 	).
-		// 	Comment("the configuration to run this job"),
-		//
-		// field.JSON("cadence", models.JobCadence{}).
-		// 	Comment("the schedule to run this job").
-		// 	Annotations(
-		// 		entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
-		// 	).
-		// 	Optional(),
+		field.JSON("configuration", models.JobConfiguration{}).
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
+			).
+			Comment("the configuration to run this job"),
+
+		field.JSON("cadence", models.JobCadence{}).
+			Comment("the schedule to run this job").
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
+			).
+			Optional(),
 
 		field.String("cron").
 			Comment("cron syntax").
@@ -77,7 +77,17 @@ func (c ControlScheduledJob) Mixin() []ent.Mixin {
 
 // Edges of the ControlScheduledJob
 func (c ControlScheduledJob) Edges() []ent.Edge {
-	return []ent.Edge{}
+	return []ent.Edge{
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: ScheduledJob{},
+			field:      "job_id",
+			required:   true,
+		}),
+
+		defaultEdgeToWithPagination(c, Control{}),
+		defaultEdgeToWithPagination(c, Subcontrol{}),
+	}
 }
 
 // Indexes of the ControlScheduledJob

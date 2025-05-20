@@ -480,15 +480,17 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ControlScheduledJob",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			controlscheduledjob.FieldCreatedAt:      {Type: field.TypeTime, Column: controlscheduledjob.FieldCreatedAt},
-			controlscheduledjob.FieldUpdatedAt:      {Type: field.TypeTime, Column: controlscheduledjob.FieldUpdatedAt},
-			controlscheduledjob.FieldCreatedBy:      {Type: field.TypeString, Column: controlscheduledjob.FieldCreatedBy},
-			controlscheduledjob.FieldUpdatedBy:      {Type: field.TypeString, Column: controlscheduledjob.FieldUpdatedBy},
-			controlscheduledjob.FieldDeletedAt:      {Type: field.TypeTime, Column: controlscheduledjob.FieldDeletedAt},
-			controlscheduledjob.FieldDeletedBy:      {Type: field.TypeString, Column: controlscheduledjob.FieldDeletedBy},
-			controlscheduledjob.FieldOwnerID:        {Type: field.TypeString, Column: controlscheduledjob.FieldOwnerID},
-			controlscheduledjob.FieldScheduledJobID: {Type: field.TypeString, Column: controlscheduledjob.FieldScheduledJobID},
-			controlscheduledjob.FieldCron:           {Type: field.TypeString, Column: controlscheduledjob.FieldCron},
+			controlscheduledjob.FieldCreatedAt:     {Type: field.TypeTime, Column: controlscheduledjob.FieldCreatedAt},
+			controlscheduledjob.FieldUpdatedAt:     {Type: field.TypeTime, Column: controlscheduledjob.FieldUpdatedAt},
+			controlscheduledjob.FieldCreatedBy:     {Type: field.TypeString, Column: controlscheduledjob.FieldCreatedBy},
+			controlscheduledjob.FieldUpdatedBy:     {Type: field.TypeString, Column: controlscheduledjob.FieldUpdatedBy},
+			controlscheduledjob.FieldDeletedAt:     {Type: field.TypeTime, Column: controlscheduledjob.FieldDeletedAt},
+			controlscheduledjob.FieldDeletedBy:     {Type: field.TypeString, Column: controlscheduledjob.FieldDeletedBy},
+			controlscheduledjob.FieldOwnerID:       {Type: field.TypeString, Column: controlscheduledjob.FieldOwnerID},
+			controlscheduledjob.FieldJobID:         {Type: field.TypeString, Column: controlscheduledjob.FieldJobID},
+			controlscheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: controlscheduledjob.FieldConfiguration},
+			controlscheduledjob.FieldCadence:       {Type: field.TypeJSON, Column: controlscheduledjob.FieldCadence},
+			controlscheduledjob.FieldCron:          {Type: field.TypeString, Column: controlscheduledjob.FieldCron},
 		},
 	}
 	graph.Nodes[12] = &sqlgraph.Node{
@@ -3227,6 +3229,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ControlScheduledJob",
 		"Organization",
+	)
+	graph.MustAddE(
+		"job",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobTable,
+			Columns: []string{controlscheduledjob.JobColumn},
+			Bidi:    false,
+		},
+		"ControlScheduledJob",
+		"ScheduledJob",
+	)
+	graph.MustAddE(
+		"controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.ControlsTable,
+			Columns: []string{controlscheduledjob.ControlsColumn},
+			Bidi:    false,
+		},
+		"ControlScheduledJob",
+		"Control",
+	)
+	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.SubcontrolsTable,
+			Columns: []string{controlscheduledjob.SubcontrolsColumn},
+			Bidi:    false,
+		},
+		"ControlScheduledJob",
+		"Subcontrol",
 	)
 	graph.MustAddE(
 		"owner",
@@ -8953,9 +8991,19 @@ func (f *ControlScheduledJobFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(controlscheduledjob.FieldOwnerID))
 }
 
-// WhereScheduledJobID applies the entql string predicate on the scheduled_job_id field.
-func (f *ControlScheduledJobFilter) WhereScheduledJobID(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjob.FieldScheduledJobID))
+// WhereJobID applies the entql string predicate on the job_id field.
+func (f *ControlScheduledJobFilter) WhereJobID(p entql.StringP) {
+	f.Where(p.Field(controlscheduledjob.FieldJobID))
+}
+
+// WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
+func (f *ControlScheduledJobFilter) WhereConfiguration(p entql.BytesP) {
+	f.Where(p.Field(controlscheduledjob.FieldConfiguration))
+}
+
+// WhereCadence applies the entql json.RawMessage predicate on the cadence field.
+func (f *ControlScheduledJobFilter) WhereCadence(p entql.BytesP) {
+	f.Where(p.Field(controlscheduledjob.FieldCadence))
 }
 
 // WhereCron applies the entql string predicate on the cron field.
@@ -8971,6 +9019,48 @@ func (f *ControlScheduledJobFilter) WhereHasOwner() {
 // WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
 func (f *ControlScheduledJobFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasJob applies a predicate to check if query has an edge job.
+func (f *ControlScheduledJobFilter) WhereHasJob() {
+	f.Where(entql.HasEdge("job"))
+}
+
+// WhereHasJobWith applies a predicate to check if query has an edge job with a given conditions (other predicates).
+func (f *ControlScheduledJobFilter) WhereHasJobWith(preds ...predicate.ScheduledJob) {
+	f.Where(entql.HasEdgeWith("job", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *ControlScheduledJobFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
+}
+
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *ControlScheduledJobFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *ControlScheduledJobFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *ControlScheduledJobFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

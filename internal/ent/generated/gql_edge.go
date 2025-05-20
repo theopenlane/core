@@ -785,6 +785,56 @@ func (csj *ControlScheduledJob) Owner(ctx context.Context) (*Organization, error
 	return result, MaskNotFound(err)
 }
 
+func (csj *ControlScheduledJob) Job(ctx context.Context) (*ScheduledJob, error) {
+	result, err := csj.Edges.JobOrErr()
+	if IsNotLoaded(err) {
+		result, err = csj.QueryJob().Only(ctx)
+	}
+	return result, err
+}
+
+func (csj *ControlScheduledJob) Controls(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
+) (*ControlConnection, error) {
+	opts := []ControlPaginateOption{
+		WithControlOrder(orderBy),
+		WithControlFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := csj.Edges.totalCount[2][alias]
+	if nodes, err := csj.NamedControls(alias); err == nil || hasTotalCount {
+		pager, err := newControlPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ControlConnection{Edges: []*ControlEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return csj.QueryControls().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (csj *ControlScheduledJob) Subcontrols(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput,
+) (*SubcontrolConnection, error) {
+	opts := []SubcontrolPaginateOption{
+		WithSubcontrolOrder(orderBy),
+		WithSubcontrolFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := csj.Edges.totalCount[3][alias]
+	if nodes, err := csj.NamedSubcontrols(alias); err == nil || hasTotalCount {
+		pager, err := newSubcontrolPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &SubcontrolConnection{Edges: []*SubcontrolEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return csj.QuerySubcontrols().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (cd *CustomDomain) Owner(ctx context.Context) (*Organization, error) {
 	result, err := cd.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

@@ -11,9 +11,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -124,23 +128,51 @@ func (csju *ControlScheduledJobUpdate) ClearOwnerID() *ControlScheduledJobUpdate
 	return csju
 }
 
-// SetScheduledJobID sets the "scheduled_job_id" field.
-func (csju *ControlScheduledJobUpdate) SetScheduledJobID(s string) *ControlScheduledJobUpdate {
-	csju.mutation.SetScheduledJobID(s)
+// SetJobID sets the "job_id" field.
+func (csju *ControlScheduledJobUpdate) SetJobID(s string) *ControlScheduledJobUpdate {
+	csju.mutation.SetJobID(s)
 	return csju
 }
 
-// SetNillableScheduledJobID sets the "scheduled_job_id" field if the given value is not nil.
-func (csju *ControlScheduledJobUpdate) SetNillableScheduledJobID(s *string) *ControlScheduledJobUpdate {
+// SetNillableJobID sets the "job_id" field if the given value is not nil.
+func (csju *ControlScheduledJobUpdate) SetNillableJobID(s *string) *ControlScheduledJobUpdate {
 	if s != nil {
-		csju.SetScheduledJobID(*s)
+		csju.SetJobID(*s)
 	}
 	return csju
 }
 
-// ClearScheduledJobID clears the value of the "scheduled_job_id" field.
-func (csju *ControlScheduledJobUpdate) ClearScheduledJobID() *ControlScheduledJobUpdate {
-	csju.mutation.ClearScheduledJobID()
+// SetConfiguration sets the "configuration" field.
+func (csju *ControlScheduledJobUpdate) SetConfiguration(mc models.JobConfiguration) *ControlScheduledJobUpdate {
+	csju.mutation.SetConfiguration(mc)
+	return csju
+}
+
+// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
+func (csju *ControlScheduledJobUpdate) SetNillableConfiguration(mc *models.JobConfiguration) *ControlScheduledJobUpdate {
+	if mc != nil {
+		csju.SetConfiguration(*mc)
+	}
+	return csju
+}
+
+// SetCadence sets the "cadence" field.
+func (csju *ControlScheduledJobUpdate) SetCadence(mc models.JobCadence) *ControlScheduledJobUpdate {
+	csju.mutation.SetCadence(mc)
+	return csju
+}
+
+// SetNillableCadence sets the "cadence" field if the given value is not nil.
+func (csju *ControlScheduledJobUpdate) SetNillableCadence(mc *models.JobCadence) *ControlScheduledJobUpdate {
+	if mc != nil {
+		csju.SetCadence(*mc)
+	}
+	return csju
+}
+
+// ClearCadence clears the value of the "cadence" field.
+func (csju *ControlScheduledJobUpdate) ClearCadence() *ControlScheduledJobUpdate {
+	csju.mutation.ClearCadence()
 	return csju
 }
 
@@ -169,6 +201,41 @@ func (csju *ControlScheduledJobUpdate) SetOwner(o *Organization) *ControlSchedul
 	return csju.SetOwnerID(o.ID)
 }
 
+// SetJob sets the "job" edge to the ScheduledJob entity.
+func (csju *ControlScheduledJobUpdate) SetJob(s *ScheduledJob) *ControlScheduledJobUpdate {
+	return csju.SetJobID(s.ID)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (csju *ControlScheduledJobUpdate) AddControlIDs(ids ...string) *ControlScheduledJobUpdate {
+	csju.mutation.AddControlIDs(ids...)
+	return csju
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (csju *ControlScheduledJobUpdate) AddControls(c ...*Control) *ControlScheduledJobUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return csju.AddControlIDs(ids...)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (csju *ControlScheduledJobUpdate) AddSubcontrolIDs(ids ...string) *ControlScheduledJobUpdate {
+	csju.mutation.AddSubcontrolIDs(ids...)
+	return csju
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (csju *ControlScheduledJobUpdate) AddSubcontrols(s ...*Subcontrol) *ControlScheduledJobUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return csju.AddSubcontrolIDs(ids...)
+}
+
 // Mutation returns the ControlScheduledJobMutation object of the builder.
 func (csju *ControlScheduledJobUpdate) Mutation() *ControlScheduledJobMutation {
 	return csju.mutation
@@ -178,6 +245,54 @@ func (csju *ControlScheduledJobUpdate) Mutation() *ControlScheduledJobMutation {
 func (csju *ControlScheduledJobUpdate) ClearOwner() *ControlScheduledJobUpdate {
 	csju.mutation.ClearOwner()
 	return csju
+}
+
+// ClearJob clears the "job" edge to the ScheduledJob entity.
+func (csju *ControlScheduledJobUpdate) ClearJob() *ControlScheduledJobUpdate {
+	csju.mutation.ClearJob()
+	return csju
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (csju *ControlScheduledJobUpdate) ClearControls() *ControlScheduledJobUpdate {
+	csju.mutation.ClearControls()
+	return csju
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (csju *ControlScheduledJobUpdate) RemoveControlIDs(ids ...string) *ControlScheduledJobUpdate {
+	csju.mutation.RemoveControlIDs(ids...)
+	return csju
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (csju *ControlScheduledJobUpdate) RemoveControls(c ...*Control) *ControlScheduledJobUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return csju.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (csju *ControlScheduledJobUpdate) ClearSubcontrols() *ControlScheduledJobUpdate {
+	csju.mutation.ClearSubcontrols()
+	return csju
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (csju *ControlScheduledJobUpdate) RemoveSubcontrolIDs(ids ...string) *ControlScheduledJobUpdate {
+	csju.mutation.RemoveSubcontrolIDs(ids...)
+	return csju
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (csju *ControlScheduledJobUpdate) RemoveSubcontrols(s ...*Subcontrol) *ControlScheduledJobUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return csju.RemoveSubcontrolIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -228,6 +343,9 @@ func (csju *ControlScheduledJobUpdate) check() error {
 		if err := controlscheduledjob.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.owner_id": %w`, err)}
 		}
+	}
+	if csju.mutation.JobCleared() && len(csju.mutation.JobIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job"`)
 	}
 	return nil
 }
@@ -280,11 +398,14 @@ func (csju *ControlScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err 
 	if csju.mutation.DeletedByCleared() {
 		_spec.ClearField(controlscheduledjob.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := csju.mutation.ScheduledJobID(); ok {
-		_spec.SetField(controlscheduledjob.FieldScheduledJobID, field.TypeString, value)
+	if value, ok := csju.mutation.Configuration(); ok {
+		_spec.SetField(controlscheduledjob.FieldConfiguration, field.TypeJSON, value)
 	}
-	if csju.mutation.ScheduledJobIDCleared() {
-		_spec.ClearField(controlscheduledjob.FieldScheduledJobID, field.TypeString)
+	if value, ok := csju.mutation.Cadence(); ok {
+		_spec.SetField(controlscheduledjob.FieldCadence, field.TypeJSON, value)
+	}
+	if csju.mutation.CadenceCleared() {
+		_spec.ClearField(controlscheduledjob.FieldCadence, field.TypeJSON)
 	}
 	if value, ok := csju.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjob.FieldCron, field.TypeString, value)
@@ -318,6 +439,133 @@ func (csju *ControlScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err 
 			},
 		}
 		edge.Schema = csju.schemaConfig.ControlScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if csju.mutation.JobCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobTable,
+			Columns: []string{controlscheduledjob.JobColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.ControlScheduledJob
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csju.mutation.JobIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobTable,
+			Columns: []string{controlscheduledjob.JobColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.ControlScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if csju.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.ControlsTable,
+			Columns: []string{controlscheduledjob.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csju.mutation.RemovedControlsIDs(); len(nodes) > 0 && !csju.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.ControlsTable,
+			Columns: []string{controlscheduledjob.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csju.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.ControlsTable,
+			Columns: []string{controlscheduledjob.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if csju.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.SubcontrolsTable,
+			Columns: []string{controlscheduledjob.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csju.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !csju.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.SubcontrolsTable,
+			Columns: []string{controlscheduledjob.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csju.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.SubcontrolsTable,
+			Columns: []string{controlscheduledjob.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -439,23 +687,51 @@ func (csjuo *ControlScheduledJobUpdateOne) ClearOwnerID() *ControlScheduledJobUp
 	return csjuo
 }
 
-// SetScheduledJobID sets the "scheduled_job_id" field.
-func (csjuo *ControlScheduledJobUpdateOne) SetScheduledJobID(s string) *ControlScheduledJobUpdateOne {
-	csjuo.mutation.SetScheduledJobID(s)
+// SetJobID sets the "job_id" field.
+func (csjuo *ControlScheduledJobUpdateOne) SetJobID(s string) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.SetJobID(s)
 	return csjuo
 }
 
-// SetNillableScheduledJobID sets the "scheduled_job_id" field if the given value is not nil.
-func (csjuo *ControlScheduledJobUpdateOne) SetNillableScheduledJobID(s *string) *ControlScheduledJobUpdateOne {
+// SetNillableJobID sets the "job_id" field if the given value is not nil.
+func (csjuo *ControlScheduledJobUpdateOne) SetNillableJobID(s *string) *ControlScheduledJobUpdateOne {
 	if s != nil {
-		csjuo.SetScheduledJobID(*s)
+		csjuo.SetJobID(*s)
 	}
 	return csjuo
 }
 
-// ClearScheduledJobID clears the value of the "scheduled_job_id" field.
-func (csjuo *ControlScheduledJobUpdateOne) ClearScheduledJobID() *ControlScheduledJobUpdateOne {
-	csjuo.mutation.ClearScheduledJobID()
+// SetConfiguration sets the "configuration" field.
+func (csjuo *ControlScheduledJobUpdateOne) SetConfiguration(mc models.JobConfiguration) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.SetConfiguration(mc)
+	return csjuo
+}
+
+// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
+func (csjuo *ControlScheduledJobUpdateOne) SetNillableConfiguration(mc *models.JobConfiguration) *ControlScheduledJobUpdateOne {
+	if mc != nil {
+		csjuo.SetConfiguration(*mc)
+	}
+	return csjuo
+}
+
+// SetCadence sets the "cadence" field.
+func (csjuo *ControlScheduledJobUpdateOne) SetCadence(mc models.JobCadence) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.SetCadence(mc)
+	return csjuo
+}
+
+// SetNillableCadence sets the "cadence" field if the given value is not nil.
+func (csjuo *ControlScheduledJobUpdateOne) SetNillableCadence(mc *models.JobCadence) *ControlScheduledJobUpdateOne {
+	if mc != nil {
+		csjuo.SetCadence(*mc)
+	}
+	return csjuo
+}
+
+// ClearCadence clears the value of the "cadence" field.
+func (csjuo *ControlScheduledJobUpdateOne) ClearCadence() *ControlScheduledJobUpdateOne {
+	csjuo.mutation.ClearCadence()
 	return csjuo
 }
 
@@ -484,6 +760,41 @@ func (csjuo *ControlScheduledJobUpdateOne) SetOwner(o *Organization) *ControlSch
 	return csjuo.SetOwnerID(o.ID)
 }
 
+// SetJob sets the "job" edge to the ScheduledJob entity.
+func (csjuo *ControlScheduledJobUpdateOne) SetJob(s *ScheduledJob) *ControlScheduledJobUpdateOne {
+	return csjuo.SetJobID(s.ID)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (csjuo *ControlScheduledJobUpdateOne) AddControlIDs(ids ...string) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.AddControlIDs(ids...)
+	return csjuo
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (csjuo *ControlScheduledJobUpdateOne) AddControls(c ...*Control) *ControlScheduledJobUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return csjuo.AddControlIDs(ids...)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (csjuo *ControlScheduledJobUpdateOne) AddSubcontrolIDs(ids ...string) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.AddSubcontrolIDs(ids...)
+	return csjuo
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (csjuo *ControlScheduledJobUpdateOne) AddSubcontrols(s ...*Subcontrol) *ControlScheduledJobUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return csjuo.AddSubcontrolIDs(ids...)
+}
+
 // Mutation returns the ControlScheduledJobMutation object of the builder.
 func (csjuo *ControlScheduledJobUpdateOne) Mutation() *ControlScheduledJobMutation {
 	return csjuo.mutation
@@ -493,6 +804,54 @@ func (csjuo *ControlScheduledJobUpdateOne) Mutation() *ControlScheduledJobMutati
 func (csjuo *ControlScheduledJobUpdateOne) ClearOwner() *ControlScheduledJobUpdateOne {
 	csjuo.mutation.ClearOwner()
 	return csjuo
+}
+
+// ClearJob clears the "job" edge to the ScheduledJob entity.
+func (csjuo *ControlScheduledJobUpdateOne) ClearJob() *ControlScheduledJobUpdateOne {
+	csjuo.mutation.ClearJob()
+	return csjuo
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (csjuo *ControlScheduledJobUpdateOne) ClearControls() *ControlScheduledJobUpdateOne {
+	csjuo.mutation.ClearControls()
+	return csjuo
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (csjuo *ControlScheduledJobUpdateOne) RemoveControlIDs(ids ...string) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.RemoveControlIDs(ids...)
+	return csjuo
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (csjuo *ControlScheduledJobUpdateOne) RemoveControls(c ...*Control) *ControlScheduledJobUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return csjuo.RemoveControlIDs(ids...)
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (csjuo *ControlScheduledJobUpdateOne) ClearSubcontrols() *ControlScheduledJobUpdateOne {
+	csjuo.mutation.ClearSubcontrols()
+	return csjuo
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (csjuo *ControlScheduledJobUpdateOne) RemoveSubcontrolIDs(ids ...string) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.RemoveSubcontrolIDs(ids...)
+	return csjuo
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (csjuo *ControlScheduledJobUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *ControlScheduledJobUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return csjuo.RemoveSubcontrolIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlScheduledJobUpdate builder.
@@ -556,6 +915,9 @@ func (csjuo *ControlScheduledJobUpdateOne) check() error {
 		if err := controlscheduledjob.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.owner_id": %w`, err)}
 		}
+	}
+	if csjuo.mutation.JobCleared() && len(csjuo.mutation.JobIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job"`)
 	}
 	return nil
 }
@@ -625,11 +987,14 @@ func (csjuo *ControlScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *
 	if csjuo.mutation.DeletedByCleared() {
 		_spec.ClearField(controlscheduledjob.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := csjuo.mutation.ScheduledJobID(); ok {
-		_spec.SetField(controlscheduledjob.FieldScheduledJobID, field.TypeString, value)
+	if value, ok := csjuo.mutation.Configuration(); ok {
+		_spec.SetField(controlscheduledjob.FieldConfiguration, field.TypeJSON, value)
 	}
-	if csjuo.mutation.ScheduledJobIDCleared() {
-		_spec.ClearField(controlscheduledjob.FieldScheduledJobID, field.TypeString)
+	if value, ok := csjuo.mutation.Cadence(); ok {
+		_spec.SetField(controlscheduledjob.FieldCadence, field.TypeJSON, value)
+	}
+	if csjuo.mutation.CadenceCleared() {
+		_spec.ClearField(controlscheduledjob.FieldCadence, field.TypeJSON)
 	}
 	if value, ok := csjuo.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjob.FieldCron, field.TypeString, value)
@@ -663,6 +1028,133 @@ func (csjuo *ControlScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *
 			},
 		}
 		edge.Schema = csjuo.schemaConfig.ControlScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if csjuo.mutation.JobCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobTable,
+			Columns: []string{controlscheduledjob.JobColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.ControlScheduledJob
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csjuo.mutation.JobIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobTable,
+			Columns: []string{controlscheduledjob.JobColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.ControlScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if csjuo.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.ControlsTable,
+			Columns: []string{controlscheduledjob.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csjuo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !csjuo.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.ControlsTable,
+			Columns: []string{controlscheduledjob.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csjuo.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.ControlsTable,
+			Columns: []string{controlscheduledjob.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if csjuo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.SubcontrolsTable,
+			Columns: []string{controlscheduledjob.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csjuo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !csjuo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.SubcontrolsTable,
+			Columns: []string{controlscheduledjob.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csjuo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.SubcontrolsTable,
+			Columns: []string{controlscheduledjob.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

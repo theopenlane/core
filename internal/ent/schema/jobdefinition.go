@@ -105,9 +105,7 @@ func (s ScheduledJob) Mixin() []ent.Mixin {
 
 // Edges of the ScheduledJob
 func (s ScheduledJob) Edges() []ent.Edge {
-	return []ent.Edge{
-		// defaultEdgeFromWithPagination(s, Control{}),
-	}
+	return []ent.Edge{}
 }
 
 // Indexes of the ScheduledJob

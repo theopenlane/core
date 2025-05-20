@@ -3,6 +3,7 @@
 package generated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -11,6 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ControlScheduledJob is the model entity for the ControlScheduledJob schema.
@@ -32,8 +35,12 @@ type ControlScheduledJob struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// ScheduledJobID holds the value of the "scheduled_job_id" field.
-	ScheduledJobID string `json:"scheduled_job_id,omitempty"`
+	// JobID holds the value of the "job_id" field.
+	JobID string `json:"job_id,omitempty"`
+	// the configuration to run this job
+	Configuration models.JobConfiguration `json:"configuration,omitempty"`
+	// the schedule to run this job
+	Cadence models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
 	Cron *string `json:"cron,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -46,11 +53,20 @@ type ControlScheduledJob struct {
 type ControlScheduledJobEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// Job holds the value of the job edge.
+	Job *ScheduledJob `json:"job,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [4]map[string]int
+
+	namedControls    map[string][]*Control
+	namedSubcontrols map[string][]*Subcontrol
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -64,12 +80,43 @@ func (e ControlScheduledJobEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// JobOrErr returns the Job value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlScheduledJobEdges) JobOrErr() (*ScheduledJob, error) {
+	if e.Job != nil {
+		return e.Job, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: scheduledjob.Label}
+	}
+	return nil, &NotLoadedError{edge: "job"}
+}
+
+// ControlsOrErr returns the Controls value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlScheduledJobEdges) ControlsOrErr() ([]*Control, error) {
+	if e.loadedTypes[2] {
+		return e.Controls, nil
+	}
+	return nil, &NotLoadedError{edge: "controls"}
+}
+
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlScheduledJobEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[3] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ControlScheduledJob) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlscheduledjob.FieldID, controlscheduledjob.FieldCreatedBy, controlscheduledjob.FieldUpdatedBy, controlscheduledjob.FieldDeletedBy, controlscheduledjob.FieldOwnerID, controlscheduledjob.FieldScheduledJobID, controlscheduledjob.FieldCron:
+		case controlscheduledjob.FieldConfiguration, controlscheduledjob.FieldCadence:
+			values[i] = new([]byte)
+		case controlscheduledjob.FieldID, controlscheduledjob.FieldCreatedBy, controlscheduledjob.FieldUpdatedBy, controlscheduledjob.FieldDeletedBy, controlscheduledjob.FieldOwnerID, controlscheduledjob.FieldJobID, controlscheduledjob.FieldCron:
 			values[i] = new(sql.NullString)
 		case controlscheduledjob.FieldCreatedAt, controlscheduledjob.FieldUpdatedAt, controlscheduledjob.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -136,11 +183,27 @@ func (csj *ControlScheduledJob) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				csj.OwnerID = value.String
 			}
-		case controlscheduledjob.FieldScheduledJobID:
+		case controlscheduledjob.FieldJobID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field scheduled_job_id", values[i])
+				return fmt.Errorf("unexpected type %T for field job_id", values[i])
 			} else if value.Valid {
-				csj.ScheduledJobID = value.String
+				csj.JobID = value.String
+			}
+		case controlscheduledjob.FieldConfiguration:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field configuration", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &csj.Configuration); err != nil {
+					return fmt.Errorf("unmarshal field configuration: %w", err)
+				}
+			}
+		case controlscheduledjob.FieldCadence:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field cadence", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &csj.Cadence); err != nil {
+					return fmt.Errorf("unmarshal field cadence: %w", err)
+				}
 			}
 		case controlscheduledjob.FieldCron:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -165,6 +228,21 @@ func (csj *ControlScheduledJob) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the ControlScheduledJob entity.
 func (csj *ControlScheduledJob) QueryOwner() *OrganizationQuery {
 	return NewControlScheduledJobClient(csj.config).QueryOwner(csj)
+}
+
+// QueryJob queries the "job" edge of the ControlScheduledJob entity.
+func (csj *ControlScheduledJob) QueryJob() *ScheduledJobQuery {
+	return NewControlScheduledJobClient(csj.config).QueryJob(csj)
+}
+
+// QueryControls queries the "controls" edge of the ControlScheduledJob entity.
+func (csj *ControlScheduledJob) QueryControls() *ControlQuery {
+	return NewControlScheduledJobClient(csj.config).QueryControls(csj)
+}
+
+// QuerySubcontrols queries the "subcontrols" edge of the ControlScheduledJob entity.
+func (csj *ControlScheduledJob) QuerySubcontrols() *SubcontrolQuery {
+	return NewControlScheduledJobClient(csj.config).QuerySubcontrols(csj)
 }
 
 // Update returns a builder for updating this ControlScheduledJob.
@@ -211,8 +289,14 @@ func (csj *ControlScheduledJob) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(csj.OwnerID)
 	builder.WriteString(", ")
-	builder.WriteString("scheduled_job_id=")
-	builder.WriteString(csj.ScheduledJobID)
+	builder.WriteString("job_id=")
+	builder.WriteString(csj.JobID)
+	builder.WriteString(", ")
+	builder.WriteString("configuration=")
+	builder.WriteString(fmt.Sprintf("%v", csj.Configuration))
+	builder.WriteString(", ")
+	builder.WriteString("cadence=")
+	builder.WriteString(fmt.Sprintf("%v", csj.Cadence))
 	builder.WriteString(", ")
 	if v := csj.Cron; v != nil {
 		builder.WriteString("cron=")
@@ -220,6 +304,54 @@ func (csj *ControlScheduledJob) String() string {
 	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedControls returns the Controls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (csj *ControlScheduledJob) NamedControls(name string) ([]*Control, error) {
+	if csj.Edges.namedControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := csj.Edges.namedControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (csj *ControlScheduledJob) appendNamedControls(name string, edges ...*Control) {
+	if csj.Edges.namedControls == nil {
+		csj.Edges.namedControls = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		csj.Edges.namedControls[name] = []*Control{}
+	} else {
+		csj.Edges.namedControls[name] = append(csj.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (csj *ControlScheduledJob) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if csj.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := csj.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (csj *ControlScheduledJob) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if csj.Edges.namedSubcontrols == nil {
+		csj.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		csj.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		csj.Edges.namedSubcontrols[name] = append(csj.Edges.namedSubcontrols[name], edges...)
+	}
 }
 
 // ControlScheduledJobs is a parsable slice of ControlScheduledJob.

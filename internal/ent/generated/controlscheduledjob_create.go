@@ -4,13 +4,18 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // ControlScheduledJobCreate is the builder for creating a ControlScheduledJob entity.
@@ -118,16 +123,28 @@ func (csjc *ControlScheduledJobCreate) SetNillableOwnerID(s *string) *ControlSch
 	return csjc
 }
 
-// SetScheduledJobID sets the "scheduled_job_id" field.
-func (csjc *ControlScheduledJobCreate) SetScheduledJobID(s string) *ControlScheduledJobCreate {
-	csjc.mutation.SetScheduledJobID(s)
+// SetJobID sets the "job_id" field.
+func (csjc *ControlScheduledJobCreate) SetJobID(s string) *ControlScheduledJobCreate {
+	csjc.mutation.SetJobID(s)
 	return csjc
 }
 
-// SetNillableScheduledJobID sets the "scheduled_job_id" field if the given value is not nil.
-func (csjc *ControlScheduledJobCreate) SetNillableScheduledJobID(s *string) *ControlScheduledJobCreate {
-	if s != nil {
-		csjc.SetScheduledJobID(*s)
+// SetConfiguration sets the "configuration" field.
+func (csjc *ControlScheduledJobCreate) SetConfiguration(mc models.JobConfiguration) *ControlScheduledJobCreate {
+	csjc.mutation.SetConfiguration(mc)
+	return csjc
+}
+
+// SetCadence sets the "cadence" field.
+func (csjc *ControlScheduledJobCreate) SetCadence(mc models.JobCadence) *ControlScheduledJobCreate {
+	csjc.mutation.SetCadence(mc)
+	return csjc
+}
+
+// SetNillableCadence sets the "cadence" field if the given value is not nil.
+func (csjc *ControlScheduledJobCreate) SetNillableCadence(mc *models.JobCadence) *ControlScheduledJobCreate {
+	if mc != nil {
+		csjc.SetCadence(*mc)
 	}
 	return csjc
 }
@@ -163,6 +180,41 @@ func (csjc *ControlScheduledJobCreate) SetNillableID(s *string) *ControlSchedule
 // SetOwner sets the "owner" edge to the Organization entity.
 func (csjc *ControlScheduledJobCreate) SetOwner(o *Organization) *ControlScheduledJobCreate {
 	return csjc.SetOwnerID(o.ID)
+}
+
+// SetJob sets the "job" edge to the ScheduledJob entity.
+func (csjc *ControlScheduledJobCreate) SetJob(s *ScheduledJob) *ControlScheduledJobCreate {
+	return csjc.SetJobID(s.ID)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (csjc *ControlScheduledJobCreate) AddControlIDs(ids ...string) *ControlScheduledJobCreate {
+	csjc.mutation.AddControlIDs(ids...)
+	return csjc
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (csjc *ControlScheduledJobCreate) AddControls(c ...*Control) *ControlScheduledJobCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return csjc.AddControlIDs(ids...)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (csjc *ControlScheduledJobCreate) AddSubcontrolIDs(ids ...string) *ControlScheduledJobCreate {
+	csjc.mutation.AddSubcontrolIDs(ids...)
+	return csjc
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (csjc *ControlScheduledJobCreate) AddSubcontrols(s ...*Subcontrol) *ControlScheduledJobCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return csjc.AddSubcontrolIDs(ids...)
 }
 
 // Mutation returns the ControlScheduledJobMutation object of the builder.
@@ -233,6 +285,15 @@ func (csjc *ControlScheduledJobCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.owner_id": %w`, err)}
 		}
 	}
+	if _, ok := csjc.mutation.JobID(); !ok {
+		return &ValidationError{Name: "job_id", err: errors.New(`generated: missing required field "ControlScheduledJob.job_id"`)}
+	}
+	if _, ok := csjc.mutation.Configuration(); !ok {
+		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ControlScheduledJob.configuration"`)}
+	}
+	if len(csjc.mutation.JobIDs()) == 0 {
+		return &ValidationError{Name: "job", err: errors.New(`generated: missing required edge "ControlScheduledJob.job"`)}
+	}
 	return nil
 }
 
@@ -293,9 +354,13 @@ func (csjc *ControlScheduledJobCreate) createSpec() (*ControlScheduledJob, *sqlg
 		_spec.SetField(controlscheduledjob.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := csjc.mutation.ScheduledJobID(); ok {
-		_spec.SetField(controlscheduledjob.FieldScheduledJobID, field.TypeString, value)
-		_node.ScheduledJobID = value
+	if value, ok := csjc.mutation.Configuration(); ok {
+		_spec.SetField(controlscheduledjob.FieldConfiguration, field.TypeJSON, value)
+		_node.Configuration = value
+	}
+	if value, ok := csjc.mutation.Cadence(); ok {
+		_spec.SetField(controlscheduledjob.FieldCadence, field.TypeJSON, value)
+		_node.Cadence = value
 	}
 	if value, ok := csjc.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjob.FieldCron, field.TypeString, value)
@@ -317,6 +382,58 @@ func (csjc *ControlScheduledJobCreate) createSpec() (*ControlScheduledJob, *sqlg
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := csjc.mutation.JobIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobTable,
+			Columns: []string{controlscheduledjob.JobColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjc.schemaConfig.ControlScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.JobID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := csjc.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.ControlsTable,
+			Columns: []string{controlscheduledjob.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjc.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := csjc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlscheduledjob.SubcontrolsTable,
+			Columns: []string{controlscheduledjob.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

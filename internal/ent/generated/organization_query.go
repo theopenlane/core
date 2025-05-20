@@ -4374,6 +4374,7 @@ func (oq *OrganizationQuery) loadControls(ctx context.Context, query *ControlQue
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(control.FieldOwnerID)
 	}

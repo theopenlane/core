@@ -16449,14 +16449,14 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 }
 
 type CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Cron           *string    "json:\"cron,omitempty\" graphql:\"cron\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ScheduledJobID *string    "json:\"scheduledJobID,omitempty\" graphql:\"scheduledJobID\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron      *string    "json:\"cron,omitempty\" graphql:\"cron\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	JobID     string     "json:\"jobID\" graphql:\"jobID\""
+	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetCreatedAt() *time.Time {
@@ -16483,17 +16483,17 @@ func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_Contr
 	}
 	return t.ID
 }
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetJobID() string {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.JobID
+}
 func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
 	}
 	return t.OwnerID
-}
-func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetScheduledJobID() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
-	}
-	return t.ScheduledJobID
 }
 func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -16520,14 +16520,14 @@ func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob) GetC
 }
 
 type CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Cron           *string    "json:\"cron,omitempty\" graphql:\"cron\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ScheduledJobID *string    "json:\"scheduledJobID,omitempty\" graphql:\"scheduledJobID\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron      *string    "json:\"cron,omitempty\" graphql:\"cron\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	JobID     string     "json:\"jobID\" graphql:\"jobID\""
+	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetCreatedAt() *time.Time {
@@ -16554,17 +16554,17 @@ func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlSche
 	}
 	return t.ID
 }
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetJobID() string {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.JobID
+}
 func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
 	}
 	return t.OwnerID
-}
-func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetScheduledJobID() *string {
-	if t == nil {
-		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
-	}
-	return t.ScheduledJobID
 }
 func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -16591,14 +16591,14 @@ func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob) GetControl
 }
 
 type CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Cron           *string    "json:\"cron,omitempty\" graphql:\"cron\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ScheduledJobID *string    "json:\"scheduledJobID,omitempty\" graphql:\"scheduledJobID\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron      *string    "json:\"cron,omitempty\" graphql:\"cron\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	JobID     string     "json:\"jobID\" graphql:\"jobID\""
+	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetCreatedAt() *time.Time {
@@ -16625,17 +16625,17 @@ func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob
 	}
 	return t.ID
 }
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetJobID() string {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.JobID
+}
 func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
 	}
 	return t.OwnerID
-}
-func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetScheduledJobID() *string {
-	if t == nil {
-		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
-	}
-	return t.ScheduledJobID
 }
 func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -16705,14 +16705,14 @@ func (t *GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCurso
 }
 
 type GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Cron           *string    "json:\"cron,omitempty\" graphql:\"cron\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ScheduledJobID *string    "json:\"scheduledJobID,omitempty\" graphql:\"scheduledJobID\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron      *string    "json:\"cron,omitempty\" graphql:\"cron\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	JobID     string     "json:\"jobID\" graphql:\"jobID\""
+	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCreatedAt() *time.Time {
@@ -16739,17 +16739,17 @@ func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetID() str
 	}
 	return t.ID
 }
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetJobID() string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.JobID
+}
 func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
 	}
 	return t.OwnerID
-}
-func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetScheduledJobID() *string {
-	if t == nil {
-		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
-	}
-	return t.ScheduledJobID
 }
 func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -16801,14 +16801,14 @@ func (t *GetAllControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 
 }
 
 type GetControlScheduledJobByID_ControlScheduledJob struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Cron           *string    "json:\"cron,omitempty\" graphql:\"cron\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ScheduledJobID *string    "json:\"scheduledJobID,omitempty\" graphql:\"scheduledJobID\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron      *string    "json:\"cron,omitempty\" graphql:\"cron\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	JobID     string     "json:\"jobID\" graphql:\"jobID\""
+	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetControlScheduledJobByID_ControlScheduledJob) GetCreatedAt() *time.Time {
@@ -16835,17 +16835,17 @@ func (t *GetControlScheduledJobByID_ControlScheduledJob) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetJobID() string {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.JobID
+}
 func (t *GetControlScheduledJobByID_ControlScheduledJob) GetOwnerID() *string {
 	if t == nil {
 		t = &GetControlScheduledJobByID_ControlScheduledJob{}
 	}
 	return t.OwnerID
-}
-func (t *GetControlScheduledJobByID_ControlScheduledJob) GetScheduledJobID() *string {
-	if t == nil {
-		t = &GetControlScheduledJobByID_ControlScheduledJob{}
-	}
-	return t.ScheduledJobID
 }
 func (t *GetControlScheduledJobByID_ControlScheduledJob) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -16893,14 +16893,14 @@ func (t *GetControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCursor()
 }
 
 type GetControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Cron           *string    "json:\"cron,omitempty\" graphql:\"cron\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ScheduledJobID *string    "json:\"scheduledJobID,omitempty\" graphql:\"scheduledJobID\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron      *string    "json:\"cron,omitempty\" graphql:\"cron\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	JobID     string     "json:\"jobID\" graphql:\"jobID\""
+	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCreatedAt() *time.Time {
@@ -16927,17 +16927,17 @@ func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetID() string
 	}
 	return t.ID
 }
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetJobID() string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.JobID
+}
 func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
 	}
 	return t.OwnerID
-}
-func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetScheduledJobID() *string {
-	if t == nil {
-		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
-	}
-	return t.ScheduledJobID
 }
 func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -16989,14 +16989,14 @@ func (t *GetControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 {
 }
 
 type UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob struct {
-	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Cron           *string    "json:\"cron,omitempty\" graphql:\"cron\""
-	ID             string     "json:\"id\" graphql:\"id\""
-	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ScheduledJobID *string    "json:\"scheduledJobID,omitempty\" graphql:\"scheduledJobID\""
-	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron      *string    "json:\"cron,omitempty\" graphql:\"cron\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	JobID     string     "json:\"jobID\" graphql:\"jobID\""
+	OwnerID   *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetCreatedAt() *time.Time {
@@ -17023,17 +17023,17 @@ func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob
 	}
 	return t.ID
 }
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetJobID() string {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.JobID
+}
 func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetOwnerID() *string {
 	if t == nil {
 		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
 	}
 	return t.OwnerID
-}
-func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetScheduledJobID() *string {
-	if t == nil {
-		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
-	}
-	return t.ScheduledJobID
 }
 func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -81546,8 +81546,8 @@ const CreateBulkCSVControlScheduledJobDocument = `mutation CreateBulkCSVControlS
 			createdBy
 			cron
 			id
+			jobID
 			ownerID
-			scheduledJobID
 			updatedAt
 			updatedBy
 		}
@@ -81579,8 +81579,8 @@ const CreateBulkControlScheduledJobDocument = `mutation CreateBulkControlSchedul
 			createdBy
 			cron
 			id
+			jobID
 			ownerID
-			scheduledJobID
 			updatedAt
 			updatedBy
 		}
@@ -81612,8 +81612,8 @@ const CreateControlScheduledJobDocument = `mutation CreateControlScheduledJob ($
 			createdBy
 			cron
 			id
+			jobID
 			ownerID
-			scheduledJobID
 			updatedAt
 			updatedBy
 		}
@@ -81677,8 +81677,8 @@ const GetAllControlScheduledJobsDocument = `query GetAllControlScheduledJobs {
 				createdBy
 				cron
 				id
+				jobID
 				ownerID
-				scheduledJobID
 				updatedAt
 				updatedBy
 			}
@@ -81708,8 +81708,8 @@ const GetControlScheduledJobByIDDocument = `query GetControlScheduledJobByID ($c
 		createdBy
 		cron
 		id
+		jobID
 		ownerID
-		scheduledJobID
 		updatedAt
 		updatedBy
 	}
@@ -81748,8 +81748,8 @@ const GetControlScheduledJobsDocument = `query GetControlScheduledJobs ($first: 
 				createdBy
 				cron
 				id
+				jobID
 				ownerID
-				scheduledJobID
 				updatedAt
 				updatedBy
 			}
@@ -81784,8 +81784,8 @@ const UpdateControlScheduledJobDocument = `mutation UpdateControlScheduledJob ($
 			createdBy
 			cron
 			id
+			jobID
 			ownerID
-			scheduledJobID
 			updatedAt
 			updatedBy
 		}

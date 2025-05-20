@@ -6,8 +6,8 @@ mutation CreateBulkCSVControlScheduledJob($input: Upload!) {
       createdBy
       cron
       id
+      jobID
       ownerID
-      scheduledJobID
       updatedAt
       updatedBy
     }
@@ -21,8 +21,8 @@ mutation CreateBulkControlScheduledJob($input: [CreateControlScheduledJobInput!]
       createdBy
       cron
       id
+      jobID
       ownerID
-      scheduledJobID
       updatedAt
       updatedBy
     }
@@ -36,8 +36,8 @@ mutation CreateControlScheduledJob($input: CreateControlScheduledJobInput!) {
       createdBy
       cron
       id
+      jobID
       ownerID
-      scheduledJobID
       updatedAt
       updatedBy
     }
@@ -65,8 +65,8 @@ query GetAllControlScheduledJobs {
         createdBy
         cron
         id
+        jobID
         ownerID
-        scheduledJobID
         updatedAt
         updatedBy
       }
@@ -79,8 +79,8 @@ query GetControlScheduledJobByID($controlScheduledJobId: ID!) {
     createdBy
     cron
     id
+    jobID
     ownerID
-    scheduledJobID
     updatedAt
     updatedBy
   }
@@ -101,8 +101,8 @@ query GetControlScheduledJobs($first: Int, $last: Int, $where: ControlScheduledJ
         createdBy
         cron
         id
+        jobID
         ownerID
-        scheduledJobID
         updatedAt
         updatedBy
       }
@@ -116,8 +116,8 @@ mutation UpdateControlScheduledJob($updateControlScheduledJobId: ID!, $input: Up
       createdBy
       cron
       id
+      jobID
       ownerID
-      scheduledJobID
       updatedAt
       updatedBy
     }

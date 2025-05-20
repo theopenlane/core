@@ -608,17 +608,22 @@ type ComplexityRoot struct {
 	}
 
 	ControlScheduledJob struct {
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		Cron           func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedBy      func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Owner          func(childComplexity int) int
-		OwnerID        func(childComplexity int) int
-		ScheduledJobID func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		Cadence       func(childComplexity int) int
+		Configuration func(childComplexity int) int
+		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Cron          func(childComplexity int) int
+		DeletedAt     func(childComplexity int) int
+		DeletedBy     func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Job           func(childComplexity int) int
+		JobID         func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Subcontrols   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	ControlScheduledJobBulkCreatePayload struct {
@@ -6977,6 +6982,32 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlObjectiveUpdatePayload.ControlObjective(childComplexity), true
 
+	case "ControlScheduledJob.cadence":
+		if e.complexity.ControlScheduledJob.Cadence == nil {
+			break
+		}
+
+		return e.complexity.ControlScheduledJob.Cadence(childComplexity), true
+
+	case "ControlScheduledJob.configuration":
+		if e.complexity.ControlScheduledJob.Configuration == nil {
+			break
+		}
+
+		return e.complexity.ControlScheduledJob.Configuration(childComplexity), true
+
+	case "ControlScheduledJob.controls":
+		if e.complexity.ControlScheduledJob.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_ControlScheduledJob_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlScheduledJob.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
 	case "ControlScheduledJob.createdAt":
 		if e.complexity.ControlScheduledJob.CreatedAt == nil {
 			break
@@ -7019,6 +7050,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlScheduledJob.ID(childComplexity), true
 
+	case "ControlScheduledJob.job":
+		if e.complexity.ControlScheduledJob.Job == nil {
+			break
+		}
+
+		return e.complexity.ControlScheduledJob.Job(childComplexity), true
+
+	case "ControlScheduledJob.jobID":
+		if e.complexity.ControlScheduledJob.JobID == nil {
+			break
+		}
+
+		return e.complexity.ControlScheduledJob.JobID(childComplexity), true
+
 	case "ControlScheduledJob.owner":
 		if e.complexity.ControlScheduledJob.Owner == nil {
 			break
@@ -7033,12 +7078,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlScheduledJob.OwnerID(childComplexity), true
 
-	case "ControlScheduledJob.scheduledJobID":
-		if e.complexity.ControlScheduledJob.ScheduledJobID == nil {
+	case "ControlScheduledJob.subcontrols":
+		if e.complexity.ControlScheduledJob.Subcontrols == nil {
 			break
 		}
 
-		return e.complexity.ControlScheduledJob.ScheduledJobID(childComplexity), true
+		args, err := ec.field_ControlScheduledJob_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlScheduledJob.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "ControlScheduledJob.updatedAt":
 		if e.complexity.ControlScheduledJob.UpdatedAt == nil {
@@ -29524,7 +29574,8 @@ type ControlScheduledJobBulkCreatePayload {
     Created controlScheduledJobs
     """
     controlScheduledJobs: [ControlScheduledJob!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/customdomain.graphql", Input: `extend type Query {
     """
     Look up customDomain by ID
@@ -35168,12 +35219,83 @@ type ControlScheduledJob implements Node {
   the organization id that owns the object
   """
   ownerID: ID
-  scheduledJobID: String
+  jobID: ID!
+  """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration!
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
   """
   cron syntax
   """
   cron: String
   owner: Organization
+  job: ScheduledJob!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
 }
 """
 A connection to a list of items.
@@ -35358,28 +35480,41 @@ input ControlScheduledJobWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  scheduled_job_id field predicates
+  job_id field predicates
   """
-  scheduledJobID: String
-  scheduledJobIDNEQ: String
-  scheduledJobIDIn: [String!]
-  scheduledJobIDNotIn: [String!]
-  scheduledJobIDGT: String
-  scheduledJobIDGTE: String
-  scheduledJobIDLT: String
-  scheduledJobIDLTE: String
-  scheduledJobIDContains: String
-  scheduledJobIDHasPrefix: String
-  scheduledJobIDHasSuffix: String
-  scheduledJobIDIsNil: Boolean
-  scheduledJobIDNotNil: Boolean
-  scheduledJobIDEqualFold: String
-  scheduledJobIDContainsFold: String
+  jobID: ID
+  jobIDNEQ: ID
+  jobIDIn: [ID!]
+  jobIDNotIn: [ID!]
+  jobIDGT: ID
+  jobIDGTE: ID
+  jobIDLT: ID
+  jobIDLTE: ID
+  jobIDContains: ID
+  jobIDHasPrefix: ID
+  jobIDHasSuffix: ID
+  jobIDEqualFold: ID
+  jobIDContainsFold: ID
   """
   owner edge predicates
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  job edge predicates
+  """
+  hasJob: Boolean
+  hasJobWith: [ScheduledJobWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -36163,12 +36298,22 @@ CreateControlScheduledJobInput is used for create ControlScheduledJob object.
 Input was generated by ent.
 """
 input CreateControlScheduledJobInput {
-  scheduledJobID: String
+  """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration!
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
   """
   cron syntax
   """
   cron: String
   ownerID: ID
+  jobID: ID!
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
 }
 """
 CreateCustomDomainInput is used for create CustomDomain object.
@@ -69215,8 +69360,15 @@ UpdateControlScheduledJobInput is used for update ControlScheduledJob object.
 Input was generated by ent.
 """
 input UpdateControlScheduledJobInput {
-  scheduledJobID: String
-  clearScheduledJobID: Boolean
+  """
+  the configuration to run this job
+  """
+  configuration: JobConfiguration
+  """
+  the schedule to run this job
+  """
+  cadence: JobCadence
+  clearCadence: Boolean
   """
   cron syntax
   """
@@ -69224,6 +69376,13 @@ input UpdateControlScheduledJobInput {
   clearCron: Boolean
   ownerID: ID
   clearOwner: Boolean
+  jobID: ID
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
 }
 """
 UpdateCustomDomainInput is used for update CustomDomain object.

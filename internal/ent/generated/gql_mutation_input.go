@@ -1653,21 +1653,33 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 
 // CreateControlScheduledJobInput represents a mutation input for creating controlscheduledjobs.
 type CreateControlScheduledJobInput struct {
-	ScheduledJobID *string
-	Cron           *string
-	OwnerID        *string
+	Configuration models.JobConfiguration
+	Cadence       *models.JobCadence
+	Cron          *string
+	OwnerID       *string
+	JobID         string
+	ControlIDs    []string
+	SubcontrolIDs []string
 }
 
 // Mutate applies the CreateControlScheduledJobInput on the ControlScheduledJobMutation builder.
 func (i *CreateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) {
-	if v := i.ScheduledJobID; v != nil {
-		m.SetScheduledJobID(*v)
+	m.SetConfiguration(i.Configuration)
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
 	}
 	if v := i.Cron; v != nil {
 		m.SetCron(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	m.SetJobID(i.JobID)
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
 	}
 }
 
@@ -1679,21 +1691,32 @@ func (c *ControlScheduledJobCreate) SetInput(i CreateControlScheduledJobInput) *
 
 // UpdateControlScheduledJobInput represents a mutation input for updating controlscheduledjobs.
 type UpdateControlScheduledJobInput struct {
-	ClearScheduledJobID bool
-	ScheduledJobID      *string
+	Configuration       *models.JobConfiguration
+	ClearCadence        bool
+	Cadence             *models.JobCadence
 	ClearCron           bool
 	Cron                *string
 	ClearOwner          bool
 	OwnerID             *string
+	JobID               *string
+	ClearControls       bool
+	AddControlIDs       []string
+	RemoveControlIDs    []string
+	ClearSubcontrols    bool
+	AddSubcontrolIDs    []string
+	RemoveSubcontrolIDs []string
 }
 
 // Mutate applies the UpdateControlScheduledJobInput on the ControlScheduledJobMutation builder.
 func (i *UpdateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) {
-	if i.ClearScheduledJobID {
-		m.ClearScheduledJobID()
+	if v := i.Configuration; v != nil {
+		m.SetConfiguration(*v)
 	}
-	if v := i.ScheduledJobID; v != nil {
-		m.SetScheduledJobID(*v)
+	if i.ClearCadence {
+		m.ClearCadence()
+	}
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
 	}
 	if i.ClearCron {
 		m.ClearCron()
@@ -1706,6 +1729,27 @@ func (i *UpdateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) 
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.JobID; v != nil {
+		m.SetJobID(*v)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 }
 

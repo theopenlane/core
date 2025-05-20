@@ -12475,26 +12475,36 @@ type ControlScheduledJobWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
-	// "scheduled_job_id" field predicates.
-	ScheduledJobID             *string  `json:"scheduledJobID,omitempty"`
-	ScheduledJobIDNEQ          *string  `json:"scheduledJobIDNEQ,omitempty"`
-	ScheduledJobIDIn           []string `json:"scheduledJobIDIn,omitempty"`
-	ScheduledJobIDNotIn        []string `json:"scheduledJobIDNotIn,omitempty"`
-	ScheduledJobIDGT           *string  `json:"scheduledJobIDGT,omitempty"`
-	ScheduledJobIDGTE          *string  `json:"scheduledJobIDGTE,omitempty"`
-	ScheduledJobIDLT           *string  `json:"scheduledJobIDLT,omitempty"`
-	ScheduledJobIDLTE          *string  `json:"scheduledJobIDLTE,omitempty"`
-	ScheduledJobIDContains     *string  `json:"scheduledJobIDContains,omitempty"`
-	ScheduledJobIDHasPrefix    *string  `json:"scheduledJobIDHasPrefix,omitempty"`
-	ScheduledJobIDHasSuffix    *string  `json:"scheduledJobIDHasSuffix,omitempty"`
-	ScheduledJobIDIsNil        bool     `json:"scheduledJobIDIsNil,omitempty"`
-	ScheduledJobIDNotNil       bool     `json:"scheduledJobIDNotNil,omitempty"`
-	ScheduledJobIDEqualFold    *string  `json:"scheduledJobIDEqualFold,omitempty"`
-	ScheduledJobIDContainsFold *string  `json:"scheduledJobIDContainsFold,omitempty"`
+	// "job_id" field predicates.
+	JobID             *string  `json:"jobID,omitempty"`
+	JobIDNEQ          *string  `json:"jobIDNEQ,omitempty"`
+	JobIDIn           []string `json:"jobIDIn,omitempty"`
+	JobIDNotIn        []string `json:"jobIDNotIn,omitempty"`
+	JobIDGT           *string  `json:"jobIDGT,omitempty"`
+	JobIDGTE          *string  `json:"jobIDGTE,omitempty"`
+	JobIDLT           *string  `json:"jobIDLT,omitempty"`
+	JobIDLTE          *string  `json:"jobIDLTE,omitempty"`
+	JobIDContains     *string  `json:"jobIDContains,omitempty"`
+	JobIDHasPrefix    *string  `json:"jobIDHasPrefix,omitempty"`
+	JobIDHasSuffix    *string  `json:"jobIDHasSuffix,omitempty"`
+	JobIDEqualFold    *string  `json:"jobIDEqualFold,omitempty"`
+	JobIDContainsFold *string  `json:"jobIDContainsFold,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "job" edge predicates.
+	HasJob     *bool                     `json:"hasJob,omitempty"`
+	HasJobWith []*ScheduledJobWhereInput `json:"hasJobWith,omitempty"`
+
+	// "controls" edge predicates.
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+
+	// "subcontrols" edge predicates.
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -12868,50 +12878,44 @@ func (i *ControlScheduledJobWhereInput) P() (predicate.ControlScheduledJob, erro
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, controlscheduledjob.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
-	if i.ScheduledJobID != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDEQ(*i.ScheduledJobID))
+	if i.JobID != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDEQ(*i.JobID))
 	}
-	if i.ScheduledJobIDNEQ != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDNEQ(*i.ScheduledJobIDNEQ))
+	if i.JobIDNEQ != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDNEQ(*i.JobIDNEQ))
 	}
-	if len(i.ScheduledJobIDIn) > 0 {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDIn(i.ScheduledJobIDIn...))
+	if len(i.JobIDIn) > 0 {
+		predicates = append(predicates, controlscheduledjob.JobIDIn(i.JobIDIn...))
 	}
-	if len(i.ScheduledJobIDNotIn) > 0 {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDNotIn(i.ScheduledJobIDNotIn...))
+	if len(i.JobIDNotIn) > 0 {
+		predicates = append(predicates, controlscheduledjob.JobIDNotIn(i.JobIDNotIn...))
 	}
-	if i.ScheduledJobIDGT != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDGT(*i.ScheduledJobIDGT))
+	if i.JobIDGT != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDGT(*i.JobIDGT))
 	}
-	if i.ScheduledJobIDGTE != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDGTE(*i.ScheduledJobIDGTE))
+	if i.JobIDGTE != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDGTE(*i.JobIDGTE))
 	}
-	if i.ScheduledJobIDLT != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDLT(*i.ScheduledJobIDLT))
+	if i.JobIDLT != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDLT(*i.JobIDLT))
 	}
-	if i.ScheduledJobIDLTE != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDLTE(*i.ScheduledJobIDLTE))
+	if i.JobIDLTE != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDLTE(*i.JobIDLTE))
 	}
-	if i.ScheduledJobIDContains != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDContains(*i.ScheduledJobIDContains))
+	if i.JobIDContains != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDContains(*i.JobIDContains))
 	}
-	if i.ScheduledJobIDHasPrefix != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDHasPrefix(*i.ScheduledJobIDHasPrefix))
+	if i.JobIDHasPrefix != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDHasPrefix(*i.JobIDHasPrefix))
 	}
-	if i.ScheduledJobIDHasSuffix != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDHasSuffix(*i.ScheduledJobIDHasSuffix))
+	if i.JobIDHasSuffix != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDHasSuffix(*i.JobIDHasSuffix))
 	}
-	if i.ScheduledJobIDIsNil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDIsNil())
+	if i.JobIDEqualFold != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDEqualFold(*i.JobIDEqualFold))
 	}
-	if i.ScheduledJobIDNotNil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDNotNil())
-	}
-	if i.ScheduledJobIDEqualFold != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDEqualFold(*i.ScheduledJobIDEqualFold))
-	}
-	if i.ScheduledJobIDContainsFold != nil {
-		predicates = append(predicates, controlscheduledjob.ScheduledJobIDContainsFold(*i.ScheduledJobIDContainsFold))
+	if i.JobIDContainsFold != nil {
+		predicates = append(predicates, controlscheduledjob.JobIDContainsFold(*i.JobIDContainsFold))
 	}
 
 	if i.HasOwner != nil {
@@ -12931,6 +12935,60 @@ func (i *ControlScheduledJobWhereInput) P() (predicate.ControlScheduledJob, erro
 			with = append(with, p)
 		}
 		predicates = append(predicates, controlscheduledjob.HasOwnerWith(with...))
+	}
+	if i.HasJob != nil {
+		p := controlscheduledjob.HasJob()
+		if !*i.HasJob {
+			p = controlscheduledjob.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasJobWith) > 0 {
+		with := make([]predicate.ScheduledJob, 0, len(i.HasJobWith))
+		for _, w := range i.HasJobWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasJobWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlscheduledjob.HasJobWith(with...))
+	}
+	if i.HasControls != nil {
+		p := controlscheduledjob.HasControls()
+		if !*i.HasControls {
+			p = controlscheduledjob.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlsWith) > 0 {
+		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		for _, w := range i.HasControlsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlscheduledjob.HasControlsWith(with...))
+	}
+	if i.HasSubcontrols != nil {
+		p := controlscheduledjob.HasSubcontrols()
+		if !*i.HasSubcontrols {
+			p = controlscheduledjob.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubcontrolsWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		for _, w := range i.HasSubcontrolsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubcontrolsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlscheduledjob.HasSubcontrolsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

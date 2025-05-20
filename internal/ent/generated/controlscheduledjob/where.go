@@ -102,9 +102,9 @@ func OwnerID(v string) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldEQ(FieldOwnerID, v))
 }
 
-// ScheduledJobID applies equality check predicate on the "scheduled_job_id" field. It's identical to ScheduledJobIDEQ.
-func ScheduledJobID(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldEQ(FieldScheduledJobID, v))
+// JobID applies equality check predicate on the "job_id" field. It's identical to JobIDEQ.
+func JobID(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldEQ(FieldJobID, v))
 }
 
 // Cron applies equality check predicate on the "cron" field. It's identical to CronEQ.
@@ -562,79 +562,79 @@ func OwnerIDContainsFold(v string) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
-// ScheduledJobIDEQ applies the EQ predicate on the "scheduled_job_id" field.
-func ScheduledJobIDEQ(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldEQ(FieldScheduledJobID, v))
+// JobIDEQ applies the EQ predicate on the "job_id" field.
+func JobIDEQ(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldEQ(FieldJobID, v))
 }
 
-// ScheduledJobIDNEQ applies the NEQ predicate on the "scheduled_job_id" field.
-func ScheduledJobIDNEQ(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldNEQ(FieldScheduledJobID, v))
+// JobIDNEQ applies the NEQ predicate on the "job_id" field.
+func JobIDNEQ(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldNEQ(FieldJobID, v))
 }
 
-// ScheduledJobIDIn applies the In predicate on the "scheduled_job_id" field.
-func ScheduledJobIDIn(vs ...string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldIn(FieldScheduledJobID, vs...))
+// JobIDIn applies the In predicate on the "job_id" field.
+func JobIDIn(vs ...string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldIn(FieldJobID, vs...))
 }
 
-// ScheduledJobIDNotIn applies the NotIn predicate on the "scheduled_job_id" field.
-func ScheduledJobIDNotIn(vs ...string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldNotIn(FieldScheduledJobID, vs...))
+// JobIDNotIn applies the NotIn predicate on the "job_id" field.
+func JobIDNotIn(vs ...string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldNotIn(FieldJobID, vs...))
 }
 
-// ScheduledJobIDGT applies the GT predicate on the "scheduled_job_id" field.
-func ScheduledJobIDGT(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldGT(FieldScheduledJobID, v))
+// JobIDGT applies the GT predicate on the "job_id" field.
+func JobIDGT(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldGT(FieldJobID, v))
 }
 
-// ScheduledJobIDGTE applies the GTE predicate on the "scheduled_job_id" field.
-func ScheduledJobIDGTE(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldGTE(FieldScheduledJobID, v))
+// JobIDGTE applies the GTE predicate on the "job_id" field.
+func JobIDGTE(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldGTE(FieldJobID, v))
 }
 
-// ScheduledJobIDLT applies the LT predicate on the "scheduled_job_id" field.
-func ScheduledJobIDLT(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldLT(FieldScheduledJobID, v))
+// JobIDLT applies the LT predicate on the "job_id" field.
+func JobIDLT(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldLT(FieldJobID, v))
 }
 
-// ScheduledJobIDLTE applies the LTE predicate on the "scheduled_job_id" field.
-func ScheduledJobIDLTE(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldLTE(FieldScheduledJobID, v))
+// JobIDLTE applies the LTE predicate on the "job_id" field.
+func JobIDLTE(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldLTE(FieldJobID, v))
 }
 
-// ScheduledJobIDContains applies the Contains predicate on the "scheduled_job_id" field.
-func ScheduledJobIDContains(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldContains(FieldScheduledJobID, v))
+// JobIDContains applies the Contains predicate on the "job_id" field.
+func JobIDContains(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldContains(FieldJobID, v))
 }
 
-// ScheduledJobIDHasPrefix applies the HasPrefix predicate on the "scheduled_job_id" field.
-func ScheduledJobIDHasPrefix(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldHasPrefix(FieldScheduledJobID, v))
+// JobIDHasPrefix applies the HasPrefix predicate on the "job_id" field.
+func JobIDHasPrefix(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldHasPrefix(FieldJobID, v))
 }
 
-// ScheduledJobIDHasSuffix applies the HasSuffix predicate on the "scheduled_job_id" field.
-func ScheduledJobIDHasSuffix(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldHasSuffix(FieldScheduledJobID, v))
+// JobIDHasSuffix applies the HasSuffix predicate on the "job_id" field.
+func JobIDHasSuffix(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldHasSuffix(FieldJobID, v))
 }
 
-// ScheduledJobIDIsNil applies the IsNil predicate on the "scheduled_job_id" field.
-func ScheduledJobIDIsNil() predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldIsNull(FieldScheduledJobID))
+// JobIDEqualFold applies the EqualFold predicate on the "job_id" field.
+func JobIDEqualFold(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldEqualFold(FieldJobID, v))
 }
 
-// ScheduledJobIDNotNil applies the NotNil predicate on the "scheduled_job_id" field.
-func ScheduledJobIDNotNil() predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldNotNull(FieldScheduledJobID))
+// JobIDContainsFold applies the ContainsFold predicate on the "job_id" field.
+func JobIDContainsFold(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldContainsFold(FieldJobID, v))
 }
 
-// ScheduledJobIDEqualFold applies the EqualFold predicate on the "scheduled_job_id" field.
-func ScheduledJobIDEqualFold(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldEqualFold(FieldScheduledJobID, v))
+// CadenceIsNil applies the IsNil predicate on the "cadence" field.
+func CadenceIsNil() predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldIsNull(FieldCadence))
 }
 
-// ScheduledJobIDContainsFold applies the ContainsFold predicate on the "scheduled_job_id" field.
-func ScheduledJobIDContainsFold(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldContainsFold(FieldScheduledJobID, v))
+// CadenceNotNil applies the NotNil predicate on the "cadence" field.
+func CadenceNotNil() predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldNotNull(FieldCadence))
 }
 
 // CronEQ applies the EQ predicate on the "cron" field.
@@ -733,6 +733,93 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.ControlScheduledJob
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.ControlScheduledJob
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasJob applies the HasEdge predicate on the "job" edge.
+func HasJob() predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, JobTable, JobColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ControlScheduledJob
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasJobWith applies the HasEdge predicate on the "job" edge with a given conditions (other predicates).
+func HasJobWith(preds ...predicate.ScheduledJob) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(func(s *sql.Selector) {
+		step := newJobStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ControlScheduledJob
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(func(s *sql.Selector) {
+		step := newControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
+func HasSubcontrols() predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubcontrolsWith applies the HasEdge predicate on the "subcontrols" edge with a given conditions (other predicates).
+func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(func(s *sql.Selector) {
+		step := newSubcontrolsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

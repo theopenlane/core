@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -12,9 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -22,13 +26,18 @@ import (
 // ControlScheduledJobQuery is the builder for querying ControlScheduledJob entities.
 type ControlScheduledJobQuery struct {
 	config
-	ctx        *QueryContext
-	order      []controlscheduledjob.OrderOption
-	inters     []Interceptor
-	predicates []predicate.ControlScheduledJob
-	withOwner  *OrganizationQuery
-	loadTotal  []func(context.Context, []*ControlScheduledJob) error
-	modifiers  []func(*sql.Selector)
+	ctx                  *QueryContext
+	order                []controlscheduledjob.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.ControlScheduledJob
+	withOwner            *OrganizationQuery
+	withJob              *ScheduledJobQuery
+	withControls         *ControlQuery
+	withSubcontrols      *SubcontrolQuery
+	loadTotal            []func(context.Context, []*ControlScheduledJob) error
+	modifiers            []func(*sql.Selector)
+	withNamedControls    map[string]*ControlQuery
+	withNamedSubcontrols map[string]*SubcontrolQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -84,6 +93,81 @@ func (csjq *ControlScheduledJobQuery) QueryOwner() *OrganizationQuery {
 		schemaConfig := csjq.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.ControlScheduledJob
+		fromU = sqlgraph.SetNeighbors(csjq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryJob chains the current query on the "job" edge.
+func (csjq *ControlScheduledJobQuery) QueryJob() *ScheduledJobQuery {
+	query := (&ScheduledJobClient{config: csjq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := csjq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := csjq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlscheduledjob.Table, controlscheduledjob.FieldID, selector),
+			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlscheduledjob.JobTable, controlscheduledjob.JobColumn),
+		)
+		schemaConfig := csjq.schemaConfig
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ControlScheduledJob
+		fromU = sqlgraph.SetNeighbors(csjq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControls chains the current query on the "controls" edge.
+func (csjq *ControlScheduledJobQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: csjq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := csjq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := csjq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlscheduledjob.Table, controlscheduledjob.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, controlscheduledjob.ControlsTable, controlscheduledjob.ControlsColumn),
+		)
+		schemaConfig := csjq.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromU = sqlgraph.SetNeighbors(csjq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubcontrols chains the current query on the "subcontrols" edge.
+func (csjq *ControlScheduledJobQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: csjq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := csjq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := csjq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlscheduledjob.Table, controlscheduledjob.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, controlscheduledjob.SubcontrolsTable, controlscheduledjob.SubcontrolsColumn),
+		)
+		schemaConfig := csjq.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(csjq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -277,12 +361,15 @@ func (csjq *ControlScheduledJobQuery) Clone() *ControlScheduledJobQuery {
 		return nil
 	}
 	return &ControlScheduledJobQuery{
-		config:     csjq.config,
-		ctx:        csjq.ctx.Clone(),
-		order:      append([]controlscheduledjob.OrderOption{}, csjq.order...),
-		inters:     append([]Interceptor{}, csjq.inters...),
-		predicates: append([]predicate.ControlScheduledJob{}, csjq.predicates...),
-		withOwner:  csjq.withOwner.Clone(),
+		config:          csjq.config,
+		ctx:             csjq.ctx.Clone(),
+		order:           append([]controlscheduledjob.OrderOption{}, csjq.order...),
+		inters:          append([]Interceptor{}, csjq.inters...),
+		predicates:      append([]predicate.ControlScheduledJob{}, csjq.predicates...),
+		withOwner:       csjq.withOwner.Clone(),
+		withJob:         csjq.withJob.Clone(),
+		withControls:    csjq.withControls.Clone(),
+		withSubcontrols: csjq.withSubcontrols.Clone(),
 		// clone intermediate query.
 		sql:       csjq.sql.Clone(),
 		path:      csjq.path,
@@ -298,6 +385,39 @@ func (csjq *ControlScheduledJobQuery) WithOwner(opts ...func(*OrganizationQuery)
 		opt(query)
 	}
 	csjq.withOwner = query
+	return csjq
+}
+
+// WithJob tells the query-builder to eager-load the nodes that are connected to
+// the "job" edge. The optional arguments are used to configure the query builder of the edge.
+func (csjq *ControlScheduledJobQuery) WithJob(opts ...func(*ScheduledJobQuery)) *ControlScheduledJobQuery {
+	query := (&ScheduledJobClient{config: csjq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	csjq.withJob = query
+	return csjq
+}
+
+// WithControls tells the query-builder to eager-load the nodes that are connected to
+// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (csjq *ControlScheduledJobQuery) WithControls(opts ...func(*ControlQuery)) *ControlScheduledJobQuery {
+	query := (&ControlClient{config: csjq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	csjq.withControls = query
+	return csjq
+}
+
+// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (csjq *ControlScheduledJobQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ControlScheduledJobQuery {
+	query := (&SubcontrolClient{config: csjq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	csjq.withSubcontrols = query
 	return csjq
 }
 
@@ -385,8 +505,11 @@ func (csjq *ControlScheduledJobQuery) sqlAll(ctx context.Context, hooks ...query
 	var (
 		nodes       = []*ControlScheduledJob{}
 		_spec       = csjq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [4]bool{
 			csjq.withOwner != nil,
+			csjq.withJob != nil,
+			csjq.withControls != nil,
+			csjq.withSubcontrols != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -415,6 +538,40 @@ func (csjq *ControlScheduledJobQuery) sqlAll(ctx context.Context, hooks ...query
 	if query := csjq.withOwner; query != nil {
 		if err := csjq.loadOwner(ctx, query, nodes, nil,
 			func(n *ControlScheduledJob, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := csjq.withJob; query != nil {
+		if err := csjq.loadJob(ctx, query, nodes, nil,
+			func(n *ControlScheduledJob, e *ScheduledJob) { n.Edges.Job = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := csjq.withControls; query != nil {
+		if err := csjq.loadControls(ctx, query, nodes,
+			func(n *ControlScheduledJob) { n.Edges.Controls = []*Control{} },
+			func(n *ControlScheduledJob, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := csjq.withSubcontrols; query != nil {
+		if err := csjq.loadSubcontrols(ctx, query, nodes,
+			func(n *ControlScheduledJob) { n.Edges.Subcontrols = []*Subcontrol{} },
+			func(n *ControlScheduledJob, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range csjq.withNamedControls {
+		if err := csjq.loadControls(ctx, query, nodes,
+			func(n *ControlScheduledJob) { n.appendNamedControls(name) },
+			func(n *ControlScheduledJob, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range csjq.withNamedSubcontrols {
+		if err := csjq.loadSubcontrols(ctx, query, nodes,
+			func(n *ControlScheduledJob) { n.appendNamedSubcontrols(name) },
+			func(n *ControlScheduledJob, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -455,6 +612,97 @@ func (csjq *ControlScheduledJobQuery) loadOwner(ctx context.Context, query *Orga
 	}
 	return nil
 }
+func (csjq *ControlScheduledJobQuery) loadJob(ctx context.Context, query *ScheduledJobQuery, nodes []*ControlScheduledJob, init func(*ControlScheduledJob), assign func(*ControlScheduledJob, *ScheduledJob)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlScheduledJob)
+	for i := range nodes {
+		fk := nodes[i].JobID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(scheduledjob.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "job_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (csjq *ControlScheduledJobQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*ControlScheduledJob, init func(*ControlScheduledJob), assign func(*ControlScheduledJob, *Control)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ControlScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Control(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(controlscheduledjob.ControlsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.control_scheduled_job_controls
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "control_scheduled_job_controls" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "control_scheduled_job_controls" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (csjq *ControlScheduledJobQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*ControlScheduledJob, init func(*ControlScheduledJob), assign func(*ControlScheduledJob, *Subcontrol)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ControlScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Subcontrol(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(controlscheduledjob.SubcontrolsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.control_scheduled_job_subcontrols
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "control_scheduled_job_subcontrols" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "control_scheduled_job_subcontrols" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (csjq *ControlScheduledJobQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := csjq.querySpec()
@@ -488,6 +736,9 @@ func (csjq *ControlScheduledJobQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if csjq.withOwner != nil {
 			_spec.Node.AddColumnOnce(controlscheduledjob.FieldOwnerID)
+		}
+		if csjq.withJob != nil {
+			_spec.Node.AddColumnOnce(controlscheduledjob.FieldJobID)
 		}
 	}
 	if ps := csjq.predicates; len(ps) > 0 {
@@ -555,6 +806,34 @@ func (csjq *ControlScheduledJobQuery) sqlQuery(ctx context.Context) *sql.Selecto
 func (csjq *ControlScheduledJobQuery) Modify(modifiers ...func(s *sql.Selector)) *ControlScheduledJobSelect {
 	csjq.modifiers = append(csjq.modifiers, modifiers...)
 	return csjq.Select()
+}
+
+// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (csjq *ControlScheduledJobQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *ControlScheduledJobQuery {
+	query := (&ControlClient{config: csjq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if csjq.withNamedControls == nil {
+		csjq.withNamedControls = make(map[string]*ControlQuery)
+	}
+	csjq.withNamedControls[name] = query
+	return csjq
+}
+
+// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (csjq *ControlScheduledJobQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *ControlScheduledJobQuery {
+	query := (&SubcontrolClient{config: csjq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if csjq.withNamedSubcontrols == nil {
+		csjq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	}
+	csjq.withNamedSubcontrols[name] = query
+	return csjq
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs

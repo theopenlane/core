@@ -5142,6 +5142,199 @@ func (csj *ControlScheduledJobQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, controlscheduledjob.FieldOwnerID)
 				fieldSeen[controlscheduledjob.FieldOwnerID] = struct{}{}
 			}
+
+		case "job":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ScheduledJobClient{config: csj.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, scheduledjobImplementors)...); err != nil {
+				return err
+			}
+			csj.withJob = query
+			if _, ok := fieldSeen[controlscheduledjob.FieldJobID]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjob.FieldJobID)
+				fieldSeen[controlscheduledjob.FieldJobID] = struct{}{}
+			}
+
+		case "controls":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: csj.config}).Query()
+			)
+			args := newControlPaginateArgs(fieldArgs(ctx, new(ControlWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newControlPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					csj.loadTotal = append(csj.loadTotal, func(ctx context.Context, nodes []*ControlScheduledJob) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"control_scheduled_job_controls"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(controlscheduledjob.ControlsColumn), ids...))
+						})
+						if err := query.GroupBy(controlscheduledjob.ControlsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					csj.loadTotal = append(csj.loadTotal, func(_ context.Context, nodes []*ControlScheduledJob) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Controls)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(controlscheduledjob.ControlsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			csj.WithNamedControls(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+
+		case "subcontrols":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: csj.config}).Query()
+			)
+			args := newSubcontrolPaginateArgs(fieldArgs(ctx, new(SubcontrolWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newSubcontrolPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					csj.loadTotal = append(csj.loadTotal, func(ctx context.Context, nodes []*ControlScheduledJob) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"control_scheduled_job_subcontrols"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(controlscheduledjob.SubcontrolsColumn), ids...))
+						})
+						if err := query.GroupBy(controlscheduledjob.SubcontrolsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				} else {
+					csj.loadTotal = append(csj.loadTotal, func(_ context.Context, nodes []*ControlScheduledJob) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Subcontrols)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(controlscheduledjob.SubcontrolsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			csj.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[controlscheduledjob.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, controlscheduledjob.FieldCreatedAt)
@@ -5177,10 +5370,20 @@ func (csj *ControlScheduledJobQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, controlscheduledjob.FieldOwnerID)
 				fieldSeen[controlscheduledjob.FieldOwnerID] = struct{}{}
 			}
-		case "scheduledJobID":
-			if _, ok := fieldSeen[controlscheduledjob.FieldScheduledJobID]; !ok {
-				selectedFields = append(selectedFields, controlscheduledjob.FieldScheduledJobID)
-				fieldSeen[controlscheduledjob.FieldScheduledJobID] = struct{}{}
+		case "jobID":
+			if _, ok := fieldSeen[controlscheduledjob.FieldJobID]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjob.FieldJobID)
+				fieldSeen[controlscheduledjob.FieldJobID] = struct{}{}
+			}
+		case "configuration":
+			if _, ok := fieldSeen[controlscheduledjob.FieldConfiguration]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjob.FieldConfiguration)
+				fieldSeen[controlscheduledjob.FieldConfiguration] = struct{}{}
+			}
+		case "cadence":
+			if _, ok := fieldSeen[controlscheduledjob.FieldCadence]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjob.FieldCadence)
+				fieldSeen[controlscheduledjob.FieldCadence] = struct{}{}
 			}
 		case "cron":
 			if _, ok := fieldSeen[controlscheduledjob.FieldCron]; !ok {

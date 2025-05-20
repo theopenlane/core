@@ -1,2 +1,2 @@
-ScheduledJobId,Cron,OwnerId
-example_scheduledjobid,example_cron,example_ownerid
+Configuration,Cadence,Cron,OwnerId,JobId,ControlIDs,SubcontrolIDs
+example_configuration,example_cadence,example_cron,example_ownerid,example_jobid,example_controlids,example_subcontrolids

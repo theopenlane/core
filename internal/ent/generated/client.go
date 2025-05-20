@@ -3601,6 +3601,63 @@ func (c *ControlScheduledJobClient) QueryOwner(csj *ControlScheduledJob) *Organi
 	return query
 }
 
+// QueryJob queries the job edge of a ControlScheduledJob.
+func (c *ControlScheduledJobClient) QueryJob(csj *ControlScheduledJob) *ScheduledJobQuery {
+	query := (&ScheduledJobClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := csj.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlscheduledjob.Table, controlscheduledjob.FieldID, id),
+			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlscheduledjob.JobTable, controlscheduledjob.JobColumn),
+		)
+		schemaConfig := csj.schemaConfig
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ControlScheduledJob
+		fromV = sqlgraph.Neighbors(csj.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a ControlScheduledJob.
+func (c *ControlScheduledJobClient) QueryControls(csj *ControlScheduledJob) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := csj.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlscheduledjob.Table, controlscheduledjob.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, controlscheduledjob.ControlsTable, controlscheduledjob.ControlsColumn),
+		)
+		schemaConfig := csj.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(csj.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a ControlScheduledJob.
+func (c *ControlScheduledJobClient) QuerySubcontrols(csj *ControlScheduledJob) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := csj.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlscheduledjob.Table, controlscheduledjob.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, controlscheduledjob.SubcontrolsTable, controlscheduledjob.SubcontrolsColumn),
+		)
+		schemaConfig := csj.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(csj.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ControlScheduledJobClient) Hooks() []Hook {
 	hooks := c.hooks.ControlScheduledJob
