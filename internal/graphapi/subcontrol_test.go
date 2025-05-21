@@ -408,7 +408,11 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 				assert.Check(t, is.Equal(*resp.CreateSubcontrol.Subcontrol.Description, ""))
 			}
 
-			assert.Check(t, is.Equal(enums.ControlStatusNotImplemented, *resp.CreateSubcontrol.Subcontrol.Status))
+			if tc.request.Status != nil {
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.CreateSubcontrol.Subcontrol.Status))
+			} else {
+				assert.Check(t, is.Equal(enums.ControlStatusNotImplemented, *resp.CreateSubcontrol.Subcontrol.Status))
+			}
 
 			if tc.request.Source != nil {
 				assert.Check(t, is.Equal(*tc.request.Source, *resp.CreateSubcontrol.Subcontrol.Source))
