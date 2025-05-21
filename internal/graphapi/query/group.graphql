@@ -338,6 +338,7 @@ mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
       description
       displayName
       id
+      displayID
       logoURL
       name
       tags

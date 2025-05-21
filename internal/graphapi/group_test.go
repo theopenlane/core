@@ -924,6 +924,8 @@ func TestMutationUpdateGroup(t *testing.T) {
 			assert.Check(t, is.Equal(tc.expectedRes.DisplayName, updatedGroup.DisplayName))
 			assert.Check(t, is.DeepEqual(tc.expectedRes.Description, updatedGroup.Description))
 
+			// ensure the displayID is not updated
+			assert.Check(t, is.Equal(group.DisplayID, updatedGroup.DisplayID))
 			if tc.updateInput.LogoURL != nil {
 				assert.Check(t, is.Equal(*tc.expectedRes.LogoURL, *updatedGroup.LogoURL))
 			}
@@ -1103,4 +1105,39 @@ func TestManagedGroups(t *testing.T) {
 	// you should not be able to delete a managed group
 	_, err = suite.client.api.DeleteGroup(testUser1.UserCtx, groupID)
 	assert.ErrorContains(t, err, "managed groups cannot be modified")
+
+	// you should, however, be able to update permissions edges on a managed group
+	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	input = openlaneclient.UpdateGroupInput{
+		AddProgramEditorIDs:              []string{program.ID},
+		AddControlViewerIDs:              []string{control.ID},
+		AddInternalPolicyBlockedGroupIDs: []string{policy.ID},
+	}
+
+	updateResp, err := suite.client.api.UpdateGroup(testUser1.UserCtx, groupID, input)
+	assert.NilError(t, err)
+
+	perms := updateResp.UpdateGroup.Group.GetPermissions()
+	assert.Check(t, is.Len(perms, 3))
+
+	// make sure I can also remove them
+	input = openlaneclient.UpdateGroupInput{
+		RemoveProgramEditorIDs:              []string{program.ID},
+		RemoveControlViewerIDs:              []string{control.ID},
+		RemoveInternalPolicyBlockedGroupIDs: []string{policy.ID},
+	}
+
+	updateResp, err = suite.client.api.UpdateGroup(testUser1.UserCtx, groupID, input)
+	assert.NilError(t, err)
+
+	perms = updateResp.UpdateGroup.Group.GetPermissions()
+	assert.Check(t, is.Len(perms, 0))
+
+	// cleanup objects created
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy.ID}).MustDelete(testUser1.UserCtx, t)
 }
