@@ -27582,6 +27582,7 @@ func (t *UpdateGroup_UpdateGroup_Group_Members) GetUser() *UpdateGroup_UpdateGro
 
 type UpdateGroup_UpdateGroup_Group struct {
 	Description *string                                      "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string                                       "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string                                       "json:\"displayName\" graphql:\"displayName\""
 	ID          string                                       "json:\"id\" graphql:\"id\""
 	LogoURL     *string                                      "json:\"logoURL,omitempty\" graphql:\"logoURL\""
@@ -27598,6 +27599,12 @@ func (t *UpdateGroup_UpdateGroup_Group) GetDescription() *string {
 		t = &UpdateGroup_UpdateGroup_Group{}
 	}
 	return t.Description
+}
+func (t *UpdateGroup_UpdateGroup_Group) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateGroup_UpdateGroup_Group) GetDisplayName() string {
 	if t == nil {
@@ -82854,6 +82861,7 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 			description
 			displayName
 			id
+			displayID
 			logoURL
 			name
 			tags
