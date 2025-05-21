@@ -99,7 +99,9 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, control *genera
 	if control.Edges.Subcontrols == nil {
 		return nil
 	}
+
 	subcontrols := make([]*generated.CreateSubcontrolInput, len(control.Edges.Subcontrols))
+
 	for j, subcontrol := range control.Edges.Subcontrols {
 		subcontrols[j] = &generated.CreateSubcontrolInput{
 			Tags:                   subcontrol.Tags,

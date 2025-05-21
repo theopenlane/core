@@ -62,7 +62,7 @@ func (r MappingType) MarshalGQL(w io.Writer) {
 func (r *MappingType) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for MappingType, got: %T", v)  //nolint:err113
+		return fmt.Errorf("wrong type for MappingType, got: %T", v) //nolint:err113
 	}
 
 	*r = MappingType(str)
