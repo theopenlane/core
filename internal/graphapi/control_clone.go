@@ -69,7 +69,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, existingControls [
 			ExampleEvidence:        control.ExampleEvidence,
 			References:             control.References,
 			MappedControlIDs:       mappedControlIDs,
-			Status:                 &enums.ControlStatusPreparing,
+			Status:                 &enums.ControlStatusNotImplemented,
 		}
 
 		if !ignoreStandard {
@@ -134,7 +134,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, control *genera
 			ExampleEvidence:        subcontrol.ExampleEvidence,
 			References:             subcontrol.References,
 			MappedControlIDs:       mappedControlIDs,
-			Status:                 &enums.ControlStatusPreparing,
+			Status:                 &enums.ControlStatusNotImplemented,
 		}
 	}
 
