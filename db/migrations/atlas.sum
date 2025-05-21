@@ -1,4 +1,4 @@
-h1:IMsBjx4UNPIHq2CPGzKeSljcRRyES/SAbf3ChtuL5I8=
+h1:L3cgi5igaJwBVYXQ/BCSww9iYMYbvGK+sYHbM6oNGyY=
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
@@ -13,3 +13,4 @@ h1:IMsBjx4UNPIHq2CPGzKeSljcRRyES/SAbf3ChtuL5I8=
 20250517235804_risks_tasks.sql h1:j4OJQeLHsUntf/XY7das71ULfUxvgvrK8sgWpiEQYL0=
 20250518145423_rm_old_domainverify_columns.sql h1:stlq1ReanjFEXnYtcfipIVpGws68ZuLX5y0eKqRc8K8=
 20250518185856_job_runners.sql h1:XTL4Nekugx01cq5eVNpFQ6U5k8+SlSYpMzo7UMy/BgE=
+20250521054025_mapped_controls.sql h1:6PYJ8HMSjuFcScp8OzB9DEyFp7QgaJ1XfYsOHCbm/FE=
