@@ -1790,6 +1790,7 @@ var (
 		{Name: "finished_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "scheduled_job_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// JobResultsTable holds the schema information for the "job_results" table.
@@ -1805,8 +1806,14 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "job_results_organizations_scheduled_job_results",
+				Symbol:     "job_results_files_file",
 				Columns:    []*schema.Column{JobResultsColumns[12]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "job_results_organizations_scheduled_job_results",
+				Columns:    []*schema.Column{JobResultsColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6429,7 +6436,8 @@ func init() {
 	}
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	JobResultsTable.ForeignKeys[0].RefTable = ControlScheduledJobsTable
-	JobResultsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	JobResultsTable.ForeignKeys[1].RefTable = FilesTable
+	JobResultsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	JobRunnersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	JobRunnerHistoryTable.Annotation = &entsql.Annotation{
 		Table: "job_runner_history",

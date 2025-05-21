@@ -2344,6 +2344,14 @@ func (jr *JobResult) ScheduledJob(ctx context.Context) (*ControlScheduledJob, er
 	return result, err
 }
 
+func (jr *JobResult) File(ctx context.Context) (*File, error) {
+	result, err := jr.Edges.FileOrErr()
+	if IsNotLoaded(err) {
+		result, err = jr.QueryFile().Only(ctx)
+	}
+	return result, err
+}
+
 func (jr *JobRunner) Owner(ctx context.Context) (*Organization, error) {
 	result, err := jr.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

@@ -4413,6 +4413,7 @@ type CreateJobResultInput struct {
 	StartedAt      *time.Time
 	OwnerID        *string
 	ScheduledJobID string
+	FileID         string
 }
 
 // Mutate applies the CreateJobResultInput on the JobResultMutation builder.
@@ -4429,6 +4430,7 @@ func (i *CreateJobResultInput) Mutate(m *JobResultMutation) {
 		m.SetOwnerID(*v)
 	}
 	m.SetScheduledJobID(i.ScheduledJobID)
+	m.SetFileID(i.FileID)
 }
 
 // SetInput applies the change-set in the CreateJobResultInput on the JobResultCreate builder.
@@ -4443,6 +4445,7 @@ type UpdateJobResultInput struct {
 	ClearOwner     bool
 	OwnerID        *string
 	ScheduledJobID *string
+	FileID         *string
 }
 
 // Mutate applies the UpdateJobResultInput on the JobResultMutation builder.
@@ -4458,6 +4461,9 @@ func (i *UpdateJobResultInput) Mutate(m *JobResultMutation) {
 	}
 	if v := i.ScheduledJobID; v != nil {
 		m.SetScheduledJobID(*v)
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 }
 

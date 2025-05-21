@@ -9484,6 +9484,25 @@ func (c *JobResultClient) QueryScheduledJob(jr *JobResult) *ControlScheduledJobQ
 	return query
 }
 
+// QueryFile queries the file edge of a JobResult.
+func (c *JobResultClient) QueryFile(jr *JobResult) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := jr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobresult.Table, jobresult.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, jobresult.FileTable, jobresult.FileColumn),
+		)
+		schemaConfig := jr.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.JobResult
+		fromV = sqlgraph.Neighbors(jr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *JobResultClient) Hooks() []Hook {
 	hooks := c.hooks.JobResult

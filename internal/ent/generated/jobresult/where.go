@@ -123,6 +123,11 @@ func StartedAt(v time.Time) predicate.JobResult {
 	return predicate.JobResult(sql.FieldEQ(FieldStartedAt, v))
 }
 
+// FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
+func FileID(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldEQ(FieldFileID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.JobResult {
 	return predicate.JobResult(sql.FieldEQ(FieldCreatedAt, v))
@@ -788,6 +793,71 @@ func StartedAtLTE(v time.Time) predicate.JobResult {
 	return predicate.JobResult(sql.FieldLTE(FieldStartedAt, v))
 }
 
+// FileIDEQ applies the EQ predicate on the "file_id" field.
+func FileIDEQ(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldEQ(FieldFileID, v))
+}
+
+// FileIDNEQ applies the NEQ predicate on the "file_id" field.
+func FileIDNEQ(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldNEQ(FieldFileID, v))
+}
+
+// FileIDIn applies the In predicate on the "file_id" field.
+func FileIDIn(vs ...string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldIn(FieldFileID, vs...))
+}
+
+// FileIDNotIn applies the NotIn predicate on the "file_id" field.
+func FileIDNotIn(vs ...string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldNotIn(FieldFileID, vs...))
+}
+
+// FileIDGT applies the GT predicate on the "file_id" field.
+func FileIDGT(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldGT(FieldFileID, v))
+}
+
+// FileIDGTE applies the GTE predicate on the "file_id" field.
+func FileIDGTE(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldGTE(FieldFileID, v))
+}
+
+// FileIDLT applies the LT predicate on the "file_id" field.
+func FileIDLT(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldLT(FieldFileID, v))
+}
+
+// FileIDLTE applies the LTE predicate on the "file_id" field.
+func FileIDLTE(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldLTE(FieldFileID, v))
+}
+
+// FileIDContains applies the Contains predicate on the "file_id" field.
+func FileIDContains(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldContains(FieldFileID, v))
+}
+
+// FileIDHasPrefix applies the HasPrefix predicate on the "file_id" field.
+func FileIDHasPrefix(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldHasPrefix(FieldFileID, v))
+}
+
+// FileIDHasSuffix applies the HasSuffix predicate on the "file_id" field.
+func FileIDHasSuffix(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldHasSuffix(FieldFileID, v))
+}
+
+// FileIDEqualFold applies the EqualFold predicate on the "file_id" field.
+func FileIDEqualFold(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldEqualFold(FieldFileID, v))
+}
+
+// FileIDContainsFold applies the ContainsFold predicate on the "file_id" field.
+func FileIDContainsFold(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldContainsFold(FieldFileID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.JobResult {
 	return predicate.JobResult(func(s *sql.Selector) {
@@ -837,6 +907,35 @@ func HasScheduledJobWith(preds ...predicate.ControlScheduledJob) predicate.JobRe
 		step := newScheduledJobStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlScheduledJob
+		step.Edge.Schema = schemaConfig.JobResult
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFile applies the HasEdge predicate on the "file" edge.
+func HasFile() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.JobResult
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFileWith applies the HasEdge predicate on the "file" edge with a given conditions (other predicates).
+func HasFileWith(preds ...predicate.File) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.JobResult
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

@@ -91,10 +91,14 @@ func (ec *executionContext) fieldContext_JobResultBulkCreatePayload_jobResults(_
 				return ec.fieldContext_JobResult_finishedAt(ctx, field)
 			case "startedAt":
 				return ec.fieldContext_JobResult_startedAt(ctx, field)
+			case "fileID":
+				return ec.fieldContext_JobResult_fileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobResult_owner(ctx, field)
 			case "scheduledJob":
 				return ec.fieldContext_JobResult_scheduledJob(ctx, field)
+			case "file":
+				return ec.fieldContext_JobResult_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobResult", field.Name)
 		},
@@ -167,10 +171,14 @@ func (ec *executionContext) fieldContext_JobResultCreatePayload_jobResult(_ cont
 				return ec.fieldContext_JobResult_finishedAt(ctx, field)
 			case "startedAt":
 				return ec.fieldContext_JobResult_startedAt(ctx, field)
+			case "fileID":
+				return ec.fieldContext_JobResult_fileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobResult_owner(ctx, field)
 			case "scheduledJob":
 				return ec.fieldContext_JobResult_scheduledJob(ctx, field)
+			case "file":
+				return ec.fieldContext_JobResult_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobResult", field.Name)
 		},
@@ -287,10 +295,14 @@ func (ec *executionContext) fieldContext_JobResultUpdatePayload_jobResult(_ cont
 				return ec.fieldContext_JobResult_finishedAt(ctx, field)
 			case "startedAt":
 				return ec.fieldContext_JobResult_startedAt(ctx, field)
+			case "fileID":
+				return ec.fieldContext_JobResult_fileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobResult_owner(ctx, field)
 			case "scheduledJob":
 				return ec.fieldContext_JobResult_scheduledJob(ctx, field)
+			case "file":
+				return ec.fieldContext_JobResult_file(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobResult", field.Name)
 		},

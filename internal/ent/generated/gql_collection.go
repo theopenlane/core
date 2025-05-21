@@ -14676,6 +14676,21 @@ func (jr *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, jobresult.FieldScheduledJobID)
 				fieldSeen[jobresult.FieldScheduledJobID] = struct{}{}
 			}
+
+		case "file":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: jr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			jr.withFile = query
+			if _, ok := fieldSeen[jobresult.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldFileID)
+				fieldSeen[jobresult.FieldFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[jobresult.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, jobresult.FieldCreatedAt)
@@ -14735,6 +14750,11 @@ func (jr *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[jobresult.FieldStartedAt]; !ok {
 				selectedFields = append(selectedFields, jobresult.FieldStartedAt)
 				fieldSeen[jobresult.FieldStartedAt] = struct{}{}
+			}
+		case "fileID":
+			if _, ok := fieldSeen[jobresult.FieldFileID]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldFileID)
+				fieldSeen[jobresult.FieldFileID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

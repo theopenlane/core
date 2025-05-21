@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/enums"
@@ -44,6 +45,8 @@ type JobResult struct {
 	FinishedAt time.Time `json:"finished_at,omitempty"`
 	// The time the job started it's execution. This is different from the db insertion time
 	StartedAt time.Time `json:"started_at,omitempty"`
+	// FileID holds the value of the "file_id" field.
+	FileID string `json:"file_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the JobResultQuery when eager-loading is set.
 	Edges        JobResultEdges `json:"edges"`
@@ -56,11 +59,13 @@ type JobResultEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// ScheduledJob holds the value of the scheduled_job edge.
 	ScheduledJob *ControlScheduledJob `json:"scheduled_job,omitempty"`
+	// File holds the value of the file edge.
+	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -85,6 +90,17 @@ func (e JobResultEdges) ScheduledJobOrErr() (*ControlScheduledJob, error) {
 	return nil, &NotLoadedError{edge: "scheduled_job"}
 }
 
+// FileOrErr returns the File value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e JobResultEdges) FileOrErr() (*File, error) {
+	if e.File != nil {
+		return e.File, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "file"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*JobResult) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -92,7 +108,7 @@ func (*JobResult) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case jobresult.FieldExitCode:
 			values[i] = new(sql.NullInt64)
-		case jobresult.FieldID, jobresult.FieldCreatedBy, jobresult.FieldUpdatedBy, jobresult.FieldDeletedBy, jobresult.FieldOwnerID, jobresult.FieldScheduledJobID, jobresult.FieldStatus:
+		case jobresult.FieldID, jobresult.FieldCreatedBy, jobresult.FieldUpdatedBy, jobresult.FieldDeletedBy, jobresult.FieldOwnerID, jobresult.FieldScheduledJobID, jobresult.FieldStatus, jobresult.FieldFileID:
 			values[i] = new(sql.NullString)
 		case jobresult.FieldCreatedAt, jobresult.FieldUpdatedAt, jobresult.FieldDeletedAt, jobresult.FieldFinishedAt, jobresult.FieldStartedAt:
 			values[i] = new(sql.NullTime)
@@ -190,6 +206,12 @@ func (jr *JobResult) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				jr.StartedAt = value.Time
 			}
+		case jobresult.FieldFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_id", values[i])
+			} else if value.Valid {
+				jr.FileID = value.String
+			}
 		default:
 			jr.selectValues.Set(columns[i], values[i])
 		}
@@ -211,6 +233,11 @@ func (jr *JobResult) QueryOwner() *OrganizationQuery {
 // QueryScheduledJob queries the "scheduled_job" edge of the JobResult entity.
 func (jr *JobResult) QueryScheduledJob() *ControlScheduledJobQuery {
 	return NewJobResultClient(jr.config).QueryScheduledJob(jr)
+}
+
+// QueryFile queries the "file" edge of the JobResult entity.
+func (jr *JobResult) QueryFile() *FileQuery {
+	return NewJobResultClient(jr.config).QueryFile(jr)
 }
 
 // Update returns a builder for updating this JobResult.
@@ -273,6 +300,9 @@ func (jr *JobResult) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("started_at=")
 	builder.WriteString(jr.StartedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("file_id=")
+	builder.WriteString(jr.FileID)
 	builder.WriteByte(')')
 	return builder.String()
 }

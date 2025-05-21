@@ -1773,6 +1773,8 @@ type ComplexityRoot struct {
 		DeletedAt      func(childComplexity int) int
 		DeletedBy      func(childComplexity int) int
 		ExitCode       func(childComplexity int) int
+		File           func(childComplexity int) int
+		FileID         func(childComplexity int) int
 		FinishedAt     func(childComplexity int) int
 		ID             func(childComplexity int) int
 		Owner          func(childComplexity int) int
@@ -12421,6 +12423,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobResult.ExitCode(childComplexity), true
+
+	case "JobResult.file":
+		if e.complexity.JobResult.File == nil {
+			break
+		}
+
+		return e.complexity.JobResult.File(childComplexity), true
+
+	case "JobResult.fileID":
+		if e.complexity.JobResult.FileID == nil {
+			break
+		}
+
+		return e.complexity.JobResult.FileID(childComplexity), true
 
 	case "JobResult.finishedAt":
 		if e.complexity.JobResult.FinishedAt == nil {
@@ -37106,6 +37122,7 @@ input CreateJobResultInput {
   startedAt: Time
   ownerID: ID
   scheduledJobID: ID!
+  fileID: ID!
 }
 """
 CreateJobRunnerInput is used for create JobRunner object.
@@ -48383,8 +48400,10 @@ type JobResult implements Node {
   The time the job started it's execution. This is different from the db insertion time
   """
   startedAt: Time!
+  fileID: ID!
   owner: Organization
   scheduledJob: ControlScheduledJob!
+  file: File!
 }
 """
 A connection to a list of items.
@@ -48638,6 +48657,22 @@ input JobResultWhereInput {
   startedAtLT: Time
   startedAtLTE: Time
   """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -48647,6 +48682,11 @@ input JobResultWhereInput {
   """
   hasScheduledJob: Boolean
   hasScheduledJobWith: [ControlScheduledJobWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 type JobRunner implements Node {
   id: ID!
@@ -70739,6 +70779,7 @@ input UpdateJobResultInput {
   ownerID: ID
   clearOwner: Boolean
   scheduledJobID: ID
+  fileID: ID
 }
 """
 UpdateJobRunnerInput is used for update JobRunner object.

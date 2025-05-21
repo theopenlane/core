@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -29,6 +30,7 @@ type JobResultQuery struct {
 	predicates       []predicate.JobResult
 	withOwner        *OrganizationQuery
 	withScheduledJob *ControlScheduledJobQuery
+	withFile         *FileQuery
 	loadTotal        []func(context.Context, []*JobResult) error
 	modifiers        []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -110,6 +112,31 @@ func (jrq *JobResultQuery) QueryScheduledJob() *ControlScheduledJobQuery {
 		)
 		schemaConfig := jrq.schemaConfig
 		step.To.Schema = schemaConfig.ControlScheduledJob
+		step.Edge.Schema = schemaConfig.JobResult
+		fromU = sqlgraph.SetNeighbors(jrq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFile chains the current query on the "file" edge.
+func (jrq *JobResultQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: jrq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := jrq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := jrq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobresult.Table, jobresult.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, jobresult.FileTable, jobresult.FileColumn),
+		)
+		schemaConfig := jrq.schemaConfig
+		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.JobResult
 		fromU = sqlgraph.SetNeighbors(jrq.driver.Dialect(), step)
 		return fromU, nil
@@ -311,6 +338,7 @@ func (jrq *JobResultQuery) Clone() *JobResultQuery {
 		predicates:       append([]predicate.JobResult{}, jrq.predicates...),
 		withOwner:        jrq.withOwner.Clone(),
 		withScheduledJob: jrq.withScheduledJob.Clone(),
+		withFile:         jrq.withFile.Clone(),
 		// clone intermediate query.
 		sql:       jrq.sql.Clone(),
 		path:      jrq.path,
@@ -337,6 +365,17 @@ func (jrq *JobResultQuery) WithScheduledJob(opts ...func(*ControlScheduledJobQue
 		opt(query)
 	}
 	jrq.withScheduledJob = query
+	return jrq
+}
+
+// WithFile tells the query-builder to eager-load the nodes that are connected to
+// the "file" edge. The optional arguments are used to configure the query builder of the edge.
+func (jrq *JobResultQuery) WithFile(opts ...func(*FileQuery)) *JobResultQuery {
+	query := (&FileClient{config: jrq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	jrq.withFile = query
 	return jrq
 }
 
@@ -424,9 +463,10 @@ func (jrq *JobResultQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*J
 	var (
 		nodes       = []*JobResult{}
 		_spec       = jrq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			jrq.withOwner != nil,
 			jrq.withScheduledJob != nil,
+			jrq.withFile != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -461,6 +501,12 @@ func (jrq *JobResultQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*J
 	if query := jrq.withScheduledJob; query != nil {
 		if err := jrq.loadScheduledJob(ctx, query, nodes, nil,
 			func(n *JobResult, e *ControlScheduledJob) { n.Edges.ScheduledJob = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := jrq.withFile; query != nil {
+		if err := jrq.loadFile(ctx, query, nodes, nil,
+			func(n *JobResult, e *File) { n.Edges.File = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -530,6 +576,35 @@ func (jrq *JobResultQuery) loadScheduledJob(ctx context.Context, query *ControlS
 	}
 	return nil
 }
+func (jrq *JobResultQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*JobResult, init func(*JobResult), assign func(*JobResult, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*JobResult)
+	for i := range nodes {
+		fk := nodes[i].FileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (jrq *JobResultQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := jrq.querySpec()
@@ -566,6 +641,9 @@ func (jrq *JobResultQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if jrq.withScheduledJob != nil {
 			_spec.Node.AddColumnOnce(jobresult.FieldScheduledJobID)
+		}
+		if jrq.withFile != nil {
+			_spec.Node.AddColumnOnce(jobresult.FieldFileID)
 		}
 	}
 	if ps := jrq.predicates; len(ps) > 0 {

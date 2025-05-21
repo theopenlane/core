@@ -1284,6 +1284,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobresult.FieldExitCode:       {Type: field.TypeInt, Column: jobresult.FieldExitCode},
 			jobresult.FieldFinishedAt:     {Type: field.TypeTime, Column: jobresult.FieldFinishedAt},
 			jobresult.FieldStartedAt:      {Type: field.TypeTime, Column: jobresult.FieldStartedAt},
+			jobresult.FieldFileID:         {Type: field.TypeString, Column: jobresult.FieldFileID},
 		},
 	}
 	graph.Nodes[41] = &sqlgraph.Node{
@@ -4503,6 +4504,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"JobResult",
 		"ControlScheduledJob",
+	)
+	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   jobresult.FileTable,
+			Columns: []string{jobresult.FileColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"File",
 	)
 	graph.MustAddE(
 		"owner",
@@ -13750,6 +13763,11 @@ func (f *JobResultFilter) WhereStartedAt(p entql.TimeP) {
 	f.Where(p.Field(jobresult.FieldStartedAt))
 }
 
+// WhereFileID applies the entql string predicate on the file_id field.
+func (f *JobResultFilter) WhereFileID(p entql.StringP) {
+	f.Where(p.Field(jobresult.FieldFileID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *JobResultFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -13772,6 +13790,20 @@ func (f *JobResultFilter) WhereHasScheduledJob() {
 // WhereHasScheduledJobWith applies a predicate to check if query has an edge scheduled_job with a given conditions (other predicates).
 func (f *JobResultFilter) WhereHasScheduledJobWith(preds ...predicate.ControlScheduledJob) {
 	f.Where(entql.HasEdgeWith("scheduled_job", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *JobResultFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

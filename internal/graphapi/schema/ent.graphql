@@ -6999,6 +6999,7 @@ input CreateJobResultInput {
   startedAt: Time
   ownerID: ID
   scheduledJobID: ID!
+  fileID: ID!
 }
 """
 CreateJobRunnerInput is used for create JobRunner object.
@@ -18276,8 +18277,10 @@ type JobResult implements Node {
   The time the job started it's execution. This is different from the db insertion time
   """
   startedAt: Time!
+  fileID: ID!
   owner: Organization
   scheduledJob: ControlScheduledJob!
+  file: File!
 }
 """
 A connection to a list of items.
@@ -18531,6 +18534,22 @@ input JobResultWhereInput {
   startedAtLT: Time
   startedAtLTE: Time
   """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -18540,6 +18559,11 @@ input JobResultWhereInput {
   """
   hasScheduledJob: Boolean
   hasScheduledJobWith: [ControlScheduledJobWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 type JobRunner implements Node {
   id: ID!
@@ -40632,6 +40656,7 @@ input UpdateJobResultInput {
   ownerID: ID
   clearOwner: Boolean
   scheduledJobID: ID
+  fileID: ID
 }
 """
 UpdateJobRunnerInput is used for update JobRunner object.

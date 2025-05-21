@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -154,6 +155,20 @@ func (jru *JobResultUpdate) SetNillableStatus(ees *enums.JobExecutionStatus) *Jo
 	return jru
 }
 
+// SetFileID sets the "file_id" field.
+func (jru *JobResultUpdate) SetFileID(s string) *JobResultUpdate {
+	jru.mutation.SetFileID(s)
+	return jru
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (jru *JobResultUpdate) SetNillableFileID(s *string) *JobResultUpdate {
+	if s != nil {
+		jru.SetFileID(*s)
+	}
+	return jru
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (jru *JobResultUpdate) SetOwner(o *Organization) *JobResultUpdate {
 	return jru.SetOwnerID(o.ID)
@@ -162,6 +177,11 @@ func (jru *JobResultUpdate) SetOwner(o *Organization) *JobResultUpdate {
 // SetScheduledJob sets the "scheduled_job" edge to the ControlScheduledJob entity.
 func (jru *JobResultUpdate) SetScheduledJob(c *ControlScheduledJob) *JobResultUpdate {
 	return jru.SetScheduledJobID(c.ID)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (jru *JobResultUpdate) SetFile(f *File) *JobResultUpdate {
+	return jru.SetFileID(f.ID)
 }
 
 // Mutation returns the JobResultMutation object of the builder.
@@ -178,6 +198,12 @@ func (jru *JobResultUpdate) ClearOwner() *JobResultUpdate {
 // ClearScheduledJob clears the "scheduled_job" edge to the ControlScheduledJob entity.
 func (jru *JobResultUpdate) ClearScheduledJob() *JobResultUpdate {
 	jru.mutation.ClearScheduledJob()
+	return jru
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (jru *JobResultUpdate) ClearFile() *JobResultUpdate {
+	jru.mutation.ClearFile()
 	return jru
 }
 
@@ -237,6 +263,9 @@ func (jru *JobResultUpdate) check() error {
 	}
 	if jru.mutation.ScheduledJobCleared() && len(jru.mutation.ScheduledJobIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "JobResult.scheduled_job"`)
+	}
+	if jru.mutation.FileCleared() && len(jru.mutation.FileIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "JobResult.file"`)
 	}
 	return nil
 }
@@ -346,6 +375,37 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jru.schemaConfig.JobResult
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if jru.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   jobresult.FileTable,
+			Columns: []string{jobresult.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jru.schemaConfig.JobResult
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := jru.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   jobresult.FileTable,
+			Columns: []string{jobresult.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = jru.schemaConfig.JobResult
@@ -498,6 +558,20 @@ func (jruo *JobResultUpdateOne) SetNillableStatus(ees *enums.JobExecutionStatus)
 	return jruo
 }
 
+// SetFileID sets the "file_id" field.
+func (jruo *JobResultUpdateOne) SetFileID(s string) *JobResultUpdateOne {
+	jruo.mutation.SetFileID(s)
+	return jruo
+}
+
+// SetNillableFileID sets the "file_id" field if the given value is not nil.
+func (jruo *JobResultUpdateOne) SetNillableFileID(s *string) *JobResultUpdateOne {
+	if s != nil {
+		jruo.SetFileID(*s)
+	}
+	return jruo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (jruo *JobResultUpdateOne) SetOwner(o *Organization) *JobResultUpdateOne {
 	return jruo.SetOwnerID(o.ID)
@@ -506,6 +580,11 @@ func (jruo *JobResultUpdateOne) SetOwner(o *Organization) *JobResultUpdateOne {
 // SetScheduledJob sets the "scheduled_job" edge to the ControlScheduledJob entity.
 func (jruo *JobResultUpdateOne) SetScheduledJob(c *ControlScheduledJob) *JobResultUpdateOne {
 	return jruo.SetScheduledJobID(c.ID)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (jruo *JobResultUpdateOne) SetFile(f *File) *JobResultUpdateOne {
+	return jruo.SetFileID(f.ID)
 }
 
 // Mutation returns the JobResultMutation object of the builder.
@@ -522,6 +601,12 @@ func (jruo *JobResultUpdateOne) ClearOwner() *JobResultUpdateOne {
 // ClearScheduledJob clears the "scheduled_job" edge to the ControlScheduledJob entity.
 func (jruo *JobResultUpdateOne) ClearScheduledJob() *JobResultUpdateOne {
 	jruo.mutation.ClearScheduledJob()
+	return jruo
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (jruo *JobResultUpdateOne) ClearFile() *JobResultUpdateOne {
+	jruo.mutation.ClearFile()
 	return jruo
 }
 
@@ -594,6 +679,9 @@ func (jruo *JobResultUpdateOne) check() error {
 	}
 	if jruo.mutation.ScheduledJobCleared() && len(jruo.mutation.ScheduledJobIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "JobResult.scheduled_job"`)
+	}
+	if jruo.mutation.FileCleared() && len(jruo.mutation.FileIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "JobResult.file"`)
 	}
 	return nil
 }
@@ -720,6 +808,37 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jruo.schemaConfig.JobResult
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if jruo.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   jobresult.FileTable,
+			Columns: []string{jobresult.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jruo.schemaConfig.JobResult
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := jruo.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   jobresult.FileTable,
+			Columns: []string{jobresult.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = jruo.schemaConfig.JobResult

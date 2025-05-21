@@ -36225,6 +36225,21 @@ type JobResultWhereInput struct {
 	StartedAtLT    *time.Time  `json:"startedAtLT,omitempty"`
 	StartedAtLTE   *time.Time  `json:"startedAtLTE,omitempty"`
 
+	// "file_id" field predicates.
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIDNEQ          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIDGT           *string  `json:"fileIDGT,omitempty"`
+	FileIDGTE          *string  `json:"fileIDGTE,omitempty"`
+	FileIDLT           *string  `json:"fileIDLT,omitempty"`
+	FileIDLTE          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -36232,6 +36247,10 @@ type JobResultWhereInput struct {
 	// "scheduled_job" edge predicates.
 	HasScheduledJob     *bool                            `json:"hasScheduledJob,omitempty"`
 	HasScheduledJobWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobWith,omitempty"`
+
+	// "file" edge predicates.
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -36728,6 +36747,45 @@ func (i *JobResultWhereInput) P() (predicate.JobResult, error) {
 	if i.StartedAtLTE != nil {
 		predicates = append(predicates, jobresult.StartedAtLTE(*i.StartedAtLTE))
 	}
+	if i.FileID != nil {
+		predicates = append(predicates, jobresult.FileIDEQ(*i.FileID))
+	}
+	if i.FileIDNEQ != nil {
+		predicates = append(predicates, jobresult.FileIDNEQ(*i.FileIDNEQ))
+	}
+	if len(i.FileIDIn) > 0 {
+		predicates = append(predicates, jobresult.FileIDIn(i.FileIDIn...))
+	}
+	if len(i.FileIDNotIn) > 0 {
+		predicates = append(predicates, jobresult.FileIDNotIn(i.FileIDNotIn...))
+	}
+	if i.FileIDGT != nil {
+		predicates = append(predicates, jobresult.FileIDGT(*i.FileIDGT))
+	}
+	if i.FileIDGTE != nil {
+		predicates = append(predicates, jobresult.FileIDGTE(*i.FileIDGTE))
+	}
+	if i.FileIDLT != nil {
+		predicates = append(predicates, jobresult.FileIDLT(*i.FileIDLT))
+	}
+	if i.FileIDLTE != nil {
+		predicates = append(predicates, jobresult.FileIDLTE(*i.FileIDLTE))
+	}
+	if i.FileIDContains != nil {
+		predicates = append(predicates, jobresult.FileIDContains(*i.FileIDContains))
+	}
+	if i.FileIDHasPrefix != nil {
+		predicates = append(predicates, jobresult.FileIDHasPrefix(*i.FileIDHasPrefix))
+	}
+	if i.FileIDHasSuffix != nil {
+		predicates = append(predicates, jobresult.FileIDHasSuffix(*i.FileIDHasSuffix))
+	}
+	if i.FileIDEqualFold != nil {
+		predicates = append(predicates, jobresult.FileIDEqualFold(*i.FileIDEqualFold))
+	}
+	if i.FileIDContainsFold != nil {
+		predicates = append(predicates, jobresult.FileIDContainsFold(*i.FileIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := jobresult.HasOwner()
@@ -36764,6 +36822,24 @@ func (i *JobResultWhereInput) P() (predicate.JobResult, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, jobresult.HasScheduledJobWith(with...))
+	}
+	if i.HasFile != nil {
+		p := jobresult.HasFile()
+		if !*i.HasFile {
+			p = jobresult.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFileWith))
+		for _, w := range i.HasFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, jobresult.HasFileWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

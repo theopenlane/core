@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/enums"
@@ -167,6 +168,12 @@ func (jrc *JobResultCreate) SetNillableStartedAt(t *time.Time) *JobResultCreate 
 	return jrc
 }
 
+// SetFileID sets the "file_id" field.
+func (jrc *JobResultCreate) SetFileID(s string) *JobResultCreate {
+	jrc.mutation.SetFileID(s)
+	return jrc
+}
+
 // SetID sets the "id" field.
 func (jrc *JobResultCreate) SetID(s string) *JobResultCreate {
 	jrc.mutation.SetID(s)
@@ -189,6 +196,11 @@ func (jrc *JobResultCreate) SetOwner(o *Organization) *JobResultCreate {
 // SetScheduledJob sets the "scheduled_job" edge to the ControlScheduledJob entity.
 func (jrc *JobResultCreate) SetScheduledJob(c *ControlScheduledJob) *JobResultCreate {
 	return jrc.SetScheduledJobID(c.ID)
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (jrc *JobResultCreate) SetFile(f *File) *JobResultCreate {
+	return jrc.SetFileID(f.ID)
 }
 
 // Mutation returns the JobResultMutation object of the builder.
@@ -298,8 +310,14 @@ func (jrc *JobResultCreate) check() error {
 	if _, ok := jrc.mutation.StartedAt(); !ok {
 		return &ValidationError{Name: "started_at", err: errors.New(`generated: missing required field "JobResult.started_at"`)}
 	}
+	if _, ok := jrc.mutation.FileID(); !ok {
+		return &ValidationError{Name: "file_id", err: errors.New(`generated: missing required field "JobResult.file_id"`)}
+	}
 	if len(jrc.mutation.ScheduledJobIDs()) == 0 {
 		return &ValidationError{Name: "scheduled_job", err: errors.New(`generated: missing required edge "JobResult.scheduled_job"`)}
+	}
+	if len(jrc.mutation.FileIDs()) == 0 {
+		return &ValidationError{Name: "file", err: errors.New(`generated: missing required edge "JobResult.file"`)}
 	}
 	return nil
 }
@@ -411,6 +429,24 @@ func (jrc *JobResultCreate) createSpec() (*JobResult, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ScheduledJobID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := jrc.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   jobresult.FileTable,
+			Columns: []string{jobresult.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jrc.schemaConfig.JobResult
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.FileID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

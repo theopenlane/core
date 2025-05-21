@@ -78,6 +78,11 @@ func (JobResult) Fields() []ent.Field {
 				entgql.OrderField("started_at"),
 			).
 			Comment("The time the job started it's execution. This is different from the db insertion time"),
+
+		field.String("file_id").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
 	}
 }
 
@@ -98,6 +103,13 @@ func (j JobResult) Edges() []ent.Edge {
 			fromSchema: j,
 			edgeSchema: ControlScheduledJob{},
 			field:      "scheduled_job_id",
+			required:   true,
+		}),
+
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: j,
+			edgeSchema: File{},
+			field:      "file_id",
 			required:   true,
 		}),
 	}
@@ -140,7 +152,7 @@ func (JobResult) Policy() ent.Policy {
 			// add mutation rules here, the below is the recommended default
 			policy.CheckCreateAccess(),
 			// this needs to be commented out for the first run that had the entfga annotation
-			// the first run will generate the functions required based on the entfa annotation
+
 			// entfga.CheckEditAccess[*generated.JobResultMutation](),
 		),
 	)
