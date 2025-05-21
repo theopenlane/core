@@ -1793,7 +1793,6 @@ type Control struct {
 	ActionPlans       *ActionPlanConnection       `json:"actionPlans"`
 	Procedures        *ProcedureConnection        `json:"procedures"`
 	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
-	MappedControls    *MappedControlConnection    `json:"mappedControls"`
 	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
@@ -3833,9 +3832,6 @@ type ControlWhereInput struct {
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
-	// mapped_controls edge predicates
-	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
-	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
 	// control_owner edge predicates
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
 	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
@@ -4019,7 +4015,6 @@ type CreateControlInput struct {
 	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
 	ProcedureIDs             []string `json:"procedureIDs,omitempty"`
 	InternalPolicyIDs        []string `json:"internalPolicyIDs,omitempty"`
-	MappedControlIDs         []string `json:"mappedControlIDs,omitempty"`
 	ControlOwnerID           *string  `json:"controlOwnerID,omitempty"`
 	DelegateID               *string  `json:"delegateID,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
@@ -4449,11 +4444,17 @@ type CreateMappedControlInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
-	MappingType *string `json:"mappingType,omitempty"`
+	MappingType *enums.MappingType `json:"mappingType,omitempty"`
 	// description of how the two controls are related
-	Relation      *string  `json:"relation,omitempty"`
-	ControlIDs    []string `json:"controlIDs,omitempty"`
-	SubcontrolIDs []string `json:"subcontrolIDs,omitempty"`
+	Relation *string `json:"relation,omitempty"`
+	// percentage of confidence in the mapping
+	Confidence *string `json:"confidence,omitempty"`
+	// source of the mapping, e.g. manual, suggested, etc.
+	Source            *enums.MappingSource `json:"source,omitempty"`
+	FromControlIDs    []string             `json:"fromControlIDs,omitempty"`
+	ToControlIDs      []string             `json:"toControlIDs,omitempty"`
+	FromSubcontrolIDs []string             `json:"fromSubcontrolIDs,omitempty"`
+	ToSubcontrolIDs   []string             `json:"toSubcontrolIDs,omitempty"`
 }
 
 type CreateMemberWithProgramInput struct {
@@ -4852,7 +4853,6 @@ type CreateSubcontrolInput struct {
 	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
 	ProcedureIDs             []string `json:"procedureIDs,omitempty"`
 	InternalPolicyIDs        []string `json:"internalPolicyIDs,omitempty"`
-	MappedControlIDs         []string `json:"mappedControlIDs,omitempty"`
 	ControlOwnerID           *string  `json:"controlOwnerID,omitempty"`
 	DelegateID               *string  `json:"delegateID,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
@@ -13496,11 +13496,17 @@ type MappedControl struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
-	MappingType *string `json:"mappingType,omitempty"`
+	MappingType *enums.MappingType `json:"mappingType,omitempty"`
 	// description of how the two controls are related
-	Relation    *string               `json:"relation,omitempty"`
-	Controls    *ControlConnection    `json:"controls"`
-	Subcontrols *SubcontrolConnection `json:"subcontrols"`
+	Relation *string `json:"relation,omitempty"`
+	// percentage of confidence in the mapping
+	Confidence *string `json:"confidence,omitempty"`
+	// source of the mapping, e.g. manual, suggested, etc.
+	Source         *enums.MappingSource  `json:"source,omitempty"`
+	FromControl    *ControlConnection    `json:"fromControl"`
+	ToControl      *ControlConnection    `json:"toControl"`
+	FromSubcontrol *SubcontrolConnection `json:"fromSubcontrol"`
+	ToSubcontrol   *SubcontrolConnection `json:"toSubcontrol"`
 }
 
 func (MappedControl) IsNode() {}
@@ -13555,9 +13561,13 @@ type MappedControlHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
-	MappingType *string `json:"mappingType,omitempty"`
+	MappingType *enums.MappingType `json:"mappingType,omitempty"`
 	// description of how the two controls are related
 	Relation *string `json:"relation,omitempty"`
+	// percentage of confidence in the mapping
+	Confidence *string `json:"confidence,omitempty"`
+	// source of the mapping, e.g. manual, suggested, etc.
+	Source *enums.MappingSource `json:"source,omitempty"`
 }
 
 func (MappedControlHistory) IsNode() {}
@@ -13717,21 +13727,12 @@ type MappedControlHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// mapping_type field predicates
-	MappingType             *string  `json:"mappingType,omitempty"`
-	MappingTypeNeq          *string  `json:"mappingTypeNEQ,omitempty"`
-	MappingTypeIn           []string `json:"mappingTypeIn,omitempty"`
-	MappingTypeNotIn        []string `json:"mappingTypeNotIn,omitempty"`
-	MappingTypeGt           *string  `json:"mappingTypeGT,omitempty"`
-	MappingTypeGte          *string  `json:"mappingTypeGTE,omitempty"`
-	MappingTypeLt           *string  `json:"mappingTypeLT,omitempty"`
-	MappingTypeLte          *string  `json:"mappingTypeLTE,omitempty"`
-	MappingTypeContains     *string  `json:"mappingTypeContains,omitempty"`
-	MappingTypeHasPrefix    *string  `json:"mappingTypeHasPrefix,omitempty"`
-	MappingTypeHasSuffix    *string  `json:"mappingTypeHasSuffix,omitempty"`
-	MappingTypeIsNil        *bool    `json:"mappingTypeIsNil,omitempty"`
-	MappingTypeNotNil       *bool    `json:"mappingTypeNotNil,omitempty"`
-	MappingTypeEqualFold    *string  `json:"mappingTypeEqualFold,omitempty"`
-	MappingTypeContainsFold *string  `json:"mappingTypeContainsFold,omitempty"`
+	MappingType       *enums.MappingType  `json:"mappingType,omitempty"`
+	MappingTypeNeq    *enums.MappingType  `json:"mappingTypeNEQ,omitempty"`
+	MappingTypeIn     []enums.MappingType `json:"mappingTypeIn,omitempty"`
+	MappingTypeNotIn  []enums.MappingType `json:"mappingTypeNotIn,omitempty"`
+	MappingTypeIsNil  *bool               `json:"mappingTypeIsNil,omitempty"`
+	MappingTypeNotNil *bool               `json:"mappingTypeNotNil,omitempty"`
 	// relation field predicates
 	Relation             *string  `json:"relation,omitempty"`
 	RelationNeq          *string  `json:"relationNEQ,omitempty"`
@@ -13748,6 +13749,29 @@ type MappedControlHistoryWhereInput struct {
 	RelationNotNil       *bool    `json:"relationNotNil,omitempty"`
 	RelationEqualFold    *string  `json:"relationEqualFold,omitempty"`
 	RelationContainsFold *string  `json:"relationContainsFold,omitempty"`
+	// confidence field predicates
+	Confidence             *string  `json:"confidence,omitempty"`
+	ConfidenceNeq          *string  `json:"confidenceNEQ,omitempty"`
+	ConfidenceIn           []string `json:"confidenceIn,omitempty"`
+	ConfidenceNotIn        []string `json:"confidenceNotIn,omitempty"`
+	ConfidenceGt           *string  `json:"confidenceGT,omitempty"`
+	ConfidenceGte          *string  `json:"confidenceGTE,omitempty"`
+	ConfidenceLt           *string  `json:"confidenceLT,omitempty"`
+	ConfidenceLte          *string  `json:"confidenceLTE,omitempty"`
+	ConfidenceContains     *string  `json:"confidenceContains,omitempty"`
+	ConfidenceHasPrefix    *string  `json:"confidenceHasPrefix,omitempty"`
+	ConfidenceHasSuffix    *string  `json:"confidenceHasSuffix,omitempty"`
+	ConfidenceIsNil        *bool    `json:"confidenceIsNil,omitempty"`
+	ConfidenceNotNil       *bool    `json:"confidenceNotNil,omitempty"`
+	ConfidenceEqualFold    *string  `json:"confidenceEqualFold,omitempty"`
+	ConfidenceContainsFold *string  `json:"confidenceContainsFold,omitempty"`
+	// source field predicates
+	Source       *enums.MappingSource  `json:"source,omitempty"`
+	SourceNeq    *enums.MappingSource  `json:"sourceNEQ,omitempty"`
+	SourceIn     []enums.MappingSource `json:"sourceIn,omitempty"`
+	SourceNotIn  []enums.MappingSource `json:"sourceNotIn,omitempty"`
+	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
+	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
 }
 
 // Ordering options for MappedControl connections
@@ -13863,21 +13887,12 @@ type MappedControlWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// mapping_type field predicates
-	MappingType             *string  `json:"mappingType,omitempty"`
-	MappingTypeNeq          *string  `json:"mappingTypeNEQ,omitempty"`
-	MappingTypeIn           []string `json:"mappingTypeIn,omitempty"`
-	MappingTypeNotIn        []string `json:"mappingTypeNotIn,omitempty"`
-	MappingTypeGt           *string  `json:"mappingTypeGT,omitempty"`
-	MappingTypeGte          *string  `json:"mappingTypeGTE,omitempty"`
-	MappingTypeLt           *string  `json:"mappingTypeLT,omitempty"`
-	MappingTypeLte          *string  `json:"mappingTypeLTE,omitempty"`
-	MappingTypeContains     *string  `json:"mappingTypeContains,omitempty"`
-	MappingTypeHasPrefix    *string  `json:"mappingTypeHasPrefix,omitempty"`
-	MappingTypeHasSuffix    *string  `json:"mappingTypeHasSuffix,omitempty"`
-	MappingTypeIsNil        *bool    `json:"mappingTypeIsNil,omitempty"`
-	MappingTypeNotNil       *bool    `json:"mappingTypeNotNil,omitempty"`
-	MappingTypeEqualFold    *string  `json:"mappingTypeEqualFold,omitempty"`
-	MappingTypeContainsFold *string  `json:"mappingTypeContainsFold,omitempty"`
+	MappingType       *enums.MappingType  `json:"mappingType,omitempty"`
+	MappingTypeNeq    *enums.MappingType  `json:"mappingTypeNEQ,omitempty"`
+	MappingTypeIn     []enums.MappingType `json:"mappingTypeIn,omitempty"`
+	MappingTypeNotIn  []enums.MappingType `json:"mappingTypeNotIn,omitempty"`
+	MappingTypeIsNil  *bool               `json:"mappingTypeIsNil,omitempty"`
+	MappingTypeNotNil *bool               `json:"mappingTypeNotNil,omitempty"`
 	// relation field predicates
 	Relation             *string  `json:"relation,omitempty"`
 	RelationNeq          *string  `json:"relationNEQ,omitempty"`
@@ -13894,12 +13909,41 @@ type MappedControlWhereInput struct {
 	RelationNotNil       *bool    `json:"relationNotNil,omitempty"`
 	RelationEqualFold    *string  `json:"relationEqualFold,omitempty"`
 	RelationContainsFold *string  `json:"relationContainsFold,omitempty"`
-	// controls edge predicates
-	HasControls     *bool                `json:"hasControls,omitempty"`
-	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
-	// subcontrols edge predicates
-	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
-	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// confidence field predicates
+	Confidence             *string  `json:"confidence,omitempty"`
+	ConfidenceNeq          *string  `json:"confidenceNEQ,omitempty"`
+	ConfidenceIn           []string `json:"confidenceIn,omitempty"`
+	ConfidenceNotIn        []string `json:"confidenceNotIn,omitempty"`
+	ConfidenceGt           *string  `json:"confidenceGT,omitempty"`
+	ConfidenceGte          *string  `json:"confidenceGTE,omitempty"`
+	ConfidenceLt           *string  `json:"confidenceLT,omitempty"`
+	ConfidenceLte          *string  `json:"confidenceLTE,omitempty"`
+	ConfidenceContains     *string  `json:"confidenceContains,omitempty"`
+	ConfidenceHasPrefix    *string  `json:"confidenceHasPrefix,omitempty"`
+	ConfidenceHasSuffix    *string  `json:"confidenceHasSuffix,omitempty"`
+	ConfidenceIsNil        *bool    `json:"confidenceIsNil,omitempty"`
+	ConfidenceNotNil       *bool    `json:"confidenceNotNil,omitempty"`
+	ConfidenceEqualFold    *string  `json:"confidenceEqualFold,omitempty"`
+	ConfidenceContainsFold *string  `json:"confidenceContainsFold,omitempty"`
+	// source field predicates
+	Source       *enums.MappingSource  `json:"source,omitempty"`
+	SourceNeq    *enums.MappingSource  `json:"sourceNEQ,omitempty"`
+	SourceIn     []enums.MappingSource `json:"sourceIn,omitempty"`
+	SourceNotIn  []enums.MappingSource `json:"sourceNotIn,omitempty"`
+	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
+	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
+	// from_control edge predicates
+	HasFromControl     *bool                `json:"hasFromControl,omitempty"`
+	HasFromControlWith []*ControlWhereInput `json:"hasFromControlWith,omitempty"`
+	// to_control edge predicates
+	HasToControl     *bool                `json:"hasToControl,omitempty"`
+	HasToControlWith []*ControlWhereInput `json:"hasToControlWith,omitempty"`
+	// from_subcontrol edge predicates
+	HasFromSubcontrol     *bool                   `json:"hasFromSubcontrol,omitempty"`
+	HasFromSubcontrolWith []*SubcontrolWhereInput `json:"hasFromSubcontrolWith,omitempty"`
+	// to_subcontrol edge predicates
+	HasToSubcontrol     *bool                   `json:"hasToSubcontrol,omitempty"`
+	HasToSubcontrolWith []*SubcontrolWhereInput `json:"hasToSubcontrolWith,omitempty"`
 }
 
 type Mutation struct {
@@ -21277,7 +21321,6 @@ type Subcontrol struct {
 	ActionPlans       *ActionPlanConnection       `json:"actionPlans"`
 	Procedures        *ProcedureConnection        `json:"procedures"`
 	InternalPolicies  *InternalPolicyConnection   `json:"internalPolicies"`
-	MappedControls    *MappedControlConnection    `json:"mappedControls"`
 	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
@@ -22092,9 +22135,6 @@ type SubcontrolWhereInput struct {
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
-	// mapped_controls edge predicates
-	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
-	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
 	// control_owner edge predicates
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
 	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
@@ -23959,9 +23999,6 @@ type UpdateControlInput struct {
 	AddInternalPolicyIDs           []string `json:"addInternalPolicyIDs,omitempty"`
 	RemoveInternalPolicyIDs        []string `json:"removeInternalPolicyIDs,omitempty"`
 	ClearInternalPolicies          *bool    `json:"clearInternalPolicies,omitempty"`
-	AddMappedControlIDs            []string `json:"addMappedControlIDs,omitempty"`
-	RemoveMappedControlIDs         []string `json:"removeMappedControlIDs,omitempty"`
-	ClearMappedControls            *bool    `json:"clearMappedControls,omitempty"`
 	ControlOwnerID                 *string  `json:"controlOwnerID,omitempty"`
 	ClearControlOwner              *bool    `json:"clearControlOwner,omitempty"`
 	DelegateID                     *string  `json:"delegateID,omitempty"`
@@ -24657,17 +24694,29 @@ type UpdateMappedControlInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
-	MappingType      *string `json:"mappingType,omitempty"`
-	ClearMappingType *bool   `json:"clearMappingType,omitempty"`
+	MappingType      *enums.MappingType `json:"mappingType,omitempty"`
+	ClearMappingType *bool              `json:"clearMappingType,omitempty"`
 	// description of how the two controls are related
-	Relation            *string  `json:"relation,omitempty"`
-	ClearRelation       *bool    `json:"clearRelation,omitempty"`
-	AddControlIDs       []string `json:"addControlIDs,omitempty"`
-	RemoveControlIDs    []string `json:"removeControlIDs,omitempty"`
-	ClearControls       *bool    `json:"clearControls,omitempty"`
-	AddSubcontrolIDs    []string `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs []string `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols    *bool    `json:"clearSubcontrols,omitempty"`
+	Relation      *string `json:"relation,omitempty"`
+	ClearRelation *bool   `json:"clearRelation,omitempty"`
+	// percentage of confidence in the mapping
+	Confidence      *string `json:"confidence,omitempty"`
+	ClearConfidence *bool   `json:"clearConfidence,omitempty"`
+	// source of the mapping, e.g. manual, suggested, etc.
+	Source                  *enums.MappingSource `json:"source,omitempty"`
+	ClearSource             *bool                `json:"clearSource,omitempty"`
+	AddFromControlIDs       []string             `json:"addFromControlIDs,omitempty"`
+	RemoveFromControlIDs    []string             `json:"removeFromControlIDs,omitempty"`
+	ClearFromControl        *bool                `json:"clearFromControl,omitempty"`
+	AddToControlIDs         []string             `json:"addToControlIDs,omitempty"`
+	RemoveToControlIDs      []string             `json:"removeToControlIDs,omitempty"`
+	ClearToControl          *bool                `json:"clearToControl,omitempty"`
+	AddFromSubcontrolIDs    []string             `json:"addFromSubcontrolIDs,omitempty"`
+	RemoveFromSubcontrolIDs []string             `json:"removeFromSubcontrolIDs,omitempty"`
+	ClearFromSubcontrol     *bool                `json:"clearFromSubcontrol,omitempty"`
+	AddToSubcontrolIDs      []string             `json:"addToSubcontrolIDs,omitempty"`
+	RemoveToSubcontrolIDs   []string             `json:"removeToSubcontrolIDs,omitempty"`
+	ClearToSubcontrol       *bool                `json:"clearToSubcontrol,omitempty"`
 }
 
 // UpdateNarrativeInput is used for update Narrative object.
@@ -25334,9 +25383,6 @@ type UpdateSubcontrolInput struct {
 	AddInternalPolicyIDs           []string `json:"addInternalPolicyIDs,omitempty"`
 	RemoveInternalPolicyIDs        []string `json:"removeInternalPolicyIDs,omitempty"`
 	ClearInternalPolicies          *bool    `json:"clearInternalPolicies,omitempty"`
-	AddMappedControlIDs            []string `json:"addMappedControlIDs,omitempty"`
-	RemoveMappedControlIDs         []string `json:"removeMappedControlIDs,omitempty"`
-	ClearMappedControls            *bool    `json:"clearMappedControls,omitempty"`
 	ControlOwnerID                 *string  `json:"controlOwnerID,omitempty"`
 	ClearControlOwner              *bool    `json:"clearControlOwner,omitempty"`
 	DelegateID                     *string  `json:"delegateID,omitempty"`
@@ -29673,18 +29719,20 @@ type MappedControlHistoryOrderField string
 const (
 	MappedControlHistoryOrderFieldCreatedAt   MappedControlHistoryOrderField = "created_at"
 	MappedControlHistoryOrderFieldUpdatedAt   MappedControlHistoryOrderField = "updated_at"
-	MappedControlHistoryOrderFieldMappingType MappedControlHistoryOrderField = "mapping_type"
+	MappedControlHistoryOrderFieldMappingType MappedControlHistoryOrderField = "MAPPING_TYPE"
+	MappedControlHistoryOrderFieldSource      MappedControlHistoryOrderField = "SOURCE"
 )
 
 var AllMappedControlHistoryOrderField = []MappedControlHistoryOrderField{
 	MappedControlHistoryOrderFieldCreatedAt,
 	MappedControlHistoryOrderFieldUpdatedAt,
 	MappedControlHistoryOrderFieldMappingType,
+	MappedControlHistoryOrderFieldSource,
 }
 
 func (e MappedControlHistoryOrderField) IsValid() bool {
 	switch e {
-	case MappedControlHistoryOrderFieldCreatedAt, MappedControlHistoryOrderFieldUpdatedAt, MappedControlHistoryOrderFieldMappingType:
+	case MappedControlHistoryOrderFieldCreatedAt, MappedControlHistoryOrderFieldUpdatedAt, MappedControlHistoryOrderFieldMappingType, MappedControlHistoryOrderFieldSource:
 		return true
 	}
 	return false
@@ -29731,18 +29779,20 @@ type MappedControlOrderField string
 const (
 	MappedControlOrderFieldCreatedAt   MappedControlOrderField = "created_at"
 	MappedControlOrderFieldUpdatedAt   MappedControlOrderField = "updated_at"
-	MappedControlOrderFieldMappingType MappedControlOrderField = "mapping_type"
+	MappedControlOrderFieldMappingType MappedControlOrderField = "MAPPING_TYPE"
+	MappedControlOrderFieldSource      MappedControlOrderField = "SOURCE"
 )
 
 var AllMappedControlOrderField = []MappedControlOrderField{
 	MappedControlOrderFieldCreatedAt,
 	MappedControlOrderFieldUpdatedAt,
 	MappedControlOrderFieldMappingType,
+	MappedControlOrderFieldSource,
 }
 
 func (e MappedControlOrderField) IsValid() bool {
 	switch e {
-	case MappedControlOrderFieldCreatedAt, MappedControlOrderFieldUpdatedAt, MappedControlOrderFieldMappingType:
+	case MappedControlOrderFieldCreatedAt, MappedControlOrderFieldUpdatedAt, MappedControlOrderFieldMappingType, MappedControlOrderFieldSource:
 		return true
 	}
 	return false

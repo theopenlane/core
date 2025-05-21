@@ -340,7 +340,6 @@ type ComplexityRoot struct {
 		ImplementationGuidance func(childComplexity int) int
 		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		MappedCategories       func(childComplexity int) int
-		MappedControls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		Narratives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
@@ -1942,18 +1941,22 @@ type ComplexityRoot struct {
 	}
 
 	MappedControl struct {
-		Controls    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
-		ID          func(childComplexity int) int
-		MappingType func(childComplexity int) int
-		Relation    func(childComplexity int) int
-		Subcontrols func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Confidence     func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		DeletedAt      func(childComplexity int) int
+		DeletedBy      func(childComplexity int) int
+		FromControl    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		FromSubcontrol func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		ID             func(childComplexity int) int
+		MappingType    func(childComplexity int) int
+		Relation       func(childComplexity int) int
+		Source         func(childComplexity int) int
+		Tags           func(childComplexity int) int
+		ToControl      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ToSubcontrol   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
 	}
 
 	MappedControlBulkCreatePayload struct {
@@ -1980,6 +1983,7 @@ type ComplexityRoot struct {
 	}
 
 	MappedControlHistory struct {
+		Confidence  func(childComplexity int) int
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
 		DeletedAt   func(childComplexity int) int
@@ -1990,6 +1994,7 @@ type ComplexityRoot struct {
 		Operation   func(childComplexity int) int
 		Ref         func(childComplexity int) int
 		Relation    func(childComplexity int) int
+		Source      func(childComplexity int) int
 		Tags        func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
@@ -3543,7 +3548,6 @@ type ComplexityRoot struct {
 		ImplementationGuidance func(childComplexity int) int
 		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		MappedCategories       func(childComplexity int) int
-		MappedControls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		Narratives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
@@ -5510,18 +5514,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.MappedCategories(childComplexity), true
-
-	case "Control.mappedControls":
-		if e.complexity.Control.MappedControls == nil {
-			break
-		}
-
-		args, err := ec.field_Control_mappedControls_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Control.MappedControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.MappedControlOrder), args["where"].(*generated.MappedControlWhereInput)), true
 
 	case "Control.narratives":
 		if e.complexity.Control.Narratives == nil {
@@ -12960,17 +12952,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappableDomainUpdatePayload.MappableDomain(childComplexity), true
 
-	case "MappedControl.controls":
-		if e.complexity.MappedControl.Controls == nil {
+	case "MappedControl.confidence":
+		if e.complexity.MappedControl.Confidence == nil {
 			break
 		}
 
-		args, err := ec.field_MappedControl_controls_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.MappedControl.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+		return e.complexity.MappedControl.Confidence(childComplexity), true
 
 	case "MappedControl.createdAt":
 		if e.complexity.MappedControl.CreatedAt == nil {
@@ -13000,6 +12987,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControl.DeletedBy(childComplexity), true
 
+	case "MappedControl.fromControl":
+		if e.complexity.MappedControl.FromControl == nil {
+			break
+		}
+
+		args, err := ec.field_MappedControl_fromControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.MappedControl.FromControl(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "MappedControl.fromSubcontrol":
+		if e.complexity.MappedControl.FromSubcontrol == nil {
+			break
+		}
+
+		args, err := ec.field_MappedControl_fromSubcontrol_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.MappedControl.FromSubcontrol(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
 	case "MappedControl.id":
 		if e.complexity.MappedControl.ID == nil {
 			break
@@ -13021,17 +13032,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControl.Relation(childComplexity), true
 
-	case "MappedControl.subcontrols":
-		if e.complexity.MappedControl.Subcontrols == nil {
+	case "MappedControl.source":
+		if e.complexity.MappedControl.Source == nil {
 			break
 		}
 
-		args, err := ec.field_MappedControl_subcontrols_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.MappedControl.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+		return e.complexity.MappedControl.Source(childComplexity), true
 
 	case "MappedControl.tags":
 		if e.complexity.MappedControl.Tags == nil {
@@ -13039,6 +13045,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControl.Tags(childComplexity), true
+
+	case "MappedControl.toControl":
+		if e.complexity.MappedControl.ToControl == nil {
+			break
+		}
+
+		args, err := ec.field_MappedControl_toControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.MappedControl.ToControl(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "MappedControl.toSubcontrol":
+		if e.complexity.MappedControl.ToSubcontrol == nil {
+			break
+		}
+
+		args, err := ec.field_MappedControl_toSubcontrol_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.MappedControl.ToSubcontrol(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "MappedControl.updatedAt":
 		if e.complexity.MappedControl.UpdatedAt == nil {
@@ -13110,6 +13140,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControlEdge.Node(childComplexity), true
 
+	case "MappedControlHistory.confidence":
+		if e.complexity.MappedControlHistory.Confidence == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.Confidence(childComplexity), true
+
 	case "MappedControlHistory.createdAt":
 		if e.complexity.MappedControlHistory.CreatedAt == nil {
 			break
@@ -13179,6 +13216,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlHistory.Relation(childComplexity), true
+
+	case "MappedControlHistory.source":
+		if e.complexity.MappedControlHistory.Source == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.Source(childComplexity), true
 
 	case "MappedControlHistory.tags":
 		if e.complexity.MappedControlHistory.Tags == nil {
@@ -23947,18 +23991,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.MappedCategories(childComplexity), true
 
-	case "Subcontrol.mappedControls":
-		if e.complexity.Subcontrol.MappedControls == nil {
-			break
-		}
-
-		args, err := ec.field_Subcontrol_mappedControls_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Subcontrol.MappedControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.MappedControlOrder), args["where"].(*generated.MappedControlWhereInput)), true
-
 	case "Subcontrol.narratives":
 		if e.complexity.Subcontrol.Narratives == nil {
 			break
@@ -31616,37 +31648,6 @@ type Control implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
-  mappedControls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for MappedControls returned from the connection.
-    """
-    orderBy: [MappedControlOrder!]
-
-    """
-    Filtering options for MappedControls returned from the connection.
-    """
-    where: MappedControlWhereInput
-  ): MappedControlConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -34746,11 +34747,6 @@ input ControlWhereInput {
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
   """
-  mapped_controls edge predicates
-  """
-  hasMappedControls: Boolean
-  hasMappedControlsWith: [MappedControlWhereInput!]
-  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -35062,7 +35058,6 @@ input CreateControlInput {
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
-  mappedControlIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
   ownerID: ID
@@ -35675,13 +35670,23 @@ input CreateMappedControlInput {
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
-  mappingType: String
+  mappingType: MappedControlMappingType
   """
   description of how the two controls are related
   """
   relation: String
-  controlIDs: [ID!]
-  subcontrolIDs: [ID!]
+  """
+  percentage of confidence in the mapping
+  """
+  confidence: String
+  """
+  source of the mapping, e.g. manual, suggested, etc.
+  """
+  source: MappedControlMappingSource
+  fromControlIDs: [ID!]
+  toControlIDs: [ID!]
+  fromSubcontrolIDs: [ID!]
+  toSubcontrolIDs: [ID!]
 }
 """
 CreateNarrativeInput is used for create Narrative object.
@@ -36281,7 +36286,6 @@ input CreateSubcontrolInput {
   actionPlanIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
-  mappedControlIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
   ownerID: ID
@@ -48564,12 +48568,20 @@ type MappedControl implements Node {
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
-  mappingType: String
+  mappingType: MappedControlMappingType
   """
   description of how the two controls are related
   """
   relation: String
-  controls(
+  """
+  percentage of confidence in the mapping
+  """
+  confidence: String
+  """
+  source of the mapping, e.g. manual, suggested, etc.
+  """
+  source: MappedControlMappingSource
+  fromControl(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -48600,7 +48612,69 @@ type MappedControl implements Node {
     """
     where: ControlWhereInput
   ): ControlConnection!
-  subcontrols(
+  toControl(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  fromSubcontrol(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  toSubcontrol(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -48680,11 +48754,19 @@ type MappedControlHistory implements Node {
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
-  mappingType: String
+  mappingType: MappedControlHistoryMappingType
   """
   description of how the two controls are related
   """
   relation: String
+  """
+  percentage of confidence in the mapping
+  """
+  confidence: String
+  """
+  source of the mapping, e.g. manual, suggested, etc.
+  """
+  source: MappedControlHistoryMappingSource
 }
 """
 A connection to a list of items.
@@ -48717,6 +48799,23 @@ type MappedControlHistoryEdge {
   cursor: Cursor!
 }
 """
+MappedControlHistoryMappingSource is enum for the field source
+"""
+enum MappedControlHistoryMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+  MANUAL
+  SUGGESTED
+  IMPORTED
+}
+"""
+MappedControlHistoryMappingType is enum for the field mapping_type
+"""
+enum MappedControlHistoryMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+  EQUAL
+  SUPERSET
+  SUBSET
+  INTERSECT
+}
+"""
 MappedControlHistoryOpType is enum for the field operation
 """
 enum MappedControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -48743,7 +48842,8 @@ Properties by which MappedControlHistory connections can be ordered.
 enum MappedControlHistoryOrderField {
   created_at
   updated_at
-  mapping_type
+  MAPPING_TYPE
+  SOURCE
 }
 """
 MappedControlHistoryWhereInput is used for filtering MappedControlHistory objects.
@@ -48898,21 +48998,12 @@ input MappedControlHistoryWhereInput {
   """
   mapping_type field predicates
   """
-  mappingType: String
-  mappingTypeNEQ: String
-  mappingTypeIn: [String!]
-  mappingTypeNotIn: [String!]
-  mappingTypeGT: String
-  mappingTypeGTE: String
-  mappingTypeLT: String
-  mappingTypeLTE: String
-  mappingTypeContains: String
-  mappingTypeHasPrefix: String
-  mappingTypeHasSuffix: String
+  mappingType: MappedControlHistoryMappingType
+  mappingTypeNEQ: MappedControlHistoryMappingType
+  mappingTypeIn: [MappedControlHistoryMappingType!]
+  mappingTypeNotIn: [MappedControlHistoryMappingType!]
   mappingTypeIsNil: Boolean
   mappingTypeNotNil: Boolean
-  mappingTypeEqualFold: String
-  mappingTypeContainsFold: String
   """
   relation field predicates
   """
@@ -48931,6 +49022,50 @@ input MappedControlHistoryWhereInput {
   relationNotNil: Boolean
   relationEqualFold: String
   relationContainsFold: String
+  """
+  confidence field predicates
+  """
+  confidence: String
+  confidenceNEQ: String
+  confidenceIn: [String!]
+  confidenceNotIn: [String!]
+  confidenceGT: String
+  confidenceGTE: String
+  confidenceLT: String
+  confidenceLTE: String
+  confidenceContains: String
+  confidenceHasPrefix: String
+  confidenceHasSuffix: String
+  confidenceIsNil: Boolean
+  confidenceNotNil: Boolean
+  confidenceEqualFold: String
+  confidenceContainsFold: String
+  """
+  source field predicates
+  """
+  source: MappedControlHistoryMappingSource
+  sourceNEQ: MappedControlHistoryMappingSource
+  sourceIn: [MappedControlHistoryMappingSource!]
+  sourceNotIn: [MappedControlHistoryMappingSource!]
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+}
+"""
+MappedControlMappingSource is enum for the field source
+"""
+enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+  MANUAL
+  SUGGESTED
+  IMPORTED
+}
+"""
+MappedControlMappingType is enum for the field mapping_type
+"""
+enum MappedControlMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+  EQUAL
+  SUPERSET
+  SUBSET
+  INTERSECT
 }
 """
 Ordering options for MappedControl connections
@@ -48951,7 +49086,8 @@ Properties by which MappedControl connections can be ordered.
 enum MappedControlOrderField {
   created_at
   updated_at
-  mapping_type
+  MAPPING_TYPE
+  SOURCE
 }
 """
 MappedControlWhereInput is used for filtering MappedControl objects.
@@ -49070,21 +49206,12 @@ input MappedControlWhereInput {
   """
   mapping_type field predicates
   """
-  mappingType: String
-  mappingTypeNEQ: String
-  mappingTypeIn: [String!]
-  mappingTypeNotIn: [String!]
-  mappingTypeGT: String
-  mappingTypeGTE: String
-  mappingTypeLT: String
-  mappingTypeLTE: String
-  mappingTypeContains: String
-  mappingTypeHasPrefix: String
-  mappingTypeHasSuffix: String
+  mappingType: MappedControlMappingType
+  mappingTypeNEQ: MappedControlMappingType
+  mappingTypeIn: [MappedControlMappingType!]
+  mappingTypeNotIn: [MappedControlMappingType!]
   mappingTypeIsNil: Boolean
   mappingTypeNotNil: Boolean
-  mappingTypeEqualFold: String
-  mappingTypeContainsFold: String
   """
   relation field predicates
   """
@@ -49104,15 +49231,52 @@ input MappedControlWhereInput {
   relationEqualFold: String
   relationContainsFold: String
   """
-  controls edge predicates
+  confidence field predicates
   """
-  hasControls: Boolean
-  hasControlsWith: [ControlWhereInput!]
+  confidence: String
+  confidenceNEQ: String
+  confidenceIn: [String!]
+  confidenceNotIn: [String!]
+  confidenceGT: String
+  confidenceGTE: String
+  confidenceLT: String
+  confidenceLTE: String
+  confidenceContains: String
+  confidenceHasPrefix: String
+  confidenceHasSuffix: String
+  confidenceIsNil: Boolean
+  confidenceNotNil: Boolean
+  confidenceEqualFold: String
+  confidenceContainsFold: String
   """
-  subcontrols edge predicates
+  source field predicates
   """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  source: MappedControlMappingSource
+  sourceNEQ: MappedControlMappingSource
+  sourceIn: [MappedControlMappingSource!]
+  sourceNotIn: [MappedControlMappingSource!]
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  """
+  from_control edge predicates
+  """
+  hasFromControl: Boolean
+  hasFromControlWith: [ControlWhereInput!]
+  """
+  to_control edge predicates
+  """
+  hasToControl: Boolean
+  hasToControlWith: [ControlWhereInput!]
+  """
+  from_subcontrol edge predicates
+  """
+  hasFromSubcontrol: Boolean
+  hasFromSubcontrolWith: [SubcontrolWhereInput!]
+  """
+  to_subcontrol edge predicates
+  """
+  hasToSubcontrol: Boolean
+  hasToSubcontrolWith: [SubcontrolWhereInput!]
 }
 type Narrative implements Node {
   id: ID!
@@ -63637,37 +63801,6 @@ type Subcontrol implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
-  mappedControls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for MappedControls returned from the connection.
-    """
-    orderBy: [MappedControlOrder!]
-
-    """
-    Filtering options for MappedControls returned from the connection.
-    """
-    where: MappedControlWhereInput
-  ): MappedControlConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -64771,11 +64904,6 @@ input SubcontrolWhereInput {
   """
   hasInternalPolicies: Boolean
   hasInternalPoliciesWith: [InternalPolicyWhereInput!]
-  """
-  mapped_controls edge predicates
-  """
-  hasMappedControls: Boolean
-  hasMappedControlsWith: [MappedControlWhereInput!]
   """
   control_owner edge predicates
   """
@@ -67565,9 +67693,6 @@ input UpdateControlInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
-  addMappedControlIDs: [ID!]
-  removeMappedControlIDs: [ID!]
-  clearMappedControls: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
@@ -68438,19 +68563,35 @@ input UpdateMappedControlInput {
   """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
-  mappingType: String
+  mappingType: MappedControlMappingType
   clearMappingType: Boolean
   """
   description of how the two controls are related
   """
   relation: String
   clearRelation: Boolean
-  addControlIDs: [ID!]
-  removeControlIDs: [ID!]
-  clearControls: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
+  """
+  percentage of confidence in the mapping
+  """
+  confidence: String
+  clearConfidence: Boolean
+  """
+  source of the mapping, e.g. manual, suggested, etc.
+  """
+  source: MappedControlMappingSource
+  clearSource: Boolean
+  addFromControlIDs: [ID!]
+  removeFromControlIDs: [ID!]
+  clearFromControl: Boolean
+  addToControlIDs: [ID!]
+  removeToControlIDs: [ID!]
+  clearToControl: Boolean
+  addFromSubcontrolIDs: [ID!]
+  removeFromSubcontrolIDs: [ID!]
+  clearFromSubcontrol: Boolean
+  addToSubcontrolIDs: [ID!]
+  removeToSubcontrolIDs: [ID!]
+  clearToSubcontrol: Boolean
 }
 """
 UpdateNarrativeInput is used for update Narrative object.
@@ -69306,9 +69447,6 @@ input UpdateSubcontrolInput {
   addInternalPolicyIDs: [ID!]
   removeInternalPolicyIDs: [ID!]
   clearInternalPolicies: Boolean
-  addMappedControlIDs: [ID!]
-  removeMappedControlIDs: [ID!]
-  clearMappedControls: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID

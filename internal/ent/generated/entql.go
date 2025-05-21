@@ -1405,8 +1405,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappedcontrol.FieldDeletedAt:   {Type: field.TypeTime, Column: mappedcontrol.FieldDeletedAt},
 			mappedcontrol.FieldDeletedBy:   {Type: field.TypeString, Column: mappedcontrol.FieldDeletedBy},
 			mappedcontrol.FieldTags:        {Type: field.TypeJSON, Column: mappedcontrol.FieldTags},
-			mappedcontrol.FieldMappingType: {Type: field.TypeString, Column: mappedcontrol.FieldMappingType},
+			mappedcontrol.FieldMappingType: {Type: field.TypeEnum, Column: mappedcontrol.FieldMappingType},
 			mappedcontrol.FieldRelation:    {Type: field.TypeString, Column: mappedcontrol.FieldRelation},
+			mappedcontrol.FieldConfidence:  {Type: field.TypeString, Column: mappedcontrol.FieldConfidence},
+			mappedcontrol.FieldSource:      {Type: field.TypeEnum, Column: mappedcontrol.FieldSource},
 		},
 	}
 	graph.Nodes[46] = &sqlgraph.Node{
@@ -1430,8 +1432,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappedcontrolhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: mappedcontrolhistory.FieldDeletedAt},
 			mappedcontrolhistory.FieldDeletedBy:   {Type: field.TypeString, Column: mappedcontrolhistory.FieldDeletedBy},
 			mappedcontrolhistory.FieldTags:        {Type: field.TypeJSON, Column: mappedcontrolhistory.FieldTags},
-			mappedcontrolhistory.FieldMappingType: {Type: field.TypeString, Column: mappedcontrolhistory.FieldMappingType},
+			mappedcontrolhistory.FieldMappingType: {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldMappingType},
 			mappedcontrolhistory.FieldRelation:    {Type: field.TypeString, Column: mappedcontrolhistory.FieldRelation},
+			mappedcontrolhistory.FieldConfidence:  {Type: field.TypeString, Column: mappedcontrolhistory.FieldConfidence},
+			mappedcontrolhistory.FieldSource:      {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldSource},
 		},
 	}
 	graph.Nodes[47] = &sqlgraph.Node{
@@ -2837,18 +2841,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Control",
 		"InternalPolicy",
-	)
-	graph.MustAddE(
-		"mapped_controls",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.MappedControlsTable,
-			Columns: control.MappedControlsPrimaryKey,
-			Bidi:    false,
-		},
-		"Control",
-		"MappedControl",
 	)
 	graph.MustAddE(
 		"control_owner",
@@ -4435,24 +4427,48 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"CustomDomain",
 	)
 	graph.MustAddE(
-		"controls",
+		"from_control",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.ControlsTable,
-			Columns: mappedcontrol.ControlsPrimaryKey,
+			Table:   mappedcontrol.FromControlTable,
+			Columns: []string{mappedcontrol.FromControlColumn},
 			Bidi:    false,
 		},
 		"MappedControl",
 		"Control",
 	)
 	graph.MustAddE(
-		"subcontrols",
+		"to_control",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.SubcontrolsTable,
-			Columns: mappedcontrol.SubcontrolsPrimaryKey,
+			Table:   mappedcontrol.ToControlTable,
+			Columns: []string{mappedcontrol.ToControlColumn},
+			Bidi:    false,
+		},
+		"MappedControl",
+		"Control",
+	)
+	graph.MustAddE(
+		"from_subcontrol",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   mappedcontrol.FromSubcontrolTable,
+			Columns: []string{mappedcontrol.FromSubcontrolColumn},
+			Bidi:    false,
+		},
+		"MappedControl",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"to_subcontrol",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   mappedcontrol.ToSubcontrolTable,
+			Columns: []string{mappedcontrol.ToSubcontrolColumn},
 			Bidi:    false,
 		},
 		"MappedControl",
@@ -5981,18 +5997,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subcontrol",
 		"InternalPolicy",
-	)
-	graph.MustAddE(
-		"mapped_controls",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.MappedControlsTable,
-			Columns: subcontrol.MappedControlsPrimaryKey,
-			Bidi:    false,
-		},
-		"Subcontrol",
-		"MappedControl",
 	)
 	graph.MustAddE(
 		"control_owner",
@@ -7702,20 +7706,6 @@ func (f *ControlFilter) WhereHasInternalPolicies() {
 // WhereHasInternalPoliciesWith applies a predicate to check if query has an edge internal_policies with a given conditions (other predicates).
 func (f *ControlFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPolicy) {
 	f.Where(entql.HasEdgeWith("internal_policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasMappedControls applies a predicate to check if query has an edge mapped_controls.
-func (f *ControlFilter) WhereHasMappedControls() {
-	f.Where(entql.HasEdge("mapped_controls"))
-}
-
-// WhereHasMappedControlsWith applies a predicate to check if query has an edge mapped_controls with a given conditions (other predicates).
-func (f *ControlFilter) WhereHasMappedControlsWith(preds ...predicate.MappedControl) {
-	f.Where(entql.HasEdgeWith("mapped_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -14095,28 +14085,66 @@ func (f *MappedControlFilter) WhereRelation(p entql.StringP) {
 	f.Where(p.Field(mappedcontrol.FieldRelation))
 }
 
-// WhereHasControls applies a predicate to check if query has an edge controls.
-func (f *MappedControlFilter) WhereHasControls() {
-	f.Where(entql.HasEdge("controls"))
+// WhereConfidence applies the entql string predicate on the confidence field.
+func (f *MappedControlFilter) WhereConfidence(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldConfidence))
 }
 
-// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
-func (f *MappedControlFilter) WhereHasControlsWith(preds ...predicate.Control) {
-	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereSource applies the entql string predicate on the source field.
+func (f *MappedControlFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldSource))
+}
+
+// WhereHasFromControl applies a predicate to check if query has an edge from_control.
+func (f *MappedControlFilter) WhereHasFromControl() {
+	f.Where(entql.HasEdge("from_control"))
+}
+
+// WhereHasFromControlWith applies a predicate to check if query has an edge from_control with a given conditions (other predicates).
+func (f *MappedControlFilter) WhereHasFromControlWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("from_control", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
-func (f *MappedControlFilter) WhereHasSubcontrols() {
-	f.Where(entql.HasEdge("subcontrols"))
+// WhereHasToControl applies a predicate to check if query has an edge to_control.
+func (f *MappedControlFilter) WhereHasToControl() {
+	f.Where(entql.HasEdge("to_control"))
 }
 
-// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
-func (f *MappedControlFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
-	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasToControlWith applies a predicate to check if query has an edge to_control with a given conditions (other predicates).
+func (f *MappedControlFilter) WhereHasToControlWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("to_control", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFromSubcontrol applies a predicate to check if query has an edge from_subcontrol.
+func (f *MappedControlFilter) WhereHasFromSubcontrol() {
+	f.Where(entql.HasEdge("from_subcontrol"))
+}
+
+// WhereHasFromSubcontrolWith applies a predicate to check if query has an edge from_subcontrol with a given conditions (other predicates).
+func (f *MappedControlFilter) WhereHasFromSubcontrolWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("from_subcontrol", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasToSubcontrol applies a predicate to check if query has an edge to_subcontrol.
+func (f *MappedControlFilter) WhereHasToSubcontrol() {
+	f.Where(entql.HasEdge("to_subcontrol"))
+}
+
+// WhereHasToSubcontrolWith applies a predicate to check if query has an edge to_subcontrol with a given conditions (other predicates).
+func (f *MappedControlFilter) WhereHasToSubcontrolWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("to_subcontrol", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -14221,6 +14249,16 @@ func (f *MappedControlHistoryFilter) WhereMappingType(p entql.StringP) {
 // WhereRelation applies the entql string predicate on the relation field.
 func (f *MappedControlHistoryFilter) WhereRelation(p entql.StringP) {
 	f.Where(p.Field(mappedcontrolhistory.FieldRelation))
+}
+
+// WhereConfidence applies the entql string predicate on the confidence field.
+func (f *MappedControlHistoryFilter) WhereConfidence(p entql.StringP) {
+	f.Where(p.Field(mappedcontrolhistory.FieldConfidence))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *MappedControlHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(mappedcontrolhistory.FieldSource))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -19320,20 +19358,6 @@ func (f *SubcontrolFilter) WhereHasInternalPolicies() {
 // WhereHasInternalPoliciesWith applies a predicate to check if query has an edge internal_policies with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPolicy) {
 	f.Where(entql.HasEdgeWith("internal_policies", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasMappedControls applies a predicate to check if query has an edge mapped_controls.
-func (f *SubcontrolFilter) WhereHasMappedControls() {
-	f.Where(entql.HasEdge("mapped_controls"))
-}
-
-// WhereHasMappedControlsWith applies a predicate to check if query has an edge mapped_controls with a given conditions (other predicates).
-func (f *SubcontrolFilter) WhereHasMappedControlsWith(preds ...predicate.MappedControl) {
-	f.Where(entql.HasEdgeWith("mapped_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // MappedControl holds the schema definition for the MappedControl entity
@@ -35,15 +36,28 @@ func (MappedControl) PluralName() string {
 // Fields of the MappedControl
 func (MappedControl) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("mapping_type").
+		field.Enum("mapping_type").
+			GoType(enums.MappingType("")).
 			Comment("the type of mapping between the two controls, e.g. subset, intersect, equal, superset").
 			Annotations(
-				entgql.OrderField("mapping_type"),
+				entgql.OrderField("MAPPING_TYPE"),
 			).
+			Default(enums.MappingTypeEqual.String()).
 			Optional(),
 		field.String("relation").
 			Comment("description of how the two controls are related").
 			Optional(),
+		field.String("confidence").
+			Comment("percentage of confidence in the mapping").
+			Optional(),
+		field.Enum("source").
+			GoType(enums.MappingSource("")).
+			Optional().
+			Annotations(
+				entgql.OrderField("SOURCE"),
+			).
+			Default(enums.MappingSourceManual.String()).
+			Comment("source of the mapping, e.g. manual, suggested, etc."),
 	}
 }
 
@@ -52,13 +66,27 @@ func (m MappedControl) Edges() []ent.Edge {
 	return []ent.Edge{
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
-			edgeSchema: Control{},
-			comment:    "mapped controls that have a relation to each other",
+			t:          Control.Type,
+			name:       "from_control",
+			comment:    "controls that map to another control",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
-			edgeSchema: Subcontrol{},
-			comment:    "mapped subcontrols that have a relation to each other",
+			t:          Control.Type,
+			name:       "to_control",
+			comment:    "controls that are being mapped from another control",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: m,
+			t:          Subcontrol.Type,
+			name:       "from_subcontrol",
+			comment:    "subcontrols map to another control",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: m,
+			t:          Subcontrol.Type,
+			name:       "to_subcontrol",
+			comment:    "subcontrols are being mapped from another control",
 		}),
 	}
 }

@@ -2864,37 +2864,6 @@ type Control implements Node {
 		"""
 		where: InternalPolicyWhereInput
 	): InternalPolicyConnection!
-	mappedControls(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for MappedControls returned from the connection.
-		"""
-		orderBy: [MappedControlOrder!]
-
-		"""
-		Filtering options for MappedControls returned from the connection.
-		"""
-		where: MappedControlWhereInput
-	): MappedControlConnection!
 	"""
 	the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	"""
@@ -6102,11 +6071,6 @@ input ControlWhereInput {
 	hasInternalPolicies: Boolean
 	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
-	mapped_controls edge predicates
-	"""
-	hasMappedControls: Boolean
-	hasMappedControlsWith: [MappedControlWhereInput!]
-	"""
 	control_owner edge predicates
 	"""
 	hasControlOwner: Boolean
@@ -6418,7 +6382,6 @@ input CreateControlInput {
 	actionPlanIDs: [ID!]
 	procedureIDs: [ID!]
 	internalPolicyIDs: [ID!]
-	mappedControlIDs: [ID!]
 	controlOwnerID: ID
 	delegateID: ID
 	ownerID: ID
@@ -7046,13 +7009,23 @@ input CreateMappedControlInput {
 	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
-	mappingType: String
+	mappingType: MappedControlMappingType
 	"""
 	description of how the two controls are related
 	"""
 	relation: String
-	controlIDs: [ID!]
-	subcontrolIDs: [ID!]
+	"""
+	percentage of confidence in the mapping
+	"""
+	confidence: String
+	"""
+	source of the mapping, e.g. manual, suggested, etc.
+	"""
+	source: MappedControlMappingSource
+	fromControlIDs: [ID!]
+	toControlIDs: [ID!]
+	fromSubcontrolIDs: [ID!]
+	toSubcontrolIDs: [ID!]
 }
 input CreateMemberWithProgramInput {
 	role: ProgramMembershipRole
@@ -7662,7 +7635,6 @@ input CreateSubcontrolInput {
 	actionPlanIDs: [ID!]
 	procedureIDs: [ID!]
 	internalPolicyIDs: [ID!]
-	mappedControlIDs: [ID!]
 	controlOwnerID: ID
 	delegateID: ID
 	ownerID: ID
@@ -20569,12 +20541,20 @@ type MappedControl implements Node {
 	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
-	mappingType: String
+	mappingType: MappedControlMappingType
 	"""
 	description of how the two controls are related
 	"""
 	relation: String
-	controls(
+	"""
+	percentage of confidence in the mapping
+	"""
+	confidence: String
+	"""
+	source of the mapping, e.g. manual, suggested, etc.
+	"""
+	source: MappedControlMappingSource
+	fromControl(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -20605,7 +20585,69 @@ type MappedControl implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
-	subcontrols(
+	toControl(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	fromSubcontrol(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Subcontrols returned from the connection.
+		"""
+		orderBy: [SubcontrolOrder!]
+
+		"""
+		Filtering options for Subcontrols returned from the connection.
+		"""
+		where: SubcontrolWhereInput
+	): SubcontrolConnection!
+	toSubcontrol(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -20712,11 +20754,19 @@ type MappedControlHistory implements Node {
 	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
-	mappingType: String
+	mappingType: MappedControlHistoryMappingType
 	"""
 	description of how the two controls are related
 	"""
 	relation: String
+	"""
+	percentage of confidence in the mapping
+	"""
+	confidence: String
+	"""
+	source of the mapping, e.g. manual, suggested, etc.
+	"""
+	source: MappedControlHistoryMappingSource
 }
 """
 A connection to a list of items.
@@ -20749,6 +20799,23 @@ type MappedControlHistoryEdge {
 	cursor: Cursor!
 }
 """
+MappedControlHistoryMappingSource is enum for the field source
+"""
+enum MappedControlHistoryMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+	MANUAL
+	SUGGESTED
+	IMPORTED
+}
+"""
+MappedControlHistoryMappingType is enum for the field mapping_type
+"""
+enum MappedControlHistoryMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+	EQUAL
+	SUPERSET
+	SUBSET
+	INTERSECT
+}
+"""
 MappedControlHistoryOpType is enum for the field operation
 """
 enum MappedControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -20775,7 +20842,8 @@ Properties by which MappedControlHistory connections can be ordered.
 enum MappedControlHistoryOrderField {
 	created_at
 	updated_at
-	mapping_type
+	MAPPING_TYPE
+	SOURCE
 }
 """
 MappedControlHistoryWhereInput is used for filtering MappedControlHistory objects.
@@ -20930,21 +20998,12 @@ input MappedControlHistoryWhereInput {
 	"""
 	mapping_type field predicates
 	"""
-	mappingType: String
-	mappingTypeNEQ: String
-	mappingTypeIn: [String!]
-	mappingTypeNotIn: [String!]
-	mappingTypeGT: String
-	mappingTypeGTE: String
-	mappingTypeLT: String
-	mappingTypeLTE: String
-	mappingTypeContains: String
-	mappingTypeHasPrefix: String
-	mappingTypeHasSuffix: String
+	mappingType: MappedControlHistoryMappingType
+	mappingTypeNEQ: MappedControlHistoryMappingType
+	mappingTypeIn: [MappedControlHistoryMappingType!]
+	mappingTypeNotIn: [MappedControlHistoryMappingType!]
 	mappingTypeIsNil: Boolean
 	mappingTypeNotNil: Boolean
-	mappingTypeEqualFold: String
-	mappingTypeContainsFold: String
 	"""
 	relation field predicates
 	"""
@@ -20963,6 +21022,50 @@ input MappedControlHistoryWhereInput {
 	relationNotNil: Boolean
 	relationEqualFold: String
 	relationContainsFold: String
+	"""
+	confidence field predicates
+	"""
+	confidence: String
+	confidenceNEQ: String
+	confidenceIn: [String!]
+	confidenceNotIn: [String!]
+	confidenceGT: String
+	confidenceGTE: String
+	confidenceLT: String
+	confidenceLTE: String
+	confidenceContains: String
+	confidenceHasPrefix: String
+	confidenceHasSuffix: String
+	confidenceIsNil: Boolean
+	confidenceNotNil: Boolean
+	confidenceEqualFold: String
+	confidenceContainsFold: String
+	"""
+	source field predicates
+	"""
+	source: MappedControlHistoryMappingSource
+	sourceNEQ: MappedControlHistoryMappingSource
+	sourceIn: [MappedControlHistoryMappingSource!]
+	sourceNotIn: [MappedControlHistoryMappingSource!]
+	sourceIsNil: Boolean
+	sourceNotNil: Boolean
+}
+"""
+MappedControlMappingSource is enum for the field source
+"""
+enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+	MANUAL
+	SUGGESTED
+	IMPORTED
+}
+"""
+MappedControlMappingType is enum for the field mapping_type
+"""
+enum MappedControlMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+	EQUAL
+	SUPERSET
+	SUBSET
+	INTERSECT
 }
 """
 Ordering options for MappedControl connections
@@ -20983,7 +21086,8 @@ Properties by which MappedControl connections can be ordered.
 enum MappedControlOrderField {
 	created_at
 	updated_at
-	mapping_type
+	MAPPING_TYPE
+	SOURCE
 }
 """
 Return response for updateMappedControl mutation
@@ -21111,21 +21215,12 @@ input MappedControlWhereInput {
 	"""
 	mapping_type field predicates
 	"""
-	mappingType: String
-	mappingTypeNEQ: String
-	mappingTypeIn: [String!]
-	mappingTypeNotIn: [String!]
-	mappingTypeGT: String
-	mappingTypeGTE: String
-	mappingTypeLT: String
-	mappingTypeLTE: String
-	mappingTypeContains: String
-	mappingTypeHasPrefix: String
-	mappingTypeHasSuffix: String
+	mappingType: MappedControlMappingType
+	mappingTypeNEQ: MappedControlMappingType
+	mappingTypeIn: [MappedControlMappingType!]
+	mappingTypeNotIn: [MappedControlMappingType!]
 	mappingTypeIsNil: Boolean
 	mappingTypeNotNil: Boolean
-	mappingTypeEqualFold: String
-	mappingTypeContainsFold: String
 	"""
 	relation field predicates
 	"""
@@ -21145,15 +21240,52 @@ input MappedControlWhereInput {
 	relationEqualFold: String
 	relationContainsFold: String
 	"""
-	controls edge predicates
+	confidence field predicates
 	"""
-	hasControls: Boolean
-	hasControlsWith: [ControlWhereInput!]
+	confidence: String
+	confidenceNEQ: String
+	confidenceIn: [String!]
+	confidenceNotIn: [String!]
+	confidenceGT: String
+	confidenceGTE: String
+	confidenceLT: String
+	confidenceLTE: String
+	confidenceContains: String
+	confidenceHasPrefix: String
+	confidenceHasSuffix: String
+	confidenceIsNil: Boolean
+	confidenceNotNil: Boolean
+	confidenceEqualFold: String
+	confidenceContainsFold: String
 	"""
-	subcontrols edge predicates
+	source field predicates
 	"""
-	hasSubcontrols: Boolean
-	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	source: MappedControlMappingSource
+	sourceNEQ: MappedControlMappingSource
+	sourceIn: [MappedControlMappingSource!]
+	sourceNotIn: [MappedControlMappingSource!]
+	sourceIsNil: Boolean
+	sourceNotNil: Boolean
+	"""
+	from_control edge predicates
+	"""
+	hasFromControl: Boolean
+	hasFromControlWith: [ControlWhereInput!]
+	"""
+	to_control edge predicates
+	"""
+	hasToControl: Boolean
+	hasToControlWith: [ControlWhereInput!]
+	"""
+	from_subcontrol edge predicates
+	"""
+	hasFromSubcontrol: Boolean
+	hasFromSubcontrolWith: [SubcontrolWhereInput!]
+	"""
+	to_subcontrol edge predicates
+	"""
+	hasToSubcontrol: Boolean
+	hasToSubcontrolWith: [SubcontrolWhereInput!]
 }
 type Mutation {
 	"""
@@ -40787,37 +40919,6 @@ type Subcontrol implements Node {
 		"""
 		where: InternalPolicyWhereInput
 	): InternalPolicyConnection!
-	mappedControls(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for MappedControls returned from the connection.
-		"""
-		orderBy: [MappedControlOrder!]
-
-		"""
-		Filtering options for MappedControls returned from the connection.
-		"""
-		where: MappedControlWhereInput
-	): MappedControlConnection!
 	"""
 	the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	"""
@@ -41957,11 +42058,6 @@ input SubcontrolWhereInput {
 	"""
 	hasInternalPolicies: Boolean
 	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
-	"""
-	mapped_controls edge predicates
-	"""
-	hasMappedControls: Boolean
-	hasMappedControlsWith: [MappedControlWhereInput!]
 	"""
 	control_owner edge predicates
 	"""
@@ -44883,9 +44979,6 @@ input UpdateControlInput {
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
-	addMappedControlIDs: [ID!]
-	removeMappedControlIDs: [ID!]
-	clearMappedControls: Boolean
 	controlOwnerID: ID
 	clearControlOwner: Boolean
 	delegateID: ID
@@ -45767,19 +45860,35 @@ input UpdateMappedControlInput {
 	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
-	mappingType: String
+	mappingType: MappedControlMappingType
 	clearMappingType: Boolean
 	"""
 	description of how the two controls are related
 	"""
 	relation: String
 	clearRelation: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControls: Boolean
-	addSubcontrolIDs: [ID!]
-	removeSubcontrolIDs: [ID!]
-	clearSubcontrols: Boolean
+	"""
+	percentage of confidence in the mapping
+	"""
+	confidence: String
+	clearConfidence: Boolean
+	"""
+	source of the mapping, e.g. manual, suggested, etc.
+	"""
+	source: MappedControlMappingSource
+	clearSource: Boolean
+	addFromControlIDs: [ID!]
+	removeFromControlIDs: [ID!]
+	clearFromControl: Boolean
+	addToControlIDs: [ID!]
+	removeToControlIDs: [ID!]
+	clearToControl: Boolean
+	addFromSubcontrolIDs: [ID!]
+	removeFromSubcontrolIDs: [ID!]
+	clearFromSubcontrol: Boolean
+	addToSubcontrolIDs: [ID!]
+	removeToSubcontrolIDs: [ID!]
+	clearToSubcontrol: Boolean
 }
 """
 UpdateNarrativeInput is used for update Narrative object.
@@ -46642,9 +46751,6 @@ input UpdateSubcontrolInput {
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
-	addMappedControlIDs: [ID!]
-	removeMappedControlIDs: [ID!]
-	clearMappedControls: Boolean
 	controlOwnerID: ID
 	clearControlOwner: Boolean
 	delegateID: ID

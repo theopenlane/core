@@ -49,11 +49,6 @@ func (m ControlMixin) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(c, ActionPlan{}),
 		defaultEdgeToWithPagination(c, Procedure{}),
 		defaultEdgeFromWithPagination(c, InternalPolicy{}),
-		edgeFromWithPagination(&edgeDefinition{
-			fromSchema: c,
-			edgeSchema: MappedControl{},
-			comment:    "mapped subcontrols that have a relation to another control or subcontrol",
-		}),
 		// owner is the user who is responsible for the control
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: c,

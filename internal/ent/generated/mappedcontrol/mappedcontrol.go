@@ -3,11 +3,14 @@
 package mappedcontrol
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -33,22 +36,48 @@ const (
 	FieldMappingType = "mapping_type"
 	// FieldRelation holds the string denoting the relation field in the database.
 	FieldRelation = "relation"
-	// EdgeControls holds the string denoting the controls edge name in mutations.
-	EdgeControls = "controls"
-	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
-	EdgeSubcontrols = "subcontrols"
+	// FieldConfidence holds the string denoting the confidence field in the database.
+	FieldConfidence = "confidence"
+	// FieldSource holds the string denoting the source field in the database.
+	FieldSource = "source"
+	// EdgeFromControl holds the string denoting the from_control edge name in mutations.
+	EdgeFromControl = "from_control"
+	// EdgeToControl holds the string denoting the to_control edge name in mutations.
+	EdgeToControl = "to_control"
+	// EdgeFromSubcontrol holds the string denoting the from_subcontrol edge name in mutations.
+	EdgeFromSubcontrol = "from_subcontrol"
+	// EdgeToSubcontrol holds the string denoting the to_subcontrol edge name in mutations.
+	EdgeToSubcontrol = "to_subcontrol"
 	// Table holds the table name of the mappedcontrol in the database.
 	Table = "mapped_controls"
-	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
-	ControlsTable = "mapped_control_controls"
-	// ControlsInverseTable is the table name for the Control entity.
+	// FromControlTable is the table that holds the from_control relation/edge.
+	FromControlTable = "controls"
+	// FromControlInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ControlsInverseTable = "controls"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
-	SubcontrolsTable = "mapped_control_subcontrols"
-	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
+	FromControlInverseTable = "controls"
+	// FromControlColumn is the table column denoting the from_control relation/edge.
+	FromControlColumn = "mapped_control_from_control"
+	// ToControlTable is the table that holds the to_control relation/edge.
+	ToControlTable = "controls"
+	// ToControlInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ToControlInverseTable = "controls"
+	// ToControlColumn is the table column denoting the to_control relation/edge.
+	ToControlColumn = "mapped_control_to_control"
+	// FromSubcontrolTable is the table that holds the from_subcontrol relation/edge.
+	FromSubcontrolTable = "subcontrols"
+	// FromSubcontrolInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
-	SubcontrolsInverseTable = "subcontrols"
+	FromSubcontrolInverseTable = "subcontrols"
+	// FromSubcontrolColumn is the table column denoting the from_subcontrol relation/edge.
+	FromSubcontrolColumn = "mapped_control_from_subcontrol"
+	// ToSubcontrolTable is the table that holds the to_subcontrol relation/edge.
+	ToSubcontrolTable = "subcontrols"
+	// ToSubcontrolInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	ToSubcontrolInverseTable = "subcontrols"
+	// ToSubcontrolColumn is the table column denoting the to_subcontrol relation/edge.
+	ToSubcontrolColumn = "mapped_control_to_subcontrol"
 )
 
 // Columns holds all SQL columns for mappedcontrol fields.
@@ -63,16 +92,9 @@ var Columns = []string{
 	FieldTags,
 	FieldMappingType,
 	FieldRelation,
+	FieldConfidence,
+	FieldSource,
 }
-
-var (
-	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
-	// primary key for the controls relation (M2M).
-	ControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
-	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
-	// primary key for the subcontrols relation (M2M).
-	SubcontrolsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
-)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -104,6 +126,30 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultMappingType enums.MappingType = "EQUAL"
+
+// MappingTypeValidator is a validator for the "mapping_type" field enum values. It is called by the builders before save.
+func MappingTypeValidator(mt enums.MappingType) error {
+	switch mt.String() {
+	case "EQUAL", "SUPERSET", "SUBSET", "INTERSECT":
+		return nil
+	default:
+		return fmt.Errorf("mappedcontrol: invalid enum value for mapping_type field: %q", mt)
+	}
+}
+
+const DefaultSource enums.MappingSource = "MANUAL"
+
+// SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
+func SourceValidator(s enums.MappingSource) error {
+	switch s.String() {
+	case "MANUAL", "SUGGESTED", "IMPORTED":
+		return nil
+	default:
+		return fmt.Errorf("mappedcontrol: invalid enum value for source field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the MappedControl queries.
 type OrderOption func(*sql.Selector)
@@ -153,44 +199,110 @@ func ByRelation(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelation, opts...).ToFunc()
 }
 
-// ByControlsCount orders the results by controls count.
-func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByConfidence orders the results by the confidence field.
+func ByConfidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldConfidence, opts...).ToFunc()
+}
+
+// BySource orders the results by the source field.
+func BySource(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByFromControlCount orders the results by from_control count.
+func ByFromControlCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newFromControlStep(), opts...)
 	}
 }
 
-// ByControls orders the results by controls terms.
-func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByFromControl orders the results by from_control terms.
+func ByFromControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newFromControlStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// BySubcontrolsCount orders the results by subcontrols count.
-func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByToControlCount orders the results by to_control count.
+func ByToControlCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newSubcontrolsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newToControlStep(), opts...)
 	}
 }
 
-// BySubcontrols orders the results by subcontrols terms.
-func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByToControl orders the results by to_control terms.
+func ByToControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newToControlStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newControlsStep() *sqlgraph.Step {
+
+// ByFromSubcontrolCount orders the results by from_subcontrol count.
+func ByFromSubcontrolCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFromSubcontrolStep(), opts...)
+	}
+}
+
+// ByFromSubcontrol orders the results by from_subcontrol terms.
+func ByFromSubcontrol(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFromSubcontrolStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByToSubcontrolCount orders the results by to_subcontrol count.
+func ByToSubcontrolCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newToSubcontrolStep(), opts...)
+	}
+}
+
+// ByToSubcontrol orders the results by to_subcontrol terms.
+func ByToSubcontrol(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newToSubcontrolStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newFromControlStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ControlsTable, ControlsPrimaryKey...),
+		sqlgraph.To(FromControlInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FromControlTable, FromControlColumn),
 	)
 }
-func newSubcontrolsStep() *sqlgraph.Step {
+func newToControlStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
+		sqlgraph.To(ToControlInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ToControlTable, ToControlColumn),
 	)
 }
+func newFromSubcontrolStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FromSubcontrolInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FromSubcontrolTable, FromSubcontrolColumn),
+	)
+}
+func newToSubcontrolStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ToSubcontrolInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ToSubcontrolTable, ToSubcontrolColumn),
+	)
+}
+
+var (
+	// enums.MappingType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.MappingType)(nil)
+	// enums.MappingType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.MappingType)(nil)
+)
+
+var (
+	// enums.MappingSource must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.MappingSource)(nil)
+	// enums.MappingSource must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.MappingSource)(nil)
+)

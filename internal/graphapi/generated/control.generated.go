@@ -141,8 +141,6 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
@@ -285,8 +283,6 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
@@ -473,8 +469,6 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":

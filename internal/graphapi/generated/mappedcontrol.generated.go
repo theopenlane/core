@@ -85,10 +85,18 @@ func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedCo
 				return ec.fieldContext_MappedControl_mappingType(ctx, field)
 			case "relation":
 				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "controls":
-				return ec.fieldContext_MappedControl_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_MappedControl_subcontrols(ctx, field)
+			case "confidence":
+				return ec.fieldContext_MappedControl_confidence(ctx, field)
+			case "source":
+				return ec.fieldContext_MappedControl_source(ctx, field)
+			case "fromControl":
+				return ec.fieldContext_MappedControl_fromControl(ctx, field)
+			case "toControl":
+				return ec.fieldContext_MappedControl_toControl(ctx, field)
+			case "fromSubcontrol":
+				return ec.fieldContext_MappedControl_fromSubcontrol(ctx, field)
+			case "toSubcontrol":
+				return ec.fieldContext_MappedControl_toSubcontrol(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
 		},
@@ -155,10 +163,18 @@ func (ec *executionContext) fieldContext_MappedControlCreatePayload_mappedContro
 				return ec.fieldContext_MappedControl_mappingType(ctx, field)
 			case "relation":
 				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "controls":
-				return ec.fieldContext_MappedControl_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_MappedControl_subcontrols(ctx, field)
+			case "confidence":
+				return ec.fieldContext_MappedControl_confidence(ctx, field)
+			case "source":
+				return ec.fieldContext_MappedControl_source(ctx, field)
+			case "fromControl":
+				return ec.fieldContext_MappedControl_fromControl(ctx, field)
+			case "toControl":
+				return ec.fieldContext_MappedControl_toControl(ctx, field)
+			case "fromSubcontrol":
+				return ec.fieldContext_MappedControl_fromSubcontrol(ctx, field)
+			case "toSubcontrol":
+				return ec.fieldContext_MappedControl_toSubcontrol(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
 		},
@@ -269,10 +285,18 @@ func (ec *executionContext) fieldContext_MappedControlUpdatePayload_mappedContro
 				return ec.fieldContext_MappedControl_mappingType(ctx, field)
 			case "relation":
 				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "controls":
-				return ec.fieldContext_MappedControl_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_MappedControl_subcontrols(ctx, field)
+			case "confidence":
+				return ec.fieldContext_MappedControl_confidence(ctx, field)
+			case "source":
+				return ec.fieldContext_MappedControl_source(ctx, field)
+			case "fromControl":
+				return ec.fieldContext_MappedControl_fromControl(ctx, field)
+			case "toControl":
+				return ec.fieldContext_MappedControl_toControl(ctx, field)
+			case "fromSubcontrol":
+				return ec.fieldContext_MappedControl_fromSubcontrol(ctx, field)
+			case "toSubcontrol":
+				return ec.fieldContext_MappedControl_toSubcontrol(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
 		},

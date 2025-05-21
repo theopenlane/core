@@ -462,8 +462,8 @@ query AdminSearch($query: String!) {
           deletedBy
           id
           tags
-          mappingType
           relation
+          confidence
         }
       }
     }

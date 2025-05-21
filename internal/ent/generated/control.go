@@ -83,8 +83,10 @@ type Control struct {
 	StandardID string `json:"standard_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlQuery when eager-loading is set.
-	Edges        ControlEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                       ControlEdges `json:"edges"`
+	mapped_control_from_control *string
+	mapped_control_to_control   *string
+	selectValues                sql.SelectValues
 }
 
 // ControlEdges holds the relations/edges for other nodes in the graph.
@@ -105,8 +107,6 @@ type ControlEdges struct {
 	Procedures []*Procedure `json:"procedures,omitempty"`
 	// InternalPolicies holds the value of the internal_policies edge.
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
-	// mapped subcontrols that have a relation to another control or subcontrol
-	MappedControls []*MappedControl `json:"mapped_controls,omitempty"`
 	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	ControlOwner *Group `json:"control_owner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
@@ -129,9 +129,9 @@ type ControlEdges struct {
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [18]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [18]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -141,7 +141,6 @@ type ControlEdges struct {
 	namedActionPlans            map[string][]*ActionPlan
 	namedProcedures             map[string][]*Procedure
 	namedInternalPolicies       map[string][]*InternalPolicy
-	namedMappedControls         map[string][]*MappedControl
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
 	namedViewers                map[string][]*Group
@@ -222,21 +221,12 @@ func (e ControlEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
-// MappedControlsOrErr returns the MappedControls value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlEdges) MappedControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[8] {
-		return e.MappedControls, nil
-	}
-	return nil, &NotLoadedError{edge: "mapped_controls"}
-}
-
 // ControlOwnerOrErr returns the ControlOwner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ControlEdges) ControlOwnerOrErr() (*Group, error) {
 	if e.ControlOwner != nil {
 		return e.ControlOwner, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "control_owner"}
@@ -247,7 +237,7 @@ func (e ControlEdges) ControlOwnerOrErr() (*Group, error) {
 func (e ControlEdges) DelegateOrErr() (*Group, error) {
 	if e.Delegate != nil {
 		return e.Delegate, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "delegate"}
@@ -258,7 +248,7 @@ func (e ControlEdges) DelegateOrErr() (*Group, error) {
 func (e ControlEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -267,7 +257,7 @@ func (e ControlEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[11] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -276,7 +266,7 @@ func (e ControlEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[12] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -285,7 +275,7 @@ func (e ControlEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[13] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -296,7 +286,7 @@ func (e ControlEdges) ViewersOrErr() ([]*Group, error) {
 func (e ControlEdges) StandardOrErr() (*Standard, error) {
 	if e.Standard != nil {
 		return e.Standard, nil
-	} else if e.loadedTypes[15] {
+	} else if e.loadedTypes[14] {
 		return nil, &NotFoundError{label: standard.Label}
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -305,7 +295,7 @@ func (e ControlEdges) StandardOrErr() (*Standard, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[15] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -314,7 +304,7 @@ func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[16] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -323,7 +313,7 @@ func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, e
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[17] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -340,6 +330,10 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case control.ForeignKeys[0]: // mapped_control_from_control
+			values[i] = new(sql.NullString)
+		case control.ForeignKeys[1]: // mapped_control_to_control
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -551,6 +545,20 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.StandardID = value.String
 			}
+		case control.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field mapped_control_from_control", values[i])
+			} else if value.Valid {
+				c.mapped_control_from_control = new(string)
+				*c.mapped_control_from_control = value.String
+			}
+		case control.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field mapped_control_to_control", values[i])
+			} else if value.Valid {
+				c.mapped_control_to_control = new(string)
+				*c.mapped_control_to_control = value.String
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -602,11 +610,6 @@ func (c *Control) QueryProcedures() *ProcedureQuery {
 // QueryInternalPolicies queries the "internal_policies" edge of the Control entity.
 func (c *Control) QueryInternalPolicies() *InternalPolicyQuery {
 	return NewControlClient(c.config).QueryInternalPolicies(c)
-}
-
-// QueryMappedControls queries the "mapped_controls" edge of the Control entity.
-func (c *Control) QueryMappedControls() *MappedControlQuery {
-	return NewControlClient(c.config).QueryMappedControls(c)
 }
 
 // QueryControlOwner queries the "control_owner" edge of the Control entity.
@@ -961,30 +964,6 @@ func (c *Control) appendNamedInternalPolicies(name string, edges ...*InternalPol
 		c.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
 	} else {
 		c.Edges.namedInternalPolicies[name] = append(c.Edges.namedInternalPolicies[name], edges...)
-	}
-}
-
-// NamedMappedControls returns the MappedControls named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (c *Control) NamedMappedControls(name string) ([]*MappedControl, error) {
-	if c.Edges.namedMappedControls == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := c.Edges.namedMappedControls[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (c *Control) appendNamedMappedControls(name string, edges ...*MappedControl) {
-	if c.Edges.namedMappedControls == nil {
-		c.Edges.namedMappedControls = make(map[string][]*MappedControl)
-	}
-	if len(edges) == 0 {
-		c.Edges.namedMappedControls[name] = []*MappedControl{}
-	} else {
-		c.Edges.namedMappedControls[name] = append(c.Edges.namedMappedControls[name], edges...)
 	}
 }
 

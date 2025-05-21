@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -123,15 +124,15 @@ func (mchu *MappedControlHistoryUpdate) ClearTags() *MappedControlHistoryUpdate 
 }
 
 // SetMappingType sets the "mapping_type" field.
-func (mchu *MappedControlHistoryUpdate) SetMappingType(s string) *MappedControlHistoryUpdate {
-	mchu.mutation.SetMappingType(s)
+func (mchu *MappedControlHistoryUpdate) SetMappingType(et enums.MappingType) *MappedControlHistoryUpdate {
+	mchu.mutation.SetMappingType(et)
 	return mchu
 }
 
 // SetNillableMappingType sets the "mapping_type" field if the given value is not nil.
-func (mchu *MappedControlHistoryUpdate) SetNillableMappingType(s *string) *MappedControlHistoryUpdate {
-	if s != nil {
-		mchu.SetMappingType(*s)
+func (mchu *MappedControlHistoryUpdate) SetNillableMappingType(et *enums.MappingType) *MappedControlHistoryUpdate {
+	if et != nil {
+		mchu.SetMappingType(*et)
 	}
 	return mchu
 }
@@ -159,6 +160,46 @@ func (mchu *MappedControlHistoryUpdate) SetNillableRelation(s *string) *MappedCo
 // ClearRelation clears the value of the "relation" field.
 func (mchu *MappedControlHistoryUpdate) ClearRelation() *MappedControlHistoryUpdate {
 	mchu.mutation.ClearRelation()
+	return mchu
+}
+
+// SetConfidence sets the "confidence" field.
+func (mchu *MappedControlHistoryUpdate) SetConfidence(s string) *MappedControlHistoryUpdate {
+	mchu.mutation.SetConfidence(s)
+	return mchu
+}
+
+// SetNillableConfidence sets the "confidence" field if the given value is not nil.
+func (mchu *MappedControlHistoryUpdate) SetNillableConfidence(s *string) *MappedControlHistoryUpdate {
+	if s != nil {
+		mchu.SetConfidence(*s)
+	}
+	return mchu
+}
+
+// ClearConfidence clears the value of the "confidence" field.
+func (mchu *MappedControlHistoryUpdate) ClearConfidence() *MappedControlHistoryUpdate {
+	mchu.mutation.ClearConfidence()
+	return mchu
+}
+
+// SetSource sets the "source" field.
+func (mchu *MappedControlHistoryUpdate) SetSource(es enums.MappingSource) *MappedControlHistoryUpdate {
+	mchu.mutation.SetSource(es)
+	return mchu
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (mchu *MappedControlHistoryUpdate) SetNillableSource(es *enums.MappingSource) *MappedControlHistoryUpdate {
+	if es != nil {
+		mchu.SetSource(*es)
+	}
+	return mchu
+}
+
+// ClearSource clears the value of the "source" field.
+func (mchu *MappedControlHistoryUpdate) ClearSource() *MappedControlHistoryUpdate {
+	mchu.mutation.ClearSource()
 	return mchu
 }
 
@@ -203,6 +244,21 @@ func (mchu *MappedControlHistoryUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (mchu *MappedControlHistoryUpdate) check() error {
+	if v, ok := mchu.mutation.MappingType(); ok {
+		if err := mappedcontrolhistory.MappingTypeValidator(v); err != nil {
+			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.mapping_type": %w`, err)}
+		}
+	}
+	if v, ok := mchu.mutation.Source(); ok {
+		if err := mappedcontrolhistory.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.source": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (mchu *MappedControlHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappedControlHistoryUpdate {
 	mchu.modifiers = append(mchu.modifiers, modifiers...)
@@ -210,6 +266,9 @@ func (mchu *MappedControlHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBu
 }
 
 func (mchu *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := mchu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(mappedcontrolhistory.Table, mappedcontrolhistory.Columns, sqlgraph.NewFieldSpec(mappedcontrolhistory.FieldID, field.TypeString))
 	if ps := mchu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -263,16 +322,28 @@ func (mchu *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 		_spec.ClearField(mappedcontrolhistory.FieldTags, field.TypeJSON)
 	}
 	if value, ok := mchu.mutation.MappingType(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeString, value)
+		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
 	}
 	if mchu.mutation.MappingTypeCleared() {
-		_spec.ClearField(mappedcontrolhistory.FieldMappingType, field.TypeString)
+		_spec.ClearField(mappedcontrolhistory.FieldMappingType, field.TypeEnum)
 	}
 	if value, ok := mchu.mutation.Relation(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldRelation, field.TypeString, value)
 	}
 	if mchu.mutation.RelationCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldRelation, field.TypeString)
+	}
+	if value, ok := mchu.mutation.Confidence(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeString, value)
+	}
+	if mchu.mutation.ConfidenceCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldConfidence, field.TypeString)
+	}
+	if value, ok := mchu.mutation.Source(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)
+	}
+	if mchu.mutation.SourceCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSource, field.TypeEnum)
 	}
 	_spec.Node.Schema = mchu.schemaConfig.MappedControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, mchu.schemaConfig)
@@ -389,15 +460,15 @@ func (mchuo *MappedControlHistoryUpdateOne) ClearTags() *MappedControlHistoryUpd
 }
 
 // SetMappingType sets the "mapping_type" field.
-func (mchuo *MappedControlHistoryUpdateOne) SetMappingType(s string) *MappedControlHistoryUpdateOne {
-	mchuo.mutation.SetMappingType(s)
+func (mchuo *MappedControlHistoryUpdateOne) SetMappingType(et enums.MappingType) *MappedControlHistoryUpdateOne {
+	mchuo.mutation.SetMappingType(et)
 	return mchuo
 }
 
 // SetNillableMappingType sets the "mapping_type" field if the given value is not nil.
-func (mchuo *MappedControlHistoryUpdateOne) SetNillableMappingType(s *string) *MappedControlHistoryUpdateOne {
-	if s != nil {
-		mchuo.SetMappingType(*s)
+func (mchuo *MappedControlHistoryUpdateOne) SetNillableMappingType(et *enums.MappingType) *MappedControlHistoryUpdateOne {
+	if et != nil {
+		mchuo.SetMappingType(*et)
 	}
 	return mchuo
 }
@@ -425,6 +496,46 @@ func (mchuo *MappedControlHistoryUpdateOne) SetNillableRelation(s *string) *Mapp
 // ClearRelation clears the value of the "relation" field.
 func (mchuo *MappedControlHistoryUpdateOne) ClearRelation() *MappedControlHistoryUpdateOne {
 	mchuo.mutation.ClearRelation()
+	return mchuo
+}
+
+// SetConfidence sets the "confidence" field.
+func (mchuo *MappedControlHistoryUpdateOne) SetConfidence(s string) *MappedControlHistoryUpdateOne {
+	mchuo.mutation.SetConfidence(s)
+	return mchuo
+}
+
+// SetNillableConfidence sets the "confidence" field if the given value is not nil.
+func (mchuo *MappedControlHistoryUpdateOne) SetNillableConfidence(s *string) *MappedControlHistoryUpdateOne {
+	if s != nil {
+		mchuo.SetConfidence(*s)
+	}
+	return mchuo
+}
+
+// ClearConfidence clears the value of the "confidence" field.
+func (mchuo *MappedControlHistoryUpdateOne) ClearConfidence() *MappedControlHistoryUpdateOne {
+	mchuo.mutation.ClearConfidence()
+	return mchuo
+}
+
+// SetSource sets the "source" field.
+func (mchuo *MappedControlHistoryUpdateOne) SetSource(es enums.MappingSource) *MappedControlHistoryUpdateOne {
+	mchuo.mutation.SetSource(es)
+	return mchuo
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (mchuo *MappedControlHistoryUpdateOne) SetNillableSource(es *enums.MappingSource) *MappedControlHistoryUpdateOne {
+	if es != nil {
+		mchuo.SetSource(*es)
+	}
+	return mchuo
+}
+
+// ClearSource clears the value of the "source" field.
+func (mchuo *MappedControlHistoryUpdateOne) ClearSource() *MappedControlHistoryUpdateOne {
+	mchuo.mutation.ClearSource()
 	return mchuo
 }
 
@@ -482,6 +593,21 @@ func (mchuo *MappedControlHistoryUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (mchuo *MappedControlHistoryUpdateOne) check() error {
+	if v, ok := mchuo.mutation.MappingType(); ok {
+		if err := mappedcontrolhistory.MappingTypeValidator(v); err != nil {
+			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.mapping_type": %w`, err)}
+		}
+	}
+	if v, ok := mchuo.mutation.Source(); ok {
+		if err := mappedcontrolhistory.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.source": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (mchuo *MappedControlHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappedControlHistoryUpdateOne {
 	mchuo.modifiers = append(mchuo.modifiers, modifiers...)
@@ -489,6 +615,9 @@ func (mchuo *MappedControlHistoryUpdateOne) Modify(modifiers ...func(u *sql.Upda
 }
 
 func (mchuo *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *MappedControlHistory, err error) {
+	if err := mchuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(mappedcontrolhistory.Table, mappedcontrolhistory.Columns, sqlgraph.NewFieldSpec(mappedcontrolhistory.FieldID, field.TypeString))
 	id, ok := mchuo.mutation.ID()
 	if !ok {
@@ -559,16 +688,28 @@ func (mchuo *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 		_spec.ClearField(mappedcontrolhistory.FieldTags, field.TypeJSON)
 	}
 	if value, ok := mchuo.mutation.MappingType(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeString, value)
+		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
 	}
 	if mchuo.mutation.MappingTypeCleared() {
-		_spec.ClearField(mappedcontrolhistory.FieldMappingType, field.TypeString)
+		_spec.ClearField(mappedcontrolhistory.FieldMappingType, field.TypeEnum)
 	}
 	if value, ok := mchuo.mutation.Relation(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldRelation, field.TypeString, value)
 	}
 	if mchuo.mutation.RelationCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldRelation, field.TypeString)
+	}
+	if value, ok := mchuo.mutation.Confidence(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeString, value)
+	}
+	if mchuo.mutation.ConfidenceCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldConfidence, field.TypeString)
+	}
+	if value, ok := mchuo.mutation.Source(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)
+	}
+	if mchuo.mutation.SourceCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldSource, field.TypeEnum)
 	}
 	_spec.Node.Schema = mchuo.schemaConfig.MappedControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, mchuo.schemaConfig)
