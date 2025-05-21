@@ -549,6 +549,7 @@ var (
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "job_id", Type: field.TypeString},
+		{Name: "job_runner_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ControlScheduledJobsTable holds the schema information for the "control_scheduled_jobs" table.
@@ -564,8 +565,14 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "control_scheduled_jobs_organizations_scheduled_jobs",
+				Symbol:     "control_scheduled_jobs_job_runners_job_runner",
 				Columns:    []*schema.Column{ControlScheduledJobsColumns[11]},
+				RefColumns: []*schema.Column{JobRunnersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "control_scheduled_jobs_organizations_scheduled_jobs",
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[12]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6362,7 +6369,8 @@ func init() {
 		Table: "control_objective_history",
 	}
 	ControlScheduledJobsTable.ForeignKeys[0].RefTable = ScheduledJobsTable
-	ControlScheduledJobsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	ControlScheduledJobsTable.ForeignKeys[1].RefTable = JobRunnersTable
+	ControlScheduledJobsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	CustomDomainsTable.ForeignKeys[0].RefTable = MappableDomainsTable
 	CustomDomainsTable.ForeignKeys[1].RefTable = MappableDomainsTable
 	CustomDomainsTable.ForeignKeys[2].RefTable = OrganizationsTable

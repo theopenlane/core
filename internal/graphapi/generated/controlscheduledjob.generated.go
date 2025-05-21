@@ -89,6 +89,8 @@ func (ec *executionContext) fieldContext_ControlScheduledJobBulkCreatePayload_co
 				return ec.fieldContext_ControlScheduledJob_cadence(ctx, field)
 			case "cron":
 				return ec.fieldContext_ControlScheduledJob_cron(ctx, field)
+			case "jobRunnerID":
+				return ec.fieldContext_ControlScheduledJob_jobRunnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlScheduledJob_owner(ctx, field)
 			case "job":
@@ -97,6 +99,8 @@ func (ec *executionContext) fieldContext_ControlScheduledJobBulkCreatePayload_co
 				return ec.fieldContext_ControlScheduledJob_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_ControlScheduledJob_subcontrols(ctx, field)
+			case "jobRunner":
+				return ec.fieldContext_ControlScheduledJob_jobRunner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlScheduledJob", field.Name)
 		},
@@ -167,6 +171,8 @@ func (ec *executionContext) fieldContext_ControlScheduledJobCreatePayload_contro
 				return ec.fieldContext_ControlScheduledJob_cadence(ctx, field)
 			case "cron":
 				return ec.fieldContext_ControlScheduledJob_cron(ctx, field)
+			case "jobRunnerID":
+				return ec.fieldContext_ControlScheduledJob_jobRunnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlScheduledJob_owner(ctx, field)
 			case "job":
@@ -175,6 +181,8 @@ func (ec *executionContext) fieldContext_ControlScheduledJobCreatePayload_contro
 				return ec.fieldContext_ControlScheduledJob_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_ControlScheduledJob_subcontrols(ctx, field)
+			case "jobRunner":
+				return ec.fieldContext_ControlScheduledJob_jobRunner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlScheduledJob", field.Name)
 		},
@@ -289,6 +297,8 @@ func (ec *executionContext) fieldContext_ControlScheduledJobUpdatePayload_contro
 				return ec.fieldContext_ControlScheduledJob_cadence(ctx, field)
 			case "cron":
 				return ec.fieldContext_ControlScheduledJob_cron(ctx, field)
+			case "jobRunnerID":
+				return ec.fieldContext_ControlScheduledJob_jobRunnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlScheduledJob_owner(ctx, field)
 			case "job":
@@ -297,6 +307,8 @@ func (ec *executionContext) fieldContext_ControlScheduledJobUpdatePayload_contro
 				return ec.fieldContext_ControlScheduledJob_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_ControlScheduledJob_subcontrols(ctx, field)
+			case "jobRunner":
+				return ec.fieldContext_ControlScheduledJob_jobRunner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlScheduledJob", field.Name)
 		},

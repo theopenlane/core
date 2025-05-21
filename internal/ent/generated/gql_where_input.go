@@ -12491,6 +12491,21 @@ type ControlScheduledJobWhereInput struct {
 	JobIDEqualFold    *string  `json:"jobIDEqualFold,omitempty"`
 	JobIDContainsFold *string  `json:"jobIDContainsFold,omitempty"`
 
+	// "job_runner_id" field predicates.
+	JobRunnerID             *string  `json:"jobRunnerID,omitempty"`
+	JobRunnerIDNEQ          *string  `json:"jobRunnerIDNEQ,omitempty"`
+	JobRunnerIDIn           []string `json:"jobRunnerIDIn,omitempty"`
+	JobRunnerIDNotIn        []string `json:"jobRunnerIDNotIn,omitempty"`
+	JobRunnerIDGT           *string  `json:"jobRunnerIDGT,omitempty"`
+	JobRunnerIDGTE          *string  `json:"jobRunnerIDGTE,omitempty"`
+	JobRunnerIDLT           *string  `json:"jobRunnerIDLT,omitempty"`
+	JobRunnerIDLTE          *string  `json:"jobRunnerIDLTE,omitempty"`
+	JobRunnerIDContains     *string  `json:"jobRunnerIDContains,omitempty"`
+	JobRunnerIDHasPrefix    *string  `json:"jobRunnerIDHasPrefix,omitempty"`
+	JobRunnerIDHasSuffix    *string  `json:"jobRunnerIDHasSuffix,omitempty"`
+	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
+	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -12506,6 +12521,10 @@ type ControlScheduledJobWhereInput struct {
 	// "subcontrols" edge predicates.
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+
+	// "job_runner" edge predicates.
+	HasJobRunner     *bool                  `json:"hasJobRunner,omitempty"`
+	HasJobRunnerWith []*JobRunnerWhereInput `json:"hasJobRunnerWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -12918,6 +12937,45 @@ func (i *ControlScheduledJobWhereInput) P() (predicate.ControlScheduledJob, erro
 	if i.JobIDContainsFold != nil {
 		predicates = append(predicates, controlscheduledjob.JobIDContainsFold(*i.JobIDContainsFold))
 	}
+	if i.JobRunnerID != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDEQ(*i.JobRunnerID))
+	}
+	if i.JobRunnerIDNEQ != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDNEQ(*i.JobRunnerIDNEQ))
+	}
+	if len(i.JobRunnerIDIn) > 0 {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDIn(i.JobRunnerIDIn...))
+	}
+	if len(i.JobRunnerIDNotIn) > 0 {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDNotIn(i.JobRunnerIDNotIn...))
+	}
+	if i.JobRunnerIDGT != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDGT(*i.JobRunnerIDGT))
+	}
+	if i.JobRunnerIDGTE != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDGTE(*i.JobRunnerIDGTE))
+	}
+	if i.JobRunnerIDLT != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDLT(*i.JobRunnerIDLT))
+	}
+	if i.JobRunnerIDLTE != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDLTE(*i.JobRunnerIDLTE))
+	}
+	if i.JobRunnerIDContains != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDContains(*i.JobRunnerIDContains))
+	}
+	if i.JobRunnerIDHasPrefix != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDHasPrefix(*i.JobRunnerIDHasPrefix))
+	}
+	if i.JobRunnerIDHasSuffix != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDHasSuffix(*i.JobRunnerIDHasSuffix))
+	}
+	if i.JobRunnerIDEqualFold != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDEqualFold(*i.JobRunnerIDEqualFold))
+	}
+	if i.JobRunnerIDContainsFold != nil {
+		predicates = append(predicates, controlscheduledjob.JobRunnerIDContainsFold(*i.JobRunnerIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := controlscheduledjob.HasOwner()
@@ -12990,6 +13048,24 @@ func (i *ControlScheduledJobWhereInput) P() (predicate.ControlScheduledJob, erro
 			with = append(with, p)
 		}
 		predicates = append(predicates, controlscheduledjob.HasSubcontrolsWith(with...))
+	}
+	if i.HasJobRunner != nil {
+		p := controlscheduledjob.HasJobRunner()
+		if !*i.HasJobRunner {
+			p = controlscheduledjob.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasJobRunnerWith) > 0 {
+		with := make([]predicate.JobRunner, 0, len(i.HasJobRunnerWith))
+		for _, w := range i.HasJobRunnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasJobRunnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlscheduledjob.HasJobRunnerWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

@@ -3666,6 +3666,25 @@ func (c *ControlScheduledJobClient) QuerySubcontrols(csj *ControlScheduledJob) *
 	return query
 }
 
+// QueryJobRunner queries the job_runner edge of a ControlScheduledJob.
+func (c *ControlScheduledJobClient) QueryJobRunner(csj *ControlScheduledJob) *JobRunnerQuery {
+	query := (&JobRunnerClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := csj.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlscheduledjob.Table, controlscheduledjob.FieldID, id),
+			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlscheduledjob.JobRunnerTable, controlscheduledjob.JobRunnerColumn),
+		)
+		schemaConfig := csj.schemaConfig
+		step.To.Schema = schemaConfig.JobRunner
+		step.Edge.Schema = schemaConfig.ControlScheduledJob
+		fromV = sqlgraph.Neighbors(csj.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ControlScheduledJobClient) Hooks() []Hook {
 	hooks := c.hooks.ControlScheduledJob

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/pkg/models"
@@ -43,6 +44,8 @@ type ControlScheduledJob struct {
 	Cadence models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
 	Cron *string `json:"cron,omitempty"`
+	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
+	JobRunnerID string `json:"job_runner_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlScheduledJobQuery when eager-loading is set.
 	Edges        ControlScheduledJobEdges `json:"edges"`
@@ -59,11 +62,13 @@ type ControlScheduledJobEdges struct {
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// JobRunner holds the value of the job_runner edge.
+	JobRunner *JobRunner `json:"job_runner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedControls    map[string][]*Control
 	namedSubcontrols map[string][]*Subcontrol
@@ -109,6 +114,17 @@ func (e ControlScheduledJobEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
+// JobRunnerOrErr returns the JobRunner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ControlScheduledJobEdges) JobRunnerOrErr() (*JobRunner, error) {
+	if e.JobRunner != nil {
+		return e.JobRunner, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: jobrunner.Label}
+	}
+	return nil, &NotLoadedError{edge: "job_runner"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ControlScheduledJob) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -116,7 +132,7 @@ func (*ControlScheduledJob) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlscheduledjob.FieldConfiguration, controlscheduledjob.FieldCadence:
 			values[i] = new([]byte)
-		case controlscheduledjob.FieldID, controlscheduledjob.FieldCreatedBy, controlscheduledjob.FieldUpdatedBy, controlscheduledjob.FieldDeletedBy, controlscheduledjob.FieldOwnerID, controlscheduledjob.FieldJobID, controlscheduledjob.FieldCron:
+		case controlscheduledjob.FieldID, controlscheduledjob.FieldCreatedBy, controlscheduledjob.FieldUpdatedBy, controlscheduledjob.FieldDeletedBy, controlscheduledjob.FieldOwnerID, controlscheduledjob.FieldJobID, controlscheduledjob.FieldCron, controlscheduledjob.FieldJobRunnerID:
 			values[i] = new(sql.NullString)
 		case controlscheduledjob.FieldCreatedAt, controlscheduledjob.FieldUpdatedAt, controlscheduledjob.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -212,6 +228,12 @@ func (csj *ControlScheduledJob) assignValues(columns []string, values []any) err
 				csj.Cron = new(string)
 				*csj.Cron = value.String
 			}
+		case controlscheduledjob.FieldJobRunnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_runner_id", values[i])
+			} else if value.Valid {
+				csj.JobRunnerID = value.String
+			}
 		default:
 			csj.selectValues.Set(columns[i], values[i])
 		}
@@ -243,6 +265,11 @@ func (csj *ControlScheduledJob) QueryControls() *ControlQuery {
 // QuerySubcontrols queries the "subcontrols" edge of the ControlScheduledJob entity.
 func (csj *ControlScheduledJob) QuerySubcontrols() *SubcontrolQuery {
 	return NewControlScheduledJobClient(csj.config).QuerySubcontrols(csj)
+}
+
+// QueryJobRunner queries the "job_runner" edge of the ControlScheduledJob entity.
+func (csj *ControlScheduledJob) QueryJobRunner() *JobRunnerQuery {
+	return NewControlScheduledJobClient(csj.config).QueryJobRunner(csj)
 }
 
 // Update returns a builder for updating this ControlScheduledJob.
@@ -302,6 +329,9 @@ func (csj *ControlScheduledJob) String() string {
 		builder.WriteString("cron=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("job_runner_id=")
+	builder.WriteString(csj.JobRunnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

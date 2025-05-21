@@ -5724,6 +5724,10 @@ type ControlScheduledJob implements Node {
 	cron syntax
 	"""
 	cron: String
+	"""
+	the runner that this job will run on. If not set, it will scheduled on a general runner instead
+	"""
+	jobRunnerID: ID!
 	owner: Organization
 	job: ScheduledJob!
 	controls(
@@ -5788,6 +5792,7 @@ type ControlScheduledJob implements Node {
 		"""
 		where: SubcontrolWhereInput
 	): SubcontrolConnection!
+	jobRunner: JobRunner!
 }
 """
 Return response for createBulkControlScheduledJob mutation
@@ -6024,6 +6029,22 @@ input ControlScheduledJobWhereInput {
 	jobIDEqualFold: ID
 	jobIDContainsFold: ID
 	"""
+	job_runner_id field predicates
+	"""
+	jobRunnerID: ID
+	jobRunnerIDNEQ: ID
+	jobRunnerIDIn: [ID!]
+	jobRunnerIDNotIn: [ID!]
+	jobRunnerIDGT: ID
+	jobRunnerIDGTE: ID
+	jobRunnerIDLT: ID
+	jobRunnerIDLTE: ID
+	jobRunnerIDContains: ID
+	jobRunnerIDHasPrefix: ID
+	jobRunnerIDHasSuffix: ID
+	jobRunnerIDEqualFold: ID
+	jobRunnerIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -6043,6 +6064,11 @@ input ControlScheduledJobWhereInput {
 	"""
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	job_runner edge predicates
+	"""
+	hasJobRunner: Boolean
+	hasJobRunnerWith: [JobRunnerWhereInput!]
 }
 """
 Return response for updateControl mutation
@@ -6851,6 +6877,7 @@ input CreateControlScheduledJobInput {
 	jobID: ID!
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
+	jobRunnerID: ID!
 }
 input CreateControlWithSubcontrolsInput {
 	control: CreateControlInput
@@ -46591,6 +46618,7 @@ input UpdateControlScheduledJobInput {
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
+	jobRunnerID: ID
 }
 """
 UpdateCustomDomainInput is used for update CustomDomain object.

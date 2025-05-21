@@ -619,6 +619,8 @@ type ComplexityRoot struct {
 		ID            func(childComplexity int) int
 		Job           func(childComplexity int) int
 		JobID         func(childComplexity int) int
+		JobRunner     func(childComplexity int) int
+		JobRunnerID   func(childComplexity int) int
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
 		Subcontrols   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
@@ -7118,6 +7120,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlScheduledJob.JobID(childComplexity), true
+
+	case "ControlScheduledJob.jobRunner":
+		if e.complexity.ControlScheduledJob.JobRunner == nil {
+			break
+		}
+
+		return e.complexity.ControlScheduledJob.JobRunner(childComplexity), true
+
+	case "ControlScheduledJob.jobRunnerID":
+		if e.complexity.ControlScheduledJob.JobRunnerID == nil {
+			break
+		}
+
+		return e.complexity.ControlScheduledJob.JobRunnerID(childComplexity), true
 
 	case "ControlScheduledJob.owner":
 		if e.complexity.ControlScheduledJob.Owner == nil {
@@ -35569,6 +35585,10 @@ type ControlScheduledJob implements Node {
   cron syntax
   """
   cron: String
+  """
+  the runner that this job will run on. If not set, it will scheduled on a general runner instead
+  """
+  jobRunnerID: ID!
   owner: Organization
   job: ScheduledJob!
   controls(
@@ -35633,6 +35653,7 @@ type ControlScheduledJob implements Node {
     """
     where: SubcontrolWhereInput
   ): SubcontrolConnection!
+  jobRunner: JobRunner!
 }
 """
 A connection to a list of items.
@@ -35833,6 +35854,22 @@ input ControlScheduledJobWhereInput {
   jobIDEqualFold: ID
   jobIDContainsFold: ID
   """
+  job_runner_id field predicates
+  """
+  jobRunnerID: ID
+  jobRunnerIDNEQ: ID
+  jobRunnerIDIn: [ID!]
+  jobRunnerIDNotIn: [ID!]
+  jobRunnerIDGT: ID
+  jobRunnerIDGTE: ID
+  jobRunnerIDLT: ID
+  jobRunnerIDLTE: ID
+  jobRunnerIDContains: ID
+  jobRunnerIDHasPrefix: ID
+  jobRunnerIDHasSuffix: ID
+  jobRunnerIDEqualFold: ID
+  jobRunnerIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -35852,6 +35889,11 @@ input ControlScheduledJobWhereInput {
   """
   hasSubcontrols: Boolean
   hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  job_runner edge predicates
+  """
+  hasJobRunner: Boolean
+  hasJobRunnerWith: [JobRunnerWhereInput!]
 }
 """
 ControlWhereInput is used for filtering Control objects.
@@ -36651,6 +36693,7 @@ input CreateControlScheduledJobInput {
   jobID: ID!
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
+  jobRunnerID: ID!
 }
 """
 CreateCustomDomainInput is used for create CustomDomain object.
@@ -70118,6 +70161,7 @@ input UpdateControlScheduledJobInput {
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
+  jobRunnerID: ID
 }
 """
 UpdateCustomDomainInput is used for update CustomDomain object.

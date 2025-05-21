@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -163,6 +164,12 @@ func (csjc *ControlScheduledJobCreate) SetNillableCron(s *string) *ControlSchedu
 	return csjc
 }
 
+// SetJobRunnerID sets the "job_runner_id" field.
+func (csjc *ControlScheduledJobCreate) SetJobRunnerID(s string) *ControlScheduledJobCreate {
+	csjc.mutation.SetJobRunnerID(s)
+	return csjc
+}
+
 // SetID sets the "id" field.
 func (csjc *ControlScheduledJobCreate) SetID(s string) *ControlScheduledJobCreate {
 	csjc.mutation.SetID(s)
@@ -215,6 +222,11 @@ func (csjc *ControlScheduledJobCreate) AddSubcontrols(s ...*Subcontrol) *Control
 		ids[i] = s[i].ID
 	}
 	return csjc.AddSubcontrolIDs(ids...)
+}
+
+// SetJobRunner sets the "job_runner" edge to the JobRunner entity.
+func (csjc *ControlScheduledJobCreate) SetJobRunner(j *JobRunner) *ControlScheduledJobCreate {
+	return csjc.SetJobRunnerID(j.ID)
 }
 
 // Mutation returns the ControlScheduledJobMutation object of the builder.
@@ -291,8 +303,14 @@ func (csjc *ControlScheduledJobCreate) check() error {
 	if _, ok := csjc.mutation.Configuration(); !ok {
 		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ControlScheduledJob.configuration"`)}
 	}
+	if _, ok := csjc.mutation.JobRunnerID(); !ok {
+		return &ValidationError{Name: "job_runner_id", err: errors.New(`generated: missing required field "ControlScheduledJob.job_runner_id"`)}
+	}
 	if len(csjc.mutation.JobIDs()) == 0 {
 		return &ValidationError{Name: "job", err: errors.New(`generated: missing required edge "ControlScheduledJob.job"`)}
+	}
+	if len(csjc.mutation.JobRunnerIDs()) == 0 {
+		return &ValidationError{Name: "job_runner", err: errors.New(`generated: missing required edge "ControlScheduledJob.job_runner"`)}
 	}
 	return nil
 }
@@ -434,6 +452,24 @@ func (csjc *ControlScheduledJobCreate) createSpec() (*ControlScheduledJob, *sqlg
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := csjc.mutation.JobRunnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobRunnerTable,
+			Columns: []string{controlscheduledjob.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjc.schemaConfig.ControlScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.JobRunnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

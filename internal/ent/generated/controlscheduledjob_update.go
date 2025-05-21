@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
@@ -196,6 +197,20 @@ func (csju *ControlScheduledJobUpdate) ClearCron() *ControlScheduledJobUpdate {
 	return csju
 }
 
+// SetJobRunnerID sets the "job_runner_id" field.
+func (csju *ControlScheduledJobUpdate) SetJobRunnerID(s string) *ControlScheduledJobUpdate {
+	csju.mutation.SetJobRunnerID(s)
+	return csju
+}
+
+// SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
+func (csju *ControlScheduledJobUpdate) SetNillableJobRunnerID(s *string) *ControlScheduledJobUpdate {
+	if s != nil {
+		csju.SetJobRunnerID(*s)
+	}
+	return csju
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (csju *ControlScheduledJobUpdate) SetOwner(o *Organization) *ControlScheduledJobUpdate {
 	return csju.SetOwnerID(o.ID)
@@ -234,6 +249,11 @@ func (csju *ControlScheduledJobUpdate) AddSubcontrols(s ...*Subcontrol) *Control
 		ids[i] = s[i].ID
 	}
 	return csju.AddSubcontrolIDs(ids...)
+}
+
+// SetJobRunner sets the "job_runner" edge to the JobRunner entity.
+func (csju *ControlScheduledJobUpdate) SetJobRunner(j *JobRunner) *ControlScheduledJobUpdate {
+	return csju.SetJobRunnerID(j.ID)
 }
 
 // Mutation returns the ControlScheduledJobMutation object of the builder.
@@ -295,6 +315,12 @@ func (csju *ControlScheduledJobUpdate) RemoveSubcontrols(s ...*Subcontrol) *Cont
 	return csju.RemoveSubcontrolIDs(ids...)
 }
 
+// ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
+func (csju *ControlScheduledJobUpdate) ClearJobRunner() *ControlScheduledJobUpdate {
+	csju.mutation.ClearJobRunner()
+	return csju
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (csju *ControlScheduledJobUpdate) Save(ctx context.Context) (int, error) {
 	if err := csju.defaults(); err != nil {
@@ -346,6 +372,9 @@ func (csju *ControlScheduledJobUpdate) check() error {
 	}
 	if csju.mutation.JobCleared() && len(csju.mutation.JobIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job"`)
+	}
+	if csju.mutation.JobRunnerCleared() && len(csju.mutation.JobRunnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job_runner"`)
 	}
 	return nil
 }
@@ -571,6 +600,37 @@ func (csju *ControlScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if csju.mutation.JobRunnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobRunnerTable,
+			Columns: []string{controlscheduledjob.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.ControlScheduledJob
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csju.mutation.JobRunnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobRunnerTable,
+			Columns: []string{controlscheduledjob.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csju.schemaConfig.ControlScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = csju.schemaConfig.ControlScheduledJob
 	ctx = internal.NewSchemaConfigContext(ctx, csju.schemaConfig)
 	_spec.AddModifiers(csju.modifiers...)
@@ -755,6 +815,20 @@ func (csjuo *ControlScheduledJobUpdateOne) ClearCron() *ControlScheduledJobUpdat
 	return csjuo
 }
 
+// SetJobRunnerID sets the "job_runner_id" field.
+func (csjuo *ControlScheduledJobUpdateOne) SetJobRunnerID(s string) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.SetJobRunnerID(s)
+	return csjuo
+}
+
+// SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
+func (csjuo *ControlScheduledJobUpdateOne) SetNillableJobRunnerID(s *string) *ControlScheduledJobUpdateOne {
+	if s != nil {
+		csjuo.SetJobRunnerID(*s)
+	}
+	return csjuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (csjuo *ControlScheduledJobUpdateOne) SetOwner(o *Organization) *ControlScheduledJobUpdateOne {
 	return csjuo.SetOwnerID(o.ID)
@@ -793,6 +867,11 @@ func (csjuo *ControlScheduledJobUpdateOne) AddSubcontrols(s ...*Subcontrol) *Con
 		ids[i] = s[i].ID
 	}
 	return csjuo.AddSubcontrolIDs(ids...)
+}
+
+// SetJobRunner sets the "job_runner" edge to the JobRunner entity.
+func (csjuo *ControlScheduledJobUpdateOne) SetJobRunner(j *JobRunner) *ControlScheduledJobUpdateOne {
+	return csjuo.SetJobRunnerID(j.ID)
 }
 
 // Mutation returns the ControlScheduledJobMutation object of the builder.
@@ -852,6 +931,12 @@ func (csjuo *ControlScheduledJobUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *
 		ids[i] = s[i].ID
 	}
 	return csjuo.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
+func (csjuo *ControlScheduledJobUpdateOne) ClearJobRunner() *ControlScheduledJobUpdateOne {
+	csjuo.mutation.ClearJobRunner()
+	return csjuo
 }
 
 // Where appends a list predicates to the ControlScheduledJobUpdate builder.
@@ -918,6 +1003,9 @@ func (csjuo *ControlScheduledJobUpdateOne) check() error {
 	}
 	if csjuo.mutation.JobCleared() && len(csjuo.mutation.JobIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job"`)
+	}
+	if csjuo.mutation.JobRunnerCleared() && len(csjuo.mutation.JobRunnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job_runner"`)
 	}
 	return nil
 }
@@ -1155,6 +1243,37 @@ func (csjuo *ControlScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *
 			},
 		}
 		edge.Schema = csjuo.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if csjuo.mutation.JobRunnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobRunnerTable,
+			Columns: []string{controlscheduledjob.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.ControlScheduledJob
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := csjuo.mutation.JobRunnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobRunnerTable,
+			Columns: []string{controlscheduledjob.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = csjuo.schemaConfig.ControlScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -492,6 +492,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlscheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: controlscheduledjob.FieldConfiguration},
 			controlscheduledjob.FieldCadence:       {Type: field.TypeJSON, Column: controlscheduledjob.FieldCadence},
 			controlscheduledjob.FieldCron:          {Type: field.TypeString, Column: controlscheduledjob.FieldCron},
+			controlscheduledjob.FieldJobRunnerID:   {Type: field.TypeString, Column: controlscheduledjob.FieldJobRunnerID},
 		},
 	}
 	graph.Nodes[12] = &sqlgraph.Node{
@@ -3292,6 +3293,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ControlScheduledJob",
 		"Subcontrol",
+	)
+	graph.MustAddE(
+		"job_runner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   controlscheduledjob.JobRunnerTable,
+			Columns: []string{controlscheduledjob.JobRunnerColumn},
+			Bidi:    false,
+		},
+		"ControlScheduledJob",
+		"JobRunner",
 	)
 	graph.MustAddE(
 		"owner",
@@ -9086,6 +9099,11 @@ func (f *ControlScheduledJobFilter) WhereCron(p entql.StringP) {
 	f.Where(p.Field(controlscheduledjob.FieldCron))
 }
 
+// WhereJobRunnerID applies the entql string predicate on the job_runner_id field.
+func (f *ControlScheduledJobFilter) WhereJobRunnerID(p entql.StringP) {
+	f.Where(p.Field(controlscheduledjob.FieldJobRunnerID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ControlScheduledJobFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -9136,6 +9154,20 @@ func (f *ControlScheduledJobFilter) WhereHasSubcontrols() {
 // WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
 func (f *ControlScheduledJobFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
 	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasJobRunner applies a predicate to check if query has an edge job_runner.
+func (f *ControlScheduledJobFilter) WhereHasJobRunner() {
+	f.Where(entql.HasEdge("job_runner"))
+}
+
+// WhereHasJobRunnerWith applies a predicate to check if query has an edge job_runner with a given conditions (other predicates).
+func (f *ControlScheduledJobFilter) WhereHasJobRunnerWith(preds ...predicate.JobRunner) {
+	f.Where(entql.HasEdgeWith("job_runner", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -5336,6 +5336,21 @@ func (csj *ControlScheduledJobQuery) collectField(ctx context.Context, oneNode b
 			csj.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
+
+		case "jobRunner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerClient{config: csj.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerImplementors)...); err != nil {
+				return err
+			}
+			csj.withJobRunner = query
+			if _, ok := fieldSeen[controlscheduledjob.FieldJobRunnerID]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjob.FieldJobRunnerID)
+				fieldSeen[controlscheduledjob.FieldJobRunnerID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[controlscheduledjob.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, controlscheduledjob.FieldCreatedAt)
@@ -5390,6 +5405,11 @@ func (csj *ControlScheduledJobQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[controlscheduledjob.FieldCron]; !ok {
 				selectedFields = append(selectedFields, controlscheduledjob.FieldCron)
 				fieldSeen[controlscheduledjob.FieldCron] = struct{}{}
+			}
+		case "jobRunnerID":
+			if _, ok := fieldSeen[controlscheduledjob.FieldJobRunnerID]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjob.FieldJobRunnerID)
+				fieldSeen[controlscheduledjob.FieldJobRunnerID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
@@ -34,6 +35,7 @@ type ControlScheduledJobQuery struct {
 	withJob              *ScheduledJobQuery
 	withControls         *ControlQuery
 	withSubcontrols      *SubcontrolQuery
+	withJobRunner        *JobRunnerQuery
 	loadTotal            []func(context.Context, []*ControlScheduledJob) error
 	modifiers            []func(*sql.Selector)
 	withNamedControls    map[string]*ControlQuery
@@ -168,6 +170,31 @@ func (csjq *ControlScheduledJobQuery) QuerySubcontrols() *SubcontrolQuery {
 		schemaConfig := csjq.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.Subcontrol
+		fromU = sqlgraph.SetNeighbors(csjq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryJobRunner chains the current query on the "job_runner" edge.
+func (csjq *ControlScheduledJobQuery) QueryJobRunner() *JobRunnerQuery {
+	query := (&JobRunnerClient{config: csjq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := csjq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := csjq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlscheduledjob.Table, controlscheduledjob.FieldID, selector),
+			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlscheduledjob.JobRunnerTable, controlscheduledjob.JobRunnerColumn),
+		)
+		schemaConfig := csjq.schemaConfig
+		step.To.Schema = schemaConfig.JobRunner
+		step.Edge.Schema = schemaConfig.ControlScheduledJob
 		fromU = sqlgraph.SetNeighbors(csjq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -370,6 +397,7 @@ func (csjq *ControlScheduledJobQuery) Clone() *ControlScheduledJobQuery {
 		withJob:         csjq.withJob.Clone(),
 		withControls:    csjq.withControls.Clone(),
 		withSubcontrols: csjq.withSubcontrols.Clone(),
+		withJobRunner:   csjq.withJobRunner.Clone(),
 		// clone intermediate query.
 		sql:       csjq.sql.Clone(),
 		path:      csjq.path,
@@ -418,6 +446,17 @@ func (csjq *ControlScheduledJobQuery) WithSubcontrols(opts ...func(*SubcontrolQu
 		opt(query)
 	}
 	csjq.withSubcontrols = query
+	return csjq
+}
+
+// WithJobRunner tells the query-builder to eager-load the nodes that are connected to
+// the "job_runner" edge. The optional arguments are used to configure the query builder of the edge.
+func (csjq *ControlScheduledJobQuery) WithJobRunner(opts ...func(*JobRunnerQuery)) *ControlScheduledJobQuery {
+	query := (&JobRunnerClient{config: csjq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	csjq.withJobRunner = query
 	return csjq
 }
 
@@ -505,11 +544,12 @@ func (csjq *ControlScheduledJobQuery) sqlAll(ctx context.Context, hooks ...query
 	var (
 		nodes       = []*ControlScheduledJob{}
 		_spec       = csjq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			csjq.withOwner != nil,
 			csjq.withJob != nil,
 			csjq.withControls != nil,
 			csjq.withSubcontrols != nil,
+			csjq.withJobRunner != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -558,6 +598,12 @@ func (csjq *ControlScheduledJobQuery) sqlAll(ctx context.Context, hooks ...query
 		if err := csjq.loadSubcontrols(ctx, query, nodes,
 			func(n *ControlScheduledJob) { n.Edges.Subcontrols = []*Subcontrol{} },
 			func(n *ControlScheduledJob, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := csjq.withJobRunner; query != nil {
+		if err := csjq.loadJobRunner(ctx, query, nodes, nil,
+			func(n *ControlScheduledJob, e *JobRunner) { n.Edges.JobRunner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -703,6 +749,35 @@ func (csjq *ControlScheduledJobQuery) loadSubcontrols(ctx context.Context, query
 	}
 	return nil
 }
+func (csjq *ControlScheduledJobQuery) loadJobRunner(ctx context.Context, query *JobRunnerQuery, nodes []*ControlScheduledJob, init func(*ControlScheduledJob), assign func(*ControlScheduledJob, *JobRunner)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ControlScheduledJob)
+	for i := range nodes {
+		fk := nodes[i].JobRunnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(jobrunner.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "job_runner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (csjq *ControlScheduledJobQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := csjq.querySpec()
@@ -739,6 +814,9 @@ func (csjq *ControlScheduledJobQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if csjq.withJob != nil {
 			_spec.Node.AddColumnOnce(controlscheduledjob.FieldJobID)
+		}
+		if csjq.withJobRunner != nil {
+			_spec.Node.AddColumnOnce(controlscheduledjob.FieldJobRunnerID)
 		}
 	}
 	if ps := csjq.predicates; len(ps) > 0 {

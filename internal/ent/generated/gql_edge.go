@@ -835,6 +835,14 @@ func (csj *ControlScheduledJob) Subcontrols(
 	return csj.QuerySubcontrols().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (csj *ControlScheduledJob) JobRunner(ctx context.Context) (*JobRunner, error) {
+	result, err := csj.Edges.JobRunnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = csj.QueryJobRunner().Only(ctx)
+	}
+	return result, err
+}
+
 func (cd *CustomDomain) Owner(ctx context.Context) (*Organization, error) {
 	result, err := cd.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

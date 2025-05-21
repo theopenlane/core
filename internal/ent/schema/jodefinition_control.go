@@ -62,6 +62,9 @@ func (ControlScheduledJob) Fields() []ent.Field {
 			).
 			Optional().
 			Nillable(),
+
+		field.String("job_runner_id").
+			Comment("the runner that this job will run on. If not set, it will scheduled on a general runner instead"),
 	}
 }
 
@@ -87,6 +90,13 @@ func (c ControlScheduledJob) Edges() []ent.Edge {
 
 		defaultEdgeToWithPagination(c, Control{}),
 		defaultEdgeToWithPagination(c, Subcontrol{}),
+
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: JobRunner{},
+			field:      "job_runner_id",
+			required:   true,
+		}),
 	}
 }
 

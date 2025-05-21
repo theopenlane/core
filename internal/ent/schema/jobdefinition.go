@@ -140,8 +140,8 @@ func (ScheduledJob) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-		// policy.CheckCreateAccess(),
-		// entfga.CheckEditAndDeleteAccess[*generated.ScheduledJobMutation](),
+			policy.CheckCreateAccess(),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

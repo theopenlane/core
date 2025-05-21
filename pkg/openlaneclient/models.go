@@ -3512,11 +3512,14 @@ type ControlScheduledJob struct {
 	// the schedule to run this job
 	Cadence *models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
-	Cron        *string               `json:"cron,omitempty"`
+	Cron *string `json:"cron,omitempty"`
+	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
+	JobRunnerID string                `json:"jobRunnerID"`
 	Owner       *Organization         `json:"owner,omitempty"`
 	Job         *ScheduledJob         `json:"job"`
 	Controls    *ControlConnection    `json:"controls"`
 	Subcontrols *SubcontrolConnection `json:"subcontrols"`
+	JobRunner   *JobRunner            `json:"jobRunner"`
 }
 
 func (ControlScheduledJob) IsNode() {}
@@ -3699,6 +3702,20 @@ type ControlScheduledJobWhereInput struct {
 	JobIDHasSuffix    *string  `json:"jobIDHasSuffix,omitempty"`
 	JobIDEqualFold    *string  `json:"jobIDEqualFold,omitempty"`
 	JobIDContainsFold *string  `json:"jobIDContainsFold,omitempty"`
+	// job_runner_id field predicates
+	JobRunnerID             *string  `json:"jobRunnerID,omitempty"`
+	JobRunnerIdneq          *string  `json:"jobRunnerIDNEQ,omitempty"`
+	JobRunnerIDIn           []string `json:"jobRunnerIDIn,omitempty"`
+	JobRunnerIDNotIn        []string `json:"jobRunnerIDNotIn,omitempty"`
+	JobRunnerIdgt           *string  `json:"jobRunnerIDGT,omitempty"`
+	JobRunnerIdgte          *string  `json:"jobRunnerIDGTE,omitempty"`
+	JobRunnerIdlt           *string  `json:"jobRunnerIDLT,omitempty"`
+	JobRunnerIdlte          *string  `json:"jobRunnerIDLTE,omitempty"`
+	JobRunnerIDContains     *string  `json:"jobRunnerIDContains,omitempty"`
+	JobRunnerIDHasPrefix    *string  `json:"jobRunnerIDHasPrefix,omitempty"`
+	JobRunnerIDHasSuffix    *string  `json:"jobRunnerIDHasSuffix,omitempty"`
+	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
+	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -3711,6 +3728,9 @@ type ControlScheduledJobWhereInput struct {
 	// subcontrols edge predicates
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// job_runner edge predicates
+	HasJobRunner     *bool                  `json:"hasJobRunner,omitempty"`
+	HasJobRunnerWith []*JobRunnerWhereInput `json:"hasJobRunnerWith,omitempty"`
 }
 
 // Return response for updateControl mutation
@@ -4298,6 +4318,7 @@ type CreateControlScheduledJobInput struct {
 	JobID         string   `json:"jobID"`
 	ControlIDs    []string `json:"controlIDs,omitempty"`
 	SubcontrolIDs []string `json:"subcontrolIDs,omitempty"`
+	JobRunnerID   string   `json:"jobRunnerID"`
 }
 
 type CreateControlWithSubcontrolsInput struct {
@@ -4633,6 +4654,7 @@ type CreateJobResultInput struct {
 	StartedAt      *time.Time `json:"startedAt,omitempty"`
 	OwnerID        *string    `json:"ownerID,omitempty"`
 	ScheduledJobID string     `json:"scheduledJobID"`
+	FileID         string     `json:"fileID"`
 }
 
 // CreateJobRunnerInput is used for create JobRunner object.
@@ -12423,8 +12445,10 @@ type JobResult struct {
 	FinishedAt time.Time `json:"finishedAt"`
 	// The time the job started it's execution. This is different from the db insertion time
 	StartedAt    time.Time            `json:"startedAt"`
+	FileID       string               `json:"fileID"`
 	Owner        *Organization        `json:"owner,omitempty"`
 	ScheduledJob *ControlScheduledJob `json:"scheduledJob"`
+	File         *File                `json:"file"`
 }
 
 func (JobResult) IsNode() {}
@@ -12639,12 +12663,29 @@ type JobResultWhereInput struct {
 	StartedAtGte   *time.Time   `json:"startedAtGTE,omitempty"`
 	StartedAtLt    *time.Time   `json:"startedAtLT,omitempty"`
 	StartedAtLte   *time.Time   `json:"startedAtLTE,omitempty"`
+	// file_id field predicates
+	FileID             *string  `json:"fileID,omitempty"`
+	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
+	FileIDIn           []string `json:"fileIDIn,omitempty"`
+	FileIDNotIn        []string `json:"fileIDNotIn,omitempty"`
+	FileIdgt           *string  `json:"fileIDGT,omitempty"`
+	FileIdgte          *string  `json:"fileIDGTE,omitempty"`
+	FileIdlt           *string  `json:"fileIDLT,omitempty"`
+	FileIdlte          *string  `json:"fileIDLTE,omitempty"`
+	FileIDContains     *string  `json:"fileIDContains,omitempty"`
+	FileIDHasPrefix    *string  `json:"fileIDHasPrefix,omitempty"`
+	FileIDHasSuffix    *string  `json:"fileIDHasSuffix,omitempty"`
+	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
+	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// scheduled_job edge predicates
 	HasScheduledJob     *bool                            `json:"hasScheduledJob,omitempty"`
 	HasScheduledJobWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobWith,omitempty"`
+	// file edge predicates
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 type JobRunner struct {
@@ -24859,6 +24900,7 @@ type UpdateControlScheduledJobInput struct {
 	AddSubcontrolIDs    []string `json:"addSubcontrolIDs,omitempty"`
 	RemoveSubcontrolIDs []string `json:"removeSubcontrolIDs,omitempty"`
 	ClearSubcontrols    *bool    `json:"clearSubcontrols,omitempty"`
+	JobRunnerID         *string  `json:"jobRunnerID,omitempty"`
 }
 
 // UpdateCustomDomainInput is used for update CustomDomain object.
@@ -25389,6 +25431,7 @@ type UpdateJobResultInput struct {
 	OwnerID        *string                   `json:"ownerID,omitempty"`
 	ClearOwner     *bool                     `json:"clearOwner,omitempty"`
 	ScheduledJobID *string                   `json:"scheduledJobID,omitempty"`
+	FileID         *string                   `json:"fileID,omitempty"`
 }
 
 // UpdateJobRunnerInput is used for update JobRunner object.

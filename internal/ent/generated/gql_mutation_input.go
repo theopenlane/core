@@ -1660,6 +1660,7 @@ type CreateControlScheduledJobInput struct {
 	JobID         string
 	ControlIDs    []string
 	SubcontrolIDs []string
+	JobRunnerID   string
 }
 
 // Mutate applies the CreateControlScheduledJobInput on the ControlScheduledJobMutation builder.
@@ -1681,6 +1682,7 @@ func (i *CreateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) 
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
+	m.SetJobRunnerID(i.JobRunnerID)
 }
 
 // SetInput applies the change-set in the CreateControlScheduledJobInput on the ControlScheduledJobCreate builder.
@@ -1705,6 +1707,7 @@ type UpdateControlScheduledJobInput struct {
 	ClearSubcontrols    bool
 	AddSubcontrolIDs    []string
 	RemoveSubcontrolIDs []string
+	JobRunnerID         *string
 }
 
 // Mutate applies the UpdateControlScheduledJobInput on the ControlScheduledJobMutation builder.
@@ -1750,6 +1753,9 @@ func (i *UpdateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) 
 	}
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
+	}
+	if v := i.JobRunnerID; v != nil {
+		m.SetJobRunnerID(*v)
 	}
 }
 

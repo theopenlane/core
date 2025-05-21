@@ -37,6 +37,8 @@ const (
 	FieldCadence = "cadence"
 	// FieldCron holds the string denoting the cron field in the database.
 	FieldCron = "cron"
+	// FieldJobRunnerID holds the string denoting the job_runner_id field in the database.
+	FieldJobRunnerID = "job_runner_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeJob holds the string denoting the job edge name in mutations.
@@ -45,6 +47,8 @@ const (
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeJobRunner holds the string denoting the job_runner edge name in mutations.
+	EdgeJobRunner = "job_runner"
 	// Table holds the table name of the controlscheduledjob in the database.
 	Table = "control_scheduled_jobs"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -75,6 +79,13 @@ const (
 	SubcontrolsInverseTable = "subcontrols"
 	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
 	SubcontrolsColumn = "control_scheduled_job_subcontrols"
+	// JobRunnerTable is the table that holds the job_runner relation/edge.
+	JobRunnerTable = "control_scheduled_jobs"
+	// JobRunnerInverseTable is the table name for the JobRunner entity.
+	// It exists in this package in order to avoid circular dependency with the "jobrunner" package.
+	JobRunnerInverseTable = "job_runners"
+	// JobRunnerColumn is the table column denoting the job_runner relation/edge.
+	JobRunnerColumn = "job_runner_id"
 )
 
 // Columns holds all SQL columns for controlscheduledjob fields.
@@ -91,6 +102,7 @@ var Columns = []string{
 	FieldConfiguration,
 	FieldCadence,
 	FieldCron,
+	FieldJobRunnerID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -177,6 +189,11 @@ func ByCron(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCron, opts...).ToFunc()
 }
 
+// ByJobRunnerID orders the results by the job_runner_id field.
+func ByJobRunnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldJobRunnerID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -218,6 +235,13 @@ func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByJobRunnerField orders the results by job_runner field.
+func ByJobRunnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobRunnerStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -244,5 +268,12 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+	)
+}
+func newJobRunnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(JobRunnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, JobRunnerTable, JobRunnerColumn),
 	)
 }
