@@ -338,10 +338,13 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 	// update the expiration date based on the subscription status
 	// if the subscription is trialing, set the expiration date to the trial end date
 	// otherwise, set the expiration date to the end date if it exists
-	expiresAt := time.Unix(0, 0)
+	trialExpiresAt := time.Unix(0, 0)
 	if customer.Status == string(stripe.SubscriptionStatusTrialing) {
-		expiresAt = time.Unix(customer.TrialEnd, 0)
-	} else if customer.EndDate > 0 {
+		trialExpiresAt = time.Unix(customer.TrialEnd, 0)
+	}
+
+	expiresAt := time.Unix(0, 0)
+	if customer.EndDate > 0 {
 		expiresAt = time.Unix(customer.EndDate, 0)
 	}
 
@@ -362,7 +365,7 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 	// if the subscription is trialing, set the expiration date to the trial end date
 	// otherwise, set the expiration date to the end date
 	if customer.Status == string(stripe.SubscriptionStatusTrialing) {
-		update.SetTrialExpiresAt(expiresAt)
+		update.SetTrialExpiresAt(trialExpiresAt)
 	} else {
 		update.SetExpiresAt(expiresAt)
 	}
