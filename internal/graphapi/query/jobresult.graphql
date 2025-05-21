@@ -1,0 +1,146 @@
+
+mutation CreateBulkCSVJobResult($input: Upload!) {
+  createBulkCSVJobResult(input: $input) {
+    jobResults {
+      createdAt
+      createdBy
+      exitCode
+      finishedAt
+      id
+      ownerID
+      scheduledJobID
+      startedAt
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkJobResult($input: [CreateJobResultInput!]) {
+  createBulkJobResult(input: $input) {
+    jobResults {
+      createdAt
+      createdBy
+      exitCode
+      finishedAt
+      id
+      ownerID
+      scheduledJobID
+      startedAt
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateJobResult($input: CreateJobResultInput!) {
+  createJobResult(input: $input) {
+    jobResult {
+      createdAt
+      createdBy
+      exitCode
+      finishedAt
+      id
+      ownerID
+      scheduledJobID
+      startedAt
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteJobResult($deleteJobResultId: ID!) {
+  deleteJobResult(id: $deleteJobResultId) {
+    deletedID
+  }
+}
+
+query GetAllJobResults {
+  jobResults {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        exitCode
+        finishedAt
+        id
+        ownerID
+        scheduledJobID
+        startedAt
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetJobResultByID($jobResultId: ID!) {
+  jobResult(id: $jobResultId) {
+    createdAt
+    createdBy
+    exitCode
+    finishedAt
+    id
+    ownerID
+    scheduledJobID
+    startedAt
+    status
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetJobResults($first: Int, $last: Int, $where: JobResultWhereInput) {
+  jobResults(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        exitCode
+        finishedAt
+        id
+        ownerID
+        scheduledJobID
+        startedAt
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateJobResult($updateJobResultId: ID!, $input: UpdateJobResultInput!) {
+  updateJobResult(id: $updateJobResultId, input: $input) {
+    jobResult {
+      createdAt
+      createdBy
+      exitCode
+      finishedAt
+      id
+      ownerID
+      scheduledJobID
+      startedAt
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}

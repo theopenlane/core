@@ -59,6 +59,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
@@ -208,6 +209,8 @@ type Client struct {
 	InternalPolicyHistory *InternalPolicyHistoryClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
+	// JobResult is the client for interacting with the JobResult builders.
+	JobResult *JobResultClient
 	// JobRunner is the client for interacting with the JobRunner builders.
 	JobRunner *JobRunnerClient
 	// JobRunnerHistory is the client for interacting with the JobRunnerHistory builders.
@@ -362,6 +365,7 @@ func (c *Client) init() {
 	c.InternalPolicy = NewInternalPolicyClient(c.config)
 	c.InternalPolicyHistory = NewInternalPolicyHistoryClient(c.config)
 	c.Invite = NewInviteClient(c.config)
+	c.JobResult = NewJobResultClient(c.config)
 	c.JobRunner = NewJobRunnerClient(c.config)
 	c.JobRunnerHistory = NewJobRunnerHistoryClient(c.config)
 	c.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(c.config)
@@ -626,6 +630,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		InternalPolicy:               NewInternalPolicyClient(cfg),
 		InternalPolicyHistory:        NewInternalPolicyHistoryClient(cfg),
 		Invite:                       NewInviteClient(cfg),
+		JobResult:                    NewJobResultClient(cfg),
 		JobRunner:                    NewJobRunnerClient(cfg),
 		JobRunnerHistory:             NewJobRunnerHistoryClient(cfg),
 		JobRunnerRegistrationToken:   NewJobRunnerRegistrationTokenClient(cfg),
@@ -732,6 +737,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		InternalPolicy:               NewInternalPolicyClient(cfg),
 		InternalPolicyHistory:        NewInternalPolicyHistoryClient(cfg),
 		Invite:                       NewInviteClient(cfg),
+		JobResult:                    NewJobResultClient(cfg),
 		JobRunner:                    NewJobRunnerClient(cfg),
 		JobRunnerHistory:             NewJobRunnerHistoryClient(cfg),
 		JobRunnerRegistrationToken:   NewJobRunnerRegistrationTokenClient(cfg),
@@ -818,7 +824,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.JobRunner, c.JobRunnerHistory, c.JobRunnerRegistrationToken,
+		c.JobResult, c.JobRunner, c.JobRunnerHistory, c.JobRunnerRegistrationToken,
 		c.JobRunnerToken, c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
 		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
 		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
@@ -849,7 +855,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.JobRunner, c.JobRunnerHistory, c.JobRunnerRegistrationToken,
+		c.JobResult, c.JobRunner, c.JobRunnerHistory, c.JobRunnerRegistrationToken,
 		c.JobRunnerToken, c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
 		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
 		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
@@ -1021,6 +1027,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.InternalPolicyHistory.mutate(ctx, m)
 	case *InviteMutation:
 		return c.Invite.mutate(ctx, m)
+	case *JobResultMutation:
+		return c.JobResult.mutate(ctx, m)
 	case *JobRunnerMutation:
 		return c.JobRunner.mutate(ctx, m)
 	case *JobRunnerHistoryMutation:
@@ -9330,6 +9338,179 @@ func (c *InviteClient) mutate(ctx context.Context, m *InviteMutation) (Value, er
 	}
 }
 
+// JobResultClient is a client for the JobResult schema.
+type JobResultClient struct {
+	config
+}
+
+// NewJobResultClient returns a client for the JobResult from the given config.
+func NewJobResultClient(c config) *JobResultClient {
+	return &JobResultClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `jobresult.Hooks(f(g(h())))`.
+func (c *JobResultClient) Use(hooks ...Hook) {
+	c.hooks.JobResult = append(c.hooks.JobResult, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `jobresult.Intercept(f(g(h())))`.
+func (c *JobResultClient) Intercept(interceptors ...Interceptor) {
+	c.inters.JobResult = append(c.inters.JobResult, interceptors...)
+}
+
+// Create returns a builder for creating a JobResult entity.
+func (c *JobResultClient) Create() *JobResultCreate {
+	mutation := newJobResultMutation(c.config, OpCreate)
+	return &JobResultCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of JobResult entities.
+func (c *JobResultClient) CreateBulk(builders ...*JobResultCreate) *JobResultCreateBulk {
+	return &JobResultCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *JobResultClient) MapCreateBulk(slice any, setFunc func(*JobResultCreate, int)) *JobResultCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &JobResultCreateBulk{err: fmt.Errorf("calling to JobResultClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*JobResultCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &JobResultCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for JobResult.
+func (c *JobResultClient) Update() *JobResultUpdate {
+	mutation := newJobResultMutation(c.config, OpUpdate)
+	return &JobResultUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *JobResultClient) UpdateOne(jr *JobResult) *JobResultUpdateOne {
+	mutation := newJobResultMutation(c.config, OpUpdateOne, withJobResult(jr))
+	return &JobResultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *JobResultClient) UpdateOneID(id string) *JobResultUpdateOne {
+	mutation := newJobResultMutation(c.config, OpUpdateOne, withJobResultID(id))
+	return &JobResultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for JobResult.
+func (c *JobResultClient) Delete() *JobResultDelete {
+	mutation := newJobResultMutation(c.config, OpDelete)
+	return &JobResultDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *JobResultClient) DeleteOne(jr *JobResult) *JobResultDeleteOne {
+	return c.DeleteOneID(jr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *JobResultClient) DeleteOneID(id string) *JobResultDeleteOne {
+	builder := c.Delete().Where(jobresult.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &JobResultDeleteOne{builder}
+}
+
+// Query returns a query builder for JobResult.
+func (c *JobResultClient) Query() *JobResultQuery {
+	return &JobResultQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeJobResult},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a JobResult entity by its id.
+func (c *JobResultClient) Get(ctx context.Context, id string) (*JobResult, error) {
+	return c.Query().Where(jobresult.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *JobResultClient) GetX(ctx context.Context, id string) *JobResult {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a JobResult.
+func (c *JobResultClient) QueryOwner(jr *JobResult) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := jr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobresult.Table, jobresult.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, jobresult.OwnerTable, jobresult.OwnerColumn),
+		)
+		schemaConfig := jr.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.JobResult
+		fromV = sqlgraph.Neighbors(jr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScheduledJob queries the scheduled_job edge of a JobResult.
+func (c *JobResultClient) QueryScheduledJob(jr *JobResult) *ControlScheduledJobQuery {
+	query := (&ControlScheduledJobClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := jr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobresult.Table, jobresult.FieldID, id),
+			sqlgraph.To(controlscheduledjob.Table, controlscheduledjob.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, jobresult.ScheduledJobTable, jobresult.ScheduledJobColumn),
+		)
+		schemaConfig := jr.schemaConfig
+		step.To.Schema = schemaConfig.ControlScheduledJob
+		step.Edge.Schema = schemaConfig.JobResult
+		fromV = sqlgraph.Neighbors(jr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *JobResultClient) Hooks() []Hook {
+	hooks := c.hooks.JobResult
+	return append(hooks[:len(hooks):len(hooks)], jobresult.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *JobResultClient) Interceptors() []Interceptor {
+	inters := c.inters.JobResult
+	return append(inters[:len(inters):len(inters)], jobresult.Interceptors[:]...)
+}
+
+func (c *JobResultClient) mutate(ctx context.Context, m *JobResultMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&JobResultCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&JobResultUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&JobResultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&JobResultDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown JobResult mutation op: %q", m.Op())
+	}
+}
+
 // JobRunnerClient is a client for the JobRunner schema.
 type JobRunnerClient struct {
 	config
@@ -13144,6 +13325,25 @@ func (c *OrganizationClient) QueryScheduledJobs(o *Organization) *ControlSchedul
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.ControlScheduledJob
 		step.Edge.Schema = schemaConfig.ControlScheduledJob
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScheduledJobResults queries the scheduled_job_results edge of a Organization.
+func (c *OrganizationClient) QueryScheduledJobResults(o *Organization) *JobResultQuery {
+	query := (&JobResultClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(jobresult.Table, jobresult.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobResultsTable, organization.ScheduledJobResultsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.JobResult
+		step.Edge.Schema = schemaConfig.JobResult
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -19219,7 +19419,7 @@ type (
 		Evidence, EvidenceHistory, File, FileHistory, Group, GroupHistory,
 		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
 		Hush, HushHistory, Integration, IntegrationHistory, InternalPolicy,
-		InternalPolicyHistory, Invite, JobRunner, JobRunnerHistory,
+		InternalPolicyHistory, Invite, JobResult, JobRunner, JobRunnerHistory,
 		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
 		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
 		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
@@ -19240,7 +19440,7 @@ type (
 		Evidence, EvidenceHistory, File, FileHistory, Group, GroupHistory,
 		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
 		Hush, HushHistory, Integration, IntegrationHistory, InternalPolicy,
-		InternalPolicyHistory, Invite, JobRunner, JobRunnerHistory,
+		InternalPolicyHistory, Invite, JobResult, JobRunner, JobRunnerHistory,
 		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
 		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
 		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,

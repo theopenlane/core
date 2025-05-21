@@ -586,6 +586,30 @@ type InviteUpdatePayload struct {
 	Invite *generated.Invite `json:"invite"`
 }
 
+// Return response for createBulkJobResult mutation
+type JobResultBulkCreatePayload struct {
+	// Created jobResults
+	JobResults []*generated.JobResult `json:"jobResults,omitempty"`
+}
+
+// Return response for createJobResult mutation
+type JobResultCreatePayload struct {
+	// Created jobResult
+	JobResult *generated.JobResult `json:"jobResult"`
+}
+
+// Return response for deleteJobResult mutation
+type JobResultDeletePayload struct {
+	// Deleted jobResult ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateJobResult mutation
+type JobResultUpdatePayload struct {
+	// Updated jobResult
+	JobResult *generated.JobResult `json:"jobResult"`
+}
+
 // Return response for deleteJobRunner mutation
 type JobRunnerDeletePayload struct {
 	// Deleted jobRunner ID

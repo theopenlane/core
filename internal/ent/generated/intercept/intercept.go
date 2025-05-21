@@ -48,6 +48,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
@@ -1232,6 +1233,33 @@ func (f TraverseInvite) Traverse(ctx context.Context, q generated.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.InviteQuery", q)
+}
+
+// The JobResultFunc type is an adapter to allow the use of ordinary function as a Querier.
+type JobResultFunc func(context.Context, *generated.JobResultQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f JobResultFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.JobResultQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.JobResultQuery", q)
+}
+
+// The TraverseJobResult type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseJobResult func(context.Context, *generated.JobResultQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseJobResult) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseJobResult) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.JobResultQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.JobResultQuery", q)
 }
 
 // The JobRunnerFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2586,6 +2614,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.InternalPolicyHistoryQuery, predicate.InternalPolicyHistory, internalpolicyhistory.OrderOption]{typ: generated.TypeInternalPolicyHistory, tq: q}, nil
 	case *generated.InviteQuery:
 		return &query[*generated.InviteQuery, predicate.Invite, invite.OrderOption]{typ: generated.TypeInvite, tq: q}, nil
+	case *generated.JobResultQuery:
+		return &query[*generated.JobResultQuery, predicate.JobResult, jobresult.OrderOption]{typ: generated.TypeJobResult, tq: q}, nil
 	case *generated.JobRunnerQuery:
 		return &query[*generated.JobRunnerQuery, predicate.JobRunner, jobrunner.OrderOption]{typ: generated.TypeJobRunner, tq: q}, nil
 	case *generated.JobRunnerHistoryQuery:

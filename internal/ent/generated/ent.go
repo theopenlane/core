@@ -52,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
@@ -199,6 +200,7 @@ func checkColumn(table, column string) error {
 			internalpolicy.Table:               internalpolicy.ValidColumn,
 			internalpolicyhistory.Table:        internalpolicyhistory.ValidColumn,
 			invite.Table:                       invite.ValidColumn,
+			jobresult.Table:                    jobresult.ValidColumn,
 			jobrunner.Table:                    jobrunner.ValidColumn,
 			jobrunnerhistory.Table:             jobrunnerhistory.ValidColumn,
 			jobrunnerregistrationtoken.Table:   jobrunnerregistrationtoken.ValidColumn,

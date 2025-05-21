@@ -1008,6 +1008,31 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 	return res, err
 }
 
+// JobResults is the resolver for the jobResults field.
+func (r *queryResolver) JobResults(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) (*generated.JobResultConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).JobResult.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobresult"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithJobResultOrder(orderBy),
+		generated.WithJobResultFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobresult"})
+	}
+
+	return res, err
+}
+
 // JobRunners is the resolver for the jobRunners field.
 func (r *queryResolver) JobRunners(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) (*generated.JobRunnerConnection, error) {
 	// set page limit if nothing was set

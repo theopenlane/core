@@ -2458,6 +2458,35 @@ func HasScheduledJobsWith(preds ...predicate.ControlScheduledJob) predicate.Orga
 	})
 }
 
+// HasScheduledJobResults applies the HasEdge predicate on the "scheduled_job_results" edge.
+func HasScheduledJobResults() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobResultsTable, ScheduledJobResultsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.JobResult
+		step.Edge.Schema = schemaConfig.JobResult
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasScheduledJobResultsWith applies the HasEdge predicate on the "scheduled_job_results" edge with a given conditions (other predicates).
+func HasScheduledJobResultsWith(preds ...predicate.JobResult) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newScheduledJobResultsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.JobResult
+		step.Edge.Schema = schemaConfig.JobResult
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

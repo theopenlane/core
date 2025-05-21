@@ -46,6 +46,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
@@ -2216,6 +2217,67 @@ func init() {
 	inviteDescID := inviteMixinFields2[0].Descriptor()
 	// invite.DefaultID holds the default value on creation for the id field.
 	invite.DefaultID = inviteDescID.Default.(func() string)
+	jobresultMixin := schema.JobResult{}.Mixin()
+	jobresult.Policy = privacy.NewPolicies(schema.JobResult{})
+	jobresult.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := jobresult.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	jobresultMixinHooks0 := jobresultMixin[0].Hooks()
+	jobresultMixinHooks1 := jobresultMixin[1].Hooks()
+	jobresultMixinHooks4 := jobresultMixin[4].Hooks()
+
+	jobresult.Hooks[1] = jobresultMixinHooks0[0]
+
+	jobresult.Hooks[2] = jobresultMixinHooks1[0]
+
+	jobresult.Hooks[3] = jobresultMixinHooks4[0]
+	jobresultMixinInters1 := jobresultMixin[1].Interceptors()
+	jobresultMixinInters4 := jobresultMixin[4].Interceptors()
+	jobresult.Interceptors[0] = jobresultMixinInters1[0]
+	jobresult.Interceptors[1] = jobresultMixinInters4[0]
+	jobresultMixinFields0 := jobresultMixin[0].Fields()
+	_ = jobresultMixinFields0
+	jobresultMixinFields2 := jobresultMixin[2].Fields()
+	_ = jobresultMixinFields2
+	jobresultMixinFields4 := jobresultMixin[4].Fields()
+	_ = jobresultMixinFields4
+	jobresultFields := schema.JobResult{}.Fields()
+	_ = jobresultFields
+	// jobresultDescCreatedAt is the schema descriptor for created_at field.
+	jobresultDescCreatedAt := jobresultMixinFields0[0].Descriptor()
+	// jobresult.DefaultCreatedAt holds the default value on creation for the created_at field.
+	jobresult.DefaultCreatedAt = jobresultDescCreatedAt.Default.(func() time.Time)
+	// jobresultDescUpdatedAt is the schema descriptor for updated_at field.
+	jobresultDescUpdatedAt := jobresultMixinFields0[1].Descriptor()
+	// jobresult.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	jobresult.DefaultUpdatedAt = jobresultDescUpdatedAt.Default.(func() time.Time)
+	// jobresult.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	jobresult.UpdateDefaultUpdatedAt = jobresultDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// jobresultDescOwnerID is the schema descriptor for owner_id field.
+	jobresultDescOwnerID := jobresultMixinFields4[0].Descriptor()
+	// jobresult.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	jobresult.OwnerIDValidator = jobresultDescOwnerID.Validators[0].(func(string) error)
+	// jobresultDescExitCode is the schema descriptor for exit_code field.
+	jobresultDescExitCode := jobresultFields[2].Descriptor()
+	// jobresult.ExitCodeValidator is a validator for the "exit_code" field. It is called by the builders before save.
+	jobresult.ExitCodeValidator = jobresultDescExitCode.Validators[0].(func(int) error)
+	// jobresultDescFinishedAt is the schema descriptor for finished_at field.
+	jobresultDescFinishedAt := jobresultFields[3].Descriptor()
+	// jobresult.DefaultFinishedAt holds the default value on creation for the finished_at field.
+	jobresult.DefaultFinishedAt = jobresultDescFinishedAt.Default.(func() time.Time)
+	// jobresultDescStartedAt is the schema descriptor for started_at field.
+	jobresultDescStartedAt := jobresultFields[4].Descriptor()
+	// jobresult.DefaultStartedAt holds the default value on creation for the started_at field.
+	jobresult.DefaultStartedAt = jobresultDescStartedAt.Default.(func() time.Time)
+	// jobresultDescID is the schema descriptor for id field.
+	jobresultDescID := jobresultMixinFields2[0].Descriptor()
+	// jobresult.DefaultID holds the default value on creation for the id field.
+	jobresult.DefaultID = jobresultDescID.Default.(func() string)
 	jobrunnerMixin := schema.JobRunner{}.Mixin()
 	jobrunner.Policy = privacy.NewPolicies(schema.JobRunner{})
 	jobrunner.Hooks[0] = func(next ent.Mutator) ent.Mutator {

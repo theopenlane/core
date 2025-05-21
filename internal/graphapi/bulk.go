@@ -370,6 +370,25 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	}, nil
 }
 
+// bulkCreateJobResult uses the CreateBulk function to create multiple JobResult entities
+func (r *mutationResolver) bulkCreateJobResult(ctx context.Context, input []*generated.CreateJobResultInput) (*model.JobResultBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.JobResultCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.JobResult.Create().SetInput(*data)
+	}
+
+	res, err := c.JobResult.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "jobresult"})
+	}
+
+	// return response
+	return &model.JobResultBulkCreatePayload{
+		JobResults: res,
+	}, nil
+}
+
 // bulkCreateMappableDomain uses the CreateBulk function to create multiple MappableDomain entities
 func (r *mutationResolver) bulkCreateMappableDomain(ctx context.Context, input []*generated.CreateMappableDomainInput) (*model.MappableDomainBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

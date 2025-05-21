@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up jobResult by ID
+    """
+     jobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+    ):  JobResult!
+}
+
+extend type Mutation{
+    """
+    Create a new jobResult
+    """
+    createJobResult(
+        """
+        values of the jobResult
+        """
+        input: CreateJobResultInput!
+    ): JobResultCreatePayload!
+    """
+    Create multiple new jobResults
+    """
+    createBulkJobResult(
+        """
+        values of the jobResult
+        """
+        input: [CreateJobResultInput!]
+    ): JobResultBulkCreatePayload!
+    """
+    Create multiple new jobResults via file upload
+    """
+    createBulkCSVJobResult(
+        """
+        csv file containing values of the jobResult
+        """
+        input: Upload!
+    ): JobResultBulkCreatePayload!
+    """
+    Update an existing jobResult
+    """
+    updateJobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+        """
+        New values for the jobResult
+        """
+        input: UpdateJobResultInput!
+    ): JobResultUpdatePayload!
+    """
+    Delete an existing jobResult
+    """
+    deleteJobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+    ): JobResultDeletePayload!
+}
+
+"""
+Return response for createJobResult mutation
+"""
+type JobResultCreatePayload {
+    """
+    Created jobResult
+    """
+    jobResult: JobResult!
+}
+
+"""
+Return response for updateJobResult mutation
+"""
+type JobResultUpdatePayload {
+    """
+    Updated jobResult
+    """
+    jobResult: JobResult!
+}
+
+"""
+Return response for deleteJobResult mutation
+"""
+type JobResultDeletePayload {
+    """
+    Deleted jobResult ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkJobResult mutation
+"""
+type JobResultBulkCreatePayload {
+    """
+    Created jobResults
+    """
+    jobResults: [JobResult!]
+}

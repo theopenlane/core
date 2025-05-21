@@ -489,6 +489,18 @@ func (f InviteFunc) Mutate(ctx context.Context, m generated.Mutation) (generated
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.InviteMutation", m)
 }
 
+// The JobResultFunc type is an adapter to allow the use of ordinary
+// function as JobResult mutator.
+type JobResultFunc func(context.Context, *generated.JobResultMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobResultFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobResultMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobResultMutation", m)
+}
+
 // The JobRunnerFunc type is an adapter to allow the use of ordinary
 // function as JobRunner mutator.
 type JobRunnerFunc func(context.Context, *generated.JobRunnerMutation) (generated.Value, error)

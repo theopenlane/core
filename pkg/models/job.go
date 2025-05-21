@@ -27,20 +27,19 @@ type JobConfiguration struct {
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (a JobConfiguration) MarshalGQL(w io.Writer) {
-	marshalGQLJSON(w, a)
+func (job JobConfiguration) MarshalGQL(w io.Writer) {
+	marshalGQLJSON(w, job)
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (a *JobConfiguration) UnmarshalGQL(v interface{}) error {
-	return unmarshalGQLJSON(v, a)
+func (job *JobConfiguration) UnmarshalGQL(v interface{}) error {
+	return unmarshalGQLJSON(v, job)
 }
 
-func (j *JobConfiguration) Validate(typ enums.JobType) error {
-
+func (job *JobConfiguration) Validate(typ enums.JobType) error {
 	switch typ {
 	case enums.JobTypeSsl:
-		return j.SSL.Validate()
+		return job.SSL.Validate()
 
 	default:
 		return ErrUnsupportedJobConfig
@@ -48,15 +47,8 @@ func (j *JobConfiguration) Validate(typ enums.JobType) error {
 }
 
 func (s SSLJobConfig) Validate() error {
-
-	newURL, err := validateURL(s.URL)
-	if err != nil {
-		return err
-	}
-
-	s.URL = newURL
-
-	return nil
+	_, err := validateURL(s.URL)
+	return err
 }
 
 func validateURL(s string) (string, error) {

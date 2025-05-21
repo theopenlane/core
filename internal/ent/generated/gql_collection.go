@@ -49,6 +49,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
@@ -14625,6 +14626,186 @@ func newInvitePaginateArgs(rv map[string]any) *invitePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (jr *JobResultQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobResultQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return jr, nil
+	}
+	if err := jr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return jr, nil
+}
+
+func (jr *JobResultQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(jobresult.Columns))
+		selectedFields = []string{jobresult.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: jr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			jr.withOwner = query
+			if _, ok := fieldSeen[jobresult.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldOwnerID)
+				fieldSeen[jobresult.FieldOwnerID] = struct{}{}
+			}
+
+		case "scheduledJob":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlScheduledJobClient{config: jr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, controlscheduledjobImplementors)...); err != nil {
+				return err
+			}
+			jr.withScheduledJob = query
+			if _, ok := fieldSeen[jobresult.FieldScheduledJobID]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldScheduledJobID)
+				fieldSeen[jobresult.FieldScheduledJobID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[jobresult.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldCreatedAt)
+				fieldSeen[jobresult.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[jobresult.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldUpdatedAt)
+				fieldSeen[jobresult.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[jobresult.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldCreatedBy)
+				fieldSeen[jobresult.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[jobresult.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldUpdatedBy)
+				fieldSeen[jobresult.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[jobresult.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldDeletedAt)
+				fieldSeen[jobresult.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[jobresult.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldDeletedBy)
+				fieldSeen[jobresult.FieldDeletedBy] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[jobresult.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldOwnerID)
+				fieldSeen[jobresult.FieldOwnerID] = struct{}{}
+			}
+		case "scheduledJobID":
+			if _, ok := fieldSeen[jobresult.FieldScheduledJobID]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldScheduledJobID)
+				fieldSeen[jobresult.FieldScheduledJobID] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[jobresult.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldStatus)
+				fieldSeen[jobresult.FieldStatus] = struct{}{}
+			}
+		case "exitCode":
+			if _, ok := fieldSeen[jobresult.FieldExitCode]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldExitCode)
+				fieldSeen[jobresult.FieldExitCode] = struct{}{}
+			}
+		case "finishedAt":
+			if _, ok := fieldSeen[jobresult.FieldFinishedAt]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldFinishedAt)
+				fieldSeen[jobresult.FieldFinishedAt] = struct{}{}
+			}
+		case "startedAt":
+			if _, ok := fieldSeen[jobresult.FieldStartedAt]; !ok {
+				selectedFields = append(selectedFields, jobresult.FieldStartedAt)
+				fieldSeen[jobresult.FieldStartedAt] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		jr.Select(selectedFields...)
+	}
+	return nil
+}
+
+type jobresultPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []JobResultPaginateOption
+}
+
+func newJobResultPaginateArgs(rv map[string]any) *jobresultPaginateArgs {
+	args := &jobresultPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*JobResultOrder:
+			args.opts = append(args.opts, WithJobResultOrder(v))
+		case []any:
+			var orders []*JobResultOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &JobResultOrder{Field: &JobResultOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithJobResultOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*JobResultWhereInput); ok {
+		args.opts = append(args.opts, WithJobResultFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (jr *JobRunnerQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobRunnerQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -21889,6 +22070,95 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "scheduledJobResults":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobResultClient{config: o.config}).Query()
+			)
+			args := newJobResultPaginateArgs(fieldArgs(ctx, new(JobResultWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newJobResultPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.ScheduledJobResultsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.ScheduledJobResultsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[49] == nil {
+								nodes[i].Edges.totalCount[49] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[49][alias] = n
+						}
+						return nil
+					})
+				} else {
+					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.ScheduledJobResults)
+							if nodes[i].Edges.totalCount[49] == nil {
+								nodes[i].Edges.totalCount[49] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[49][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, jobresultImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.ScheduledJobResultsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			o.WithNamedScheduledJobResults(alias, func(wq *JobResultQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -21932,10 +22202,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[49] == nil {
-								nodes[i].Edges.totalCount[49] = make(map[string]int)
+							if nodes[i].Edges.totalCount[50] == nil {
+								nodes[i].Edges.totalCount[50] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[49][alias] = n
+							nodes[i].Edges.totalCount[50][alias] = n
 						}
 						return nil
 					})
@@ -21943,10 +22213,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[49] == nil {
-								nodes[i].Edges.totalCount[49] = make(map[string]int)
+							if nodes[i].Edges.totalCount[50] == nil {
+								nodes[i].Edges.totalCount[50] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[49][alias] = n
+							nodes[i].Edges.totalCount[50][alias] = n
 						}
 						return nil
 					})

@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
@@ -1000,6 +1001,21 @@ func (ou *OrganizationUpdate) AddScheduledJobs(c ...*ControlScheduledJob) *Organ
 		ids[i] = c[i].ID
 	}
 	return ou.AddScheduledJobIDs(ids...)
+}
+
+// AddScheduledJobResultIDs adds the "scheduled_job_results" edge to the JobResult entity by IDs.
+func (ou *OrganizationUpdate) AddScheduledJobResultIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddScheduledJobResultIDs(ids...)
+	return ou
+}
+
+// AddScheduledJobResults adds the "scheduled_job_results" edges to the JobResult entity.
+func (ou *OrganizationUpdate) AddScheduledJobResults(j ...*JobResult) *OrganizationUpdate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ou.AddScheduledJobResultIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1998,6 +2014,27 @@ func (ou *OrganizationUpdate) RemoveScheduledJobs(c ...*ControlScheduledJob) *Or
 		ids[i] = c[i].ID
 	}
 	return ou.RemoveScheduledJobIDs(ids...)
+}
+
+// ClearScheduledJobResults clears all "scheduled_job_results" edges to the JobResult entity.
+func (ou *OrganizationUpdate) ClearScheduledJobResults() *OrganizationUpdate {
+	ou.mutation.ClearScheduledJobResults()
+	return ou
+}
+
+// RemoveScheduledJobResultIDs removes the "scheduled_job_results" edge to JobResult entities by IDs.
+func (ou *OrganizationUpdate) RemoveScheduledJobResultIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveScheduledJobResultIDs(ids...)
+	return ou
+}
+
+// RemoveScheduledJobResults removes "scheduled_job_results" edges to JobResult entities.
+func (ou *OrganizationUpdate) RemoveScheduledJobResults(j ...*JobResult) *OrganizationUpdate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ou.RemoveScheduledJobResultIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -4470,6 +4507,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.ScheduledJobResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScheduledJobResultsTable,
+			Columns: []string{organization.ScheduledJobResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobResult
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedScheduledJobResultsIDs(); len(nodes) > 0 && !ou.mutation.ScheduledJobResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScheduledJobResultsTable,
+			Columns: []string{organization.ScheduledJobResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobResult
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.ScheduledJobResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScheduledJobResultsTable,
+			Columns: []string{organization.ScheduledJobResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.JobResult
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5474,6 +5559,21 @@ func (ouo *OrganizationUpdateOne) AddScheduledJobs(c ...*ControlScheduledJob) *O
 	return ouo.AddScheduledJobIDs(ids...)
 }
 
+// AddScheduledJobResultIDs adds the "scheduled_job_results" edge to the JobResult entity by IDs.
+func (ouo *OrganizationUpdateOne) AddScheduledJobResultIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddScheduledJobResultIDs(ids...)
+	return ouo
+}
+
+// AddScheduledJobResults adds the "scheduled_job_results" edges to the JobResult entity.
+func (ouo *OrganizationUpdateOne) AddScheduledJobResults(j ...*JobResult) *OrganizationUpdateOne {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ouo.AddScheduledJobResultIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -6470,6 +6570,27 @@ func (ouo *OrganizationUpdateOne) RemoveScheduledJobs(c ...*ControlScheduledJob)
 		ids[i] = c[i].ID
 	}
 	return ouo.RemoveScheduledJobIDs(ids...)
+}
+
+// ClearScheduledJobResults clears all "scheduled_job_results" edges to the JobResult entity.
+func (ouo *OrganizationUpdateOne) ClearScheduledJobResults() *OrganizationUpdateOne {
+	ouo.mutation.ClearScheduledJobResults()
+	return ouo
+}
+
+// RemoveScheduledJobResultIDs removes the "scheduled_job_results" edge to JobResult entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveScheduledJobResultIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveScheduledJobResultIDs(ids...)
+	return ouo
+}
+
+// RemoveScheduledJobResults removes "scheduled_job_results" edges to JobResult entities.
+func (ouo *OrganizationUpdateOne) RemoveScheduledJobResults(j ...*JobResult) *OrganizationUpdateOne {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return ouo.RemoveScheduledJobResultIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -8967,6 +9088,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.ControlScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.ScheduledJobResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScheduledJobResultsTable,
+			Columns: []string{organization.ScheduledJobResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobResult
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedScheduledJobResultsIDs(); len(nodes) > 0 && !ouo.mutation.ScheduledJobResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScheduledJobResultsTable,
+			Columns: []string{organization.ScheduledJobResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobResult
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.ScheduledJobResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScheduledJobResultsTable,
+			Columns: []string{organization.ScheduledJobResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

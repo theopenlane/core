@@ -46,6 +46,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
@@ -36050,6 +36051,730 @@ func (i *InviteWhereInput) P() (predicate.Invite, error) {
 	}
 }
 
+// JobResultWhereInput represents a where input for filtering JobResult queries.
+type JobResultWhereInput struct {
+	Predicates []predicate.JobResult  `json:"-"`
+	Not        *JobResultWhereInput   `json:"not,omitempty"`
+	Or         []*JobResultWhereInput `json:"or,omitempty"`
+	And        []*JobResultWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "deleted_at" field predicates.
+	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
+	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGT     *time.Time  `json:"deletedAtGT,omitempty"`
+	DeletedAtGTE    *time.Time  `json:"deletedAtGTE,omitempty"`
+	DeletedAtLT     *time.Time  `json:"deletedAtLT,omitempty"`
+	DeletedAtLTE    *time.Time  `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil bool        `json:"deletedAtNotNil,omitempty"`
+
+	// "deleted_by" field predicates.
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNEQ          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGT           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGTE          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLT           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLTE          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        bool     `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "scheduled_job_id" field predicates.
+	ScheduledJobID             *string  `json:"scheduledJobID,omitempty"`
+	ScheduledJobIDNEQ          *string  `json:"scheduledJobIDNEQ,omitempty"`
+	ScheduledJobIDIn           []string `json:"scheduledJobIDIn,omitempty"`
+	ScheduledJobIDNotIn        []string `json:"scheduledJobIDNotIn,omitempty"`
+	ScheduledJobIDGT           *string  `json:"scheduledJobIDGT,omitempty"`
+	ScheduledJobIDGTE          *string  `json:"scheduledJobIDGTE,omitempty"`
+	ScheduledJobIDLT           *string  `json:"scheduledJobIDLT,omitempty"`
+	ScheduledJobIDLTE          *string  `json:"scheduledJobIDLTE,omitempty"`
+	ScheduledJobIDContains     *string  `json:"scheduledJobIDContains,omitempty"`
+	ScheduledJobIDHasPrefix    *string  `json:"scheduledJobIDHasPrefix,omitempty"`
+	ScheduledJobIDHasSuffix    *string  `json:"scheduledJobIDHasSuffix,omitempty"`
+	ScheduledJobIDEqualFold    *string  `json:"scheduledJobIDEqualFold,omitempty"`
+	ScheduledJobIDContainsFold *string  `json:"scheduledJobIDContainsFold,omitempty"`
+
+	// "status" field predicates.
+	Status      *enums.JobExecutionStatus  `json:"status,omitempty"`
+	StatusNEQ   *enums.JobExecutionStatus  `json:"statusNEQ,omitempty"`
+	StatusIn    []enums.JobExecutionStatus `json:"statusIn,omitempty"`
+	StatusNotIn []enums.JobExecutionStatus `json:"statusNotIn,omitempty"`
+
+	// "exit_code" field predicates.
+	ExitCode      *int  `json:"exitCode,omitempty"`
+	ExitCodeNEQ   *int  `json:"exitCodeNEQ,omitempty"`
+	ExitCodeIn    []int `json:"exitCodeIn,omitempty"`
+	ExitCodeNotIn []int `json:"exitCodeNotIn,omitempty"`
+	ExitCodeGT    *int  `json:"exitCodeGT,omitempty"`
+	ExitCodeGTE   *int  `json:"exitCodeGTE,omitempty"`
+	ExitCodeLT    *int  `json:"exitCodeLT,omitempty"`
+	ExitCodeLTE   *int  `json:"exitCodeLTE,omitempty"`
+
+	// "finished_at" field predicates.
+	FinishedAt      *time.Time  `json:"finishedAt,omitempty"`
+	FinishedAtNEQ   *time.Time  `json:"finishedAtNEQ,omitempty"`
+	FinishedAtIn    []time.Time `json:"finishedAtIn,omitempty"`
+	FinishedAtNotIn []time.Time `json:"finishedAtNotIn,omitempty"`
+	FinishedAtGT    *time.Time  `json:"finishedAtGT,omitempty"`
+	FinishedAtGTE   *time.Time  `json:"finishedAtGTE,omitempty"`
+	FinishedAtLT    *time.Time  `json:"finishedAtLT,omitempty"`
+	FinishedAtLTE   *time.Time  `json:"finishedAtLTE,omitempty"`
+
+	// "started_at" field predicates.
+	StartedAt      *time.Time  `json:"startedAt,omitempty"`
+	StartedAtNEQ   *time.Time  `json:"startedAtNEQ,omitempty"`
+	StartedAtIn    []time.Time `json:"startedAtIn,omitempty"`
+	StartedAtNotIn []time.Time `json:"startedAtNotIn,omitempty"`
+	StartedAtGT    *time.Time  `json:"startedAtGT,omitempty"`
+	StartedAtGTE   *time.Time  `json:"startedAtGTE,omitempty"`
+	StartedAtLT    *time.Time  `json:"startedAtLT,omitempty"`
+	StartedAtLTE   *time.Time  `json:"startedAtLTE,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "scheduled_job" edge predicates.
+	HasScheduledJob     *bool                            `json:"hasScheduledJob,omitempty"`
+	HasScheduledJobWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *JobResultWhereInput) AddPredicates(predicates ...predicate.JobResult) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the JobResultWhereInput filter on the JobResultQuery builder.
+func (i *JobResultWhereInput) Filter(q *JobResultQuery) (*JobResultQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyJobResultWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyJobResultWhereInput is returned in case the JobResultWhereInput is empty.
+var ErrEmptyJobResultWhereInput = errors.New("generated: empty predicate JobResultWhereInput")
+
+// P returns a predicate for filtering jobresults.
+// An error is returned if the input is empty or invalid.
+func (i *JobResultWhereInput) P() (predicate.JobResult, error) {
+	var predicates []predicate.JobResult
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, jobresult.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.JobResult, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, jobresult.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.JobResult, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, jobresult.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, jobresult.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, jobresult.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, jobresult.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, jobresult.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, jobresult.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, jobresult.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, jobresult.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, jobresult.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, jobresult.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, jobresult.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, jobresult.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, jobresult.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, jobresult.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, jobresult.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, jobresult.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, jobresult.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, jobresult.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, jobresult.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, jobresult.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, jobresult.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, jobresult.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, jobresult.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, jobresult.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, jobresult.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, jobresult.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, jobresult.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, jobresult.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, jobresult.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, jobresult.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, jobresult.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, jobresult.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, jobresult.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, jobresult.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, jobresult.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, jobresult.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, jobresult.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, jobresult.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, jobresult.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, jobresult.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, jobresult.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, jobresult.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, jobresult.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, jobresult.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, jobresult.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, jobresult.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, jobresult.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, jobresult.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, jobresult.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, jobresult.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, jobresult.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, jobresult.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, jobresult.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, jobresult.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, jobresult.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, jobresult.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, jobresult.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, jobresult.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, jobresult.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, jobresult.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, jobresult.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DeletedAt != nil {
+		predicates = append(predicates, jobresult.DeletedAtEQ(*i.DeletedAt))
+	}
+	if i.DeletedAtNEQ != nil {
+		predicates = append(predicates, jobresult.DeletedAtNEQ(*i.DeletedAtNEQ))
+	}
+	if len(i.DeletedAtIn) > 0 {
+		predicates = append(predicates, jobresult.DeletedAtIn(i.DeletedAtIn...))
+	}
+	if len(i.DeletedAtNotIn) > 0 {
+		predicates = append(predicates, jobresult.DeletedAtNotIn(i.DeletedAtNotIn...))
+	}
+	if i.DeletedAtGT != nil {
+		predicates = append(predicates, jobresult.DeletedAtGT(*i.DeletedAtGT))
+	}
+	if i.DeletedAtGTE != nil {
+		predicates = append(predicates, jobresult.DeletedAtGTE(*i.DeletedAtGTE))
+	}
+	if i.DeletedAtLT != nil {
+		predicates = append(predicates, jobresult.DeletedAtLT(*i.DeletedAtLT))
+	}
+	if i.DeletedAtLTE != nil {
+		predicates = append(predicates, jobresult.DeletedAtLTE(*i.DeletedAtLTE))
+	}
+	if i.DeletedAtIsNil {
+		predicates = append(predicates, jobresult.DeletedAtIsNil())
+	}
+	if i.DeletedAtNotNil {
+		predicates = append(predicates, jobresult.DeletedAtNotNil())
+	}
+	if i.DeletedBy != nil {
+		predicates = append(predicates, jobresult.DeletedByEQ(*i.DeletedBy))
+	}
+	if i.DeletedByNEQ != nil {
+		predicates = append(predicates, jobresult.DeletedByNEQ(*i.DeletedByNEQ))
+	}
+	if len(i.DeletedByIn) > 0 {
+		predicates = append(predicates, jobresult.DeletedByIn(i.DeletedByIn...))
+	}
+	if len(i.DeletedByNotIn) > 0 {
+		predicates = append(predicates, jobresult.DeletedByNotIn(i.DeletedByNotIn...))
+	}
+	if i.DeletedByGT != nil {
+		predicates = append(predicates, jobresult.DeletedByGT(*i.DeletedByGT))
+	}
+	if i.DeletedByGTE != nil {
+		predicates = append(predicates, jobresult.DeletedByGTE(*i.DeletedByGTE))
+	}
+	if i.DeletedByLT != nil {
+		predicates = append(predicates, jobresult.DeletedByLT(*i.DeletedByLT))
+	}
+	if i.DeletedByLTE != nil {
+		predicates = append(predicates, jobresult.DeletedByLTE(*i.DeletedByLTE))
+	}
+	if i.DeletedByContains != nil {
+		predicates = append(predicates, jobresult.DeletedByContains(*i.DeletedByContains))
+	}
+	if i.DeletedByHasPrefix != nil {
+		predicates = append(predicates, jobresult.DeletedByHasPrefix(*i.DeletedByHasPrefix))
+	}
+	if i.DeletedByHasSuffix != nil {
+		predicates = append(predicates, jobresult.DeletedByHasSuffix(*i.DeletedByHasSuffix))
+	}
+	if i.DeletedByIsNil {
+		predicates = append(predicates, jobresult.DeletedByIsNil())
+	}
+	if i.DeletedByNotNil {
+		predicates = append(predicates, jobresult.DeletedByNotNil())
+	}
+	if i.DeletedByEqualFold != nil {
+		predicates = append(predicates, jobresult.DeletedByEqualFold(*i.DeletedByEqualFold))
+	}
+	if i.DeletedByContainsFold != nil {
+		predicates = append(predicates, jobresult.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, jobresult.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, jobresult.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, jobresult.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, jobresult.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, jobresult.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, jobresult.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, jobresult.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, jobresult.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, jobresult.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, jobresult.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, jobresult.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, jobresult.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, jobresult.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, jobresult.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, jobresult.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.ScheduledJobID != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDEQ(*i.ScheduledJobID))
+	}
+	if i.ScheduledJobIDNEQ != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDNEQ(*i.ScheduledJobIDNEQ))
+	}
+	if len(i.ScheduledJobIDIn) > 0 {
+		predicates = append(predicates, jobresult.ScheduledJobIDIn(i.ScheduledJobIDIn...))
+	}
+	if len(i.ScheduledJobIDNotIn) > 0 {
+		predicates = append(predicates, jobresult.ScheduledJobIDNotIn(i.ScheduledJobIDNotIn...))
+	}
+	if i.ScheduledJobIDGT != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDGT(*i.ScheduledJobIDGT))
+	}
+	if i.ScheduledJobIDGTE != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDGTE(*i.ScheduledJobIDGTE))
+	}
+	if i.ScheduledJobIDLT != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDLT(*i.ScheduledJobIDLT))
+	}
+	if i.ScheduledJobIDLTE != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDLTE(*i.ScheduledJobIDLTE))
+	}
+	if i.ScheduledJobIDContains != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDContains(*i.ScheduledJobIDContains))
+	}
+	if i.ScheduledJobIDHasPrefix != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDHasPrefix(*i.ScheduledJobIDHasPrefix))
+	}
+	if i.ScheduledJobIDHasSuffix != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDHasSuffix(*i.ScheduledJobIDHasSuffix))
+	}
+	if i.ScheduledJobIDEqualFold != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDEqualFold(*i.ScheduledJobIDEqualFold))
+	}
+	if i.ScheduledJobIDContainsFold != nil {
+		predicates = append(predicates, jobresult.ScheduledJobIDContainsFold(*i.ScheduledJobIDContainsFold))
+	}
+	if i.Status != nil {
+		predicates = append(predicates, jobresult.StatusEQ(*i.Status))
+	}
+	if i.StatusNEQ != nil {
+		predicates = append(predicates, jobresult.StatusNEQ(*i.StatusNEQ))
+	}
+	if len(i.StatusIn) > 0 {
+		predicates = append(predicates, jobresult.StatusIn(i.StatusIn...))
+	}
+	if len(i.StatusNotIn) > 0 {
+		predicates = append(predicates, jobresult.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.ExitCode != nil {
+		predicates = append(predicates, jobresult.ExitCodeEQ(*i.ExitCode))
+	}
+	if i.ExitCodeNEQ != nil {
+		predicates = append(predicates, jobresult.ExitCodeNEQ(*i.ExitCodeNEQ))
+	}
+	if len(i.ExitCodeIn) > 0 {
+		predicates = append(predicates, jobresult.ExitCodeIn(i.ExitCodeIn...))
+	}
+	if len(i.ExitCodeNotIn) > 0 {
+		predicates = append(predicates, jobresult.ExitCodeNotIn(i.ExitCodeNotIn...))
+	}
+	if i.ExitCodeGT != nil {
+		predicates = append(predicates, jobresult.ExitCodeGT(*i.ExitCodeGT))
+	}
+	if i.ExitCodeGTE != nil {
+		predicates = append(predicates, jobresult.ExitCodeGTE(*i.ExitCodeGTE))
+	}
+	if i.ExitCodeLT != nil {
+		predicates = append(predicates, jobresult.ExitCodeLT(*i.ExitCodeLT))
+	}
+	if i.ExitCodeLTE != nil {
+		predicates = append(predicates, jobresult.ExitCodeLTE(*i.ExitCodeLTE))
+	}
+	if i.FinishedAt != nil {
+		predicates = append(predicates, jobresult.FinishedAtEQ(*i.FinishedAt))
+	}
+	if i.FinishedAtNEQ != nil {
+		predicates = append(predicates, jobresult.FinishedAtNEQ(*i.FinishedAtNEQ))
+	}
+	if len(i.FinishedAtIn) > 0 {
+		predicates = append(predicates, jobresult.FinishedAtIn(i.FinishedAtIn...))
+	}
+	if len(i.FinishedAtNotIn) > 0 {
+		predicates = append(predicates, jobresult.FinishedAtNotIn(i.FinishedAtNotIn...))
+	}
+	if i.FinishedAtGT != nil {
+		predicates = append(predicates, jobresult.FinishedAtGT(*i.FinishedAtGT))
+	}
+	if i.FinishedAtGTE != nil {
+		predicates = append(predicates, jobresult.FinishedAtGTE(*i.FinishedAtGTE))
+	}
+	if i.FinishedAtLT != nil {
+		predicates = append(predicates, jobresult.FinishedAtLT(*i.FinishedAtLT))
+	}
+	if i.FinishedAtLTE != nil {
+		predicates = append(predicates, jobresult.FinishedAtLTE(*i.FinishedAtLTE))
+	}
+	if i.StartedAt != nil {
+		predicates = append(predicates, jobresult.StartedAtEQ(*i.StartedAt))
+	}
+	if i.StartedAtNEQ != nil {
+		predicates = append(predicates, jobresult.StartedAtNEQ(*i.StartedAtNEQ))
+	}
+	if len(i.StartedAtIn) > 0 {
+		predicates = append(predicates, jobresult.StartedAtIn(i.StartedAtIn...))
+	}
+	if len(i.StartedAtNotIn) > 0 {
+		predicates = append(predicates, jobresult.StartedAtNotIn(i.StartedAtNotIn...))
+	}
+	if i.StartedAtGT != nil {
+		predicates = append(predicates, jobresult.StartedAtGT(*i.StartedAtGT))
+	}
+	if i.StartedAtGTE != nil {
+		predicates = append(predicates, jobresult.StartedAtGTE(*i.StartedAtGTE))
+	}
+	if i.StartedAtLT != nil {
+		predicates = append(predicates, jobresult.StartedAtLT(*i.StartedAtLT))
+	}
+	if i.StartedAtLTE != nil {
+		predicates = append(predicates, jobresult.StartedAtLTE(*i.StartedAtLTE))
+	}
+
+	if i.HasOwner != nil {
+		p := jobresult.HasOwner()
+		if !*i.HasOwner {
+			p = jobresult.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, jobresult.HasOwnerWith(with...))
+	}
+	if i.HasScheduledJob != nil {
+		p := jobresult.HasScheduledJob()
+		if !*i.HasScheduledJob {
+			p = jobresult.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasScheduledJobWith) > 0 {
+		with := make([]predicate.ControlScheduledJob, 0, len(i.HasScheduledJobWith))
+		for _, w := range i.HasScheduledJobWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasScheduledJobWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, jobresult.HasScheduledJobWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyJobResultWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return jobresult.And(predicates...), nil
+	}
+}
+
 // JobRunnerWhereInput represents a where input for filtering JobRunner queries.
 type JobRunnerWhereInput struct {
 	Predicates []predicate.JobRunner  `json:"-"`
@@ -48906,6 +49631,10 @@ type OrganizationWhereInput struct {
 	HasScheduledJobs     *bool                            `json:"hasScheduledJobs,omitempty"`
 	HasScheduledJobsWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
 
+	// "scheduled_job_results" edge predicates.
+	HasScheduledJobResults     *bool                  `json:"hasScheduledJobResults,omitempty"`
+	HasScheduledJobResultsWith []*JobResultWhereInput `json:"hasScheduledJobResultsWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -50335,6 +51064,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasScheduledJobsWith(with...))
+	}
+	if i.HasScheduledJobResults != nil {
+		p := organization.HasScheduledJobResults()
+		if !*i.HasScheduledJobResults {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasScheduledJobResultsWith) > 0 {
+		with := make([]predicate.JobResult, 0, len(i.HasScheduledJobResultsWith))
+		for _, w := range i.HasScheduledJobResultsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasScheduledJobResultsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasScheduledJobResultsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()

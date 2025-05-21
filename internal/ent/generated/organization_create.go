@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
@@ -1025,6 +1026,21 @@ func (oc *OrganizationCreate) AddScheduledJobs(c ...*ControlScheduledJob) *Organ
 		ids[i] = c[i].ID
 	}
 	return oc.AddScheduledJobIDs(ids...)
+}
+
+// AddScheduledJobResultIDs adds the "scheduled_job_results" edge to the JobResult entity by IDs.
+func (oc *OrganizationCreate) AddScheduledJobResultIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddScheduledJobResultIDs(ids...)
+	return oc
+}
+
+// AddScheduledJobResults adds the "scheduled_job_results" edges to the JobResult entity.
+func (oc *OrganizationCreate) AddScheduledJobResults(j ...*JobResult) *OrganizationCreate {
+	ids := make([]string, len(j))
+	for i := range j {
+		ids[i] = j[i].ID
+	}
+	return oc.AddScheduledJobResultIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2081,6 +2097,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.ControlScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.ScheduledJobResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScheduledJobResultsTable,
+			Columns: []string{organization.ScheduledJobResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.JobResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -204,6 +204,14 @@ type OpenlaneGraphClient interface {
 	GetAllInvites(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInvites, error)
 	GetInviteByID(ctx context.Context, inviteID string, interceptors ...clientv2.RequestInterceptor) (*GetInviteByID, error)
 	InvitesByOrgID(ctx context.Context, where *InviteWhereInput, interceptors ...clientv2.RequestInterceptor) (*InvitesByOrgID, error)
+	CreateBulkCSVJobResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVJobResult, error)
+	CreateBulkJobResult(ctx context.Context, input []*CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkJobResult, error)
+	CreateJobResult(ctx context.Context, input CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobResult, error)
+	DeleteJobResult(ctx context.Context, deleteJobResultID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobResult, error)
+	GetAllJobResults(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobResults, error)
+	GetJobResultByID(ctx context.Context, jobResultID string, interceptors ...clientv2.RequestInterceptor) (*GetJobResultByID, error)
+	GetJobResults(ctx context.Context, first *int64, last *int64, where *JobResultWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobResults, error)
+	UpdateJobResult(ctx context.Context, updateJobResultID string, input UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobResult, error)
 	DeleteJobRunner(ctx context.Context, deleteJobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunner, error)
 	GetAllJobRunners(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunners, error)
 	GetJobRunnerByID(ctx context.Context, jobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerByID, error)
@@ -35182,6 +35190,764 @@ func (t *InvitesByOrgID_Invites) GetEdges() []*InvitesByOrgID_Invites_Edges {
 		t = &InvitesByOrgID_Invites{}
 	}
 	return t.Edges
+}
+
+type CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetExitCode() int64 {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return t.ExitCode
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return &t.FinishedAt
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetScheduledJobID() string {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return t.ScheduledJobID
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return &t.StartedAt
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVJobResult_CreateBulkCSVJobResult struct {
+	JobResults []*CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults "json:\"jobResults,omitempty\" graphql:\"jobResults\""
+}
+
+func (t *CreateBulkCSVJobResult_CreateBulkCSVJobResult) GetJobResults() []*CreateBulkCSVJobResult_CreateBulkCSVJobResult_JobResults {
+	if t == nil {
+		t = &CreateBulkCSVJobResult_CreateBulkCSVJobResult{}
+	}
+	return t.JobResults
+}
+
+type CreateBulkJobResult_CreateBulkJobResult_JobResults struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetExitCode() int64 {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return t.ExitCode
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return &t.FinishedAt
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetID() string {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return t.ID
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetScheduledJobID() string {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return t.ScheduledJobID
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return &t.StartedAt
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkJobResult_CreateBulkJobResult_JobResults) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult_JobResults{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkJobResult_CreateBulkJobResult struct {
+	JobResults []*CreateBulkJobResult_CreateBulkJobResult_JobResults "json:\"jobResults,omitempty\" graphql:\"jobResults\""
+}
+
+func (t *CreateBulkJobResult_CreateBulkJobResult) GetJobResults() []*CreateBulkJobResult_CreateBulkJobResult_JobResults {
+	if t == nil {
+		t = &CreateBulkJobResult_CreateBulkJobResult{}
+	}
+	return t.JobResults
+}
+
+type CreateJobResult_CreateJobResult_JobResult struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateJobResult_CreateJobResult_JobResult) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetExitCode() int64 {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.ExitCode
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return &t.FinishedAt
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetID() string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.ID
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.OwnerID
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetScheduledJobID() string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.ScheduledJobID
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return &t.StartedAt
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return &t.Status
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateJobResult_CreateJobResult_JobResult) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult_JobResult{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateJobResult_CreateJobResult struct {
+	JobResult CreateJobResult_CreateJobResult_JobResult "json:\"jobResult\" graphql:\"jobResult\""
+}
+
+func (t *CreateJobResult_CreateJobResult) GetJobResult() *CreateJobResult_CreateJobResult_JobResult {
+	if t == nil {
+		t = &CreateJobResult_CreateJobResult{}
+	}
+	return &t.JobResult
+}
+
+type DeleteJobResult_DeleteJobResult struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteJobResult_DeleteJobResult) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteJobResult_DeleteJobResult{}
+	}
+	return t.DeletedID
+}
+
+type GetAllJobResults_JobResults_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllJobResults_JobResults_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllJobResults_JobResults_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllJobResults_JobResults_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllJobResults_JobResults_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllJobResults_JobResults_Edges_Node struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllJobResults_JobResults_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetExitCode() int64 {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.ExitCode
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return &t.FinishedAt
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetScheduledJobID() string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.ScheduledJobID
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllJobResults_JobResults_Edges struct {
+	Node *GetAllJobResults_JobResults_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllJobResults_JobResults_Edges) GetNode() *GetAllJobResults_JobResults_Edges_Node {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllJobResults_JobResults struct {
+	Edges      []*GetAllJobResults_JobResults_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllJobResults_JobResults_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllJobResults_JobResults) GetEdges() []*GetAllJobResults_JobResults_Edges {
+	if t == nil {
+		t = &GetAllJobResults_JobResults{}
+	}
+	return t.Edges
+}
+func (t *GetAllJobResults_JobResults) GetPageInfo() *GetAllJobResults_JobResults_PageInfo {
+	if t == nil {
+		t = &GetAllJobResults_JobResults{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllJobResults_JobResults) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllJobResults_JobResults{}
+	}
+	return t.TotalCount
+}
+
+type GetJobResultByID_JobResult struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobResultByID_JobResult) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobResultByID_JobResult) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobResultByID_JobResult) GetExitCode() int64 {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.ExitCode
+}
+func (t *GetJobResultByID_JobResult) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return &t.FinishedAt
+}
+func (t *GetJobResultByID_JobResult) GetID() string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.ID
+}
+func (t *GetJobResultByID_JobResult) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobResultByID_JobResult) GetScheduledJobID() string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.ScheduledJobID
+}
+func (t *GetJobResultByID_JobResult) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return &t.StartedAt
+}
+func (t *GetJobResultByID_JobResult) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return &t.Status
+}
+func (t *GetJobResultByID_JobResult) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobResultByID_JobResult) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobResults_JobResults_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetJobResults_JobResults_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetJobResults_JobResults_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetJobResults_JobResults_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetJobResults_JobResults_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetJobResults_JobResults_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetJobResults_JobResults_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetJobResults_JobResults_Edges_Node struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobResults_JobResults_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetExitCode() int64 {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.ExitCode
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return &t.FinishedAt
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetScheduledJobID() string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.ScheduledJobID
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobResults_JobResults_Edges struct {
+	Node *GetJobResults_JobResults_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetJobResults_JobResults_Edges) GetNode() *GetJobResults_JobResults_Edges_Node {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges{}
+	}
+	return t.Node
+}
+
+type GetJobResults_JobResults struct {
+	Edges      []*GetJobResults_JobResults_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetJobResults_JobResults_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetJobResults_JobResults) GetEdges() []*GetJobResults_JobResults_Edges {
+	if t == nil {
+		t = &GetJobResults_JobResults{}
+	}
+	return t.Edges
+}
+func (t *GetJobResults_JobResults) GetPageInfo() *GetJobResults_JobResults_PageInfo {
+	if t == nil {
+		t = &GetJobResults_JobResults{}
+	}
+	return &t.PageInfo
+}
+func (t *GetJobResults_JobResults) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetJobResults_JobResults{}
+	}
+	return t.TotalCount
+}
+
+type UpdateJobResult_UpdateJobResult_JobResult struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetExitCode() int64 {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.ExitCode
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return &t.FinishedAt
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetID() string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.ID
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetScheduledJobID() string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.ScheduledJobID
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return &t.StartedAt
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return &t.Status
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateJobResult_UpdateJobResult_JobResult) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult_JobResult{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateJobResult_UpdateJobResult struct {
+	JobResult UpdateJobResult_UpdateJobResult_JobResult "json:\"jobResult\" graphql:\"jobResult\""
+}
+
+func (t *UpdateJobResult_UpdateJobResult) GetJobResult() *UpdateJobResult_UpdateJobResult_JobResult {
+	if t == nil {
+		t = &UpdateJobResult_UpdateJobResult{}
+	}
+	return &t.JobResult
 }
 
 type DeleteJobRunner_DeleteJobRunner struct {
@@ -75481,6 +76247,94 @@ func (t *InvitesByOrgID) GetInvites() *InvitesByOrgID_Invites {
 	return &t.Invites
 }
 
+type CreateBulkCSVJobResult struct {
+	CreateBulkCSVJobResult CreateBulkCSVJobResult_CreateBulkCSVJobResult "json:\"createBulkCSVJobResult\" graphql:\"createBulkCSVJobResult\""
+}
+
+func (t *CreateBulkCSVJobResult) GetCreateBulkCSVJobResult() *CreateBulkCSVJobResult_CreateBulkCSVJobResult {
+	if t == nil {
+		t = &CreateBulkCSVJobResult{}
+	}
+	return &t.CreateBulkCSVJobResult
+}
+
+type CreateBulkJobResult struct {
+	CreateBulkJobResult CreateBulkJobResult_CreateBulkJobResult "json:\"createBulkJobResult\" graphql:\"createBulkJobResult\""
+}
+
+func (t *CreateBulkJobResult) GetCreateBulkJobResult() *CreateBulkJobResult_CreateBulkJobResult {
+	if t == nil {
+		t = &CreateBulkJobResult{}
+	}
+	return &t.CreateBulkJobResult
+}
+
+type CreateJobResult struct {
+	CreateJobResult CreateJobResult_CreateJobResult "json:\"createJobResult\" graphql:\"createJobResult\""
+}
+
+func (t *CreateJobResult) GetCreateJobResult() *CreateJobResult_CreateJobResult {
+	if t == nil {
+		t = &CreateJobResult{}
+	}
+	return &t.CreateJobResult
+}
+
+type DeleteJobResult struct {
+	DeleteJobResult DeleteJobResult_DeleteJobResult "json:\"deleteJobResult\" graphql:\"deleteJobResult\""
+}
+
+func (t *DeleteJobResult) GetDeleteJobResult() *DeleteJobResult_DeleteJobResult {
+	if t == nil {
+		t = &DeleteJobResult{}
+	}
+	return &t.DeleteJobResult
+}
+
+type GetAllJobResults struct {
+	JobResults GetAllJobResults_JobResults "json:\"jobResults\" graphql:\"jobResults\""
+}
+
+func (t *GetAllJobResults) GetJobResults() *GetAllJobResults_JobResults {
+	if t == nil {
+		t = &GetAllJobResults{}
+	}
+	return &t.JobResults
+}
+
+type GetJobResultByID struct {
+	JobResult GetJobResultByID_JobResult "json:\"jobResult\" graphql:\"jobResult\""
+}
+
+func (t *GetJobResultByID) GetJobResult() *GetJobResultByID_JobResult {
+	if t == nil {
+		t = &GetJobResultByID{}
+	}
+	return &t.JobResult
+}
+
+type GetJobResults struct {
+	JobResults GetJobResults_JobResults "json:\"jobResults\" graphql:\"jobResults\""
+}
+
+func (t *GetJobResults) GetJobResults() *GetJobResults_JobResults {
+	if t == nil {
+		t = &GetJobResults{}
+	}
+	return &t.JobResults
+}
+
+type UpdateJobResult struct {
+	UpdateJobResult UpdateJobResult_UpdateJobResult "json:\"updateJobResult\" graphql:\"updateJobResult\""
+}
+
+func (t *UpdateJobResult) GetUpdateJobResult() *UpdateJobResult_UpdateJobResult {
+	if t == nil {
+		t = &UpdateJobResult{}
+	}
+	return &t.UpdateJobResult
+}
+
 type DeleteJobRunner struct {
 	DeleteJobRunner DeleteJobRunner_DeleteJobRunner "json:\"deleteJobRunner\" graphql:\"deleteJobRunner\""
 }
@@ -87370,6 +88224,299 @@ func (c *Client) InvitesByOrgID(ctx context.Context, where *InviteWhereInput, in
 	return &res, nil
 }
 
+const CreateBulkCSVJobResultDocument = `mutation CreateBulkCSVJobResult ($input: Upload!) {
+	createBulkCSVJobResult(input: $input) {
+		jobResults {
+			createdAt
+			createdBy
+			exitCode
+			finishedAt
+			id
+			ownerID
+			scheduledJobID
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVJobResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVJobResult, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVJobResult
+	if err := c.Client.Post(ctx, "CreateBulkCSVJobResult", CreateBulkCSVJobResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkJobResultDocument = `mutation CreateBulkJobResult ($input: [CreateJobResultInput!]) {
+	createBulkJobResult(input: $input) {
+		jobResults {
+			createdAt
+			createdBy
+			exitCode
+			finishedAt
+			id
+			ownerID
+			scheduledJobID
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkJobResult(ctx context.Context, input []*CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkJobResult, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkJobResult
+	if err := c.Client.Post(ctx, "CreateBulkJobResult", CreateBulkJobResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateJobResultDocument = `mutation CreateJobResult ($input: CreateJobResultInput!) {
+	createJobResult(input: $input) {
+		jobResult {
+			createdAt
+			createdBy
+			exitCode
+			finishedAt
+			id
+			ownerID
+			scheduledJobID
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateJobResult(ctx context.Context, input CreateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobResult, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateJobResult
+	if err := c.Client.Post(ctx, "CreateJobResult", CreateJobResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteJobResultDocument = `mutation DeleteJobResult ($deleteJobResultId: ID!) {
+	deleteJobResult(id: $deleteJobResultId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteJobResult(ctx context.Context, deleteJobResultID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobResult, error) {
+	vars := map[string]any{
+		"deleteJobResultId": deleteJobResultID,
+	}
+
+	var res DeleteJobResult
+	if err := c.Client.Post(ctx, "DeleteJobResult", DeleteJobResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllJobResultsDocument = `query GetAllJobResults {
+	jobResults {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exitCode
+				finishedAt
+				id
+				ownerID
+				scheduledJobID
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllJobResults(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobResults, error) {
+	vars := map[string]any{}
+
+	var res GetAllJobResults
+	if err := c.Client.Post(ctx, "GetAllJobResults", GetAllJobResultsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobResultByIDDocument = `query GetJobResultByID ($jobResultId: ID!) {
+	jobResult(id: $jobResultId) {
+		createdAt
+		createdBy
+		exitCode
+		finishedAt
+		id
+		ownerID
+		scheduledJobID
+		startedAt
+		status
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetJobResultByID(ctx context.Context, jobResultID string, interceptors ...clientv2.RequestInterceptor) (*GetJobResultByID, error) {
+	vars := map[string]any{
+		"jobResultId": jobResultID,
+	}
+
+	var res GetJobResultByID
+	if err := c.Client.Post(ctx, "GetJobResultByID", GetJobResultByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobResultsDocument = `query GetJobResults ($first: Int, $last: Int, $where: JobResultWhereInput) {
+	jobResults(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exitCode
+				finishedAt
+				id
+				ownerID
+				scheduledJobID
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetJobResults(ctx context.Context, first *int64, last *int64, where *JobResultWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobResults, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetJobResults
+	if err := c.Client.Post(ctx, "GetJobResults", GetJobResultsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateJobResultDocument = `mutation UpdateJobResult ($updateJobResultId: ID!, $input: UpdateJobResultInput!) {
+	updateJobResult(id: $updateJobResultId, input: $input) {
+		jobResult {
+			createdAt
+			createdBy
+			exitCode
+			finishedAt
+			id
+			ownerID
+			scheduledJobID
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateJobResult(ctx context.Context, updateJobResultID string, input UpdateJobResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobResult, error) {
+	vars := map[string]any{
+		"updateJobResultId": updateJobResultID,
+		"input":             input,
+	}
+
+	var res UpdateJobResult
+	if err := c.Client.Post(ctx, "UpdateJobResult", UpdateJobResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteJobRunnerDocument = `mutation DeleteJobRunner ($deleteJobRunnerId: ID!) {
 	deleteJobRunner(id: $deleteJobRunnerId) {
 		deletedID
@@ -98056,6 +99203,14 @@ var DocumentOperationNames = map[string]string{
 	GetAllInvitesDocument:                        "GetAllInvites",
 	GetInviteByIDDocument:                        "GetInviteByID",
 	InvitesByOrgIDDocument:                       "InvitesByOrgID",
+	CreateBulkCSVJobResultDocument:               "CreateBulkCSVJobResult",
+	CreateBulkJobResultDocument:                  "CreateBulkJobResult",
+	CreateJobResultDocument:                      "CreateJobResult",
+	DeleteJobResultDocument:                      "DeleteJobResult",
+	GetAllJobResultsDocument:                     "GetAllJobResults",
+	GetJobResultByIDDocument:                     "GetJobResultByID",
+	GetJobResultsDocument:                        "GetJobResults",
+	UpdateJobResultDocument:                      "UpdateJobResult",
 	DeleteJobRunnerDocument:                      "DeleteJobRunner",
 	GetAllJobRunnersDocument:                     "GetAllJobRunners",
 	GetJobRunnerByIDDocument:                     "GetJobRunnerByID",

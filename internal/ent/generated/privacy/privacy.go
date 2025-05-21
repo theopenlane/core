@@ -1071,6 +1071,30 @@ func (f InviteMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mu
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.InviteMutation", m)
 }
 
+// The JobResultQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type JobResultQueryRuleFunc func(context.Context, *generated.JobResultQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f JobResultQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.JobResultQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.JobResultQuery", q)
+}
+
+// The JobResultMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type JobResultMutationRuleFunc func(context.Context, *generated.JobResultMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f JobResultMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.JobResultMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.JobResultMutation", m)
+}
+
 // The JobRunnerQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type JobRunnerQueryRuleFunc func(context.Context, *generated.JobRunnerQuery) error
@@ -2314,6 +2338,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.InviteQuery:
 		return q.Filter(), nil
+	case *generated.JobResultQuery:
+		return q.Filter(), nil
 	case *generated.JobRunnerQuery:
 		return q.Filter(), nil
 	case *generated.JobRunnerHistoryQuery:
@@ -2494,6 +2520,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.InternalPolicyHistoryMutation:
 		return m.Filter(), nil
 	case *generated.InviteMutation:
+		return m.Filter(), nil
+	case *generated.JobResultMutation:
 		return m.Filter(), nil
 	case *generated.JobRunnerMutation:
 		return m.Filter(), nil

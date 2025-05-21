@@ -145,6 +145,8 @@ const (
 	EdgeJobs = "jobs"
 	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
 	EdgeScheduledJobs = "scheduled_jobs"
+	// EdgeScheduledJobResults holds the string denoting the scheduled_job_results edge name in mutations.
+	EdgeScheduledJobResults = "scheduled_job_results"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -478,6 +480,13 @@ const (
 	ScheduledJobsInverseTable = "control_scheduled_jobs"
 	// ScheduledJobsColumn is the table column denoting the scheduled_jobs relation/edge.
 	ScheduledJobsColumn = "owner_id"
+	// ScheduledJobResultsTable is the table that holds the scheduled_job_results relation/edge.
+	ScheduledJobResultsTable = "job_results"
+	// ScheduledJobResultsInverseTable is the table name for the JobResult entity.
+	// It exists in this package in order to avoid circular dependency with the "jobresult" package.
+	ScheduledJobResultsInverseTable = "job_results"
+	// ScheduledJobResultsColumn is the table column denoting the scheduled_job_results relation/edge.
+	ScheduledJobResultsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1318,6 +1327,20 @@ func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByScheduledJobResultsCount orders the results by scheduled_job_results count.
+func ByScheduledJobResultsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScheduledJobResultsStep(), opts...)
+	}
+}
+
+// ByScheduledJobResults orders the results by scheduled_job_results terms.
+func ByScheduledJobResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScheduledJobResultsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1672,6 +1695,13 @@ func newScheduledJobsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobsTable, ScheduledJobsColumn),
+	)
+}
+func newScheduledJobResultsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScheduledJobResultsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobResultsTable, ScheduledJobResultsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

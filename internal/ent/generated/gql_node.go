@@ -48,6 +48,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
@@ -295,6 +296,11 @@ var inviteImplementors = []string{"Invite", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Invite) IsNode() {}
+
+var jobresultImplementors = []string{"JobResult", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*JobResult) IsNode() {}
 
 var jobrunnerImplementors = []string{"JobRunner", "Node"}
 
@@ -931,6 +937,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(invite.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, inviteImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case jobresult.Table:
+		query := c.JobResult.Query().
+			Where(jobresult.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobresultImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2034,6 +2049,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Invite.Query().
 			Where(invite.IDIn(ids...))
 		query, err := query.CollectFields(ctx, inviteImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case jobresult.Table:
+		query := c.JobResult.Query().
+			Where(jobresult.IDIn(ids...))
+		query, err := query.CollectFields(ctx, jobresultImplementors...)
 		if err != nil {
 			return nil, err
 		}

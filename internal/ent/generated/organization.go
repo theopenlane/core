@@ -158,13 +158,15 @@ type OrganizationEdges struct {
 	Jobs []*ScheduledJob `json:"jobs,omitempty"`
 	// ScheduledJobs holds the value of the scheduled_jobs edge.
 	ScheduledJobs []*ControlScheduledJob `json:"scheduled_jobs,omitempty"`
+	// ScheduledJobResults holds the value of the scheduled_job_results edge.
+	ScheduledJobResults []*JobResult `json:"scheduled_job_results,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [50]bool
+	loadedTypes [51]bool
 	// totalCount holds the count of the edges above.
-	totalCount [50]map[string]int
+	totalCount [51]map[string]int
 
 	namedControlCreators             map[string][]*Group
 	namedControlObjectiveCreators    map[string][]*Group
@@ -212,6 +214,7 @@ type OrganizationEdges struct {
 	namedJobRunnerRegistrationTokens map[string][]*JobRunnerRegistrationToken
 	namedJobs                        map[string][]*ScheduledJob
 	namedScheduledJobs               map[string][]*ControlScheduledJob
+	namedScheduledJobResults         map[string][]*JobResult
 	namedMembers                     map[string][]*OrgMembership
 }
 
@@ -662,10 +665,19 @@ func (e OrganizationEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) 
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
 }
 
+// ScheduledJobResultsOrErr returns the ScheduledJobResults value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ScheduledJobResultsOrErr() ([]*JobResult, error) {
+	if e.loadedTypes[49] {
+		return e.ScheduledJobResults, nil
+	}
+	return nil, &NotLoadedError{edge: "scheduled_job_results"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[49] {
+	if e.loadedTypes[50] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1062,6 +1074,11 @@ func (o *Organization) QueryJobs() *ScheduledJobQuery {
 // QueryScheduledJobs queries the "scheduled_jobs" edge of the Organization entity.
 func (o *Organization) QueryScheduledJobs() *ControlScheduledJobQuery {
 	return NewOrganizationClient(o.config).QueryScheduledJobs(o)
+}
+
+// QueryScheduledJobResults queries the "scheduled_job_results" edge of the Organization entity.
+func (o *Organization) QueryScheduledJobResults() *JobResultQuery {
+	return NewOrganizationClient(o.config).QueryScheduledJobResults(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2250,6 +2267,30 @@ func (o *Organization) appendNamedScheduledJobs(name string, edges ...*ControlSc
 		o.Edges.namedScheduledJobs[name] = []*ControlScheduledJob{}
 	} else {
 		o.Edges.namedScheduledJobs[name] = append(o.Edges.namedScheduledJobs[name], edges...)
+	}
+}
+
+// NamedScheduledJobResults returns the ScheduledJobResults named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedScheduledJobResults(name string) ([]*JobResult, error) {
+	if o.Edges.namedScheduledJobResults == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedScheduledJobResults[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedScheduledJobResults(name string, edges ...*JobResult) {
+	if o.Edges.namedScheduledJobResults == nil {
+		o.Edges.namedScheduledJobResults = make(map[string][]*JobResult)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedScheduledJobResults[name] = []*JobResult{}
+	} else {
+		o.Edges.namedScheduledJobResults[name] = append(o.Edges.namedScheduledJobResults[name], edges...)
 	}
 }
 

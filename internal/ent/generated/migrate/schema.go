@@ -1776,6 +1776,49 @@ var (
 			},
 		},
 	}
+	// JobResultsColumns holds the columns for the "job_results" table.
+	JobResultsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"CANCELED", "SUCCESS", "PENDING", "FAILED"}},
+		{Name: "exit_code", Type: field.TypeInt},
+		{Name: "finished_at", Type: field.TypeTime},
+		{Name: "started_at", Type: field.TypeTime},
+		{Name: "scheduled_job_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// JobResultsTable holds the schema information for the "job_results" table.
+	JobResultsTable = &schema.Table{
+		Name:       "job_results",
+		Columns:    JobResultsColumns,
+		PrimaryKey: []*schema.Column{JobResultsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "job_results_control_scheduled_jobs_scheduled_job",
+				Columns:    []*schema.Column{JobResultsColumns[11]},
+				RefColumns: []*schema.Column{ControlScheduledJobsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "job_results_organizations_scheduled_job_results",
+				Columns:    []*schema.Column{JobResultsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "jobresult_id",
+				Unique:  true,
+				Columns: []*schema.Column{JobResultsColumns[0]},
+			},
+		},
+	}
 	// JobRunnersColumns holds the columns for the "job_runners" table.
 	JobRunnersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -6142,6 +6185,7 @@ var (
 		InternalPoliciesTable,
 		InternalPolicyHistoryTable,
 		InvitesTable,
+		JobResultsTable,
 		JobRunnersTable,
 		JobRunnerHistoryTable,
 		JobRunnerRegistrationTokensTable,
@@ -6384,6 +6428,8 @@ func init() {
 		Table: "internal_policy_history",
 	}
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	JobResultsTable.ForeignKeys[0].RefTable = ControlScheduledJobsTable
+	JobResultsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	JobRunnersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	JobRunnerHistoryTable.Annotation = &entsql.Annotation{
 		Table: "job_runner_history",

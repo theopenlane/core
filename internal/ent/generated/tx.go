@@ -92,6 +92,8 @@ type Tx struct {
 	InternalPolicyHistory *InternalPolicyHistoryClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
+	// JobResult is the client for interacting with the JobResult builders.
+	JobResult *JobResultClient
 	// JobRunner is the client for interacting with the JobRunner builders.
 	JobRunner *JobRunnerClient
 	// JobRunnerHistory is the client for interacting with the JobRunnerHistory builders.
@@ -357,6 +359,7 @@ func (tx *Tx) init() {
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)
 	tx.InternalPolicyHistory = NewInternalPolicyHistoryClient(tx.config)
 	tx.Invite = NewInviteClient(tx.config)
+	tx.JobResult = NewJobResultClient(tx.config)
 	tx.JobRunner = NewJobRunnerClient(tx.config)
 	tx.JobRunnerHistory = NewJobRunnerHistoryClient(tx.config)
 	tx.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(tx.config)

@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
@@ -314,6 +315,12 @@ func InternalPolicyHistoryEdgeCleanup(ctx context.Context, id string) error {
 
 func InviteEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func JobResultEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobresult edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -678,6 +685,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).ControlScheduledJob.Query().Where((controlscheduledjob.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if controlscheduledjobCount, err := FromContext(ctx).ControlScheduledJob.Delete().Where(controlscheduledjob.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", controlscheduledjobCount).Msg("deleting controlscheduledjob")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).JobResult.Query().Where((jobresult.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if jobresultCount, err := FromContext(ctx).JobResult.Delete().Where(jobresult.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", jobresultCount).Msg("deleting jobresult")
 			return err
 		}
 	}

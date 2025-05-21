@@ -126,6 +126,9 @@ type InternalPolicyHistory func(*sql.Selector)
 // Invite is the predicate function for invite builders.
 type Invite func(*sql.Selector)
 
+// JobResult is the predicate function for jobresult builders.
+type JobResult func(*sql.Selector)
+
 // JobRunner is the predicate function for jobrunner builders.
 type JobRunner func(*sql.Selector)
 
