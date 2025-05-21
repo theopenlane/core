@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 
 	"entgo.io/ent"
@@ -12,7 +13,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/gravatar"
-	"golang.org/x/exp/slices"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
