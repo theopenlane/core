@@ -40,7 +40,7 @@ require (
 	github.com/knadh/koanf/providers/posflag v1.0.0
 	github.com/knadh/koanf/v2 v2.2.0
 	github.com/labstack/echo-contrib v0.17.4
-	github.com/labstack/echo/v4 v4.13.3
+	github.com/labstack/echo/v4 v4.13.4
 	github.com/lestrrat-go/httprc/v3 v3.0.0-beta2
 	github.com/lestrrat-go/jwx/v3 v3.0.1
 	github.com/manifoldco/promptui v0.9.0
