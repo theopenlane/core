@@ -116,7 +116,9 @@ func (g Group) Edges() []ent.Edge {
 			// Skip the mutation input for the users edge
 			// this should be done via the members edge
 			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)).
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entgql.RelayConnection(),
+			).
 			Through("members", GroupMembership.Type),
 		defaultEdgeToWithPagination(g, Event{}),
 		defaultEdgeToWithPagination(g, Integration{}),

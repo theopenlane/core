@@ -237,7 +237,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 	}
 
 	if cloneGroupMembers != nil {
-		existingMembers, err := res.Members(ctx)
+		existingMembers, err := res.QueryMembers().All(ctx)
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
 		}
