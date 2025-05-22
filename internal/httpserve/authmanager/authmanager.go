@@ -232,7 +232,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		// get the default org for the user to check access
 		var err error
 
-		orgID, err = getUserDefaultOrg(ctx, user)
+		orgID, err = a.getUserDefaultOrg(ctx, user)
 		if err != nil {
 			return "", err
 		}
@@ -290,7 +290,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 }
 
 // getUserDefaultOrg returns the default org for the user
-func getUserDefaultOrg(ctx context.Context, user *generated.User) (string, error) {
+func (a *Client) getUserDefaultOrg(ctx context.Context, user *generated.User) (string, error) {
 	// check if we already have the default org
 	if user.Edges.Setting.Edges.DefaultOrg != nil {
 		return user.Edges.Setting.Edges.DefaultOrg.ID, nil
@@ -307,6 +307,12 @@ func getUserDefaultOrg(ctx context.Context, user *generated.User) (string, error
 		return "", err
 	}
 
+	// if the user does not have a default org, which can happen if their default org was deleted
+	// we need to reset it
+	if org == nil {
+		return a.updateDefaultOrgToPersonal(ctx, user)
+	}
+
 	// add default org to user object to use later
 	user.Edges.Setting.Edges.DefaultOrg = org
 
@@ -314,7 +320,7 @@ func getUserDefaultOrg(ctx context.Context, user *generated.User) (string, error
 }
 
 func (a *Client) updateDefaultOrg(ctx context.Context, user *generated.User, orgID string) (string, error) {
-	defaultOrgID, err := getUserDefaultOrg(ctx, user)
+	defaultOrgID, err := a.getUserDefaultOrg(ctx, user)
 	if err != nil {
 		return "", err
 	}
