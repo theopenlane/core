@@ -86,7 +86,7 @@ func tableOutput(out []openlaneclient.Group) {
 			isManaged = *i.IsManaged
 		}
 
-		writer.AddRow(i.ID, i.Name, i.DisplayName, *i.Description, i.Setting.Visibility, isManaged, i.Owner.DisplayName, len(i.Members))
+		writer.AddRow(i.ID, i.Name, i.DisplayName, *i.Description, i.Setting.Visibility, isManaged, i.Owner.DisplayName, len(i.Members.Edges))
 	}
 
 	writer.Render()
