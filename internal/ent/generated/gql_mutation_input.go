@@ -4712,7 +4712,6 @@ type UpdateMappedControlInput struct {
 	ClearTags               bool
 	Tags                    []string
 	AppendTags              []string
-	ClearMappingType        bool
 	MappingType             *enums.MappingType
 	ClearRelation           bool
 	Relation                *string
@@ -4720,16 +4719,16 @@ type UpdateMappedControlInput struct {
 	Confidence              *string
 	ClearSource             bool
 	Source                  *enums.MappingSource
-	ClearFromControl        bool
+	ClearFromControls       bool
 	AddFromControlIDs       []string
 	RemoveFromControlIDs    []string
-	ClearToControl          bool
+	ClearToControls         bool
 	AddToControlIDs         []string
 	RemoveToControlIDs      []string
-	ClearFromSubcontrol     bool
+	ClearFromSubcontrols    bool
 	AddFromSubcontrolIDs    []string
 	RemoveFromSubcontrolIDs []string
-	ClearToSubcontrol       bool
+	ClearToSubcontrols      bool
 	AddToSubcontrolIDs      []string
 	RemoveToSubcontrolIDs   []string
 }
@@ -4744,9 +4743,6 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
-	}
-	if i.ClearMappingType {
-		m.ClearMappingType()
 	}
 	if v := i.MappingType; v != nil {
 		m.SetMappingType(*v)
@@ -4769,8 +4765,8 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
-	if i.ClearFromControl {
-		m.ClearFromControl()
+	if i.ClearFromControls {
+		m.ClearFromControls()
 	}
 	if v := i.AddFromControlIDs; len(v) > 0 {
 		m.AddFromControlIDs(v...)
@@ -4778,8 +4774,8 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if v := i.RemoveFromControlIDs; len(v) > 0 {
 		m.RemoveFromControlIDs(v...)
 	}
-	if i.ClearToControl {
-		m.ClearToControl()
+	if i.ClearToControls {
+		m.ClearToControls()
 	}
 	if v := i.AddToControlIDs; len(v) > 0 {
 		m.AddToControlIDs(v...)
@@ -4787,8 +4783,8 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if v := i.RemoveToControlIDs; len(v) > 0 {
 		m.RemoveToControlIDs(v...)
 	}
-	if i.ClearFromSubcontrol {
-		m.ClearFromSubcontrol()
+	if i.ClearFromSubcontrols {
+		m.ClearFromSubcontrols()
 	}
 	if v := i.AddFromSubcontrolIDs; len(v) > 0 {
 		m.AddFromSubcontrolIDs(v...)
@@ -4796,8 +4792,8 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if v := i.RemoveFromSubcontrolIDs; len(v) > 0 {
 		m.RemoveFromSubcontrolIDs(v...)
 	}
-	if i.ClearToSubcontrol {
-		m.ClearToSubcontrol()
+	if i.ClearToSubcontrols {
+		m.ClearToSubcontrols()
 	}
 	if v := i.AddToSubcontrolIDs; len(v) > 0 {
 		m.AddToSubcontrolIDs(v...)

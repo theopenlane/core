@@ -294,6 +294,9 @@ func (mchc *MappedControlHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.operation": %w`, err)}
 		}
 	}
+	if _, ok := mchc.mutation.MappingType(); !ok {
+		return &ValidationError{Name: "mapping_type", err: errors.New(`generated: missing required field "MappedControlHistory.mapping_type"`)}
+	}
 	if v, ok := mchc.mutation.MappingType(); ok {
 		if err := mappedcontrolhistory.MappingTypeValidator(v); err != nil {
 			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.mapping_type": %w`, err)}

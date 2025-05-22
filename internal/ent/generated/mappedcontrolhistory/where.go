@@ -666,16 +666,6 @@ func MappingTypeNotIn(vs ...enums.MappingType) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldNotIn(FieldMappingType, v...))
 }
 
-// MappingTypeIsNil applies the IsNil predicate on the "mapping_type" field.
-func MappingTypeIsNil() predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldIsNull(FieldMappingType))
-}
-
-// MappingTypeNotNil applies the NotNil predicate on the "mapping_type" field.
-func MappingTypeNotNil() predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldNotNull(FieldMappingType))
-}
-
 // RelationEQ applies the EQ predicate on the "relation" field.
 func RelationEQ(v string) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldEQ(FieldRelation, v))

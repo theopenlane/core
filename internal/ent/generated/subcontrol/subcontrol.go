@@ -220,8 +220,8 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "subcontrols"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"mapped_control_from_subcontrol",
-	"mapped_control_to_subcontrol",
+	"mapped_control_from_subcontrols",
+	"mapped_control_to_subcontrols",
 	"program_subcontrols",
 	"user_subcontrols",
 }

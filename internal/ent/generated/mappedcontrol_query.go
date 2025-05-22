@@ -24,20 +24,20 @@ import (
 // MappedControlQuery is the builder for querying MappedControl entities.
 type MappedControlQuery struct {
 	config
-	ctx                     *QueryContext
-	order                   []mappedcontrol.OrderOption
-	inters                  []Interceptor
-	predicates              []predicate.MappedControl
-	withFromControl         *ControlQuery
-	withToControl           *ControlQuery
-	withFromSubcontrol      *SubcontrolQuery
-	withToSubcontrol        *SubcontrolQuery
-	loadTotal               []func(context.Context, []*MappedControl) error
-	modifiers               []func(*sql.Selector)
-	withNamedFromControl    map[string]*ControlQuery
-	withNamedToControl      map[string]*ControlQuery
-	withNamedFromSubcontrol map[string]*SubcontrolQuery
-	withNamedToSubcontrol   map[string]*SubcontrolQuery
+	ctx                      *QueryContext
+	order                    []mappedcontrol.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.MappedControl
+	withFromControls         *ControlQuery
+	withToControls           *ControlQuery
+	withFromSubcontrols      *SubcontrolQuery
+	withToSubcontrols        *SubcontrolQuery
+	loadTotal                []func(context.Context, []*MappedControl) error
+	modifiers                []func(*sql.Selector)
+	withNamedFromControls    map[string]*ControlQuery
+	withNamedToControls      map[string]*ControlQuery
+	withNamedFromSubcontrols map[string]*SubcontrolQuery
+	withNamedToSubcontrols   map[string]*SubcontrolQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -74,8 +74,8 @@ func (mcq *MappedControlQuery) Order(o ...mappedcontrol.OrderOption) *MappedCont
 	return mcq
 }
 
-// QueryFromControl chains the current query on the "from_control" edge.
-func (mcq *MappedControlQuery) QueryFromControl() *ControlQuery {
+// QueryFromControls chains the current query on the "from_controls" edge.
+func (mcq *MappedControlQuery) QueryFromControls() *ControlQuery {
 	query := (&ControlClient{config: mcq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mcq.prepareQuery(ctx); err != nil {
@@ -88,7 +88,7 @@ func (mcq *MappedControlQuery) QueryFromControl() *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, selector),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.FromControlTable, mappedcontrol.FromControlColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.FromControlsTable, mappedcontrol.FromControlsColumn),
 		)
 		schemaConfig := mcq.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -99,8 +99,8 @@ func (mcq *MappedControlQuery) QueryFromControl() *ControlQuery {
 	return query
 }
 
-// QueryToControl chains the current query on the "to_control" edge.
-func (mcq *MappedControlQuery) QueryToControl() *ControlQuery {
+// QueryToControls chains the current query on the "to_controls" edge.
+func (mcq *MappedControlQuery) QueryToControls() *ControlQuery {
 	query := (&ControlClient{config: mcq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mcq.prepareQuery(ctx); err != nil {
@@ -113,7 +113,7 @@ func (mcq *MappedControlQuery) QueryToControl() *ControlQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, selector),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.ToControlTable, mappedcontrol.ToControlColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.ToControlsTable, mappedcontrol.ToControlsColumn),
 		)
 		schemaConfig := mcq.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -124,8 +124,8 @@ func (mcq *MappedControlQuery) QueryToControl() *ControlQuery {
 	return query
 }
 
-// QueryFromSubcontrol chains the current query on the "from_subcontrol" edge.
-func (mcq *MappedControlQuery) QueryFromSubcontrol() *SubcontrolQuery {
+// QueryFromSubcontrols chains the current query on the "from_subcontrols" edge.
+func (mcq *MappedControlQuery) QueryFromSubcontrols() *SubcontrolQuery {
 	query := (&SubcontrolClient{config: mcq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mcq.prepareQuery(ctx); err != nil {
@@ -138,7 +138,7 @@ func (mcq *MappedControlQuery) QueryFromSubcontrol() *SubcontrolQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, selector),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.FromSubcontrolTable, mappedcontrol.FromSubcontrolColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.FromSubcontrolsTable, mappedcontrol.FromSubcontrolsColumn),
 		)
 		schemaConfig := mcq.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
@@ -149,8 +149,8 @@ func (mcq *MappedControlQuery) QueryFromSubcontrol() *SubcontrolQuery {
 	return query
 }
 
-// QueryToSubcontrol chains the current query on the "to_subcontrol" edge.
-func (mcq *MappedControlQuery) QueryToSubcontrol() *SubcontrolQuery {
+// QueryToSubcontrols chains the current query on the "to_subcontrols" edge.
+func (mcq *MappedControlQuery) QueryToSubcontrols() *SubcontrolQuery {
 	query := (&SubcontrolClient{config: mcq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mcq.prepareQuery(ctx); err != nil {
@@ -163,7 +163,7 @@ func (mcq *MappedControlQuery) QueryToSubcontrol() *SubcontrolQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, selector),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.ToSubcontrolTable, mappedcontrol.ToSubcontrolColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.ToSubcontrolsTable, mappedcontrol.ToSubcontrolsColumn),
 		)
 		schemaConfig := mcq.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
@@ -361,15 +361,15 @@ func (mcq *MappedControlQuery) Clone() *MappedControlQuery {
 		return nil
 	}
 	return &MappedControlQuery{
-		config:             mcq.config,
-		ctx:                mcq.ctx.Clone(),
-		order:              append([]mappedcontrol.OrderOption{}, mcq.order...),
-		inters:             append([]Interceptor{}, mcq.inters...),
-		predicates:         append([]predicate.MappedControl{}, mcq.predicates...),
-		withFromControl:    mcq.withFromControl.Clone(),
-		withToControl:      mcq.withToControl.Clone(),
-		withFromSubcontrol: mcq.withFromSubcontrol.Clone(),
-		withToSubcontrol:   mcq.withToSubcontrol.Clone(),
+		config:              mcq.config,
+		ctx:                 mcq.ctx.Clone(),
+		order:               append([]mappedcontrol.OrderOption{}, mcq.order...),
+		inters:              append([]Interceptor{}, mcq.inters...),
+		predicates:          append([]predicate.MappedControl{}, mcq.predicates...),
+		withFromControls:    mcq.withFromControls.Clone(),
+		withToControls:      mcq.withToControls.Clone(),
+		withFromSubcontrols: mcq.withFromSubcontrols.Clone(),
+		withToSubcontrols:   mcq.withToSubcontrols.Clone(),
 		// clone intermediate query.
 		sql:       mcq.sql.Clone(),
 		path:      mcq.path,
@@ -377,47 +377,47 @@ func (mcq *MappedControlQuery) Clone() *MappedControlQuery {
 	}
 }
 
-// WithFromControl tells the query-builder to eager-load the nodes that are connected to
-// the "from_control" edge. The optional arguments are used to configure the query builder of the edge.
-func (mcq *MappedControlQuery) WithFromControl(opts ...func(*ControlQuery)) *MappedControlQuery {
+// WithFromControls tells the query-builder to eager-load the nodes that are connected to
+// the "from_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (mcq *MappedControlQuery) WithFromControls(opts ...func(*ControlQuery)) *MappedControlQuery {
 	query := (&ControlClient{config: mcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mcq.withFromControl = query
+	mcq.withFromControls = query
 	return mcq
 }
 
-// WithToControl tells the query-builder to eager-load the nodes that are connected to
-// the "to_control" edge. The optional arguments are used to configure the query builder of the edge.
-func (mcq *MappedControlQuery) WithToControl(opts ...func(*ControlQuery)) *MappedControlQuery {
+// WithToControls tells the query-builder to eager-load the nodes that are connected to
+// the "to_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (mcq *MappedControlQuery) WithToControls(opts ...func(*ControlQuery)) *MappedControlQuery {
 	query := (&ControlClient{config: mcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mcq.withToControl = query
+	mcq.withToControls = query
 	return mcq
 }
 
-// WithFromSubcontrol tells the query-builder to eager-load the nodes that are connected to
-// the "from_subcontrol" edge. The optional arguments are used to configure the query builder of the edge.
-func (mcq *MappedControlQuery) WithFromSubcontrol(opts ...func(*SubcontrolQuery)) *MappedControlQuery {
+// WithFromSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "from_subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (mcq *MappedControlQuery) WithFromSubcontrols(opts ...func(*SubcontrolQuery)) *MappedControlQuery {
 	query := (&SubcontrolClient{config: mcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mcq.withFromSubcontrol = query
+	mcq.withFromSubcontrols = query
 	return mcq
 }
 
-// WithToSubcontrol tells the query-builder to eager-load the nodes that are connected to
-// the "to_subcontrol" edge. The optional arguments are used to configure the query builder of the edge.
-func (mcq *MappedControlQuery) WithToSubcontrol(opts ...func(*SubcontrolQuery)) *MappedControlQuery {
+// WithToSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "to_subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (mcq *MappedControlQuery) WithToSubcontrols(opts ...func(*SubcontrolQuery)) *MappedControlQuery {
 	query := (&SubcontrolClient{config: mcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mcq.withToSubcontrol = query
+	mcq.withToSubcontrols = query
 	return mcq
 }
 
@@ -506,10 +506,10 @@ func (mcq *MappedControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes       = []*MappedControl{}
 		_spec       = mcq.querySpec()
 		loadedTypes = [4]bool{
-			mcq.withFromControl != nil,
-			mcq.withToControl != nil,
-			mcq.withFromSubcontrol != nil,
-			mcq.withToSubcontrol != nil,
+			mcq.withFromControls != nil,
+			mcq.withToControls != nil,
+			mcq.withFromSubcontrols != nil,
+			mcq.withToSubcontrols != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -535,59 +535,59 @@ func (mcq *MappedControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := mcq.withFromControl; query != nil {
-		if err := mcq.loadFromControl(ctx, query, nodes,
-			func(n *MappedControl) { n.Edges.FromControl = []*Control{} },
-			func(n *MappedControl, e *Control) { n.Edges.FromControl = append(n.Edges.FromControl, e) }); err != nil {
+	if query := mcq.withFromControls; query != nil {
+		if err := mcq.loadFromControls(ctx, query, nodes,
+			func(n *MappedControl) { n.Edges.FromControls = []*Control{} },
+			func(n *MappedControl, e *Control) { n.Edges.FromControls = append(n.Edges.FromControls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := mcq.withToControl; query != nil {
-		if err := mcq.loadToControl(ctx, query, nodes,
-			func(n *MappedControl) { n.Edges.ToControl = []*Control{} },
-			func(n *MappedControl, e *Control) { n.Edges.ToControl = append(n.Edges.ToControl, e) }); err != nil {
+	if query := mcq.withToControls; query != nil {
+		if err := mcq.loadToControls(ctx, query, nodes,
+			func(n *MappedControl) { n.Edges.ToControls = []*Control{} },
+			func(n *MappedControl, e *Control) { n.Edges.ToControls = append(n.Edges.ToControls, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := mcq.withFromSubcontrol; query != nil {
-		if err := mcq.loadFromSubcontrol(ctx, query, nodes,
-			func(n *MappedControl) { n.Edges.FromSubcontrol = []*Subcontrol{} },
-			func(n *MappedControl, e *Subcontrol) { n.Edges.FromSubcontrol = append(n.Edges.FromSubcontrol, e) }); err != nil {
+	if query := mcq.withFromSubcontrols; query != nil {
+		if err := mcq.loadFromSubcontrols(ctx, query, nodes,
+			func(n *MappedControl) { n.Edges.FromSubcontrols = []*Subcontrol{} },
+			func(n *MappedControl, e *Subcontrol) { n.Edges.FromSubcontrols = append(n.Edges.FromSubcontrols, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := mcq.withToSubcontrol; query != nil {
-		if err := mcq.loadToSubcontrol(ctx, query, nodes,
-			func(n *MappedControl) { n.Edges.ToSubcontrol = []*Subcontrol{} },
-			func(n *MappedControl, e *Subcontrol) { n.Edges.ToSubcontrol = append(n.Edges.ToSubcontrol, e) }); err != nil {
+	if query := mcq.withToSubcontrols; query != nil {
+		if err := mcq.loadToSubcontrols(ctx, query, nodes,
+			func(n *MappedControl) { n.Edges.ToSubcontrols = []*Subcontrol{} },
+			func(n *MappedControl, e *Subcontrol) { n.Edges.ToSubcontrols = append(n.Edges.ToSubcontrols, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range mcq.withNamedFromControl {
-		if err := mcq.loadFromControl(ctx, query, nodes,
-			func(n *MappedControl) { n.appendNamedFromControl(name) },
-			func(n *MappedControl, e *Control) { n.appendNamedFromControl(name, e) }); err != nil {
+	for name, query := range mcq.withNamedFromControls {
+		if err := mcq.loadFromControls(ctx, query, nodes,
+			func(n *MappedControl) { n.appendNamedFromControls(name) },
+			func(n *MappedControl, e *Control) { n.appendNamedFromControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range mcq.withNamedToControl {
-		if err := mcq.loadToControl(ctx, query, nodes,
-			func(n *MappedControl) { n.appendNamedToControl(name) },
-			func(n *MappedControl, e *Control) { n.appendNamedToControl(name, e) }); err != nil {
+	for name, query := range mcq.withNamedToControls {
+		if err := mcq.loadToControls(ctx, query, nodes,
+			func(n *MappedControl) { n.appendNamedToControls(name) },
+			func(n *MappedControl, e *Control) { n.appendNamedToControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range mcq.withNamedFromSubcontrol {
-		if err := mcq.loadFromSubcontrol(ctx, query, nodes,
-			func(n *MappedControl) { n.appendNamedFromSubcontrol(name) },
-			func(n *MappedControl, e *Subcontrol) { n.appendNamedFromSubcontrol(name, e) }); err != nil {
+	for name, query := range mcq.withNamedFromSubcontrols {
+		if err := mcq.loadFromSubcontrols(ctx, query, nodes,
+			func(n *MappedControl) { n.appendNamedFromSubcontrols(name) },
+			func(n *MappedControl, e *Subcontrol) { n.appendNamedFromSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range mcq.withNamedToSubcontrol {
-		if err := mcq.loadToSubcontrol(ctx, query, nodes,
-			func(n *MappedControl) { n.appendNamedToSubcontrol(name) },
-			func(n *MappedControl, e *Subcontrol) { n.appendNamedToSubcontrol(name, e) }); err != nil {
+	for name, query := range mcq.withNamedToSubcontrols {
+		if err := mcq.loadToSubcontrols(ctx, query, nodes,
+			func(n *MappedControl) { n.appendNamedToSubcontrols(name) },
+			func(n *MappedControl, e *Subcontrol) { n.appendNamedToSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -599,7 +599,7 @@ func (mcq *MappedControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
-func (mcq *MappedControlQuery) loadFromControl(ctx context.Context, query *ControlQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Control)) error {
+func (mcq *MappedControlQuery) loadFromControls(ctx context.Context, query *ControlQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Control)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*MappedControl)
 	for i := range nodes {
@@ -611,26 +611,26 @@ func (mcq *MappedControlQuery) loadFromControl(ctx context.Context, query *Contr
 	}
 	query.withFKs = true
 	query.Where(predicate.Control(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(mappedcontrol.FromControlColumn), fks...))
+		s.Where(sql.InValues(s.C(mappedcontrol.FromControlsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.mapped_control_from_control
+		fk := n.mapped_control_from_controls
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "mapped_control_from_control" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "mapped_control_from_controls" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_from_control" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_from_controls" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
 	return nil
 }
-func (mcq *MappedControlQuery) loadToControl(ctx context.Context, query *ControlQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Control)) error {
+func (mcq *MappedControlQuery) loadToControls(ctx context.Context, query *ControlQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Control)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*MappedControl)
 	for i := range nodes {
@@ -642,26 +642,26 @@ func (mcq *MappedControlQuery) loadToControl(ctx context.Context, query *Control
 	}
 	query.withFKs = true
 	query.Where(predicate.Control(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(mappedcontrol.ToControlColumn), fks...))
+		s.Where(sql.InValues(s.C(mappedcontrol.ToControlsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.mapped_control_to_control
+		fk := n.mapped_control_to_controls
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "mapped_control_to_control" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "mapped_control_to_controls" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_to_control" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_to_controls" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
 	return nil
 }
-func (mcq *MappedControlQuery) loadFromSubcontrol(ctx context.Context, query *SubcontrolQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Subcontrol)) error {
+func (mcq *MappedControlQuery) loadFromSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Subcontrol)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*MappedControl)
 	for i := range nodes {
@@ -673,26 +673,26 @@ func (mcq *MappedControlQuery) loadFromSubcontrol(ctx context.Context, query *Su
 	}
 	query.withFKs = true
 	query.Where(predicate.Subcontrol(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(mappedcontrol.FromSubcontrolColumn), fks...))
+		s.Where(sql.InValues(s.C(mappedcontrol.FromSubcontrolsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.mapped_control_from_subcontrol
+		fk := n.mapped_control_from_subcontrols
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "mapped_control_from_subcontrol" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "mapped_control_from_subcontrols" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_from_subcontrol" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_from_subcontrols" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
 	return nil
 }
-func (mcq *MappedControlQuery) loadToSubcontrol(ctx context.Context, query *SubcontrolQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Subcontrol)) error {
+func (mcq *MappedControlQuery) loadToSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Subcontrol)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*MappedControl)
 	for i := range nodes {
@@ -704,20 +704,20 @@ func (mcq *MappedControlQuery) loadToSubcontrol(ctx context.Context, query *Subc
 	}
 	query.withFKs = true
 	query.Where(predicate.Subcontrol(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(mappedcontrol.ToSubcontrolColumn), fks...))
+		s.Where(sql.InValues(s.C(mappedcontrol.ToSubcontrolsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.mapped_control_to_subcontrol
+		fk := n.mapped_control_to_subcontrols
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "mapped_control_to_subcontrol" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "mapped_control_to_subcontrols" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_to_subcontrol" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_to_subcontrols" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -822,59 +822,59 @@ func (mcq *MappedControlQuery) Modify(modifiers ...func(s *sql.Selector)) *Mappe
 	return mcq.Select()
 }
 
-// WithNamedFromControl tells the query-builder to eager-load the nodes that are connected to the "from_control"
+// WithNamedFromControls tells the query-builder to eager-load the nodes that are connected to the "from_controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (mcq *MappedControlQuery) WithNamedFromControl(name string, opts ...func(*ControlQuery)) *MappedControlQuery {
+func (mcq *MappedControlQuery) WithNamedFromControls(name string, opts ...func(*ControlQuery)) *MappedControlQuery {
 	query := (&ControlClient{config: mcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if mcq.withNamedFromControl == nil {
-		mcq.withNamedFromControl = make(map[string]*ControlQuery)
+	if mcq.withNamedFromControls == nil {
+		mcq.withNamedFromControls = make(map[string]*ControlQuery)
 	}
-	mcq.withNamedFromControl[name] = query
+	mcq.withNamedFromControls[name] = query
 	return mcq
 }
 
-// WithNamedToControl tells the query-builder to eager-load the nodes that are connected to the "to_control"
+// WithNamedToControls tells the query-builder to eager-load the nodes that are connected to the "to_controls"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (mcq *MappedControlQuery) WithNamedToControl(name string, opts ...func(*ControlQuery)) *MappedControlQuery {
+func (mcq *MappedControlQuery) WithNamedToControls(name string, opts ...func(*ControlQuery)) *MappedControlQuery {
 	query := (&ControlClient{config: mcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if mcq.withNamedToControl == nil {
-		mcq.withNamedToControl = make(map[string]*ControlQuery)
+	if mcq.withNamedToControls == nil {
+		mcq.withNamedToControls = make(map[string]*ControlQuery)
 	}
-	mcq.withNamedToControl[name] = query
+	mcq.withNamedToControls[name] = query
 	return mcq
 }
 
-// WithNamedFromSubcontrol tells the query-builder to eager-load the nodes that are connected to the "from_subcontrol"
+// WithNamedFromSubcontrols tells the query-builder to eager-load the nodes that are connected to the "from_subcontrols"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (mcq *MappedControlQuery) WithNamedFromSubcontrol(name string, opts ...func(*SubcontrolQuery)) *MappedControlQuery {
+func (mcq *MappedControlQuery) WithNamedFromSubcontrols(name string, opts ...func(*SubcontrolQuery)) *MappedControlQuery {
 	query := (&SubcontrolClient{config: mcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if mcq.withNamedFromSubcontrol == nil {
-		mcq.withNamedFromSubcontrol = make(map[string]*SubcontrolQuery)
+	if mcq.withNamedFromSubcontrols == nil {
+		mcq.withNamedFromSubcontrols = make(map[string]*SubcontrolQuery)
 	}
-	mcq.withNamedFromSubcontrol[name] = query
+	mcq.withNamedFromSubcontrols[name] = query
 	return mcq
 }
 
-// WithNamedToSubcontrol tells the query-builder to eager-load the nodes that are connected to the "to_subcontrol"
+// WithNamedToSubcontrols tells the query-builder to eager-load the nodes that are connected to the "to_subcontrols"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (mcq *MappedControlQuery) WithNamedToSubcontrol(name string, opts ...func(*SubcontrolQuery)) *MappedControlQuery {
+func (mcq *MappedControlQuery) WithNamedToSubcontrols(name string, opts ...func(*SubcontrolQuery)) *MappedControlQuery {
 	query := (&SubcontrolClient{config: mcq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if mcq.withNamedToSubcontrol == nil {
-		mcq.withNamedToSubcontrol = make(map[string]*SubcontrolQuery)
+	if mcq.withNamedToSubcontrols == nil {
+		mcq.withNamedToSubcontrols = make(map[string]*SubcontrolQuery)
 	}
-	mcq.withNamedToSubcontrol[name] = query
+	mcq.withNamedToSubcontrols[name] = query
 	return mcq
 }
 

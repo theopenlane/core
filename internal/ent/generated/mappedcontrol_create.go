@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -182,14 +183,14 @@ func (mcc *MappedControlCreate) SetNillableID(s *string) *MappedControlCreate {
 	return mcc
 }
 
-// AddFromControlIDs adds the "from_control" edge to the Control entity by IDs.
+// AddFromControlIDs adds the "from_controls" edge to the Control entity by IDs.
 func (mcc *MappedControlCreate) AddFromControlIDs(ids ...string) *MappedControlCreate {
 	mcc.mutation.AddFromControlIDs(ids...)
 	return mcc
 }
 
-// AddFromControl adds the "from_control" edges to the Control entity.
-func (mcc *MappedControlCreate) AddFromControl(c ...*Control) *MappedControlCreate {
+// AddFromControls adds the "from_controls" edges to the Control entity.
+func (mcc *MappedControlCreate) AddFromControls(c ...*Control) *MappedControlCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -197,14 +198,14 @@ func (mcc *MappedControlCreate) AddFromControl(c ...*Control) *MappedControlCrea
 	return mcc.AddFromControlIDs(ids...)
 }
 
-// AddToControlIDs adds the "to_control" edge to the Control entity by IDs.
+// AddToControlIDs adds the "to_controls" edge to the Control entity by IDs.
 func (mcc *MappedControlCreate) AddToControlIDs(ids ...string) *MappedControlCreate {
 	mcc.mutation.AddToControlIDs(ids...)
 	return mcc
 }
 
-// AddToControl adds the "to_control" edges to the Control entity.
-func (mcc *MappedControlCreate) AddToControl(c ...*Control) *MappedControlCreate {
+// AddToControls adds the "to_controls" edges to the Control entity.
+func (mcc *MappedControlCreate) AddToControls(c ...*Control) *MappedControlCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
@@ -212,14 +213,14 @@ func (mcc *MappedControlCreate) AddToControl(c ...*Control) *MappedControlCreate
 	return mcc.AddToControlIDs(ids...)
 }
 
-// AddFromSubcontrolIDs adds the "from_subcontrol" edge to the Subcontrol entity by IDs.
+// AddFromSubcontrolIDs adds the "from_subcontrols" edge to the Subcontrol entity by IDs.
 func (mcc *MappedControlCreate) AddFromSubcontrolIDs(ids ...string) *MappedControlCreate {
 	mcc.mutation.AddFromSubcontrolIDs(ids...)
 	return mcc
 }
 
-// AddFromSubcontrol adds the "from_subcontrol" edges to the Subcontrol entity.
-func (mcc *MappedControlCreate) AddFromSubcontrol(s ...*Subcontrol) *MappedControlCreate {
+// AddFromSubcontrols adds the "from_subcontrols" edges to the Subcontrol entity.
+func (mcc *MappedControlCreate) AddFromSubcontrols(s ...*Subcontrol) *MappedControlCreate {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -227,14 +228,14 @@ func (mcc *MappedControlCreate) AddFromSubcontrol(s ...*Subcontrol) *MappedContr
 	return mcc.AddFromSubcontrolIDs(ids...)
 }
 
-// AddToSubcontrolIDs adds the "to_subcontrol" edge to the Subcontrol entity by IDs.
+// AddToSubcontrolIDs adds the "to_subcontrols" edge to the Subcontrol entity by IDs.
 func (mcc *MappedControlCreate) AddToSubcontrolIDs(ids ...string) *MappedControlCreate {
 	mcc.mutation.AddToSubcontrolIDs(ids...)
 	return mcc
 }
 
-// AddToSubcontrol adds the "to_subcontrol" edges to the Subcontrol entity.
-func (mcc *MappedControlCreate) AddToSubcontrol(s ...*Subcontrol) *MappedControlCreate {
+// AddToSubcontrols adds the "to_subcontrols" edges to the Subcontrol entity.
+func (mcc *MappedControlCreate) AddToSubcontrols(s ...*Subcontrol) *MappedControlCreate {
 	ids := make([]string, len(s))
 	for i := range s {
 		ids[i] = s[i].ID
@@ -317,6 +318,9 @@ func (mcc *MappedControlCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (mcc *MappedControlCreate) check() error {
+	if _, ok := mcc.mutation.MappingType(); !ok {
+		return &ValidationError{Name: "mapping_type", err: errors.New(`generated: missing required field "MappedControl.mapping_type"`)}
+	}
 	if v, ok := mcc.mutation.MappingType(); ok {
 		if err := mappedcontrol.MappingTypeValidator(v); err != nil {
 			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControl.mapping_type": %w`, err)}
@@ -407,12 +411,12 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 		_spec.SetField(mappedcontrol.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
-	if nodes := mcc.mutation.FromControlIDs(); len(nodes) > 0 {
+	if nodes := mcc.mutation.FromControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.FromControlTable,
-			Columns: []string{mappedcontrol.FromControlColumn},
+			Table:   mappedcontrol.FromControlsTable,
+			Columns: []string{mappedcontrol.FromControlsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -424,12 +428,12 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mcc.mutation.ToControlIDs(); len(nodes) > 0 {
+	if nodes := mcc.mutation.ToControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.ToControlTable,
-			Columns: []string{mappedcontrol.ToControlColumn},
+			Table:   mappedcontrol.ToControlsTable,
+			Columns: []string{mappedcontrol.ToControlsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
@@ -441,12 +445,12 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mcc.mutation.FromSubcontrolIDs(); len(nodes) > 0 {
+	if nodes := mcc.mutation.FromSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.FromSubcontrolTable,
-			Columns: []string{mappedcontrol.FromSubcontrolColumn},
+			Table:   mappedcontrol.FromSubcontrolsTable,
+			Columns: []string{mappedcontrol.FromSubcontrolsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
@@ -458,12 +462,12 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := mcc.mutation.ToSubcontrolIDs(); len(nodes) > 0 {
+	if nodes := mcc.mutation.ToSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.ToSubcontrolTable,
-			Columns: []string{mappedcontrol.ToSubcontrolColumn},
+			Table:   mappedcontrol.ToSubcontrolsTable,
+			Columns: []string{mappedcontrol.ToSubcontrolsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),

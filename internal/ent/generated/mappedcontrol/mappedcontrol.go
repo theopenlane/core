@@ -40,44 +40,44 @@ const (
 	FieldConfidence = "confidence"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
-	// EdgeFromControl holds the string denoting the from_control edge name in mutations.
-	EdgeFromControl = "from_control"
-	// EdgeToControl holds the string denoting the to_control edge name in mutations.
-	EdgeToControl = "to_control"
-	// EdgeFromSubcontrol holds the string denoting the from_subcontrol edge name in mutations.
-	EdgeFromSubcontrol = "from_subcontrol"
-	// EdgeToSubcontrol holds the string denoting the to_subcontrol edge name in mutations.
-	EdgeToSubcontrol = "to_subcontrol"
+	// EdgeFromControls holds the string denoting the from_controls edge name in mutations.
+	EdgeFromControls = "from_controls"
+	// EdgeToControls holds the string denoting the to_controls edge name in mutations.
+	EdgeToControls = "to_controls"
+	// EdgeFromSubcontrols holds the string denoting the from_subcontrols edge name in mutations.
+	EdgeFromSubcontrols = "from_subcontrols"
+	// EdgeToSubcontrols holds the string denoting the to_subcontrols edge name in mutations.
+	EdgeToSubcontrols = "to_subcontrols"
 	// Table holds the table name of the mappedcontrol in the database.
 	Table = "mapped_controls"
-	// FromControlTable is the table that holds the from_control relation/edge.
-	FromControlTable = "controls"
-	// FromControlInverseTable is the table name for the Control entity.
+	// FromControlsTable is the table that holds the from_controls relation/edge.
+	FromControlsTable = "controls"
+	// FromControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	FromControlInverseTable = "controls"
-	// FromControlColumn is the table column denoting the from_control relation/edge.
-	FromControlColumn = "mapped_control_from_control"
-	// ToControlTable is the table that holds the to_control relation/edge.
-	ToControlTable = "controls"
-	// ToControlInverseTable is the table name for the Control entity.
+	FromControlsInverseTable = "controls"
+	// FromControlsColumn is the table column denoting the from_controls relation/edge.
+	FromControlsColumn = "mapped_control_from_controls"
+	// ToControlsTable is the table that holds the to_controls relation/edge.
+	ToControlsTable = "controls"
+	// ToControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
-	ToControlInverseTable = "controls"
-	// ToControlColumn is the table column denoting the to_control relation/edge.
-	ToControlColumn = "mapped_control_to_control"
-	// FromSubcontrolTable is the table that holds the from_subcontrol relation/edge.
-	FromSubcontrolTable = "subcontrols"
-	// FromSubcontrolInverseTable is the table name for the Subcontrol entity.
+	ToControlsInverseTable = "controls"
+	// ToControlsColumn is the table column denoting the to_controls relation/edge.
+	ToControlsColumn = "mapped_control_to_controls"
+	// FromSubcontrolsTable is the table that holds the from_subcontrols relation/edge.
+	FromSubcontrolsTable = "subcontrols"
+	// FromSubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
-	FromSubcontrolInverseTable = "subcontrols"
-	// FromSubcontrolColumn is the table column denoting the from_subcontrol relation/edge.
-	FromSubcontrolColumn = "mapped_control_from_subcontrol"
-	// ToSubcontrolTable is the table that holds the to_subcontrol relation/edge.
-	ToSubcontrolTable = "subcontrols"
-	// ToSubcontrolInverseTable is the table name for the Subcontrol entity.
+	FromSubcontrolsInverseTable = "subcontrols"
+	// FromSubcontrolsColumn is the table column denoting the from_subcontrols relation/edge.
+	FromSubcontrolsColumn = "mapped_control_from_subcontrols"
+	// ToSubcontrolsTable is the table that holds the to_subcontrols relation/edge.
+	ToSubcontrolsTable = "subcontrols"
+	// ToSubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
-	ToSubcontrolInverseTable = "subcontrols"
-	// ToSubcontrolColumn is the table column denoting the to_subcontrol relation/edge.
-	ToSubcontrolColumn = "mapped_control_to_subcontrol"
+	ToSubcontrolsInverseTable = "subcontrols"
+	// ToSubcontrolsColumn is the table column denoting the to_subcontrols relation/edge.
+	ToSubcontrolsColumn = "mapped_control_to_subcontrols"
 )
 
 // Columns holds all SQL columns for mappedcontrol fields.
@@ -209,87 +209,87 @@ func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
 }
 
-// ByFromControlCount orders the results by from_control count.
-func ByFromControlCount(opts ...sql.OrderTermOption) OrderOption {
+// ByFromControlsCount orders the results by from_controls count.
+func ByFromControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFromControlStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newFromControlsStep(), opts...)
 	}
 }
 
-// ByFromControl orders the results by from_control terms.
-func ByFromControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByFromControls orders the results by from_controls terms.
+func ByFromControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFromControlStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newFromControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByToControlCount orders the results by to_control count.
-func ByToControlCount(opts ...sql.OrderTermOption) OrderOption {
+// ByToControlsCount orders the results by to_controls count.
+func ByToControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newToControlStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newToControlsStep(), opts...)
 	}
 }
 
-// ByToControl orders the results by to_control terms.
-func ByToControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByToControls orders the results by to_controls terms.
+func ByToControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newToControlStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newToControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByFromSubcontrolCount orders the results by from_subcontrol count.
-func ByFromSubcontrolCount(opts ...sql.OrderTermOption) OrderOption {
+// ByFromSubcontrolsCount orders the results by from_subcontrols count.
+func ByFromSubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFromSubcontrolStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newFromSubcontrolsStep(), opts...)
 	}
 }
 
-// ByFromSubcontrol orders the results by from_subcontrol terms.
-func ByFromSubcontrol(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByFromSubcontrols orders the results by from_subcontrols terms.
+func ByFromSubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFromSubcontrolStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newFromSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByToSubcontrolCount orders the results by to_subcontrol count.
-func ByToSubcontrolCount(opts ...sql.OrderTermOption) OrderOption {
+// ByToSubcontrolsCount orders the results by to_subcontrols count.
+func ByToSubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newToSubcontrolStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newToSubcontrolsStep(), opts...)
 	}
 }
 
-// ByToSubcontrol orders the results by to_subcontrol terms.
-func ByToSubcontrol(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByToSubcontrols orders the results by to_subcontrols terms.
+func ByToSubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newToSubcontrolStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newToSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newFromControlStep() *sqlgraph.Step {
+func newFromControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FromControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, FromControlTable, FromControlColumn),
+		sqlgraph.To(FromControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FromControlsTable, FromControlsColumn),
 	)
 }
-func newToControlStep() *sqlgraph.Step {
+func newToControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ToControlInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ToControlTable, ToControlColumn),
+		sqlgraph.To(ToControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ToControlsTable, ToControlsColumn),
 	)
 }
-func newFromSubcontrolStep() *sqlgraph.Step {
+func newFromSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FromSubcontrolInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, FromSubcontrolTable, FromSubcontrolColumn),
+		sqlgraph.To(FromSubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FromSubcontrolsTable, FromSubcontrolsColumn),
 	)
 }
-func newToSubcontrolStep() *sqlgraph.Step {
+func newToSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ToSubcontrolInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ToSubcontrolTable, ToSubcontrolColumn),
+		sqlgraph.To(ToSubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ToSubcontrolsTable, ToSubcontrolsColumn),
 	)
 }
 

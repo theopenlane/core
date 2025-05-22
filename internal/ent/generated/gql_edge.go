@@ -2344,7 +2344,7 @@ func (md *MappableDomain) CustomDomains(
 	return md.QueryCustomDomains().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (mc *MappedControl) FromControl(
+func (mc *MappedControl) FromControls(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
 ) (*ControlConnection, error) {
 	opts := []ControlPaginateOption{
@@ -2353,7 +2353,7 @@ func (mc *MappedControl) FromControl(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := mc.Edges.totalCount[0][alias]
-	if nodes, err := mc.NamedFromControl(alias); err == nil || hasTotalCount {
+	if nodes, err := mc.NamedFromControls(alias); err == nil || hasTotalCount {
 		pager, err := newControlPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -2362,10 +2362,10 @@ func (mc *MappedControl) FromControl(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return mc.QueryFromControl().Paginate(ctx, after, first, before, last, opts...)
+	return mc.QueryFromControls().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (mc *MappedControl) ToControl(
+func (mc *MappedControl) ToControls(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
 ) (*ControlConnection, error) {
 	opts := []ControlPaginateOption{
@@ -2374,7 +2374,7 @@ func (mc *MappedControl) ToControl(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := mc.Edges.totalCount[1][alias]
-	if nodes, err := mc.NamedToControl(alias); err == nil || hasTotalCount {
+	if nodes, err := mc.NamedToControls(alias); err == nil || hasTotalCount {
 		pager, err := newControlPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -2383,10 +2383,10 @@ func (mc *MappedControl) ToControl(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return mc.QueryToControl().Paginate(ctx, after, first, before, last, opts...)
+	return mc.QueryToControls().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (mc *MappedControl) FromSubcontrol(
+func (mc *MappedControl) FromSubcontrols(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput,
 ) (*SubcontrolConnection, error) {
 	opts := []SubcontrolPaginateOption{
@@ -2395,7 +2395,7 @@ func (mc *MappedControl) FromSubcontrol(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := mc.Edges.totalCount[2][alias]
-	if nodes, err := mc.NamedFromSubcontrol(alias); err == nil || hasTotalCount {
+	if nodes, err := mc.NamedFromSubcontrols(alias); err == nil || hasTotalCount {
 		pager, err := newSubcontrolPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -2404,10 +2404,10 @@ func (mc *MappedControl) FromSubcontrol(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return mc.QueryFromSubcontrol().Paginate(ctx, after, first, before, last, opts...)
+	return mc.QueryFromSubcontrols().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (mc *MappedControl) ToSubcontrol(
+func (mc *MappedControl) ToSubcontrols(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput,
 ) (*SubcontrolConnection, error) {
 	opts := []SubcontrolPaginateOption{
@@ -2416,7 +2416,7 @@ func (mc *MappedControl) ToSubcontrol(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := mc.Edges.totalCount[3][alias]
-	if nodes, err := mc.NamedToSubcontrol(alias); err == nil || hasTotalCount {
+	if nodes, err := mc.NamedToSubcontrols(alias); err == nil || hasTotalCount {
 		pager, err := newSubcontrolPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -2425,7 +2425,7 @@ func (mc *MappedControl) ToSubcontrol(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return mc.QueryToSubcontrol().Paginate(ctx, after, first, before, last, opts...)
+	return mc.QueryToSubcontrols().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (n *Narrative) Owner(ctx context.Context) (*Organization, error) {

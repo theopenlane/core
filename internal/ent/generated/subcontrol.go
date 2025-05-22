@@ -83,12 +83,12 @@ type Subcontrol struct {
 	ControlID string `json:"control_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
-	Edges                          SubcontrolEdges `json:"edges"`
-	mapped_control_from_subcontrol *string
-	mapped_control_to_subcontrol   *string
-	program_subcontrols            *string
-	user_subcontrols               *string
-	selectValues                   sql.SelectValues
+	Edges                           SubcontrolEdges `json:"edges"`
+	mapped_control_from_subcontrols *string
+	mapped_control_to_subcontrols   *string
+	program_subcontrols             *string
+	user_subcontrols                *string
+	selectValues                    sql.SelectValues
 }
 
 // SubcontrolEdges holds the relations/edges for other nodes in the graph.
@@ -272,9 +272,9 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case subcontrol.ForeignKeys[0]: // mapped_control_from_subcontrol
+		case subcontrol.ForeignKeys[0]: // mapped_control_from_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[1]: // mapped_control_to_subcontrol
+		case subcontrol.ForeignKeys[1]: // mapped_control_to_subcontrols
 			values[i] = new(sql.NullString)
 		case subcontrol.ForeignKeys[2]: // program_subcontrols
 			values[i] = new(sql.NullString)
@@ -493,17 +493,17 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			}
 		case subcontrol.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_control_from_subcontrol", values[i])
+				return fmt.Errorf("unexpected type %T for field mapped_control_from_subcontrols", values[i])
 			} else if value.Valid {
-				s.mapped_control_from_subcontrol = new(string)
-				*s.mapped_control_from_subcontrol = value.String
+				s.mapped_control_from_subcontrols = new(string)
+				*s.mapped_control_from_subcontrols = value.String
 			}
 		case subcontrol.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_control_to_subcontrol", values[i])
+				return fmt.Errorf("unexpected type %T for field mapped_control_to_subcontrols", values[i])
 			} else if value.Valid {
-				s.mapped_control_to_subcontrol = new(string)
-				*s.mapped_control_to_subcontrol = value.String
+				s.mapped_control_to_subcontrols = new(string)
+				*s.mapped_control_to_subcontrols = value.String
 			}
 		case subcontrol.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {

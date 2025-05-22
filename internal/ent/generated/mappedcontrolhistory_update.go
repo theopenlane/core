@@ -137,12 +137,6 @@ func (mchu *MappedControlHistoryUpdate) SetNillableMappingType(et *enums.Mapping
 	return mchu
 }
 
-// ClearMappingType clears the value of the "mapping_type" field.
-func (mchu *MappedControlHistoryUpdate) ClearMappingType() *MappedControlHistoryUpdate {
-	mchu.mutation.ClearMappingType()
-	return mchu
-}
-
 // SetRelation sets the "relation" field.
 func (mchu *MappedControlHistoryUpdate) SetRelation(s string) *MappedControlHistoryUpdate {
 	mchu.mutation.SetRelation(s)
@@ -324,9 +318,6 @@ func (mchu *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 	if value, ok := mchu.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
 	}
-	if mchu.mutation.MappingTypeCleared() {
-		_spec.ClearField(mappedcontrolhistory.FieldMappingType, field.TypeEnum)
-	}
 	if value, ok := mchu.mutation.Relation(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldRelation, field.TypeString, value)
 	}
@@ -470,12 +461,6 @@ func (mchuo *MappedControlHistoryUpdateOne) SetNillableMappingType(et *enums.Map
 	if et != nil {
 		mchuo.SetMappingType(*et)
 	}
-	return mchuo
-}
-
-// ClearMappingType clears the value of the "mapping_type" field.
-func (mchuo *MappedControlHistoryUpdateOne) ClearMappingType() *MappedControlHistoryUpdateOne {
-	mchuo.mutation.ClearMappingType()
 	return mchuo
 }
 
@@ -689,9 +674,6 @@ func (mchuo *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if value, ok := mchuo.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
-	}
-	if mchuo.mutation.MappingTypeCleared() {
-		_spec.ClearField(mappedcontrolhistory.FieldMappingType, field.TypeEnum)
 	}
 	if value, ok := mchuo.mutation.Relation(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldRelation, field.TypeString, value)

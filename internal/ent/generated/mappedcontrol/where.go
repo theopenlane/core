@@ -523,16 +523,6 @@ func MappingTypeNotIn(vs ...enums.MappingType) predicate.MappedControl {
 	return predicate.MappedControl(sql.FieldNotIn(FieldMappingType, v...))
 }
 
-// MappingTypeIsNil applies the IsNil predicate on the "mapping_type" field.
-func MappingTypeIsNil() predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldIsNull(FieldMappingType))
-}
-
-// MappingTypeNotNil applies the NotNil predicate on the "mapping_type" field.
-func MappingTypeNotNil() predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldNotNull(FieldMappingType))
-}
-
 // RelationEQ applies the EQ predicate on the "relation" field.
 func RelationEQ(v string) predicate.MappedControl {
 	return predicate.MappedControl(sql.FieldEQ(FieldRelation, v))
@@ -723,12 +713,12 @@ func SourceNotNil() predicate.MappedControl {
 	return predicate.MappedControl(sql.FieldNotNull(FieldSource))
 }
 
-// HasFromControl applies the HasEdge predicate on the "from_control" edge.
-func HasFromControl() predicate.MappedControl {
+// HasFromControls applies the HasEdge predicate on the "from_controls" edge.
+func HasFromControls() predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, FromControlTable, FromControlColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, FromControlsTable, FromControlsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
@@ -737,39 +727,10 @@ func HasFromControl() predicate.MappedControl {
 	})
 }
 
-// HasFromControlWith applies the HasEdge predicate on the "from_control" edge with a given conditions (other predicates).
-func HasFromControlWith(preds ...predicate.Control) predicate.MappedControl {
+// HasFromControlsWith applies the HasEdge predicate on the "from_controls" edge with a given conditions (other predicates).
+func HasFromControlsWith(preds ...predicate.Control) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
-		step := newFromControlStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasToControl applies the HasEdge predicate on the "to_control" edge.
-func HasToControl() predicate.MappedControl {
-	return predicate.MappedControl(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ToControlTable, ToControlColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasToControlWith applies the HasEdge predicate on the "to_control" edge with a given conditions (other predicates).
-func HasToControlWith(preds ...predicate.Control) predicate.MappedControl {
-	return predicate.MappedControl(func(s *sql.Selector) {
-		step := newToControlStep()
+		step := newFromControlsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.Control
@@ -781,12 +742,41 @@ func HasToControlWith(preds ...predicate.Control) predicate.MappedControl {
 	})
 }
 
-// HasFromSubcontrol applies the HasEdge predicate on the "from_subcontrol" edge.
-func HasFromSubcontrol() predicate.MappedControl {
+// HasToControls applies the HasEdge predicate on the "to_controls" edge.
+func HasToControls() predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, FromSubcontrolTable, FromSubcontrolColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, ToControlsTable, ToControlsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasToControlsWith applies the HasEdge predicate on the "to_controls" edge with a given conditions (other predicates).
+func HasToControlsWith(preds ...predicate.Control) predicate.MappedControl {
+	return predicate.MappedControl(func(s *sql.Selector) {
+		step := newToControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFromSubcontrols applies the HasEdge predicate on the "from_subcontrols" edge.
+func HasFromSubcontrols() predicate.MappedControl {
+	return predicate.MappedControl(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, FromSubcontrolsTable, FromSubcontrolsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
@@ -795,10 +785,10 @@ func HasFromSubcontrol() predicate.MappedControl {
 	})
 }
 
-// HasFromSubcontrolWith applies the HasEdge predicate on the "from_subcontrol" edge with a given conditions (other predicates).
-func HasFromSubcontrolWith(preds ...predicate.Subcontrol) predicate.MappedControl {
+// HasFromSubcontrolsWith applies the HasEdge predicate on the "from_subcontrols" edge with a given conditions (other predicates).
+func HasFromSubcontrolsWith(preds ...predicate.Subcontrol) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
-		step := newFromSubcontrolStep()
+		step := newFromSubcontrolsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.Subcontrol
@@ -810,12 +800,12 @@ func HasFromSubcontrolWith(preds ...predicate.Subcontrol) predicate.MappedContro
 	})
 }
 
-// HasToSubcontrol applies the HasEdge predicate on the "to_subcontrol" edge.
-func HasToSubcontrol() predicate.MappedControl {
+// HasToSubcontrols applies the HasEdge predicate on the "to_subcontrols" edge.
+func HasToSubcontrols() predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ToSubcontrolTable, ToSubcontrolColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, ToSubcontrolsTable, ToSubcontrolsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
@@ -824,10 +814,10 @@ func HasToSubcontrol() predicate.MappedControl {
 	})
 }
 
-// HasToSubcontrolWith applies the HasEdge predicate on the "to_subcontrol" edge with a given conditions (other predicates).
-func HasToSubcontrolWith(preds ...predicate.Subcontrol) predicate.MappedControl {
+// HasToSubcontrolsWith applies the HasEdge predicate on the "to_subcontrols" edge with a given conditions (other predicates).
+func HasToSubcontrolsWith(preds ...predicate.Subcontrol) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
-		step := newToSubcontrolStep()
+		step := newToSubcontrolsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.Subcontrol

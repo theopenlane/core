@@ -8,6 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
+	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
@@ -252,7 +253,7 @@ func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organizat
 		SetStripeSubscriptionID(subscriptionPendingUpdate).
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
-		SetStripeSubscriptionStatus("active").Exec(ctx)
+		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).Exec(ctx)
 }
 
 // createEntityTypes creates the default entity types for a new org

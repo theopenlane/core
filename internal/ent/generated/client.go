@@ -10131,15 +10131,15 @@ func (c *MappedControlClient) GetX(ctx context.Context, id string) *MappedContro
 	return obj
 }
 
-// QueryFromControl queries the from_control edge of a MappedControl.
-func (c *MappedControlClient) QueryFromControl(mc *MappedControl) *ControlQuery {
+// QueryFromControls queries the from_controls edge of a MappedControl.
+func (c *MappedControlClient) QueryFromControls(mc *MappedControl) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.FromControlTable, mappedcontrol.FromControlColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.FromControlsTable, mappedcontrol.FromControlsColumn),
 		)
 		schemaConfig := mc.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -10150,15 +10150,15 @@ func (c *MappedControlClient) QueryFromControl(mc *MappedControl) *ControlQuery 
 	return query
 }
 
-// QueryToControl queries the to_control edge of a MappedControl.
-func (c *MappedControlClient) QueryToControl(mc *MappedControl) *ControlQuery {
+// QueryToControls queries the to_controls edge of a MappedControl.
+func (c *MappedControlClient) QueryToControls(mc *MappedControl) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
 			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.ToControlTable, mappedcontrol.ToControlColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.ToControlsTable, mappedcontrol.ToControlsColumn),
 		)
 		schemaConfig := mc.schemaConfig
 		step.To.Schema = schemaConfig.Control
@@ -10169,15 +10169,15 @@ func (c *MappedControlClient) QueryToControl(mc *MappedControl) *ControlQuery {
 	return query
 }
 
-// QueryFromSubcontrol queries the from_subcontrol edge of a MappedControl.
-func (c *MappedControlClient) QueryFromSubcontrol(mc *MappedControl) *SubcontrolQuery {
+// QueryFromSubcontrols queries the from_subcontrols edge of a MappedControl.
+func (c *MappedControlClient) QueryFromSubcontrols(mc *MappedControl) *SubcontrolQuery {
 	query := (&SubcontrolClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.FromSubcontrolTable, mappedcontrol.FromSubcontrolColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.FromSubcontrolsTable, mappedcontrol.FromSubcontrolsColumn),
 		)
 		schemaConfig := mc.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
@@ -10188,15 +10188,15 @@ func (c *MappedControlClient) QueryFromSubcontrol(mc *MappedControl) *Subcontrol
 	return query
 }
 
-// QueryToSubcontrol queries the to_subcontrol edge of a MappedControl.
-func (c *MappedControlClient) QueryToSubcontrol(mc *MappedControl) *SubcontrolQuery {
+// QueryToSubcontrols queries the to_subcontrols edge of a MappedControl.
+func (c *MappedControlClient) QueryToSubcontrols(mc *MappedControl) *SubcontrolQuery {
 	query := (&SubcontrolClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.ToSubcontrolTable, mappedcontrol.ToSubcontrolColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.ToSubcontrolsTable, mappedcontrol.ToSubcontrolsColumn),
 		)
 		schemaConfig := mc.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol

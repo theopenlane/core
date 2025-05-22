@@ -37143,7 +37143,7 @@ type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls struct
 	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID          string               "json:\"id\" graphql:\"id\""
-	MappingType *enums.MappingType   "json:\"mappingType,omitempty\" graphql:\"mappingType\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
 	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
 	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
 	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37179,7 +37179,7 @@ func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) G
 	if t == nil {
 		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetRelation() *string {
 	if t == nil {
@@ -37228,7 +37228,7 @@ type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls struct {
 	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID          string               "json:\"id\" graphql:\"id\""
-	MappingType *enums.MappingType   "json:\"mappingType,omitempty\" graphql:\"mappingType\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
 	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
 	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
 	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37264,7 +37264,7 @@ func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetMapp
 	if t == nil {
 		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetRelation() *string {
 	if t == nil {
@@ -37313,7 +37313,7 @@ type CreateMappedControl_CreateMappedControl_MappedControl struct {
 	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID          string               "json:\"id\" graphql:\"id\""
-	MappingType *enums.MappingType   "json:\"mappingType,omitempty\" graphql:\"mappingType\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
 	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
 	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
 	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37349,7 +37349,7 @@ func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetMappingType()
 	if t == nil {
 		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetRelation() *string {
 	if t == nil {
@@ -37441,7 +37441,7 @@ type GetAllMappedControls_MappedControls_Edges_Node struct {
 	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID          string               "json:\"id\" graphql:\"id\""
-	MappingType *enums.MappingType   "json:\"mappingType,omitempty\" graphql:\"mappingType\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
 	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
 	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
 	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37477,7 +37477,7 @@ func (t *GetAllMappedControls_MappedControls_Edges_Node) GetMappingType() *enums
 	if t == nil {
 		t = &GetAllMappedControls_MappedControls_Edges_Node{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetAllMappedControls_MappedControls_Edges_Node) GetRelation() *string {
 	if t == nil {
@@ -37551,7 +37551,7 @@ type GetMappedControlByID_MappedControl struct {
 	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID          string               "json:\"id\" graphql:\"id\""
-	MappingType *enums.MappingType   "json:\"mappingType,omitempty\" graphql:\"mappingType\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
 	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
 	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
 	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37587,7 +37587,7 @@ func (t *GetMappedControlByID_MappedControl) GetMappingType() *enums.MappingType
 	if t == nil {
 		t = &GetMappedControlByID_MappedControl{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetMappedControlByID_MappedControl) GetRelation() *string {
 	if t == nil {
@@ -37657,7 +37657,7 @@ type GetMappedControls_MappedControls_Edges_Node struct {
 	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID          string               "json:\"id\" graphql:\"id\""
-	MappingType *enums.MappingType   "json:\"mappingType,omitempty\" graphql:\"mappingType\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
 	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
 	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
 	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37693,7 +37693,7 @@ func (t *GetMappedControls_MappedControls_Edges_Node) GetMappingType() *enums.Ma
 	if t == nil {
 		t = &GetMappedControls_MappedControls_Edges_Node{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetMappedControls_MappedControls_Edges_Node) GetRelation() *string {
 	if t == nil {
@@ -37767,7 +37767,7 @@ type UpdateMappedControl_UpdateMappedControl_MappedControl struct {
 	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID          string               "json:\"id\" graphql:\"id\""
-	MappingType *enums.MappingType   "json:\"mappingType,omitempty\" graphql:\"mappingType\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
 	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
 	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
 	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37803,7 +37803,7 @@ func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetMappingType()
 	if t == nil {
 		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetRelation() *string {
 	if t == nil {
@@ -37885,7 +37885,7 @@ type GetAllMappedControlHistories_MappedControlHistories_Edges_Node struct {
 	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	HistoryTime time.Time            "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string               "json:\"id\" graphql:\"id\""
-	MappingType *enums.MappingType   "json:\"mappingType,omitempty\" graphql:\"mappingType\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
 	Operation   history.OpType       "json:\"operation\" graphql:\"operation\""
 	Ref         *string              "json:\"ref,omitempty\" graphql:\"ref\""
 	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
@@ -37929,7 +37929,7 @@ func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetMapp
 	if t == nil {
 		t = &GetAllMappedControlHistories_MappedControlHistories_Edges_Node{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
@@ -38048,7 +38048,7 @@ type GetMappedControlHistories_MappedControlHistories_Edges_Node struct {
 	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	HistoryTime time.Time            "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string               "json:\"id\" graphql:\"id\""
-	MappingType *enums.MappingType   "json:\"mappingType,omitempty\" graphql:\"mappingType\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
 	Operation   history.OpType       "json:\"operation\" graphql:\"operation\""
 	Ref         *string              "json:\"ref,omitempty\" graphql:\"ref\""
 	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
@@ -38092,7 +38092,7 @@ func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetMapping
 	if t == nil {
 		t = &GetMappedControlHistories_MappedControlHistories_Edges_Node{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {

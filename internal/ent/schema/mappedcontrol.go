@@ -42,8 +42,7 @@ func (MappedControl) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("MAPPING_TYPE"),
 			).
-			Default(enums.MappingTypeEqual.String()).
-			Optional(),
+			Default(enums.MappingTypeEqual.String()),
 		field.String("relation").
 			Comment("description of how the two controls are related").
 			Optional(),
@@ -67,25 +66,25 @@ func (m MappedControl) Edges() []ent.Edge {
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Control.Type,
-			name:       "from_control",
+			name:       "from_controls",
 			comment:    "controls that map to another control",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Control.Type,
-			name:       "to_control",
+			name:       "to_controls",
 			comment:    "controls that are being mapped from another control",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Subcontrol.Type,
-			name:       "from_subcontrol",
+			name:       "from_subcontrols",
 			comment:    "subcontrols map to another control",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m,
 			t:          Subcontrol.Type,
-			name:       "to_subcontrol",
+			name:       "to_subcontrols",
 			comment:    "subcontrols are being mapped from another control",
 		}),
 	}
@@ -115,10 +114,10 @@ func (MappedControl) Interceptors() []ent.Interceptor {
 func (MappedControl) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+			privacy.AlwaysAllowRule(), // TODO(sfunk): - add query rules
 		),
 		policy.WithMutationRules(
-			privacy.AlwaysDenyRule(), // TODO(sfunk): - add query rules
+			privacy.AlwaysAllowRule(), // TODO(sfunk): - add query rules
 		),
 	)
 }

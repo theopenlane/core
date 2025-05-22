@@ -83,10 +83,10 @@ type Control struct {
 	StandardID string `json:"standard_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlQuery when eager-loading is set.
-	Edges                       ControlEdges `json:"edges"`
-	mapped_control_from_control *string
-	mapped_control_to_control   *string
-	selectValues                sql.SelectValues
+	Edges                        ControlEdges `json:"edges"`
+	mapped_control_from_controls *string
+	mapped_control_to_controls   *string
+	selectValues                 sql.SelectValues
 }
 
 // ControlEdges holds the relations/edges for other nodes in the graph.
@@ -330,9 +330,9 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case control.ForeignKeys[0]: // mapped_control_from_control
+		case control.ForeignKeys[0]: // mapped_control_from_controls
 			values[i] = new(sql.NullString)
-		case control.ForeignKeys[1]: // mapped_control_to_control
+		case control.ForeignKeys[1]: // mapped_control_to_controls
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -547,17 +547,17 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			}
 		case control.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_control_from_control", values[i])
+				return fmt.Errorf("unexpected type %T for field mapped_control_from_controls", values[i])
 			} else if value.Valid {
-				c.mapped_control_from_control = new(string)
-				*c.mapped_control_from_control = value.String
+				c.mapped_control_from_controls = new(string)
+				*c.mapped_control_from_controls = value.String
 			}
 		case control.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_control_to_control", values[i])
+				return fmt.Errorf("unexpected type %T for field mapped_control_to_controls", values[i])
 			} else if value.Valid {
-				c.mapped_control_to_control = new(string)
-				*c.mapped_control_to_control = value.String
+				c.mapped_control_to_controls = new(string)
+				*c.mapped_control_to_controls = value.String
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])

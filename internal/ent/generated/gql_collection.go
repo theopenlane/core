@@ -15436,7 +15436,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "fromControl":
+		case "fromControls":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -15464,13 +15464,13 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"mapped_control_from_control"`
+							NodeID string `sql:"mapped_control_from_controls"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(mappedcontrol.FromControlColumn), ids...))
+							s.Where(sql.InValues(s.C(mappedcontrol.FromControlsColumn), ids...))
 						})
-						if err := query.GroupBy(mappedcontrol.FromControlColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(mappedcontrol.FromControlsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -15489,7 +15489,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				} else {
 					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.FromControl)
+							n := len(nodes[i].Edges.FromControls)
 							if nodes[i].Edges.totalCount[0] == nil {
 								nodes[i].Edges.totalCount[0] = make(map[string]int)
 							}
@@ -15515,17 +15515,17 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(mappedcontrol.FromControlColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(mappedcontrol.FromControlsColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedFromControl(alias, func(wq *ControlQuery) {
+			mc.WithNamedFromControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
-		case "toControl":
+		case "toControls":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -15553,13 +15553,13 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"mapped_control_to_control"`
+							NodeID string `sql:"mapped_control_to_controls"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(mappedcontrol.ToControlColumn), ids...))
+							s.Where(sql.InValues(s.C(mappedcontrol.ToControlsColumn), ids...))
 						})
-						if err := query.GroupBy(mappedcontrol.ToControlColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(mappedcontrol.ToControlsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -15578,7 +15578,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				} else {
 					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.ToControl)
+							n := len(nodes[i].Edges.ToControls)
 							if nodes[i].Edges.totalCount[1] == nil {
 								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
@@ -15604,17 +15604,17 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(mappedcontrol.ToControlColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(mappedcontrol.ToControlsColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedToControl(alias, func(wq *ControlQuery) {
+			mc.WithNamedToControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
-		case "fromSubcontrol":
+		case "fromSubcontrols":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -15642,13 +15642,13 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"mapped_control_from_subcontrol"`
+							NodeID string `sql:"mapped_control_from_subcontrols"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(mappedcontrol.FromSubcontrolColumn), ids...))
+							s.Where(sql.InValues(s.C(mappedcontrol.FromSubcontrolsColumn), ids...))
 						})
-						if err := query.GroupBy(mappedcontrol.FromSubcontrolColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(mappedcontrol.FromSubcontrolsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -15667,7 +15667,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				} else {
 					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.FromSubcontrol)
+							n := len(nodes[i].Edges.FromSubcontrols)
 							if nodes[i].Edges.totalCount[2] == nil {
 								nodes[i].Edges.totalCount[2] = make(map[string]int)
 							}
@@ -15693,17 +15693,17 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(mappedcontrol.FromSubcontrolColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(mappedcontrol.FromSubcontrolsColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedFromSubcontrol(alias, func(wq *SubcontrolQuery) {
+			mc.WithNamedFromSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 
-		case "toSubcontrol":
+		case "toSubcontrols":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -15731,13 +15731,13 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"mapped_control_to_subcontrol"`
+							NodeID string `sql:"mapped_control_to_subcontrols"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(mappedcontrol.ToSubcontrolColumn), ids...))
+							s.Where(sql.InValues(s.C(mappedcontrol.ToSubcontrolsColumn), ids...))
 						})
-						if err := query.GroupBy(mappedcontrol.ToSubcontrolColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(mappedcontrol.ToSubcontrolsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -15756,7 +15756,7 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				} else {
 					mc.loadTotal = append(mc.loadTotal, func(_ context.Context, nodes []*MappedControl) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.ToSubcontrol)
+							n := len(nodes[i].Edges.ToSubcontrols)
 							if nodes[i].Edges.totalCount[3] == nil {
 								nodes[i].Edges.totalCount[3] = make(map[string]int)
 							}
@@ -15782,13 +15782,13 @@ func (mc *MappedControlQuery) collectField(ctx context.Context, oneNode bool, op
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(mappedcontrol.ToSubcontrolColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(mappedcontrol.ToSubcontrolsColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			mc.WithNamedToSubcontrol(alias, func(wq *SubcontrolQuery) {
+			mc.WithNamedToSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 		case "createdAt":

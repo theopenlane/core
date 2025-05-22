@@ -4427,48 +4427,48 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"CustomDomain",
 	)
 	graph.MustAddE(
-		"from_control",
+		"from_controls",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.FromControlTable,
-			Columns: []string{mappedcontrol.FromControlColumn},
+			Table:   mappedcontrol.FromControlsTable,
+			Columns: []string{mappedcontrol.FromControlsColumn},
 			Bidi:    false,
 		},
 		"MappedControl",
 		"Control",
 	)
 	graph.MustAddE(
-		"to_control",
+		"to_controls",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.ToControlTable,
-			Columns: []string{mappedcontrol.ToControlColumn},
+			Table:   mappedcontrol.ToControlsTable,
+			Columns: []string{mappedcontrol.ToControlsColumn},
 			Bidi:    false,
 		},
 		"MappedControl",
 		"Control",
 	)
 	graph.MustAddE(
-		"from_subcontrol",
+		"from_subcontrols",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.FromSubcontrolTable,
-			Columns: []string{mappedcontrol.FromSubcontrolColumn},
+			Table:   mappedcontrol.FromSubcontrolsTable,
+			Columns: []string{mappedcontrol.FromSubcontrolsColumn},
 			Bidi:    false,
 		},
 		"MappedControl",
 		"Subcontrol",
 	)
 	graph.MustAddE(
-		"to_subcontrol",
+		"to_subcontrols",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   mappedcontrol.ToSubcontrolTable,
-			Columns: []string{mappedcontrol.ToSubcontrolColumn},
+			Table:   mappedcontrol.ToSubcontrolsTable,
+			Columns: []string{mappedcontrol.ToSubcontrolsColumn},
 			Bidi:    false,
 		},
 		"MappedControl",
@@ -14095,56 +14095,56 @@ func (f *MappedControlFilter) WhereSource(p entql.StringP) {
 	f.Where(p.Field(mappedcontrol.FieldSource))
 }
 
-// WhereHasFromControl applies a predicate to check if query has an edge from_control.
-func (f *MappedControlFilter) WhereHasFromControl() {
-	f.Where(entql.HasEdge("from_control"))
+// WhereHasFromControls applies a predicate to check if query has an edge from_controls.
+func (f *MappedControlFilter) WhereHasFromControls() {
+	f.Where(entql.HasEdge("from_controls"))
 }
 
-// WhereHasFromControlWith applies a predicate to check if query has an edge from_control with a given conditions (other predicates).
-func (f *MappedControlFilter) WhereHasFromControlWith(preds ...predicate.Control) {
-	f.Where(entql.HasEdgeWith("from_control", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasFromControlsWith applies a predicate to check if query has an edge from_controls with a given conditions (other predicates).
+func (f *MappedControlFilter) WhereHasFromControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("from_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasToControl applies a predicate to check if query has an edge to_control.
-func (f *MappedControlFilter) WhereHasToControl() {
-	f.Where(entql.HasEdge("to_control"))
+// WhereHasToControls applies a predicate to check if query has an edge to_controls.
+func (f *MappedControlFilter) WhereHasToControls() {
+	f.Where(entql.HasEdge("to_controls"))
 }
 
-// WhereHasToControlWith applies a predicate to check if query has an edge to_control with a given conditions (other predicates).
-func (f *MappedControlFilter) WhereHasToControlWith(preds ...predicate.Control) {
-	f.Where(entql.HasEdgeWith("to_control", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasToControlsWith applies a predicate to check if query has an edge to_controls with a given conditions (other predicates).
+func (f *MappedControlFilter) WhereHasToControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("to_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasFromSubcontrol applies a predicate to check if query has an edge from_subcontrol.
-func (f *MappedControlFilter) WhereHasFromSubcontrol() {
-	f.Where(entql.HasEdge("from_subcontrol"))
+// WhereHasFromSubcontrols applies a predicate to check if query has an edge from_subcontrols.
+func (f *MappedControlFilter) WhereHasFromSubcontrols() {
+	f.Where(entql.HasEdge("from_subcontrols"))
 }
 
-// WhereHasFromSubcontrolWith applies a predicate to check if query has an edge from_subcontrol with a given conditions (other predicates).
-func (f *MappedControlFilter) WhereHasFromSubcontrolWith(preds ...predicate.Subcontrol) {
-	f.Where(entql.HasEdgeWith("from_subcontrol", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasFromSubcontrolsWith applies a predicate to check if query has an edge from_subcontrols with a given conditions (other predicates).
+func (f *MappedControlFilter) WhereHasFromSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("from_subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
 	})))
 }
 
-// WhereHasToSubcontrol applies a predicate to check if query has an edge to_subcontrol.
-func (f *MappedControlFilter) WhereHasToSubcontrol() {
-	f.Where(entql.HasEdge("to_subcontrol"))
+// WhereHasToSubcontrols applies a predicate to check if query has an edge to_subcontrols.
+func (f *MappedControlFilter) WhereHasToSubcontrols() {
+	f.Where(entql.HasEdge("to_subcontrols"))
 }
 
-// WhereHasToSubcontrolWith applies a predicate to check if query has an edge to_subcontrol with a given conditions (other predicates).
-func (f *MappedControlFilter) WhereHasToSubcontrolWith(preds ...predicate.Subcontrol) {
-	f.Where(entql.HasEdgeWith("to_subcontrol", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasToSubcontrolsWith applies a predicate to check if query has an edge to_subcontrols with a given conditions (other predicates).
+func (f *MappedControlFilter) WhereHasToSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("to_subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
