@@ -20,7 +20,7 @@ mutation CreateBulkCSVGroup($input: Upload!) {
       }
       members {
         edges {
-          nodes {
+          node {
             id
             role
             user {
@@ -57,7 +57,7 @@ mutation CreateBulkGroup($input: [CreateGroupInput!]) {
       }
       members {
         edges {
-          nodes {
+          node {
             id
             role
             user {
@@ -100,19 +100,27 @@ mutation CreateGroup($input: CreateGroupInput!) {
         permissions
       }
       members {
-        id
-        role
-        user {
-          id
-          firstName
-          lastName
+        edges {
+          node {
+            id
+            role
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }
   }
 }
 
-mutation CreateGroupByClone($groupInput: CreateGroupInput!, $inheritGroupPermissions: ID, $cloneGroupMembers: ID) {
+mutation CreateGroupByClone(
+  $groupInput: CreateGroupInput!
+  $inheritGroupPermissions: ID
+  $cloneGroupMembers: ID
+) {
   createGroupByClone(
     groupInput: $groupInput
     inheritGroupPermissions: $inheritGroupPermissions
@@ -122,10 +130,14 @@ mutation CreateGroupByClone($groupInput: CreateGroupInput!, $inheritGroupPermiss
       id
       displayID
       members {
-        id
-        user {
-          firstName
-          lastName
+        edges {
+          node {
+            id
+            user {
+              firstName
+              lastName
+            }
+          }
         }
       }
       permissions {
@@ -139,7 +151,10 @@ mutation CreateGroupByClone($groupInput: CreateGroupInput!, $inheritGroupPermiss
   }
 }
 
-mutation CreateGroupWithMembers($groupInput: CreateGroupInput!, $members: [GroupMembersInput!]) {
+mutation CreateGroupWithMembers(
+  $groupInput: CreateGroupInput!
+  $members: [GroupMembersInput!]
+) {
   createGroupWithMembers(groupInput: $groupInput, members: $members) {
     group {
       id
@@ -149,12 +164,16 @@ mutation CreateGroupWithMembers($groupInput: CreateGroupInput!, $members: [Group
         visibility
       }
       members {
-        id
-        role
-        user {
-          id
-          firstName
-          lastName
+        edges {
+          node {
+            id
+            role
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }
@@ -195,7 +214,7 @@ query GetAllGroups {
         }
         members {
           edges {
-            nodes {
+            node {
               id
               role
               user {
@@ -248,7 +267,7 @@ query GetGroupByID($groupId: ID!) {
     }
     members {
       edges {
-        nodes {
+        node {
           id
           role
           user {
@@ -332,17 +351,16 @@ query GetGroups($where: GroupWhereInput) {
         }
         members {
           edges {
-              nodes {
-
-          id
-          role
-          user {
-            id
-            firstName
-            lastName
-          }
-                }
+            node {
+              id
+              role
+              user {
+                id
+                firstName
+                lastName
+              }
             }
+          }
         }
         createdAt
         createdBy
@@ -385,20 +403,19 @@ mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
         objectType
         permissions
       }
-        members {
-          edges {
-              nodes {
-
-          id
-          role
-          user {
+      members {
+        edges {
+          node {
             id
-            firstName
-            lastName
-          }
-                }
+            role
+            user {
+              id
+              firstName
+              lastName
             }
+          }
         }
+      }
     }
   }
 }
