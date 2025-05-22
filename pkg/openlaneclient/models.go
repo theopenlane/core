@@ -8773,34 +8773,34 @@ type Group struct {
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName                   string                 `json:"displayName"`
-	Owner                         *Organization          `json:"owner,omitempty"`
-	ProgramEditors                []*Program             `json:"programEditors,omitempty"`
-	ProgramBlockedGroups          []*Program             `json:"programBlockedGroups,omitempty"`
-	ProgramViewers                []*Program             `json:"programViewers,omitempty"`
-	RiskEditors                   []*Risk                `json:"riskEditors,omitempty"`
-	RiskBlockedGroups             []*Risk                `json:"riskBlockedGroups,omitempty"`
-	RiskViewers                   []*Risk                `json:"riskViewers,omitempty"`
-	ControlObjectiveEditors       []*ControlObjective    `json:"controlObjectiveEditors,omitempty"`
-	ControlObjectiveBlockedGroups []*ControlObjective    `json:"controlObjectiveBlockedGroups,omitempty"`
-	ControlObjectiveViewers       []*ControlObjective    `json:"controlObjectiveViewers,omitempty"`
-	ControlEditors                []*Control             `json:"controlEditors,omitempty"`
-	ControlBlockedGroups          []*Control             `json:"controlBlockedGroups,omitempty"`
-	ControlViewers                []*Control             `json:"controlViewers,omitempty"`
-	NarrativeEditors              []*Narrative           `json:"narrativeEditors,omitempty"`
-	NarrativeBlockedGroups        []*Narrative           `json:"narrativeBlockedGroups,omitempty"`
-	NarrativeViewers              []*Narrative           `json:"narrativeViewers,omitempty"`
-	ProcedureEditors              []*Procedure           `json:"procedureEditors,omitempty"`
-	ProcedureBlockedGroups        []*Procedure           `json:"procedureBlockedGroups,omitempty"`
-	InternalPolicyEditors         []*InternalPolicy      `json:"internalPolicyEditors,omitempty"`
-	InternalPolicyBlockedGroups   []*InternalPolicy      `json:"internalPolicyBlockedGroups,omitempty"`
-	Setting                       *GroupSetting          `json:"setting,omitempty"`
-	Users                         []*User                `json:"users,omitempty"`
-	Events                        *EventConnection       `json:"events"`
-	Integrations                  *IntegrationConnection `json:"integrations"`
-	Files                         *FileConnection        `json:"files"`
-	Tasks                         *TaskConnection        `json:"tasks"`
-	Members                       []*GroupMembership     `json:"members,omitempty"`
+	DisplayName                   string                     `json:"displayName"`
+	Owner                         *Organization              `json:"owner,omitempty"`
+	ProgramEditors                []*Program                 `json:"programEditors,omitempty"`
+	ProgramBlockedGroups          []*Program                 `json:"programBlockedGroups,omitempty"`
+	ProgramViewers                []*Program                 `json:"programViewers,omitempty"`
+	RiskEditors                   []*Risk                    `json:"riskEditors,omitempty"`
+	RiskBlockedGroups             []*Risk                    `json:"riskBlockedGroups,omitempty"`
+	RiskViewers                   []*Risk                    `json:"riskViewers,omitempty"`
+	ControlObjectiveEditors       []*ControlObjective        `json:"controlObjectiveEditors,omitempty"`
+	ControlObjectiveBlockedGroups []*ControlObjective        `json:"controlObjectiveBlockedGroups,omitempty"`
+	ControlObjectiveViewers       []*ControlObjective        `json:"controlObjectiveViewers,omitempty"`
+	ControlEditors                []*Control                 `json:"controlEditors,omitempty"`
+	ControlBlockedGroups          []*Control                 `json:"controlBlockedGroups,omitempty"`
+	ControlViewers                []*Control                 `json:"controlViewers,omitempty"`
+	NarrativeEditors              []*Narrative               `json:"narrativeEditors,omitempty"`
+	NarrativeBlockedGroups        []*Narrative               `json:"narrativeBlockedGroups,omitempty"`
+	NarrativeViewers              []*Narrative               `json:"narrativeViewers,omitempty"`
+	ProcedureEditors              []*Procedure               `json:"procedureEditors,omitempty"`
+	ProcedureBlockedGroups        []*Procedure               `json:"procedureBlockedGroups,omitempty"`
+	InternalPolicyEditors         []*InternalPolicy          `json:"internalPolicyEditors,omitempty"`
+	InternalPolicyBlockedGroups   []*InternalPolicy          `json:"internalPolicyBlockedGroups,omitempty"`
+	Setting                       *GroupSetting              `json:"setting,omitempty"`
+	Users                         *UserConnection            `json:"users"`
+	Events                        *EventConnection           `json:"events"`
+	Integrations                  *IntegrationConnection     `json:"integrations"`
+	Files                         *FileConnection            `json:"files"`
+	Tasks                         *TaskConnection            `json:"tasks"`
+	Members                       *GroupMembershipConnection `json:"members"`
 	// permissions the group provides
 	Permissions []*GroupPermissions `json:"permissions,omitempty"`
 }

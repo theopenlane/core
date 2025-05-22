@@ -507,20 +507,21 @@ func TestMutationCreateGroupWithMembers(t *testing.T) {
 				expectedLen = 2
 			}
 
-			assert.Assert(t, is.Len(resp.CreateGroupWithMembers.Group.Members, expectedLen))
+			assert.Assert(t, is.Len(resp.CreateGroupWithMembers.Group.Members.Edges, expectedLen))
 
 			// make sure we get the member data back
 			for _, member := range tc.members {
+				members := resp.CreateGroupWithMembers.Group.Members.Edges
 				found := false
-				for _, m := range resp.CreateGroupWithMembers.Group.Members {
-					assert.Assert(t, m.User.ID != "")
+				for _, m := range members {
+					assert.Assert(t, m.Node.User.ID != "")
 
-					if m.User.ID == member.UserID {
+					if m.Node.User.ID == member.UserID {
 						found = true
-						assert.Check(t, is.Equal(*member.Role, m.Role))
+						assert.Check(t, is.Equal(*member.Role, m.Node.Role))
 
-						assert.Check(t, m.User.FirstName != nil)
-						assert.Check(t, m.User.LastName != nil)
+						assert.Check(t, m.Node.User.FirstName != nil)
+						assert.Check(t, m.Node.User.LastName != nil)
 					}
 				}
 
@@ -632,7 +633,7 @@ func TestMutationCreateGroupByClone(t *testing.T) {
 				expectedLen += 1
 			}
 
-			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Members, expectedLen))
+			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Members.Edges, expectedLen))
 
 			// added a control and a program to the group we cloned, make sure they are there
 			expectedLenPerms := 0
@@ -786,11 +787,15 @@ func TestMutationUpdateGroup(t *testing.T) {
 				Name:        nameUpdate,
 				DisplayName: displayNameUpdate,
 				Description: &descriptionUpdate,
-				Members: []*openlaneclient.UpdateGroup_UpdateGroup_Group_Members{
-					{
-						Role: enums.RoleAdmin,
-						User: openlaneclient.UpdateGroup_UpdateGroup_Group_Members_User{
-							ID: om.UserID,
+				Members: openlaneclient.UpdateGroup_UpdateGroup_Group_Members{
+					Edges: []*openlaneclient.UpdateGroup_UpdateGroup_Group_Members_Edges{
+						{
+							Node: &openlaneclient.UpdateGroup_UpdateGroup_Group_Members_Edges_Node{
+								Role: enums.RoleAdmin,
+								User: openlaneclient.UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User{
+									ID: om.UserID,
+								},
+							},
 						},
 					},
 				},
@@ -933,9 +938,9 @@ func TestMutationUpdateGroup(t *testing.T) {
 			if tc.updateInput.AddGroupMembers != nil {
 				// Adding a member to an group will make it 2 users, there is an admin
 				// assigned to the group automatically and a member added in the test case
-				assert.Check(t, is.Len(updatedGroup.Members, 3))
-				assert.Check(t, is.Equal(tc.expectedRes.Members[0].Role, updatedGroup.Members[2].Role))
-				assert.Check(t, is.Equal(tc.expectedRes.Members[0].User.ID, updatedGroup.Members[2].User.ID))
+				assert.Check(t, is.Len(updatedGroup.Members.Edges, 3))
+				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.Role, updatedGroup.Members.Edges[2].Node.Role))
+				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.User.ID, updatedGroup.Members.Edges[2].Node.User.ID))
 			}
 
 			if tc.updateInput.UpdateGroupSettings != nil {

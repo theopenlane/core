@@ -19,12 +19,17 @@ mutation CreateBulkCSVGroup($input: Upload!) {
         visibility
       }
       members {
-        id
-        role
-        user {
-          id
-          firstName
-          lastName
+        totalCount
+        edges {
+          node {
+            id
+            role
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }
@@ -52,12 +57,17 @@ mutation CreateBulkGroup($input: [CreateGroupInput!]) {
         visibility
       }
       members {
-        id
-        role
-        user {
-          id
-          firstName
-          lastName
+        totalCount
+        edges {
+          node {
+            id
+            role
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }
@@ -92,19 +102,27 @@ mutation CreateGroup($input: CreateGroupInput!) {
         permissions
       }
       members {
-        id
-        role
-        user {
-          id
-          firstName
-          lastName
+        edges {
+          node {
+            id
+            role
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }
   }
 }
 
-mutation CreateGroupByClone($groupInput: CreateGroupInput!, $inheritGroupPermissions: ID, $cloneGroupMembers: ID) {
+mutation CreateGroupByClone(
+  $groupInput: CreateGroupInput!
+  $inheritGroupPermissions: ID
+  $cloneGroupMembers: ID
+) {
   createGroupByClone(
     groupInput: $groupInput
     inheritGroupPermissions: $inheritGroupPermissions
@@ -114,10 +132,14 @@ mutation CreateGroupByClone($groupInput: CreateGroupInput!, $inheritGroupPermiss
       id
       displayID
       members {
-        id
-        user {
-          firstName
-          lastName
+        edges {
+          node {
+            id
+            user {
+              firstName
+              lastName
+            }
+          }
         }
       }
       permissions {
@@ -131,7 +153,10 @@ mutation CreateGroupByClone($groupInput: CreateGroupInput!, $inheritGroupPermiss
   }
 }
 
-mutation CreateGroupWithMembers($groupInput: CreateGroupInput!, $members: [GroupMembersInput!]) {
+mutation CreateGroupWithMembers(
+  $groupInput: CreateGroupInput!
+  $members: [GroupMembersInput!]
+) {
   createGroupWithMembers(groupInput: $groupInput, members: $members) {
     group {
       id
@@ -141,12 +166,16 @@ mutation CreateGroupWithMembers($groupInput: CreateGroupInput!, $members: [Group
         visibility
       }
       members {
-        id
-        role
-        user {
-          id
-          firstName
-          lastName
+        edges {
+          node {
+            id
+            role
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }
@@ -186,12 +215,17 @@ query GetAllGroups {
           visibility
         }
         members {
-          id
-          role
-          user {
-            id
-            firstName
-            lastName
+          totalCount
+          edges {
+            node {
+              id
+              role
+              user {
+                id
+                firstName
+                lastName
+              }
+            }
           }
         }
         createdAt
@@ -235,13 +269,18 @@ query GetGroupByID($groupId: ID!) {
       permissions
     }
     members {
-      id
-      role
-      user {
-        id
-        firstName
-        lastName
+      edges {
+        node {
+          id
+          role
+          user {
+            id
+            firstName
+            lastName
+          }
+        }
       }
+      totalCount
     }
     createdAt
     createdBy
@@ -315,12 +354,17 @@ query GetGroups($where: GroupWhereInput) {
           permissions
         }
         members {
-          id
-          role
-          user {
-            id
-            firstName
-            lastName
+          totalCount
+          edges {
+            node {
+              id
+              role
+              user {
+                id
+                firstName
+                lastName
+              }
+            }
           }
         }
         createdAt
@@ -365,12 +409,17 @@ mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
         permissions
       }
       members {
-        id
-        role
-        user {
-          id
-          firstName
-          lastName
+        totalCount
+        edges {
+          node {
+            id
+            role
+            user {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }
