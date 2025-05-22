@@ -938,7 +938,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 			if tc.updateInput.AddGroupMembers != nil {
 				// Adding a member to an group will make it 2 users, there is an admin
 				// assigned to the group automatically and a member added in the test case
-				assert.Check(t, is.Len(updatedGroup.Members, 3))
+				assert.Check(t, is.Len(updatedGroup.Members.Edges, 3))
 				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.Role, updatedGroup.Members.Edges[2].Node.Role))
 				assert.Check(t, is.Equal(tc.expectedRes.Members.Edges[0].Node.User.ID, updatedGroup.Members.Edges[2].Node.User.ID))
 			}

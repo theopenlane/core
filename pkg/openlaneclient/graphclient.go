@@ -25660,7 +25660,8 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges) GetNode() *
 }
 
 type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members struct {
-	Edges []*CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                         "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members) GetEdges() []*CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges {
@@ -25668,6 +25669,12 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members) GetEdges() []*Cre
 		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members{}
 	}
 	return t.Edges
+}
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups struct {
@@ -25867,7 +25874,8 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges) GetNode() *Create
 }
 
 type CreateBulkGroup_CreateBulkGroup_Groups_Members struct {
-	Edges []*CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                   "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members) GetEdges() []*CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges {
@@ -25875,6 +25883,12 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members) GetEdges() []*CreateBul
 		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members{}
 	}
 	return t.Edges
+}
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkGroup_CreateBulkGroup_Groups struct {
@@ -26639,7 +26653,8 @@ func (t *GetAllGroups_Groups_Edges_Node_Members_Edges) GetNode() *GetAllGroups_G
 }
 
 type GetAllGroups_Groups_Edges_Node_Members struct {
-	Edges []*GetAllGroups_Groups_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllGroups_Groups_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                           "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllGroups_Groups_Edges_Node_Members) GetEdges() []*GetAllGroups_Groups_Edges_Node_Members_Edges {
@@ -26647,6 +26662,12 @@ func (t *GetAllGroups_Groups_Edges_Node_Members) GetEdges() []*GetAllGroups_Grou
 		t = &GetAllGroups_Groups_Edges_Node_Members{}
 	}
 	return t.Edges
+}
+func (t *GetAllGroups_Groups_Edges_Node_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllGroups_Groups_Edges_Node_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetAllGroups_Groups_Edges_Node struct {
@@ -26959,7 +26980,8 @@ func (t *GetGroupByID_Group_Members_Edges) GetNode() *GetGroupByID_Group_Members
 }
 
 type GetGroupByID_Group_Members struct {
-	Edges []*GetGroupByID_Group_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetGroupByID_Group_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetGroupByID_Group_Members) GetEdges() []*GetGroupByID_Group_Members_Edges {
@@ -26967,6 +26989,12 @@ func (t *GetGroupByID_Group_Members) GetEdges() []*GetGroupByID_Group_Members_Ed
 		t = &GetGroupByID_Group_Members{}
 	}
 	return t.Edges
+}
+func (t *GetGroupByID_Group_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetGroupByID_Group_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetGroupByID_Group struct {
@@ -27441,7 +27469,8 @@ func (t *GetGroups_Groups_Edges_Node_Members_Edges) GetNode() *GetGroups_Groups_
 }
 
 type GetGroups_Groups_Edges_Node_Members struct {
-	Edges []*GetGroups_Groups_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetGroups_Groups_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetGroups_Groups_Edges_Node_Members) GetEdges() []*GetGroups_Groups_Edges_Node_Members_Edges {
@@ -27449,6 +27478,12 @@ func (t *GetGroups_Groups_Edges_Node_Members) GetEdges() []*GetGroups_Groups_Edg
 		t = &GetGroups_Groups_Edges_Node_Members{}
 	}
 	return t.Edges
+}
+func (t *GetGroups_Groups_Edges_Node_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetGroups_Groups_Edges_Node struct {
@@ -27768,7 +27803,8 @@ func (t *UpdateGroup_UpdateGroup_Group_Members_Edges) GetNode() *UpdateGroup_Upd
 }
 
 type UpdateGroup_UpdateGroup_Group_Members struct {
-	Edges []*UpdateGroup_UpdateGroup_Group_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*UpdateGroup_UpdateGroup_Group_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *UpdateGroup_UpdateGroup_Group_Members) GetEdges() []*UpdateGroup_UpdateGroup_Group_Members_Edges {
@@ -27776,6 +27812,12 @@ func (t *UpdateGroup_UpdateGroup_Group_Members) GetEdges() []*UpdateGroup_Update
 		t = &UpdateGroup_UpdateGroup_Group_Members{}
 	}
 	return t.Edges
+}
+func (t *UpdateGroup_UpdateGroup_Group_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group_Members{}
+	}
+	return t.TotalCount
 }
 
 type UpdateGroup_UpdateGroup_Group struct {
@@ -82563,6 +82605,7 @@ const CreateBulkCSVGroupDocument = `mutation CreateBulkCSVGroup ($input: Upload!
 				visibility
 			}
 			members {
+				totalCount
 				edges {
 					node {
 						id
@@ -82618,6 +82661,7 @@ const CreateBulkGroupDocument = `mutation CreateBulkGroup ($input: [CreateGroupI
 				visibility
 			}
 			members {
+				totalCount
 				edges {
 					node {
 						id
@@ -82857,6 +82901,7 @@ const GetAllGroupsDocument = `query GetAllGroups {
 					visibility
 				}
 				members {
+					totalCount
 					edges {
 						node {
 							id
@@ -82937,6 +82982,7 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 					}
 				}
 			}
+			totalCount
 		}
 		createdAt
 		createdBy
@@ -83046,6 +83092,7 @@ const GetGroupsDocument = `query GetGroups ($where: GroupWhereInput) {
 					permissions
 				}
 				members {
+					totalCount
 					edges {
 						node {
 							id
@@ -83118,6 +83165,7 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 				permissions
 			}
 			members {
+				totalCount
 				edges {
 					node {
 						id

@@ -19,6 +19,7 @@ mutation CreateBulkCSVGroup($input: Upload!) {
         visibility
       }
       members {
+    totalCount
         edges {
           node {
             id
@@ -56,6 +57,7 @@ mutation CreateBulkGroup($input: [CreateGroupInput!]) {
         visibility
       }
       members {
+    totalCount
         edges {
           node {
             id
@@ -213,6 +215,8 @@ query GetAllGroups {
           visibility
         }
         members {
+
+    totalCount
           edges {
             node {
               id
@@ -277,6 +281,7 @@ query GetGroupByID($groupId: ID!) {
           }
         }
       }
+      totalCount
     }
     createdAt
     createdBy
@@ -350,6 +355,7 @@ query GetGroups($where: GroupWhereInput) {
           permissions
         }
         members {
+          totalCount
           edges {
             node {
               id
@@ -404,6 +410,7 @@ mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
         permissions
       }
       members {
+    totalCount
         edges {
           node {
             id
