@@ -507,7 +507,7 @@ func TestMutationCreateGroupWithMembers(t *testing.T) {
 				expectedLen = 2
 			}
 
-			assert.Assert(t, is.Len(resp.CreateGroupWithMembers.Group.Members, expectedLen))
+			assert.Assert(t, is.Len(resp.CreateGroupWithMembers.Group.Members.Edges, expectedLen))
 
 			// make sure we get the member data back
 			for _, member := range tc.members {
@@ -633,7 +633,7 @@ func TestMutationCreateGroupByClone(t *testing.T) {
 				expectedLen += 1
 			}
 
-			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Members, expectedLen))
+			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Members.Edges, expectedLen))
 
 			// added a control and a program to the group we cloned, make sure they are there
 			expectedLenPerms := 0
