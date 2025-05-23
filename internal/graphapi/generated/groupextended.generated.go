@@ -5,10 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"sync"
 	"sync/atomic"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
@@ -29,8 +31,8 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _GroupPermissions_objectType(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissions) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissions_objectType(ctx, field)
+func (ec *executionContext) _GroupPermission_objectType(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermission_objectType(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -60,9 +62,9 @@ func (ec *executionContext) _GroupPermissions_objectType(ctx context.Context, fi
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_GroupPermissions_objectType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_GroupPermission_objectType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "GroupPermissions",
+		Object:     "GroupPermission",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -73,8 +75,8 @@ func (ec *executionContext) fieldContext_GroupPermissions_objectType(_ context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _GroupPermissions_permissions(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissions) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissions_permissions(ctx, field)
+func (ec *executionContext) _GroupPermission_permissions(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermission_permissions(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -104,9 +106,9 @@ func (ec *executionContext) _GroupPermissions_permissions(ctx context.Context, f
 	return ec.marshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐPermission(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_GroupPermissions_permissions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_GroupPermission_permissions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "GroupPermissions",
+		Object:     "GroupPermission",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -117,8 +119,8 @@ func (ec *executionContext) fieldContext_GroupPermissions_permissions(_ context.
 	return fc, nil
 }
 
-func (ec *executionContext) _GroupPermissions_id(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissions) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissions_id(ctx, field)
+func (ec *executionContext) _GroupPermission_id(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermission_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -138,16 +140,19 @@ func (ec *executionContext) _GroupPermissions_id(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_GroupPermissions_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_GroupPermission_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "GroupPermissions",
+		Object:     "GroupPermission",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -158,8 +163,8 @@ func (ec *executionContext) fieldContext_GroupPermissions_id(_ context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _GroupPermissions_displayID(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissions) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissions_displayID(ctx, field)
+func (ec *executionContext) _GroupPermission_displayID(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermission_displayID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -186,9 +191,9 @@ func (ec *executionContext) _GroupPermissions_displayID(ctx context.Context, fie
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_GroupPermissions_displayID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_GroupPermission_displayID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "GroupPermissions",
+		Object:     "GroupPermission",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -199,8 +204,8 @@ func (ec *executionContext) fieldContext_GroupPermissions_displayID(_ context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _GroupPermissions_name(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissions) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_GroupPermissions_name(ctx, field)
+func (ec *executionContext) _GroupPermission_name(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermission_name(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -227,14 +232,256 @@ func (ec *executionContext) _GroupPermissions_name(ctx context.Context, field gr
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_GroupPermissions_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_GroupPermission_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "GroupPermissions",
+		Object:     "GroupPermission",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GroupPermissionConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermissionConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.GroupPermissionEdge)
+	fc.Result = res
+	return ec.marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GroupPermissionConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GroupPermissionConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "node":
+				return ec.fieldContext_GroupPermissionEdge_node(ctx, field)
+			case "cursor":
+				return ec.fieldContext_GroupPermissionEdge_cursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type GroupPermissionEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GroupPermissionConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermissionConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*entgql.PageInfo[string])
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GroupPermissionConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GroupPermissionConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GroupPermissionConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermissionConnection_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GroupPermissionConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GroupPermissionConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GroupPermissionEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermissionEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.GroupPermission)
+	fc.Result = res
+	return ec.marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermission(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GroupPermissionEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GroupPermissionEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "objectType":
+				return ec.fieldContext_GroupPermission_objectType(ctx, field)
+			case "permissions":
+				return ec.fieldContext_GroupPermission_permissions(ctx, field)
+			case "id":
+				return ec.fieldContext_GroupPermission_id(ctx, field)
+			case "displayID":
+				return ec.fieldContext_GroupPermission_displayID(ctx, field)
+			case "name":
+				return ec.fieldContext_GroupPermission_name(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type GroupPermission", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GroupPermissionEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GroupPermissionEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(entgql.Cursor[string])
+	fc.Result = res
+	return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GroupPermissionEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GroupPermissionEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Cursor does not have child fields")
 		},
 	}
 	return fc, nil
@@ -278,6 +525,386 @@ func (ec *executionContext) unmarshalInputGroupMembersInput(ctx context.Context,
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputGroupPermissionOrder(ctx context.Context, obj any) (model.GroupPermissionOrder, error) {
+	var it model.GroupPermissionOrder
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputGroupPermissionWhereInput(ctx context.Context, obj any) (model.GroupPermissionWhereInput, error) {
+	var it model.GroupPermissionWhereInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "objectType", "objectTypeNEQ", "objectTypeIn", "objectTypeNotIn", "objectTypeGT", "objectTypeGTE", "objectTypeLT", "objectTypeLTE", "objectTypeContains", "objectTypeHasPrefix", "objectTypeHasSuffix", "objectTypeIsNil", "objectTypeNotNil", "objectTypeEqualFold", "objectTypeContainsFold", "permission", "permissionNEQ", "permissionIn", "permissionNotIn", "permissionGT", "permissionGTE", "permissionLT", "permissionLTE", "permissionContains", "permissionHasPrefix", "permissionHasSuffix", "permissionIsNil", "permissionNotNil", "permissionEqualFold", "permissionContainsFold"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "nameNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameNeq = data
+		case "nameIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameIn = data
+		case "nameNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameNotIn = data
+		case "nameGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameGt = data
+		case "nameGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameGte = data
+		case "nameLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameLt = data
+		case "nameLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameLte = data
+		case "nameContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameContains = data
+		case "nameHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameHasPrefix = data
+		case "nameHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameHasSuffix = data
+		case "nameEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameEqualFold = data
+		case "nameContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameContainsFold = data
+		case "objectType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectType"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectType = data
+		case "objectTypeNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeNeq = data
+		case "objectTypeIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeIn = data
+		case "objectTypeNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeNotIn = data
+		case "objectTypeGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeGt = data
+		case "objectTypeGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeGte = data
+		case "objectTypeLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeLt = data
+		case "objectTypeLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeLte = data
+		case "objectTypeContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeContains = data
+		case "objectTypeHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeHasPrefix = data
+		case "objectTypeHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeHasSuffix = data
+		case "objectTypeIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeIsNil"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeIsNil = data
+		case "objectTypeNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeNotNil"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeNotNil = data
+		case "objectTypeEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeEqualFold = data
+		case "objectTypeContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectTypeContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectTypeContainsFold = data
+		case "permission":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permission"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Permission = data
+		case "permissionNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionNeq = data
+		case "permissionIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionIn = data
+		case "permissionNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionNotIn = data
+		case "permissionGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionGt = data
+		case "permissionGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionGte = data
+		case "permissionLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionLt = data
+		case "permissionLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionLte = data
+		case "permissionContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionContains = data
+		case "permissionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionHasPrefix = data
+		case "permissionHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionHasSuffix = data
+		case "permissionIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionIsNil"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionIsNil = data
+		case "permissionNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionNotNil"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionNotNil = data
+		case "permissionEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionEqualFold = data
+		case "permissionContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("permissionContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PermissionContainsFold = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -286,33 +913,123 @@ func (ec *executionContext) unmarshalInputGroupMembersInput(ctx context.Context,
 
 // region    **************************** object.gotpl ****************************
 
-var groupPermissionsImplementors = []string{"GroupPermissions"}
+var groupPermissionImplementors = []string{"GroupPermission", "Node"}
 
-func (ec *executionContext) _GroupPermissions(ctx context.Context, sel ast.SelectionSet, obj *model.GroupPermissions) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, groupPermissionsImplementors)
+func (ec *executionContext) _GroupPermission(ctx context.Context, sel ast.SelectionSet, obj *model.GroupPermission) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, groupPermissionImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("GroupPermissions")
+			out.Values[i] = graphql.MarshalString("GroupPermission")
 		case "objectType":
-			out.Values[i] = ec._GroupPermissions_objectType(ctx, field, obj)
+			out.Values[i] = ec._GroupPermission_objectType(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "permissions":
-			out.Values[i] = ec._GroupPermissions_permissions(ctx, field, obj)
+			out.Values[i] = ec._GroupPermission_permissions(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "id":
-			out.Values[i] = ec._GroupPermissions_id(ctx, field, obj)
+			out.Values[i] = ec._GroupPermission_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "displayID":
-			out.Values[i] = ec._GroupPermissions_displayID(ctx, field, obj)
+			out.Values[i] = ec._GroupPermission_displayID(ctx, field, obj)
 		case "name":
-			out.Values[i] = ec._GroupPermissions_name(ctx, field, obj)
+			out.Values[i] = ec._GroupPermission_name(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var groupPermissionConnectionImplementors = []string{"GroupPermissionConnection"}
+
+func (ec *executionContext) _GroupPermissionConnection(ctx context.Context, sel ast.SelectionSet, obj *model.GroupPermissionConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, groupPermissionConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("GroupPermissionConnection")
+		case "edges":
+			out.Values[i] = ec._GroupPermissionConnection_edges(ctx, field, obj)
+		case "pageInfo":
+			out.Values[i] = ec._GroupPermissionConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._GroupPermissionConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var groupPermissionEdgeImplementors = []string{"GroupPermissionEdge"}
+
+func (ec *executionContext) _GroupPermissionEdge(ctx context.Context, sel ast.SelectionSet, obj *model.GroupPermissionEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, groupPermissionEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("GroupPermissionEdge")
+		case "node":
+			out.Values[i] = ec._GroupPermissionEdge_node(ctx, field, obj)
+		case "cursor":
+			out.Values[i] = ec._GroupPermissionEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -345,14 +1062,38 @@ func (ec *executionContext) unmarshalNGroupMembersInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNGroupPermissions2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissions(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermissions) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupPermissionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionConnection(ctx context.Context, sel ast.SelectionSet, v model.GroupPermissionConnection) graphql.Marshaler {
+	return ec._GroupPermissionConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNGroupPermissionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionConnection(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermissionConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._GroupPermissions(ctx, sel, v)
+	return ec._GroupPermissionConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNGroupPermissionOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrder(ctx context.Context, v any) (*model.GroupPermissionOrder, error) {
+	res, err := ec.unmarshalInputGroupPermissionOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx context.Context, v any) (model.GroupPermissionOrderField, error) {
+	var res model.GroupPermissionOrderField
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx context.Context, sel ast.SelectionSet, v model.GroupPermissionOrderField) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx context.Context, v any) (*model.GroupPermissionWhereInput, error) {
+	res, err := ec.unmarshalInputGroupPermissionWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐPermission(ctx context.Context, v any) (enums.Permission, error) {
@@ -383,7 +1124,14 @@ func (ec *executionContext) unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋthe
 	return res, nil
 }
 
-func (ec *executionContext) marshalOGroupPermissions2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionsᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.GroupPermissions) graphql.Marshaler {
+func (ec *executionContext) marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermission(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermission) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._GroupPermission(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx context.Context, sel ast.SelectionSet, v []*model.GroupPermissionEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -410,7 +1158,7 @@ func (ec *executionContext) marshalOGroupPermissions2ᚕᚖgithubᚗcomᚋtheope
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNGroupPermissions2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissions(ctx, sel, v[i])
+			ret[i] = ec.marshalOGroupPermissionEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -421,13 +1169,58 @@ func (ec *executionContext) marshalOGroupPermissions2ᚕᚖgithubᚗcomᚋtheope
 	}
 	wg.Wait()
 
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
+	return ret
+}
+
+func (ec *executionContext) marshalOGroupPermissionEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermissionEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._GroupPermissionEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOGroupPermissionOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderᚄ(ctx context.Context, v any) ([]*model.GroupPermissionOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]*model.GroupPermissionOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNGroupPermissionOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
 		}
 	}
+	return res, nil
+}
 
-	return ret
+func (ec *executionContext) unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx context.Context, v any) ([]*model.GroupPermissionWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]*model.GroupPermissionWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx context.Context, v any) (*model.GroupPermissionWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputGroupPermissionWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 // endregion ***************************** type.gotpl *****************************

@@ -1650,14 +1650,11 @@ type Control struct {
 	// the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	ControlOwner *Group `json:"controlOwner,omitempty"`
 	// temporary delegate for the control, used for temporary control ownership
-	Delegate *Group        `json:"delegate,omitempty"`
-	Owner    *Organization `json:"owner,omitempty"`
-	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
-	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers                []*Group                         `json:"viewers,omitempty"`
+	Delegate               *Group                           `json:"delegate,omitempty"`
+	Owner                  *Organization                    `json:"owner,omitempty"`
+	BlockedGroups          *GroupConnection                 `json:"blockedGroups"`
+	Editors                *GroupConnection                 `json:"editors"`
+	Viewers                *GroupConnection                 `json:"viewers"`
 	Standard               *Standard                        `json:"standard,omitempty"`
 	Programs               *ProgramConnection               `json:"programs"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
@@ -2574,14 +2571,11 @@ type ControlObjective struct {
 	// category of the control
 	Category *string `json:"category,omitempty"`
 	// subcategory of the control
-	Subcategory *string       `json:"subcategory,omitempty"`
-	Owner       *Organization `json:"owner,omitempty"`
-	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
-	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers          []*Group                  `json:"viewers,omitempty"`
+	Subcategory      *string                   `json:"subcategory,omitempty"`
+	Owner            *Organization             `json:"owner,omitempty"`
+	BlockedGroups    *GroupConnection          `json:"blockedGroups"`
+	Editors          *GroupConnection          `json:"editors"`
+	Viewers          *GroupConnection          `json:"viewers"`
 	Programs         *ProgramConnection        `json:"programs"`
 	Evidence         *EvidenceConnection       `json:"evidence"`
 	Controls         *ControlConnection        `json:"controls"`
@@ -9251,36 +9245,36 @@ type Group struct {
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName                   string                     `json:"displayName"`
-	Owner                         *Organization              `json:"owner,omitempty"`
-	ProgramEditors                []*Program                 `json:"programEditors,omitempty"`
-	ProgramBlockedGroups          []*Program                 `json:"programBlockedGroups,omitempty"`
-	ProgramViewers                []*Program                 `json:"programViewers,omitempty"`
-	RiskEditors                   []*Risk                    `json:"riskEditors,omitempty"`
-	RiskBlockedGroups             []*Risk                    `json:"riskBlockedGroups,omitempty"`
-	RiskViewers                   []*Risk                    `json:"riskViewers,omitempty"`
-	ControlObjectiveEditors       []*ControlObjective        `json:"controlObjectiveEditors,omitempty"`
-	ControlObjectiveBlockedGroups []*ControlObjective        `json:"controlObjectiveBlockedGroups,omitempty"`
-	ControlObjectiveViewers       []*ControlObjective        `json:"controlObjectiveViewers,omitempty"`
-	ControlEditors                []*Control                 `json:"controlEditors,omitempty"`
-	ControlBlockedGroups          []*Control                 `json:"controlBlockedGroups,omitempty"`
-	ControlViewers                []*Control                 `json:"controlViewers,omitempty"`
-	NarrativeEditors              []*Narrative               `json:"narrativeEditors,omitempty"`
-	NarrativeBlockedGroups        []*Narrative               `json:"narrativeBlockedGroups,omitempty"`
-	NarrativeViewers              []*Narrative               `json:"narrativeViewers,omitempty"`
-	ProcedureEditors              []*Procedure               `json:"procedureEditors,omitempty"`
-	ProcedureBlockedGroups        []*Procedure               `json:"procedureBlockedGroups,omitempty"`
-	InternalPolicyEditors         []*InternalPolicy          `json:"internalPolicyEditors,omitempty"`
-	InternalPolicyBlockedGroups   []*InternalPolicy          `json:"internalPolicyBlockedGroups,omitempty"`
-	Setting                       *GroupSetting              `json:"setting,omitempty"`
-	Users                         *UserConnection            `json:"users"`
-	Events                        *EventConnection           `json:"events"`
-	Integrations                  *IntegrationConnection     `json:"integrations"`
-	Files                         *FileConnection            `json:"files"`
-	Tasks                         *TaskConnection            `json:"tasks"`
-	Members                       *GroupMembershipConnection `json:"members"`
+	DisplayName                   string                      `json:"displayName"`
+	Owner                         *Organization               `json:"owner,omitempty"`
+	ProgramEditors                *ProgramConnection          `json:"programEditors"`
+	ProgramBlockedGroups          *ProgramConnection          `json:"programBlockedGroups"`
+	ProgramViewers                *ProgramConnection          `json:"programViewers"`
+	RiskEditors                   *RiskConnection             `json:"riskEditors"`
+	RiskBlockedGroups             *RiskConnection             `json:"riskBlockedGroups"`
+	RiskViewers                   *RiskConnection             `json:"riskViewers"`
+	ControlObjectiveEditors       *ControlObjectiveConnection `json:"controlObjectiveEditors"`
+	ControlObjectiveBlockedGroups *ControlObjectiveConnection `json:"controlObjectiveBlockedGroups"`
+	ControlObjectiveViewers       *ControlObjectiveConnection `json:"controlObjectiveViewers"`
+	ControlEditors                *ControlConnection          `json:"controlEditors"`
+	ControlBlockedGroups          *ControlConnection          `json:"controlBlockedGroups"`
+	ControlViewers                *ControlConnection          `json:"controlViewers"`
+	NarrativeEditors              *NarrativeConnection        `json:"narrativeEditors"`
+	NarrativeBlockedGroups        *NarrativeConnection        `json:"narrativeBlockedGroups"`
+	NarrativeViewers              *NarrativeConnection        `json:"narrativeViewers"`
+	ProcedureEditors              *ProcedureConnection        `json:"procedureEditors"`
+	ProcedureBlockedGroups        *ProcedureConnection        `json:"procedureBlockedGroups"`
+	InternalPolicyEditors         *InternalPolicyConnection   `json:"internalPolicyEditors"`
+	InternalPolicyBlockedGroups   *InternalPolicyConnection   `json:"internalPolicyBlockedGroups"`
+	Setting                       *GroupSetting               `json:"setting,omitempty"`
+	Users                         *UserConnection             `json:"users"`
+	Events                        *EventConnection            `json:"events"`
+	Integrations                  *IntegrationConnection      `json:"integrations"`
+	Files                         *FileConnection             `json:"files"`
+	Tasks                         *TaskConnection             `json:"tasks"`
+	Members                       *GroupMembershipConnection  `json:"members"`
 	// permissions the group provides
-	Permissions []*GroupPermissions `json:"permissions,omitempty"`
+	Permissions *GroupPermissionConnection `json:"permissions"`
 }
 
 func (Group) IsNode() {}
@@ -9883,15 +9877,101 @@ type GroupOrder struct {
 	Field GroupOrderField `json:"field"`
 }
 
-// GroupPermissions contains details for the related object and the permissions
+// GroupPermission contains details for the related object and the permissions
 // the group provides (or removes in the case of blocked) to the object within the
 // organization
-type GroupPermissions struct {
-	ObjectType  string           `json:"objectType"`
+type GroupPermission struct {
+	// the type of object the permissions are for, e.g. Program, Control, etc.
+	ObjectType string `json:"objectType"`
+	// the permissions the group has in relation to the object, e.g. EDITOR, VIEWER, BLOCKED
 	Permissions enums.Permission `json:"permissions"`
-	ID          *string          `json:"id,omitempty"`
-	DisplayID   *string          `json:"displayID,omitempty"`
-	Name        *string          `json:"name,omitempty"`
+	// the ID of the object the group was given permissions to
+	ID string `json:"id"`
+	// the displayID of the object the group was given permissions to
+	DisplayID *string `json:"displayID,omitempty"`
+	// the  name of the object the group was given permissions to
+	Name *string `json:"name,omitempty"`
+}
+
+func (GroupPermission) IsNode() {}
+
+// A connection to a list of items.
+type GroupPermissionConnection struct {
+	// A list of edges.
+	Edges []*GroupPermissionEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type GroupPermissionEdge struct {
+	// The item at the end of the edge.
+	Node *GroupPermission `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for GroupPermission connections
+type GroupPermissionOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order GroupPermission.
+	Field GroupPermissionOrderField `json:"field"`
+}
+
+// GroupPermissionWhereInput is used for filtering GroupPermission objects.
+type GroupPermissionWhereInput struct {
+	Not *GroupPermissionWhereInput   `json:"not,omitempty"`
+	And []*GroupPermissionWhereInput `json:"and,omitempty"`
+	Or  []*GroupPermissionWhereInput `json:"or,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// objectType field predicates
+	ObjectType             *string  `json:"objectType,omitempty"`
+	ObjectTypeNeq          *string  `json:"objectTypeNEQ,omitempty"`
+	ObjectTypeIn           []string `json:"objectTypeIn,omitempty"`
+	ObjectTypeNotIn        []string `json:"objectTypeNotIn,omitempty"`
+	ObjectTypeGt           *string  `json:"objectTypeGT,omitempty"`
+	ObjectTypeGte          *string  `json:"objectTypeGTE,omitempty"`
+	ObjectTypeLt           *string  `json:"objectTypeLT,omitempty"`
+	ObjectTypeLte          *string  `json:"objectTypeLTE,omitempty"`
+	ObjectTypeContains     *string  `json:"objectTypeContains,omitempty"`
+	ObjectTypeHasPrefix    *string  `json:"objectTypeHasPrefix,omitempty"`
+	ObjectTypeHasSuffix    *string  `json:"objectTypeHasSuffix,omitempty"`
+	ObjectTypeIsNil        *bool    `json:"objectTypeIsNil,omitempty"`
+	ObjectTypeNotNil       *bool    `json:"objectTypeNotNil,omitempty"`
+	ObjectTypeEqualFold    *string  `json:"objectTypeEqualFold,omitempty"`
+	ObjectTypeContainsFold *string  `json:"objectTypeContainsFold,omitempty"`
+	// permission field predicates
+	Permission             *string  `json:"permission,omitempty"`
+	PermissionNeq          *string  `json:"permissionNEQ,omitempty"`
+	PermissionIn           []string `json:"permissionIn,omitempty"`
+	PermissionNotIn        []string `json:"permissionNotIn,omitempty"`
+	PermissionGt           *string  `json:"permissionGT,omitempty"`
+	PermissionGte          *string  `json:"permissionGTE,omitempty"`
+	PermissionLt           *string  `json:"permissionLT,omitempty"`
+	PermissionLte          *string  `json:"permissionLTE,omitempty"`
+	PermissionContains     *string  `json:"permissionContains,omitempty"`
+	PermissionHasPrefix    *string  `json:"permissionHasPrefix,omitempty"`
+	PermissionHasSuffix    *string  `json:"permissionHasSuffix,omitempty"`
+	PermissionIsNil        *bool    `json:"permissionIsNil,omitempty"`
+	PermissionNotNil       *bool    `json:"permissionNotNil,omitempty"`
+	PermissionEqualFold    *string  `json:"permissionEqualFold,omitempty"`
+	PermissionContainsFold *string  `json:"permissionContainsFold,omitempty"`
 }
 
 type GroupSetting struct {
@@ -11347,13 +11427,11 @@ type InternalPolicy struct {
 	// the id of the group responsible for approving the policy
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the policy
-	DelegateID *string       `json:"delegateID,omitempty"`
-	Summary    *string       `json:"summary,omitempty"`
-	Owner      *Organization `json:"owner,omitempty"`
-	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
-	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty"`
+	DelegateID    *string          `json:"delegateID,omitempty"`
+	Summary       *string          `json:"summary,omitempty"`
+	Owner         *Organization    `json:"owner,omitempty"`
+	BlockedGroups *GroupConnection `json:"blockedGroups"`
+	Editors       *GroupConnection `json:"editors"`
 	// the group of users who are responsible for approving the policy
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the policy, used for temporary approval
@@ -14035,14 +14113,11 @@ type Narrative struct {
 	// the description of the narrative
 	Description *string `json:"description,omitempty"`
 	// text data for the narrative document
-	Details *string       `json:"details,omitempty"`
-	Owner   *Organization `json:"owner,omitempty"`
-	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
-	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers          []*Group                  `json:"viewers,omitempty"`
+	Details          *string                   `json:"details,omitempty"`
+	Owner            *Organization             `json:"owner,omitempty"`
+	BlockedGroups    *GroupConnection          `json:"blockedGroups"`
+	Editors          *GroupConnection          `json:"editors"`
+	Viewers          *GroupConnection          `json:"viewers"`
 	Satisfies        *ControlConnection        `json:"satisfies"`
 	Programs         *ProgramConnection        `json:"programs"`
 	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
@@ -15904,25 +15979,16 @@ type Organization struct {
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// Whether the organization has a dedicated database
-	DedicatedDb bool `json:"dedicatedDb"`
-	// groups that are allowed to create controls
-	ControlCreators []*Group `json:"controlCreators,omitempty"`
-	// groups that are allowed to create control_objectives
-	ControlObjectiveCreators []*Group `json:"controlObjectiveCreators,omitempty"`
-	// groups that are allowed to create groups
-	GroupCreators []*Group `json:"groupCreators,omitempty"`
-	// groups that are allowed to create internal_policys
-	InternalPolicyCreators []*Group `json:"internalPolicyCreators,omitempty"`
-	// groups that are allowed to create narratives
-	NarrativeCreators []*Group `json:"narrativeCreators,omitempty"`
-	// groups that are allowed to create procedures
-	ProcedureCreators []*Group `json:"procedureCreators,omitempty"`
-	// groups that are allowed to create programs
-	ProgramCreators []*Group `json:"programCreators,omitempty"`
-	// groups that are allowed to create risks
-	RiskCreators []*Group `json:"riskCreators,omitempty"`
-	// groups that are allowed to create templates
-	TemplateCreators            []*Group                              `json:"templateCreators,omitempty"`
+	DedicatedDb                 bool                                  `json:"dedicatedDb"`
+	ControlCreators             *GroupConnection                      `json:"controlCreators"`
+	ControlObjectiveCreators    *GroupConnection                      `json:"controlObjectiveCreators"`
+	GroupCreators               *GroupConnection                      `json:"groupCreators"`
+	InternalPolicyCreators      *GroupConnection                      `json:"internalPolicyCreators"`
+	NarrativeCreators           *GroupConnection                      `json:"narrativeCreators"`
+	ProcedureCreators           *GroupConnection                      `json:"procedureCreators"`
+	ProgramCreators             *GroupConnection                      `json:"programCreators"`
+	RiskCreators                *GroupConnection                      `json:"riskCreators"`
+	TemplateCreators            *GroupConnection                      `json:"templateCreators"`
 	Parent                      *Organization                         `json:"parent,omitempty"`
 	Children                    *OrganizationConnection               `json:"children"`
 	Setting                     *OrganizationSetting                  `json:"setting,omitempty"`
@@ -17368,13 +17434,11 @@ type Procedure struct {
 	// the id of the group responsible for approving the procedure
 	ApproverID *string `json:"approverID,omitempty"`
 	// the id of the group responsible for approving the procedure
-	DelegateID *string       `json:"delegateID,omitempty"`
-	Summary    *string       `json:"summary,omitempty"`
-	Owner      *Organization `json:"owner,omitempty"`
-	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
-	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty"`
+	DelegateID    *string          `json:"delegateID,omitempty"`
+	Summary       *string          `json:"summary,omitempty"`
+	Owner         *Organization    `json:"owner,omitempty"`
+	BlockedGroups *GroupConnection `json:"blockedGroups"`
+	Editors       *GroupConnection `json:"editors"`
 	// the group of users who are responsible for approving the procedure
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the procedure, used for temporary approval
@@ -18063,14 +18127,11 @@ type Program struct {
 	// the full name of the auditor conducting the audit
 	Auditor *string `json:"auditor,omitempty"`
 	// the email of the auditor conducting the audit
-	AuditorEmail *string       `json:"auditorEmail,omitempty"`
-	Owner        *Organization `json:"owner,omitempty"`
-	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
-	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers           []*Group                     `json:"viewers,omitempty"`
+	AuditorEmail      *string                      `json:"auditorEmail,omitempty"`
+	Owner             *Organization                `json:"owner,omitempty"`
+	BlockedGroups     *GroupConnection             `json:"blockedGroups"`
+	Editors           *GroupConnection             `json:"editors"`
+	Viewers           *GroupConnection             `json:"viewers"`
 	Controls          *ControlConnection           `json:"controls"`
 	Subcontrols       *SubcontrolConnection        `json:"subcontrols"`
 	ControlObjectives *ControlObjectiveConnection  `json:"controlObjectives"`
@@ -18783,8 +18844,6 @@ type ProgramMembershipWhereInput struct {
 	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
 	RoleIn    []enums.Role `json:"roleIn,omitempty"`
 	RoleNotIn []enums.Role `json:"roleNotIn,omitempty"`
-	ProgramID *string      `json:"programID,omitempty"`
-	UserID    *string      `json:"userID,omitempty"`
 }
 
 // Ordering options for Program connections
@@ -19131,14 +19190,11 @@ type Risk struct {
 	// the id of the group responsible for risk oversight
 	StakeholderID *string `json:"stakeholderID,omitempty"`
 	// the id of the group responsible for risk oversight on behalf of the stakeholder
-	DelegateID *string       `json:"delegateID,omitempty"`
-	Owner      *Organization `json:"owner,omitempty"`
-	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
-	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers          []*Group                  `json:"viewers,omitempty"`
+	DelegateID       *string                   `json:"delegateID,omitempty"`
+	Owner            *Organization             `json:"owner,omitempty"`
+	BlockedGroups    *GroupConnection          `json:"blockedGroups"`
+	Editors          *GroupConnection          `json:"editors"`
+	Viewers          *GroupConnection          `json:"viewers"`
 	Controls         *ControlConnection        `json:"controls"`
 	Subcontrols      *SubcontrolConnection     `json:"subcontrols"`
 	Procedures       *ProcedureConnection      `json:"procedures"`
@@ -25615,10 +25671,10 @@ type User struct {
 	Subcontrols          *SubcontrolConnection          `json:"subcontrols"`
 	AssignerTasks        *TaskConnection                `json:"assignerTasks"`
 	AssigneeTasks        *TaskConnection                `json:"assigneeTasks"`
-	Programs             []*Program                     `json:"programs,omitempty"`
+	Programs             *ProgramConnection             `json:"programs"`
 	GroupMemberships     *GroupMembershipConnection     `json:"groupMemberships"`
 	OrgMemberships       *OrgMembershipConnection       `json:"orgMemberships"`
-	ProgramMemberships   []*ProgramMembership           `json:"programMemberships,omitempty"`
+	ProgramMemberships   *ProgramMembershipConnection   `json:"programMemberships"`
 }
 
 func (User) IsNode() {}
@@ -28860,6 +28916,64 @@ func (e *GroupOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e GroupOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which GroupPermission connections can be ordered.
+type GroupPermissionOrderField string
+
+const (
+	GroupPermissionOrderFieldName       GroupPermissionOrderField = "name"
+	GroupPermissionOrderFieldPermission GroupPermissionOrderField = "permission"
+	GroupPermissionOrderFieldObjectType GroupPermissionOrderField = "objectType"
+)
+
+var AllGroupPermissionOrderField = []GroupPermissionOrderField{
+	GroupPermissionOrderFieldName,
+	GroupPermissionOrderFieldPermission,
+	GroupPermissionOrderFieldObjectType,
+}
+
+func (e GroupPermissionOrderField) IsValid() bool {
+	switch e {
+	case GroupPermissionOrderFieldName, GroupPermissionOrderFieldPermission, GroupPermissionOrderFieldObjectType:
+		return true
+	}
+	return false
+}
+
+func (e GroupPermissionOrderField) String() string {
+	return string(e)
+}
+
+func (e *GroupPermissionOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = GroupPermissionOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid GroupPermissionOrderField", str)
+	}
+	return nil
+}
+
+func (e GroupPermissionOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *GroupPermissionOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e GroupPermissionOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

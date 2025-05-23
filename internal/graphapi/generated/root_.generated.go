@@ -306,7 +306,7 @@ type ComplexityRoot struct {
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
 		AuditorReferenceID     func(childComplexity int) int
-		BlockedGroups          func(childComplexity int) int
+		BlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
 		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
@@ -321,7 +321,7 @@ type ComplexityRoot struct {
 		DelegateID             func(childComplexity int) int
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
-		Editors                func(childComplexity int) int
+		Editors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ExampleEvidence        func(childComplexity int) int
 		ID                     func(childComplexity int) int
@@ -349,7 +349,7 @@ type ComplexityRoot struct {
 		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
-		Viewers                func(childComplexity int) int
+		Viewers                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	ControlBulkCreatePayload struct {
@@ -495,7 +495,7 @@ type ComplexityRoot struct {
 	}
 
 	ControlObjective struct {
-		BlockedGroups        func(childComplexity int) int
+		BlockedGroups        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Category             func(childComplexity int) int
 		ControlObjectiveType func(childComplexity int) int
 		Controls             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
@@ -503,7 +503,7 @@ type ComplexityRoot struct {
 		CreatedBy            func(childComplexity int) int
 		DesiredOutcome       func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
-		Editors              func(childComplexity int) int
+		Editors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Evidence             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ID                   func(childComplexity int) int
 		InternalPolicies     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -523,7 +523,7 @@ type ComplexityRoot struct {
 		Tasks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
-		Viewers              func(childComplexity int) int
+		Viewers              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	ControlObjectiveBulkCreatePayload struct {
@@ -1282,12 +1282,12 @@ type ComplexityRoot struct {
 	}
 
 	Group struct {
-		ControlBlockedGroups          func(childComplexity int) int
-		ControlEditors                func(childComplexity int) int
-		ControlObjectiveBlockedGroups func(childComplexity int) int
-		ControlObjectiveEditors       func(childComplexity int) int
-		ControlObjectiveViewers       func(childComplexity int) int
-		ControlViewers                func(childComplexity int) int
+		ControlBlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ControlEditors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ControlObjectiveBlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlObjectiveEditors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlObjectiveViewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlViewers                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt                     func(childComplexity int) int
 		CreatedBy                     func(childComplexity int) int
 		Description                   func(childComplexity int) int
@@ -1298,26 +1298,26 @@ type ComplexityRoot struct {
 		GravatarLogoURL               func(childComplexity int) int
 		ID                            func(childComplexity int) int
 		Integrations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalPolicyBlockedGroups   func(childComplexity int) int
-		InternalPolicyEditors         func(childComplexity int) int
+		InternalPolicyBlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		InternalPolicyEditors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		IsManaged                     func(childComplexity int) int
 		LogoURL                       func(childComplexity int) int
 		Members                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
 		Name                          func(childComplexity int) int
-		NarrativeBlockedGroups        func(childComplexity int) int
-		NarrativeEditors              func(childComplexity int) int
-		NarrativeViewers              func(childComplexity int) int
+		NarrativeBlockedGroups        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		NarrativeEditors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		NarrativeViewers              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                         func(childComplexity int) int
 		OwnerID                       func(childComplexity int) int
-		Permissions                   func(childComplexity int) int
-		ProcedureBlockedGroups        func(childComplexity int) int
-		ProcedureEditors              func(childComplexity int) int
-		ProgramBlockedGroups          func(childComplexity int) int
-		ProgramEditors                func(childComplexity int) int
-		ProgramViewers                func(childComplexity int) int
-		RiskBlockedGroups             func(childComplexity int) int
-		RiskEditors                   func(childComplexity int) int
-		RiskViewers                   func(childComplexity int) int
+		Permissions                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*model.GroupPermissionOrder, where *model.GroupPermissionWhereInput) int
+		ProcedureBlockedGroups        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProcedureEditors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProgramBlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ProgramEditors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ProgramViewers                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RiskBlockedGroups             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		RiskEditors                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		RiskViewers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Setting                       func(childComplexity int) int
 		Tags                          func(childComplexity int) int
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -1446,12 +1446,23 @@ type ComplexityRoot struct {
 		GroupMembership func(childComplexity int) int
 	}
 
-	GroupPermissions struct {
+	GroupPermission struct {
 		DisplayID   func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Name        func(childComplexity int) int
 		ObjectType  func(childComplexity int) int
 		Permissions func(childComplexity int) int
+	}
+
+	GroupPermissionConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	GroupPermissionEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	GroupSetting struct {
@@ -1670,7 +1681,7 @@ type ComplexityRoot struct {
 		ApprovalRequired  func(childComplexity int) int
 		Approver          func(childComplexity int) int
 		ApproverID        func(childComplexity int) int
-		BlockedGroups     func(childComplexity int) int
+		BlockedGroups     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ControlObjectives func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		Controls          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt         func(childComplexity int) int
@@ -1679,7 +1690,7 @@ type ComplexityRoot struct {
 		DelegateID        func(childComplexity int) int
 		Details           func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
-		Editors           func(childComplexity int) int
+		Editors           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                func(childComplexity int) int
 		Name              func(childComplexity int) int
 		Narratives        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
@@ -2324,13 +2335,13 @@ type ComplexityRoot struct {
 	}
 
 	Narrative struct {
-		BlockedGroups    func(childComplexity int) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
-		Editors          func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID               func(childComplexity int) int
 		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Name             func(childComplexity int) int
@@ -2342,7 +2353,7 @@ type ComplexityRoot struct {
 		Tags             func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
-		Viewers          func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	NarrativeBulkCreatePayload struct {
@@ -2616,9 +2627,9 @@ type ComplexityRoot struct {
 		AvatarUpdatedAt             func(childComplexity int) int
 		Children                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		Contacts                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		ControlCreators             func(childComplexity int) int
+		ControlCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ControlImplementations      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjectiveCreators    func(childComplexity int) int
+		ControlObjectiveCreators    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ControlObjectives           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		Controls                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt                   func(childComplexity int) int
@@ -2634,12 +2645,12 @@ type ComplexityRoot struct {
 		Events                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Evidence                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		Files                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		GroupCreators               func(childComplexity int) int
+		GroupCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Groups                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                          func(childComplexity int) int
 		Integrations                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicies            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		InternalPolicyCreators      func(childComplexity int) int
+		InternalPolicyCreators      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Invites                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
 		JobResults                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
 		JobRunnerRegistrationTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
@@ -2648,18 +2659,18 @@ type ComplexityRoot struct {
 		Jobs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Members                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		Name                        func(childComplexity int) int
-		NarrativeCreators           func(childComplexity int) int
+		NarrativeCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Narratives                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Notes                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		OrgSubscriptions            func(childComplexity int) int
 		Parent                      func(childComplexity int) int
 		PersonalAccessTokens        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		PersonalOrg                 func(childComplexity int) int
-		ProcedureCreators           func(childComplexity int) int
+		ProcedureCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Procedures                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		ProgramCreators             func(childComplexity int) int
+		ProgramCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Programs                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RiskCreators                func(childComplexity int) int
+		RiskCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Risks                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		ScheduledJobRuns            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
 		ScheduledJobs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
@@ -2670,7 +2681,7 @@ type ComplexityRoot struct {
 		Subscribers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
 		Tags                        func(childComplexity int) int
 		Tasks                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		TemplateCreators            func(childComplexity int) int
+		TemplateCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Templates                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		UpdatedAt                   func(childComplexity int) int
 		UpdatedBy                   func(childComplexity int) int
@@ -2876,7 +2887,7 @@ type ComplexityRoot struct {
 		ApprovalRequired func(childComplexity int) int
 		Approver         func(childComplexity int) int
 		ApproverID       func(childComplexity int) int
-		BlockedGroups    func(childComplexity int) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
@@ -2884,7 +2895,7 @@ type ComplexityRoot struct {
 		DelegateID       func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
-		Editors          func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID               func(childComplexity int) int
 		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Name             func(childComplexity int) int
@@ -2977,14 +2988,14 @@ type ComplexityRoot struct {
 		AuditorReadComments  func(childComplexity int) int
 		AuditorReady         func(childComplexity int) int
 		AuditorWriteComments func(childComplexity int) int
-		BlockedGroups        func(childComplexity int) int
+		BlockedGroups        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ControlObjectives    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		Controls             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
-		Editors              func(childComplexity int) int
+		Editors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EndDate              func(childComplexity int) int
 		Evidence             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
@@ -3008,7 +3019,7 @@ type ComplexityRoot struct {
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 		Users                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
-		Viewers              func(childComplexity int) int
+		Viewers              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	ProgramBulkCreatePayload struct {
@@ -3371,7 +3382,7 @@ type ComplexityRoot struct {
 
 	Risk struct {
 		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		BlockedGroups    func(childComplexity int) int
+		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		BusinessCosts    func(childComplexity int) int
 		Category         func(childComplexity int) int
 		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
@@ -3381,7 +3392,7 @@ type ComplexityRoot struct {
 		DelegateID       func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
-		Editors          func(childComplexity int) int
+		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID               func(childComplexity int) int
 		Impact           func(childComplexity int) int
 		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -3402,7 +3413,7 @@ type ComplexityRoot struct {
 		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
-		Viewers          func(childComplexity int) int
+		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	RiskBulkCreatePayload struct {
@@ -4103,8 +4114,8 @@ type ComplexityRoot struct {
 		OrgMemberships       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		Organizations        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		PersonalAccessTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
-		ProgramMemberships   func(childComplexity int) int
-		Programs             func(childComplexity int) int
+		ProgramMemberships   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
+		Programs             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		Role                 func(childComplexity int) int
 		Setting              func(childComplexity int) int
 		Sub                  func(childComplexity int) int
@@ -5433,7 +5444,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Control.BlockedGroups(childComplexity), true
+		args, err := ec.field_Control_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Control.category":
 		if e.complexity.Control.Category == nil {
@@ -5548,7 +5564,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Control.Editors(childComplexity), true
+		args, err := ec.field_Control_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Control.evidence":
 		if e.complexity.Control.Evidence == nil {
@@ -5794,7 +5815,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Control.Viewers(childComplexity), true
+		args, err := ec.field_Control_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "ControlBulkCreatePayload.controls":
 		if e.complexity.ControlBulkCreatePayload.Controls == nil {
@@ -6427,7 +6453,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.ControlObjective.BlockedGroups(childComplexity), true
+		args, err := ec.field_ControlObjective_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "ControlObjective.category":
 		if e.complexity.ControlObjective.Category == nil {
@@ -6488,7 +6519,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.ControlObjective.Editors(childComplexity), true
+		args, err := ec.field_ControlObjective_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "ControlObjective.evidence":
 		if e.complexity.ControlObjective.Evidence == nil {
@@ -6668,7 +6704,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.ControlObjective.Viewers(childComplexity), true
+		args, err := ec.field_ControlObjective_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlObjective.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "ControlObjectiveBulkCreatePayload.controlObjectives":
 		if e.complexity.ControlObjectiveBulkCreatePayload.ControlObjectives == nil {
@@ -10073,42 +10114,72 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Group.ControlBlockedGroups(childComplexity), true
+		args, err := ec.field_Group_controlBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ControlBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Group.controlEditors":
 		if e.complexity.Group.ControlEditors == nil {
 			break
 		}
 
-		return e.complexity.Group.ControlEditors(childComplexity), true
+		args, err := ec.field_Group_controlEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ControlEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Group.controlObjectiveBlockedGroups":
 		if e.complexity.Group.ControlObjectiveBlockedGroups == nil {
 			break
 		}
 
-		return e.complexity.Group.ControlObjectiveBlockedGroups(childComplexity), true
+		args, err := ec.field_Group_controlObjectiveBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ControlObjectiveBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "Group.controlObjectiveEditors":
 		if e.complexity.Group.ControlObjectiveEditors == nil {
 			break
 		}
 
-		return e.complexity.Group.ControlObjectiveEditors(childComplexity), true
+		args, err := ec.field_Group_controlObjectiveEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ControlObjectiveEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "Group.controlObjectiveViewers":
 		if e.complexity.Group.ControlObjectiveViewers == nil {
 			break
 		}
 
-		return e.complexity.Group.ControlObjectiveViewers(childComplexity), true
+		args, err := ec.field_Group_controlObjectiveViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ControlObjectiveViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
 	case "Group.controlViewers":
 		if e.complexity.Group.ControlViewers == nil {
 			break
 		}
 
-		return e.complexity.Group.ControlViewers(childComplexity), true
+		args, err := ec.field_Group_controlViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ControlViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Group.createdAt":
 		if e.complexity.Group.CreatedAt == nil {
@@ -10200,14 +10271,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Group.InternalPolicyBlockedGroups(childComplexity), true
+		args, err := ec.field_Group_internalPolicyBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.InternalPolicyBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "Group.internalPolicyEditors":
 		if e.complexity.Group.InternalPolicyEditors == nil {
 			break
 		}
 
-		return e.complexity.Group.InternalPolicyEditors(childComplexity), true
+		args, err := ec.field_Group_internalPolicyEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.InternalPolicyEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
 
 	case "Group.isManaged":
 		if e.complexity.Group.IsManaged == nil {
@@ -10247,21 +10328,36 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Group.NarrativeBlockedGroups(childComplexity), true
+		args, err := ec.field_Group_narrativeBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.NarrativeBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "Group.narrativeEditors":
 		if e.complexity.Group.NarrativeEditors == nil {
 			break
 		}
 
-		return e.complexity.Group.NarrativeEditors(childComplexity), true
+		args, err := ec.field_Group_narrativeEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.NarrativeEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "Group.narrativeViewers":
 		if e.complexity.Group.NarrativeViewers == nil {
 			break
 		}
 
-		return e.complexity.Group.NarrativeViewers(childComplexity), true
+		args, err := ec.field_Group_narrativeViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.NarrativeViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
 	case "Group.owner":
 		if e.complexity.Group.Owner == nil {
@@ -10282,63 +10378,108 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Group.Permissions(childComplexity), true
+		args, err := ec.field_Group_permissions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.Permissions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*model.GroupPermissionOrder), args["where"].(*model.GroupPermissionWhereInput)), true
 
 	case "Group.procedureBlockedGroups":
 		if e.complexity.Group.ProcedureBlockedGroups == nil {
 			break
 		}
 
-		return e.complexity.Group.ProcedureBlockedGroups(childComplexity), true
+		args, err := ec.field_Group_procedureBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ProcedureBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "Group.procedureEditors":
 		if e.complexity.Group.ProcedureEditors == nil {
 			break
 		}
 
-		return e.complexity.Group.ProcedureEditors(childComplexity), true
+		args, err := ec.field_Group_procedureEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ProcedureEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
 
 	case "Group.programBlockedGroups":
 		if e.complexity.Group.ProgramBlockedGroups == nil {
 			break
 		}
 
-		return e.complexity.Group.ProgramBlockedGroups(childComplexity), true
+		args, err := ec.field_Group_programBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ProgramBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Group.programEditors":
 		if e.complexity.Group.ProgramEditors == nil {
 			break
 		}
 
-		return e.complexity.Group.ProgramEditors(childComplexity), true
+		args, err := ec.field_Group_programEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ProgramEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Group.programViewers":
 		if e.complexity.Group.ProgramViewers == nil {
 			break
 		}
 
-		return e.complexity.Group.ProgramViewers(childComplexity), true
+		args, err := ec.field_Group_programViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ProgramViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "Group.riskBlockedGroups":
 		if e.complexity.Group.RiskBlockedGroups == nil {
 			break
 		}
 
-		return e.complexity.Group.RiskBlockedGroups(childComplexity), true
+		args, err := ec.field_Group_riskBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.RiskBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Group.riskEditors":
 		if e.complexity.Group.RiskEditors == nil {
 			break
 		}
 
-		return e.complexity.Group.RiskEditors(childComplexity), true
+		args, err := ec.field_Group_riskEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.RiskEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Group.riskViewers":
 		if e.complexity.Group.RiskViewers == nil {
 			break
 		}
 
-		return e.complexity.Group.RiskViewers(childComplexity), true
+		args, err := ec.field_Group_riskViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.RiskViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "Group.setting":
 		if e.complexity.Group.Setting == nil {
@@ -10859,40 +11000,75 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.GroupMembershipUpdatePayload.GroupMembership(childComplexity), true
 
-	case "GroupPermissions.displayID":
-		if e.complexity.GroupPermissions.DisplayID == nil {
+	case "GroupPermission.displayID":
+		if e.complexity.GroupPermission.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.GroupPermissions.DisplayID(childComplexity), true
+		return e.complexity.GroupPermission.DisplayID(childComplexity), true
 
-	case "GroupPermissions.id":
-		if e.complexity.GroupPermissions.ID == nil {
+	case "GroupPermission.id":
+		if e.complexity.GroupPermission.ID == nil {
 			break
 		}
 
-		return e.complexity.GroupPermissions.ID(childComplexity), true
+		return e.complexity.GroupPermission.ID(childComplexity), true
 
-	case "GroupPermissions.name":
-		if e.complexity.GroupPermissions.Name == nil {
+	case "GroupPermission.name":
+		if e.complexity.GroupPermission.Name == nil {
 			break
 		}
 
-		return e.complexity.GroupPermissions.Name(childComplexity), true
+		return e.complexity.GroupPermission.Name(childComplexity), true
 
-	case "GroupPermissions.objectType":
-		if e.complexity.GroupPermissions.ObjectType == nil {
+	case "GroupPermission.objectType":
+		if e.complexity.GroupPermission.ObjectType == nil {
 			break
 		}
 
-		return e.complexity.GroupPermissions.ObjectType(childComplexity), true
+		return e.complexity.GroupPermission.ObjectType(childComplexity), true
 
-	case "GroupPermissions.permissions":
-		if e.complexity.GroupPermissions.Permissions == nil {
+	case "GroupPermission.permissions":
+		if e.complexity.GroupPermission.Permissions == nil {
 			break
 		}
 
-		return e.complexity.GroupPermissions.Permissions(childComplexity), true
+		return e.complexity.GroupPermission.Permissions(childComplexity), true
+
+	case "GroupPermissionConnection.edges":
+		if e.complexity.GroupPermissionConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissionConnection.Edges(childComplexity), true
+
+	case "GroupPermissionConnection.pageInfo":
+		if e.complexity.GroupPermissionConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissionConnection.PageInfo(childComplexity), true
+
+	case "GroupPermissionConnection.totalCount":
+		if e.complexity.GroupPermissionConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissionConnection.TotalCount(childComplexity), true
+
+	case "GroupPermissionEdge.cursor":
+		if e.complexity.GroupPermissionEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissionEdge.Cursor(childComplexity), true
+
+	case "GroupPermissionEdge.node":
+		if e.complexity.GroupPermissionEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.GroupPermissionEdge.Node(childComplexity), true
 
 	case "GroupSetting.createdAt":
 		if e.complexity.GroupSetting.CreatedAt == nil {
@@ -11773,7 +11949,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.InternalPolicy.BlockedGroups(childComplexity), true
+		args, err := ec.field_InternalPolicy_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "InternalPolicy.controlObjectives":
 		if e.complexity.InternalPolicy.ControlObjectives == nil {
@@ -11846,7 +12027,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.InternalPolicy.Editors(childComplexity), true
+		args, err := ec.field_InternalPolicy_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "InternalPolicy.id":
 		if e.complexity.InternalPolicy.ID == nil {
@@ -16180,7 +16366,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Narrative.BlockedGroups(childComplexity), true
+		args, err := ec.field_Narrative_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Narrative.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Narrative.createdAt":
 		if e.complexity.Narrative.CreatedAt == nil {
@@ -16222,7 +16413,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Narrative.Editors(childComplexity), true
+		args, err := ec.field_Narrative_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Narrative.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Narrative.id":
 		if e.complexity.Narrative.ID == nil {
@@ -16326,7 +16522,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Narrative.Viewers(childComplexity), true
+		args, err := ec.field_Narrative_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Narrative.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "NarrativeBulkCreatePayload.narratives":
 		if e.complexity.NarrativeBulkCreatePayload.Narratives == nil {
@@ -17565,7 +17766,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Organization.ControlCreators(childComplexity), true
+		args, err := ec.field_Organization_controlCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ControlCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.controlImplementations":
 		if e.complexity.Organization.ControlImplementations == nil {
@@ -17584,7 +17790,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Organization.ControlObjectiveCreators(childComplexity), true
+		args, err := ec.field_Organization_controlObjectiveCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ControlObjectiveCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.controlObjectives":
 		if e.complexity.Organization.ControlObjectives == nil {
@@ -17746,7 +17957,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Organization.GroupCreators(childComplexity), true
+		args, err := ec.field_Organization_groupCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.GroupCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.groups":
 		if e.complexity.Organization.Groups == nil {
@@ -17796,7 +18012,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Organization.InternalPolicyCreators(childComplexity), true
+		args, err := ec.field_Organization_internalPolicyCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.InternalPolicyCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.invites":
 		if e.complexity.Organization.Invites == nil {
@@ -17894,7 +18115,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Organization.NarrativeCreators(childComplexity), true
+		args, err := ec.field_Organization_narrativeCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.NarrativeCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.narratives":
 		if e.complexity.Organization.Narratives == nil {
@@ -17958,7 +18184,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Organization.ProcedureCreators(childComplexity), true
+		args, err := ec.field_Organization_procedureCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ProcedureCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.procedures":
 		if e.complexity.Organization.Procedures == nil {
@@ -17977,7 +18208,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Organization.ProgramCreators(childComplexity), true
+		args, err := ec.field_Organization_programCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ProgramCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.programs":
 		if e.complexity.Organization.Programs == nil {
@@ -17996,7 +18232,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Organization.RiskCreators(childComplexity), true
+		args, err := ec.field_Organization_riskCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.RiskCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.risks":
 		if e.complexity.Organization.Risks == nil {
@@ -18113,7 +18354,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Organization.TemplateCreators(childComplexity), true
+		args, err := ec.field_Organization_templateCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TemplateCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.templates":
 		if e.complexity.Organization.Templates == nil {
@@ -18992,7 +19238,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Procedure.BlockedGroups(childComplexity), true
+		args, err := ec.field_Procedure_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Procedure.controls":
 		if e.complexity.Procedure.Controls == nil {
@@ -19053,7 +19304,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Procedure.Editors(childComplexity), true
+		args, err := ec.field_Procedure_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Procedure.id":
 		if e.complexity.Procedure.ID == nil {
@@ -19529,7 +19785,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Program.BlockedGroups(childComplexity), true
+		args, err := ec.field_Program_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Program.controlObjectives":
 		if e.complexity.Program.ControlObjectives == nil {
@@ -19588,7 +19849,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Program.Editors(childComplexity), true
+		args, err := ec.field_Program_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Program.endDate":
 		if e.complexity.Program.EndDate == nil {
@@ -19811,7 +20077,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Program.Viewers(childComplexity), true
+		args, err := ec.field_Program_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Program.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "ProgramBulkCreatePayload.programs":
 		if e.complexity.ProgramBulkCreatePayload.Programs == nil {
@@ -23036,7 +23307,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Risk.BlockedGroups(childComplexity), true
+		args, err := ec.field_Risk_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Risk.businessCosts":
 		if e.complexity.Risk.BusinessCosts == nil {
@@ -23111,7 +23387,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Risk.Editors(childComplexity), true
+		args, err := ec.field_Risk_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Risk.id":
 		if e.complexity.Risk.ID == nil {
@@ -23283,7 +23564,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Risk.Viewers(childComplexity), true
+		args, err := ec.field_Risk_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "RiskBulkCreatePayload.risks":
 		if e.complexity.RiskBulkCreatePayload.Risks == nil {
@@ -26769,14 +27055,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.User.ProgramMemberships(childComplexity), true
+		args, err := ec.field_User_programMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.ProgramMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramMembershipOrder), args["where"].(*generated.ProgramMembershipWhereInput)), true
 
 	case "User.programs":
 		if e.complexity.User.Programs == nil {
 			break
 		}
 
-		return e.complexity.User.Programs(childComplexity), true
+		args, err := ec.field_User_programs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "User.role":
 		if e.complexity.User.Role == nil {
@@ -27683,6 +27979,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputGroupMembershipOrder,
 		ec.unmarshalInputGroupMembershipWhereInput,
 		ec.unmarshalInputGroupOrder,
+		ec.unmarshalInputGroupPermissionOrder,
+		ec.unmarshalInputGroupPermissionWhereInput,
 		ec.unmarshalInputGroupSettingHistoryOrder,
 		ec.unmarshalInputGroupSettingHistoryWhereInput,
 		ec.unmarshalInputGroupSettingOrder,
@@ -32635,18 +32933,99 @@ type Control implements Node {
   """
   delegate: Group
   owner: Organization
-  """
-  groups that are blocked from viewing or editing the risk
-  """
-  blockedGroups: [Group!]
-  """
-  provides edit access to the risk to members of the group
-  """
-  editors: [Group!]
-  """
-  provides view access to the risk to members of the group
-  """
-  viewers: [Group!]
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   standard: Standard
   programs(
     """
@@ -34084,18 +34463,99 @@ type ControlObjective implements Node {
   """
   subcategory: String
   owner: Organization
-  """
-  groups that are blocked from viewing or editing the risk
-  """
-  blockedGroups: [Group!]
-  """
-  provides edit access to the risk to members of the group
-  """
-  editors: [Group!]
-  """
-  provides view access to the risk to members of the group
-  """
-  viewers: [Group!]
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   programs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -44076,25 +44536,595 @@ type Group implements Node {
   """
   displayName: String!
   owner: Organization
-  programEditors: [Program!]
-  programBlockedGroups: [Program!]
-  programViewers: [Program!]
-  riskEditors: [Risk!]
-  riskBlockedGroups: [Risk!]
-  riskViewers: [Risk!]
-  controlObjectiveEditors: [ControlObjective!]
-  controlObjectiveBlockedGroups: [ControlObjective!]
-  controlObjectiveViewers: [ControlObjective!]
-  controlEditors: [Control!]
-  controlBlockedGroups: [Control!]
-  controlViewers: [Control!]
-  narrativeEditors: [Narrative!]
-  narrativeBlockedGroups: [Narrative!]
-  narrativeViewers: [Narrative!]
-  procedureEditors: [Procedure!]
-  procedureBlockedGroups: [Procedure!]
-  internalPolicyEditors: [InternalPolicy!]
-  internalPolicyBlockedGroups: [InternalPolicy!]
+  programEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  programBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  programViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
+  riskEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  riskBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  riskViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  controlObjectiveEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  controlObjectiveBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  controlObjectiveViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlObjectives returned from the connection.
+    """
+    orderBy: [ControlObjectiveOrder!]
+
+    """
+    Filtering options for ControlObjectives returned from the connection.
+    """
+    where: ControlObjectiveWhereInput
+  ): ControlObjectiveConnection!
+  controlEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  controlBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  controlViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  narrativeEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: [NarrativeOrder!]
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  narrativeBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: [NarrativeOrder!]
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  narrativeViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Narratives returned from the connection.
+    """
+    orderBy: [NarrativeOrder!]
+
+    """
+    Filtering options for Narratives returned from the connection.
+    """
+    where: NarrativeWhereInput
+  ): NarrativeConnection!
+  procedureEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Procedures returned from the connection.
+    """
+    orderBy: [ProcedureOrder!]
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  procedureBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Procedures returned from the connection.
+    """
+    orderBy: [ProcedureOrder!]
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  internalPolicyEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  internalPolicyBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
   setting: GroupSetting
   users(
     """
@@ -47055,14 +48085,68 @@ type InternalPolicy implements Node {
   delegateID: ID
   summary: String
   owner: Organization
-  """
-  groups that are blocked from viewing or editing the risk
-  """
-  blockedGroups: [Group!]
-  """
-  provides edit access to the risk to members of the group
-  """
-  editors: [Group!]
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   """
   the group of users who are responsible for approving the policy
   """
@@ -50900,18 +51984,99 @@ type Narrative implements Node {
   """
   details: String
   owner: Organization
-  """
-  groups that are blocked from viewing or editing the risk
-  """
-  blockedGroups: [Group!]
-  """
-  provides edit access to the risk to members of the group
-  """
-  editors: [Group!]
-  """
-  provides view access to the risk to members of the group
-  """
-  viewers: [Group!]
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   satisfies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -53512,42 +54677,285 @@ type Organization implements Node {
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean!
-  """
-  groups that are allowed to create controls
-  """
-  controlCreators: [Group!]
-  """
-  groups that are allowed to create control_objectives
-  """
-  controlObjectiveCreators: [Group!]
-  """
-  groups that are allowed to create groups
-  """
-  groupCreators: [Group!]
-  """
-  groups that are allowed to create internal_policys
-  """
-  internalPolicyCreators: [Group!]
-  """
-  groups that are allowed to create narratives
-  """
-  narrativeCreators: [Group!]
-  """
-  groups that are allowed to create procedures
-  """
-  procedureCreators: [Group!]
-  """
-  groups that are allowed to create programs
-  """
-  programCreators: [Group!]
-  """
-  groups that are allowed to create risks
-  """
-  riskCreators: [Group!]
-  """
-  groups that are allowed to create templates
-  """
-  templateCreators: [Group!]
+  controlCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  controlObjectiveCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  groupCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  internalPolicyCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  narrativeCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  procedureCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  programCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  riskCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  templateCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   parent: Organization
   children(
     """
@@ -56721,14 +58129,68 @@ type Procedure implements Node {
   delegateID: ID
   summary: String
   owner: Organization
-  """
-  groups that are blocked from viewing or editing the risk
-  """
-  blockedGroups: [Group!]
-  """
-  provides edit access to the risk to members of the group
-  """
-  editors: [Group!]
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   """
   the group of users who are responsible for approving the procedure
   """
@@ -57865,18 +59327,99 @@ type Program implements Node {
   """
   auditorEmail: String
   owner: Organization
-  """
-  groups that are blocked from viewing or editing the risk
-  """
-  blockedGroups: [Group!]
-  """
-  provides edit access to the risk to members of the group
-  """
-  editors: [Group!]
-  """
-  provides view access to the risk to members of the group
-  """
-  viewers: [Group!]
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62504,18 +64047,99 @@ type Risk implements Node {
   """
   delegateID: ID
   owner: Organization
-  """
-  groups that are blocked from viewing or editing the risk
-  """
-  blockedGroups: [Group!]
-  """
-  provides edit access to the risk to members of the group
-  """
-  editors: [Group!]
-  """
-  provides view access to the risk to members of the group
-  """
-  viewers: [Group!]
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -72214,7 +73838,37 @@ type User implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
-  programs: [Program!]
+  programs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
   groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -72277,7 +73931,37 @@ type User implements Node {
     """
     where: OrgMembershipWhereInput
   ): OrgMembershipConnection!
-  programMemberships: [ProgramMembership!]
+  programMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ProgramMemberships returned from the connection.
+    """
+    orderBy: [ProgramMembershipOrder!]
+
+    """
+    Filtering options for ProgramMemberships returned from the connection.
+    """
+    where: ProgramMembershipWhereInput
+  ): ProgramMembershipConnection!
 }
 """
 UserAuthProvider is enum for the field last_login_provider
@@ -74518,24 +76202,186 @@ enum Permission @goModel(model: "github.com/theopenlane/core/pkg/enums.Permissio
 }
 
 """
-GroupPermissions contains details for the related object and the permissions
+GroupPermission contains details for the related object and the permissions
 the group provides (or removes in the case of blocked) to the object within the
 organization
 """
-type GroupPermissions {
+type GroupPermission implements Node {
+  """
+  the type of object the permissions are for, e.g. Program, Control, etc.
+  """
   objectType: String!
+  """
+  the permissions the group has in relation to the object, e.g. EDITOR, VIEWER, BLOCKED
+  """
   permissions: Permission!
-  id: ID
+  """
+  the ID of the object the group was given permissions to
+  """
+  id: ID!
+  """
+  the displayID of the object the group was given permissions to
+  """
   displayID: String
+  """
+  the  name of the object the group was given permissions to
+  """
   name: String
+}
+
+"""
+A connection to a list of items.
+"""
+type GroupPermissionConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [GroupPermissionEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type GroupPermissionEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: GroupPermission
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
 }
 
 extend type Group {
   """
   permissions the group provides
   """
-  permissions: [GroupPermissions!]
+  permissions(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Integrations returned from the connection.
+		"""
+		orderBy: [GroupPermissionOrder!]
+
+		"""
+		Filtering options for Integrations returned from the connection.
+		"""
+		where: GroupPermissionWhereInput
+	): GroupPermissionConnection!
 }
+
+"""
+Ordering options for GroupPermission connections
+"""
+input GroupPermissionOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order GroupPermission.
+	"""
+	field: GroupPermissionOrderField!
+}
+
+"""
+Properties by which GroupPermission connections can be ordered.
+"""
+enum GroupPermissionOrderField {
+	name
+	permission
+  objectType
+}
+
+"""
+GroupPermissionWhereInput is used for filtering GroupPermission objects.
+"""
+input GroupPermissionWhereInput {
+	not: GroupPermissionWhereInput
+	and: [GroupPermissionWhereInput!]
+	or: [GroupPermissionWhereInput!]
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
+	"""
+	objectType field predicates
+	"""
+	objectType: String
+	objectTypeNEQ: String
+	objectTypeIn: [String!]
+	objectTypeNotIn: [String!]
+	objectTypeGT: String
+	objectTypeGTE: String
+	objectTypeLT: String
+	objectTypeLTE: String
+	objectTypeContains: String
+	objectTypeHasPrefix: String
+	objectTypeHasSuffix: String
+	objectTypeIsNil: Boolean
+	objectTypeNotNil: Boolean
+	objectTypeEqualFold: String
+	objectTypeContainsFold: String
+  """
+	permission field predicates
+	"""
+	permission: String
+	permissionNEQ: String
+	permissionIn: [String!]
+	permissionNotIn: [String!]
+	permissionGT: String
+	permissionGTE: String
+	permissionLT: String
+	permissionLTE: String
+	permissionContains: String
+	permissionHasPrefix: String
+	permissionHasSuffix: String
+	permissionIsNil: Boolean
+	permissionNotNil: Boolean
+	permissionEqualFold: String
+	permissionContainsFold: String
+}
+
 extend type Mutation{
   """
   Create a new group with members
@@ -76395,11 +78241,6 @@ type ProgramBulkCreatePayload {
 	{Name: "../schema/programextended.graphql", Input: `extend input UpdateProgramInput {
   addProgramMembers: [CreateProgramMembershipInput!]
   removeProgramMembers: [ID!]
-}
-
-extend input ProgramMembershipWhereInput {
-  programID: String
-  userID: String
 }
 
 input CreateControlWithSubcontrolsInput{
