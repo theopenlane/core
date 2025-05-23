@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedCo
 				return ec.fieldContext_MappedControl_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_MappedControl_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_MappedControl_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
 			case "mappingType":
@@ -145,10 +141,6 @@ func (ec *executionContext) fieldContext_MappedControlCreatePayload_mappedContro
 				return ec.fieldContext_MappedControl_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_MappedControl_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_MappedControl_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
 			case "mappingType":
@@ -259,10 +251,6 @@ func (ec *executionContext) fieldContext_MappedControlUpdatePayload_mappedContro
 				return ec.fieldContext_MappedControl_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_MappedControl_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_MappedControl_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappedControl_tags(ctx, field)
 			case "mappingType":

@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 				return ec.fieldContext_APIToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_APIToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_APIToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_APIToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_APIToken_tags(ctx, field)
 			case "ownerID":
@@ -161,10 +157,6 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_APIToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_APIToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_APIToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_APIToken_tags(ctx, field)
 			case "ownerID":
@@ -291,10 +283,6 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_APIToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_APIToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_APIToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_APIToken_tags(ctx, field)
 			case "ownerID":

@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_pe
 				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_PersonalAccessToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
 			case "name":
@@ -163,10 +159,6 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_person
 				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_PersonalAccessToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
 			case "name":
@@ -295,10 +287,6 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_person
 				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_PersonalAccessToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_PersonalAccessToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
 			case "name":

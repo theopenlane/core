@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_CustomDomainBulkCreatePayload_customDom
 				return ec.fieldContext_CustomDomain_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_CustomDomain_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_CustomDomain_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_CustomDomain_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_CustomDomain_tags(ctx, field)
 			case "ownerID":
@@ -147,10 +143,6 @@ func (ec *executionContext) fieldContext_CustomDomainCreatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_CustomDomain_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_CustomDomain_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_CustomDomain_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_CustomDomain_tags(ctx, field)
 			case "ownerID":
@@ -263,10 +255,6 @@ func (ec *executionContext) fieldContext_CustomDomainUpdatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_CustomDomain_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_CustomDomain_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_CustomDomain_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_CustomDomain_tags(ctx, field)
 			case "ownerID":

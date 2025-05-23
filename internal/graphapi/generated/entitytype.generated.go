@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_EntityTypeBulkCreatePayload_entityTypes
 				return ec.fieldContext_EntityType_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_EntityType_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_EntityType_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_EntityType_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_EntityType_tags(ctx, field)
 			case "ownerID":
@@ -145,10 +141,6 @@ func (ec *executionContext) fieldContext_EntityTypeCreatePayload_entityType(_ co
 				return ec.fieldContext_EntityType_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_EntityType_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_EntityType_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_EntityType_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_EntityType_tags(ctx, field)
 			case "ownerID":
@@ -259,10 +251,6 @@ func (ec *executionContext) fieldContext_EntityTypeUpdatePayload_entityType(_ co
 				return ec.fieldContext_EntityType_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_EntityType_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_EntityType_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_EntityType_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_EntityType_tags(ctx, field)
 			case "ownerID":

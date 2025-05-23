@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_IntegrationBulkCreatePayload_integratio
 				return ec.fieldContext_Integration_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Integration_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Integration_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Integration_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "ownerID":
@@ -151,10 +147,6 @@ func (ec *executionContext) fieldContext_IntegrationCreatePayload_integration(_ 
 				return ec.fieldContext_Integration_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Integration_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Integration_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Integration_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "ownerID":
@@ -271,10 +263,6 @@ func (ec *executionContext) fieldContext_IntegrationUpdatePayload_integration(_ 
 				return ec.fieldContext_Integration_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Integration_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Integration_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Integration_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Integration_tags(ctx, field)
 			case "ownerID":

@@ -16,8 +16,6 @@ query GetAllUserSettings {
         emailConfirmed
         createdAt
         createdBy
-        deletedAt
-        deletedBy
         updatedAt
         updatedBy
       }
@@ -41,8 +39,6 @@ query GetUserSettingByID($userSettingId: ID!) {
     emailConfirmed
     createdAt
     createdBy
-    deletedAt
-    deletedBy
     updatedAt
     updatedBy
   }
@@ -66,8 +62,6 @@ query GetUserSettings($where: UserSettingWhereInput!) {
         emailConfirmed
         createdAt
         createdBy
-        deletedAt
-        deletedBy
         updatedAt
         updatedBy
       }
@@ -92,8 +86,6 @@ mutation UpdateUserSetting($updateUserSettingId: ID!, $input: UpdateUserSettingI
       emailConfirmed
       createdAt
       createdBy
-      deletedAt
-      deletedBy
       updatedAt
       updatedBy
     }

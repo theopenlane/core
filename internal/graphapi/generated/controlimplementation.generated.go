@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_ControlImplementationBulkCreatePayload_
 				return ec.fieldContext_ControlImplementation_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ControlImplementation_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_ControlImplementation_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ControlImplementation_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
 			case "ownerID":
@@ -155,10 +151,6 @@ func (ec *executionContext) fieldContext_ControlImplementationCreatePayload_cont
 				return ec.fieldContext_ControlImplementation_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ControlImplementation_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_ControlImplementation_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ControlImplementation_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
 			case "ownerID":
@@ -279,10 +271,6 @@ func (ec *executionContext) fieldContext_ControlImplementationUpdatePayload_cont
 				return ec.fieldContext_ControlImplementation_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ControlImplementation_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_ControlImplementation_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ControlImplementation_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ControlImplementation_tags(ctx, field)
 			case "ownerID":

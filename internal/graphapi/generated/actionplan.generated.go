@@ -6894,10 +6894,6 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "revision":
@@ -7000,10 +6996,6 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "revision":
@@ -7150,10 +7142,6 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ActionPlan_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_ActionPlan_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ActionPlan_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_ActionPlan_tags(ctx, field)
 			case "revision":

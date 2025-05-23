@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 				return ec.fieldContext_Contact_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Contact_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Contact_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Contact_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Contact_tags(ctx, field)
 			case "ownerID":
@@ -159,10 +155,6 @@ func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.
 				return ec.fieldContext_Contact_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Contact_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Contact_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Contact_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Contact_tags(ctx, field)
 			case "ownerID":
@@ -287,10 +279,6 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 				return ec.fieldContext_Contact_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Contact_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Contact_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Contact_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Contact_tags(ctx, field)
 			case "ownerID":
