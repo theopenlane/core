@@ -38,6 +38,15 @@ func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[stri
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.APITokenOrder{
+			{
+				Field:     generated.APITokenOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).APIToken.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "apitoken"})
@@ -62,6 +71,15 @@ func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[stri
 func (r *queryResolver) ActionPlans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) (*generated.ActionPlanConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ActionPlanOrder{
+			{
+				Field:     generated.ActionPlanOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).ActionPlan.Query().CollectFields(ctx)
 	if err != nil {
@@ -88,6 +106,13 @@ func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.C
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.ActionPlanHistoryOrder{
+			Field:     generated.ActionPlanHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).ActionPlanHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplanhistory"})
@@ -112,6 +137,15 @@ func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.C
 func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) (*generated.ContactConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ContactOrder{
+			{
+				Field:     generated.ContactOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Contact.Query().CollectFields(ctx)
 	if err != nil {
@@ -138,6 +172,13 @@ func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Curs
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.ContactHistoryOrder{
+			Field:     generated.ContactHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).ContactHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "contacthistory"})
@@ -162,6 +203,15 @@ func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Curs
 func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) (*generated.ControlConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ControlOrder{
+			{
+				Field:     generated.ControlOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Control.Query().CollectFields(ctx)
 	if err != nil {
@@ -188,6 +238,13 @@ func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Curs
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.ControlHistoryOrder{
+			Field:     generated.ControlHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).ControlHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "controlhistory"})
@@ -212,6 +269,15 @@ func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Curs
 func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) (*generated.ControlImplementationConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ControlImplementationOrder{
+			{
+				Field:     generated.ControlImplementationOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).ControlImplementation.Query().CollectFields(ctx)
 	if err != nil {
@@ -238,6 +304,13 @@ func (r *queryResolver) ControlImplementationHistories(ctx context.Context, afte
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.ControlImplementationHistoryOrder{
+			Field:     generated.ControlImplementationHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).ControlImplementationHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementationhistory"})
@@ -262,6 +335,15 @@ func (r *queryResolver) ControlImplementationHistories(ctx context.Context, afte
 func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) (*generated.ControlObjectiveConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ControlObjectiveOrder{
+			{
+				Field:     generated.ControlObjectiveOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).ControlObjective.Query().CollectFields(ctx)
 	if err != nil {
@@ -288,6 +370,13 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.ControlObjectiveHistoryOrder{
+			Field:     generated.ControlObjectiveHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).ControlObjectiveHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjectivehistory"})
@@ -312,6 +401,15 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 func (r *queryResolver) CustomDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) (*generated.CustomDomainConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.CustomDomainOrder{
+			{
+				Field:     generated.CustomDomainOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).CustomDomain.Query().CollectFields(ctx)
 	if err != nil {
@@ -338,6 +436,13 @@ func (r *queryResolver) CustomDomainHistories(ctx context.Context, after *entgql
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.CustomDomainHistoryOrder{
+			Field:     generated.CustomDomainHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).CustomDomainHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomainhistory"})
@@ -362,6 +467,15 @@ func (r *queryResolver) CustomDomainHistories(ctx context.Context, after *entgql
 func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.DocumentDataOrder{
+			{
+				Field:     generated.DocumentDataOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).DocumentData.Query().CollectFields(ctx)
 	if err != nil {
@@ -388,6 +502,13 @@ func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.DocumentDataHistoryOrder{
+			Field:     generated.DocumentDataHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).DocumentDataHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdatahistory"})
@@ -412,6 +533,15 @@ func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql
 func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) (*generated.EntityConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.EntityOrder{
+			{
+				Field:     generated.EntityOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Entity.Query().CollectFields(ctx)
 	if err != nil {
@@ -438,6 +568,13 @@ func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Curso
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.EntityHistoryOrder{
+			Field:     generated.EntityHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).EntityHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "entityhistory"})
@@ -462,6 +599,15 @@ func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Curso
 func (r *queryResolver) EntityTypes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) (*generated.EntityTypeConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.EntityTypeOrder{
+			{
+				Field:     generated.EntityTypeOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).EntityType.Query().CollectFields(ctx)
 	if err != nil {
@@ -488,6 +634,13 @@ func (r *queryResolver) EntityTypeHistories(ctx context.Context, after *entgql.C
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.EntityTypeHistoryOrder{
+			Field:     generated.EntityTypeHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).EntityTypeHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytypehistory"})
@@ -512,6 +665,15 @@ func (r *queryResolver) EntityTypeHistories(ctx context.Context, after *entgql.C
 func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) (*generated.EventConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.EventOrder{
+			{
+				Field:     generated.EventOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Event.Query().CollectFields(ctx)
 	if err != nil {
@@ -538,6 +700,13 @@ func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.EventHistoryOrder{
+			Field:     generated.EventHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).EventHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "eventhistory"})
@@ -562,6 +731,15 @@ func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor
 func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) (*generated.EvidenceConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.EvidenceOrder{
+			{
+				Field:     generated.EvidenceOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Evidence.Query().CollectFields(ctx)
 	if err != nil {
@@ -588,6 +766,13 @@ func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cur
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.EvidenceHistoryOrder{
+			Field:     generated.EvidenceHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).EvidenceHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "evidencehistory"})
@@ -612,6 +797,15 @@ func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cur
 func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) (*generated.FileConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.FileOrder{
+			{
+				Field:     generated.FileOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).File.Query().CollectFields(ctx)
 	if err != nil {
@@ -638,6 +832,13 @@ func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.FileHistoryOrder{
+			Field:     generated.FileHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).FileHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "filehistory"})
@@ -662,6 +863,15 @@ func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[
 func (r *queryResolver) Groups(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) (*generated.GroupConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.GroupOrder{
+			{
+				Field:     generated.GroupOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Group.Query().CollectFields(ctx)
 	if err != nil {
@@ -688,6 +898,13 @@ func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.GroupHistoryOrder{
+			Field:     generated.GroupHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).GroupHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "grouphistory"})
@@ -712,6 +929,15 @@ func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor
 func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) (*generated.GroupMembershipConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.GroupMembershipOrder{
+			{
+				Field:     generated.GroupMembershipOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).GroupMembership.Query().CollectFields(ctx)
 	if err != nil {
@@ -738,6 +964,13 @@ func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *ent
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.GroupMembershipHistoryOrder{
+			Field:     generated.GroupMembershipHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).GroupMembershipHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembershiphistory"})
@@ -762,6 +995,15 @@ func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *ent
 func (r *queryResolver) GroupSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupSettingOrder, where *generated.GroupSettingWhereInput) (*generated.GroupSettingConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.GroupSettingOrder{
+			{
+				Field:     generated.GroupSettingOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).GroupSetting.Query().CollectFields(ctx)
 	if err != nil {
@@ -788,6 +1030,13 @@ func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.GroupSettingHistoryOrder{
+			Field:     generated.GroupSettingHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).GroupSettingHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "groupsettinghistory"})
@@ -812,6 +1061,15 @@ func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql
 func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) (*generated.HushConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.HushOrder{
+			{
+				Field:     generated.HushOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Hush.Query().CollectFields(ctx)
 	if err != nil {
@@ -838,6 +1096,13 @@ func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.HushHistoryOrder{
+			Field:     generated.HushHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).HushHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "hushhistory"})
@@ -862,6 +1127,15 @@ func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[
 func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) (*generated.IntegrationConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.IntegrationOrder{
+			{
+				Field:     generated.IntegrationOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Integration.Query().CollectFields(ctx)
 	if err != nil {
@@ -888,6 +1162,13 @@ func (r *queryResolver) IntegrationHistories(ctx context.Context, after *entgql.
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.IntegrationHistoryOrder{
+			Field:     generated.IntegrationHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).IntegrationHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "integrationhistory"})
@@ -912,6 +1193,15 @@ func (r *queryResolver) IntegrationHistories(ctx context.Context, after *entgql.
 func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) (*generated.InternalPolicyConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.InternalPolicyOrder{
+			{
+				Field:     generated.InternalPolicyOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).InternalPolicy.Query().CollectFields(ctx)
 	if err != nil {
@@ -938,6 +1228,13 @@ func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entg
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.InternalPolicyHistoryOrder{
+			Field:     generated.InternalPolicyHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).InternalPolicyHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "internalpolicyhistory"})
@@ -962,6 +1259,15 @@ func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entg
 func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) (*generated.InviteConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.InviteOrder{
+			{
+				Field:     generated.InviteOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Invite.Query().CollectFields(ctx)
 	if err != nil {
@@ -988,6 +1294,15 @@ func (r *queryResolver) JobRunners(ctx context.Context, after *entgql.Cursor[str
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.JobRunnerOrder{
+			{
+				Field:     generated.JobRunnerOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).JobRunner.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunner"})
@@ -1012,6 +1327,13 @@ func (r *queryResolver) JobRunners(ctx context.Context, after *entgql.Cursor[str
 func (r *queryResolver) JobRunnerHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.JobRunnerHistoryOrder, where *generated.JobRunnerHistoryWhereInput) (*generated.JobRunnerHistoryConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.JobRunnerHistoryOrder{
+			Field:     generated.JobRunnerHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).JobRunnerHistory.Query().CollectFields(ctx)
 	if err != nil {
@@ -1038,6 +1360,15 @@ func (r *queryResolver) JobRunnerRegistrationTokens(ctx context.Context, after *
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.JobRunnerRegistrationTokenOrder{
+			{
+				Field:     generated.JobRunnerRegistrationTokenOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).JobRunnerRegistrationToken.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
@@ -1062,6 +1393,15 @@ func (r *queryResolver) JobRunnerRegistrationTokens(ctx context.Context, after *
 func (r *queryResolver) JobRunnerTokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) (*generated.JobRunnerTokenConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.JobRunnerTokenOrder{
+			{
+				Field:     generated.JobRunnerTokenOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).JobRunnerToken.Query().CollectFields(ctx)
 	if err != nil {
@@ -1088,6 +1428,15 @@ func (r *queryResolver) MappableDomains(ctx context.Context, after *entgql.Curso
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.MappableDomainOrder{
+			{
+				Field:     generated.MappableDomainOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).MappableDomain.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomain"})
@@ -1112,6 +1461,13 @@ func (r *queryResolver) MappableDomains(ctx context.Context, after *entgql.Curso
 func (r *queryResolver) MappableDomainHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappableDomainHistoryOrder, where *generated.MappableDomainHistoryWhereInput) (*generated.MappableDomainHistoryConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.MappableDomainHistoryOrder{
+			Field:     generated.MappableDomainHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).MappableDomainHistory.Query().CollectFields(ctx)
 	if err != nil {
@@ -1138,6 +1494,15 @@ func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.MappedControlOrder{
+			{
+				Field:     generated.MappedControlOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).MappedControl.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrol"})
@@ -1162,6 +1527,13 @@ func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor
 func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlHistoryOrder, where *generated.MappedControlHistoryWhereInput) (*generated.MappedControlHistoryConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.MappedControlHistoryOrder{
+			Field:     generated.MappedControlHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).MappedControlHistory.Query().CollectFields(ctx)
 	if err != nil {
@@ -1188,6 +1560,15 @@ func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[str
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.NarrativeOrder{
+			{
+				Field:     generated.NarrativeOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).Narrative.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "narrative"})
@@ -1212,6 +1593,13 @@ func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[str
 func (r *queryResolver) NarrativeHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeHistoryOrder, where *generated.NarrativeHistoryWhereInput) (*generated.NarrativeHistoryConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.NarrativeHistoryOrder{
+			Field:     generated.NarrativeHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).NarrativeHistory.Query().CollectFields(ctx)
 	if err != nil {
@@ -1238,6 +1626,15 @@ func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string],
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.NoteOrder{
+			{
+				Field:     generated.NoteOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).Note.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "note"})
@@ -1262,6 +1659,13 @@ func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string],
 func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NoteHistoryOrder, where *generated.NoteHistoryWhereInput) (*generated.NoteHistoryConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.NoteHistoryOrder{
+			Field:     generated.NoteHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).NoteHistory.Query().CollectFields(ctx)
 	if err != nil {
@@ -1288,6 +1692,15 @@ func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.OrgMembershipOrder{
+			{
+				Field:     generated.OrgMembershipOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).OrgMembership.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
@@ -1312,6 +1725,13 @@ func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor
 func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipHistoryOrder, where *generated.OrgMembershipHistoryWhereInput) (*generated.OrgMembershipHistoryConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.OrgMembershipHistoryOrder{
+			Field:     generated.OrgMembershipHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).OrgMembershipHistory.Query().CollectFields(ctx)
 	if err != nil {
@@ -1338,6 +1758,13 @@ func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Curs
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.OrgSubscriptionOrder{
+			Field:     generated.OrgSubscriptionOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).OrgSubscription.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscription"})
@@ -1362,6 +1789,13 @@ func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Curs
 func (r *queryResolver) OrgSubscriptionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionHistoryOrder, where *generated.OrgSubscriptionHistoryWhereInput) (*generated.OrgSubscriptionHistoryConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.OrgSubscriptionHistoryOrder{
+			Field:     generated.OrgSubscriptionHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).OrgSubscriptionHistory.Query().CollectFields(ctx)
 	if err != nil {
@@ -1388,6 +1822,15 @@ func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.OrganizationOrder{
+			{
+				Field:     generated.OrganizationOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).Organization.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})
@@ -1412,6 +1855,13 @@ func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[
 func (r *queryResolver) OrganizationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) (*generated.OrganizationHistoryConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.OrganizationHistoryOrder{
+			Field:     generated.OrganizationHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).OrganizationHistory.Query().CollectFields(ctx)
 	if err != nil {
@@ -1438,6 +1888,15 @@ func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.OrganizationSettingOrder{
+			{
+				Field:     generated.OrganizationSettingOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).OrganizationSetting.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationsetting"})
@@ -1462,6 +1921,13 @@ func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.
 func (r *queryResolver) OrganizationSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationSettingHistoryOrder, where *generated.OrganizationSettingHistoryWhereInput) (*generated.OrganizationSettingHistoryConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.OrganizationSettingHistoryOrder{
+			Field:     generated.OrganizationSettingHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).OrganizationSettingHistory.Query().CollectFields(ctx)
 	if err != nil {
@@ -1488,6 +1954,15 @@ func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.PersonalAccessTokenOrder{
+			{
+				Field:     generated.PersonalAccessTokenOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).PersonalAccessToken.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "personalaccesstoken"})
@@ -1512,6 +1987,15 @@ func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.
 func (r *queryResolver) Procedures(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) (*generated.ProcedureConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ProcedureOrder{
+			{
+				Field:     generated.ProcedureOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Procedure.Query().CollectFields(ctx)
 	if err != nil {
@@ -1538,6 +2022,13 @@ func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cu
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.ProcedureHistoryOrder{
+			Field:     generated.ProcedureHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).ProcedureHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "procedurehistory"})
@@ -1562,6 +2053,15 @@ func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cu
 func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) (*generated.ProgramConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ProgramOrder{
+			{
+				Field:     generated.ProgramOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Program.Query().CollectFields(ctx)
 	if err != nil {
@@ -1588,6 +2088,13 @@ func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Curs
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.ProgramHistoryOrder{
+			Field:     generated.ProgramHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).ProgramHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "programhistory"})
@@ -1612,6 +2119,15 @@ func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Curs
 func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) (*generated.ProgramMembershipConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ProgramMembershipOrder{
+			{
+				Field:     generated.ProgramMembershipOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).ProgramMembership.Query().CollectFields(ctx)
 	if err != nil {
@@ -1638,6 +2154,13 @@ func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *e
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.ProgramMembershipHistoryOrder{
+			Field:     generated.ProgramMembershipHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).ProgramMembershipHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembershiphistory"})
@@ -1662,6 +2185,15 @@ func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *e
 func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) (*generated.RiskConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.RiskOrder{
+			{
+				Field:     generated.RiskOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Risk.Query().CollectFields(ctx)
 	if err != nil {
@@ -1688,6 +2220,13 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.RiskHistoryOrder{
+			Field:     generated.RiskHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).RiskHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "riskhistory"})
@@ -1712,6 +2251,15 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) (*generated.StandardConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.StandardOrder{
+			{
+				Field:     generated.StandardOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Standard.Query().CollectFields(ctx)
 	if err != nil {
@@ -1738,6 +2286,13 @@ func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cur
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.StandardHistoryOrder{
+			Field:     generated.StandardHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).StandardHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "standardhistory"})
@@ -1762,6 +2317,15 @@ func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cur
 func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) (*generated.SubcontrolConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.SubcontrolOrder{
+			{
+				Field:     generated.SubcontrolOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Subcontrol.Query().CollectFields(ctx)
 	if err != nil {
@@ -1788,6 +2352,13 @@ func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.C
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.SubcontrolHistoryOrder{
+			Field:     generated.SubcontrolHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).SubcontrolHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "subcontrolhistory"})
@@ -1812,6 +2383,15 @@ func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.C
 func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) (*generated.SubscriberConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.SubscriberOrder{
+			{
+				Field:     generated.SubscriberOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Subscriber.Query().CollectFields(ctx)
 	if err != nil {
@@ -1838,6 +2418,15 @@ func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[st
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = []*generated.TFASettingOrder{
+			{
+				Field:     generated.TFASettingOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).TFASetting.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
@@ -1862,6 +2451,15 @@ func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[st
 func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) (*generated.TaskConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TaskOrder{
+			{
+				Field:     generated.TaskOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Task.Query().CollectFields(ctx)
 	if err != nil {
@@ -1888,6 +2486,13 @@ func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.TaskHistoryOrder{
+			Field:     generated.TaskHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).TaskHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "taskhistory"})
@@ -1912,6 +2517,15 @@ func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[
 func (r *queryResolver) Templates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) (*generated.TemplateConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TemplateOrder{
+			{
+				Field:     generated.TemplateOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Template.Query().CollectFields(ctx)
 	if err != nil {
@@ -1938,6 +2552,13 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.TemplateHistoryOrder{
+			Field:     generated.TemplateHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).TemplateHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "templatehistory"})
@@ -1962,6 +2583,15 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.UserOrder{
+			{
+				Field:     generated.UserOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).User.Query().CollectFields(ctx)
 	if err != nil {
@@ -1988,6 +2618,13 @@ func (r *queryResolver) UserHistories(ctx context.Context, after *entgql.Cursor[
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.UserHistoryOrder{
+			Field:     generated.UserHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).UserHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "userhistory"})
@@ -2012,6 +2649,15 @@ func (r *queryResolver) UserHistories(ctx context.Context, after *entgql.Cursor[
 func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserSettingOrder, where *generated.UserSettingWhereInput) (*generated.UserSettingConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.UserSettingOrder{
+			{
+				Field:     generated.UserSettingOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).UserSetting.Query().CollectFields(ctx)
 	if err != nil {
@@ -2038,6 +2684,13 @@ func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	if orderBy == nil {
+		orderBy = &generated.UserSettingHistoryOrder{
+			Field:     generated.UserSettingHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
 	query, err := withTransactionalMutation(ctx).UserSettingHistory.Query().CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "usersettinghistory"})
@@ -2062,6 +2715,13 @@ func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.
 func (r *queryResolver) Webauthns(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) (*generated.WebauthnConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.WebauthnOrder{
+			Field:     generated.WebauthnOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
 
 	query, err := withTransactionalMutation(ctx).Webauthn.Query().CollectFields(ctx)
 	if err != nil {

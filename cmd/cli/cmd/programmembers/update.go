@@ -48,8 +48,8 @@ func updateValidation() (where openlaneclient.ProgramMembershipWhereInput, input
 	cobra.CheckErr(err)
 
 	where = openlaneclient.ProgramMembershipWhereInput{
-		ProgramID: &programID,
-		UserID:    &userID,
+		// ProgramID: &programID,
+		// UserID:    &userID,
 	}
 
 	input = openlaneclient.UpdateProgramMembershipInput{

@@ -190,10 +190,18 @@ func (u User) Edges() []ent.Edge {
 		}),
 
 		edge.To("groups", Group.Type).
-			Annotations(entgql.RelayConnection()).
+			Annotations(
+				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entgql.MultiOrder(),
+			).
 			Through("group_memberships", GroupMembership.Type),
 		edge.To("organizations", Organization.Type).
-			Annotations(entgql.RelayConnection()).
+			Annotations(
+				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entgql.MultiOrder(),
+			).
 			Through("org_memberships", OrgMembership.Type),
 
 		edgeToWithPagination(&edgeDefinition{
@@ -223,9 +231,12 @@ func (u User) Edges() []ent.Edge {
 			name:       "assignee_tasks",
 			t:          Task.Type,
 		}),
-
 		edge.To("programs", Program.Type).
-			Through("program_memberships", ProgramMembership.Type),
+			Through("program_memberships", ProgramMembership.Type).
+			Annotations(
+				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entgql.MultiOrder()),
 	}
 }
 

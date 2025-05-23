@@ -197,16 +197,28 @@ mutation CreateProgram($input: CreateProgramInput!) {
         }
       }
       editors {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
     }
   }
@@ -307,16 +319,28 @@ query GetAllPrograms {
           }
         }
         editors {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         members {
           edges {
@@ -395,16 +419,28 @@ query GetProgramByID($programId: ID!) {
       }
     }
     editors {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     viewers {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     blockedGroups {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     members {
       edges {
@@ -483,16 +519,28 @@ query GetPrograms($where: ProgramWhereInput) {
           }
         }
         editors {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         members {
           edges {
@@ -571,16 +619,28 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
         }
       }
       editors {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       members {
         edges {

@@ -81,13 +81,21 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       tags
       updatedAt
       updatedBy
-      editors{
-        id
-        name
+      editors {
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
-      blockedGroups{
-        id
-        name
+      blockedGroups {
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
       approver {
         id
@@ -128,13 +136,21 @@ query GetAllProcedures {
         tags
         updatedAt
         updatedBy
-        editors{
-          id
-          name
+        editors {
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
-        blockedGroups{
-          id
-          name
+        blockedGroups {
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
         approver {
           id
@@ -167,13 +183,21 @@ query GetProcedureByID($procedureId: ID!) {
     tags
     updatedAt
     updatedBy
-    editors{
-      id
-      name
+    editors {
+      edges{
+        node{
+          id
+          name
+        }
+      }
     }
-    blockedGroups{
-      id
-      name
+    blockedGroups {
+      edges{
+        node{
+          id
+          name
+        }
+      }
     }
     approver {
       id
@@ -206,13 +230,21 @@ query GetProcedures($where: ProcedureWhereInput) {
         tags
         updatedAt
         updatedBy
-        editors{
-          id
-          name
+        editors {
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
-        blockedGroups{
-          id
-          name
+        blockedGroups {
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
         approver {
           id
@@ -246,13 +278,21 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
       tags
       updatedAt
       updatedBy
-      editors{
-        id
-        name
+      editors {
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
-      blockedGroups{
-        id
-        name
+      blockedGroups {
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
       approver {
         id

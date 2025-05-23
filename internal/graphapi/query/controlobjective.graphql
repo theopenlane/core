@@ -84,16 +84,28 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
         }
       }
       editors {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
-      blockedGroups{
-        id
-        name
+      blockedGroups {
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
     }
   }
@@ -145,16 +157,28 @@ query GetAllControlObjectives {
           }
         }
         editors {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
-        blockedGroups{
-          id
-          name
+        blockedGroups {
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -198,16 +222,28 @@ query GetControlObjectiveByID($controlObjectiveId: ID!) {
       }
     }
     editors {
-      id
-      name
+      edges{
+        node{
+          id
+          name
+        }
+      }
     }
     viewers {
-      id
-      name
+      edges{
+        node{
+          id
+          name
+        }
+      }
     }
-    blockedGroups{
-      id
-      name
+    blockedGroups {
+      edges{
+        node{
+          id
+          name
+        }
+      }
     }
   }
 }
@@ -252,16 +288,28 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
           }
         }
         editors {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
-        blockedGroups{
-          id
-          name
+        blockedGroups {
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -307,16 +355,28 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
         }
       }
       editors {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
-      blockedGroups{
-        id
-        name
+      blockedGroups {
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
     }
   }

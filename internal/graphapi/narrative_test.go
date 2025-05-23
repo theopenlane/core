@@ -356,22 +356,22 @@ func TestMutationCreateNarrative(t *testing.T) {
 
 			if len(tc.request.EditorIDs) > 0 {
 				assert.Check(t, is.Len(resp.CreateNarrative.Narrative.Editors, 1))
-				for _, edge := range resp.CreateNarrative.Narrative.Editors {
-					assert.Check(t, is.Equal(testUser1.GroupID, edge.ID))
+				for _, edge := range resp.CreateNarrative.Narrative.Editors.Edges {
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
 				assert.Check(t, is.Len(resp.CreateNarrative.Narrative.BlockedGroups, 1))
-				for _, edge := range resp.CreateNarrative.Narrative.BlockedGroups {
-					assert.Check(t, is.Equal(blockedGroup.ID, edge.ID))
+				for _, edge := range resp.CreateNarrative.Narrative.BlockedGroups.Edges {
+					assert.Check(t, is.Equal(blockedGroup.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
 				assert.Check(t, is.Len(resp.CreateNarrative.Narrative.Viewers, 1))
-				for _, edge := range resp.CreateNarrative.Narrative.Viewers {
-					assert.Check(t, is.Equal(viewerGroup.ID, edge.ID))
+				for _, edge := range resp.CreateNarrative.Narrative.Viewers.Edges {
+					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}
 			}
 
@@ -499,8 +499,8 @@ func TestMutationUpdateNarrative(t *testing.T) {
 			if len(tc.request.AddViewerIDs) > 0 {
 				assert.Check(t, is.Len(resp.UpdateNarrative.Narrative.Viewers, 1))
 				found := false
-				for _, edge := range resp.UpdateNarrative.Narrative.Viewers {
-					if edge.ID == tc.request.AddViewerIDs[0] {
+				for _, edge := range resp.UpdateNarrative.Narrative.Viewers.Edges {
+					if edge.Node.ID == tc.request.AddViewerIDs[0] {
 						found = true
 						break
 					}

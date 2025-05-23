@@ -476,7 +476,6 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateControlObjective(tc.ctx, controlObjective.ID, tc.request)
 			if tc.expectedErr != "" {
-
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
@@ -525,8 +524,8 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 			if len(tc.request.AddViewerIDs) > 0 {
 				assert.Check(t, is.Len(resp.UpdateControlObjective.ControlObjective.Viewers, 1))
 				found := false
-				for _, edge := range resp.UpdateControlObjective.ControlObjective.Viewers {
-					if edge.ID == tc.request.AddViewerIDs[0] {
+				for _, edge := range resp.UpdateControlObjective.ControlObjective.Viewers.Edges {
+					if edge.Node.ID == tc.request.AddViewerIDs[0] {
 						found = true
 						break
 					}

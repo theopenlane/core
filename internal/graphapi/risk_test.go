@@ -397,22 +397,22 @@ func TestMutationCreateRisk(t *testing.T) {
 
 			if len(tc.request.EditorIDs) > 0 {
 				assert.Assert(t, is.Len(resp.CreateRisk.Risk.Editors, 1))
-				for _, edge := range resp.CreateRisk.Risk.Editors {
-					assert.Check(t, is.Equal(testUser1.GroupID, edge.ID))
+				for _, edge := range resp.CreateRisk.Risk.Editors.Edges {
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
 				assert.Assert(t, is.Len(resp.CreateRisk.Risk.BlockedGroups, 1))
-				for _, edge := range resp.CreateRisk.Risk.BlockedGroups {
-					assert.Check(t, is.Equal(blockedGroup.ID, edge.ID))
+				for _, edge := range resp.CreateRisk.Risk.BlockedGroups.Edges {
+					assert.Check(t, is.Equal(blockedGroup.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
 				assert.Assert(t, is.Len(resp.CreateRisk.Risk.Viewers, 1))
-				for _, edge := range resp.CreateRisk.Risk.Viewers {
-					assert.Check(t, is.Equal(viewerGroup.ID, edge.ID))
+				for _, edge := range resp.CreateRisk.Risk.Viewers.Edges {
+					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}
 			}
 
@@ -561,8 +561,8 @@ func TestMutationUpdateRisk(t *testing.T) {
 			if len(tc.request.AddViewerIDs) > 0 {
 				assert.Assert(t, is.Len(resp.UpdateRisk.Risk.Viewers, 1))
 				found := false
-				for _, edge := range resp.UpdateRisk.Risk.Viewers {
-					if edge.ID == tc.request.AddViewerIDs[0] {
+				for _, edge := range resp.UpdateRisk.Risk.Viewers.Edges {
+					if edge.Node.ID == tc.request.AddViewerIDs[0] {
 						found = true
 						break
 					}
