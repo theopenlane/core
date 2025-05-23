@@ -410,7 +410,7 @@ func TestMutationCreateRisk(t *testing.T) {
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
-				assert.Assert(t, is.Len(resp.CreateRisk.Risk.Viewers, 1))
+				assert.Assert(t, is.Len(resp.CreateRisk.Risk.Viewers.Edges, 1))
 				for _, edge := range resp.CreateRisk.Risk.Viewers.Edges {
 					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}
