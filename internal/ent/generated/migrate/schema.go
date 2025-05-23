@@ -270,6 +270,7 @@ var (
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
+		{Name: "control_scheduled_job_controls", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
 	}
@@ -292,14 +293,20 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_organizations_controls",
+				Symbol:     "controls_control_scheduled_jobs_controls",
 				Columns:    []*schema.Column{ControlsColumns[28]},
+				RefColumns: []*schema.Column{ControlScheduledJobsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_organizations_controls",
+				Columns:    []*schema.Column{ControlsColumns[29]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_standards_controls",
-				Columns:    []*schema.Column{ControlsColumns[29]},
+				Columns:    []*schema.Column{ControlsColumns[30]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -313,12 +320,12 @@ var (
 			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[28]},
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[29]},
 			},
 			{
 				Name:    "control_standard_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[29], ControlsColumns[25]},
+				Columns: []*schema.Column{ControlsColumns[30], ControlsColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is NULL",
 				},
@@ -526,6 +533,55 @@ var (
 				Name:    "controlobjectivehistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{ControlObjectiveHistoryColumns[1]},
+			},
+		},
+	}
+	// ControlScheduledJobsColumns holds the columns for the "control_scheduled_jobs" table.
+	ControlScheduledJobsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "configuration", Type: field.TypeJSON},
+		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
+		{Name: "cron", Type: field.TypeString, Nullable: true},
+		{Name: "job_id", Type: field.TypeString},
+		{Name: "job_runner_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// ControlScheduledJobsTable holds the schema information for the "control_scheduled_jobs" table.
+	ControlScheduledJobsTable = &schema.Table{
+		Name:       "control_scheduled_jobs",
+		Columns:    ControlScheduledJobsColumns,
+		PrimaryKey: []*schema.Column{ControlScheduledJobsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_scheduled_jobs_scheduled_jobs_job",
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[10]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "control_scheduled_jobs_job_runners_job_runner",
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[11]},
+				RefColumns: []*schema.Column{JobRunnersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "control_scheduled_jobs_organizations_scheduled_jobs",
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "controlscheduledjob_id",
+				Unique:  true,
+				Columns: []*schema.Column{ControlScheduledJobsColumns[0]},
 			},
 		},
 	}
@@ -1724,6 +1780,56 @@ var (
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
+			},
+		},
+	}
+	// JobResultsColumns holds the columns for the "job_results" table.
+	JobResultsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"CANCELED", "SUCCESS", "PENDING", "FAILED"}},
+		{Name: "exit_code", Type: field.TypeInt},
+		{Name: "finished_at", Type: field.TypeTime},
+		{Name: "started_at", Type: field.TypeTime},
+		{Name: "scheduled_job_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// JobResultsTable holds the schema information for the "job_results" table.
+	JobResultsTable = &schema.Table{
+		Name:       "job_results",
+		Columns:    JobResultsColumns,
+		PrimaryKey: []*schema.Column{JobResultsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "job_results_control_scheduled_jobs_scheduled_job",
+				Columns:    []*schema.Column{JobResultsColumns[11]},
+				RefColumns: []*schema.Column{ControlScheduledJobsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "job_results_files_file",
+				Columns:    []*schema.Column{JobResultsColumns[12]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "job_results_organizations_scheduled_job_results",
+				Columns:    []*schema.Column{JobResultsColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "jobresult_id",
+				Unique:  true,
+				Columns: []*schema.Column{JobResultsColumns[0]},
 			},
 		},
 	}
@@ -3041,6 +3147,53 @@ var (
 			},
 		},
 	}
+	// ScheduledJobsColumns holds the columns for the "scheduled_jobs" table.
+	ScheduledJobsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "title", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
+		{Name: "script", Type: field.TypeString, Nullable: true},
+		{Name: "configuration", Type: field.TypeJSON},
+		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
+		{Name: "cron", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// ScheduledJobsTable holds the schema information for the "scheduled_jobs" table.
+	ScheduledJobsTable = &schema.Table{
+		Name:       "scheduled_jobs",
+		Columns:    ScheduledJobsColumns,
+		PrimaryKey: []*schema.Column{ScheduledJobsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "scheduled_jobs_organizations_jobs",
+				Columns:    []*schema.Column{ScheduledJobsColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "scheduledjob_id",
+				Unique:  true,
+				Columns: []*schema.Column{ScheduledJobsColumns[0]},
+			},
+			{
+				Name:    "scheduledjob_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[17]},
+			},
+		},
+	}
 	// StandardsColumns holds the columns for the "standards" table.
 	StandardsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3161,6 +3314,7 @@ var (
 		{Name: "references", Type: field.TypeJSON, Nullable: true},
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "control_id", Type: field.TypeString},
+		{Name: "control_scheduled_job_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "program_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
@@ -3180,32 +3334,38 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "subcontrols_organizations_subcontrols",
+				Symbol:     "subcontrols_control_scheduled_jobs_subcontrols",
 				Columns:    []*schema.Column{SubcontrolsColumns[27]},
+				RefColumns: []*schema.Column{ControlScheduledJobsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_organizations_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_programs_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[28]},
+				Columns:    []*schema.Column{SubcontrolsColumns[29]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_groups_control_owner",
-				Columns:    []*schema.Column{SubcontrolsColumns[29]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "subcontrols_groups_delegate",
 				Columns:    []*schema.Column{SubcontrolsColumns[30]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subcontrols_users_subcontrols",
+				Symbol:     "subcontrols_groups_delegate",
 				Columns:    []*schema.Column{SubcontrolsColumns[31]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_users_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[32]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3219,7 +3379,7 @@ var (
 			{
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[27]},
+				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[28]},
 			},
 			{
 				Name:    "subcontrol_control_id_ref_code",
@@ -6010,6 +6170,7 @@ var (
 		ControlImplementationHistoryTable,
 		ControlObjectivesTable,
 		ControlObjectiveHistoryTable,
+		ControlScheduledJobsTable,
 		CustomDomainsTable,
 		CustomDomainHistoryTable,
 		DocumentDataTable,
@@ -6038,6 +6199,7 @@ var (
 		InternalPoliciesTable,
 		InternalPolicyHistoryTable,
 		InvitesTable,
+		JobResultsTable,
 		JobRunnersTable,
 		JobRunnerHistoryTable,
 		JobRunnerRegistrationTokensTable,
@@ -6069,6 +6231,7 @@ var (
 		ProgramMembershipHistoryTable,
 		RisksTable,
 		RiskHistoryTable,
+		ScheduledJobsTable,
 		StandardsTable,
 		StandardHistoryTable,
 		SubcontrolsTable,
@@ -6191,8 +6354,9 @@ func init() {
 	}
 	ControlsTable.ForeignKeys[0].RefTable = GroupsTable
 	ControlsTable.ForeignKeys[1].RefTable = GroupsTable
-	ControlsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	ControlsTable.ForeignKeys[3].RefTable = StandardsTable
+	ControlsTable.ForeignKeys[2].RefTable = ControlScheduledJobsTable
+	ControlsTable.ForeignKeys[3].RefTable = OrganizationsTable
+	ControlsTable.ForeignKeys[4].RefTable = StandardsTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
@@ -6204,6 +6368,9 @@ func init() {
 	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_objective_history",
 	}
+	ControlScheduledJobsTable.ForeignKeys[0].RefTable = ScheduledJobsTable
+	ControlScheduledJobsTable.ForeignKeys[1].RefTable = JobRunnersTable
+	ControlScheduledJobsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	CustomDomainsTable.ForeignKeys[0].RefTable = MappableDomainsTable
 	CustomDomainsTable.ForeignKeys[1].RefTable = MappableDomainsTable
 	CustomDomainsTable.ForeignKeys[2].RefTable = OrganizationsTable
@@ -6276,6 +6443,9 @@ func init() {
 		Table: "internal_policy_history",
 	}
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	JobResultsTable.ForeignKeys[0].RefTable = ControlScheduledJobsTable
+	JobResultsTable.ForeignKeys[1].RefTable = FilesTable
+	JobResultsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	JobRunnersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	JobRunnerHistoryTable.Annotation = &entsql.Annotation{
 		Table: "job_runner_history",
@@ -6347,16 +6517,18 @@ func init() {
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
+	ScheduledJobsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	StandardsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	StandardHistoryTable.Annotation = &entsql.Annotation{
 		Table: "standard_history",
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlsTable
-	SubcontrolsTable.ForeignKeys[1].RefTable = OrganizationsTable
-	SubcontrolsTable.ForeignKeys[2].RefTable = ProgramsTable
-	SubcontrolsTable.ForeignKeys[3].RefTable = GroupsTable
+	SubcontrolsTable.ForeignKeys[1].RefTable = ControlScheduledJobsTable
+	SubcontrolsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	SubcontrolsTable.ForeignKeys[3].RefTable = ProgramsTable
 	SubcontrolsTable.ForeignKeys[4].RefTable = GroupsTable
-	SubcontrolsTable.ForeignKeys[5].RefTable = UsersTable
+	SubcontrolsTable.ForeignKeys[5].RefTable = GroupsTable
+	SubcontrolsTable.ForeignKeys[6].RefTable = UsersTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}

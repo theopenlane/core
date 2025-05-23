@@ -1,0 +1,2 @@
+Status,ExitCode,FinishedAt,StartedAt,OwnerId,ScheduledJobId,FileId
+example_status,example_exitcode,example_finishedat,example_startedat,example_ownerid,example_scheduledjobid,example_fileid

@@ -194,6 +194,30 @@ type ControlObjectiveUpdatePayload struct {
 	ControlObjective *generated.ControlObjective `json:"controlObjective"`
 }
 
+// Return response for createBulkControlScheduledJob mutation
+type ControlScheduledJobBulkCreatePayload struct {
+	// Created controlScheduledJobs
+	ControlScheduledJobs []*generated.ControlScheduledJob `json:"controlScheduledJobs,omitempty"`
+}
+
+// Return response for createControlScheduledJob mutation
+type ControlScheduledJobCreatePayload struct {
+	// Created controlScheduledJob
+	ControlScheduledJob *generated.ControlScheduledJob `json:"controlScheduledJob"`
+}
+
+// Return response for deleteControlScheduledJob mutation
+type ControlScheduledJobDeletePayload struct {
+	// Deleted controlScheduledJob ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateControlScheduledJob mutation
+type ControlScheduledJobUpdatePayload struct {
+	// Updated controlScheduledJob
+	ControlScheduledJob *generated.ControlScheduledJob `json:"controlScheduledJob"`
+}
+
 // Return response for updateControl mutation
 type ControlUpdatePayload struct {
 	// Updated control
@@ -562,6 +586,30 @@ type InviteUpdatePayload struct {
 	Invite *generated.Invite `json:"invite"`
 }
 
+// Return response for createBulkJobResult mutation
+type JobResultBulkCreatePayload struct {
+	// Created jobResults
+	JobResults []*generated.JobResult `json:"jobResults,omitempty"`
+}
+
+// Return response for createJobResult mutation
+type JobResultCreatePayload struct {
+	// Created jobResult
+	JobResult *generated.JobResult `json:"jobResult"`
+}
+
+// Return response for deleteJobResult mutation
+type JobResultDeletePayload struct {
+	// Deleted jobResult ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateJobResult mutation
+type JobResultUpdatePayload struct {
+	// Updated jobResult
+	JobResult *generated.JobResult `json:"jobResult"`
+}
+
 // Return response for deleteJobRunner mutation
 type JobRunnerDeletePayload struct {
 	// Deleted jobRunner ID
@@ -887,6 +935,30 @@ type RiskUpdatePayload struct {
 	Risk *generated.Risk `json:"risk"`
 }
 
+// Return response for createBulkScheduledJob mutation
+type ScheduledJobBulkCreatePayload struct {
+	// Created scheduledJobs
+	ScheduledJobs []*generated.ScheduledJob `json:"scheduledJobs,omitempty"`
+}
+
+// Return response for createScheduledJob mutation
+type ScheduledJobCreatePayload struct {
+	// Created scheduledJob
+	ScheduledJob *generated.ScheduledJob `json:"scheduledJob"`
+}
+
+// Return response for deleteScheduledJob mutation
+type ScheduledJobDeletePayload struct {
+	// Deleted scheduledJob ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateScheduledJob mutation
+type ScheduledJobUpdatePayload struct {
+	// Updated scheduledJob
+	ScheduledJob *generated.ScheduledJob `json:"scheduledJob"`
+}
+
 type SearchResults struct {
 	// Information to aid in pagination.
 	Page *entgql.PageInfo[string] `json:"page"`
@@ -922,6 +994,7 @@ type SearchResults struct {
 	Procedures                  *generated.ProcedureConnection                  `json:"procedures,omitempty"`
 	Programs                    *generated.ProgramConnection                    `json:"programs,omitempty"`
 	Risks                       *generated.RiskConnection                       `json:"risks,omitempty"`
+	ScheduledJobs               *generated.ScheduledJobConnection               `json:"scheduledJobs,omitempty"`
 	Standards                   *generated.StandardConnection                   `json:"standards,omitempty"`
 	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`
 	Subscribers                 *generated.SubscriberConnection                 `json:"subscribers,omitempty"`

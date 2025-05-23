@@ -1651,6 +1651,126 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 	return c
 }
 
+// CreateControlScheduledJobInput represents a mutation input for creating controlscheduledjobs.
+type CreateControlScheduledJobInput struct {
+	Configuration models.JobConfiguration
+	Cadence       *models.JobCadence
+	Cron          *string
+	OwnerID       *string
+	JobID         string
+	ControlIDs    []string
+	SubcontrolIDs []string
+	JobRunnerID   string
+}
+
+// Mutate applies the CreateControlScheduledJobInput on the ControlScheduledJobMutation builder.
+func (i *CreateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) {
+	m.SetConfiguration(i.Configuration)
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
+	}
+	if v := i.Cron; v != nil {
+		m.SetCron(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetJobID(i.JobID)
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	m.SetJobRunnerID(i.JobRunnerID)
+}
+
+// SetInput applies the change-set in the CreateControlScheduledJobInput on the ControlScheduledJobCreate builder.
+func (c *ControlScheduledJobCreate) SetInput(i CreateControlScheduledJobInput) *ControlScheduledJobCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateControlScheduledJobInput represents a mutation input for updating controlscheduledjobs.
+type UpdateControlScheduledJobInput struct {
+	Configuration       *models.JobConfiguration
+	ClearCadence        bool
+	Cadence             *models.JobCadence
+	ClearCron           bool
+	Cron                *string
+	ClearOwner          bool
+	OwnerID             *string
+	JobID               *string
+	ClearControls       bool
+	AddControlIDs       []string
+	RemoveControlIDs    []string
+	ClearSubcontrols    bool
+	AddSubcontrolIDs    []string
+	RemoveSubcontrolIDs []string
+	JobRunnerID         *string
+}
+
+// Mutate applies the UpdateControlScheduledJobInput on the ControlScheduledJobMutation builder.
+func (i *UpdateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) {
+	if v := i.Configuration; v != nil {
+		m.SetConfiguration(*v)
+	}
+	if i.ClearCadence {
+		m.ClearCadence()
+	}
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
+	}
+	if i.ClearCron {
+		m.ClearCron()
+	}
+	if v := i.Cron; v != nil {
+		m.SetCron(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.JobID; v != nil {
+		m.SetJobID(*v)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if v := i.JobRunnerID; v != nil {
+		m.SetJobRunnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateControlScheduledJobInput on the ControlScheduledJobUpdate builder.
+func (c *ControlScheduledJobUpdate) SetInput(i UpdateControlScheduledJobInput) *ControlScheduledJobUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateControlScheduledJobInput on the ControlScheduledJobUpdateOne builder.
+func (c *ControlScheduledJobUpdateOne) SetInput(i UpdateControlScheduledJobInput) *ControlScheduledJobUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateCustomDomainInput represents a mutation input for creating customdomains.
 type CreateCustomDomainInput struct {
 	Tags             []string
@@ -4291,6 +4411,80 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 	return c
 }
 
+// CreateJobResultInput represents a mutation input for creating jobresults.
+type CreateJobResultInput struct {
+	Status         enums.JobExecutionStatus
+	ExitCode       int
+	FinishedAt     *time.Time
+	StartedAt      *time.Time
+	OwnerID        *string
+	ScheduledJobID string
+	FileID         string
+}
+
+// Mutate applies the CreateJobResultInput on the JobResultMutation builder.
+func (i *CreateJobResultInput) Mutate(m *JobResultMutation) {
+	m.SetStatus(i.Status)
+	m.SetExitCode(i.ExitCode)
+	if v := i.FinishedAt; v != nil {
+		m.SetFinishedAt(*v)
+	}
+	if v := i.StartedAt; v != nil {
+		m.SetStartedAt(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetScheduledJobID(i.ScheduledJobID)
+	m.SetFileID(i.FileID)
+}
+
+// SetInput applies the change-set in the CreateJobResultInput on the JobResultCreate builder.
+func (c *JobResultCreate) SetInput(i CreateJobResultInput) *JobResultCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateJobResultInput represents a mutation input for updating jobresults.
+type UpdateJobResultInput struct {
+	Status         *enums.JobExecutionStatus
+	ClearOwner     bool
+	OwnerID        *string
+	ScheduledJobID *string
+	FileID         *string
+}
+
+// Mutate applies the UpdateJobResultInput on the JobResultMutation builder.
+func (i *UpdateJobResultInput) Mutate(m *JobResultMutation) {
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.ScheduledJobID; v != nil {
+		m.SetScheduledJobID(*v)
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateJobResultInput on the JobResultUpdate builder.
+func (c *JobResultUpdate) SetInput(i UpdateJobResultInput) *JobResultUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateJobResultInput on the JobResultUpdateOne builder.
+func (c *JobResultUpdateOne) SetInput(i UpdateJobResultInput) *JobResultUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateJobRunnerInput represents a mutation input for creating jobrunners.
 type CreateJobRunnerInput struct {
 	Tags              []string
@@ -5200,6 +5394,9 @@ type CreateOrganizationInput struct {
 	JobRunnerIDs                  []string
 	JobRunnerTokenIDs             []string
 	JobRunnerRegistrationTokenIDs []string
+	JobIDs                        []string
+	ScheduledJobIDs               []string
+	ScheduledJobResultIDs         []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -5361,6 +5558,15 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.JobRunnerRegistrationTokenIDs; len(v) > 0 {
 		m.AddJobRunnerRegistrationTokenIDs(v...)
 	}
+	if v := i.JobIDs; len(v) > 0 {
+		m.AddJobIDs(v...)
+	}
+	if v := i.ScheduledJobIDs; len(v) > 0 {
+		m.AddScheduledJobIDs(v...)
+	}
+	if v := i.ScheduledJobResultIDs; len(v) > 0 {
+		m.AddScheduledJobResultIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -5512,6 +5718,15 @@ type UpdateOrganizationInput struct {
 	ClearJobRunnerRegistrationTokens    bool
 	AddJobRunnerRegistrationTokenIDs    []string
 	RemoveJobRunnerRegistrationTokenIDs []string
+	ClearJobs                           bool
+	AddJobIDs                           []string
+	RemoveJobIDs                        []string
+	ClearScheduledJobs                  bool
+	AddScheduledJobIDs                  []string
+	RemoveScheduledJobIDs               []string
+	ClearScheduledJobResults            bool
+	AddScheduledJobResultIDs            []string
+	RemoveScheduledJobResultIDs         []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5938,6 +6153,33 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveJobRunnerRegistrationTokenIDs; len(v) > 0 {
 		m.RemoveJobRunnerRegistrationTokenIDs(v...)
+	}
+	if i.ClearJobs {
+		m.ClearJobs()
+	}
+	if v := i.AddJobIDs; len(v) > 0 {
+		m.AddJobIDs(v...)
+	}
+	if v := i.RemoveJobIDs; len(v) > 0 {
+		m.RemoveJobIDs(v...)
+	}
+	if i.ClearScheduledJobs {
+		m.ClearScheduledJobs()
+	}
+	if v := i.AddScheduledJobIDs; len(v) > 0 {
+		m.AddScheduledJobIDs(v...)
+	}
+	if v := i.RemoveScheduledJobIDs; len(v) > 0 {
+		m.RemoveScheduledJobIDs(v...)
+	}
+	if i.ClearScheduledJobResults {
+		m.ClearScheduledJobResults()
+	}
+	if v := i.AddScheduledJobResultIDs; len(v) > 0 {
+		m.AddScheduledJobResultIDs(v...)
+	}
+	if v := i.RemoveScheduledJobResultIDs; len(v) > 0 {
+		m.RemoveScheduledJobResultIDs(v...)
 	}
 }
 
@@ -7433,6 +7675,136 @@ func (c *RiskUpdate) SetInput(i UpdateRiskInput) *RiskUpdate {
 
 // SetInput applies the change-set in the UpdateRiskInput on the RiskUpdateOne builder.
 func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateScheduledJobInput represents a mutation input for creating scheduledjobs.
+type CreateScheduledJobInput struct {
+	Tags          []string
+	Title         string
+	Description   *string
+	JobType       *enums.JobType
+	Script        *string
+	Configuration models.JobConfiguration
+	Cadence       *models.JobCadence
+	Cron          *string
+	OwnerID       *string
+}
+
+// Mutate applies the CreateScheduledJobInput on the ScheduledJobMutation builder.
+func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetTitle(i.Title)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.JobType; v != nil {
+		m.SetJobType(*v)
+	}
+	if v := i.Script; v != nil {
+		m.SetScript(*v)
+	}
+	m.SetConfiguration(i.Configuration)
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
+	}
+	if v := i.Cron; v != nil {
+		m.SetCron(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateScheduledJobInput on the ScheduledJobCreate builder.
+func (c *ScheduledJobCreate) SetInput(i CreateScheduledJobInput) *ScheduledJobCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateScheduledJobInput represents a mutation input for updating scheduledjobs.
+type UpdateScheduledJobInput struct {
+	ClearTags        bool
+	Tags             []string
+	AppendTags       []string
+	Title            *string
+	ClearDescription bool
+	Description      *string
+	JobType          *enums.JobType
+	ClearScript      bool
+	Script           *string
+	Configuration    *models.JobConfiguration
+	ClearCadence     bool
+	Cadence          *models.JobCadence
+	ClearCron        bool
+	Cron             *string
+	ClearOwner       bool
+	OwnerID          *string
+}
+
+// Mutate applies the UpdateScheduledJobInput on the ScheduledJobMutation builder.
+func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.JobType; v != nil {
+		m.SetJobType(*v)
+	}
+	if i.ClearScript {
+		m.ClearScript()
+	}
+	if v := i.Script; v != nil {
+		m.SetScript(*v)
+	}
+	if v := i.Configuration; v != nil {
+		m.SetConfiguration(*v)
+	}
+	if i.ClearCadence {
+		m.ClearCadence()
+	}
+	if v := i.Cadence; v != nil {
+		m.SetCadence(*v)
+	}
+	if i.ClearCron {
+		m.ClearCron()
+	}
+	if v := i.Cron; v != nil {
+		m.SetCron(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateScheduledJobInput on the ScheduledJobUpdate builder.
+func (c *ScheduledJobUpdate) SetInput(i UpdateScheduledJobInput) *ScheduledJobUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateScheduledJobInput on the ScheduledJobUpdateOne builder.
+func (c *ScheduledJobUpdateOne) SetInput(i UpdateScheduledJobInput) *ScheduledJobUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

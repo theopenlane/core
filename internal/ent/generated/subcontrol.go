@@ -83,10 +83,11 @@ type Subcontrol struct {
 	ControlID string `json:"control_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
-	Edges               SubcontrolEdges `json:"edges"`
-	program_subcontrols *string
-	user_subcontrols    *string
-	selectValues        sql.SelectValues
+	Edges                             SubcontrolEdges `json:"edges"`
+	control_scheduled_job_subcontrols *string
+	program_subcontrols               *string
+	user_subcontrols                  *string
+	selectValues                      sql.SelectValues
 }
 
 // SubcontrolEdges holds the relations/edges for other nodes in the graph.
@@ -282,9 +283,11 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case subcontrol.ForeignKeys[0]: // program_subcontrols
+		case subcontrol.ForeignKeys[0]: // control_scheduled_job_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[1]: // user_subcontrols
+		case subcontrol.ForeignKeys[1]: // program_subcontrols
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[2]: // user_subcontrols
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -499,12 +502,19 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			}
 		case subcontrol.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_scheduled_job_subcontrols", values[i])
+			} else if value.Valid {
+				s.control_scheduled_job_subcontrols = new(string)
+				*s.control_scheduled_job_subcontrols = value.String
+			}
+		case subcontrol.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_subcontrols", values[i])
 			} else if value.Valid {
 				s.program_subcontrols = new(string)
 				*s.program_subcontrols = value.String
 			}
-		case subcontrol.ForeignKeys[1]:
+		case subcontrol.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_subcontrols", values[i])
 			} else if value.Valid {
