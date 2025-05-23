@@ -34008,6 +34008,8 @@ input ProgramMembershipWhereInput {
 	roleNEQ: ProgramMembershipRole
 	roleIn: [ProgramMembershipRole!]
 	roleNotIn: [ProgramMembershipRole!]
+	programID: String
+	userID: String
 }
 """
 Ordering options for Program connections

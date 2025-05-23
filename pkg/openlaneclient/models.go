@@ -18844,6 +18844,8 @@ type ProgramMembershipWhereInput struct {
 	RoleNeq   *enums.Role  `json:"roleNEQ,omitempty"`
 	RoleIn    []enums.Role `json:"roleIn,omitempty"`
 	RoleNotIn []enums.Role `json:"roleNotIn,omitempty"`
+	ProgramID *string      `json:"programID,omitempty"`
+	UserID    *string      `json:"userID,omitempty"`
 }
 
 // Ordering options for Program connections

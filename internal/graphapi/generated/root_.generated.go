@@ -78233,6 +78233,11 @@ type ProgramBulkCreatePayload {
   removeProgramMembers: [ID!]
 }
 
+extend input ProgramMembershipWhereInput {
+  programID: String
+  userID: String
+}
+
 input CreateControlWithSubcontrolsInput{
   control: CreateControlInput
   subcontrols: [CreateSubcontrolInput!]

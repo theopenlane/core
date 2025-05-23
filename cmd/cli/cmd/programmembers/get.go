@@ -42,7 +42,7 @@ func get(ctx context.Context) error {
 	}
 
 	where := openlaneclient.ProgramMembershipWhereInput{
-		// ProgramID: &id,
+		ProgramID: &id,
 	}
 
 	o, err := client.GetProgramMembersByProgramID(ctx, &where)

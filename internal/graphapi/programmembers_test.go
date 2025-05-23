@@ -143,7 +143,9 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 	pm := (&ProgramMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// get all program members so we know the id of the test user program member
-	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{})
+	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{
+		ProgramID: &pm.ProgramID,
+	})
 	assert.NilError(t, err)
 
 	testUser1ProgramMember := ""
