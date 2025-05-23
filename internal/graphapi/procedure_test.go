@@ -319,15 +319,15 @@ func TestMutationCreateProcedure(t *testing.T) {
 			}
 
 			if tc.request.EditorIDs != nil {
-				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.Editors, len(tc.request.EditorIDs)))
+				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.Editors.Edges, len(tc.request.EditorIDs)))
 			} else {
-				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.Editors, 0))
+				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.Editors.Edges, 0))
 			}
 
 			if tc.request.BlockedGroupIDs != nil {
-				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.BlockedGroups, len(tc.request.BlockedGroupIDs)))
+				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.BlockedGroups.Edges, len(tc.request.BlockedGroupIDs)))
 			} else {
-				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.BlockedGroups, 0))
+				assert.Check(t, is.Len(resp.CreateProcedure.Procedure.BlockedGroups.Edges, 0))
 			}
 
 			if tc.request.ApproverID != nil {
