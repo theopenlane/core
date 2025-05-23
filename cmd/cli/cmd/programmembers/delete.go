@@ -37,7 +37,6 @@ func deleteValidation() (where openlaneclient.ProgramMembershipWhereInput, err e
 	if userID == "" {
 		return where, cmd.NewRequiredFieldMissingError("user id")
 	}
-
 	where.ProgramID = &programID
 	where.UserID = &userID
 

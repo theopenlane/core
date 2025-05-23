@@ -89,12 +89,20 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
         }
       }
       editors {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       approver {
         id
@@ -136,12 +144,20 @@ query GetAllInternalPolicies {
         updatedAt
         updatedBy
         editors {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         approver {
           id
@@ -177,12 +193,20 @@ query GetInternalPolicies($where: InternalPolicyWhereInput) {
         updatedAt
         updatedBy
         editors {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         approver {
           id
@@ -216,12 +240,20 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
     updatedAt
     updatedBy
     editors {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     blockedGroups {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     approver {
       id
@@ -255,12 +287,20 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
       updatedAt
       updatedBy
       editors {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       approver {
         id

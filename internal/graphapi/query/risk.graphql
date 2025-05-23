@@ -88,16 +88,28 @@ mutation CreateRisk($input: CreateRiskInput!) {
         }
       }
       editors {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       stakeholder {
         id
@@ -147,16 +159,28 @@ query GetAllRisks {
           }
         }
         editors {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         stakeholder {
           id
@@ -199,16 +223,28 @@ query GetRiskByID($riskId: ID!) {
       }
     }
     editors {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     viewers {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     blockedGroups {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     stakeholder {
       id
@@ -251,16 +287,28 @@ query GetRisks($where: RiskWhereInput) {
           }
         }
         editors {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         stakeholder {
           id
@@ -304,16 +352,28 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
         }
       }
       editors {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       stakeholder {
         id

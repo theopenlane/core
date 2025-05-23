@@ -54,24 +54,176 @@ enum Permission @goModel(model: "github.com/theopenlane/core/pkg/enums.Permissio
 }
 
 """
-GroupPermissions contains details for the related object and the permissions
+GroupPermission contains details for the related object and the permissions
 the group provides (or removes in the case of blocked) to the object within the
 organization
 """
-type GroupPermissions {
+type GroupPermission implements Node {
+  """
+  the type of object the permissions are for, e.g. Program, Control, etc.
+  """
   objectType: String!
+  """
+  the permissions the group has in relation to the object, e.g. EDITOR, VIEWER, BLOCKED
+  """
   permissions: Permission!
-  id: ID
+  """
+  the ID of the object the group was given permissions to
+  """
+  id: ID!
+  """
+  the displayID of the object the group was given permissions to
+  """
   displayID: String
+  """
+  the  name of the object the group was given permissions to
+  """
   name: String
+}
+
+"""
+A connection to a list of items.
+"""
+type GroupPermissionConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [GroupPermissionEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type GroupPermissionEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: GroupPermission
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
 }
 
 extend type Group {
   """
   permissions the group provides
   """
-  permissions: [GroupPermissions!]
+  permissions(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): GroupPermissionConnection!
 }
+
+"""
+Ordering options for GroupPermission connections
+"""
+input GroupPermissionOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order GroupPermission.
+	"""
+	field: GroupPermissionOrderField!
+}
+
+"""
+Properties by which GroupPermission connections can be ordered.
+"""
+enum GroupPermissionOrderField {
+	name
+	permission
+  objectType
+}
+
+"""
+GroupPermissionWhereInput is used for filtering GroupPermission objects.
+"""
+input GroupPermissionWhereInput {
+	not: GroupPermissionWhereInput
+	and: [GroupPermissionWhereInput!]
+	or: [GroupPermissionWhereInput!]
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
+	"""
+	objectType field predicates
+	"""
+	objectType: String
+	objectTypeNEQ: String
+	objectTypeIn: [String!]
+	objectTypeNotIn: [String!]
+	objectTypeGT: String
+	objectTypeGTE: String
+	objectTypeLT: String
+	objectTypeLTE: String
+	objectTypeContains: String
+	objectTypeHasPrefix: String
+	objectTypeHasSuffix: String
+	objectTypeIsNil: Boolean
+	objectTypeNotNil: Boolean
+	objectTypeEqualFold: String
+	objectTypeContainsFold: String
+  """
+	permission field predicates
+	"""
+	permission: String
+	permissionNEQ: String
+	permissionIn: [String!]
+	permissionNotIn: [String!]
+	permissionGT: String
+	permissionGTE: String
+	permissionLT: String
+	permissionLTE: String
+	permissionContains: String
+	permissionHasPrefix: String
+	permissionHasSuffix: String
+	permissionIsNil: Boolean
+	permissionNotNil: Boolean
+	permissionEqualFold: String
+	permissionContainsFold: String
+}
+
 extend type Mutation{
   """
   Create a new group with members
