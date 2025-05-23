@@ -10,14 +10,16 @@ import (
 type MappingType string
 
 var (
-	// MappingTypeEqual indicates the equal.
+	// MappingTypeEqual indicates the two sets are equivalent
 	MappingTypeEqual MappingType = "EQUAL"
-	// MappingTypeSuperset indicates the superset.
+	// MappingTypeSuperset indicates the mapping is superset
 	MappingTypeSuperset MappingType = "SUPERSET"
-	// MappingTypeSubset indicates the subset.
+	// MappingTypeSubset indicates the mapping is subset
 	MappingTypeSubset MappingType = "SUBSET"
-	// MappingTypeIntersect indicates the intersect.
+	// MappingTypeIntersect indicates the overlap is an intersection
 	MappingTypeIntersect MappingType = "INTERSECT"
+	// MappingTypePartial indicates a partial overlap, but the exact type is unspecified
+	MappingTypePartial MappingType = "PARTIAL"
 	// MappingTypeInvalid is used when an unknown or unsupported value is provided.
 	MappingTypeInvalid MappingType = "MAPPINGTYPE_INVALID"
 )
@@ -29,6 +31,7 @@ func (MappingType) Values() []string {
 		string(MappingTypeSuperset),
 		string(MappingTypeSubset),
 		string(MappingTypeIntersect),
+		string(MappingTypePartial),
 	}
 }
 
@@ -48,6 +51,8 @@ func ToMappingType(r string) *MappingType {
 		return &MappingTypeSubset
 	case MappingTypeIntersect.String():
 		return &MappingTypeIntersect
+	case MappingTypePartial.String():
+		return &MappingTypePartial
 	default:
 		return &MappingTypeInvalid
 	}
