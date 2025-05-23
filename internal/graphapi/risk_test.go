@@ -403,7 +403,7 @@ func TestMutationCreateRisk(t *testing.T) {
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
-				assert.Assert(t, is.Len(resp.CreateRisk.Risk.BlockedGroups, 1))
+				assert.Assert(t, is.Len(resp.CreateRisk.Risk.BlockedGroups.Edges, 1))
 				for _, edge := range resp.CreateRisk.Risk.BlockedGroups.Edges {
 					assert.Check(t, is.Equal(blockedGroup.ID, edge.Node.ID))
 				}
