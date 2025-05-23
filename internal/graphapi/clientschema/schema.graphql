@@ -15578,16 +15578,6 @@ type Group implements Node {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
-
-		"""
-		Ordering options for Integrations returned from the connection.
-		"""
-		orderBy: [GroupPermissionOrder!]
-
-		"""
-		Filtering options for Integrations returned from the connection.
-		"""
-		where: GroupPermissionWhereInput
 	): GroupPermissionConnection!
 }
 """

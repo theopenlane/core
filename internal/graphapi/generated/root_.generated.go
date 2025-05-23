@@ -1309,7 +1309,7 @@ type ComplexityRoot struct {
 		NarrativeViewers              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                         func(childComplexity int) int
 		OwnerID                       func(childComplexity int) int
-		Permissions                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*model.GroupPermissionOrder, where *model.GroupPermissionWhereInput) int
+		Permissions                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		ProcedureBlockedGroups        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		ProcedureEditors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		ProgramBlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
@@ -10383,7 +10383,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Group.Permissions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*model.GroupPermissionOrder), args["where"].(*model.GroupPermissionWhereInput)), true
+		return e.complexity.Group.Permissions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Group.procedureBlockedGroups":
 		if e.complexity.Group.ProcedureBlockedGroups == nil {
@@ -76285,16 +76285,6 @@ extend type Group {
 		Returns the last _n_ elements from the list.
 		"""
 		last: Int
-
-		"""
-		Ordering options for Integrations returned from the connection.
-		"""
-		orderBy: [GroupPermissionOrder!]
-
-		"""
-		Filtering options for Integrations returned from the connection.
-		"""
-		where: GroupPermissionWhereInput
 	): GroupPermissionConnection!
 }
 

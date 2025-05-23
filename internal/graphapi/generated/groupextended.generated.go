@@ -1076,11 +1076,6 @@ func (ec *executionContext) marshalNGroupPermissionConnection2ᚖgithubᚗcomᚋ
 	return ec._GroupPermissionConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNGroupPermissionOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrder(ctx context.Context, v any) (*model.GroupPermissionOrder, error) {
-	res, err := ec.unmarshalInputGroupPermissionOrder(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx context.Context, v any) (model.GroupPermissionOrderField, error) {
 	var res model.GroupPermissionOrderField
 	err := res.UnmarshalGQL(v)
@@ -1177,24 +1172,6 @@ func (ec *executionContext) marshalOGroupPermissionEdge2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._GroupPermissionEdge(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOGroupPermissionOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderᚄ(ctx context.Context, v any) ([]*model.GroupPermissionOrder, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]*model.GroupPermissionOrder, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNGroupPermissionOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrder(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
 }
 
 func (ec *executionContext) unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx context.Context, v any) ([]*model.GroupPermissionWhereInput, error) {
