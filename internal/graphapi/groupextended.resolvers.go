@@ -58,7 +58,7 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 		WithNarrativeViewers().
 		WithNarrativeEditors().
 		WithNarrativeBlockedGroups().
-		Paginate(ctx, after, first, before, last, nil, nil)
+		Paginate(ctx, after, first, before, last)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
 	}

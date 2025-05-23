@@ -489,21 +489,21 @@ func TestMutationCreateProgram(t *testing.T) {
 			}
 
 			if len(tc.request.EditorIDs) > 0 {
-				assert.Assert(t, is.Len(resp.CreateProgram.Program.Editors, 1))
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.Editors.Edges, 1))
 				for _, edge := range resp.CreateProgram.Program.Editors.Edges {
 					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
-				assert.Assert(t, is.Len(resp.CreateProgram.Program.BlockedGroups, 1))
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.BlockedGroups.Edges, 1))
 				for _, edge := range resp.CreateProgram.Program.BlockedGroups.Edges {
 					assert.Check(t, is.Equal(blockedGroup.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
-				assert.Assert(t, is.Len(resp.CreateProgram.Program.Viewers, 1))
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.Viewers.Edges, 1))
 				for _, edge := range resp.CreateProgram.Program.Viewers.Edges {
 					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}
@@ -812,7 +812,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			}
 
 			if len(tc.request.AddEditorIDs) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Editors, 1))
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Editors.Edges, 1))
 				for _, edge := range resp.UpdateProgram.Program.Editors.Edges {
 					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
 				}
@@ -826,7 +826,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Viewers, 1))
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Viewers.Edges, 1))
 				for _, edge := range resp.UpdateProgram.Program.Viewers.Edges {
 					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}

@@ -641,7 +641,7 @@ func TestMutationCreateGroupByClone(t *testing.T) {
 				expectedLenPerms = 2
 			}
 
-			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Permissions, expectedLenPerms))
+			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Permissions.Edges, expectedLenPerms))
 
 			// delete group via the api
 			_, err = tc.client.DeleteGroup(tc.ctx, resp.CreateGroupByClone.Group.ID)
@@ -998,7 +998,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 
 			if tc.updateInput.InheritGroupPermissions != nil {
 				// ensure the group has the additional permissions as the group we cloned, there is one overlap with the group we cloned
-				assert.Check(t, is.Len(updatedGroup.Permissions, 5))
+				assert.Check(t, is.Len(updatedGroup.Permissions.Edges, 5))
 			}
 		})
 	}
@@ -1134,7 +1134,7 @@ func TestManagedGroups(t *testing.T) {
 	assert.NilError(t, err)
 
 	perms := updateResp.UpdateGroup.Group.GetPermissions()
-	assert.Check(t, is.Len(perms, 3))
+	assert.Check(t, is.Len(perms.Edges, 3))
 
 	// make sure I can also remove them
 	input = openlaneclient.UpdateGroupInput{
@@ -1147,7 +1147,7 @@ func TestManagedGroups(t *testing.T) {
 	assert.NilError(t, err)
 
 	perms = updateResp.UpdateGroup.Group.GetPermissions()
-	assert.Check(t, is.Len(perms, 0))
+	assert.Check(t, is.Len(perms.Edges, 0))
 
 	// cleanup objects created
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
