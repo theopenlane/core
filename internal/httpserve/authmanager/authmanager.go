@@ -383,7 +383,10 @@ func (a *Client) updateDefaultOrgToPersonal(ctx context.Context, user *generated
 
 // getPersonalOrgID returns the personal org ID for the user
 func (a *Client) getPersonalOrgID(ctx context.Context, user *generated.User) (*generated.Organization, error) {
-	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(ctx)
+	// ensure the organization is not filtered by the default interceptor
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	return a.db.User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).Only(allowCtx)
 }
 
 // skipOrgValidation checks if the org validation should be skipped based on the context
