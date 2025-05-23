@@ -20,7 +20,7 @@ type EntObject struct {
 }
 
 // getGroupPermissions returns a slice of GroupPermissions for the given object type and permission
-func getGroupPermissions[T any](obj []T, objectType string, permission enums.Permission) (perms []*model.GroupPermissions) {
+func getGroupPermissions[T any](obj []T, objectType string, permission enums.Permission) (perms []*model.GroupPermissionEdge) {
 	for _, e := range obj {
 		eo, err := convertToEntObject(e)
 		if err != nil {
@@ -32,12 +32,14 @@ func getGroupPermissions[T any](obj []T, objectType string, permission enums.Per
 			name = eo.RefCode
 		}
 
-		perms = append(perms, &model.GroupPermissions{
-			ObjectType:  objectType,
-			ID:          &eo.ID,
-			Permissions: permission,
-			DisplayID:   &eo.DisplayID,
-			Name:        &name,
+		perms = append(perms, &model.GroupPermissionEdge{
+			Node: &model.GroupPermission{
+				ObjectType:  objectType,
+				ID:          eo.ID,
+				Permissions: permission,
+				DisplayID:   &eo.DisplayID,
+				Name:        &name,
+			},
 		})
 	}
 

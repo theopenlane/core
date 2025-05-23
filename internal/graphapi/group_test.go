@@ -719,27 +719,35 @@ func TestMutationUpdateGroup(t *testing.T) {
 				Setting: &openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
 					JoinPolicy: enums.JoinPolicyOpen,
 				},
-				Permissions: []*openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions{
-					{
-						ObjectType:  "Program",
-						ID:          &program.ID,
-						Permissions: enums.Viewer,
-						DisplayID:   &program.DisplayID,
-						Name:        &program.Name,
-					},
-					{
-						ObjectType:  "Procedure",
-						ID:          &procedure.ID,
-						Permissions: enums.Blocked,
-						DisplayID:   &procedure.DisplayID,
-						Name:        &procedure.Name,
-					},
-					{
-						ObjectType:  "Control",
-						ID:          &control.ID,
-						Permissions: enums.Editor,
-						DisplayID:   &control.DisplayID,
-						Name:        &control.RefCode,
+				Permissions: openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions{
+					Edges: []*openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions_Edges{
+						{
+							Node: &openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions_Edges_Node{
+								ObjectType:  "Program",
+								ID:          program.ID,
+								Permissions: enums.Viewer,
+								DisplayID:   &program.DisplayID,
+								Name:        &program.Name,
+							},
+						},
+						{
+							Node: &openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions_Edges_Node{
+								ObjectType:  "Procedure",
+								ID:          procedure.ID,
+								Permissions: enums.Blocked,
+								DisplayID:   &procedure.DisplayID,
+								Name:        &procedure.Name,
+							},
+						},
+						{
+							Node: &openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions_Edges_Node{
+								ObjectType:  "Control",
+								ID:          control.ID,
+								Permissions: enums.Editor,
+								DisplayID:   &control.DisplayID,
+								Name:        &control.RefCode,
+							},
+						},
 					},
 				},
 			},
@@ -954,18 +962,18 @@ func TestMutationUpdateGroup(t *testing.T) {
 			}
 
 			if tc.updateInput.AddProgramViewerIDs != nil || tc.updateInput.AddProcedureEditorIDs != nil || tc.updateInput.AddControlBlockedGroupIDs != nil {
-				assert.Check(t, is.Equal(len(tc.expectedRes.Permissions), len(updatedGroup.Permissions)))
+				assert.Check(t, is.Equal(len(tc.expectedRes.Permissions.Edges), len(updatedGroup.Permissions.Edges)))
 
-				for _, permission := range updatedGroup.Permissions {
+				for _, permission := range updatedGroup.Permissions.Edges {
 					found := false
-					for _, expectedPermission := range tc.expectedRes.Permissions {
-						if *permission.ID == *expectedPermission.ID {
+					for _, expectedPermission := range tc.expectedRes.Permissions.Edges {
+						if permission.Node.ID == expectedPermission.Node.ID {
 							found = true
 							assert.Check(t, is.DeepEqual(permission, expectedPermission))
 						}
 					}
 
-					assert.Check(t, found, "permission %s not found", permission.ObjectType)
+					assert.Check(t, found, "permission %s not found", permission.Node.ObjectType)
 				}
 
 				// ensure user can now get access to the program

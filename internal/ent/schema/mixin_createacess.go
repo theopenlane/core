@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
@@ -55,7 +56,12 @@ func (c GroupBasedCreateAccessMixin) Edges() []ent.Edge {
 		toName := strings.ToLower(fmt.Sprintf("%s_creators", t))
 
 		edge := edge.To(toName, Group.Type).
-			Comment(fmt.Sprintf("groups that are allowed to create %ss", t))
+			Comment(fmt.Sprintf("groups that are allowed to create %ss", t)).
+			Annotations(
+				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entgql.MultiOrder(),
+			)
 
 		edges = append(edges, edge)
 	}

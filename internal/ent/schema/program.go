@@ -164,7 +164,12 @@ func (p Program) Edges() []ent.Edge {
 			Ref("programs").
 			// Skip the mutation input for the users edge
 			// this should be done via the members edge
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput), entgql.RelayConnection()).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entgql.MultiOrder(),
+			).
 			Through("members", ProgramMembership.Type),
 	}
 }

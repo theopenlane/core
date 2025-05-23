@@ -490,22 +490,22 @@ func TestMutationCreateProgram(t *testing.T) {
 
 			if len(tc.request.EditorIDs) > 0 {
 				assert.Assert(t, is.Len(resp.CreateProgram.Program.Editors, 1))
-				for _, edge := range resp.CreateProgram.Program.Editors {
-					assert.Check(t, is.Equal(testUser1.GroupID, edge.ID))
+				for _, edge := range resp.CreateProgram.Program.Editors.Edges {
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
 				assert.Assert(t, is.Len(resp.CreateProgram.Program.BlockedGroups, 1))
-				for _, edge := range resp.CreateProgram.Program.BlockedGroups {
-					assert.Check(t, is.Equal(blockedGroup.ID, edge.ID))
+				for _, edge := range resp.CreateProgram.Program.BlockedGroups.Edges {
+					assert.Check(t, is.Equal(blockedGroup.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
 				assert.Assert(t, is.Len(resp.CreateProgram.Program.Viewers, 1))
-				for _, edge := range resp.CreateProgram.Program.Viewers {
-					assert.Check(t, is.Equal(viewerGroup.ID, edge.ID))
+				for _, edge := range resp.CreateProgram.Program.Viewers.Edges {
+					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}
 			}
 
@@ -529,9 +529,7 @@ func TestMutationCreateProgram(t *testing.T) {
 func TestMutationUpdateProgram(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{
-		ProgramID: &program.ID,
-	})
+	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{})
 	assert.NilError(t, err)
 
 	testUserProgramMemberID := ""
@@ -815,22 +813,22 @@ func TestMutationUpdateProgram(t *testing.T) {
 
 			if len(tc.request.AddEditorIDs) > 0 {
 				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Editors, 1))
-				for _, edge := range resp.UpdateProgram.Program.Editors {
-					assert.Check(t, is.Equal(testUser1.GroupID, edge.ID))
+				for _, edge := range resp.UpdateProgram.Program.Editors.Edges {
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.AddBlockedGroupIDs) > 0 {
 				assert.Assert(t, is.Len(resp.UpdateProgram.Program.BlockedGroups, 1))
-				for _, edge := range resp.UpdateProgram.Program.BlockedGroups {
-					assert.Check(t, is.Equal(blockGroup.ID, edge.ID))
+				for _, edge := range resp.UpdateProgram.Program.BlockedGroups.Edges {
+					assert.Check(t, is.Equal(blockGroup.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {
 				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Viewers, 1))
-				for _, edge := range resp.UpdateProgram.Program.Viewers {
-					assert.Check(t, is.Equal(viewerGroup.ID, edge.ID))
+				for _, edge := range resp.UpdateProgram.Program.Viewers.Edges {
+					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}
 
 				// ensure the user has access to the program now

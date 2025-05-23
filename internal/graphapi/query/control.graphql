@@ -114,16 +114,28 @@ mutation CreateControl($input: CreateControlInput!) {
         }
       }
       editors {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
     }
   }
@@ -203,16 +215,28 @@ query GetAllControls {
           }
         }
         editors {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -278,16 +302,28 @@ query GetControlByID($controlId: ID!) {
       }
     }
     editors {
-      id
-      name
+      edges{
+        node{
+          id
+          name
+        }
+      }
     }
     viewers {
-      id
-      name
+      edges{
+        node{
+          id
+          name
+        }
+      }
     }
     blockedGroups {
-      id
-      name
+      edges{
+        node{
+          id
+          name
+        }
+      }
     }
   }
 }
@@ -360,16 +396,28 @@ query GetControls($first: Int, $last: Int, $where: ControlWhereInput) {
           }
         }
         editors {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges{
+            node{
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -436,16 +484,28 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
         }
       }
       editors {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges{
+          node{
+            id
+            name
+          }
+        }
       }
     }
   }

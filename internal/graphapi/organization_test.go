@@ -613,18 +613,24 @@ func TestMutationUpdateOrganization(t *testing.T) {
 				Name:        nameUpdate,
 				DisplayName: org.DisplayName,
 				Description: &org.Description,
-				ProgramCreators: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
-					{
-						ID:          groupProgramCreators.ID,
-						DisplayID:   groupProgramCreators.DisplayID,
-						Name:        groupProgramCreators.Name,
-						DisplayName: groupProgramCreators.DisplayName,
-					},
-					{
-						ID:          anotherGroupProgramCreators.ID,
-						DisplayID:   anotherGroupProgramCreators.DisplayID,
-						Name:        anotherGroupProgramCreators.Name,
-						DisplayName: anotherGroupProgramCreators.DisplayName,
+				ProgramCreators: openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
+					Edges: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges{
+						{
+							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{
+								ID:          groupProgramCreators.ID,
+								DisplayID:   groupProgramCreators.DisplayID,
+								Name:        groupProgramCreators.Name,
+								DisplayName: groupProgramCreators.DisplayName,
+							},
+						},
+						{
+							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{
+								ID:          anotherGroupProgramCreators.ID,
+								DisplayID:   anotherGroupProgramCreators.DisplayID,
+								Name:        anotherGroupProgramCreators.Name,
+								DisplayName: anotherGroupProgramCreators.DisplayName,
+							},
+						},
 					},
 				},
 			},
@@ -643,20 +649,28 @@ func TestMutationUpdateOrganization(t *testing.T) {
 				Name:        nameUpdate,
 				DisplayName: org.DisplayName,
 				Description: &org.Description,
-				ProcedureCreators: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators{
-					{
-						ID:          groupProcedureCreators.ID,
-						DisplayID:   groupProcedureCreators.DisplayID,
-						Name:        groupProcedureCreators.Name,
-						DisplayName: groupProcedureCreators.DisplayName,
+				ProcedureCreators: openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators{
+					Edges: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges{
+						{
+							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{
+								ID:          groupProcedureCreators.ID,
+								DisplayID:   groupProcedureCreators.DisplayID,
+								Name:        groupProcedureCreators.Name,
+								DisplayName: groupProcedureCreators.DisplayName,
+							},
+						},
 					},
 				},
-				ProgramCreators: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
-					{
-						ID:          anotherGroupProgramCreators.ID,
-						DisplayID:   anotherGroupProgramCreators.DisplayID,
-						Name:        anotherGroupProgramCreators.Name,
-						DisplayName: anotherGroupProgramCreators.DisplayName,
+				ProgramCreators: openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
+					Edges: []*openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges{
+						{
+							Node: &openlaneclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{
+								ID:          anotherGroupProgramCreators.ID,
+								DisplayID:   anotherGroupProgramCreators.DisplayID,
+								Name:        anotherGroupProgramCreators.Name,
+								DisplayName: anotherGroupProgramCreators.DisplayName,
+							},
+						},
 					},
 				},
 			},
