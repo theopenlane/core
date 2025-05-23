@@ -91,6 +91,8 @@ func tableOutput(out []openlaneclient.OrgSubscription) {
 		exp := ""
 		if i.ExpiresAt != nil {
 			exp = i.ExpiresAt.String()
+		} else if i.TrialExpiresAt != nil {
+			exp = i.TrialExpiresAt.String()
 		}
 
 		price := ""

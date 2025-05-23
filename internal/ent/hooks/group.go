@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 
 	"entgo.io/ent"
@@ -79,13 +80,79 @@ func HookManagedGroups() ent.Hook {
 			_, allowCtx := privacy.DecisionFromContext(ctx)
 			_, allowManagedCtx := contextx.From[ManagedContextKey](ctx)
 
+			// before returning the error, we need to allow for edges to be updated
+			// if they are permissions edges
 			if group.IsManaged && (!allowManagedCtx && !allowCtx) {
-				return nil, ErrManagedGroup
+				if err := checkOnlyDefaultFields(m); err != nil {
+					return nil, ErrManagedGroup
+				}
+
+				if err := checkOnlyPermissionEdges(m); err != nil {
+					return nil, err
+				}
 			}
+
+			// if we got here, the only that that was updated was edges for permissions (Editor, Viewer, BlockedGroups)
+			// and we can continue
 
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne)
+}
+
+// checkOnlyDefaultFields checks if the added or cleared fields are only default fields
+// and returns an error if they are not
+func checkOnlyDefaultFields(m *generated.GroupMutation) error {
+	fields := m.Fields()
+	numericFields := m.AddedFields()
+	clearedFields := m.ClearedFields()
+
+	// if nothing changed, return no error
+	if len(fields) == 0 && len(numericFields) == 0 && len(clearedFields) == 0 {
+		return nil
+	}
+
+	// default fields are updatedAt, updatedBy
+	defaultFields := []string{
+		"updated_at",
+		"updated_by",
+		// TODO: see why this is sent in the mutation, added a test to confirm it doesn't actually change
+		"display_id",
+	}
+
+	// check if any of the fields are not default fields
+	for _, field := range fields {
+		if !slices.Contains(defaultFields, field) {
+			return ErrManagedGroup
+		}
+	}
+
+	return nil
+}
+
+// checkOnlyPermissionEdges checks if the added or cleared edges are only permission edges
+// and returns an error if they are not
+func checkOnlyPermissionEdges(m *generated.GroupMutation) error {
+	addedEdges := m.AddedEdges()
+	clearedEdges := m.ClearedEdges()
+
+	if len(addedEdges) > 0 || len(clearedEdges) > 0 {
+		for _, edge := range addedEdges {
+			_, _, isPermissionEdge := isPermissionsEdge(edge)
+			if !isPermissionEdge {
+				return ErrManagedGroup
+			}
+		}
+
+		for _, edge := range clearedEdges {
+			_, _, isPermissionEdge := isPermissionsEdge(edge)
+			if !isPermissionEdge {
+				return ErrManagedGroup
+			}
+		}
+	}
+
+	return nil
 }
 
 // HookGroupAuthz runs on group mutations to setup or remove relationship tuples

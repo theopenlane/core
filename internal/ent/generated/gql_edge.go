@@ -1838,16 +1838,25 @@ func (gr *Group) Setting(ctx context.Context) (*GroupSetting, error) {
 	return result, MaskNotFound(err)
 }
 
-func (gr *Group) Users(ctx context.Context) (result []*User, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = gr.NamedUsers(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = gr.Edges.UsersOrErr()
+func (gr *Group) Users(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*UserOrder, where *UserWhereInput,
+) (*UserConnection, error) {
+	opts := []UserPaginateOption{
+		WithUserOrder(orderBy),
+		WithUserFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = gr.QueryUsers().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := gr.Edges.totalCount[21][alias]
+	if nodes, err := gr.NamedUsers(alias); err == nil || hasTotalCount {
+		pager, err := newUserPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &UserConnection{Edges: []*UserEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return gr.QueryUsers().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (gr *Group) Events(
@@ -1934,16 +1943,25 @@ func (gr *Group) Tasks(
 	return gr.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (gr *Group) Members(ctx context.Context) (result []*GroupMembership, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = gr.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = gr.Edges.MembersOrErr()
+func (gr *Group) Members(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupMembershipOrder, where *GroupMembershipWhereInput,
+) (*GroupMembershipConnection, error) {
+	opts := []GroupMembershipPaginateOption{
+		WithGroupMembershipOrder(orderBy),
+		WithGroupMembershipFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = gr.QueryMembers().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := gr.Edges.totalCount[26][alias]
+	if nodes, err := gr.NamedMembers(alias); err == nil || hasTotalCount {
+		pager, err := newGroupMembershipPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &GroupMembershipConnection{Edges: []*GroupMembershipEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return gr.QueryMembers().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (gm *GroupMembership) Group(ctx context.Context) (*Group, error) {

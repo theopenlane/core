@@ -335,16 +335,22 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 		}
 	}
 
+	// update the expiration date based on the subscription status
+	// if the subscription is trialing, set the expiration date to the trial end date
+	// otherwise, set the expiration date to the end date if it exists
+	trialExpiresAt := time.Unix(0, 0)
+	if customer.Status == string(stripe.SubscriptionStatusTrialing) {
+		trialExpiresAt = time.Unix(customer.TrialEnd, 0)
+	}
+
 	expiresAt := time.Unix(0, 0)
 	if customer.EndDate > 0 {
 		expiresAt = time.Unix(customer.EndDate, 0)
-	} else if customer.Status == string(stripe.SubscriptionStatusTrialing) {
-		expiresAt = time.Unix(customer.TrialEnd, 0)
 	}
 
 	active := customer.Status == string(stripe.SubscriptionStatusActive) || customer.Status == string(stripe.SubscriptionStatusTrialing)
 
-	return client.(*entgen.Client).OrgSubscription.UpdateOneID(customer.OrganizationSubscriptionID).
+	update := client.(*entgen.Client).OrgSubscription.UpdateOneID(customer.OrganizationSubscriptionID).
 		SetStripeSubscriptionID(customer.StripeSubscriptionID).
 		SetStripeCustomerID(customer.StripeCustomerID).
 		SetStripeSubscriptionStatus(customer.Subscription.Status).
@@ -353,8 +359,18 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 		SetFeatures(customer.FeatureNames).
 		SetFeatureLookupKeys(customer.Features).
 		SetStripeProductTierID(customer.Subscription.ProductID).
-		SetProductPrice(productPrice).
-		SetExpiresAt(expiresAt).Exec(ctx)
+		SetProductPrice(productPrice)
+
+	// ensure the correct expiration date is set based on the subscription status
+	// if the subscription is trialing, set the expiration date to the trial end date
+	// otherwise, set the expiration date to the end date
+	if customer.Status == string(stripe.SubscriptionStatusTrialing) {
+		update.SetTrialExpiresAt(trialExpiresAt)
+	} else {
+		update.SetExpiresAt(expiresAt)
+	}
+
+	return update.Exec(ctx)
 }
 
 // updateOrgCustomerWithSubscription updates the organization customer with the subscription data

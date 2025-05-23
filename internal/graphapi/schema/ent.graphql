@@ -13525,7 +13525,37 @@ type Group implements Node {
   internalPolicyEditors: [InternalPolicy!]
   internalPolicyBlockedGroups: [InternalPolicy!]
   setting: GroupSetting
-  users: [User!]
+  users(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -13650,7 +13680,37 @@ type Group implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
-  members: [GroupMembership!]
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for GroupMemberships returned from the connection.
+    """
+    orderBy: [GroupMembershipOrder!]
+
+    """
+    Filtering options for GroupMemberships returned from the connection.
+    """
+    where: GroupMembershipWhereInput
+  ): GroupMembershipConnection!
 }
 """
 A connection to a list of items.

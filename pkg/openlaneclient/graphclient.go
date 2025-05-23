@@ -26375,66 +26375,95 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting) GetVisibility() *
 	return &t.Visibility
 }
 
-type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_User struct {
+type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_User) GetFirstName() *string {
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_User{}
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_User) GetID() string {
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_User{}
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_User) GetLastName() *string {
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_User{}
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members struct {
-	ID   string                                                    "json:\"id\" graphql:\"id\""
-	Role enums.Role                                                "json:\"role\" graphql:\"role\""
-	User CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_User "json:\"user\" graphql:\"user\""
+type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node struct {
+	ID   string                                                               "json:\"id\" graphql:\"id\""
+	Role enums.Role                                                           "json:\"role\" graphql:\"role\""
+	User CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members) GetID() string {
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members{}
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members) GetRole() *enums.Role {
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members{}
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members) GetUser() *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_User {
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node) GetUser() *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node_User {
 	if t == nil {
-		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members{}
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node{}
 	}
 	return &t.User
 }
 
+type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges struct {
+	Node *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges) GetNode() *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges_Node {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges{}
+	}
+	return t.Node
+}
+
+type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members struct {
+	Edges      []*CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members) GetEdges() []*CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members_Edges {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members{}
+	}
+	return t.Edges
+}
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members{}
+	}
+	return t.TotalCount
+}
+
 type CreateBulkCSVGroup_CreateBulkCSVGroup_Groups struct {
-	Description *string                                                 "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string                                                  "json:\"displayName\" graphql:\"displayName\""
-	ID          string                                                  "json:\"id\" graphql:\"id\""
-	LogoURL     *string                                                 "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name        string                                                  "json:\"name\" graphql:\"name\""
-	Owner       *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags        []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
+	Description *string                                               "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string                                                "json:\"displayName\" graphql:\"displayName\""
+	ID          string                                                "json:\"id\" graphql:\"id\""
+	LogoURL     *string                                               "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Members     CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members  "json:\"members\" graphql:\"members\""
+	Name        string                                                "json:\"name\" graphql:\"name\""
+	Owner       *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Owner   "json:\"owner,omitempty\" graphql:\"owner\""
+	Setting     *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Setting "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags        []string                                              "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetDescription() *string {
@@ -26461,11 +26490,11 @@ func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetLogoURL() *string {
 	}
 	return t.LogoURL
 }
-func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetMembers() []*CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members {
+func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetMembers() *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups_Members {
 	if t == nil {
 		t = &CreateBulkCSVGroup_CreateBulkCSVGroup_Groups{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *CreateBulkCSVGroup_CreateBulkCSVGroup_Groups) GetName() string {
 	if t == nil {
@@ -26560,66 +26589,95 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups_Setting) GetVisibility() *enums.
 	return &t.Visibility
 }
 
-type CreateBulkGroup_CreateBulkGroup_Groups_Members_User struct {
+type CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_User) GetFirstName() *string {
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_User{}
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_User) GetID() string {
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_User{}
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_User) GetLastName() *string {
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_User{}
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type CreateBulkGroup_CreateBulkGroup_Groups_Members struct {
-	ID   string                                              "json:\"id\" graphql:\"id\""
-	Role enums.Role                                          "json:\"role\" graphql:\"role\""
-	User CreateBulkGroup_CreateBulkGroup_Groups_Members_User "json:\"user\" graphql:\"user\""
+type CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node struct {
+	ID   string                                                         "json:\"id\" graphql:\"id\""
+	Role enums.Role                                                     "json:\"role\" graphql:\"role\""
+	User CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members) GetID() string {
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members{}
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members) GetRole() *enums.Role {
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members{}
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members) GetUser() *CreateBulkGroup_CreateBulkGroup_Groups_Members_User {
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node) GetUser() *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node_User {
 	if t == nil {
-		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members{}
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node{}
 	}
 	return &t.User
 }
 
+type CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges struct {
+	Node *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges) GetNode() *CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges_Node {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges{}
+	}
+	return t.Node
+}
+
+type CreateBulkGroup_CreateBulkGroup_Groups_Members struct {
+	Edges      []*CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members) GetEdges() []*CreateBulkGroup_CreateBulkGroup_Groups_Members_Edges {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members{}
+	}
+	return t.Edges
+}
+func (t *CreateBulkGroup_CreateBulkGroup_Groups_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateBulkGroup_CreateBulkGroup_Groups_Members{}
+	}
+	return t.TotalCount
+}
+
 type CreateBulkGroup_CreateBulkGroup_Groups struct {
-	Description *string                                           "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string                                            "json:\"displayName\" graphql:\"displayName\""
-	ID          string                                            "json:\"id\" graphql:\"id\""
-	LogoURL     *string                                           "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*CreateBulkGroup_CreateBulkGroup_Groups_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name        string                                            "json:\"name\" graphql:\"name\""
-	Owner       *CreateBulkGroup_CreateBulkGroup_Groups_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     *CreateBulkGroup_CreateBulkGroup_Groups_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags        []string                                          "json:\"tags,omitempty\" graphql:\"tags\""
+	Description *string                                         "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string                                          "json:\"displayName\" graphql:\"displayName\""
+	ID          string                                          "json:\"id\" graphql:\"id\""
+	LogoURL     *string                                         "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Members     CreateBulkGroup_CreateBulkGroup_Groups_Members  "json:\"members\" graphql:\"members\""
+	Name        string                                          "json:\"name\" graphql:\"name\""
+	Owner       *CreateBulkGroup_CreateBulkGroup_Groups_Owner   "json:\"owner,omitempty\" graphql:\"owner\""
+	Setting     *CreateBulkGroup_CreateBulkGroup_Groups_Setting "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags        []string                                        "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetDescription() *string {
@@ -26646,11 +26704,11 @@ func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetLogoURL() *string {
 	}
 	return t.LogoURL
 }
-func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetMembers() []*CreateBulkGroup_CreateBulkGroup_Groups_Members {
+func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetMembers() *CreateBulkGroup_CreateBulkGroup_Groups_Members {
 	if t == nil {
 		t = &CreateBulkGroup_CreateBulkGroup_Groups{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *CreateBulkGroup_CreateBulkGroup_Groups) GetName() string {
 	if t == nil {
@@ -26784,54 +26842,76 @@ func (t *CreateGroup_CreateGroup_Group_Permissions) GetPermissions() *enums.Perm
 	return &t.Permissions
 }
 
-type CreateGroup_CreateGroup_Group_Members_User struct {
+type CreateGroup_CreateGroup_Group_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *CreateGroup_CreateGroup_Group_Members_User) GetFirstName() *string {
+func (t *CreateGroup_CreateGroup_Group_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &CreateGroup_CreateGroup_Group_Members_User{}
+		t = &CreateGroup_CreateGroup_Group_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *CreateGroup_CreateGroup_Group_Members_User) GetID() string {
+func (t *CreateGroup_CreateGroup_Group_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &CreateGroup_CreateGroup_Group_Members_User{}
+		t = &CreateGroup_CreateGroup_Group_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *CreateGroup_CreateGroup_Group_Members_User) GetLastName() *string {
+func (t *CreateGroup_CreateGroup_Group_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &CreateGroup_CreateGroup_Group_Members_User{}
+		t = &CreateGroup_CreateGroup_Group_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type CreateGroup_CreateGroup_Group_Members struct {
-	ID   string                                     "json:\"id\" graphql:\"id\""
-	Role enums.Role                                 "json:\"role\" graphql:\"role\""
-	User CreateGroup_CreateGroup_Group_Members_User "json:\"user\" graphql:\"user\""
+type CreateGroup_CreateGroup_Group_Members_Edges_Node struct {
+	ID   string                                                "json:\"id\" graphql:\"id\""
+	Role enums.Role                                            "json:\"role\" graphql:\"role\""
+	User CreateGroup_CreateGroup_Group_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *CreateGroup_CreateGroup_Group_Members) GetID() string {
+func (t *CreateGroup_CreateGroup_Group_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &CreateGroup_CreateGroup_Group_Members{}
+		t = &CreateGroup_CreateGroup_Group_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *CreateGroup_CreateGroup_Group_Members) GetRole() *enums.Role {
+func (t *CreateGroup_CreateGroup_Group_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &CreateGroup_CreateGroup_Group_Members{}
+		t = &CreateGroup_CreateGroup_Group_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *CreateGroup_CreateGroup_Group_Members) GetUser() *CreateGroup_CreateGroup_Group_Members_User {
+func (t *CreateGroup_CreateGroup_Group_Members_Edges_Node) GetUser() *CreateGroup_CreateGroup_Group_Members_Edges_Node_User {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type CreateGroup_CreateGroup_Group_Members_Edges struct {
+	Node *CreateGroup_CreateGroup_Group_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateGroup_CreateGroup_Group_Members_Edges) GetNode() *CreateGroup_CreateGroup_Group_Members_Edges_Node {
+	if t == nil {
+		t = &CreateGroup_CreateGroup_Group_Members_Edges{}
+	}
+	return t.Node
+}
+
+type CreateGroup_CreateGroup_Group_Members struct {
+	Edges []*CreateGroup_CreateGroup_Group_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateGroup_CreateGroup_Group_Members) GetEdges() []*CreateGroup_CreateGroup_Group_Members_Edges {
 	if t == nil {
 		t = &CreateGroup_CreateGroup_Group_Members{}
 	}
-	return &t.User
+	return t.Edges
 }
 
 type CreateGroup_CreateGroup_Group struct {
@@ -26839,7 +26919,7 @@ type CreateGroup_CreateGroup_Group struct {
 	DisplayName string                                       "json:\"displayName\" graphql:\"displayName\""
 	ID          string                                       "json:\"id\" graphql:\"id\""
 	LogoURL     *string                                      "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*CreateGroup_CreateGroup_Group_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Members     CreateGroup_CreateGroup_Group_Members        "json:\"members\" graphql:\"members\""
 	Name        string                                       "json:\"name\" graphql:\"name\""
 	Owner       *CreateGroup_CreateGroup_Group_Owner         "json:\"owner,omitempty\" graphql:\"owner\""
 	Permissions []*CreateGroup_CreateGroup_Group_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
@@ -26871,11 +26951,11 @@ func (t *CreateGroup_CreateGroup_Group) GetLogoURL() *string {
 	}
 	return t.LogoURL
 }
-func (t *CreateGroup_CreateGroup_Group) GetMembers() []*CreateGroup_CreateGroup_Group_Members {
+func (t *CreateGroup_CreateGroup_Group) GetMembers() *CreateGroup_CreateGroup_Group_Members {
 	if t == nil {
 		t = &CreateGroup_CreateGroup_Group{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *CreateGroup_CreateGroup_Group) GetName() string {
 	if t == nil {
@@ -26919,40 +26999,62 @@ func (t *CreateGroup_CreateGroup) GetGroup() *CreateGroup_CreateGroup_Group {
 	return &t.Group
 }
 
-type CreateGroupByClone_CreateGroupByClone_Group_Members_User struct {
+type CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *CreateGroupByClone_CreateGroupByClone_Group_Members_User) GetFirstName() *string {
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &CreateGroupByClone_CreateGroupByClone_Group_Members_User{}
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *CreateGroupByClone_CreateGroupByClone_Group_Members_User) GetLastName() *string {
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &CreateGroupByClone_CreateGroupByClone_Group_Members_User{}
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type CreateGroupByClone_CreateGroupByClone_Group_Members struct {
-	ID   string                                                   "json:\"id\" graphql:\"id\""
-	User CreateGroupByClone_CreateGroupByClone_Group_Members_User "json:\"user\" graphql:\"user\""
+type CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node struct {
+	ID   string                                                              "json:\"id\" graphql:\"id\""
+	User CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *CreateGroupByClone_CreateGroupByClone_Group_Members) GetID() string {
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &CreateGroupByClone_CreateGroupByClone_Group_Members{}
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *CreateGroupByClone_CreateGroupByClone_Group_Members) GetUser() *CreateGroupByClone_CreateGroupByClone_Group_Members_User {
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node) GetUser() *CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node_User {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type CreateGroupByClone_CreateGroupByClone_Group_Members_Edges struct {
+	Node *CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members_Edges) GetNode() *CreateGroupByClone_CreateGroupByClone_Group_Members_Edges_Node {
+	if t == nil {
+		t = &CreateGroupByClone_CreateGroupByClone_Group_Members_Edges{}
+	}
+	return t.Node
+}
+
+type CreateGroupByClone_CreateGroupByClone_Group_Members struct {
+	Edges []*CreateGroupByClone_CreateGroupByClone_Group_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateGroupByClone_CreateGroupByClone_Group_Members) GetEdges() []*CreateGroupByClone_CreateGroupByClone_Group_Members_Edges {
 	if t == nil {
 		t = &CreateGroupByClone_CreateGroupByClone_Group_Members{}
 	}
-	return &t.User
+	return t.Edges
 }
 
 type CreateGroupByClone_CreateGroupByClone_Group_Permissions struct {
@@ -26997,7 +27099,7 @@ func (t *CreateGroupByClone_CreateGroupByClone_Group_Permissions) GetPermissions
 type CreateGroupByClone_CreateGroupByClone_Group struct {
 	DisplayID   string                                                     "json:\"displayID\" graphql:\"displayID\""
 	ID          string                                                     "json:\"id\" graphql:\"id\""
-	Members     []*CreateGroupByClone_CreateGroupByClone_Group_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Members     CreateGroupByClone_CreateGroupByClone_Group_Members        "json:\"members\" graphql:\"members\""
 	Permissions []*CreateGroupByClone_CreateGroupByClone_Group_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
 }
 
@@ -27013,11 +27115,11 @@ func (t *CreateGroupByClone_CreateGroupByClone_Group) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateGroupByClone_CreateGroupByClone_Group) GetMembers() []*CreateGroupByClone_CreateGroupByClone_Group_Members {
+func (t *CreateGroupByClone_CreateGroupByClone_Group) GetMembers() *CreateGroupByClone_CreateGroupByClone_Group_Members {
 	if t == nil {
 		t = &CreateGroupByClone_CreateGroupByClone_Group{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *CreateGroupByClone_CreateGroupByClone_Group) GetPermissions() []*CreateGroupByClone_CreateGroupByClone_Group_Permissions {
 	if t == nil {
@@ -27048,62 +27150,84 @@ func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Setting) GetVisibil
 	return &t.Visibility
 }
 
-type CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User struct {
+type CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User) GetFirstName() *string {
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User{}
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User) GetID() string {
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User{}
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User) GetLastName() *string {
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User{}
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type CreateGroupWithMembers_CreateGroupWithMembers_Group_Members struct {
-	ID   string                                                           "json:\"id\" graphql:\"id\""
-	Role enums.Role                                                       "json:\"role\" graphql:\"role\""
-	User CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User "json:\"user\" graphql:\"user\""
+type CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node struct {
+	ID   string                                                                      "json:\"id\" graphql:\"id\""
+	Role enums.Role                                                                  "json:\"role\" graphql:\"role\""
+	User CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members) GetID() string {
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members{}
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members) GetRole() *enums.Role {
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members{}
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members) GetUser() *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_User {
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node) GetUser() *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node_User {
 	if t == nil {
-		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members{}
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node{}
 	}
 	return &t.User
 }
 
+type CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges struct {
+	Node *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges) GetNode() *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges_Node {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges{}
+	}
+	return t.Node
+}
+
+type CreateGroupWithMembers_CreateGroupWithMembers_Group_Members struct {
+	Edges []*CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members) GetEdges() []*CreateGroupWithMembers_CreateGroupWithMembers_Group_Members_Edges {
+	if t == nil {
+		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group_Members{}
+	}
+	return t.Edges
+}
+
 type CreateGroupWithMembers_CreateGroupWithMembers_Group struct {
-	DisplayID string                                                         "json:\"displayID\" graphql:\"displayID\""
-	ID        string                                                         "json:\"id\" graphql:\"id\""
-	Members   []*CreateGroupWithMembers_CreateGroupWithMembers_Group_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name      string                                                         "json:\"name\" graphql:\"name\""
-	Setting   *CreateGroupWithMembers_CreateGroupWithMembers_Group_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
+	DisplayID string                                                       "json:\"displayID\" graphql:\"displayID\""
+	ID        string                                                       "json:\"id\" graphql:\"id\""
+	Members   CreateGroupWithMembers_CreateGroupWithMembers_Group_Members  "json:\"members\" graphql:\"members\""
+	Name      string                                                       "json:\"name\" graphql:\"name\""
+	Setting   *CreateGroupWithMembers_CreateGroupWithMembers_Group_Setting "json:\"setting,omitempty\" graphql:\"setting\""
 }
 
 func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetDisplayID() string {
@@ -27118,11 +27242,11 @@ func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetMembers() []*CreateGroupWithMembers_CreateGroupWithMembers_Group_Members {
+func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetMembers() *CreateGroupWithMembers_CreateGroupWithMembers_Group_Members {
 	if t == nil {
 		t = &CreateGroupWithMembers_CreateGroupWithMembers_Group{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *CreateGroupWithMembers_CreateGroupWithMembers_Group) GetName() string {
 	if t == nil {
@@ -27244,71 +27368,100 @@ func (t *GetAllGroups_Groups_Edges_Node_Setting) GetVisibility() *enums.Visibili
 	return &t.Visibility
 }
 
-type GetAllGroups_Groups_Edges_Node_Members_User struct {
+type GetAllGroups_Groups_Edges_Node_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *GetAllGroups_Groups_Edges_Node_Members_User) GetFirstName() *string {
+func (t *GetAllGroups_Groups_Edges_Node_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &GetAllGroups_Groups_Edges_Node_Members_User{}
+		t = &GetAllGroups_Groups_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *GetAllGroups_Groups_Edges_Node_Members_User) GetID() string {
+func (t *GetAllGroups_Groups_Edges_Node_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &GetAllGroups_Groups_Edges_Node_Members_User{}
+		t = &GetAllGroups_Groups_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *GetAllGroups_Groups_Edges_Node_Members_User) GetLastName() *string {
+func (t *GetAllGroups_Groups_Edges_Node_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &GetAllGroups_Groups_Edges_Node_Members_User{}
+		t = &GetAllGroups_Groups_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type GetAllGroups_Groups_Edges_Node_Members struct {
-	ID   string                                      "json:\"id\" graphql:\"id\""
-	Role enums.Role                                  "json:\"role\" graphql:\"role\""
-	User GetAllGroups_Groups_Edges_Node_Members_User "json:\"user\" graphql:\"user\""
+type GetAllGroups_Groups_Edges_Node_Members_Edges_Node struct {
+	ID   string                                                 "json:\"id\" graphql:\"id\""
+	Role enums.Role                                             "json:\"role\" graphql:\"role\""
+	User GetAllGroups_Groups_Edges_Node_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *GetAllGroups_Groups_Edges_Node_Members) GetID() string {
+func (t *GetAllGroups_Groups_Edges_Node_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GetAllGroups_Groups_Edges_Node_Members{}
+		t = &GetAllGroups_Groups_Edges_Node_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetAllGroups_Groups_Edges_Node_Members) GetRole() *enums.Role {
+func (t *GetAllGroups_Groups_Edges_Node_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &GetAllGroups_Groups_Edges_Node_Members{}
+		t = &GetAllGroups_Groups_Edges_Node_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *GetAllGroups_Groups_Edges_Node_Members) GetUser() *GetAllGroups_Groups_Edges_Node_Members_User {
+func (t *GetAllGroups_Groups_Edges_Node_Members_Edges_Node) GetUser() *GetAllGroups_Groups_Edges_Node_Members_Edges_Node_User {
 	if t == nil {
-		t = &GetAllGroups_Groups_Edges_Node_Members{}
+		t = &GetAllGroups_Groups_Edges_Node_Members_Edges_Node{}
 	}
 	return &t.User
 }
 
+type GetAllGroups_Groups_Edges_Node_Members_Edges struct {
+	Node *GetAllGroups_Groups_Edges_Node_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllGroups_Groups_Edges_Node_Members_Edges) GetNode() *GetAllGroups_Groups_Edges_Node_Members_Edges_Node {
+	if t == nil {
+		t = &GetAllGroups_Groups_Edges_Node_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllGroups_Groups_Edges_Node_Members struct {
+	Edges      []*GetAllGroups_Groups_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                           "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllGroups_Groups_Edges_Node_Members) GetEdges() []*GetAllGroups_Groups_Edges_Node_Members_Edges {
+	if t == nil {
+		t = &GetAllGroups_Groups_Edges_Node_Members{}
+	}
+	return t.Edges
+}
+func (t *GetAllGroups_Groups_Edges_Node_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllGroups_Groups_Edges_Node_Members{}
+	}
+	return t.TotalCount
+}
+
 type GetAllGroups_Groups_Edges_Node struct {
-	CreatedAt   *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                   "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string                                    "json:\"displayName\" graphql:\"displayName\""
-	ID          string                                    "json:\"id\" graphql:\"id\""
-	IsManaged   *bool                                     "json:\"isManaged,omitempty\" graphql:\"isManaged\""
-	LogoURL     *string                                   "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*GetAllGroups_Groups_Edges_Node_Members "json:\"members,omitempty\" graphql:\"members\""
-	Name        string                                    "json:\"name\" graphql:\"name\""
-	Owner       *GetAllGroups_Groups_Edges_Node_Owner     "json:\"owner,omitempty\" graphql:\"owner\""
-	Setting     *GetAllGroups_Groups_Edges_Node_Setting   "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags        []string                                  "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string                                  "json:\"displayName\" graphql:\"displayName\""
+	ID          string                                  "json:\"id\" graphql:\"id\""
+	IsManaged   *bool                                   "json:\"isManaged,omitempty\" graphql:\"isManaged\""
+	LogoURL     *string                                 "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Members     GetAllGroups_Groups_Edges_Node_Members  "json:\"members\" graphql:\"members\""
+	Name        string                                  "json:\"name\" graphql:\"name\""
+	Owner       *GetAllGroups_Groups_Edges_Node_Owner   "json:\"owner,omitempty\" graphql:\"owner\""
+	Setting     *GetAllGroups_Groups_Edges_Node_Setting "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags        []string                                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllGroups_Groups_Edges_Node) GetCreatedAt() *time.Time {
@@ -27353,11 +27506,11 @@ func (t *GetAllGroups_Groups_Edges_Node) GetLogoURL() *string {
 	}
 	return t.LogoURL
 }
-func (t *GetAllGroups_Groups_Edges_Node) GetMembers() []*GetAllGroups_Groups_Edges_Node_Members {
+func (t *GetAllGroups_Groups_Edges_Node) GetMembers() *GetAllGroups_Groups_Edges_Node_Members {
 	if t == nil {
 		t = &GetAllGroups_Groups_Edges_Node{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *GetAllGroups_Groups_Edges_Node) GetName() string {
 	if t == nil {
@@ -27542,54 +27695,83 @@ func (t *GetGroupByID_Group_Permissions) GetPermissions() *enums.Permission {
 	return &t.Permissions
 }
 
-type GetGroupByID_Group_Members_User struct {
+type GetGroupByID_Group_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *GetGroupByID_Group_Members_User) GetFirstName() *string {
+func (t *GetGroupByID_Group_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &GetGroupByID_Group_Members_User{}
+		t = &GetGroupByID_Group_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *GetGroupByID_Group_Members_User) GetID() string {
+func (t *GetGroupByID_Group_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &GetGroupByID_Group_Members_User{}
+		t = &GetGroupByID_Group_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *GetGroupByID_Group_Members_User) GetLastName() *string {
+func (t *GetGroupByID_Group_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &GetGroupByID_Group_Members_User{}
+		t = &GetGroupByID_Group_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type GetGroupByID_Group_Members struct {
-	ID   string                          "json:\"id\" graphql:\"id\""
-	Role enums.Role                      "json:\"role\" graphql:\"role\""
-	User GetGroupByID_Group_Members_User "json:\"user\" graphql:\"user\""
+type GetGroupByID_Group_Members_Edges_Node struct {
+	ID   string                                     "json:\"id\" graphql:\"id\""
+	Role enums.Role                                 "json:\"role\" graphql:\"role\""
+	User GetGroupByID_Group_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *GetGroupByID_Group_Members) GetID() string {
+func (t *GetGroupByID_Group_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GetGroupByID_Group_Members{}
+		t = &GetGroupByID_Group_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetGroupByID_Group_Members) GetRole() *enums.Role {
+func (t *GetGroupByID_Group_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &GetGroupByID_Group_Members{}
+		t = &GetGroupByID_Group_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *GetGroupByID_Group_Members) GetUser() *GetGroupByID_Group_Members_User {
+func (t *GetGroupByID_Group_Members_Edges_Node) GetUser() *GetGroupByID_Group_Members_Edges_Node_User {
+	if t == nil {
+		t = &GetGroupByID_Group_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type GetGroupByID_Group_Members_Edges struct {
+	Node *GetGroupByID_Group_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetGroupByID_Group_Members_Edges) GetNode() *GetGroupByID_Group_Members_Edges_Node {
+	if t == nil {
+		t = &GetGroupByID_Group_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetGroupByID_Group_Members struct {
+	Edges      []*GetGroupByID_Group_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetGroupByID_Group_Members) GetEdges() []*GetGroupByID_Group_Members_Edges {
 	if t == nil {
 		t = &GetGroupByID_Group_Members{}
 	}
-	return &t.User
+	return t.Edges
+}
+func (t *GetGroupByID_Group_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetGroupByID_Group_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetGroupByID_Group struct {
@@ -27600,7 +27782,7 @@ type GetGroupByID_Group struct {
 	ID          string                            "json:\"id\" graphql:\"id\""
 	IsManaged   *bool                             "json:\"isManaged,omitempty\" graphql:\"isManaged\""
 	LogoURL     *string                           "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*GetGroupByID_Group_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Members     GetGroupByID_Group_Members        "json:\"members\" graphql:\"members\""
 	Name        string                            "json:\"name\" graphql:\"name\""
 	Owner       *GetGroupByID_Group_Owner         "json:\"owner,omitempty\" graphql:\"owner\""
 	Permissions []*GetGroupByID_Group_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
@@ -27652,11 +27834,11 @@ func (t *GetGroupByID_Group) GetLogoURL() *string {
 	}
 	return t.LogoURL
 }
-func (t *GetGroupByID_Group) GetMembers() []*GetGroupByID_Group_Members {
+func (t *GetGroupByID_Group) GetMembers() *GetGroupByID_Group_Members {
 	if t == nil {
 		t = &GetGroupByID_Group{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *GetGroupByID_Group) GetName() string {
 	if t == nil {
@@ -28002,54 +28184,83 @@ func (t *GetGroups_Groups_Edges_Node_Permissions) GetPermissions() *enums.Permis
 	return &t.Permissions
 }
 
-type GetGroups_Groups_Edges_Node_Members_User struct {
+type GetGroups_Groups_Edges_Node_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *GetGroups_Groups_Edges_Node_Members_User) GetFirstName() *string {
+func (t *GetGroups_Groups_Edges_Node_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &GetGroups_Groups_Edges_Node_Members_User{}
+		t = &GetGroups_Groups_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *GetGroups_Groups_Edges_Node_Members_User) GetID() string {
+func (t *GetGroups_Groups_Edges_Node_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &GetGroups_Groups_Edges_Node_Members_User{}
+		t = &GetGroups_Groups_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *GetGroups_Groups_Edges_Node_Members_User) GetLastName() *string {
+func (t *GetGroups_Groups_Edges_Node_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &GetGroups_Groups_Edges_Node_Members_User{}
+		t = &GetGroups_Groups_Edges_Node_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type GetGroups_Groups_Edges_Node_Members struct {
-	ID   string                                   "json:\"id\" graphql:\"id\""
-	Role enums.Role                               "json:\"role\" graphql:\"role\""
-	User GetGroups_Groups_Edges_Node_Members_User "json:\"user\" graphql:\"user\""
+type GetGroups_Groups_Edges_Node_Members_Edges_Node struct {
+	ID   string                                              "json:\"id\" graphql:\"id\""
+	Role enums.Role                                          "json:\"role\" graphql:\"role\""
+	User GetGroups_Groups_Edges_Node_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *GetGroups_Groups_Edges_Node_Members) GetID() string {
+func (t *GetGroups_Groups_Edges_Node_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &GetGroups_Groups_Edges_Node_Members{}
+		t = &GetGroups_Groups_Edges_Node_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetGroups_Groups_Edges_Node_Members) GetRole() *enums.Role {
+func (t *GetGroups_Groups_Edges_Node_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &GetGroups_Groups_Edges_Node_Members{}
+		t = &GetGroups_Groups_Edges_Node_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *GetGroups_Groups_Edges_Node_Members) GetUser() *GetGroups_Groups_Edges_Node_Members_User {
+func (t *GetGroups_Groups_Edges_Node_Members_Edges_Node) GetUser() *GetGroups_Groups_Edges_Node_Members_Edges_Node_User {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type GetGroups_Groups_Edges_Node_Members_Edges struct {
+	Node *GetGroups_Groups_Edges_Node_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetGroups_Groups_Edges_Node_Members_Edges) GetNode() *GetGroups_Groups_Edges_Node_Members_Edges_Node {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetGroups_Groups_Edges_Node_Members struct {
+	Edges      []*GetGroups_Groups_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetGroups_Groups_Edges_Node_Members) GetEdges() []*GetGroups_Groups_Edges_Node_Members_Edges {
 	if t == nil {
 		t = &GetGroups_Groups_Edges_Node_Members{}
 	}
-	return &t.User
+	return t.Edges
+}
+func (t *GetGroups_Groups_Edges_Node_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetGroups_Groups_Edges_Node_Members{}
+	}
+	return t.TotalCount
 }
 
 type GetGroups_Groups_Edges_Node struct {
@@ -28060,7 +28271,7 @@ type GetGroups_Groups_Edges_Node struct {
 	ID          string                                     "json:\"id\" graphql:\"id\""
 	IsManaged   *bool                                      "json:\"isManaged,omitempty\" graphql:\"isManaged\""
 	LogoURL     *string                                    "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*GetGroups_Groups_Edges_Node_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Members     GetGroups_Groups_Edges_Node_Members        "json:\"members\" graphql:\"members\""
 	Name        string                                     "json:\"name\" graphql:\"name\""
 	Owner       *GetGroups_Groups_Edges_Node_Owner         "json:\"owner,omitempty\" graphql:\"owner\""
 	Permissions []*GetGroups_Groups_Edges_Node_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
@@ -28112,11 +28323,11 @@ func (t *GetGroups_Groups_Edges_Node) GetLogoURL() *string {
 	}
 	return t.LogoURL
 }
-func (t *GetGroups_Groups_Edges_Node) GetMembers() []*GetGroups_Groups_Edges_Node_Members {
+func (t *GetGroups_Groups_Edges_Node) GetMembers() *GetGroups_Groups_Edges_Node_Members {
 	if t == nil {
 		t = &GetGroups_Groups_Edges_Node{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *GetGroups_Groups_Edges_Node) GetName() string {
 	if t == nil {
@@ -28307,62 +28518,92 @@ func (t *UpdateGroup_UpdateGroup_Group_Permissions) GetPermissions() *enums.Perm
 	return &t.Permissions
 }
 
-type UpdateGroup_UpdateGroup_Group_Members_User struct {
+type UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User struct {
 	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
 	ID        string  "json:\"id\" graphql:\"id\""
 	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
 }
 
-func (t *UpdateGroup_UpdateGroup_Group_Members_User) GetFirstName() *string {
+func (t *UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User) GetFirstName() *string {
 	if t == nil {
-		t = &UpdateGroup_UpdateGroup_Group_Members_User{}
+		t = &UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User{}
 	}
 	return t.FirstName
 }
-func (t *UpdateGroup_UpdateGroup_Group_Members_User) GetID() string {
+func (t *UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User) GetID() string {
 	if t == nil {
-		t = &UpdateGroup_UpdateGroup_Group_Members_User{}
+		t = &UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User{}
 	}
 	return t.ID
 }
-func (t *UpdateGroup_UpdateGroup_Group_Members_User) GetLastName() *string {
+func (t *UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User) GetLastName() *string {
 	if t == nil {
-		t = &UpdateGroup_UpdateGroup_Group_Members_User{}
+		t = &UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User{}
 	}
 	return t.LastName
 }
 
-type UpdateGroup_UpdateGroup_Group_Members struct {
-	ID   string                                     "json:\"id\" graphql:\"id\""
-	Role enums.Role                                 "json:\"role\" graphql:\"role\""
-	User UpdateGroup_UpdateGroup_Group_Members_User "json:\"user\" graphql:\"user\""
+type UpdateGroup_UpdateGroup_Group_Members_Edges_Node struct {
+	ID   string                                                "json:\"id\" graphql:\"id\""
+	Role enums.Role                                            "json:\"role\" graphql:\"role\""
+	User UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
 }
 
-func (t *UpdateGroup_UpdateGroup_Group_Members) GetID() string {
+func (t *UpdateGroup_UpdateGroup_Group_Members_Edges_Node) GetID() string {
 	if t == nil {
-		t = &UpdateGroup_UpdateGroup_Group_Members{}
+		t = &UpdateGroup_UpdateGroup_Group_Members_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *UpdateGroup_UpdateGroup_Group_Members) GetRole() *enums.Role {
+func (t *UpdateGroup_UpdateGroup_Group_Members_Edges_Node) GetRole() *enums.Role {
 	if t == nil {
-		t = &UpdateGroup_UpdateGroup_Group_Members{}
+		t = &UpdateGroup_UpdateGroup_Group_Members_Edges_Node{}
 	}
 	return &t.Role
 }
-func (t *UpdateGroup_UpdateGroup_Group_Members) GetUser() *UpdateGroup_UpdateGroup_Group_Members_User {
+func (t *UpdateGroup_UpdateGroup_Group_Members_Edges_Node) GetUser() *UpdateGroup_UpdateGroup_Group_Members_Edges_Node_User {
 	if t == nil {
-		t = &UpdateGroup_UpdateGroup_Group_Members{}
+		t = &UpdateGroup_UpdateGroup_Group_Members_Edges_Node{}
 	}
 	return &t.User
 }
 
+type UpdateGroup_UpdateGroup_Group_Members_Edges struct {
+	Node *UpdateGroup_UpdateGroup_Group_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateGroup_UpdateGroup_Group_Members_Edges) GetNode() *UpdateGroup_UpdateGroup_Group_Members_Edges_Node {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group_Members_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateGroup_UpdateGroup_Group_Members struct {
+	Edges      []*UpdateGroup_UpdateGroup_Group_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *UpdateGroup_UpdateGroup_Group_Members) GetEdges() []*UpdateGroup_UpdateGroup_Group_Members_Edges {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group_Members{}
+	}
+	return t.Edges
+}
+func (t *UpdateGroup_UpdateGroup_Group_Members) GetTotalCount() int64 {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group_Members{}
+	}
+	return t.TotalCount
+}
+
 type UpdateGroup_UpdateGroup_Group struct {
 	Description *string                                      "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string                                       "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string                                       "json:\"displayName\" graphql:\"displayName\""
 	ID          string                                       "json:\"id\" graphql:\"id\""
 	LogoURL     *string                                      "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Members     []*UpdateGroup_UpdateGroup_Group_Members     "json:\"members,omitempty\" graphql:\"members\""
+	Members     UpdateGroup_UpdateGroup_Group_Members        "json:\"members\" graphql:\"members\""
 	Name        string                                       "json:\"name\" graphql:\"name\""
 	Owner       *UpdateGroup_UpdateGroup_Group_Owner         "json:\"owner,omitempty\" graphql:\"owner\""
 	Permissions []*UpdateGroup_UpdateGroup_Group_Permissions "json:\"permissions,omitempty\" graphql:\"permissions\""
@@ -28375,6 +28616,12 @@ func (t *UpdateGroup_UpdateGroup_Group) GetDescription() *string {
 		t = &UpdateGroup_UpdateGroup_Group{}
 	}
 	return t.Description
+}
+func (t *UpdateGroup_UpdateGroup_Group) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateGroup_UpdateGroup_Group{}
+	}
+	return t.DisplayID
 }
 func (t *UpdateGroup_UpdateGroup_Group) GetDisplayName() string {
 	if t == nil {
@@ -28394,11 +28641,11 @@ func (t *UpdateGroup_UpdateGroup_Group) GetLogoURL() *string {
 	}
 	return t.LogoURL
 }
-func (t *UpdateGroup_UpdateGroup_Group) GetMembers() []*UpdateGroup_UpdateGroup_Group_Members {
+func (t *UpdateGroup_UpdateGroup_Group) GetMembers() *UpdateGroup_UpdateGroup_Group_Members {
 	if t == nil {
 		t = &UpdateGroup_UpdateGroup_Group{}
 	}
-	return t.Members
+	return &t.Members
 }
 func (t *UpdateGroup_UpdateGroup_Group) GetName() string {
 	if t == nil {
@@ -85470,12 +85717,17 @@ const CreateBulkCSVGroupDocument = `mutation CreateBulkCSVGroup ($input: Upload!
 				visibility
 			}
 			members {
-				id
-				role
-				user {
-					id
-					firstName
-					lastName
+				totalCount
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
 				}
 			}
 		}
@@ -85521,12 +85773,17 @@ const CreateBulkGroupDocument = `mutation CreateBulkGroup ($input: [CreateGroupI
 				visibility
 			}
 			members {
-				id
-				role
-				user {
-					id
-					firstName
-					lastName
+				totalCount
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
 				}
 			}
 		}
@@ -85579,12 +85836,16 @@ const CreateGroupDocument = `mutation CreateGroup ($input: CreateGroupInput!) {
 				permissions
 			}
 			members {
-				id
-				role
-				user {
-					id
-					firstName
-					lastName
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
 				}
 			}
 		}
@@ -85615,10 +85876,14 @@ const CreateGroupByCloneDocument = `mutation CreateGroupByClone ($groupInput: Cr
 			id
 			displayID
 			members {
-				id
-				user {
-					firstName
-					lastName
+				edges {
+					node {
+						id
+						user {
+							firstName
+							lastName
+						}
+					}
 				}
 			}
 			permissions {
@@ -85662,12 +85927,16 @@ const CreateGroupWithMembersDocument = `mutation CreateGroupWithMembers ($groupI
 				visibility
 			}
 			members {
-				id
-				role
-				user {
-					id
-					firstName
-					lastName
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
 				}
 			}
 		}
@@ -85744,12 +86013,17 @@ const GetAllGroupsDocument = `query GetAllGroups {
 					visibility
 				}
 				members {
-					id
-					role
-					user {
-						id
-						firstName
-						lastName
+					totalCount
+					edges {
+						node {
+							id
+							role
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
 					}
 				}
 				createdAt
@@ -85809,13 +86083,18 @@ const GetGroupByIDDocument = `query GetGroupByID ($groupId: ID!) {
 			permissions
 		}
 		members {
-			id
-			role
-			user {
-				id
-				firstName
-				lastName
+			edges {
+				node {
+					id
+					role
+					user {
+						id
+						firstName
+						lastName
+					}
+				}
 			}
+			totalCount
 		}
 		createdAt
 		createdBy
@@ -85925,12 +86204,17 @@ const GetGroupsDocument = `query GetGroups ($where: GroupWhereInput) {
 					permissions
 				}
 				members {
-					id
-					role
-					user {
-						id
-						firstName
-						lastName
+					totalCount
+					edges {
+						node {
+							id
+							role
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
 					}
 				}
 				createdAt
@@ -85966,6 +86250,7 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 			description
 			displayName
 			id
+			displayID
 			logoURL
 			name
 			tags
@@ -85992,12 +86277,17 @@ const UpdateGroupDocument = `mutation UpdateGroup ($updateGroupId: ID!, $input: 
 				permissions
 			}
 			members {
-				id
-				role
-				user {
-					id
-					firstName
-					lastName
+				totalCount
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
 				}
 			}
 		}

@@ -800,8 +800,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				assert.Check(t, is.DeepEqual(tc.expectedControls[i].MappedCategories, control.MappedCategories))
 				assert.Check(t, is.DeepEqual(tc.expectedControls[i].ControlQuestions, control.ControlQuestions))
 				assert.Check(t, is.DeepEqual(tc.expectedControls[i].Tags, control.Tags))
-				// expected control status ignored as we always set to preparing
-				assert.Check(t, is.Equal(enums.ControlStatusPreparing, *control.Status))
+				assert.Check(t, is.Equal(enums.ControlStatusNotImplemented, *control.Status))
 				assert.Check(t, is.Equal(tc.expectedControls[i].ControlType, *control.ControlType))
 				assert.Check(t, is.Equal(tc.expectedControls[i].Source, *control.Source))
 				assert.Check(t, is.Equal(tc.expectedControls[i].StandardID, *control.StandardID))

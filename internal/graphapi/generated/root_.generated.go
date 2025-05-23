@@ -1239,7 +1239,7 @@ type ComplexityRoot struct {
 		InternalPolicyEditors         func(childComplexity int) int
 		IsManaged                     func(childComplexity int) int
 		LogoURL                       func(childComplexity int) int
-		Members                       func(childComplexity int) int
+		Members                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
 		Name                          func(childComplexity int) int
 		NarrativeBlockedGroups        func(childComplexity int) int
 		NarrativeEditors              func(childComplexity int) int
@@ -1260,7 +1260,7 @@ type ComplexityRoot struct {
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
-		Users                         func(childComplexity int) int
+		Users                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	GroupBulkCreatePayload struct {
@@ -10046,7 +10046,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Group.Members(childComplexity), true
+		args, err := ec.field_Group_members_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.Members(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupMembershipOrder), args["where"].(*generated.GroupMembershipWhereInput)), true
 
 	case "Group.name":
 		if e.complexity.Group.Name == nil {
@@ -10198,7 +10203,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Group.Users(childComplexity), true
+		args, err := ec.field_Group_users_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
 
 	case "GroupBulkCreatePayload.groups":
 		if e.complexity.GroupBulkCreatePayload.Groups == nil {
@@ -43664,7 +43674,37 @@ type Group implements Node {
   internalPolicyEditors: [InternalPolicy!]
   internalPolicyBlockedGroups: [InternalPolicy!]
   setting: GroupSetting
-  users: [User!]
+  users(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
   events(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -43789,7 +43829,37 @@ type Group implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
-  members: [GroupMembership!]
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for GroupMemberships returned from the connection.
+    """
+    orderBy: [GroupMembershipOrder!]
+
+    """
+    Filtering options for GroupMemberships returned from the connection.
+    """
+    where: GroupMembershipWhereInput
+  ): GroupMembershipConnection!
 }
 """
 A connection to a list of items.

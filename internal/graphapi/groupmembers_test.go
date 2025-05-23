@@ -19,7 +19,7 @@ func TestQueryGroupMembers(t *testing.T) {
 
 	checkCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-	groupMember, err := group.Members(checkCtx)
+	groupMember, err := group.QueryMembers().All(checkCtx)
 	assert.NilError(t, err)
 	assert.Assert(t, is.Len(groupMember, 1))
 
@@ -108,7 +108,7 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 
 	checkCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-	groupMember, err := group1.Members(checkCtx)
+	groupMember, err := group1.QueryMembers().All(checkCtx)
 	assert.NilError(t, err)
 	assert.Assert(t, is.Len(groupMember, 1))
 
