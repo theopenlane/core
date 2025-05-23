@@ -19,7 +19,7 @@ import (
 )
 
 // Permissions is the resolver for the permissions field.
-func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*model.GroupPermissionOrder, where *model.GroupPermissionWhereInput) (*model.GroupPermissionConnection, error) {
+func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*model.GroupPermissionConnection, error) {
 	perms := make([]*model.GroupPermissionEdge, 0)
 
 	// TODO (sfunk): we should generate this code in the future
