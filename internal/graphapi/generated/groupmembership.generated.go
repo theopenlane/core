@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_GroupMembershipBulkCreatePayload_groupM
 				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_GroupMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupMembership_deletedBy(ctx, field)
 			case "role":
 				return ec.fieldContext_GroupMembership_role(ctx, field)
 			case "groupID":
@@ -147,10 +143,6 @@ func (ec *executionContext) fieldContext_GroupMembershipCreatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_GroupMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupMembership_deletedBy(ctx, field)
 			case "role":
 				return ec.fieldContext_GroupMembership_role(ctx, field)
 			case "groupID":
@@ -263,10 +255,6 @@ func (ec *executionContext) fieldContext_GroupMembershipUpdatePayload_groupMembe
 				return ec.fieldContext_GroupMembership_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_GroupMembership_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_GroupMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_GroupMembership_deletedBy(ctx, field)
 			case "role":
 				return ec.fieldContext_GroupMembership_role(ctx, field)
 			case "groupID":

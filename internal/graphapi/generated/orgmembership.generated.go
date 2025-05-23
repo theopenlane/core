@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_OrgMembershipBulkCreatePayload_orgMembe
 				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_OrgMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgMembership_deletedBy(ctx, field)
 			case "role":
 				return ec.fieldContext_OrgMembership_role(ctx, field)
 			case "organizationID":
@@ -147,10 +143,6 @@ func (ec *executionContext) fieldContext_OrgMembershipCreatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_OrgMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgMembership_deletedBy(ctx, field)
 			case "role":
 				return ec.fieldContext_OrgMembership_role(ctx, field)
 			case "organizationID":
@@ -263,10 +255,6 @@ func (ec *executionContext) fieldContext_OrgMembershipUpdatePayload_orgMembershi
 				return ec.fieldContext_OrgMembership_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_OrgMembership_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_OrgMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrgMembership_deletedBy(ctx, field)
 			case "role":
 				return ec.fieldContext_OrgMembership_role(ctx, field)
 			case "organizationID":

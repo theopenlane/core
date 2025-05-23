@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_JobRunnerRegistrationTokenBulkCreatePay
 				return ec.fieldContext_JobRunnerRegistrationToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_JobRunnerRegistrationToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_JobRunnerRegistrationToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_JobRunnerRegistrationToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_JobRunnerRegistrationToken_tags(ctx, field)
 			case "ownerID":
@@ -151,10 +147,6 @@ func (ec *executionContext) fieldContext_JobRunnerRegistrationTokenCreatePayload
 				return ec.fieldContext_JobRunnerRegistrationToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_JobRunnerRegistrationToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_JobRunnerRegistrationToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_JobRunnerRegistrationToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_JobRunnerRegistrationToken_tags(ctx, field)
 			case "ownerID":

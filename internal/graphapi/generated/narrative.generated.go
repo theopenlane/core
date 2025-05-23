@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_NarrativeBulkCreatePayload_narratives(_
 				return ec.fieldContext_Narrative_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Narrative_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Narrative_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Narrative_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Narrative_displayID(ctx, field)
 			case "tags":
@@ -163,10 +159,6 @@ func (ec *executionContext) fieldContext_NarrativeCreatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Narrative_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Narrative_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Narrative_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Narrative_displayID(ctx, field)
 			case "tags":
@@ -295,10 +287,6 @@ func (ec *executionContext) fieldContext_NarrativeUpdatePayload_narrative(_ cont
 				return ec.fieldContext_Narrative_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Narrative_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Narrative_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Narrative_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Narrative_displayID(ctx, field)
 			case "tags":

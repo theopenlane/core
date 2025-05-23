@@ -78,10 +78,6 @@ func (ec *executionContext) fieldContext_JobRunnerTokenCreatePayload_jobRunnerTo
 				return ec.fieldContext_JobRunnerToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_JobRunnerToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_JobRunnerToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_JobRunnerToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_JobRunnerToken_tags(ctx, field)
 			case "ownerID":
@@ -204,10 +200,6 @@ func (ec *executionContext) fieldContext_JobRunnerTokenUpdatePayload_jobRunnerTo
 				return ec.fieldContext_JobRunnerToken_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_JobRunnerToken_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_JobRunnerToken_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_JobRunnerToken_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_JobRunnerToken_tags(ctx, field)
 			case "ownerID":

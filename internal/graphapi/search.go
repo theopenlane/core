@@ -81,17 +81,16 @@ func adminSearchAPITokens(ctx context.Context, query string, after *entgql.Curso
 	request := withTransactionalMutation(ctx).APIToken.Query().
 		Where(
 			apitoken.Or(
-				apitoken.DeletedByContainsFold(query), // search by DeletedBy
-				apitoken.ID(query),                    // search equal to ID
+				apitoken.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				apitoken.OwnerIDContainsFold(query), // search by OwnerID
 				apitoken.NameContainsFold(query),    // search by Name
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(scopes)::text LIKE $6", likeQuery)) // search by Scopes
+					s.Where(sql.ExprP("(scopes)::text LIKE $5", likeQuery)) // search by Scopes
 				},
 				apitoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				apitoken.RevokedByContainsFold(query),     // search by RevokedBy
@@ -124,11 +123,10 @@ func adminSearchActionPlans(ctx context.Context, query string, after *entgql.Cur
 	request := withTransactionalMutation(ctx).ActionPlan.Query().
 		Where(
 			actionplan.Or(
-				actionplan.DeletedByContainsFold(query), // search by DeletedBy
-				actionplan.ID(query),                    // search equal to ID
+				actionplan.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				actionplan.RevisionContainsFold(query),       // search by Revision
 				actionplan.NameContainsFold(query),           // search by Name
@@ -167,11 +165,10 @@ func adminSearchContacts(ctx context.Context, query string, after *entgql.Cursor
 	request := withTransactionalMutation(ctx).Contact.Query().
 		Where(
 			contact.Or(
-				contact.DeletedByContainsFold(query), // search by DeletedBy
-				contact.ID(query),                    // search equal to ID
+				contact.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				contact.OwnerIDContainsFold(query),     // search by OwnerID
 				contact.FullNameContainsFold(query),    // search by FullName
@@ -216,12 +213,11 @@ func adminSearchControls(ctx context.Context, query string, after *entgql.Cursor
 	request := withTransactionalMutation(ctx).Control.Query().
 		Where(
 			control.Or(
-				control.DeletedByContainsFold(query), // search by DeletedBy
-				control.ID(query),                    // search equal to ID
-				control.DisplayID(query),             // search equal to DisplayID
+				control.ID(query),        // search equal to ID
+				control.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				control.DescriptionContainsFold(query),        // search by Description
 				control.ReferenceIDContainsFold(query),        // search by ReferenceID
@@ -231,31 +227,31 @@ func adminSearchControls(ctx context.Context, query string, after *entgql.Cursor
 				control.SubcategoryContainsFold(query),        // search by Subcategory
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(mapped_categories)::text LIKE $11", likeQuery)) // search by MappedCategories
+					s.Where(sql.ExprP("(mapped_categories)::text LIKE $10", likeQuery)) // search by MappedCategories
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(assessment_objectives)::text LIKE $12", likeQuery)) // search by AssessmentObjectives
+					s.Where(sql.ExprP("(assessment_objectives)::text LIKE $11", likeQuery)) // search by AssessmentObjectives
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(assessment_methods)::text LIKE $13", likeQuery)) // search by AssessmentMethods
+					s.Where(sql.ExprP("(assessment_methods)::text LIKE $12", likeQuery)) // search by AssessmentMethods
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(control_questions)::text LIKE $14", likeQuery)) // search by ControlQuestions
+					s.Where(sql.ExprP("(control_questions)::text LIKE $13", likeQuery)) // search by ControlQuestions
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(implementation_guidance)::text LIKE $15", likeQuery)) // search by ImplementationGuidance
+					s.Where(sql.ExprP("(implementation_guidance)::text LIKE $14", likeQuery)) // search by ImplementationGuidance
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(example_evidence)::text LIKE $16", likeQuery)) // search by ExampleEvidence
+					s.Where(sql.ExprP("(example_evidence)::text LIKE $15", likeQuery)) // search by ExampleEvidence
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(references)::text LIKE $17", likeQuery)) // search by References
+					s.Where(sql.ExprP("(references)::text LIKE $16", likeQuery)) // search by References
 				},
 				control.ControlOwnerIDContainsFold(query), // search by ControlOwnerID
 				control.DelegateIDContainsFold(query),     // search by DelegateID
@@ -289,11 +285,10 @@ func adminSearchControlImplementations(ctx context.Context, query string, after 
 	request := withTransactionalMutation(ctx).ControlImplementation.Query().
 		Where(
 			controlimplementation.Or(
-				controlimplementation.DeletedByContainsFold(query), // search by DeletedBy
-				controlimplementation.ID(query),                    // search equal to ID
+				controlimplementation.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				controlimplementation.OwnerIDContainsFold(query), // search by OwnerID
 				controlimplementation.DetailsContainsFold(query), // search by Details
@@ -328,12 +323,11 @@ func adminSearchControlObjectives(ctx context.Context, query string, after *entg
 	request := withTransactionalMutation(ctx).ControlObjective.Query().
 		Where(
 			controlobjective.Or(
-				controlobjective.DeletedByContainsFold(query), // search by DeletedBy
-				controlobjective.ID(query),                    // search equal to ID
-				controlobjective.DisplayID(query),             // search equal to DisplayID
+				controlobjective.ID(query),        // search equal to ID
+				controlobjective.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				controlobjective.RevisionContainsFold(query),             // search by Revision
 				controlobjective.OwnerIDContainsFold(query),              // search by OwnerID
@@ -369,11 +363,10 @@ func adminSearchCustomDomains(ctx context.Context, query string, after *entgql.C
 	request := withTransactionalMutation(ctx).CustomDomain.Query().
 		Where(
 			customdomain.Or(
-				customdomain.DeletedByContainsFold(query), // search by DeletedBy
-				customdomain.ID(query),                    // search equal to ID
+				customdomain.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				customdomain.OwnerIDContainsFold(query),          // search by OwnerID
 				customdomain.CnameRecordContainsFold(query),      // search by CnameRecord
@@ -405,17 +398,16 @@ func adminSearchDocumentData(ctx context.Context, query string, after *entgql.Cu
 	request := withTransactionalMutation(ctx).DocumentData.Query().
 		Where(
 			documentdata.Or(
-				documentdata.DeletedByContainsFold(query), // search by DeletedBy
-				documentdata.ID(query),                    // search equal to ID
+				documentdata.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				documentdata.OwnerIDContainsFold(query),    // search by OwnerID
 				documentdata.TemplateIDContainsFold(query), // search by TemplateID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(data)::text LIKE $6", likeQuery)) // search by Data
+					s.Where(sql.ExprP("(data)::text LIKE $5", likeQuery)) // search by Data
 				},
 			),
 		)
@@ -447,11 +439,10 @@ func adminSearchEntities(ctx context.Context, query string, after *entgql.Cursor
 	request := withTransactionalMutation(ctx).Entity.Query().
 		Where(
 			entity.Or(
-				entity.DeletedByContainsFold(query), // search by DeletedBy
-				entity.ID(query),                    // search equal to ID
+				entity.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				entity.OwnerIDContainsFold(query),     // search by OwnerID
 				entity.NameContainsFold(query),        // search by Name
@@ -459,7 +450,7 @@ func adminSearchEntities(ctx context.Context, query string, after *entgql.Cursor
 				entity.DescriptionContainsFold(query), // search by Description
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(domains)::text LIKE $8", likeQuery)) // search by Domains
+					s.Where(sql.ExprP("(domains)::text LIKE $7", likeQuery)) // search by Domains
 				},
 				entity.EntityTypeIDContainsFold(query), // search by EntityTypeID
 				entity.StatusContainsFold(query),       // search by Status
@@ -490,11 +481,10 @@ func adminSearchEntityTypes(ctx context.Context, query string, after *entgql.Cur
 	request := withTransactionalMutation(ctx).EntityType.Query().
 		Where(
 			entitytype.Or(
-				entitytype.DeletedByContainsFold(query), // search by DeletedBy
-				entitytype.ID(query),                    // search equal to ID
+				entitytype.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				entitytype.OwnerIDContainsFold(query), // search by OwnerID
 				entitytype.NameContainsFold(query),    // search by Name
@@ -566,12 +556,11 @@ func adminSearchEvidences(ctx context.Context, query string, after *entgql.Curso
 	request := withTransactionalMutation(ctx).Evidence.Query().
 		Where(
 			evidence.Or(
-				evidence.DeletedByContainsFold(query), // search by DeletedBy
-				evidence.ID(query),                    // search equal to ID
-				evidence.DisplayID(query),             // search equal to DisplayID
+				evidence.ID(query),        // search equal to ID
+				evidence.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				evidence.OwnerIDContainsFold(query),             // search by OwnerID
 				evidence.NameContainsFold(query),                // search by Name
@@ -606,11 +595,10 @@ func adminSearchFiles(ctx context.Context, query string, after *entgql.Cursor[st
 	request := withTransactionalMutation(ctx).File.Query().
 		Where(
 			file.Or(
-				file.DeletedByContainsFold(query), // search by DeletedBy
-				file.ID(query),                    // search equal to ID
+				file.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				file.ProvidedFileNameContainsFold(query),      // search by ProvidedFileName
 				file.ProvidedFileExtensionContainsFold(query), // search by ProvidedFileExtension
@@ -653,12 +641,11 @@ func adminSearchGroups(ctx context.Context, query string, after *entgql.Cursor[s
 	request := withTransactionalMutation(ctx).Group.Query().
 		Where(
 			group.Or(
-				group.DeletedByContainsFold(query), // search by DeletedBy
-				group.ID(query),                    // search equal to ID
-				group.DisplayID(query),             // search equal to DisplayID
+				group.ID(query),        // search equal to ID
+				group.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				group.OwnerIDContainsFold(query),     // search by OwnerID
 				group.NameContainsFold(query),        // search by Name
@@ -690,11 +677,10 @@ func adminSearchIntegrations(ctx context.Context, query string, after *entgql.Cu
 	request := withTransactionalMutation(ctx).Integration.Query().
 		Where(
 			integration.Or(
-				integration.DeletedByContainsFold(query), // search by DeletedBy
-				integration.ID(query),                    // search equal to ID
+				integration.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				integration.OwnerIDContainsFold(query), // search by OwnerID
 				integration.NameContainsFold(query),    // search by Name
@@ -729,12 +715,11 @@ func adminSearchInternalPolicies(ctx context.Context, query string, after *entgq
 	request := withTransactionalMutation(ctx).InternalPolicy.Query().
 		Where(
 			internalpolicy.Or(
-				internalpolicy.DeletedByContainsFold(query), // search by DeletedBy
-				internalpolicy.ID(query),                    // search equal to ID
-				internalpolicy.DisplayID(query),             // search equal to DisplayID
+				internalpolicy.ID(query),        // search equal to ID
+				internalpolicy.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				internalpolicy.RevisionContainsFold(query),   // search by Revision
 				internalpolicy.OwnerIDContainsFold(query),    // search by OwnerID
@@ -767,7 +752,6 @@ func adminSearchInvites(ctx context.Context, query string, after *entgql.Cursor[
 	request := withTransactionalMutation(ctx).Invite.Query().
 		Where(
 			invite.Or(
-				invite.DeletedByContainsFold(query),   // search by DeletedBy
 				invite.ID(query),                      // search equal to ID
 				invite.OwnerIDContainsFold(query),     // search by OwnerID
 				invite.RecipientContainsFold(query),   // search by Recipient
@@ -801,12 +785,11 @@ func adminSearchJobRunners(ctx context.Context, query string, after *entgql.Curs
 	request := withTransactionalMutation(ctx).JobRunner.Query().
 		Where(
 			jobrunner.Or(
-				jobrunner.DeletedByContainsFold(query), // search by DeletedBy
-				jobrunner.ID(query),                    // search equal to ID
-				jobrunner.DisplayID(query),             // search equal to DisplayID
+				jobrunner.ID(query),        // search equal to ID
+				jobrunner.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				jobrunner.OwnerIDContainsFold(query),   // search by OwnerID
 				jobrunner.NameContainsFold(query),      // search by Name
@@ -838,11 +821,10 @@ func adminSearchJobRunnerRegistrationTokens(ctx context.Context, query string, a
 	request := withTransactionalMutation(ctx).JobRunnerRegistrationToken.Query().
 		Where(
 			jobrunnerregistrationtoken.Or(
-				jobrunnerregistrationtoken.DeletedByContainsFold(query), // search by DeletedBy
-				jobrunnerregistrationtoken.ID(query),                    // search equal to ID
+				jobrunnerregistrationtoken.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				jobrunnerregistrationtoken.OwnerIDContainsFold(query),     // search by OwnerID
 				jobrunnerregistrationtoken.JobRunnerIDContainsFold(query), // search by JobRunnerID
@@ -873,11 +855,10 @@ func adminSearchJobRunnerTokens(ctx context.Context, query string, after *entgql
 	request := withTransactionalMutation(ctx).JobRunnerToken.Query().
 		Where(
 			jobrunnertoken.Or(
-				jobrunnertoken.DeletedByContainsFold(query), // search by DeletedBy
-				jobrunnertoken.ID(query),                    // search equal to ID
+				jobrunnertoken.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				jobrunnertoken.OwnerIDContainsFold(query),       // search by OwnerID
 				jobrunnertoken.RevokedReasonContainsFold(query), // search by RevokedReason
@@ -909,11 +890,10 @@ func adminSearchMappableDomains(ctx context.Context, query string, after *entgql
 	request := withTransactionalMutation(ctx).MappableDomain.Query().
 		Where(
 			mappabledomain.Or(
-				mappabledomain.DeletedByContainsFold(query), // search by DeletedBy
-				mappabledomain.ID(query),                    // search equal to ID
+				mappabledomain.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				mappabledomain.NameContainsFold(query), // search by Name
 			),
@@ -943,11 +923,10 @@ func adminSearchMappedControls(ctx context.Context, query string, after *entgql.
 	request := withTransactionalMutation(ctx).MappedControl.Query().
 		Where(
 			mappedcontrol.Or(
-				mappedcontrol.DeletedByContainsFold(query), // search by DeletedBy
-				mappedcontrol.ID(query),                    // search equal to ID
+				mappedcontrol.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				mappedcontrol.MappingTypeContainsFold(query), // search by MappingType
 				mappedcontrol.RelationContainsFold(query),    // search by Relation
@@ -981,12 +960,11 @@ func adminSearchNarratives(ctx context.Context, query string, after *entgql.Curs
 	request := withTransactionalMutation(ctx).Narrative.Query().
 		Where(
 			narrative.Or(
-				narrative.DeletedByContainsFold(query), // search by DeletedBy
-				narrative.ID(query),                    // search equal to ID
-				narrative.DisplayID(query),             // search equal to DisplayID
+				narrative.ID(query),        // search equal to ID
+				narrative.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				narrative.OwnerIDContainsFold(query),     // search by OwnerID
 				narrative.NameContainsFold(query),        // search by Name
@@ -1019,18 +997,17 @@ func adminSearchOrgSubscriptions(ctx context.Context, query string, after *entgq
 	request := withTransactionalMutation(ctx).OrgSubscription.Query().
 		Where(
 			orgsubscription.Or(
-				orgsubscription.DeletedByContainsFold(query), // search by DeletedBy
-				orgsubscription.ID(query),                    // search equal to ID
+				orgsubscription.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				orgsubscription.OwnerIDContainsFold(query),              // search by OwnerID
 				orgsubscription.StripeSubscriptionIDContainsFold(query), // search by StripeSubscriptionID
 				orgsubscription.ProductTierContainsFold(query),          // search by ProductTier
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(product_price)::text LIKE $7", likeQuery)) // search by ProductPrice
+					s.Where(sql.ExprP("(product_price)::text LIKE $6", likeQuery)) // search by ProductPrice
 				},
 				orgsubscription.StripeProductTierIDContainsFold(query),      // search by StripeProductTierID
 				orgsubscription.StripeSubscriptionStatusContainsFold(query), // search by StripeSubscriptionStatus
@@ -1038,11 +1015,11 @@ func adminSearchOrgSubscriptions(ctx context.Context, query string, after *entgq
 				orgsubscription.DaysUntilDueContainsFold(query),             // search by DaysUntilDue
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(features)::text LIKE $12", likeQuery)) // search by Features
+					s.Where(sql.ExprP("(features)::text LIKE $11", likeQuery)) // search by Features
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(feature_lookup_keys)::text LIKE $13", likeQuery)) // search by FeatureLookupKeys
+					s.Where(sql.ExprP("(feature_lookup_keys)::text LIKE $12", likeQuery)) // search by FeatureLookupKeys
 				},
 			),
 		)
@@ -1073,11 +1050,10 @@ func adminSearchOrganizations(ctx context.Context, query string, after *entgql.C
 	request := withTransactionalMutation(ctx).Organization.Query().
 		Where(
 			organization.Or(
-				organization.DeletedByContainsFold(query), // search by DeletedBy
-				organization.ID(query),                    // search equal to ID
+				organization.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				organization.NameContainsFold(query),              // search by Name
 				organization.DisplayNameContainsFold(query),       // search by DisplayName
@@ -1110,28 +1086,27 @@ func adminSearchOrganizationSettings(ctx context.Context, query string, after *e
 	request := withTransactionalMutation(ctx).OrganizationSetting.Query().
 		Where(
 			organizationsetting.Or(
-				organizationsetting.DeletedByContainsFold(query), // search by DeletedBy
-				organizationsetting.ID(query),                    // search equal to ID
+				organizationsetting.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(domains)::text LIKE $4", likeQuery)) // search by Domains
+					s.Where(sql.ExprP("(domains)::text LIKE $3", likeQuery)) // search by Domains
 				},
 				organizationsetting.BillingContactContainsFold(query), // search by BillingContact
 				organizationsetting.BillingEmailContainsFold(query),   // search by BillingEmail
 				organizationsetting.BillingPhoneContainsFold(query),   // search by BillingPhone
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(billing_address)::text LIKE $8", likeQuery)) // search by BillingAddress
+					s.Where(sql.ExprP("(billing_address)::text LIKE $7", likeQuery)) // search by BillingAddress
 				},
 				organizationsetting.TaxIdentifierContainsFold(query),  // search by TaxIdentifier
 				organizationsetting.OrganizationIDContainsFold(query), // search by OrganizationID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(allowed_email_domains)::text LIKE $11", likeQuery)) // search by AllowedEmailDomains
+					s.Where(sql.ExprP("(allowed_email_domains)::text LIKE $10", likeQuery)) // search by AllowedEmailDomains
 				},
 			),
 		)
@@ -1160,16 +1135,15 @@ func adminSearchPersonalAccessTokens(ctx context.Context, query string, after *e
 	request := withTransactionalMutation(ctx).PersonalAccessToken.Query().
 		Where(
 			personalaccesstoken.Or(
-				personalaccesstoken.DeletedByContainsFold(query), // search by DeletedBy
-				personalaccesstoken.ID(query),                    // search equal to ID
+				personalaccesstoken.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				personalaccesstoken.NameContainsFold(query), // search by Name
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(scopes)::text LIKE $5", likeQuery)) // search by Scopes
+					s.Where(sql.ExprP("(scopes)::text LIKE $4", likeQuery)) // search by Scopes
 				},
 				personalaccesstoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				personalaccesstoken.RevokedByContainsFold(query),     // search by RevokedBy
@@ -1203,12 +1177,11 @@ func adminSearchProcedures(ctx context.Context, query string, after *entgql.Curs
 	request := withTransactionalMutation(ctx).Procedure.Query().
 		Where(
 			procedure.Or(
-				procedure.DeletedByContainsFold(query), // search by DeletedBy
-				procedure.ID(query),                    // search equal to ID
-				procedure.DisplayID(query),             // search equal to DisplayID
+				procedure.ID(query),        // search equal to ID
+				procedure.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				procedure.RevisionContainsFold(query),      // search by Revision
 				procedure.OwnerIDContainsFold(query),       // search by OwnerID
@@ -1247,12 +1220,11 @@ func adminSearchPrograms(ctx context.Context, query string, after *entgql.Cursor
 	request := withTransactionalMutation(ctx).Program.Query().
 		Where(
 			program.Or(
-				program.DeletedByContainsFold(query), // search by DeletedBy
-				program.ID(query),                    // search equal to ID
-				program.DisplayID(query),             // search equal to DisplayID
+				program.ID(query),        // search equal to ID
+				program.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				program.OwnerIDContainsFold(query),       // search by OwnerID
 				program.NameContainsFold(query),          // search by Name
@@ -1290,12 +1262,11 @@ func adminSearchRisks(ctx context.Context, query string, after *entgql.Cursor[st
 	request := withTransactionalMutation(ctx).Risk.Query().
 		Where(
 			risk.Or(
-				risk.DeletedByContainsFold(query), // search by DeletedBy
-				risk.ID(query),                    // search equal to ID
-				risk.DisplayID(query),             // search equal to DisplayID
+				risk.ID(query),        // search equal to ID
+				risk.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				risk.OwnerIDContainsFold(query),       // search by OwnerID
 				risk.NameContainsFold(query),          // search by Name
@@ -1341,11 +1312,10 @@ func adminSearchStandards(ctx context.Context, query string, after *entgql.Curso
 	request := withTransactionalMutation(ctx).Standard.Query().
 		Where(
 			standard.Or(
-				standard.DeletedByContainsFold(query), // search by DeletedBy
-				standard.ID(query),                    // search equal to ID
+				standard.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				standard.RevisionContainsFold(query),             // search by Revision
 				standard.OwnerIDContainsFold(query),              // search by OwnerID
@@ -1357,7 +1327,7 @@ func adminSearchStandards(ctx context.Context, query string, after *entgql.Curso
 				standard.GoverningBodyContainsFold(query),        // search by GoverningBody
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(domains)::text LIKE $12", likeQuery)) // search by Domains
+					s.Where(sql.ExprP("(domains)::text LIKE $11", likeQuery)) // search by Domains
 				},
 				standard.LinkContainsFold(query),         // search by Link
 				standard.StandardTypeContainsFold(query), // search by StandardType
@@ -1398,12 +1368,11 @@ func adminSearchSubcontrols(ctx context.Context, query string, after *entgql.Cur
 	request := withTransactionalMutation(ctx).Subcontrol.Query().
 		Where(
 			subcontrol.Or(
-				subcontrol.DeletedByContainsFold(query), // search by DeletedBy
-				subcontrol.ID(query),                    // search equal to ID
-				subcontrol.DisplayID(query),             // search equal to DisplayID
+				subcontrol.ID(query),        // search equal to ID
+				subcontrol.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				subcontrol.DescriptionContainsFold(query),        // search by Description
 				subcontrol.ReferenceIDContainsFold(query),        // search by ReferenceID
@@ -1413,31 +1382,31 @@ func adminSearchSubcontrols(ctx context.Context, query string, after *entgql.Cur
 				subcontrol.SubcategoryContainsFold(query),        // search by Subcategory
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(mapped_categories)::text LIKE $11", likeQuery)) // search by MappedCategories
+					s.Where(sql.ExprP("(mapped_categories)::text LIKE $10", likeQuery)) // search by MappedCategories
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(assessment_objectives)::text LIKE $12", likeQuery)) // search by AssessmentObjectives
+					s.Where(sql.ExprP("(assessment_objectives)::text LIKE $11", likeQuery)) // search by AssessmentObjectives
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(assessment_methods)::text LIKE $13", likeQuery)) // search by AssessmentMethods
+					s.Where(sql.ExprP("(assessment_methods)::text LIKE $12", likeQuery)) // search by AssessmentMethods
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(control_questions)::text LIKE $14", likeQuery)) // search by ControlQuestions
+					s.Where(sql.ExprP("(control_questions)::text LIKE $13", likeQuery)) // search by ControlQuestions
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(implementation_guidance)::text LIKE $15", likeQuery)) // search by ImplementationGuidance
+					s.Where(sql.ExprP("(implementation_guidance)::text LIKE $14", likeQuery)) // search by ImplementationGuidance
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(example_evidence)::text LIKE $16", likeQuery)) // search by ExampleEvidence
+					s.Where(sql.ExprP("(example_evidence)::text LIKE $15", likeQuery)) // search by ExampleEvidence
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(references)::text LIKE $17", likeQuery)) // search by References
+					s.Where(sql.ExprP("(references)::text LIKE $16", likeQuery)) // search by References
 				},
 				subcontrol.ControlOwnerIDContainsFold(query), // search by ControlOwnerID
 				subcontrol.DelegateIDContainsFold(query),     // search by DelegateID
@@ -1472,11 +1441,10 @@ func adminSearchSubscribers(ctx context.Context, query string, after *entgql.Cur
 	request := withTransactionalMutation(ctx).Subscriber.Query().
 		Where(
 			subscriber.Or(
-				subscriber.DeletedByContainsFold(query), // search by DeletedBy
-				subscriber.ID(query),                    // search equal to ID
+				subscriber.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				subscriber.OwnerIDContainsFold(query),     // search by OwnerID
 				subscriber.EmailContainsFold(query),       // search by Email
@@ -1510,12 +1478,11 @@ func adminSearchTasks(ctx context.Context, query string, after *entgql.Cursor[st
 	request := withTransactionalMutation(ctx).Task.Query().
 		Where(
 			task.Or(
-				task.DeletedByContainsFold(query), // search by DeletedBy
-				task.ID(query),                    // search equal to ID
-				task.DisplayID(query),             // search equal to DisplayID
+				task.ID(query),        // search equal to ID
+				task.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				task.OwnerIDContainsFold(query),    // search by OwnerID
 				task.TitleContainsFold(query),      // search by Title
@@ -1556,11 +1523,10 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 	request := withTransactionalMutation(ctx).Template.Query().
 		Where(
 			template.Or(
-				template.DeletedByContainsFold(query), // search by DeletedBy
-				template.ID(query),                    // search equal to ID
+				template.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				template.OwnerIDContainsFold(query),     // search by OwnerID
 				template.NameContainsFold(query),        // search by Name
@@ -1572,7 +1538,7 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(uischema)::text LIKE $8", likeQuery)) // search by Uischema
+					s.Where(sql.ExprP("(uischema)::text LIKE $7", likeQuery)) // search by Uischema
 				},
 			),
 		)
@@ -1602,12 +1568,11 @@ func adminSearchUsers(ctx context.Context, query string, after *entgql.Cursor[st
 	request := withTransactionalMutation(ctx).User.Query().
 		Where(
 			user.Or(
-				user.DeletedByContainsFold(query), // search by DeletedBy
-				user.ID(query),                    // search equal to ID
-				user.DisplayID(query),             // search equal to DisplayID
+				user.ID(query),        // search equal to ID
+				user.DisplayID(query), // search equal to DisplayID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				user.EmailContainsFold(query),             // search by Email
 				user.FirstNameContainsFold(query),         // search by FirstName
@@ -1643,11 +1608,10 @@ func adminSearchUserSettings(ctx context.Context, query string, after *entgql.Cu
 	request := withTransactionalMutation(ctx).UserSetting.Query().
 		Where(
 			usersetting.Or(
-				usersetting.DeletedByContainsFold(query), // search by DeletedBy
-				usersetting.ID(query),                    // search equal to ID
+				usersetting.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 				usersetting.UserIDContainsFold(query), // search by UserID
 			),

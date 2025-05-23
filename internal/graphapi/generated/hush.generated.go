@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 				return ec.fieldContext_Hush_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Hush_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Hush_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Hush_deletedBy(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Hush_ownerID(ctx, field)
 			case "name":
@@ -151,10 +147,6 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Hush_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Hush_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Hush_deletedBy(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Hush_ownerID(ctx, field)
 			case "name":
@@ -271,10 +263,6 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 				return ec.fieldContext_Hush_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Hush_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Hush_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Hush_deletedBy(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Hush_ownerID(ctx, field)
 			case "name":

@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_DocumentDataBulkCreatePayload_documentD
 				return ec.fieldContext_DocumentData_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":
@@ -151,10 +147,6 @@ func (ec *executionContext) fieldContext_DocumentDataCreatePayload_documentData(
 				return ec.fieldContext_DocumentData_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":
@@ -271,10 +263,6 @@ func (ec *executionContext) fieldContext_DocumentDataUpdatePayload_documentData(
 				return ec.fieldContext_DocumentData_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_DocumentData_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_DocumentData_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_DocumentData_tags(ctx, field)
 			case "ownerID":

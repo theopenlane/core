@@ -1732,7 +1732,6 @@ func (t *AdminSearch_AdminSearch_APITokens_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_APITokens_Edges_Node struct {
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID            string   "json:\"id\" graphql:\"id\""
 	Name          string   "json:\"name\" graphql:\"name\""
 	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -1742,12 +1741,6 @@ type AdminSearch_AdminSearch_APITokens_Edges_Node struct {
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
@@ -1863,7 +1856,6 @@ type AdminSearch_AdminSearch_ActionPlans_Edges_Node struct {
 	ActionPlanType *string  "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
 	ApproverID     *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
 	DelegateID     *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	DeletedBy      *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Details        *string  "json:\"details,omitempty\" graphql:\"details\""
 	ID             string   "json:\"id\" graphql:\"id\""
 	Name           string   "json:\"name\" graphql:\"name\""
@@ -1890,12 +1882,6 @@ func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDelegateID() *string
 		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.DelegateID
-}
-func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDetails() *string {
 	if t == nil {
@@ -2011,7 +1997,6 @@ func (t *AdminSearch_AdminSearch_Contacts_PageInfo) GetStartCursor() *string {
 type AdminSearch_AdminSearch_Contacts_Edges_Node struct {
 	Address     *string  "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string  "json:\"company,omitempty\" graphql:\"company\""
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Email       *string  "json:\"email,omitempty\" graphql:\"email\""
 	FullName    string   "json:\"fullName\" graphql:\"fullName\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -2032,12 +2017,6 @@ func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetCompany() *string {
 		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
 	}
 	return t.Company
-}
-func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Contacts_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Contacts_Edges_Node) GetEmail() *string {
 	if t == nil {
@@ -2159,7 +2138,6 @@ type AdminSearch_AdminSearch_Controls_Edges_Node struct {
 	ControlOwnerID         *string                          "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions       []string                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	DelegateID             *string                          "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	DeletedBy              *string                          "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description            *string                          "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID              string                           "json:\"displayID\" graphql:\"displayID\""
 	ExampleEvidence        []*models.ExampleEvidence        "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
@@ -2222,12 +2200,6 @@ func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetDelegateID() *string {
 		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
 	}
 	return t.DelegateID
-}
-func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Controls_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Controls_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -2377,19 +2349,12 @@ func (t *AdminSearch_AdminSearch_ControlImplementations_PageInfo) GetStartCursor
 }
 
 type AdminSearch_AdminSearch_ControlImplementations_Edges_Node struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Details   *string  "json:\"details,omitempty\" graphql:\"details\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Details *string  "json:\"details,omitempty\" graphql:\"details\""
+	ID      string   "json:\"id\" graphql:\"id\""
+	OwnerID *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags    []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_ControlImplementations_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ControlImplementations_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_ControlImplementations_Edges_Node) GetDetails() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_ControlImplementations_Edges_Node{}
@@ -2486,7 +2451,6 @@ func (t *AdminSearch_AdminSearch_ControlObjectives_PageInfo) GetStartCursor() *s
 type AdminSearch_AdminSearch_ControlObjectives_Edges_Node struct {
 	Category             *string  "json:\"category,omitempty\" graphql:\"category\""
 	ControlObjectiveType *string  "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
-	DeletedBy            *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	DesiredOutcome       *string  "json:\"desiredOutcome,omitempty\" graphql:\"desiredOutcome\""
 	DisplayID            string   "json:\"displayID\" graphql:\"displayID\""
 	ID                   string   "json:\"id\" graphql:\"id\""
@@ -2508,12 +2472,6 @@ func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetControlObjecti
 		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
 	}
 	return t.ControlObjectiveType
-}
-func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ControlObjectives_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_ControlObjectives_Edges_Node) GetDesiredOutcome() *string {
 	if t == nil {
@@ -2634,7 +2592,6 @@ func (t *AdminSearch_AdminSearch_CustomDomains_PageInfo) GetStartCursor() *strin
 
 type AdminSearch_AdminSearch_CustomDomains_Edges_Node struct {
 	CnameRecord      string   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	DeletedBy        *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID               string   "json:\"id\" graphql:\"id\""
 	MappableDomainID string   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID          *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -2646,12 +2603,6 @@ func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetCnameRecord() stri
 		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
 	}
 	return t.CnameRecord
-}
-func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetID() string {
 	if t == nil {
@@ -2748,7 +2699,6 @@ func (t *AdminSearch_AdminSearch_DocumentData_PageInfo) GetStartCursor() *string
 
 type AdminSearch_AdminSearch_DocumentData_Edges_Node struct {
 	Data       map[string]any "json:\"data\" graphql:\"data\""
-	DeletedBy  *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID         string         "json:\"id\" graphql:\"id\""
 	OwnerID    *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Tags       []string       "json:\"tags,omitempty\" graphql:\"tags\""
@@ -2760,12 +2710,6 @@ func (t *AdminSearch_AdminSearch_DocumentData_Edges_Node) GetData() map[string]a
 		t = &AdminSearch_AdminSearch_DocumentData_Edges_Node{}
 	}
 	return t.Data
-}
-func (t *AdminSearch_AdminSearch_DocumentData_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_DocumentData_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_DocumentData_Edges_Node) GetID() string {
 	if t == nil {
@@ -2861,7 +2805,6 @@ func (t *AdminSearch_AdminSearch_Entities_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_Entities_Edges_Node struct {
-	DeletedBy    *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description  *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName  *string  "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Domains      []string "json:\"domains,omitempty\" graphql:\"domains\""
@@ -2873,12 +2816,6 @@ type AdminSearch_AdminSearch_Entities_Edges_Node struct {
 	Tags         []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_Entities_Edges_Node) GetDescription() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Entities_Edges_Node{}
@@ -3003,19 +2940,12 @@ func (t *AdminSearch_AdminSearch_EntityTypes_PageInfo) GetStartCursor() *string 
 }
 
 type AdminSearch_AdminSearch_EntityTypes_Edges_Node struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID      string   "json:\"id\" graphql:\"id\""
+	Name    string   "json:\"name\" graphql:\"name\""
+	OwnerID *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags    []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_EntityTypes_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_EntityTypes_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_EntityTypes_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_EntityTypes_Edges_Node{}
@@ -3225,7 +3155,6 @@ func (t *AdminSearch_AdminSearch_Evidences_PageInfo) GetStartCursor() *string {
 
 type AdminSearch_AdminSearch_Evidences_Edges_Node struct {
 	CollectionProcedure *string  "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
-	DeletedBy           *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description         *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID           string   "json:\"displayID\" graphql:\"displayID\""
 	ID                  string   "json:\"id\" graphql:\"id\""
@@ -3241,12 +3170,6 @@ func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetCollectionProcedure() 
 		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
 	}
 	return t.CollectionProcedure
-}
-func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Evidences_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Evidences_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -3367,7 +3290,6 @@ func (t *AdminSearch_AdminSearch_Files_PageInfo) GetStartCursor() *string {
 
 type AdminSearch_AdminSearch_Files_Edges_Node struct {
 	CategoryType          *string  "json:\"categoryType,omitempty\" graphql:\"categoryType\""
-	DeletedBy             *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	DetectedContentType   string   "json:\"detectedContentType\" graphql:\"detectedContentType\""
 	DetectedMimeType      *string  "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
 	ID                    string   "json:\"id\" graphql:\"id\""
@@ -3387,12 +3309,6 @@ func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetCategoryType() *string {
 		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.CategoryType
-}
-func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
@@ -3536,7 +3452,6 @@ func (t *AdminSearch_AdminSearch_Groups_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_Groups_Edges_Node struct {
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
 	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -3545,12 +3460,6 @@ type AdminSearch_AdminSearch_Groups_Edges_Node struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Groups_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Groups_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_Groups_Edges_Node) GetDisplayID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Groups_Edges_Node{}
@@ -3657,20 +3566,13 @@ func (t *AdminSearch_AdminSearch_Integrations_PageInfo) GetStartCursor() *string
 }
 
 type AdminSearch_AdminSearch_Integrations_Edges_Node struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Kind      *string  "json:\"kind,omitempty\" graphql:\"kind\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID      string   "json:\"id\" graphql:\"id\""
+	Kind    *string  "json:\"kind,omitempty\" graphql:\"kind\""
+	Name    string   "json:\"name\" graphql:\"name\""
+	OwnerID *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags    []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_Integrations_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Integrations_Edges_Node{}
@@ -3773,7 +3675,6 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_PageInfo) GetStartCursor() *st
 type AdminSearch_AdminSearch_InternalPolicies_Edges_Node struct {
 	ApproverID *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
 	DelegateID *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	DeletedBy  *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Details    *string  "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID  string   "json:\"displayID\" graphql:\"displayID\""
 	ID         string   "json:\"id\" graphql:\"id\""
@@ -3795,12 +3696,6 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDelegateID() *s
 		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.DelegateID
-}
-func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDetails() *string {
 	if t == nil {
@@ -3920,19 +3815,12 @@ func (t *AdminSearch_AdminSearch_Invites_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_Invites_Edges_Node struct {
-	DeletedBy   *string "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID          string  "json:\"id\" graphql:\"id\""
 	OwnerID     *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Recipient   string  "json:\"recipient\" graphql:\"recipient\""
 	RequestorID *string "json:\"requestorID,omitempty\" graphql:\"requestorID\""
 }
 
-func (t *AdminSearch_AdminSearch_Invites_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Invites_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_Invites_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Invites_Edges_Node{}
@@ -4027,7 +3915,6 @@ func (t *AdminSearch_AdminSearch_JobRunners_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_JobRunners_Edges_Node struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
 	ID        string   "json:\"id\" graphql:\"id\""
 	IPAddress string   "json:\"ipAddress\" graphql:\"ipAddress\""
@@ -4036,12 +3923,6 @@ type AdminSearch_AdminSearch_JobRunners_Edges_Node struct {
 	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_JobRunners_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_JobRunners_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_JobRunners_Edges_Node) GetDisplayID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_JobRunners_Edges_Node{}
@@ -4148,19 +4029,12 @@ func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_PageInfo) GetStartC
 }
 
 type AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node struct {
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	JobRunnerID *string  "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
 	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_JobRunnerRegistrationTokens_Edges_Node{}
@@ -4255,7 +4129,6 @@ func (t *AdminSearch_AdminSearch_JobRunnerTokens_PageInfo) GetStartCursor() *str
 }
 
 type AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node struct {
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID            string   "json:\"id\" graphql:\"id\""
 	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
@@ -4263,12 +4136,6 @@ type AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node struct {
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_JobRunnerTokens_Edges_Node{}
@@ -4369,18 +4236,11 @@ func (t *AdminSearch_AdminSearch_MappableDomains_PageInfo) GetStartCursor() *str
 }
 
 type AdminSearch_AdminSearch_MappableDomains_Edges_Node struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Name      string   "json:\"name\" graphql:\"name\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID   string   "json:\"id\" graphql:\"id\""
+	Name string   "json:\"name\" graphql:\"name\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_MappableDomains_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_MappableDomains_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_MappableDomains_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_MappableDomains_Edges_Node{}
@@ -4469,19 +4329,12 @@ func (t *AdminSearch_AdminSearch_MappedControls_PageInfo) GetStartCursor() *stri
 }
 
 type AdminSearch_AdminSearch_MappedControls_Edges_Node struct {
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	MappingType *string  "json:\"mappingType,omitempty\" graphql:\"mappingType\""
 	Relation    *string  "json:\"relation,omitempty\" graphql:\"relation\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
@@ -4576,7 +4429,6 @@ func (t *AdminSearch_AdminSearch_Narratives_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_Narratives_Edges_Node struct {
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 	Details     *string  "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
@@ -4586,12 +4438,6 @@ type AdminSearch_AdminSearch_Narratives_Edges_Node struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_Narratives_Edges_Node) GetDescription() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Narratives_Edges_Node{}
@@ -4705,7 +4551,6 @@ func (t *AdminSearch_AdminSearch_OrgSubscriptions_PageInfo) GetStartCursor() *st
 
 type AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node struct {
 	DaysUntilDue             *string       "json:\"daysUntilDue,omitempty\" graphql:\"daysUntilDue\""
-	DeletedBy                *string       "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	FeatureLookupKeys        []string      "json:\"featureLookupKeys,omitempty\" graphql:\"featureLookupKeys\""
 	Features                 []string      "json:\"features,omitempty\" graphql:\"features\""
 	ID                       string        "json:\"id\" graphql:\"id\""
@@ -4724,12 +4569,6 @@ func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetDaysUntilDue() 
 		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
 	}
 	return t.DaysUntilDue
-}
-func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_OrgSubscriptions_Edges_Node) GetFeatureLookupKeys() []string {
 	if t == nil {
@@ -4869,7 +4708,6 @@ func (t *AdminSearch_AdminSearch_Organizations_PageInfo) GetStartCursor() *strin
 type AdminSearch_AdminSearch_Organizations_Edges_Node struct {
 	AvatarLocalFileID *string  "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	DeletedBy         *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	DisplayName       string   "json:\"displayName\" graphql:\"displayName\""
 	ID                string   "json:\"id\" graphql:\"id\""
 	Name              string   "json:\"name\" graphql:\"name\""
@@ -4887,12 +4725,6 @@ func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetAvatarRemoteURL() 
 		t = &AdminSearch_AdminSearch_Organizations_Edges_Node{}
 	}
 	return t.AvatarRemoteURL
-}
-func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Organizations_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Organizations_Edges_Node) GetDisplayName() string {
 	if t == nil {
@@ -4993,7 +4825,6 @@ type AdminSearch_AdminSearch_OrganizationSettings_Edges_Node struct {
 	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
 	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	DeletedBy           *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	ID                  string          "json:\"id\" graphql:\"id\""
 	OrganizationID      *string         "json:\"organizationID,omitempty\" graphql:\"organizationID\""
@@ -5030,12 +4861,6 @@ func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetBillingPhon
 		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.BillingPhone
-}
-func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetDomains() []string {
 	if t == nil {
@@ -5137,7 +4962,6 @@ func (t *AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo) GetStartCursor()
 }
 
 type AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node struct {
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID            string   "json:\"id\" graphql:\"id\""
 	Name          string   "json:\"name\" graphql:\"name\""
 	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
@@ -5146,12 +4970,6 @@ type AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node struct {
 	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
@@ -5260,7 +5078,6 @@ func (t *AdminSearch_AdminSearch_Procedures_PageInfo) GetStartCursor() *string {
 type AdminSearch_AdminSearch_Procedures_Edges_Node struct {
 	ApproverID    *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
 	DelegateID    *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Details       *string  "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID     string   "json:\"displayID\" graphql:\"displayID\""
 	ID            string   "json:\"id\" graphql:\"id\""
@@ -5282,12 +5099,6 @@ func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDelegateID() *string 
 		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.DelegateID
-}
-func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDetails() *string {
 	if t == nil {
@@ -5410,7 +5221,6 @@ type AdminSearch_AdminSearch_Programs_Edges_Node struct {
 	AuditFirm     *string  "json:\"auditFirm,omitempty\" graphql:\"auditFirm\""
 	Auditor       *string  "json:\"auditor,omitempty\" graphql:\"auditor\""
 	AuditorEmail  *string  "json:\"auditorEmail,omitempty\" graphql:\"auditorEmail\""
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description   *string  "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string   "json:\"displayID\" graphql:\"displayID\""
 	FrameworkName *string  "json:\"frameworkName,omitempty\" graphql:\"frameworkName\""
@@ -5437,12 +5247,6 @@ func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetAuditorEmail() *string 
 		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
 	}
 	return t.AuditorEmail
-}
-func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Programs_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Programs_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -5559,7 +5363,6 @@ type AdminSearch_AdminSearch_Risks_Edges_Node struct {
 	BusinessCosts *string  "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	Category      *string  "json:\"category,omitempty\" graphql:\"category\""
 	DelegateID    *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Details       *string  "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID     string   "json:\"displayID\" graphql:\"displayID\""
 	ID            string   "json:\"id\" graphql:\"id\""
@@ -5588,12 +5391,6 @@ func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetDelegateID() *string {
 		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
 	}
 	return t.DelegateID
-}
-func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Risks_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Risks_Edges_Node) GetDetails() *string {
 	if t == nil {
@@ -5719,7 +5516,6 @@ func (t *AdminSearch_AdminSearch_Standards_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_Standards_Edges_Node struct {
-	DeletedBy            *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description          *string  "json:\"description,omitempty\" graphql:\"description\""
 	Domains              []string "json:\"domains,omitempty\" graphql:\"domains\""
 	Framework            *string  "json:\"framework,omitempty\" graphql:\"framework\""
@@ -5736,12 +5532,6 @@ type AdminSearch_AdminSearch_Standards_Edges_Node struct {
 	Version              *string  "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_Standards_Edges_Node) GetDescription() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Standards_Edges_Node{}
@@ -5905,7 +5695,6 @@ type AdminSearch_AdminSearch_Subcontrols_Edges_Node struct {
 	ControlOwnerID         *string                          "json:\"controlOwnerID,omitempty\" graphql:\"controlOwnerID\""
 	ControlQuestions       []string                         "json:\"controlQuestions,omitempty\" graphql:\"controlQuestions\""
 	DelegateID             *string                          "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	DeletedBy              *string                          "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description            *string                          "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID              string                           "json:\"displayID\" graphql:\"displayID\""
 	ExampleEvidence        []*models.ExampleEvidence        "json:\"exampleEvidence,omitempty\" graphql:\"exampleEvidence\""
@@ -5973,12 +5762,6 @@ func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetDelegateID() *string
 		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
 	}
 	return t.DelegateID
-}
-func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Subcontrols_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Subcontrols_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -6122,7 +5905,6 @@ func (t *AdminSearch_AdminSearch_Subscribers_PageInfo) GetStartCursor() *string 
 }
 
 type AdminSearch_AdminSearch_Subscribers_Edges_Node struct {
-	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Email       string   "json:\"email\" graphql:\"email\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -6130,12 +5912,6 @@ type AdminSearch_AdminSearch_Subscribers_Edges_Node struct {
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
-func (t *AdminSearch_AdminSearch_Subscribers_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Subscribers_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_Subscribers_Edges_Node) GetEmail() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Subscribers_Edges_Node{}
@@ -6239,7 +6015,6 @@ type AdminSearch_AdminSearch_Tasks_Edges_Node struct {
 	AssigneeID *string  "json:\"assigneeID,omitempty\" graphql:\"assigneeID\""
 	AssignerID *string  "json:\"assignerID,omitempty\" graphql:\"assignerID\""
 	Category   *string  "json:\"category,omitempty\" graphql:\"category\""
-	DeletedBy  *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Details    *string  "json:\"details,omitempty\" graphql:\"details\""
 	DisplayID  string   "json:\"displayID\" graphql:\"displayID\""
 	ID         string   "json:\"id\" graphql:\"id\""
@@ -6265,12 +6040,6 @@ func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetCategory() *string {
 		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
 	}
 	return t.Category
-}
-func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Tasks_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Tasks_Edges_Node) GetDetails() *string {
 	if t == nil {
@@ -6378,7 +6147,6 @@ func (t *AdminSearch_AdminSearch_Templates_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_Templates_Edges_Node struct {
-	DeletedBy   *string        "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Description *string        "json:\"description,omitempty\" graphql:\"description\""
 	ID          string         "json:\"id\" graphql:\"id\""
 	Jsonconfig  map[string]any "json:\"jsonconfig\" graphql:\"jsonconfig\""
@@ -6388,12 +6156,6 @@ type AdminSearch_AdminSearch_Templates_Edges_Node struct {
 	Uischema    map[string]any "json:\"uischema,omitempty\" graphql:\"uischema\""
 }
 
-func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_Templates_Edges_Node) GetDescription() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Templates_Edges_Node{}
@@ -6508,7 +6270,6 @@ func (t *AdminSearch_AdminSearch_Users_PageInfo) GetStartCursor() *string {
 type AdminSearch_AdminSearch_Users_Edges_Node struct {
 	AvatarLocalFileID *string  "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
 	AvatarRemoteURL   *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	DeletedBy         *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	DisplayID         string   "json:\"displayID\" graphql:\"displayID\""
 	DisplayName       string   "json:\"displayName\" graphql:\"displayName\""
 	Email             string   "json:\"email\" graphql:\"email\""
@@ -6530,12 +6291,6 @@ func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetAvatarRemoteURL() *string 
 		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
 	}
 	return t.AvatarRemoteURL
-}
-func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Users_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *AdminSearch_AdminSearch_Users_Edges_Node) GetDisplayID() string {
 	if t == nil {
@@ -6655,18 +6410,11 @@ func (t *AdminSearch_AdminSearch_UserSettings_PageInfo) GetStartCursor() *string
 }
 
 type AdminSearch_AdminSearch_UserSettings_Edges_Node struct {
-	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID        string   "json:\"id\" graphql:\"id\""
-	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
-	UserID    *string  "json:\"userID,omitempty\" graphql:\"userID\""
+	ID     string   "json:\"id\" graphql:\"id\""
+	Tags   []string "json:\"tags,omitempty\" graphql:\"tags\""
+	UserID *string  "json:\"userID,omitempty\" graphql:\"userID\""
 }
 
-func (t *AdminSearch_AdminSearch_UserSettings_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_UserSettings_Edges_Node{}
-	}
-	return t.DeletedBy
-}
 func (t *AdminSearch_AdminSearch_UserSettings_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_UserSettings_Edges_Node{}
@@ -70887,8 +70635,6 @@ type GetAllUserSettings_UserSettings_Edges_Node struct {
 	CreatedAt      *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy      *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DefaultOrg     *GetAllUserSettings_UserSettings_Edges_Node_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
-	DeletedAt      *time.Time                                             "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
-	DeletedBy      *string                                                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	EmailConfirmed bool                                                   "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	ID             string                                                 "json:\"id\" graphql:\"id\""
 	IsTfaEnabled   *bool                                                  "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
@@ -70917,18 +70663,6 @@ func (t *GetAllUserSettings_UserSettings_Edges_Node) GetDefaultOrg() *GetAllUser
 		t = &GetAllUserSettings_UserSettings_Edges_Node{}
 	}
 	return t.DefaultOrg
-}
-func (t *GetAllUserSettings_UserSettings_Edges_Node) GetDeletedAt() *time.Time {
-	if t == nil {
-		t = &GetAllUserSettings_UserSettings_Edges_Node{}
-	}
-	return t.DeletedAt
-}
-func (t *GetAllUserSettings_UserSettings_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &GetAllUserSettings_UserSettings_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *GetAllUserSettings_UserSettings_Edges_Node) GetEmailConfirmed() bool {
 	if t == nil {
@@ -71036,8 +70770,6 @@ type GetUserSettingByID_UserSetting struct {
 	CreatedAt      *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy      *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DefaultOrg     *GetUserSettingByID_UserSetting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
-	DeletedAt      *time.Time                                 "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
-	DeletedBy      *string                                    "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	EmailConfirmed bool                                       "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	ID             string                                     "json:\"id\" graphql:\"id\""
 	IsTfaEnabled   *bool                                      "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
@@ -71066,18 +70798,6 @@ func (t *GetUserSettingByID_UserSetting) GetDefaultOrg() *GetUserSettingByID_Use
 		t = &GetUserSettingByID_UserSetting{}
 	}
 	return t.DefaultOrg
-}
-func (t *GetUserSettingByID_UserSetting) GetDeletedAt() *time.Time {
-	if t == nil {
-		t = &GetUserSettingByID_UserSetting{}
-	}
-	return t.DeletedAt
-}
-func (t *GetUserSettingByID_UserSetting) GetDeletedBy() *string {
-	if t == nil {
-		t = &GetUserSettingByID_UserSetting{}
-	}
-	return t.DeletedBy
 }
 func (t *GetUserSettingByID_UserSetting) GetEmailConfirmed() bool {
 	if t == nil {
@@ -71163,8 +70883,6 @@ type GetUserSettings_UserSettings_Edges_Node struct {
 	CreatedAt      *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy      *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DefaultOrg     *GetUserSettings_UserSettings_Edges_Node_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
-	DeletedAt      *time.Time                                          "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
-	DeletedBy      *string                                             "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	EmailConfirmed bool                                                "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	ID             string                                              "json:\"id\" graphql:\"id\""
 	IsTfaEnabled   *bool                                               "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
@@ -71193,18 +70911,6 @@ func (t *GetUserSettings_UserSettings_Edges_Node) GetDefaultOrg() *GetUserSettin
 		t = &GetUserSettings_UserSettings_Edges_Node{}
 	}
 	return t.DefaultOrg
-}
-func (t *GetUserSettings_UserSettings_Edges_Node) GetDeletedAt() *time.Time {
-	if t == nil {
-		t = &GetUserSettings_UserSettings_Edges_Node{}
-	}
-	return t.DeletedAt
-}
-func (t *GetUserSettings_UserSettings_Edges_Node) GetDeletedBy() *string {
-	if t == nil {
-		t = &GetUserSettings_UserSettings_Edges_Node{}
-	}
-	return t.DeletedBy
 }
 func (t *GetUserSettings_UserSettings_Edges_Node) GetEmailConfirmed() bool {
 	if t == nil {
@@ -71312,8 +71018,6 @@ type UpdateUserSetting_UpdateUserSetting_UserSetting struct {
 	CreatedAt      *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy      *string                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DefaultOrg     *UpdateUserSetting_UpdateUserSetting_UserSetting_DefaultOrg "json:\"defaultOrg,omitempty\" graphql:\"defaultOrg\""
-	DeletedAt      *time.Time                                                  "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
-	DeletedBy      *string                                                     "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	EmailConfirmed bool                                                        "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
 	ID             string                                                      "json:\"id\" graphql:\"id\""
 	IsTfaEnabled   *bool                                                       "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
@@ -71342,18 +71046,6 @@ func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetDefaultOrg() *Updat
 		t = &UpdateUserSetting_UpdateUserSetting_UserSetting{}
 	}
 	return t.DefaultOrg
-}
-func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetDeletedAt() *time.Time {
-	if t == nil {
-		t = &UpdateUserSetting_UpdateUserSetting_UserSetting{}
-	}
-	return t.DeletedAt
-}
-func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetDeletedBy() *string {
-	if t == nil {
-		t = &UpdateUserSetting_UpdateUserSetting_UserSetting{}
-	}
-	return t.DeletedBy
 }
 func (t *UpdateUserSetting_UpdateUserSetting_UserSetting) GetEmailConfirmed() bool {
 	if t == nil {
@@ -76487,7 +76179,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76508,7 +76199,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					revision
@@ -76532,7 +76222,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76555,7 +76244,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -76590,7 +76278,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76608,7 +76295,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -76632,7 +76318,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76651,7 +76336,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76670,7 +76354,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76693,7 +76376,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76730,7 +76412,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -76753,7 +76434,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					providedFileName
@@ -76780,7 +76460,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -76800,7 +76479,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76819,7 +76497,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -76843,7 +76520,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					ownerID
 					recipient
@@ -76861,7 +76537,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -76881,7 +76556,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76899,7 +76573,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -76918,7 +76591,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					name
@@ -76935,7 +76607,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					mappingType
@@ -76953,7 +76624,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -76974,7 +76644,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -77000,7 +76669,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					name
@@ -77020,7 +76688,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					domains
@@ -77044,7 +76711,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					name
@@ -77064,7 +76730,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -77088,7 +76753,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -77112,7 +76776,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -77138,7 +76801,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					revision
@@ -77166,7 +76828,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -77201,7 +76862,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -77220,7 +76880,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -77243,7 +76902,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					ownerID
@@ -77264,7 +76922,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					displayID
 					tags
@@ -77288,7 +76945,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 			}
 			edges {
 				node {
-					deletedBy
 					id
 					tags
 					userID
@@ -95260,8 +94916,6 @@ const GetAllUserSettingsDocument = `query GetAllUserSettings {
 				emailConfirmed
 				createdAt
 				createdBy
-				deletedAt
-				deletedBy
 				updatedAt
 				updatedBy
 			}
@@ -95301,8 +94955,6 @@ const GetUserSettingByIDDocument = `query GetUserSettingByID ($userSettingId: ID
 		emailConfirmed
 		createdAt
 		createdBy
-		deletedAt
-		deletedBy
 		updatedAt
 		updatedBy
 	}
@@ -95344,8 +94996,6 @@ const GetUserSettingsDocument = `query GetUserSettings ($where: UserSettingWhere
 				emailConfirmed
 				createdAt
 				createdBy
-				deletedAt
-				deletedBy
 				updatedAt
 				updatedBy
 			}
@@ -95388,8 +95038,6 @@ const UpdateUserSettingDocument = `mutation UpdateUserSetting ($updateUserSettin
 			emailConfirmed
 			createdAt
 			createdBy
-			deletedAt
-			deletedBy
 			updatedAt
 			updatedBy
 		}

@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_MappableDomainBulkCreatePayload_mappabl
 				return ec.fieldContext_MappableDomain_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_MappableDomain_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_MappableDomain_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_MappableDomain_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappableDomain_tags(ctx, field)
 			case "name":
@@ -141,10 +137,6 @@ func (ec *executionContext) fieldContext_MappableDomainCreatePayload_mappableDom
 				return ec.fieldContext_MappableDomain_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_MappableDomain_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_MappableDomain_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_MappableDomain_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappableDomain_tags(ctx, field)
 			case "name":
@@ -251,10 +243,6 @@ func (ec *executionContext) fieldContext_MappableDomainUpdatePayload_mappableDom
 				return ec.fieldContext_MappableDomain_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_MappableDomain_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_MappableDomain_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_MappableDomain_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_MappableDomain_tags(ctx, field)
 			case "name":

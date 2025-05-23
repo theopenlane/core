@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_ProgramMembershipBulkCreatePayload_prog
 				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_ProgramMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ProgramMembership_deletedBy(ctx, field)
 			case "role":
 				return ec.fieldContext_ProgramMembership_role(ctx, field)
 			case "programID":
@@ -145,10 +141,6 @@ func (ec *executionContext) fieldContext_ProgramMembershipCreatePayload_programM
 				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_ProgramMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ProgramMembership_deletedBy(ctx, field)
 			case "role":
 				return ec.fieldContext_ProgramMembership_role(ctx, field)
 			case "programID":
@@ -259,10 +251,6 @@ func (ec *executionContext) fieldContext_ProgramMembershipUpdatePayload_programM
 				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_ProgramMembership_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_ProgramMembership_deletedBy(ctx, field)
 			case "role":
 				return ec.fieldContext_ProgramMembership_role(ctx, field)
 			case "programID":

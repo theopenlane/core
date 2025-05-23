@@ -78,10 +78,6 @@ func (ec *executionContext) fieldContext_TFASettingCreatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_TFASetting_deletedBy(ctx, field)
 			case "verified":
 				return ec.fieldContext_TFASetting_verified(ctx, field)
 			case "totpAllowed":
@@ -226,10 +222,6 @@ func (ec *executionContext) fieldContext_TFASettingUpdatePayload_tfaSetting(_ co
 				return ec.fieldContext_TFASetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TFASetting_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_TFASetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_TFASetting_deletedBy(ctx, field)
 			case "verified":
 				return ec.fieldContext_TFASetting_verified(ctx, field)
 			case "totpAllowed":

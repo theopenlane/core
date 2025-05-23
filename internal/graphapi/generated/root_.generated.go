@@ -62,8 +62,6 @@ type ComplexityRoot struct {
 	APIToken struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedBy     func(childComplexity int) int
 		Description   func(childComplexity int) int
 		ExpiresAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
@@ -119,8 +117,6 @@ type ComplexityRoot struct {
 		CreatedBy        func(childComplexity int) int
 		Delegate         func(childComplexity int) int
 		DelegateID       func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DueDate          func(childComplexity int) int
 		ID               func(childComplexity int) int
@@ -172,8 +168,6 @@ type ComplexityRoot struct {
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		DelegateID       func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DueDate          func(childComplexity int) int
 		HistoryTime      func(childComplexity int) int
@@ -234,8 +228,6 @@ type ComplexityRoot struct {
 		Company     func(childComplexity int) int
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		Email       func(childComplexity int) int
 		Entities    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Files       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
@@ -279,8 +271,6 @@ type ComplexityRoot struct {
 		Company     func(childComplexity int) int
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		Email       func(childComplexity int) int
 		FullName    func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
@@ -329,8 +319,6 @@ type ComplexityRoot struct {
 		CreatedBy              func(childComplexity int) int
 		Delegate               func(childComplexity int) int
 		DelegateID             func(childComplexity int) int
-		DeletedAt              func(childComplexity int) int
-		DeletedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Editors                func(childComplexity int) int
@@ -398,8 +386,6 @@ type ComplexityRoot struct {
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		DelegateID             func(childComplexity int) int
-		DeletedAt              func(childComplexity int) int
-		DeletedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		ExampleEvidence        func(childComplexity int) int
@@ -437,8 +423,6 @@ type ComplexityRoot struct {
 		Controls           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
-		DeletedAt          func(childComplexity int) int
-		DeletedBy          func(childComplexity int) int
 		Details            func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
@@ -479,8 +463,6 @@ type ComplexityRoot struct {
 	ControlImplementationHistory struct {
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
-		DeletedAt          func(childComplexity int) int
-		DeletedBy          func(childComplexity int) int
 		Details            func(childComplexity int) int
 		HistoryTime        func(childComplexity int) int
 		ID                 func(childComplexity int) int
@@ -518,8 +500,6 @@ type ComplexityRoot struct {
 		Controls             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
-		DeletedAt            func(childComplexity int) int
-		DeletedBy            func(childComplexity int) int
 		DesiredOutcome       func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
@@ -573,8 +553,6 @@ type ComplexityRoot struct {
 		ControlObjectiveType func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
-		DeletedAt            func(childComplexity int) int
-		DeletedBy            func(childComplexity int) int
 		DesiredOutcome       func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
@@ -615,8 +593,6 @@ type ComplexityRoot struct {
 		CnameRecord      func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
 		ID               func(childComplexity int) int
 		MappableDomain   func(childComplexity int) int
 		MappableDomainID func(childComplexity int) int
@@ -654,8 +630,6 @@ type ComplexityRoot struct {
 		CnameRecord      func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
 		MappableDomainID func(childComplexity int) int
@@ -686,8 +660,6 @@ type ComplexityRoot struct {
 		CreatedAt  func(childComplexity int) int
 		CreatedBy  func(childComplexity int) int
 		Data       func(childComplexity int) int
-		DeletedAt  func(childComplexity int) int
-		DeletedBy  func(childComplexity int) int
 		Entities   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Files      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID         func(childComplexity int) int
@@ -727,8 +699,6 @@ type ComplexityRoot struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
 		Data        func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Operation   func(childComplexity int) int
@@ -759,8 +729,6 @@ type ComplexityRoot struct {
 		Contacts     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedBy    func(childComplexity int) int
 		Description  func(childComplexity int) int
 		DisplayName  func(childComplexity int) int
 		Documents    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
@@ -805,8 +773,6 @@ type ComplexityRoot struct {
 	EntityHistory struct {
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedBy    func(childComplexity int) int
 		Description  func(childComplexity int) int
 		DisplayName  func(childComplexity int) int
 		Domains      func(childComplexity int) int
@@ -837,8 +803,6 @@ type ComplexityRoot struct {
 	EntityType struct {
 		CreatedAt func(childComplexity int) int
 		CreatedBy func(childComplexity int) int
-		DeletedAt func(childComplexity int) int
-		DeletedBy func(childComplexity int) int
 		Entities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		ID        func(childComplexity int) int
 		Name      func(childComplexity int) int
@@ -875,8 +839,6 @@ type ComplexityRoot struct {
 	EntityTypeHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Name        func(childComplexity int) int
@@ -993,8 +955,6 @@ type ComplexityRoot struct {
 		CreatedAt           func(childComplexity int) int
 		CreatedBy           func(childComplexity int) int
 		CreationDate        func(childComplexity int) int
-		DeletedAt           func(childComplexity int) int
-		DeletedBy           func(childComplexity int) int
 		Description         func(childComplexity int) int
 		DisplayID           func(childComplexity int) int
 		Files               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
@@ -1043,8 +1003,6 @@ type ComplexityRoot struct {
 		CreatedAt           func(childComplexity int) int
 		CreatedBy           func(childComplexity int) int
 		CreationDate        func(childComplexity int) int
-		DeletedAt           func(childComplexity int) int
-		DeletedBy           func(childComplexity int) int
 		Description         func(childComplexity int) int
 		DisplayID           func(childComplexity int) int
 		HistoryTime         func(childComplexity int) int
@@ -1083,8 +1041,6 @@ type ComplexityRoot struct {
 		Contact               func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
-		DeletedAt             func(childComplexity int) int
-		DeletedBy             func(childComplexity int) int
 		DetectedContentType   func(childComplexity int) int
 		DetectedMimeType      func(childComplexity int) int
 		Document              func(childComplexity int) int
@@ -1134,8 +1090,6 @@ type ComplexityRoot struct {
 		CategoryType          func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
-		DeletedAt             func(childComplexity int) int
-		DeletedBy             func(childComplexity int) int
 		DetectedContentType   func(childComplexity int) int
 		DetectedMimeType      func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
@@ -1177,8 +1131,6 @@ type ComplexityRoot struct {
 		ControlViewers                func(childComplexity int) int
 		CreatedAt                     func(childComplexity int) int
 		CreatedBy                     func(childComplexity int) int
-		DeletedAt                     func(childComplexity int) int
-		DeletedBy                     func(childComplexity int) int
 		Description                   func(childComplexity int) int
 		DisplayID                     func(childComplexity int) int
 		DisplayName                   func(childComplexity int) int
@@ -1241,8 +1193,6 @@ type ComplexityRoot struct {
 	GroupHistory struct {
 		CreatedAt       func(childComplexity int) int
 		CreatedBy       func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedBy       func(childComplexity int) int
 		Description     func(childComplexity int) int
 		DisplayID       func(childComplexity int) int
 		DisplayName     func(childComplexity int) int
@@ -1274,8 +1224,6 @@ type ComplexityRoot struct {
 	GroupMembership struct {
 		CreatedAt func(childComplexity int) int
 		CreatedBy func(childComplexity int) int
-		DeletedAt func(childComplexity int) int
-		DeletedBy func(childComplexity int) int
 		Events    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Group     func(childComplexity int) int
 		GroupID   func(childComplexity int) int
@@ -1313,8 +1261,6 @@ type ComplexityRoot struct {
 	GroupMembershipHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		GroupID     func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -1352,8 +1298,6 @@ type ComplexityRoot struct {
 	GroupSetting struct {
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedBy    func(childComplexity int) int
 		Group        func(childComplexity int) int
 		GroupID      func(childComplexity int) int
 		ID           func(childComplexity int) int
@@ -1391,8 +1335,6 @@ type ComplexityRoot struct {
 	GroupSettingHistory struct {
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedBy    func(childComplexity int) int
 		GroupID      func(childComplexity int) int
 		HistoryTime  func(childComplexity int) int
 		ID           func(childComplexity int) int
@@ -1428,8 +1370,6 @@ type ComplexityRoot struct {
 	Hush struct {
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedBy    func(childComplexity int) int
 		Description  func(childComplexity int) int
 		Events       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ID           func(childComplexity int) int
@@ -1469,8 +1409,6 @@ type ComplexityRoot struct {
 	HushHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		Description func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -1502,8 +1440,6 @@ type ComplexityRoot struct {
 	Integration struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		Description func(childComplexity int) int
 		Events      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ID          func(childComplexity int) int
@@ -1543,8 +1479,6 @@ type ComplexityRoot struct {
 	IntegrationHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		Description func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -1584,8 +1518,6 @@ type ComplexityRoot struct {
 		CreatedBy         func(childComplexity int) int
 		Delegate          func(childComplexity int) int
 		DelegateID        func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedBy         func(childComplexity int) int
 		Details           func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
 		Editors           func(childComplexity int) int
@@ -1639,8 +1571,6 @@ type ComplexityRoot struct {
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		DelegateID       func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		HistoryTime      func(childComplexity int) int
@@ -1678,8 +1608,6 @@ type ComplexityRoot struct {
 	Invite struct {
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedBy    func(childComplexity int) int
 		Events       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Expires      func(childComplexity int) int
 		ID           func(childComplexity int) int
@@ -1724,8 +1652,6 @@ type ComplexityRoot struct {
 	JobRunner struct {
 		CreatedAt       func(childComplexity int) int
 		CreatedBy       func(childComplexity int) int
-		DeletedAt       func(childComplexity int) int
-		DeletedBy       func(childComplexity int) int
 		DisplayID       func(childComplexity int) int
 		ID              func(childComplexity int) int
 		IPAddress       func(childComplexity int) int
@@ -1758,8 +1684,6 @@ type ComplexityRoot struct {
 	JobRunnerHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		DisplayID   func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -1789,8 +1713,6 @@ type ComplexityRoot struct {
 	JobRunnerRegistrationToken struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		ExpiresAt   func(childComplexity int) int
 		ID          func(childComplexity int) int
 		JobRunner   func(childComplexity int) int
@@ -1830,8 +1752,6 @@ type ComplexityRoot struct {
 	JobRunnerToken struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedBy     func(childComplexity int) int
 		ExpiresAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
 		IsActive      func(childComplexity int) int
@@ -1879,8 +1799,6 @@ type ComplexityRoot struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
 		CustomDomains func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
-		DeletedAt     func(childComplexity int) int
-		DeletedBy     func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Name          func(childComplexity int) int
 		Tags          func(childComplexity int) int
@@ -1914,8 +1832,6 @@ type ComplexityRoot struct {
 	MappableDomainHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Name        func(childComplexity int) int
@@ -1945,8 +1861,6 @@ type ComplexityRoot struct {
 		Controls    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		ID          func(childComplexity int) int
 		MappingType func(childComplexity int) int
 		Relation    func(childComplexity int) int
@@ -1982,8 +1896,6 @@ type ComplexityRoot struct {
 	MappedControlHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
 		MappingType func(childComplexity int) int
@@ -2210,8 +2122,6 @@ type ComplexityRoot struct {
 		BlockedGroups    func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
@@ -2256,8 +2166,6 @@ type ComplexityRoot struct {
 	NarrativeHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		Description func(childComplexity int) int
 		Details     func(childComplexity int) int
 		DisplayID   func(childComplexity int) int
@@ -2290,8 +2198,6 @@ type ComplexityRoot struct {
 	Note struct {
 		CreatedAt func(childComplexity int) int
 		CreatedBy func(childComplexity int) int
-		DeletedAt func(childComplexity int) int
-		DeletedBy func(childComplexity int) int
 		DisplayID func(childComplexity int) int
 		Files     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID        func(childComplexity int) int
@@ -2317,8 +2223,6 @@ type ComplexityRoot struct {
 	NoteHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		DisplayID   func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -2345,8 +2249,6 @@ type ComplexityRoot struct {
 		CompanyDetails func(childComplexity int) int
 		CompanyName    func(childComplexity int) int
 		Compliance     func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedBy      func(childComplexity int) int
 		Domains        func(childComplexity int) int
 		ID             func(childComplexity int) int
 		Organization   func(childComplexity int) int
@@ -2361,8 +2263,6 @@ type ComplexityRoot struct {
 	OrgMembership struct {
 		CreatedAt      func(childComplexity int) int
 		CreatedBy      func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedBy      func(childComplexity int) int
 		Events         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ID             func(childComplexity int) int
 		Organization   func(childComplexity int) int
@@ -2400,8 +2300,6 @@ type ComplexityRoot struct {
 	OrgMembershipHistory struct {
 		CreatedAt      func(childComplexity int) int
 		CreatedBy      func(childComplexity int) int
-		DeletedAt      func(childComplexity int) int
-		DeletedBy      func(childComplexity int) int
 		HistoryTime    func(childComplexity int) int
 		ID             func(childComplexity int) int
 		Operation      func(childComplexity int) int
@@ -2434,8 +2332,6 @@ type ComplexityRoot struct {
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DaysUntilDue             func(childComplexity int) int
-		DeletedAt                func(childComplexity int) int
-		DeletedBy                func(childComplexity int) int
 		Events                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ExpiresAt                func(childComplexity int) int
 		FeatureLookupKeys        func(childComplexity int) int
@@ -2474,8 +2370,6 @@ type ComplexityRoot struct {
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DaysUntilDue             func(childComplexity int) int
-		DeletedAt                func(childComplexity int) int
-		DeletedBy                func(childComplexity int) int
 		ExpiresAt                func(childComplexity int) int
 		FeatureLookupKeys        func(childComplexity int) int
 		Features                 func(childComplexity int) int
@@ -2526,8 +2420,6 @@ type ComplexityRoot struct {
 		CreatedBy                   func(childComplexity int) int
 		CustomDomains               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
 		DedicatedDb                 func(childComplexity int) int
-		DeletedAt                   func(childComplexity int) int
-		DeletedBy                   func(childComplexity int) int
 		Description                 func(childComplexity int) int
 		DisplayName                 func(childComplexity int) int
 		Documents                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
@@ -2605,8 +2497,6 @@ type ComplexityRoot struct {
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		DedicatedDb       func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedBy         func(childComplexity int) int
 		Description       func(childComplexity int) int
 		DisplayName       func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
@@ -2640,8 +2530,6 @@ type ComplexityRoot struct {
 		BillingPhone                func(childComplexity int) int
 		CreatedAt                   func(childComplexity int) int
 		CreatedBy                   func(childComplexity int) int
-		DeletedAt                   func(childComplexity int) int
-		DeletedBy                   func(childComplexity int) int
 		Domains                     func(childComplexity int) int
 		Files                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		GeoLocation                 func(childComplexity int) int
@@ -2686,8 +2574,6 @@ type ComplexityRoot struct {
 		BillingPhone                func(childComplexity int) int
 		CreatedAt                   func(childComplexity int) int
 		CreatedBy                   func(childComplexity int) int
-		DeletedAt                   func(childComplexity int) int
-		DeletedBy                   func(childComplexity int) int
 		Domains                     func(childComplexity int) int
 		GeoLocation                 func(childComplexity int) int
 		HistoryTime                 func(childComplexity int) int
@@ -2730,8 +2616,6 @@ type ComplexityRoot struct {
 	PersonalAccessToken struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedBy     func(childComplexity int) int
 		Description   func(childComplexity int) int
 		Events        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ExpiresAt     func(childComplexity int) int
@@ -2788,8 +2672,6 @@ type ComplexityRoot struct {
 		CreatedBy        func(childComplexity int) int
 		Delegate         func(childComplexity int) int
 		DelegateID       func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		Editors          func(childComplexity int) int
@@ -2843,8 +2725,6 @@ type ComplexityRoot struct {
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		DelegateID       func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		HistoryTime      func(childComplexity int) int
@@ -2892,8 +2772,6 @@ type ComplexityRoot struct {
 		Controls             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
-		DeletedAt            func(childComplexity int) int
-		DeletedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int) int
@@ -2955,8 +2833,6 @@ type ComplexityRoot struct {
 		AuditorWriteComments func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
-		DeletedAt            func(childComplexity int) int
-		DeletedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		EndDate              func(childComplexity int) int
@@ -2989,8 +2865,6 @@ type ComplexityRoot struct {
 	ProgramMembership struct {
 		CreatedAt func(childComplexity int) int
 		CreatedBy func(childComplexity int) int
-		DeletedAt func(childComplexity int) int
-		DeletedBy func(childComplexity int) int
 		ID        func(childComplexity int) int
 		Program   func(childComplexity int) int
 		ProgramID func(childComplexity int) int
@@ -3027,8 +2901,6 @@ type ComplexityRoot struct {
 	ProgramMembershipHistory struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		HistoryTime func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Operation   func(childComplexity int) int
@@ -3280,8 +3152,6 @@ type ComplexityRoot struct {
 		CreatedBy        func(childComplexity int) int
 		Delegate         func(childComplexity int) int
 		DelegateID       func(childComplexity int) int
-		DeletedAt        func(childComplexity int) int
-		DeletedBy        func(childComplexity int) int
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		Editors          func(childComplexity int) int
@@ -3337,8 +3207,6 @@ type ComplexityRoot struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
 		DelegateID    func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedBy     func(childComplexity int) int
 		Details       func(childComplexity int) int
 		DisplayID     func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
@@ -3421,8 +3289,6 @@ type ComplexityRoot struct {
 		Controls             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
-		DeletedAt            func(childComplexity int) int
-		DeletedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		Domains              func(childComplexity int) int
 		Framework            func(childComplexity int) int
@@ -3472,8 +3338,6 @@ type ComplexityRoot struct {
 	StandardHistory struct {
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
-		DeletedAt            func(childComplexity int) int
-		DeletedBy            func(childComplexity int) int
 		Description          func(childComplexity int) int
 		Domains              func(childComplexity int) int
 		Framework            func(childComplexity int) int
@@ -3533,8 +3397,6 @@ type ComplexityRoot struct {
 		CreatedBy              func(childComplexity int) int
 		Delegate               func(childComplexity int) int
 		DelegateID             func(childComplexity int) int
-		DeletedAt              func(childComplexity int) int
-		DeletedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
@@ -3597,8 +3459,6 @@ type ComplexityRoot struct {
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		DelegateID             func(childComplexity int) int
-		DeletedAt              func(childComplexity int) int
-		DeletedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		ExampleEvidence        func(childComplexity int) int
@@ -3639,8 +3499,6 @@ type ComplexityRoot struct {
 		Active        func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
-		DeletedAt     func(childComplexity int) int
-		DeletedBy     func(childComplexity int) int
 		Email         func(childComplexity int) int
 		Events        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ID            func(childComplexity int) int
@@ -3686,8 +3544,6 @@ type ComplexityRoot struct {
 	TFASetting struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Owner       func(childComplexity int) int
 		TotpAllowed func(childComplexity int) int
@@ -3732,8 +3588,6 @@ type ComplexityRoot struct {
 		Controls          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedBy         func(childComplexity int) int
 		Details           func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
 		Due               func(childComplexity int) int
@@ -3784,8 +3638,6 @@ type ComplexityRoot struct {
 		Completed   func(childComplexity int) int
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
-		DeletedAt   func(childComplexity int) int
-		DeletedBy   func(childComplexity int) int
 		Details     func(childComplexity int) int
 		DisplayID   func(childComplexity int) int
 		Due         func(childComplexity int) int
@@ -3819,8 +3671,6 @@ type ComplexityRoot struct {
 	Template struct {
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedBy    func(childComplexity int) int
 		Description  func(childComplexity int) int
 		Documents    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
 		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
@@ -3862,8 +3712,6 @@ type ComplexityRoot struct {
 	TemplateHistory struct {
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
-		DeletedAt    func(childComplexity int) int
-		DeletedBy    func(childComplexity int) int
 		Description  func(childComplexity int) int
 		HistoryTime  func(childComplexity int) int
 		ID           func(childComplexity int) int
@@ -3905,8 +3753,6 @@ type ComplexityRoot struct {
 		AvatarUpdatedAt      func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
-		DeletedAt            func(childComplexity int) int
-		DeletedBy            func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		DisplayName          func(childComplexity int) int
 		Email                func(childComplexity int) int
@@ -3965,8 +3811,6 @@ type ComplexityRoot struct {
 		AvatarUpdatedAt   func(childComplexity int) int
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedBy         func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
 		DisplayName       func(childComplexity int) int
 		Email             func(childComplexity int) int
@@ -4000,8 +3844,6 @@ type ComplexityRoot struct {
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		DefaultOrg        func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedBy         func(childComplexity int) int
 		EmailConfirmed    func(childComplexity int) int
 		Files             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID                func(childComplexity int) int
@@ -4040,8 +3882,6 @@ type ComplexityRoot struct {
 	UserSettingHistory struct {
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
-		DeletedAt         func(childComplexity int) int
-		DeletedBy         func(childComplexity int) int
 		EmailConfirmed    func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
@@ -4139,20 +3979,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APIToken.CreatedBy(childComplexity), true
-
-	case "APIToken.deletedAt":
-		if e.complexity.APIToken.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.APIToken.DeletedAt(childComplexity), true
-
-	case "APIToken.deletedBy":
-		if e.complexity.APIToken.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.APIToken.DeletedBy(childComplexity), true
 
 	case "APIToken.description":
 		if e.complexity.APIToken.Description == nil {
@@ -4396,20 +4222,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.DelegateID(childComplexity), true
-
-	case "ActionPlan.deletedAt":
-		if e.complexity.ActionPlan.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ActionPlan.DeletedAt(childComplexity), true
-
-	case "ActionPlan.deletedBy":
-		if e.complexity.ActionPlan.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ActionPlan.DeletedBy(childComplexity), true
 
 	case "ActionPlan.details":
 		if e.complexity.ActionPlan.Details == nil {
@@ -4656,20 +4468,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.DelegateID(childComplexity), true
-
-	case "ActionPlanHistory.deletedAt":
-		if e.complexity.ActionPlanHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ActionPlanHistory.DeletedAt(childComplexity), true
-
-	case "ActionPlanHistory.deletedBy":
-		if e.complexity.ActionPlanHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ActionPlanHistory.DeletedBy(childComplexity), true
 
 	case "ActionPlanHistory.details":
 		if e.complexity.ActionPlanHistory.Details == nil {
@@ -4944,20 +4742,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Contact.CreatedBy(childComplexity), true
 
-	case "Contact.deletedAt":
-		if e.complexity.Contact.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Contact.DeletedAt(childComplexity), true
-
-	case "Contact.deletedBy":
-		if e.complexity.Contact.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Contact.DeletedBy(childComplexity), true
-
 	case "Contact.email":
 		if e.complexity.Contact.Email == nil {
 			break
@@ -5142,20 +4926,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ContactHistory.CreatedBy(childComplexity), true
-
-	case "ContactHistory.deletedAt":
-		if e.complexity.ContactHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ContactHistory.DeletedAt(childComplexity), true
-
-	case "ContactHistory.deletedBy":
-		if e.complexity.ContactHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ContactHistory.DeletedBy(childComplexity), true
 
 	case "ContactHistory.email":
 		if e.complexity.ContactHistory.Email == nil {
@@ -5423,20 +5193,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.DelegateID(childComplexity), true
-
-	case "Control.deletedAt":
-		if e.complexity.Control.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Control.DeletedAt(childComplexity), true
-
-	case "Control.deletedBy":
-		if e.complexity.Control.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Control.DeletedBy(childComplexity), true
 
 	case "Control.description":
 		if e.complexity.Control.Description == nil {
@@ -5826,20 +5582,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlHistory.DelegateID(childComplexity), true
 
-	case "ControlHistory.deletedAt":
-		if e.complexity.ControlHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlHistory.DeletedAt(childComplexity), true
-
-	case "ControlHistory.deletedBy":
-		if e.complexity.ControlHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlHistory.DeletedBy(childComplexity), true
-
 	case "ControlHistory.description":
 		if e.complexity.ControlHistory.Description == nil {
 			break
@@ -6041,20 +5783,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlImplementation.CreatedBy(childComplexity), true
 
-	case "ControlImplementation.deletedAt":
-		if e.complexity.ControlImplementation.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlImplementation.DeletedAt(childComplexity), true
-
-	case "ControlImplementation.deletedBy":
-		if e.complexity.ControlImplementation.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlImplementation.DeletedBy(childComplexity), true
-
 	case "ControlImplementation.details":
 		if e.complexity.ControlImplementation.Details == nil {
 			break
@@ -6213,20 +5941,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlImplementationHistory.CreatedBy(childComplexity), true
-
-	case "ControlImplementationHistory.deletedAt":
-		if e.complexity.ControlImplementationHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlImplementationHistory.DeletedAt(childComplexity), true
-
-	case "ControlImplementationHistory.deletedBy":
-		if e.complexity.ControlImplementationHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlImplementationHistory.DeletedBy(childComplexity), true
 
 	case "ControlImplementationHistory.details":
 		if e.complexity.ControlImplementationHistory.Details == nil {
@@ -6407,20 +6121,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlObjective.CreatedBy(childComplexity), true
-
-	case "ControlObjective.deletedAt":
-		if e.complexity.ControlObjective.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.DeletedAt(childComplexity), true
-
-	case "ControlObjective.deletedBy":
-		if e.complexity.ControlObjective.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlObjective.DeletedBy(childComplexity), true
 
 	case "ControlObjective.desiredOutcome":
 		if e.complexity.ControlObjective.DesiredOutcome == nil {
@@ -6707,20 +6407,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlObjectiveHistory.CreatedBy(childComplexity), true
 
-	case "ControlObjectiveHistory.deletedAt":
-		if e.complexity.ControlObjectiveHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlObjectiveHistory.DeletedAt(childComplexity), true
-
-	case "ControlObjectiveHistory.deletedBy":
-		if e.complexity.ControlObjectiveHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlObjectiveHistory.DeletedBy(childComplexity), true
-
 	case "ControlObjectiveHistory.desiredOutcome":
 		if e.complexity.ControlObjectiveHistory.DesiredOutcome == nil {
 			break
@@ -6896,20 +6582,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomain.CreatedBy(childComplexity), true
 
-	case "CustomDomain.deletedAt":
-		if e.complexity.CustomDomain.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.CustomDomain.DeletedAt(childComplexity), true
-
-	case "CustomDomain.deletedBy":
-		if e.complexity.CustomDomain.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.CustomDomain.DeletedBy(childComplexity), true
-
 	case "CustomDomain.id":
 		if e.complexity.CustomDomain.ID == nil {
 			break
@@ -7043,20 +6715,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomainHistory.CreatedBy(childComplexity), true
 
-	case "CustomDomainHistory.deletedAt":
-		if e.complexity.CustomDomainHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.CustomDomainHistory.DeletedAt(childComplexity), true
-
-	case "CustomDomainHistory.deletedBy":
-		if e.complexity.CustomDomainHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.CustomDomainHistory.DeletedBy(childComplexity), true
-
 	case "CustomDomainHistory.historyTime":
 		if e.complexity.CustomDomainHistory.HistoryTime == nil {
 			break
@@ -7182,20 +6840,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DocumentData.Data(childComplexity), true
-
-	case "DocumentData.deletedAt":
-		if e.complexity.DocumentData.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.DocumentData.DeletedAt(childComplexity), true
-
-	case "DocumentData.deletedBy":
-		if e.complexity.DocumentData.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.DocumentData.DeletedBy(childComplexity), true
 
 	case "DocumentData.entities":
 		if e.complexity.DocumentData.Entities == nil {
@@ -7354,20 +6998,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DocumentDataHistory.Data(childComplexity), true
 
-	case "DocumentDataHistory.deletedAt":
-		if e.complexity.DocumentDataHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.DocumentDataHistory.DeletedAt(childComplexity), true
-
-	case "DocumentDataHistory.deletedBy":
-		if e.complexity.DocumentDataHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.DocumentDataHistory.DeletedBy(childComplexity), true
-
 	case "DocumentDataHistory.historyTime":
 		if e.complexity.DocumentDataHistory.HistoryTime == nil {
 			break
@@ -7498,20 +7128,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Entity.CreatedBy(childComplexity), true
-
-	case "Entity.deletedAt":
-		if e.complexity.Entity.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Entity.DeletedAt(childComplexity), true
-
-	case "Entity.deletedBy":
-		if e.complexity.Entity.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Entity.DeletedBy(childComplexity), true
 
 	case "Entity.description":
 		if e.complexity.Entity.Description == nil {
@@ -7710,20 +7326,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityHistory.CreatedBy(childComplexity), true
 
-	case "EntityHistory.deletedAt":
-		if e.complexity.EntityHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.EntityHistory.DeletedAt(childComplexity), true
-
-	case "EntityHistory.deletedBy":
-		if e.complexity.EntityHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.EntityHistory.DeletedBy(childComplexity), true
-
 	case "EntityHistory.description":
 		if e.complexity.EntityHistory.Description == nil {
 			break
@@ -7871,20 +7473,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EntityType.CreatedBy(childComplexity), true
 
-	case "EntityType.deletedAt":
-		if e.complexity.EntityType.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.EntityType.DeletedAt(childComplexity), true
-
-	case "EntityType.deletedBy":
-		if e.complexity.EntityType.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.EntityType.DeletedBy(childComplexity), true
-
 	case "EntityType.entities":
 		if e.complexity.EntityType.Entities == nil {
 			break
@@ -8015,20 +7603,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EntityTypeHistory.CreatedBy(childComplexity), true
-
-	case "EntityTypeHistory.deletedAt":
-		if e.complexity.EntityTypeHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.EntityTypeHistory.DeletedAt(childComplexity), true
-
-	case "EntityTypeHistory.deletedBy":
-		if e.complexity.EntityTypeHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.EntityTypeHistory.DeletedBy(childComplexity), true
 
 	case "EntityTypeHistory.historyTime":
 		if e.complexity.EntityTypeHistory.HistoryTime == nil {
@@ -8597,20 +8171,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Evidence.CreationDate(childComplexity), true
 
-	case "Evidence.deletedAt":
-		if e.complexity.Evidence.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Evidence.DeletedAt(childComplexity), true
-
-	case "Evidence.deletedBy":
-		if e.complexity.Evidence.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Evidence.DeletedBy(childComplexity), true
-
 	case "Evidence.description":
 		if e.complexity.Evidence.Description == nil {
 			break
@@ -8841,20 +8401,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EvidenceHistory.CreationDate(childComplexity), true
 
-	case "EvidenceHistory.deletedAt":
-		if e.complexity.EvidenceHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.EvidenceHistory.DeletedAt(childComplexity), true
-
-	case "EvidenceHistory.deletedBy":
-		if e.complexity.EvidenceHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.EvidenceHistory.DeletedBy(childComplexity), true
-
 	case "EvidenceHistory.description":
 		if e.complexity.EvidenceHistory.Description == nil {
 			break
@@ -9036,20 +8582,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.File.CreatedBy(childComplexity), true
-
-	case "File.deletedAt":
-		if e.complexity.File.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.File.DeletedAt(childComplexity), true
-
-	case "File.deletedBy":
-		if e.complexity.File.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.File.DeletedBy(childComplexity), true
 
 	case "File.detectedContentType":
 		if e.complexity.File.DetectedContentType == nil {
@@ -9320,20 +8852,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.FileHistory.CreatedBy(childComplexity), true
 
-	case "FileHistory.deletedAt":
-		if e.complexity.FileHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.FileHistory.DeletedAt(childComplexity), true
-
-	case "FileHistory.deletedBy":
-		if e.complexity.FileHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.FileHistory.DeletedBy(childComplexity), true
-
 	case "FileHistory.detectedContentType":
 		if e.complexity.FileHistory.DetectedContentType == nil {
 			break
@@ -9557,20 +9075,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Group.CreatedBy(childComplexity), true
-
-	case "Group.deletedAt":
-		if e.complexity.Group.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Group.DeletedAt(childComplexity), true
-
-	case "Group.deletedBy":
-		if e.complexity.Group.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Group.DeletedBy(childComplexity), true
 
 	case "Group.description":
 		if e.complexity.Group.Description == nil {
@@ -9910,20 +9414,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.GroupHistory.CreatedBy(childComplexity), true
 
-	case "GroupHistory.deletedAt":
-		if e.complexity.GroupHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.GroupHistory.DeletedAt(childComplexity), true
-
-	case "GroupHistory.deletedBy":
-		if e.complexity.GroupHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.GroupHistory.DeletedBy(childComplexity), true
-
 	case "GroupHistory.description":
 		if e.complexity.GroupHistory.Description == nil {
 			break
@@ -10078,20 +9568,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.GroupMembership.CreatedBy(childComplexity), true
 
-	case "GroupMembership.deletedAt":
-		if e.complexity.GroupMembership.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.GroupMembership.DeletedAt(childComplexity), true
-
-	case "GroupMembership.deletedBy":
-		if e.complexity.GroupMembership.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.GroupMembership.DeletedBy(childComplexity), true
-
 	case "GroupMembership.events":
 		if e.complexity.GroupMembership.Events == nil {
 			break
@@ -10229,20 +9705,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.GroupMembershipHistory.CreatedBy(childComplexity), true
-
-	case "GroupMembershipHistory.deletedAt":
-		if e.complexity.GroupMembershipHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.GroupMembershipHistory.DeletedAt(childComplexity), true
-
-	case "GroupMembershipHistory.deletedBy":
-		if e.complexity.GroupMembershipHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.GroupMembershipHistory.DeletedBy(childComplexity), true
 
 	case "GroupMembershipHistory.groupID":
 		if e.complexity.GroupMembershipHistory.GroupID == nil {
@@ -10398,20 +9860,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.GroupSetting.CreatedBy(childComplexity), true
 
-	case "GroupSetting.deletedAt":
-		if e.complexity.GroupSetting.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.GroupSetting.DeletedAt(childComplexity), true
-
-	case "GroupSetting.deletedBy":
-		if e.complexity.GroupSetting.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.GroupSetting.DeletedBy(childComplexity), true
-
 	case "GroupSetting.group":
 		if e.complexity.GroupSetting.Group == nil {
 			break
@@ -10544,20 +9992,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.GroupSettingHistory.CreatedBy(childComplexity), true
-
-	case "GroupSettingHistory.deletedAt":
-		if e.complexity.GroupSettingHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.GroupSettingHistory.DeletedAt(childComplexity), true
-
-	case "GroupSettingHistory.deletedBy":
-		if e.complexity.GroupSettingHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.GroupSettingHistory.DeletedBy(childComplexity), true
 
 	case "GroupSettingHistory.groupID":
 		if e.complexity.GroupSettingHistory.GroupID == nil {
@@ -10698,20 +10132,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Hush.CreatedBy(childComplexity), true
-
-	case "Hush.deletedAt":
-		if e.complexity.Hush.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Hush.DeletedAt(childComplexity), true
-
-	case "Hush.deletedBy":
-		if e.complexity.Hush.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Hush.DeletedBy(childComplexity), true
 
 	case "Hush.description":
 		if e.complexity.Hush.Description == nil {
@@ -10870,20 +10290,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.HushHistory.CreatedBy(childComplexity), true
 
-	case "HushHistory.deletedAt":
-		if e.complexity.HushHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.HushHistory.DeletedAt(childComplexity), true
-
-	case "HushHistory.deletedBy":
-		if e.complexity.HushHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.HushHistory.DeletedBy(childComplexity), true
-
 	case "HushHistory.description":
 		if e.complexity.HushHistory.Description == nil {
 			break
@@ -11016,20 +10422,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Integration.CreatedBy(childComplexity), true
-
-	case "Integration.deletedAt":
-		if e.complexity.Integration.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Integration.DeletedAt(childComplexity), true
-
-	case "Integration.deletedBy":
-		if e.complexity.Integration.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Integration.DeletedBy(childComplexity), true
 
 	case "Integration.description":
 		if e.complexity.Integration.Description == nil {
@@ -11187,20 +10579,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IntegrationHistory.CreatedBy(childComplexity), true
-
-	case "IntegrationHistory.deletedAt":
-		if e.complexity.IntegrationHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.IntegrationHistory.DeletedAt(childComplexity), true
-
-	case "IntegrationHistory.deletedBy":
-		if e.complexity.IntegrationHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.IntegrationHistory.DeletedBy(childComplexity), true
 
 	case "IntegrationHistory.description":
 		if e.complexity.IntegrationHistory.Description == nil {
@@ -11400,20 +10778,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.DelegateID(childComplexity), true
-
-	case "InternalPolicy.deletedAt":
-		if e.complexity.InternalPolicy.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicy.DeletedAt(childComplexity), true
-
-	case "InternalPolicy.deletedBy":
-		if e.complexity.InternalPolicy.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicy.DeletedBy(childComplexity), true
 
 	case "InternalPolicy.details":
 		if e.complexity.InternalPolicy.Details == nil {
@@ -11690,20 +11054,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.DelegateID(childComplexity), true
 
-	case "InternalPolicyHistory.deletedAt":
-		if e.complexity.InternalPolicyHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicyHistory.DeletedAt(childComplexity), true
-
-	case "InternalPolicyHistory.deletedBy":
-		if e.complexity.InternalPolicyHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicyHistory.DeletedBy(childComplexity), true
-
 	case "InternalPolicyHistory.details":
 		if e.complexity.InternalPolicyHistory.Details == nil {
 			break
@@ -11879,20 +11229,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Invite.CreatedBy(childComplexity), true
 
-	case "Invite.deletedAt":
-		if e.complexity.Invite.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Invite.DeletedAt(childComplexity), true
-
-	case "Invite.deletedBy":
-		if e.complexity.Invite.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Invite.DeletedBy(childComplexity), true
-
 	case "Invite.events":
 		if e.complexity.Invite.Events == nil {
 			break
@@ -12059,20 +11395,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunner.CreatedBy(childComplexity), true
 
-	case "JobRunner.deletedAt":
-		if e.complexity.JobRunner.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.JobRunner.DeletedAt(childComplexity), true
-
-	case "JobRunner.deletedBy":
-		if e.complexity.JobRunner.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.JobRunner.DeletedBy(childComplexity), true
-
 	case "JobRunner.displayID":
 		if e.complexity.JobRunner.DisplayID == nil {
 			break
@@ -12218,20 +11540,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunnerHistory.CreatedBy(childComplexity), true
 
-	case "JobRunnerHistory.deletedAt":
-		if e.complexity.JobRunnerHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.DeletedAt(childComplexity), true
-
-	case "JobRunnerHistory.deletedBy":
-		if e.complexity.JobRunnerHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.DeletedBy(childComplexity), true
-
 	case "JobRunnerHistory.displayID":
 		if e.complexity.JobRunnerHistory.DisplayID == nil {
 			break
@@ -12371,20 +11679,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunnerRegistrationToken.CreatedBy(childComplexity), true
-
-	case "JobRunnerRegistrationToken.deletedAt":
-		if e.complexity.JobRunnerRegistrationToken.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerRegistrationToken.DeletedAt(childComplexity), true
-
-	case "JobRunnerRegistrationToken.deletedBy":
-		if e.complexity.JobRunnerRegistrationToken.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerRegistrationToken.DeletedBy(childComplexity), true
 
 	case "JobRunnerRegistrationToken.expiresAt":
 		if e.complexity.JobRunnerRegistrationToken.ExpiresAt == nil {
@@ -12532,20 +11826,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunnerToken.CreatedBy(childComplexity), true
-
-	case "JobRunnerToken.deletedAt":
-		if e.complexity.JobRunnerToken.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerToken.DeletedAt(childComplexity), true
-
-	case "JobRunnerToken.deletedBy":
-		if e.complexity.JobRunnerToken.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerToken.DeletedBy(childComplexity), true
 
 	case "JobRunnerToken.expiresAt":
 		if e.complexity.JobRunnerToken.ExpiresAt == nil {
@@ -12739,20 +12019,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappableDomain.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
 
-	case "MappableDomain.deletedAt":
-		if e.complexity.MappableDomain.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.MappableDomain.DeletedAt(childComplexity), true
-
-	case "MappableDomain.deletedBy":
-		if e.complexity.MappableDomain.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.MappableDomain.DeletedBy(childComplexity), true
-
 	case "MappableDomain.id":
 		if e.complexity.MappableDomain.ID == nil {
 			break
@@ -12857,20 +12123,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappableDomainHistory.CreatedBy(childComplexity), true
-
-	case "MappableDomainHistory.deletedAt":
-		if e.complexity.MappableDomainHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.MappableDomainHistory.DeletedAt(childComplexity), true
-
-	case "MappableDomainHistory.deletedBy":
-		if e.complexity.MappableDomainHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.MappableDomainHistory.DeletedBy(childComplexity), true
 
 	case "MappableDomainHistory.historyTime":
 		if e.complexity.MappableDomainHistory.HistoryTime == nil {
@@ -12996,20 +12248,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControl.CreatedBy(childComplexity), true
 
-	case "MappedControl.deletedAt":
-		if e.complexity.MappedControl.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.MappedControl.DeletedAt(childComplexity), true
-
-	case "MappedControl.deletedBy":
-		if e.complexity.MappedControl.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.MappedControl.DeletedBy(childComplexity), true
-
 	case "MappedControl.id":
 		if e.complexity.MappedControl.ID == nil {
 			break
@@ -13133,20 +12371,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlHistory.CreatedBy(childComplexity), true
-
-	case "MappedControlHistory.deletedAt":
-		if e.complexity.MappedControlHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.MappedControlHistory.DeletedAt(childComplexity), true
-
-	case "MappedControlHistory.deletedBy":
-		if e.complexity.MappedControlHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.MappedControlHistory.DeletedBy(childComplexity), true
 
 	case "MappedControlHistory.historyTime":
 		if e.complexity.MappedControlHistory.HistoryTime == nil {
@@ -15590,20 +14814,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Narrative.CreatedBy(childComplexity), true
 
-	case "Narrative.deletedAt":
-		if e.complexity.Narrative.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Narrative.DeletedAt(childComplexity), true
-
-	case "Narrative.deletedBy":
-		if e.complexity.Narrative.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Narrative.DeletedBy(childComplexity), true
-
 	case "Narrative.description":
 		if e.complexity.Narrative.Description == nil {
 			break
@@ -15806,20 +15016,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NarrativeHistory.CreatedBy(childComplexity), true
 
-	case "NarrativeHistory.deletedAt":
-		if e.complexity.NarrativeHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.NarrativeHistory.DeletedAt(childComplexity), true
-
-	case "NarrativeHistory.deletedBy":
-		if e.complexity.NarrativeHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.NarrativeHistory.DeletedBy(childComplexity), true
-
 	case "NarrativeHistory.description":
 		if e.complexity.NarrativeHistory.Description == nil {
 			break
@@ -15960,20 +15156,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Note.CreatedBy(childComplexity), true
 
-	case "Note.deletedAt":
-		if e.complexity.Note.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Note.DeletedAt(childComplexity), true
-
-	case "Note.deletedBy":
-		if e.complexity.Note.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Note.DeletedBy(childComplexity), true
-
 	case "Note.displayID":
 		if e.complexity.Note.DisplayID == nil {
 			break
@@ -16090,20 +15272,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.NoteHistory.CreatedBy(childComplexity), true
-
-	case "NoteHistory.deletedAt":
-		if e.complexity.NoteHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.NoteHistory.DeletedAt(childComplexity), true
-
-	case "NoteHistory.deletedBy":
-		if e.complexity.NoteHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.NoteHistory.DeletedBy(childComplexity), true
 
 	case "NoteHistory.displayID":
 		if e.complexity.NoteHistory.DisplayID == nil {
@@ -16224,20 +15392,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Onboarding.Compliance(childComplexity), true
 
-	case "Onboarding.deletedAt":
-		if e.complexity.Onboarding.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Onboarding.DeletedAt(childComplexity), true
-
-	case "Onboarding.deletedBy":
-		if e.complexity.Onboarding.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Onboarding.DeletedBy(childComplexity), true
-
 	case "Onboarding.domains":
 		if e.complexity.Onboarding.Domains == nil {
 			break
@@ -16293,20 +15447,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgMembership.CreatedBy(childComplexity), true
-
-	case "OrgMembership.deletedAt":
-		if e.complexity.OrgMembership.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.OrgMembership.DeletedAt(childComplexity), true
-
-	case "OrgMembership.deletedBy":
-		if e.complexity.OrgMembership.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.OrgMembership.DeletedBy(childComplexity), true
 
 	case "OrgMembership.events":
 		if e.complexity.OrgMembership.Events == nil {
@@ -16445,20 +15585,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgMembershipHistory.CreatedBy(childComplexity), true
-
-	case "OrgMembershipHistory.deletedAt":
-		if e.complexity.OrgMembershipHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.OrgMembershipHistory.DeletedAt(childComplexity), true
-
-	case "OrgMembershipHistory.deletedBy":
-		if e.complexity.OrgMembershipHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.OrgMembershipHistory.DeletedBy(childComplexity), true
 
 	case "OrgMembershipHistory.historyTime":
 		if e.complexity.OrgMembershipHistory.HistoryTime == nil {
@@ -16599,20 +15725,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgSubscription.DaysUntilDue(childComplexity), true
-
-	case "OrgSubscription.deletedAt":
-		if e.complexity.OrgSubscription.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.DeletedAt(childComplexity), true
-
-	case "OrgSubscription.deletedBy":
-		if e.complexity.OrgSubscription.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscription.DeletedBy(childComplexity), true
 
 	case "OrgSubscription.events":
 		if e.complexity.OrgSubscription.Events == nil {
@@ -16821,20 +15933,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgSubscriptionHistory.DaysUntilDue(childComplexity), true
-
-	case "OrgSubscriptionHistory.deletedAt":
-		if e.complexity.OrgSubscriptionHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.DeletedAt(childComplexity), true
-
-	case "OrgSubscriptionHistory.deletedBy":
-		if e.complexity.OrgSubscriptionHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.OrgSubscriptionHistory.DeletedBy(childComplexity), true
 
 	case "OrgSubscriptionHistory.expiresAt":
 		if e.complexity.OrgSubscriptionHistory.ExpiresAt == nil {
@@ -17162,20 +16260,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.DedicatedDb(childComplexity), true
-
-	case "Organization.deletedAt":
-		if e.complexity.Organization.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Organization.DeletedAt(childComplexity), true
-
-	case "Organization.deletedBy":
-		if e.complexity.Organization.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Organization.DeletedBy(childComplexity), true
 
 	case "Organization.description":
 		if e.complexity.Organization.Description == nil {
@@ -17725,20 +16809,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationHistory.DedicatedDb(childComplexity), true
 
-	case "OrganizationHistory.deletedAt":
-		if e.complexity.OrganizationHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.OrganizationHistory.DeletedAt(childComplexity), true
-
-	case "OrganizationHistory.deletedBy":
-		if e.complexity.OrganizationHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.OrganizationHistory.DeletedBy(childComplexity), true
-
 	case "OrganizationHistory.description":
 		if e.complexity.OrganizationHistory.Description == nil {
 			break
@@ -17906,20 +16976,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSetting.CreatedBy(childComplexity), true
-
-	case "OrganizationSetting.deletedAt":
-		if e.complexity.OrganizationSetting.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSetting.DeletedAt(childComplexity), true
-
-	case "OrganizationSetting.deletedBy":
-		if e.complexity.OrganizationSetting.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSetting.DeletedBy(childComplexity), true
 
 	case "OrganizationSetting.domains":
 		if e.complexity.OrganizationSetting.Domains == nil {
@@ -18108,20 +17164,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSettingHistory.CreatedBy(childComplexity), true
 
-	case "OrganizationSettingHistory.deletedAt":
-		if e.complexity.OrganizationSettingHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSettingHistory.DeletedAt(childComplexity), true
-
-	case "OrganizationSettingHistory.deletedBy":
-		if e.complexity.OrganizationSettingHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.OrganizationSettingHistory.DeletedBy(childComplexity), true
-
 	case "OrganizationSettingHistory.domains":
 		if e.complexity.OrganizationSettingHistory.Domains == nil {
 			break
@@ -18289,20 +17331,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.PersonalAccessToken.CreatedBy(childComplexity), true
-
-	case "PersonalAccessToken.deletedAt":
-		if e.complexity.PersonalAccessToken.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.PersonalAccessToken.DeletedAt(childComplexity), true
-
-	case "PersonalAccessToken.deletedBy":
-		if e.complexity.PersonalAccessToken.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.PersonalAccessToken.DeletedBy(childComplexity), true
 
 	case "PersonalAccessToken.description":
 		if e.complexity.PersonalAccessToken.Description == nil {
@@ -18563,20 +17591,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.DelegateID(childComplexity), true
-
-	case "Procedure.deletedAt":
-		if e.complexity.Procedure.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Procedure.DeletedAt(childComplexity), true
-
-	case "Procedure.deletedBy":
-		if e.complexity.Procedure.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Procedure.DeletedBy(childComplexity), true
 
 	case "Procedure.details":
 		if e.complexity.Procedure.Details == nil {
@@ -18853,20 +17867,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProcedureHistory.DelegateID(childComplexity), true
 
-	case "ProcedureHistory.deletedAt":
-		if e.complexity.ProcedureHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ProcedureHistory.DeletedAt(childComplexity), true
-
-	case "ProcedureHistory.deletedBy":
-		if e.complexity.ProcedureHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ProcedureHistory.DeletedBy(childComplexity), true
-
 	case "ProcedureHistory.details":
 		if e.complexity.ProcedureHistory.Details == nil {
 			break
@@ -19126,20 +18126,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Program.CreatedBy(childComplexity), true
-
-	case "Program.deletedAt":
-		if e.complexity.Program.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Program.DeletedAt(childComplexity), true
-
-	case "Program.deletedBy":
-		if e.complexity.Program.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Program.DeletedBy(childComplexity), true
 
 	case "Program.description":
 		if e.complexity.Program.Description == nil {
@@ -19497,20 +18483,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProgramHistory.CreatedBy(childComplexity), true
 
-	case "ProgramHistory.deletedAt":
-		if e.complexity.ProgramHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ProgramHistory.DeletedAt(childComplexity), true
-
-	case "ProgramHistory.deletedBy":
-		if e.complexity.ProgramHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ProgramHistory.DeletedBy(childComplexity), true
-
 	case "ProgramHistory.description":
 		if e.complexity.ProgramHistory.Description == nil {
 			break
@@ -19672,20 +18644,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProgramMembership.CreatedBy(childComplexity), true
 
-	case "ProgramMembership.deletedAt":
-		if e.complexity.ProgramMembership.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ProgramMembership.DeletedAt(childComplexity), true
-
-	case "ProgramMembership.deletedBy":
-		if e.complexity.ProgramMembership.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ProgramMembership.DeletedBy(childComplexity), true
-
 	case "ProgramMembership.id":
 		if e.complexity.ProgramMembership.ID == nil {
 			break
@@ -19811,20 +18769,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProgramMembershipHistory.CreatedBy(childComplexity), true
-
-	case "ProgramMembershipHistory.deletedAt":
-		if e.complexity.ProgramMembershipHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.ProgramMembershipHistory.DeletedAt(childComplexity), true
-
-	case "ProgramMembershipHistory.deletedBy":
-		if e.complexity.ProgramMembershipHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.ProgramMembershipHistory.DeletedBy(childComplexity), true
 
 	case "ProgramMembershipHistory.historyTime":
 		if e.complexity.ProgramMembershipHistory.HistoryTime == nil {
@@ -22502,20 +21446,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.DelegateID(childComplexity), true
 
-	case "Risk.deletedAt":
-		if e.complexity.Risk.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Risk.DeletedAt(childComplexity), true
-
-	case "Risk.deletedBy":
-		if e.complexity.Risk.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Risk.DeletedBy(childComplexity), true
-
 	case "Risk.details":
 		if e.complexity.Risk.Details == nil {
 			break
@@ -22799,20 +21729,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RiskHistory.DelegateID(childComplexity), true
-
-	case "RiskHistory.deletedAt":
-		if e.complexity.RiskHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.RiskHistory.DeletedAt(childComplexity), true
-
-	case "RiskHistory.deletedBy":
-		if e.complexity.RiskHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.RiskHistory.DeletedBy(childComplexity), true
 
 	case "RiskHistory.details":
 		if e.complexity.RiskHistory.Details == nil {
@@ -23288,20 +22204,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Standard.CreatedBy(childComplexity), true
 
-	case "Standard.deletedAt":
-		if e.complexity.Standard.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Standard.DeletedAt(childComplexity), true
-
-	case "Standard.deletedBy":
-		if e.complexity.Standard.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Standard.DeletedBy(childComplexity), true
-
 	case "Standard.description":
 		if e.complexity.Standard.Description == nil {
 			break
@@ -23518,20 +22420,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.StandardHistory.CreatedBy(childComplexity), true
-
-	case "StandardHistory.deletedAt":
-		if e.complexity.StandardHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.StandardHistory.DeletedAt(childComplexity), true
-
-	case "StandardHistory.deletedBy":
-		if e.complexity.StandardHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.StandardHistory.DeletedBy(childComplexity), true
 
 	case "StandardHistory.description":
 		if e.complexity.StandardHistory.Description == nil {
@@ -23877,20 +22765,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.DelegateID(childComplexity), true
 
-	case "Subcontrol.deletedAt":
-		if e.complexity.Subcontrol.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.DeletedAt(childComplexity), true
-
-	case "Subcontrol.deletedBy":
-		if e.complexity.Subcontrol.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.DeletedBy(childComplexity), true
-
 	case "Subcontrol.description":
 		if e.complexity.Subcontrol.Description == nil {
 			break
@@ -24234,20 +23108,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubcontrolHistory.DelegateID(childComplexity), true
 
-	case "SubcontrolHistory.deletedAt":
-		if e.complexity.SubcontrolHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.DeletedAt(childComplexity), true
-
-	case "SubcontrolHistory.deletedBy":
-		if e.complexity.SubcontrolHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.DeletedBy(childComplexity), true
-
 	case "SubcontrolHistory.description":
 		if e.complexity.SubcontrolHistory.Description == nil {
 			break
@@ -24444,20 +23304,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subscriber.CreatedBy(childComplexity), true
 
-	case "Subscriber.deletedAt":
-		if e.complexity.Subscriber.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Subscriber.DeletedAt(childComplexity), true
-
-	case "Subscriber.deletedBy":
-		if e.complexity.Subscriber.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Subscriber.DeletedBy(childComplexity), true
-
 	case "Subscriber.email":
 		if e.complexity.Subscriber.Email == nil {
 			break
@@ -24630,20 +23476,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TFASetting.CreatedBy(childComplexity), true
-
-	case "TFASetting.deletedAt":
-		if e.complexity.TFASetting.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.TFASetting.DeletedAt(childComplexity), true
-
-	case "TFASetting.deletedBy":
-		if e.complexity.TFASetting.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.TFASetting.DeletedBy(childComplexity), true
 
 	case "TFASetting.id":
 		if e.complexity.TFASetting.ID == nil {
@@ -24862,20 +23694,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Task.CreatedBy(childComplexity), true
-
-	case "Task.deletedAt":
-		if e.complexity.Task.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Task.DeletedAt(childComplexity), true
-
-	case "Task.deletedBy":
-		if e.complexity.Task.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Task.DeletedBy(childComplexity), true
 
 	case "Task.details":
 		if e.complexity.Task.Details == nil {
@@ -25136,20 +23954,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TaskHistory.CreatedBy(childComplexity), true
 
-	case "TaskHistory.deletedAt":
-		if e.complexity.TaskHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.TaskHistory.DeletedAt(childComplexity), true
-
-	case "TaskHistory.deletedBy":
-		if e.complexity.TaskHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.TaskHistory.DeletedBy(childComplexity), true
-
 	case "TaskHistory.details":
 		if e.complexity.TaskHistory.Details == nil {
 			break
@@ -25296,20 +24100,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Template.CreatedBy(childComplexity), true
-
-	case "Template.deletedAt":
-		if e.complexity.Template.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.Template.DeletedAt(childComplexity), true
-
-	case "Template.deletedBy":
-		if e.complexity.Template.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.Template.DeletedBy(childComplexity), true
 
 	case "Template.description":
 		if e.complexity.Template.Description == nil {
@@ -25481,20 +24271,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TemplateHistory.CreatedBy(childComplexity), true
-
-	case "TemplateHistory.deletedAt":
-		if e.complexity.TemplateHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.TemplateHistory.DeletedAt(childComplexity), true
-
-	case "TemplateHistory.deletedBy":
-		if e.complexity.TemplateHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.TemplateHistory.DeletedBy(childComplexity), true
 
 	case "TemplateHistory.description":
 		if e.complexity.TemplateHistory.Description == nil {
@@ -25713,20 +24489,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.User.CreatedBy(childComplexity), true
-
-	case "User.deletedAt":
-		if e.complexity.User.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.User.DeletedAt(childComplexity), true
-
-	case "User.deletedBy":
-		if e.complexity.User.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.User.DeletedBy(childComplexity), true
 
 	case "User.displayID":
 		if e.complexity.User.DisplayID == nil {
@@ -26058,20 +24820,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.UserHistory.CreatedBy(childComplexity), true
 
-	case "UserHistory.deletedAt":
-		if e.complexity.UserHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.UserHistory.DeletedAt(childComplexity), true
-
-	case "UserHistory.deletedBy":
-		if e.complexity.UserHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.UserHistory.DeletedBy(childComplexity), true
-
 	case "UserHistory.displayID":
 		if e.complexity.UserHistory.DisplayID == nil {
 			break
@@ -26240,20 +24988,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.UserSetting.DefaultOrg(childComplexity), true
 
-	case "UserSetting.deletedAt":
-		if e.complexity.UserSetting.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.UserSetting.DeletedAt(childComplexity), true
-
-	case "UserSetting.deletedBy":
-		if e.complexity.UserSetting.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.UserSetting.DeletedBy(childComplexity), true
-
 	case "UserSetting.emailConfirmed":
 		if e.complexity.UserSetting.EmailConfirmed == nil {
 			break
@@ -26419,20 +25153,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.UserSettingHistory.CreatedBy(childComplexity), true
-
-	case "UserSettingHistory.deletedAt":
-		if e.complexity.UserSettingHistory.DeletedAt == nil {
-			break
-		}
-
-		return e.complexity.UserSettingHistory.DeletedAt(childComplexity), true
-
-	case "UserSettingHistory.deletedBy":
-		if e.complexity.UserSettingHistory.DeletedBy == nil {
-			break
-		}
-
-		return e.complexity.UserSettingHistory.DeletedBy(childComplexity), true
 
 	case "UserSettingHistory.emailConfirmed":
 		if e.complexity.UserSettingHistory.EmailConfirmed == nil {
@@ -28947,8 +27667,6 @@ type APIToken implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -29128,37 +27846,6 @@ input APITokenWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -29286,8 +27973,6 @@ type ActionPlan implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -29541,8 +28226,6 @@ type ActionPlanHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -29818,37 +28501,6 @@ input ActionPlanHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   revision field predicates
   """
@@ -30173,37 +28825,6 @@ input ActionPlanWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   revision field predicates
   """
   revision: String
@@ -30447,8 +29068,6 @@ type Contact implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -30588,8 +29207,6 @@ type ContactHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -30819,37 +29436,6 @@ input ContactHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   owner_id field predicates
   """
@@ -31101,37 +29687,6 @@ input ContactWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -31284,8 +29839,6 @@ type Control implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -31841,8 +30394,6 @@ type ControlHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -32149,37 +30700,6 @@ input ControlHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -32425,8 +30945,6 @@ type ControlImplementation implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -32568,8 +31086,6 @@ type ControlImplementationHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -32791,37 +31307,6 @@ input ControlImplementationHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -33008,37 +31493,6 @@ input ControlImplementationWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -33138,8 +31592,6 @@ type ControlObjective implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -33525,8 +31977,6 @@ type ControlObjectiveHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -33773,37 +32223,6 @@ input ControlObjectiveHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -34081,37 +32500,6 @@ input ControlObjectiveWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -34445,37 +32833,6 @@ input ControlWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -36521,8 +34878,6 @@ type CustomDomain implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -36581,8 +34936,6 @@ type CustomDomainHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -36779,37 +35132,6 @@ input CustomDomainHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -36965,37 +35287,6 @@ input CustomDomainWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -37062,8 +35353,6 @@ type DocumentData implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -37184,8 +35473,6 @@ type DocumentDataHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -37381,37 +35668,6 @@ input DocumentDataHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -37550,37 +35806,6 @@ input DocumentDataWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -37641,8 +35866,6 @@ type Entity implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -37841,8 +36064,6 @@ type EntityHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -38057,37 +36278,6 @@ input EntityHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -38207,8 +36397,6 @@ type EntityType implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -38293,8 +36481,6 @@ type EntityTypeHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -38487,37 +36673,6 @@ input EntityTypeHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -38657,37 +36812,6 @@ input EntityTypeWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -38815,37 +36939,6 @@ input EntityWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   owner_id field predicates
   """
@@ -39854,8 +37947,6 @@ type Evidence implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -40141,8 +38232,6 @@ type EvidenceHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -40383,37 +38472,6 @@ input EvidenceHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -40685,37 +38743,6 @@ input EvidenceWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -40919,8 +38946,6 @@ type File implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -41086,8 +39111,6 @@ type FileHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -41319,37 +39342,6 @@ input FileHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   provided_file_name field predicates
   """
@@ -41673,37 +39665,6 @@ input FileWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   provided_file_name field predicates
   """
   providedFileName: String
@@ -41988,8 +39949,6 @@ type Group implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -42273,8 +40232,6 @@ type GroupHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -42492,37 +40449,6 @@ input GroupHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -42602,8 +40528,6 @@ type GroupMembership implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   role: GroupMembershipRole!
   groupID: ID!
   userID: ID!
@@ -42680,8 +40604,6 @@ type GroupMembershipHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   role: GroupMembershipHistoryRole!
   groupID: String!
   userID: String!
@@ -42872,37 +40794,6 @@ input GroupMembershipHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   role field predicates
   """
   role: GroupMembershipHistoryRole
@@ -43054,37 +40945,6 @@ input GroupMembershipWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   role field predicates
   """
   role: GroupMembershipRole
@@ -43120,8 +40980,6 @@ type GroupSetting implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
   """
@@ -43183,8 +41041,6 @@ type GroupSettingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
   """
@@ -43400,37 +41256,6 @@ input GroupSettingHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   visibility field predicates
   """
   visibility: GroupSettingHistoryVisibility
@@ -43597,37 +41422,6 @@ input GroupSettingWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   visibility field predicates
   """
   visibility: GroupSettingVisibility
@@ -43762,37 +41556,6 @@ input GroupWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -44008,8 +41771,6 @@ type Hush implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   the organization id that owns the object
   """
@@ -44133,8 +41894,6 @@ type HushHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   the organization id that owns the object
   """
@@ -44336,37 +42095,6 @@ input HushHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -44543,37 +42271,6 @@ input HushWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -44665,8 +42362,6 @@ type Integration implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -44787,8 +42482,6 @@ type IntegrationHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -44987,37 +42680,6 @@ input IntegrationHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -45176,37 +42838,6 @@ input IntegrationWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -45280,8 +42911,6 @@ type InternalPolicy implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -45659,8 +43288,6 @@ type InternalPolicyHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -45916,37 +43543,6 @@ input InternalPolicyHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -46235,37 +43831,6 @@ input InternalPolicyWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -46515,8 +44080,6 @@ type Invite implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   the organization id that owns the object
   """
@@ -46728,37 +44291,6 @@ input InviteWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -46869,8 +44401,6 @@ type JobRunner implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -46971,8 +44501,6 @@ type JobRunnerHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -47188,37 +44716,6 @@ input JobRunnerHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -47333,8 +44830,6 @@ type JobRunnerRegistrationToken implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -47491,37 +44986,6 @@ input JobRunnerRegistrationTokenWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -47587,8 +45051,6 @@ type JobRunnerToken implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -47788,37 +45250,6 @@ input JobRunnerTokenWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -48013,37 +45444,6 @@ input JobRunnerWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -48144,8 +45544,6 @@ type MappableDomain implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -48225,8 +45623,6 @@ type MappableDomainHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -48415,37 +45811,6 @@ input MappableDomainHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   name field predicates
   """
   name: String
@@ -48567,37 +45932,6 @@ input MappableDomainWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   name field predicates
   """
   name: String
@@ -48625,8 +45959,6 @@ type MappedControl implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -48741,8 +46073,6 @@ type MappedControlHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -48935,37 +46265,6 @@ input MappedControlHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   mapping_type field predicates
   """
   mappingType: String
@@ -49107,37 +46406,6 @@ input MappedControlWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   mapping_type field predicates
   """
   mappingType: String
@@ -49190,8 +46458,6 @@ type Narrative implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -49393,8 +46659,6 @@ type NarrativeHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -49599,37 +46863,6 @@ input NarrativeHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -49821,37 +47054,6 @@ input NarrativeWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -49994,8 +47196,6 @@ type Note implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -50081,8 +47281,6 @@ type NoteHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -50274,37 +47472,6 @@ input NoteHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -50459,37 +47626,6 @@ input NoteWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -50557,8 +47693,6 @@ input NoteWhereInput {
 }
 type Onboarding implements Node {
   id: ID!
-  deletedAt: Time
-  deletedBy: String
   organizationID: ID
   """
   name of the company
@@ -50603,37 +47737,6 @@ input OnboardingWhereInput {
   idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   organization_id field predicates
   """
@@ -50693,8 +47796,6 @@ type OrgMembership implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   role: OrgMembershipRole!
   organizationID: ID!
   userID: ID!
@@ -50771,8 +47872,6 @@ type OrgMembershipHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   role: OrgMembershipHistoryRole!
   organizationID: String!
   userID: String!
@@ -50964,37 +48063,6 @@ input OrgMembershipHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   role field predicates
   """
   role: OrgMembershipHistoryRole
@@ -51147,37 +48215,6 @@ input OrgMembershipWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   role field predicates
   """
   role: OrgMembershipRole
@@ -51191,8 +48228,6 @@ type OrgSubscription implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -51325,8 +48360,6 @@ type OrgSubscriptionHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -51571,37 +48604,6 @@ input OrgSubscriptionHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   owner_id field predicates
   """
@@ -51877,37 +48879,6 @@ input OrgSubscriptionWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -52088,8 +49059,6 @@ type Organization implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -53291,8 +50260,6 @@ type OrganizationHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -53510,37 +50477,6 @@ input OrganizationHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_name field predicates
   """
   displayName: String
@@ -53659,8 +50595,6 @@ type OrganizationSetting implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -53777,8 +50711,6 @@ type OrganizationSettingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -54010,37 +50942,6 @@ input OrganizationSettingHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   billing_contact field predicates
   """
   billingContact: String
@@ -54257,37 +51158,6 @@ input OrganizationSettingWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   billing_contact field predicates
   """
   billingContact: String
@@ -54485,37 +51355,6 @@ input OrganizationWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_name field predicates
   """
@@ -54875,8 +51714,6 @@ type PersonalAccessToken implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -55114,37 +51951,6 @@ input PersonalAccessTokenWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   name field predicates
   """
   name: String
@@ -55264,8 +52070,6 @@ type Procedure implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -55612,8 +52416,6 @@ type ProcedureHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -55869,37 +52671,6 @@ input ProcedureHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -56188,37 +52959,6 @@ input ProcedureWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -56463,8 +53203,6 @@ type Program implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -57016,8 +53754,6 @@ type ProgramHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -57286,37 +54022,6 @@ input ProgramHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -57518,8 +54223,6 @@ type ProgramMembership implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   role: ProgramMembershipRole!
   programID: ID!
   userID: ID!
@@ -57565,8 +54268,6 @@ type ProgramMembershipHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   role: ProgramMembershipHistoryRole!
   programID: String!
   userID: String!
@@ -57757,37 +54458,6 @@ input ProgramMembershipHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   role field predicates
   """
   role: ProgramMembershipHistoryRole
@@ -57939,37 +54609,6 @@ input ProgramMembershipWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   role field predicates
   """
   role: ProgramMembershipRole
@@ -58105,37 +54744,6 @@ input ProgramWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -60990,8 +57598,6 @@ type Risk implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -61330,8 +57936,6 @@ type RiskHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -61605,37 +58209,6 @@ input RiskHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -61992,37 +58565,6 @@ input RiskWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -62310,8 +58852,6 @@ type Standard implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -62452,8 +58992,6 @@ type StandardHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -62715,37 +59253,6 @@ input StandardHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   revision field predicates
   """
@@ -63092,37 +59599,6 @@ input StandardWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   revision field predicates
   """
   revision: String
@@ -63365,8 +59841,6 @@ type Subcontrol implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -63848,8 +60322,6 @@ type SubcontrolHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -64155,37 +60627,6 @@ input SubcontrolHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -64534,37 +60975,6 @@ input SubcontrolWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -64878,8 +61288,6 @@ type Subscriber implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -65087,37 +61495,6 @@ input SubscriberWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: ID
@@ -65217,8 +61594,6 @@ type TFASetting implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   specifies if the TFA device has been verified
   """
@@ -65363,37 +61738,6 @@ input TFASettingWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   verified field predicates
   """
   verified: Boolean
@@ -65417,8 +61761,6 @@ type Task implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -65816,8 +62158,6 @@ type TaskHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -66055,37 +62395,6 @@ input TaskHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """
@@ -66361,37 +62670,6 @@ input TaskWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -66618,8 +62896,6 @@ type Template implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -66758,8 +63034,6 @@ type TemplateHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -66976,37 +63250,6 @@ input TemplateHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   owner_id field predicates
   """
   ownerID: String
@@ -67171,37 +63414,6 @@ input TemplateWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   owner_id field predicates
   """
@@ -69706,8 +65918,6 @@ type User implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -70211,8 +66421,6 @@ type UserHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   a shortened prefixed id field to use as a human readable identifier
   """
@@ -70459,37 +66667,6 @@ input UserHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   display_id field predicates
   """
   displayID: String
@@ -70716,8 +66893,6 @@ type UserSetting implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -70827,8 +67002,6 @@ type UserSettingHistory implements Node {
   updatedAt: Time
   createdBy: String
   updatedBy: String
-  deletedAt: Time
-  deletedBy: String
   """
   tags associated with the object
   """
@@ -71051,37 +67224,6 @@ input UserSettingHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   user_id field predicates
   """
   userID: String
@@ -71264,37 +67406,6 @@ input UserSettingWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """
   user_id field predicates
   """
   userID: ID
@@ -71461,37 +67572,6 @@ input UserWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """
-  deleted_at field predicates
-  """
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """
-  deleted_by field predicates
-  """
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
   """
   display_id field predicates
   """

@@ -69,10 +69,6 @@ func (ec *executionContext) fieldContext_OnboardingCreatePayload_onboarding(_ co
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Onboarding_id(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Onboarding_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Onboarding_deletedBy(ctx, field)
 			case "organizationID":
 				return ec.fieldContext_Onboarding_organizationID(ctx, field)
 			case "companyName":

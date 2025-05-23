@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Risk_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Risk_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Risk_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Risk_displayID(ctx, field)
 			case "tags":
@@ -191,10 +187,6 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Risk_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Risk_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Risk_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Risk_displayID(ctx, field)
 			case "tags":
@@ -351,10 +343,6 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Risk_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Risk_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Risk_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Risk_displayID(ctx, field)
 			case "tags":

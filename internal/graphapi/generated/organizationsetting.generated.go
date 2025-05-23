@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_OrganizationSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrganizationSetting_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "domains":
@@ -161,10 +157,6 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_OrganizationSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrganizationSetting_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "domains":
@@ -291,10 +283,6 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_OrganizationSetting_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_OrganizationSetting_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_OrganizationSetting_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_OrganizationSetting_tags(ctx, field)
 			case "domains":

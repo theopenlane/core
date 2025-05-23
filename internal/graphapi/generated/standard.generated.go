@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Standard_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Standard_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
 			case "revision":
@@ -173,10 +169,6 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Standard_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Standard_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
 			case "revision":
@@ -315,10 +307,6 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Standard_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Standard_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Standard_deletedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Standard_tags(ctx, field)
 			case "revision":

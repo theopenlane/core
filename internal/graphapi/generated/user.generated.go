@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_User_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_User_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_User_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_User_displayID(ctx, field)
 			case "tags":
@@ -197,10 +193,6 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_User_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_User_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_User_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_User_displayID(ctx, field)
 			case "tags":
@@ -363,10 +355,6 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_User_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_User_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_User_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_User_displayID(ctx, field)
 			case "tags":

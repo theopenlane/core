@@ -122,10 +122,6 @@ func (ec *executionContext) fieldContext_JobRunnerUpdatePayload_jobRunner(_ cont
 				return ec.fieldContext_JobRunner_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_JobRunner_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_JobRunner_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_JobRunner_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_JobRunner_displayID(ctx, field)
 			case "tags":

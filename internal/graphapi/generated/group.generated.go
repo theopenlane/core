@@ -75,10 +75,6 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Group_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Group_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Group_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Group_displayID(ctx, field)
 			case "tags":
@@ -209,10 +205,6 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Group_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Group_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Group_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Group_displayID(ctx, field)
 			case "tags":
@@ -387,10 +379,6 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Group_updatedBy(ctx, field)
-			case "deletedAt":
-				return ec.fieldContext_Group_deletedAt(ctx, field)
-			case "deletedBy":
-				return ec.fieldContext_Group_deletedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_Group_displayID(ctx, field)
 			case "tags":
