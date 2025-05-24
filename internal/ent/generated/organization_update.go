@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -968,6 +969,21 @@ func (ou *OrganizationUpdate) AddJobRunnerRegistrationTokens(j ...*JobRunnerRegi
 		ids[i] = j[i].ID
 	}
 	return ou.AddJobRunnerRegistrationTokenIDs(ids...)
+}
+
+// AddDNSVerificationIDs adds the "dns_verifications" edge to the DNSVerification entity by IDs.
+func (ou *OrganizationUpdate) AddDNSVerificationIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddDNSVerificationIDs(ids...)
+	return ou
+}
+
+// AddDNSVerifications adds the "dns_verifications" edges to the DNSVerification entity.
+func (ou *OrganizationUpdate) AddDNSVerifications(d ...*DNSVerification) *OrganizationUpdate {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ou.AddDNSVerificationIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1924,6 +1940,27 @@ func (ou *OrganizationUpdate) RemoveJobRunnerRegistrationTokens(j ...*JobRunnerR
 		ids[i] = j[i].ID
 	}
 	return ou.RemoveJobRunnerRegistrationTokenIDs(ids...)
+}
+
+// ClearDNSVerifications clears all "dns_verifications" edges to the DNSVerification entity.
+func (ou *OrganizationUpdate) ClearDNSVerifications() *OrganizationUpdate {
+	ou.mutation.ClearDNSVerifications()
+	return ou
+}
+
+// RemoveDNSVerificationIDs removes the "dns_verifications" edge to DNSVerification entities by IDs.
+func (ou *OrganizationUpdate) RemoveDNSVerificationIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveDNSVerificationIDs(ids...)
+	return ou
+}
+
+// RemoveDNSVerifications removes "dns_verifications" edges to DNSVerification entities.
+func (ou *OrganizationUpdate) RemoveDNSVerifications(d ...*DNSVerification) *OrganizationUpdate {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ou.RemoveDNSVerificationIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -4300,6 +4337,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.DNSVerificationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DNSVerificationsTable,
+			Columns: []string{organization.DNSVerificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.DNSVerification
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedDNSVerificationsIDs(); len(nodes) > 0 && !ou.mutation.DNSVerificationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DNSVerificationsTable,
+			Columns: []string{organization.DNSVerificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.DNSVerification
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DNSVerificationsTable,
+			Columns: []string{organization.DNSVerificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.DNSVerification
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5274,6 +5359,21 @@ func (ouo *OrganizationUpdateOne) AddJobRunnerRegistrationTokens(j ...*JobRunner
 	return ouo.AddJobRunnerRegistrationTokenIDs(ids...)
 }
 
+// AddDNSVerificationIDs adds the "dns_verifications" edge to the DNSVerification entity by IDs.
+func (ouo *OrganizationUpdateOne) AddDNSVerificationIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddDNSVerificationIDs(ids...)
+	return ouo
+}
+
+// AddDNSVerifications adds the "dns_verifications" edges to the DNSVerification entity.
+func (ouo *OrganizationUpdateOne) AddDNSVerifications(d ...*DNSVerification) *OrganizationUpdateOne {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ouo.AddDNSVerificationIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -6228,6 +6328,27 @@ func (ouo *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokens(j ...*JobRun
 		ids[i] = j[i].ID
 	}
 	return ouo.RemoveJobRunnerRegistrationTokenIDs(ids...)
+}
+
+// ClearDNSVerifications clears all "dns_verifications" edges to the DNSVerification entity.
+func (ouo *OrganizationUpdateOne) ClearDNSVerifications() *OrganizationUpdateOne {
+	ouo.mutation.ClearDNSVerifications()
+	return ouo
+}
+
+// RemoveDNSVerificationIDs removes the "dns_verifications" edge to DNSVerification entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveDNSVerificationIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveDNSVerificationIDs(ids...)
+	return ouo
+}
+
+// RemoveDNSVerifications removes "dns_verifications" edges to DNSVerification entities.
+func (ouo *OrganizationUpdateOne) RemoveDNSVerifications(d ...*DNSVerification) *OrganizationUpdateOne {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ouo.RemoveDNSVerificationIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -8629,6 +8750,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.JobRunnerRegistrationToken
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.DNSVerificationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DNSVerificationsTable,
+			Columns: []string{organization.DNSVerificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.DNSVerification
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedDNSVerificationsIDs(); len(nodes) > 0 && !ouo.mutation.DNSVerificationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DNSVerificationsTable,
+			Columns: []string{organization.DNSVerificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.DNSVerification
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DNSVerificationsTable,
+			Columns: []string{organization.DNSVerificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

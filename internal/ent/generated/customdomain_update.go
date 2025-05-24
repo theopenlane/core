@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
@@ -143,9 +144,34 @@ func (cdu *CustomDomainUpdate) ClearOwnerID() *CustomDomainUpdate {
 	return cdu
 }
 
+// SetDNSVerificationID sets the "dns_verification_id" field.
+func (cdu *CustomDomainUpdate) SetDNSVerificationID(s string) *CustomDomainUpdate {
+	cdu.mutation.SetDNSVerificationID(s)
+	return cdu
+}
+
+// SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
+func (cdu *CustomDomainUpdate) SetNillableDNSVerificationID(s *string) *CustomDomainUpdate {
+	if s != nil {
+		cdu.SetDNSVerificationID(*s)
+	}
+	return cdu
+}
+
+// ClearDNSVerificationID clears the value of the "dns_verification_id" field.
+func (cdu *CustomDomainUpdate) ClearDNSVerificationID() *CustomDomainUpdate {
+	cdu.mutation.ClearDNSVerificationID()
+	return cdu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cdu *CustomDomainUpdate) SetOwner(o *Organization) *CustomDomainUpdate {
 	return cdu.SetOwnerID(o.ID)
+}
+
+// SetDNSVerification sets the "dns_verification" edge to the DNSVerification entity.
+func (cdu *CustomDomainUpdate) SetDNSVerification(d *DNSVerification) *CustomDomainUpdate {
+	return cdu.SetDNSVerificationID(d.ID)
 }
 
 // Mutation returns the CustomDomainMutation object of the builder.
@@ -156,6 +182,12 @@ func (cdu *CustomDomainUpdate) Mutation() *CustomDomainMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (cdu *CustomDomainUpdate) ClearOwner() *CustomDomainUpdate {
 	cdu.mutation.ClearOwner()
+	return cdu
+}
+
+// ClearDNSVerification clears the "dns_verification" edge to the DNSVerification entity.
+func (cdu *CustomDomainUpdate) ClearDNSVerification() *CustomDomainUpdate {
+	cdu.mutation.ClearDNSVerification()
 	return cdu
 }
 
@@ -203,11 +235,6 @@ func (cdu *CustomDomainUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cdu *CustomDomainUpdate) check() error {
-	if v, ok := cdu.mutation.OwnerID(); ok {
-		if err := customdomain.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.owner_id": %w`, err)}
-		}
-	}
 	if cdu.mutation.MappableDomainCleared() && len(cdu.mutation.MappableDomainIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "CustomDomain.mappable_domain"`)
 	}
@@ -296,6 +323,37 @@ func (cdu *CustomDomainUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cdu.schemaConfig.CustomDomain
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cdu.mutation.DNSVerificationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   customdomain.DNSVerificationTable,
+			Columns: []string{customdomain.DNSVerificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cdu.schemaConfig.CustomDomain
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cdu.mutation.DNSVerificationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   customdomain.DNSVerificationTable,
+			Columns: []string{customdomain.DNSVerificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cdu.schemaConfig.CustomDomain
@@ -438,9 +496,34 @@ func (cduo *CustomDomainUpdateOne) ClearOwnerID() *CustomDomainUpdateOne {
 	return cduo
 }
 
+// SetDNSVerificationID sets the "dns_verification_id" field.
+func (cduo *CustomDomainUpdateOne) SetDNSVerificationID(s string) *CustomDomainUpdateOne {
+	cduo.mutation.SetDNSVerificationID(s)
+	return cduo
+}
+
+// SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
+func (cduo *CustomDomainUpdateOne) SetNillableDNSVerificationID(s *string) *CustomDomainUpdateOne {
+	if s != nil {
+		cduo.SetDNSVerificationID(*s)
+	}
+	return cduo
+}
+
+// ClearDNSVerificationID clears the value of the "dns_verification_id" field.
+func (cduo *CustomDomainUpdateOne) ClearDNSVerificationID() *CustomDomainUpdateOne {
+	cduo.mutation.ClearDNSVerificationID()
+	return cduo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cduo *CustomDomainUpdateOne) SetOwner(o *Organization) *CustomDomainUpdateOne {
 	return cduo.SetOwnerID(o.ID)
+}
+
+// SetDNSVerification sets the "dns_verification" edge to the DNSVerification entity.
+func (cduo *CustomDomainUpdateOne) SetDNSVerification(d *DNSVerification) *CustomDomainUpdateOne {
+	return cduo.SetDNSVerificationID(d.ID)
 }
 
 // Mutation returns the CustomDomainMutation object of the builder.
@@ -451,6 +534,12 @@ func (cduo *CustomDomainUpdateOne) Mutation() *CustomDomainMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (cduo *CustomDomainUpdateOne) ClearOwner() *CustomDomainUpdateOne {
 	cduo.mutation.ClearOwner()
+	return cduo
+}
+
+// ClearDNSVerification clears the "dns_verification" edge to the DNSVerification entity.
+func (cduo *CustomDomainUpdateOne) ClearDNSVerification() *CustomDomainUpdateOne {
+	cduo.mutation.ClearDNSVerification()
 	return cduo
 }
 
@@ -511,11 +600,6 @@ func (cduo *CustomDomainUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (cduo *CustomDomainUpdateOne) check() error {
-	if v, ok := cduo.mutation.OwnerID(); ok {
-		if err := customdomain.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.owner_id": %w`, err)}
-		}
-	}
 	if cduo.mutation.MappableDomainCleared() && len(cduo.mutation.MappableDomainIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "CustomDomain.mappable_domain"`)
 	}
@@ -621,6 +705,37 @@ func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDo
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cduo.schemaConfig.CustomDomain
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cduo.mutation.DNSVerificationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   customdomain.DNSVerificationTable,
+			Columns: []string{customdomain.DNSVerificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cduo.schemaConfig.CustomDomain
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cduo.mutation.DNSVerificationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   customdomain.DNSVerificationTable,
+			Columns: []string{customdomain.DNSVerificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = cduo.schemaConfig.CustomDomain

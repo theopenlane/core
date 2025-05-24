@@ -793,6 +793,43 @@ func (cd *CustomDomain) MappableDomain(ctx context.Context) (*MappableDomain, er
 	return result, err
 }
 
+func (cd *CustomDomain) DNSVerification(ctx context.Context) (*DNSVerification, error) {
+	result, err := cd.Edges.DNSVerificationOrErr()
+	if IsNotLoaded(err) {
+		result, err = cd.QueryDNSVerification().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (dv *DNSVerification) Owner(ctx context.Context) (*Organization, error) {
+	result, err := dv.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = dv.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (dv *DNSVerification) CustomDomains(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*CustomDomainOrder, where *CustomDomainWhereInput,
+) (*CustomDomainConnection, error) {
+	opts := []CustomDomainPaginateOption{
+		WithCustomDomainOrder(orderBy),
+		WithCustomDomainFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := dv.Edges.totalCount[1][alias]
+	if nodes, err := dv.NamedCustomDomains(alias); err == nil || hasTotalCount {
+		pager, err := newCustomDomainPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &CustomDomainConnection{Edges: []*CustomDomainEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return dv.QueryCustomDomains().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (dd *DocumentData) Owner(ctx context.Context) (*Organization, error) {
 	result, err := dd.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -3522,6 +3559,27 @@ func (o *Organization) JobRunnerRegistrationTokens(
 	return o.QueryJobRunnerRegistrationTokens().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) DNSVerifications(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DNSVerificationOrder, where *DNSVerificationWhereInput,
+) (*DNSVerificationConnection, error) {
+	opts := []DNSVerificationPaginateOption{
+		WithDNSVerificationOrder(orderBy),
+		WithDNSVerificationFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[47][alias]
+	if nodes, err := o.NamedDNSVerifications(alias); err == nil || hasTotalCount {
+		pager, err := newDNSVerificationPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DNSVerificationConnection{Edges: []*DNSVerificationEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryDNSVerifications().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -3530,7 +3588,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[47][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[48][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {

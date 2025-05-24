@@ -2400,6 +2400,35 @@ func HasJobRunnerRegistrationTokensWith(preds ...predicate.JobRunnerRegistration
 	})
 }
 
+// HasDNSVerifications applies the HasEdge predicate on the "dns_verifications" edge.
+func HasDNSVerifications() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DNSVerificationsTable, DNSVerificationsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DNSVerification
+		step.Edge.Schema = schemaConfig.DNSVerification
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDNSVerificationsWith applies the HasEdge predicate on the "dns_verifications" edge with a given conditions (other predicates).
+func HasDNSVerificationsWith(preds ...predicate.DNSVerification) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newDNSVerificationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DNSVerification
+		step.Edge.Schema = schemaConfig.DNSVerification
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

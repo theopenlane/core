@@ -32,6 +32,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -152,6 +154,10 @@ type Client struct {
 	CustomDomain *CustomDomainClient
 	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
 	CustomDomainHistory *CustomDomainHistoryClient
+	// DNSVerification is the client for interacting with the DNSVerification builders.
+	DNSVerification *DNSVerificationClient
+	// DNSVerificationHistory is the client for interacting with the DNSVerificationHistory builders.
+	DNSVerificationHistory *DNSVerificationHistoryClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -329,6 +335,8 @@ func (c *Client) init() {
 	c.ControlObjectiveHistory = NewControlObjectiveHistoryClient(c.config)
 	c.CustomDomain = NewCustomDomainClient(c.config)
 	c.CustomDomainHistory = NewCustomDomainHistoryClient(c.config)
+	c.DNSVerification = NewDNSVerificationClient(c.config)
+	c.DNSVerificationHistory = NewDNSVerificationHistoryClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
 	c.DocumentDataHistory = NewDocumentDataHistoryClient(c.config)
 	c.EmailVerificationToken = NewEmailVerificationTokenClient(c.config)
@@ -591,6 +599,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ControlObjectiveHistory:      NewControlObjectiveHistoryClient(cfg),
 		CustomDomain:                 NewCustomDomainClient(cfg),
 		CustomDomainHistory:          NewCustomDomainHistoryClient(cfg),
+		DNSVerification:              NewDNSVerificationClient(cfg),
+		DNSVerificationHistory:       NewDNSVerificationHistoryClient(cfg),
 		DocumentData:                 NewDocumentDataClient(cfg),
 		DocumentDataHistory:          NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
@@ -695,6 +705,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ControlObjectiveHistory:      NewControlObjectiveHistoryClient(cfg),
 		CustomDomain:                 NewCustomDomainClient(cfg),
 		CustomDomainHistory:          NewCustomDomainHistoryClient(cfg),
+		DNSVerification:              NewDNSVerificationClient(cfg),
+		DNSVerificationHistory:       NewDNSVerificationHistoryClient(cfg),
 		DocumentData:                 NewDocumentDataClient(cfg),
 		DocumentDataHistory:          NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
@@ -799,7 +811,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Contact, c.ContactHistory,
 		c.Control, c.ControlHistory, c.ControlImplementation,
 		c.ControlImplementationHistory, c.ControlObjective, c.ControlObjectiveHistory,
-		c.CustomDomain, c.CustomDomainHistory, c.DocumentData, c.DocumentDataHistory,
+		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
+		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
 		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
 		c.EntityTypeHistory, c.Event, c.EventHistory, c.Evidence, c.EvidenceHistory,
 		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
@@ -829,7 +842,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Contact, c.ContactHistory,
 		c.Control, c.ControlHistory, c.ControlImplementation,
 		c.ControlImplementationHistory, c.ControlObjective, c.ControlObjectiveHistory,
-		c.CustomDomain, c.CustomDomainHistory, c.DocumentData, c.DocumentDataHistory,
+		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
+		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
 		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
 		c.EntityTypeHistory, c.Event, c.EventHistory, c.Evidence, c.EvidenceHistory,
 		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
@@ -953,6 +967,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.CustomDomain.mutate(ctx, m)
 	case *CustomDomainHistoryMutation:
 		return c.CustomDomainHistory.mutate(ctx, m)
+	case *DNSVerificationMutation:
+		return c.DNSVerification.mutate(ctx, m)
+	case *DNSVerificationHistoryMutation:
+		return c.DNSVerificationHistory.mutate(ctx, m)
 	case *DocumentDataMutation:
 		return c.DocumentData.mutate(ctx, m)
 	case *DocumentDataHistoryMutation:
@@ -3602,6 +3620,25 @@ func (c *CustomDomainClient) QueryMappableDomain(cd *CustomDomain) *MappableDoma
 	return query
 }
 
+// QueryDNSVerification queries the dns_verification edge of a CustomDomain.
+func (c *CustomDomainClient) QueryDNSVerification(cd *CustomDomain) *DNSVerificationQuery {
+	query := (&DNSVerificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customdomain.Table, customdomain.FieldID, id),
+			sqlgraph.To(dnsverification.Table, dnsverification.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, customdomain.DNSVerificationTable, customdomain.DNSVerificationColumn),
+		)
+		schemaConfig := cd.schemaConfig
+		step.To.Schema = schemaConfig.DNSVerification
+		step.Edge.Schema = schemaConfig.CustomDomain
+		fromV = sqlgraph.Neighbors(cd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *CustomDomainClient) Hooks() []Hook {
 	hooks := c.hooks.CustomDomain
@@ -3760,6 +3797,313 @@ func (c *CustomDomainHistoryClient) mutate(ctx context.Context, m *CustomDomainH
 		return (&CustomDomainHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown CustomDomainHistory mutation op: %q", m.Op())
+	}
+}
+
+// DNSVerificationClient is a client for the DNSVerification schema.
+type DNSVerificationClient struct {
+	config
+}
+
+// NewDNSVerificationClient returns a client for the DNSVerification from the given config.
+func NewDNSVerificationClient(c config) *DNSVerificationClient {
+	return &DNSVerificationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `dnsverification.Hooks(f(g(h())))`.
+func (c *DNSVerificationClient) Use(hooks ...Hook) {
+	c.hooks.DNSVerification = append(c.hooks.DNSVerification, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `dnsverification.Intercept(f(g(h())))`.
+func (c *DNSVerificationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DNSVerification = append(c.inters.DNSVerification, interceptors...)
+}
+
+// Create returns a builder for creating a DNSVerification entity.
+func (c *DNSVerificationClient) Create() *DNSVerificationCreate {
+	mutation := newDNSVerificationMutation(c.config, OpCreate)
+	return &DNSVerificationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DNSVerification entities.
+func (c *DNSVerificationClient) CreateBulk(builders ...*DNSVerificationCreate) *DNSVerificationCreateBulk {
+	return &DNSVerificationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DNSVerificationClient) MapCreateBulk(slice any, setFunc func(*DNSVerificationCreate, int)) *DNSVerificationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DNSVerificationCreateBulk{err: fmt.Errorf("calling to DNSVerificationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DNSVerificationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DNSVerificationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DNSVerification.
+func (c *DNSVerificationClient) Update() *DNSVerificationUpdate {
+	mutation := newDNSVerificationMutation(c.config, OpUpdate)
+	return &DNSVerificationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DNSVerificationClient) UpdateOne(dv *DNSVerification) *DNSVerificationUpdateOne {
+	mutation := newDNSVerificationMutation(c.config, OpUpdateOne, withDNSVerification(dv))
+	return &DNSVerificationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DNSVerificationClient) UpdateOneID(id string) *DNSVerificationUpdateOne {
+	mutation := newDNSVerificationMutation(c.config, OpUpdateOne, withDNSVerificationID(id))
+	return &DNSVerificationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DNSVerification.
+func (c *DNSVerificationClient) Delete() *DNSVerificationDelete {
+	mutation := newDNSVerificationMutation(c.config, OpDelete)
+	return &DNSVerificationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DNSVerificationClient) DeleteOne(dv *DNSVerification) *DNSVerificationDeleteOne {
+	return c.DeleteOneID(dv.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DNSVerificationClient) DeleteOneID(id string) *DNSVerificationDeleteOne {
+	builder := c.Delete().Where(dnsverification.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DNSVerificationDeleteOne{builder}
+}
+
+// Query returns a query builder for DNSVerification.
+func (c *DNSVerificationClient) Query() *DNSVerificationQuery {
+	return &DNSVerificationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDNSVerification},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DNSVerification entity by its id.
+func (c *DNSVerificationClient) Get(ctx context.Context, id string) (*DNSVerification, error) {
+	return c.Query().Where(dnsverification.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DNSVerificationClient) GetX(ctx context.Context, id string) *DNSVerification {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a DNSVerification.
+func (c *DNSVerificationClient) QueryOwner(dv *DNSVerification) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := dv.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dnsverification.Table, dnsverification.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, dnsverification.OwnerTable, dnsverification.OwnerColumn),
+		)
+		schemaConfig := dv.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.DNSVerification
+		fromV = sqlgraph.Neighbors(dv.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCustomDomains queries the custom_domains edge of a DNSVerification.
+func (c *DNSVerificationClient) QueryCustomDomains(dv *DNSVerification) *CustomDomainQuery {
+	query := (&CustomDomainClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := dv.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dnsverification.Table, dnsverification.FieldID, id),
+			sqlgraph.To(customdomain.Table, customdomain.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, dnsverification.CustomDomainsTable, dnsverification.CustomDomainsColumn),
+		)
+		schemaConfig := dv.schemaConfig
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.CustomDomain
+		fromV = sqlgraph.Neighbors(dv.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DNSVerificationClient) Hooks() []Hook {
+	hooks := c.hooks.DNSVerification
+	return append(hooks[:len(hooks):len(hooks)], dnsverification.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DNSVerificationClient) Interceptors() []Interceptor {
+	inters := c.inters.DNSVerification
+	return append(inters[:len(inters):len(inters)], dnsverification.Interceptors[:]...)
+}
+
+func (c *DNSVerificationClient) mutate(ctx context.Context, m *DNSVerificationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DNSVerificationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DNSVerificationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DNSVerificationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DNSVerificationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DNSVerification mutation op: %q", m.Op())
+	}
+}
+
+// DNSVerificationHistoryClient is a client for the DNSVerificationHistory schema.
+type DNSVerificationHistoryClient struct {
+	config
+}
+
+// NewDNSVerificationHistoryClient returns a client for the DNSVerificationHistory from the given config.
+func NewDNSVerificationHistoryClient(c config) *DNSVerificationHistoryClient {
+	return &DNSVerificationHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `dnsverificationhistory.Hooks(f(g(h())))`.
+func (c *DNSVerificationHistoryClient) Use(hooks ...Hook) {
+	c.hooks.DNSVerificationHistory = append(c.hooks.DNSVerificationHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `dnsverificationhistory.Intercept(f(g(h())))`.
+func (c *DNSVerificationHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DNSVerificationHistory = append(c.inters.DNSVerificationHistory, interceptors...)
+}
+
+// Create returns a builder for creating a DNSVerificationHistory entity.
+func (c *DNSVerificationHistoryClient) Create() *DNSVerificationHistoryCreate {
+	mutation := newDNSVerificationHistoryMutation(c.config, OpCreate)
+	return &DNSVerificationHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DNSVerificationHistory entities.
+func (c *DNSVerificationHistoryClient) CreateBulk(builders ...*DNSVerificationHistoryCreate) *DNSVerificationHistoryCreateBulk {
+	return &DNSVerificationHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DNSVerificationHistoryClient) MapCreateBulk(slice any, setFunc func(*DNSVerificationHistoryCreate, int)) *DNSVerificationHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DNSVerificationHistoryCreateBulk{err: fmt.Errorf("calling to DNSVerificationHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DNSVerificationHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DNSVerificationHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DNSVerificationHistory.
+func (c *DNSVerificationHistoryClient) Update() *DNSVerificationHistoryUpdate {
+	mutation := newDNSVerificationHistoryMutation(c.config, OpUpdate)
+	return &DNSVerificationHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DNSVerificationHistoryClient) UpdateOne(dvh *DNSVerificationHistory) *DNSVerificationHistoryUpdateOne {
+	mutation := newDNSVerificationHistoryMutation(c.config, OpUpdateOne, withDNSVerificationHistory(dvh))
+	return &DNSVerificationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DNSVerificationHistoryClient) UpdateOneID(id string) *DNSVerificationHistoryUpdateOne {
+	mutation := newDNSVerificationHistoryMutation(c.config, OpUpdateOne, withDNSVerificationHistoryID(id))
+	return &DNSVerificationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DNSVerificationHistory.
+func (c *DNSVerificationHistoryClient) Delete() *DNSVerificationHistoryDelete {
+	mutation := newDNSVerificationHistoryMutation(c.config, OpDelete)
+	return &DNSVerificationHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DNSVerificationHistoryClient) DeleteOne(dvh *DNSVerificationHistory) *DNSVerificationHistoryDeleteOne {
+	return c.DeleteOneID(dvh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DNSVerificationHistoryClient) DeleteOneID(id string) *DNSVerificationHistoryDeleteOne {
+	builder := c.Delete().Where(dnsverificationhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DNSVerificationHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for DNSVerificationHistory.
+func (c *DNSVerificationHistoryClient) Query() *DNSVerificationHistoryQuery {
+	return &DNSVerificationHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDNSVerificationHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DNSVerificationHistory entity by its id.
+func (c *DNSVerificationHistoryClient) Get(ctx context.Context, id string) (*DNSVerificationHistory, error) {
+	return c.Query().Where(dnsverificationhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DNSVerificationHistoryClient) GetX(ctx context.Context, id string) *DNSVerificationHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *DNSVerificationHistoryClient) Hooks() []Hook {
+	return c.hooks.DNSVerificationHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *DNSVerificationHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.DNSVerificationHistory
+	return append(inters[:len(inters):len(inters)], dnsverificationhistory.Interceptors[:]...)
+}
+
+func (c *DNSVerificationHistoryClient) mutate(ctx context.Context, m *DNSVerificationHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DNSVerificationHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DNSVerificationHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DNSVerificationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DNSVerificationHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DNSVerificationHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -12883,6 +13227,25 @@ func (c *OrganizationClient) QueryJobRunnerRegistrationTokens(o *Organization) *
 	return query
 }
 
+// QueryDNSVerifications queries the dns_verifications edge of a Organization.
+func (c *OrganizationClient) QueryDNSVerifications(o *Organization) *DNSVerificationQuery {
+	query := (&DNSVerificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(dnsverification.Table, dnsverification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DNSVerificationsTable, organization.DNSVerificationsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.DNSVerification
+		step.Edge.Schema = schemaConfig.DNSVerification
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -18793,14 +19156,15 @@ type (
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
 		ControlHistory, ControlImplementation, ControlImplementationHistory,
 		ControlObjective, ControlObjectiveHistory, CustomDomain, CustomDomainHistory,
-		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
-		EntityHistory, EntityType, EntityTypeHistory, Event, EventHistory, Evidence,
-		EvidenceHistory, File, FileHistory, Group, GroupHistory, GroupMembership,
-		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
-		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
-		JobRunner, JobRunnerHistory, JobRunnerRegistrationToken, JobRunnerToken,
-		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
-		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		DNSVerification, DNSVerificationHistory, DocumentData, DocumentDataHistory,
+		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
+		Event, EventHistory, Evidence, EvidenceHistory, File, FileHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
+		InternalPolicy, InternalPolicyHistory, Invite, JobRunner, JobRunnerHistory,
+		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
+		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
+		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
 		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
 		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
 		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
@@ -18813,14 +19177,15 @@ type (
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
 		ControlHistory, ControlImplementation, ControlImplementationHistory,
 		ControlObjective, ControlObjectiveHistory, CustomDomain, CustomDomainHistory,
-		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
-		EntityHistory, EntityType, EntityTypeHistory, Event, EventHistory, Evidence,
-		EvidenceHistory, File, FileHistory, Group, GroupHistory, GroupMembership,
-		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
-		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
-		JobRunner, JobRunnerHistory, JobRunnerRegistrationToken, JobRunnerToken,
-		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
-		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		DNSVerification, DNSVerificationHistory, DocumentData, DocumentDataHistory,
+		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
+		Event, EventHistory, Evidence, EvidenceHistory, File, FileHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
+		InternalPolicy, InternalPolicyHistory, Invite, JobRunner, JobRunnerHistory,
+		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
+		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
+		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
 		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
 		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
 		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,

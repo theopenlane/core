@@ -25,6 +25,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -170,6 +172,8 @@ func checkColumn(table, column string) error {
 			controlobjectivehistory.Table:      controlobjectivehistory.ValidColumn,
 			customdomain.Table:                 customdomain.ValidColumn,
 			customdomainhistory.Table:          customdomainhistory.ValidColumn,
+			dnsverification.Table:              dnsverification.ValidColumn,
+			dnsverificationhistory.Table:       dnsverificationhistory.ValidColumn,
 			documentdata.Table:                 documentdata.ValidColumn,
 			documentdatahistory.Table:          documentdatahistory.ValidColumn,
 			emailverificationtoken.Table:       emailverificationtoken.ValidColumn,

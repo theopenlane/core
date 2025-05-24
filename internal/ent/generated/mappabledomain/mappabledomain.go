@@ -31,6 +31,8 @@ const (
 	FieldTags = "tags"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldZoneID holds the string denoting the zone_id field in the database.
+	FieldZoneID = "zone_id"
 	// EdgeCustomDomains holds the string denoting the custom_domains edge name in mutations.
 	EdgeCustomDomains = "custom_domains"
 	// Table holds the table name of the mappabledomain in the database.
@@ -55,6 +57,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldName,
+	FieldZoneID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -86,6 +89,8 @@ var (
 	DefaultTags []string
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// ZoneIDValidator is a validator for the "zone_id" field. It is called by the builders before save.
+	ZoneIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -131,6 +136,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByZoneID orders the results by the zone_id field.
+func ByZoneID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldZoneID, opts...).ToFunc()
 }
 
 // ByCustomDomainsCount orders the results by custom_domains count.

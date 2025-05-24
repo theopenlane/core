@@ -141,6 +141,8 @@ const (
 	EdgeJobRunnerTokens = "job_runner_tokens"
 	// EdgeJobRunnerRegistrationTokens holds the string denoting the job_runner_registration_tokens edge name in mutations.
 	EdgeJobRunnerRegistrationTokens = "job_runner_registration_tokens"
+	// EdgeDNSVerifications holds the string denoting the dns_verifications edge name in mutations.
+	EdgeDNSVerifications = "dns_verifications"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -460,6 +462,13 @@ const (
 	JobRunnerRegistrationTokensInverseTable = "job_runner_registration_tokens"
 	// JobRunnerRegistrationTokensColumn is the table column denoting the job_runner_registration_tokens relation/edge.
 	JobRunnerRegistrationTokensColumn = "owner_id"
+	// DNSVerificationsTable is the table that holds the dns_verifications relation/edge.
+	DNSVerificationsTable = "dns_verifications"
+	// DNSVerificationsInverseTable is the table name for the DNSVerification entity.
+	// It exists in this package in order to avoid circular dependency with the "dnsverification" package.
+	DNSVerificationsInverseTable = "dns_verifications"
+	// DNSVerificationsColumn is the table column denoting the dns_verifications relation/edge.
+	DNSVerificationsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1272,6 +1281,20 @@ func ByJobRunnerRegistrationTokens(term sql.OrderTerm, terms ...sql.OrderTerm) O
 	}
 }
 
+// ByDNSVerificationsCount orders the results by dns_verifications count.
+func ByDNSVerificationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDNSVerificationsStep(), opts...)
+	}
+}
+
+// ByDNSVerifications orders the results by dns_verifications terms.
+func ByDNSVerifications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDNSVerificationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1612,6 +1635,13 @@ func newJobRunnerRegistrationTokensStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(JobRunnerRegistrationTokensInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerRegistrationTokensTable, JobRunnerRegistrationTokensColumn),
+	)
+}
+func newDNSVerificationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DNSVerificationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DNSVerificationsTable, DNSVerificationsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

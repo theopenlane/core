@@ -39,6 +39,8 @@ const (
 	FieldTags = "tags"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldZoneID holds the string denoting the zone_id field in the database.
+	FieldZoneID = "zone_id"
 	// Table holds the table name of the mappabledomainhistory in the database.
 	Table = "mappable_domain_history"
 )
@@ -57,6 +59,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldName,
+	FieldZoneID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -156,6 +159,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByZoneID orders the results by the zone_id field.
+func ByZoneID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldZoneID, opts...).ToFunc()
 }
 
 var (

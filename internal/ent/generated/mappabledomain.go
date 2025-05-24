@@ -34,6 +34,8 @@ type MappableDomain struct {
 	Tags []string `json:"tags,omitempty"`
 	// Name of the mappable domain
 	Name string `json:"name,omitempty"`
+	// DNS Zone ID of the mappable domain.
+	ZoneID string `json:"zone_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MappableDomainQuery when eager-loading is set.
 	Edges        MappableDomainEdges `json:"edges"`
@@ -69,7 +71,7 @@ func (*MappableDomain) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case mappabledomain.FieldTags:
 			values[i] = new([]byte)
-		case mappabledomain.FieldID, mappabledomain.FieldCreatedBy, mappabledomain.FieldUpdatedBy, mappabledomain.FieldDeletedBy, mappabledomain.FieldName:
+		case mappabledomain.FieldID, mappabledomain.FieldCreatedBy, mappabledomain.FieldUpdatedBy, mappabledomain.FieldDeletedBy, mappabledomain.FieldName, mappabledomain.FieldZoneID:
 			values[i] = new(sql.NullString)
 		case mappabledomain.FieldCreatedAt, mappabledomain.FieldUpdatedAt, mappabledomain.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -144,6 +146,12 @@ func (md *MappableDomain) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				md.Name = value.String
 			}
+		case mappabledomain.FieldZoneID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field zone_id", values[i])
+			} else if value.Valid {
+				md.ZoneID = value.String
+			}
 		default:
 			md.selectValues.Set(columns[i], values[i])
 		}
@@ -208,6 +216,9 @@ func (md *MappableDomain) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(md.Name)
+	builder.WriteString(", ")
+	builder.WriteString("zone_id=")
+	builder.WriteString(md.ZoneID)
 	builder.WriteByte(')')
 	return builder.String()
 }
