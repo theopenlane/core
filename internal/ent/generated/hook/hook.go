@@ -165,6 +165,30 @@ func (f CustomDomainHistoryFunc) Mutate(ctx context.Context, m generated.Mutatio
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.CustomDomainHistoryMutation", m)
 }
 
+// The DNSVerificationFunc type is an adapter to allow the use of ordinary
+// function as DNSVerification mutator.
+type DNSVerificationFunc func(context.Context, *generated.DNSVerificationMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DNSVerificationFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DNSVerificationMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DNSVerificationMutation", m)
+}
+
+// The DNSVerificationHistoryFunc type is an adapter to allow the use of ordinary
+// function as DNSVerificationHistory mutator.
+type DNSVerificationHistoryFunc func(context.Context, *generated.DNSVerificationHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DNSVerificationHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DNSVerificationHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DNSVerificationHistoryMutation", m)
+}
+
 // The DocumentDataFunc type is an adapter to allow the use of ordinary
 // function as DocumentData mutator.
 type DocumentDataFunc func(context.Context, *generated.DocumentDataMutation) (generated.Value, error)

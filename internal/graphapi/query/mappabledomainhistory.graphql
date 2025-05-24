@@ -21,6 +21,7 @@ query GetAllMappableDomainHistories {
         tags
         updatedAt
         updatedBy
+        zoneID
       }
     }
   }
@@ -47,6 +48,7 @@ query GetMappableDomainHistories($first: Int, $last: Int, $where: MappableDomain
         tags
         updatedAt
         updatedBy
+        zoneID
       }
     }
   }

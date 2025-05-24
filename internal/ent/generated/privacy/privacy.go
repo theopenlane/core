@@ -423,6 +423,54 @@ func (f CustomDomainHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.CustomDomainHistoryMutation", m)
 }
 
+// The DNSVerificationQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type DNSVerificationQueryRuleFunc func(context.Context, *generated.DNSVerificationQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f DNSVerificationQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DNSVerificationQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.DNSVerificationQuery", q)
+}
+
+// The DNSVerificationMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type DNSVerificationMutationRuleFunc func(context.Context, *generated.DNSVerificationMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f DNSVerificationMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.DNSVerificationMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.DNSVerificationMutation", m)
+}
+
+// The DNSVerificationHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type DNSVerificationHistoryQueryRuleFunc func(context.Context, *generated.DNSVerificationHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f DNSVerificationHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DNSVerificationHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.DNSVerificationHistoryQuery", q)
+}
+
+// The DNSVerificationHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type DNSVerificationHistoryMutationRuleFunc func(context.Context, *generated.DNSVerificationHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f DNSVerificationHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.DNSVerificationHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.DNSVerificationHistoryMutation", m)
+}
+
 // The DocumentDataQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type DocumentDataQueryRuleFunc func(context.Context, *generated.DocumentDataQuery) error
@@ -2212,6 +2260,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.CustomDomainHistoryQuery:
 		return q.Filter(), nil
+	case *generated.DNSVerificationQuery:
+		return q.Filter(), nil
+	case *generated.DNSVerificationHistoryQuery:
+		return q.Filter(), nil
 	case *generated.DocumentDataQuery:
 		return q.Filter(), nil
 	case *generated.DocumentDataHistoryQuery:
@@ -2388,6 +2440,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.CustomDomainMutation:
 		return m.Filter(), nil
 	case *generated.CustomDomainHistoryMutation:
+		return m.Filter(), nil
+	case *generated.DNSVerificationMutation:
+		return m.Filter(), nil
+	case *generated.DNSVerificationHistoryMutation:
 		return m.Filter(), nil
 	case *generated.DocumentDataMutation:
 		return m.Filter(), nil

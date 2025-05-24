@@ -122,7 +122,8 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 		{
 			name: "happy path",
 			request: openlaneclient.CreateMappableDomainInput{
-				Name: "trust.theopenlane.io",
+				Name:   "trust.theopenlane.io",
+				ZoneID: "trust-zone-id",
 			},
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
@@ -130,7 +131,8 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 		{
 			name: "invalid domain",
 			request: openlaneclient.CreateMappableDomainInput{
-				Name: "!not-a-domain",
+				Name:   "!not-a-domain",
+				ZoneID: "trust-zone-id",
 			},
 			client:      suite.client.api,
 			ctx:         systemAdminUser.UserCtx,
@@ -139,7 +141,8 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 		{
 			name: "not system admin, unauthorized",
 			request: openlaneclient.CreateMappableDomainInput{
-				Name: "trust.theopenlane.io",
+				Name:   "trust.theopenlane.io",
+				ZoneID: "trust-zone-id",
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -179,13 +182,16 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 			name: "happy path - multiple domains",
 			requests: []*openlaneclient.CreateMappableDomainInput{
 				{
-					Name: "bulk1.theopenlane.io",
+					Name:   "bulk1.theopenlane.io",
+					ZoneID: "bulk1-zone-id",
 				},
 				{
-					Name: "bulk2.theopenlane.io",
+					Name:   "bulk2.theopenlane.io",
+					ZoneID: "bulk2-zone-id",
 				},
 				{
-					Name: "bulk3.theopenlane.io",
+					Name:   "bulk3.theopenlane.io",
+					ZoneID: "bulk3-zone-id",
 				},
 			},
 			client:      suite.client.api,
@@ -196,7 +202,8 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 			name: "happy path - single domain",
 			requests: []*openlaneclient.CreateMappableDomainInput{
 				{
-					Name: "singlebulk.theopenlane.io",
+					Name:   "singlebulk.theopenlane.io",
+					ZoneID: "singlebulk-zone-id",
 				},
 			},
 			client:      suite.client.api,
@@ -207,10 +214,12 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 			name: "invalid domain in batch",
 			requests: []*openlaneclient.CreateMappableDomainInput{
 				{
-					Name: "valid.theopenlane.io",
+					Name:   "valid.theopenlane.io",
+					ZoneID: "singlebulk-zone-id",
 				},
 				{
-					Name: "!invalid-domain",
+					Name:   "!invalid-domain",
+					ZoneID: "singlebulk-zone-id",
 				},
 			},
 			client:      suite.client.api,
@@ -221,7 +230,8 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 			name: "not system admin, unauthorized",
 			requests: []*openlaneclient.CreateMappableDomainInput{
 				{
-					Name: "unauthorized.theopenlane.io",
+					Name:   "unauthorized.theopenlane.io",
+					ZoneID: "singlebulk-zone-id",
 				},
 			},
 			client:      suite.client.api,

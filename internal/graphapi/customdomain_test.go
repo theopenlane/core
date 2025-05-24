@@ -258,13 +258,7 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 			name:   "delete domain",
 			id:     customDomain.ID,
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-		},
-		{
-			name:   "delete domain, admin user",
-			id:     customDomain2.ID,
-			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    systemAdminUser.UserCtx,
 		},
 		{
 			name:        "unauthorized",
@@ -308,6 +302,7 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 
 func TestUpdateCustomDomain(t *testing.T) {
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	dnsVerification := (&DNSVerificationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -321,20 +316,38 @@ func TestUpdateCustomDomain(t *testing.T) {
 			name:    "happy path",
 			queryID: customDomain.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     systemAdminUser.UserCtx,
 			updateInput: openlaneclient.UpdateCustomDomainInput{
 				Tags: []string{"hello"},
+			},
+		},
+		{
+			name:    "update dns verification id",
+			queryID: customDomain.ID,
+			client:  suite.client.api,
+			ctx:     systemAdminUser.UserCtx,
+			updateInput: openlaneclient.UpdateCustomDomainInput{
+				DNSVerificationID: &dnsVerification.ID,
+			},
+		},
+		{
+			name:    "clear dns verification",
+			queryID: customDomain.ID,
+			client:  suite.client.api,
+			ctx:     systemAdminUser.UserCtx,
+			updateInput: openlaneclient.UpdateCustomDomainInput{
+				ClearDNSVerification: lo.ToPtr(true),
 			},
 		},
 		{
 			name:    "not allowed",
 			queryID: customDomain.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     testUser1.UserCtx,
 			updateInput: openlaneclient.UpdateCustomDomainInput{
 				Tags: []string{"hello"},
 			},
-			errorMsg: notAuthorizedErrorMsg,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -352,6 +365,7 @@ func TestUpdateCustomDomain(t *testing.T) {
 			assert.Assert(t, resp != nil)
 		})
 	}
+	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: dnsVerification.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(testUser1.UserCtx, t)
 }

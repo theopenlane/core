@@ -35,10 +35,14 @@ const (
 	FieldCnameRecord = "cname_record"
 	// FieldMappableDomainID holds the string denoting the mappable_domain_id field in the database.
 	FieldMappableDomainID = "mappable_domain_id"
+	// FieldDNSVerificationID holds the string denoting the dns_verification_id field in the database.
+	FieldDNSVerificationID = "dns_verification_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeMappableDomain holds the string denoting the mappable_domain edge name in mutations.
 	EdgeMappableDomain = "mappable_domain"
+	// EdgeDNSVerification holds the string denoting the dns_verification edge name in mutations.
+	EdgeDNSVerification = "dns_verification"
 	// Table holds the table name of the customdomain in the database.
 	Table = "custom_domains"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -55,6 +59,13 @@ const (
 	MappableDomainInverseTable = "mappable_domains"
 	// MappableDomainColumn is the table column denoting the mappable_domain relation/edge.
 	MappableDomainColumn = "mappable_domain_id"
+	// DNSVerificationTable is the table that holds the dns_verification relation/edge.
+	DNSVerificationTable = "custom_domains"
+	// DNSVerificationInverseTable is the table name for the DNSVerification entity.
+	// It exists in this package in order to avoid circular dependency with the "dnsverification" package.
+	DNSVerificationInverseTable = "dns_verifications"
+	// DNSVerificationColumn is the table column denoting the dns_verification relation/edge.
+	DNSVerificationColumn = "dns_verification_id"
 )
 
 // Columns holds all SQL columns for customdomain fields.
@@ -70,11 +81,13 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldCnameRecord,
 	FieldMappableDomainID,
+	FieldDNSVerificationID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "custom_domains"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"dns_verification_custom_domains",
 	"mappable_domain_custom_domains",
 }
 
@@ -110,8 +123,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	OwnerIDValidator func(string) error
 	// CnameRecordValidator is a validator for the "cname_record" field. It is called by the builders before save.
 	CnameRecordValidator func(string) error
 	// MappableDomainIDValidator is a validator for the "mappable_domain_id" field. It is called by the builders before save.
@@ -173,6 +184,11 @@ func ByMappableDomainID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappableDomainID, opts...).ToFunc()
 }
 
+// ByDNSVerificationID orders the results by the dns_verification_id field.
+func ByDNSVerificationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDNSVerificationID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -184,6 +200,13 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByMappableDomainField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newMappableDomainStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDNSVerificationField orders the results by dns_verification field.
+func ByDNSVerificationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDNSVerificationStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -198,5 +221,12 @@ func newMappableDomainStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MappableDomainInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, MappableDomainTable, MappableDomainColumn),
+	)
+}
+func newDNSVerificationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DNSVerificationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DNSVerificationTable, DNSVerificationColumn),
 	)
 }

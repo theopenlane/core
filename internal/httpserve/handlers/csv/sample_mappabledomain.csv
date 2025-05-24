@@ -1,2 +1,2 @@
-Tags,Name,CustomDomainIDs
-example_tags,example_name,example_customdomainids
+Tags,Name,ZoneId,CustomDomainIDs
+example_tags,example_name,example_zoneid,example_customdomainids

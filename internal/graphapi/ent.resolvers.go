@@ -358,6 +358,56 @@ func (r *queryResolver) CustomDomainHistories(ctx context.Context, after *entgql
 	return res, err
 }
 
+// DNSVerifications is the resolver for the dnsVerifications field.
+func (r *queryResolver) DNSVerifications(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) (*generated.DNSVerificationConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).DNSVerification.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverification"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDNSVerificationOrder(orderBy),
+		generated.WithDNSVerificationFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverification"})
+	}
+
+	return res, err
+}
+
+// DNSVerificationHistories is the resolver for the dnsVerificationHistories field.
+func (r *queryResolver) DNSVerificationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DNSVerificationHistoryOrder, where *generated.DNSVerificationHistoryWhereInput) (*generated.DNSVerificationHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	query, err := withTransactionalMutation(ctx).DNSVerificationHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverificationhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDNSVerificationHistoryOrder(orderBy),
+		generated.WithDNSVerificationHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverificationhistory"})
+	}
+
+	return res, err
+}
+
 // DocumentDataSlice is the resolver for the documentDataSlice field.
 func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
 	// set page limit if nothing was set

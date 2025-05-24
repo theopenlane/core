@@ -1,9 +1,11 @@
+
 mutation CreateBulkCSVCustomDomain($input: Upload!) {
   createBulkCSVCustomDomain(input: $input) {
     customDomains {
       cnameRecord
       createdAt
       createdBy
+      dnsVerificationID
       id
       mappableDomainID
       ownerID
@@ -20,6 +22,7 @@ mutation CreateBulkCustomDomain($input: [CreateCustomDomainInput!]) {
       cnameRecord
       createdAt
       createdBy
+      dnsVerificationID
       id
       mappableDomainID
       ownerID
@@ -36,6 +39,7 @@ mutation CreateCustomDomain($input: CreateCustomDomainInput!) {
       cnameRecord
       createdAt
       createdBy
+      dnsVerificationID
       id
       mappableDomainID
       ownerID
@@ -66,6 +70,7 @@ query GetAllCustomDomains {
         cnameRecord
         createdAt
         createdBy
+        dnsVerificationID
         id
         mappableDomainID
         ownerID
@@ -76,12 +81,12 @@ query GetAllCustomDomains {
     }
   }
 }
-
 query GetCustomDomainByID($customDomainId: ID!) {
   customDomain(id: $customDomainId) {
     cnameRecord
     createdAt
     createdBy
+    dnsVerificationID
     id
     mappableDomainID
     ownerID
@@ -105,6 +110,7 @@ query GetCustomDomains($first: Int, $last: Int, $where: CustomDomainWhereInput) 
         cnameRecord
         createdAt
         createdBy
+        dnsVerificationID
         id
         mappableDomainID
         ownerID
@@ -115,13 +121,13 @@ query GetCustomDomains($first: Int, $last: Int, $where: CustomDomainWhereInput) 
     }
   }
 }
-
 mutation UpdateCustomDomain($updateCustomDomainId: ID!, $input: UpdateCustomDomainInput!) {
   updateCustomDomain(id: $updateCustomDomainId, input: $input) {
     customDomain {
       cnameRecord
       createdAt
       createdBy
+      dnsVerificationID
       id
       mappableDomainID
       ownerID

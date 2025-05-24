@@ -83,10 +83,14 @@ func (ec *executionContext) fieldContext_CustomDomainBulkCreatePayload_customDom
 				return ec.fieldContext_CustomDomain_cnameRecord(ctx, field)
 			case "mappableDomainID":
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
+			case "dnsVerificationID":
+				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
 				return ec.fieldContext_CustomDomain_mappableDomain(ctx, field)
+			case "dnsVerification":
+				return ec.fieldContext_CustomDomain_dnsVerification(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomDomain", field.Name)
 		},
@@ -151,10 +155,14 @@ func (ec *executionContext) fieldContext_CustomDomainCreatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_cnameRecord(ctx, field)
 			case "mappableDomainID":
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
+			case "dnsVerificationID":
+				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
 				return ec.fieldContext_CustomDomain_mappableDomain(ctx, field)
+			case "dnsVerification":
+				return ec.fieldContext_CustomDomain_dnsVerification(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomDomain", field.Name)
 		},
@@ -263,10 +271,14 @@ func (ec *executionContext) fieldContext_CustomDomainUpdatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_cnameRecord(ctx, field)
 			case "mappableDomainID":
 				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
+			case "dnsVerificationID":
+				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomDomain_owner(ctx, field)
 			case "mappableDomain":
 				return ec.fieldContext_CustomDomain_mappableDomain(ctx, field)
+			case "dnsVerification":
+				return ec.fieldContext_CustomDomain_dnsVerification(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomDomain", field.Name)
 		},

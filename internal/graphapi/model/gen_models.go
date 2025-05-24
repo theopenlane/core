@@ -250,6 +250,30 @@ type CustomDomainUpdatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
+// Return response for createBulkDNSVerification mutation
+type DNSVerificationBulkCreatePayload struct {
+	// Created dnsVerifications
+	DNSVerifications []*generated.DNSVerification `json:"dnsVerifications,omitempty"`
+}
+
+// Return response for createDNSVerification mutation
+type DNSVerificationCreatePayload struct {
+	// Created dnsVerification
+	DNSVerification *generated.DNSVerification `json:"dnsVerification"`
+}
+
+// Return response for deleteDNSVerification mutation
+type DNSVerificationDeletePayload struct {
+	// Deleted dnsVerification ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateDNSVerification mutation
+type DNSVerificationUpdatePayload struct {
+	// Updated dnsVerification
+	DNSVerification *generated.DNSVerification `json:"dnsVerification"`
+}
+
 // Return response for createBulkDocumentData mutation
 type DocumentDataBulkCreatePayload struct {
 	// Created documentData
@@ -899,6 +923,7 @@ type SearchResults struct {
 	ControlImplementations      *generated.ControlImplementationConnection      `json:"controlImplementations,omitempty"`
 	ControlObjectives           *generated.ControlObjectiveConnection           `json:"controlObjectives,omitempty"`
 	CustomDomains               *generated.CustomDomainConnection               `json:"customDomains,omitempty"`
+	DNSVerifications            *generated.DNSVerificationConnection            `json:"dnsVerifications,omitempty"`
 	DocumentData                *generated.DocumentDataConnection               `json:"documentData,omitempty"`
 	Entities                    *generated.EntityConnection                     `json:"entities,omitempty"`
 	EntityTypes                 *generated.EntityTypeConnection                 `json:"entityTypes,omitempty"`

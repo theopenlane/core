@@ -1653,10 +1653,11 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 
 // CreateCustomDomainInput represents a mutation input for creating customdomains.
 type CreateCustomDomainInput struct {
-	Tags             []string
-	CnameRecord      string
-	OwnerID          *string
-	MappableDomainID string
+	Tags              []string
+	CnameRecord       string
+	OwnerID           *string
+	MappableDomainID  string
+	DNSVerificationID *string
 }
 
 // Mutate applies the CreateCustomDomainInput on the CustomDomainMutation builder.
@@ -1669,6 +1670,9 @@ func (i *CreateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 		m.SetOwnerID(*v)
 	}
 	m.SetMappableDomainID(i.MappableDomainID)
+	if v := i.DNSVerificationID; v != nil {
+		m.SetDNSVerificationID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateCustomDomainInput on the CustomDomainCreate builder.
@@ -1679,11 +1683,13 @@ func (c *CustomDomainCreate) SetInput(i CreateCustomDomainInput) *CustomDomainCr
 
 // UpdateCustomDomainInput represents a mutation input for updating customdomains.
 type UpdateCustomDomainInput struct {
-	ClearTags  bool
-	Tags       []string
-	AppendTags []string
-	ClearOwner bool
-	OwnerID    *string
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	ClearOwner           bool
+	OwnerID              *string
+	ClearDNSVerification bool
+	DNSVerificationID    *string
 }
 
 // Mutate applies the UpdateCustomDomainInput on the CustomDomainMutation builder.
@@ -1703,6 +1709,12 @@ func (i *UpdateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if i.ClearDNSVerification {
+		m.ClearDNSVerification()
+	}
+	if v := i.DNSVerificationID; v != nil {
+		m.SetDNSVerificationID(*v)
+	}
 }
 
 // SetInput applies the change-set in the UpdateCustomDomainInput on the CustomDomainUpdate builder.
@@ -1713,6 +1725,146 @@ func (c *CustomDomainUpdate) SetInput(i UpdateCustomDomainInput) *CustomDomainUp
 
 // SetInput applies the change-set in the UpdateCustomDomainInput on the CustomDomainUpdateOne builder.
 func (c *CustomDomainUpdateOne) SetInput(i UpdateCustomDomainInput) *CustomDomainUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateDNSVerificationInput represents a mutation input for creating dnsverifications.
+type CreateDNSVerificationInput struct {
+	Tags                        []string
+	CloudflareHostnameID        string
+	DNSTxtRecord                string
+	DNSTxtValue                 string
+	DNSVerificationStatus       *enums.CustomDomainStatus
+	DNSVerificationStatusReason *string
+	SslTxtRecord                string
+	SslTxtValue                 string
+	SslCertStatus               *enums.CustomDomainStatus
+	OwnerID                     *string
+	CustomDomainIDs             []string
+}
+
+// Mutate applies the CreateDNSVerificationInput on the DNSVerificationMutation builder.
+func (i *CreateDNSVerificationInput) Mutate(m *DNSVerificationMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetCloudflareHostnameID(i.CloudflareHostnameID)
+	m.SetDNSTxtRecord(i.DNSTxtRecord)
+	m.SetDNSTxtValue(i.DNSTxtValue)
+	if v := i.DNSVerificationStatus; v != nil {
+		m.SetDNSVerificationStatus(*v)
+	}
+	if v := i.DNSVerificationStatusReason; v != nil {
+		m.SetDNSVerificationStatusReason(*v)
+	}
+	m.SetSslTxtRecord(i.SslTxtRecord)
+	m.SetSslTxtValue(i.SslTxtValue)
+	if v := i.SslCertStatus; v != nil {
+		m.SetSslCertStatus(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.CustomDomainIDs; len(v) > 0 {
+		m.AddCustomDomainIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateDNSVerificationInput on the DNSVerificationCreate builder.
+func (c *DNSVerificationCreate) SetInput(i CreateDNSVerificationInput) *DNSVerificationCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateDNSVerificationInput represents a mutation input for updating dnsverifications.
+type UpdateDNSVerificationInput struct {
+	ClearTags                        bool
+	Tags                             []string
+	AppendTags                       []string
+	DNSTxtRecord                     *string
+	DNSTxtValue                      *string
+	DNSVerificationStatus            *enums.CustomDomainStatus
+	ClearDNSVerificationStatusReason bool
+	DNSVerificationStatusReason      *string
+	SslTxtRecord                     *string
+	SslTxtValue                      *string
+	SslCertStatus                    *enums.CustomDomainStatus
+	ClearSslCertStatusReason         bool
+	SslCertStatusReason              *string
+	ClearOwner                       bool
+	OwnerID                          *string
+	ClearCustomDomains               bool
+	AddCustomDomainIDs               []string
+	RemoveCustomDomainIDs            []string
+}
+
+// Mutate applies the UpdateDNSVerificationInput on the DNSVerificationMutation builder.
+func (i *UpdateDNSVerificationInput) Mutate(m *DNSVerificationMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.DNSTxtRecord; v != nil {
+		m.SetDNSTxtRecord(*v)
+	}
+	if v := i.DNSTxtValue; v != nil {
+		m.SetDNSTxtValue(*v)
+	}
+	if v := i.DNSVerificationStatus; v != nil {
+		m.SetDNSVerificationStatus(*v)
+	}
+	if i.ClearDNSVerificationStatusReason {
+		m.ClearDNSVerificationStatusReason()
+	}
+	if v := i.DNSVerificationStatusReason; v != nil {
+		m.SetDNSVerificationStatusReason(*v)
+	}
+	if v := i.SslTxtRecord; v != nil {
+		m.SetSslTxtRecord(*v)
+	}
+	if v := i.SslTxtValue; v != nil {
+		m.SetSslTxtValue(*v)
+	}
+	if v := i.SslCertStatus; v != nil {
+		m.SetSslCertStatus(*v)
+	}
+	if i.ClearSslCertStatusReason {
+		m.ClearSslCertStatusReason()
+	}
+	if v := i.SslCertStatusReason; v != nil {
+		m.SetSslCertStatusReason(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearCustomDomains {
+		m.ClearCustomDomains()
+	}
+	if v := i.AddCustomDomainIDs; len(v) > 0 {
+		m.AddCustomDomainIDs(v...)
+	}
+	if v := i.RemoveCustomDomainIDs; len(v) > 0 {
+		m.RemoveCustomDomainIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateDNSVerificationInput on the DNSVerificationUpdate builder.
+func (c *DNSVerificationUpdate) SetInput(i UpdateDNSVerificationInput) *DNSVerificationUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateDNSVerificationInput on the DNSVerificationUpdateOne builder.
+func (c *DNSVerificationUpdateOne) SetInput(i UpdateDNSVerificationInput) *DNSVerificationUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -4609,6 +4761,7 @@ func (c *JobRunnerTokenUpdateOne) SetInput(i UpdateJobRunnerTokenInput) *JobRunn
 type CreateMappableDomainInput struct {
 	Tags            []string
 	Name            string
+	ZoneID          string
 	CustomDomainIDs []string
 }
 
@@ -4618,6 +4771,7 @@ func (i *CreateMappableDomainInput) Mutate(m *MappableDomainMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
+	m.SetZoneID(i.ZoneID)
 	if v := i.CustomDomainIDs; len(v) > 0 {
 		m.AddCustomDomainIDs(v...)
 	}
@@ -5200,6 +5354,7 @@ type CreateOrganizationInput struct {
 	JobRunnerIDs                  []string
 	JobRunnerTokenIDs             []string
 	JobRunnerRegistrationTokenIDs []string
+	DNSVerificationIDs            []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -5361,6 +5516,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.JobRunnerRegistrationTokenIDs; len(v) > 0 {
 		m.AddJobRunnerRegistrationTokenIDs(v...)
 	}
+	if v := i.DNSVerificationIDs; len(v) > 0 {
+		m.AddDNSVerificationIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -5512,6 +5670,9 @@ type UpdateOrganizationInput struct {
 	ClearJobRunnerRegistrationTokens    bool
 	AddJobRunnerRegistrationTokenIDs    []string
 	RemoveJobRunnerRegistrationTokenIDs []string
+	ClearDNSVerifications               bool
+	AddDNSVerificationIDs               []string
+	RemoveDNSVerificationIDs            []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5938,6 +6099,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveJobRunnerRegistrationTokenIDs; len(v) > 0 {
 		m.RemoveJobRunnerRegistrationTokenIDs(v...)
+	}
+	if i.ClearDNSVerifications {
+		m.ClearDNSVerifications()
+	}
+	if v := i.AddDNSVerificationIDs; len(v) > 0 {
+		m.AddDNSVerificationIDs(v...)
+	}
+	if v := i.RemoveDNSVerificationIDs; len(v) > 0 {
+		m.RemoveDNSVerificationIDs(v...)
 	}
 }
 

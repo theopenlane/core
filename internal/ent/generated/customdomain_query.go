@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -23,15 +24,16 @@ import (
 // CustomDomainQuery is the builder for querying CustomDomain entities.
 type CustomDomainQuery struct {
 	config
-	ctx                *QueryContext
-	order              []customdomain.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.CustomDomain
-	withOwner          *OrganizationQuery
-	withMappableDomain *MappableDomainQuery
-	withFKs            bool
-	loadTotal          []func(context.Context, []*CustomDomain) error
-	modifiers          []func(*sql.Selector)
+	ctx                 *QueryContext
+	order               []customdomain.OrderOption
+	inters              []Interceptor
+	predicates          []predicate.CustomDomain
+	withOwner           *OrganizationQuery
+	withMappableDomain  *MappableDomainQuery
+	withDNSVerification *DNSVerificationQuery
+	withFKs             bool
+	loadTotal           []func(context.Context, []*CustomDomain) error
+	modifiers           []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -111,6 +113,31 @@ func (cdq *CustomDomainQuery) QueryMappableDomain() *MappableDomainQuery {
 		)
 		schemaConfig := cdq.schemaConfig
 		step.To.Schema = schemaConfig.MappableDomain
+		step.Edge.Schema = schemaConfig.CustomDomain
+		fromU = sqlgraph.SetNeighbors(cdq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDNSVerification chains the current query on the "dns_verification" edge.
+func (cdq *CustomDomainQuery) QueryDNSVerification() *DNSVerificationQuery {
+	query := (&DNSVerificationClient{config: cdq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cdq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cdq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customdomain.Table, customdomain.FieldID, selector),
+			sqlgraph.To(dnsverification.Table, dnsverification.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, customdomain.DNSVerificationTable, customdomain.DNSVerificationColumn),
+		)
+		schemaConfig := cdq.schemaConfig
+		step.To.Schema = schemaConfig.DNSVerification
 		step.Edge.Schema = schemaConfig.CustomDomain
 		fromU = sqlgraph.SetNeighbors(cdq.driver.Dialect(), step)
 		return fromU, nil
@@ -305,13 +332,14 @@ func (cdq *CustomDomainQuery) Clone() *CustomDomainQuery {
 		return nil
 	}
 	return &CustomDomainQuery{
-		config:             cdq.config,
-		ctx:                cdq.ctx.Clone(),
-		order:              append([]customdomain.OrderOption{}, cdq.order...),
-		inters:             append([]Interceptor{}, cdq.inters...),
-		predicates:         append([]predicate.CustomDomain{}, cdq.predicates...),
-		withOwner:          cdq.withOwner.Clone(),
-		withMappableDomain: cdq.withMappableDomain.Clone(),
+		config:              cdq.config,
+		ctx:                 cdq.ctx.Clone(),
+		order:               append([]customdomain.OrderOption{}, cdq.order...),
+		inters:              append([]Interceptor{}, cdq.inters...),
+		predicates:          append([]predicate.CustomDomain{}, cdq.predicates...),
+		withOwner:           cdq.withOwner.Clone(),
+		withMappableDomain:  cdq.withMappableDomain.Clone(),
+		withDNSVerification: cdq.withDNSVerification.Clone(),
 		// clone intermediate query.
 		sql:       cdq.sql.Clone(),
 		path:      cdq.path,
@@ -338,6 +366,17 @@ func (cdq *CustomDomainQuery) WithMappableDomain(opts ...func(*MappableDomainQue
 		opt(query)
 	}
 	cdq.withMappableDomain = query
+	return cdq
+}
+
+// WithDNSVerification tells the query-builder to eager-load the nodes that are connected to
+// the "dns_verification" edge. The optional arguments are used to configure the query builder of the edge.
+func (cdq *CustomDomainQuery) WithDNSVerification(opts ...func(*DNSVerificationQuery)) *CustomDomainQuery {
+	query := (&DNSVerificationClient{config: cdq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cdq.withDNSVerification = query
 	return cdq
 }
 
@@ -426,9 +465,10 @@ func (cdq *CustomDomainQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		nodes       = []*CustomDomain{}
 		withFKs     = cdq.withFKs
 		_spec       = cdq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			cdq.withOwner != nil,
 			cdq.withMappableDomain != nil,
+			cdq.withDNSVerification != nil,
 		}
 	)
 	if withFKs {
@@ -466,6 +506,12 @@ func (cdq *CustomDomainQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	if query := cdq.withMappableDomain; query != nil {
 		if err := cdq.loadMappableDomain(ctx, query, nodes, nil,
 			func(n *CustomDomain, e *MappableDomain) { n.Edges.MappableDomain = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cdq.withDNSVerification; query != nil {
+		if err := cdq.loadDNSVerification(ctx, query, nodes, nil,
+			func(n *CustomDomain, e *DNSVerification) { n.Edges.DNSVerification = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -535,6 +581,35 @@ func (cdq *CustomDomainQuery) loadMappableDomain(ctx context.Context, query *Map
 	}
 	return nil
 }
+func (cdq *CustomDomainQuery) loadDNSVerification(ctx context.Context, query *DNSVerificationQuery, nodes []*CustomDomain, init func(*CustomDomain), assign func(*CustomDomain, *DNSVerification)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*CustomDomain)
+	for i := range nodes {
+		fk := nodes[i].DNSVerificationID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(dnsverification.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "dns_verification_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (cdq *CustomDomainQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cdq.querySpec()
@@ -571,6 +646,9 @@ func (cdq *CustomDomainQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if cdq.withMappableDomain != nil {
 			_spec.Node.AddColumnOnce(customdomain.FieldMappableDomainID)
+		}
+		if cdq.withDNSVerification != nil {
+			_spec.Node.AddColumnOnce(customdomain.FieldDNSVerificationID)
 		}
 	}
 	if ps := cdq.predicates; len(ps) > 0 {

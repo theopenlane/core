@@ -79,6 +79,8 @@ func (ec *executionContext) fieldContext_MappableDomainBulkCreatePayload_mappabl
 				return ec.fieldContext_MappableDomain_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_MappableDomain_name(ctx, field)
+			case "zoneID":
+				return ec.fieldContext_MappableDomain_zoneID(ctx, field)
 			case "customDomains":
 				return ec.fieldContext_MappableDomain_customDomains(ctx, field)
 			}
@@ -141,6 +143,8 @@ func (ec *executionContext) fieldContext_MappableDomainCreatePayload_mappableDom
 				return ec.fieldContext_MappableDomain_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_MappableDomain_name(ctx, field)
+			case "zoneID":
+				return ec.fieldContext_MappableDomain_zoneID(ctx, field)
 			case "customDomains":
 				return ec.fieldContext_MappableDomain_customDomains(ctx, field)
 			}
@@ -247,6 +251,8 @@ func (ec *executionContext) fieldContext_MappableDomainUpdatePayload_mappableDom
 				return ec.fieldContext_MappableDomain_tags(ctx, field)
 			case "name":
 				return ec.fieldContext_MappableDomain_name(ctx, field)
+			case "zoneID":
+				return ec.fieldContext_MappableDomain_zoneID(ctx, field)
 			case "customDomains":
 				return ec.fieldContext_MappableDomain_customDomains(ctx, field)
 			}

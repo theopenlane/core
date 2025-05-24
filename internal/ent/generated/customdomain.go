@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
@@ -40,11 +41,14 @@ type CustomDomain struct {
 	CnameRecord string `json:"cname_record,omitempty"`
 	// The mappable domain id that this custom domain maps to
 	MappableDomainID string `json:"mappable_domain_id,omitempty"`
+	// The ID of the dns verification record
+	DNSVerificationID string `json:"dns_verification_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CustomDomainQuery when eager-loading is set.
-	Edges                          CustomDomainEdges `json:"edges"`
-	mappable_domain_custom_domains *string
-	selectValues                   sql.SelectValues
+	Edges                           CustomDomainEdges `json:"edges"`
+	dns_verification_custom_domains *string
+	mappable_domain_custom_domains  *string
+	selectValues                    sql.SelectValues
 }
 
 // CustomDomainEdges holds the relations/edges for other nodes in the graph.
@@ -53,11 +57,13 @@ type CustomDomainEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// MappableDomain holds the value of the mappable_domain edge.
 	MappableDomain *MappableDomain `json:"mappable_domain,omitempty"`
+	// DNSVerification holds the value of the dns_verification edge.
+	DNSVerification *DNSVerification `json:"dns_verification,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -82,6 +88,17 @@ func (e CustomDomainEdges) MappableDomainOrErr() (*MappableDomain, error) {
 	return nil, &NotLoadedError{edge: "mappable_domain"}
 }
 
+// DNSVerificationOrErr returns the DNSVerification value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CustomDomainEdges) DNSVerificationOrErr() (*DNSVerification, error) {
+	if e.DNSVerification != nil {
+		return e.DNSVerification, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: dnsverification.Label}
+	}
+	return nil, &NotLoadedError{edge: "dns_verification"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*CustomDomain) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -89,11 +106,13 @@ func (*CustomDomain) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case customdomain.FieldTags:
 			values[i] = new([]byte)
-		case customdomain.FieldID, customdomain.FieldCreatedBy, customdomain.FieldUpdatedBy, customdomain.FieldDeletedBy, customdomain.FieldOwnerID, customdomain.FieldCnameRecord, customdomain.FieldMappableDomainID:
+		case customdomain.FieldID, customdomain.FieldCreatedBy, customdomain.FieldUpdatedBy, customdomain.FieldDeletedBy, customdomain.FieldOwnerID, customdomain.FieldCnameRecord, customdomain.FieldMappableDomainID, customdomain.FieldDNSVerificationID:
 			values[i] = new(sql.NullString)
 		case customdomain.FieldCreatedAt, customdomain.FieldUpdatedAt, customdomain.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case customdomain.ForeignKeys[0]: // mappable_domain_custom_domains
+		case customdomain.ForeignKeys[0]: // dns_verification_custom_domains
+			values[i] = new(sql.NullString)
+		case customdomain.ForeignKeys[1]: // mappable_domain_custom_domains
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -178,7 +197,20 @@ func (cd *CustomDomain) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				cd.MappableDomainID = value.String
 			}
+		case customdomain.FieldDNSVerificationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dns_verification_id", values[i])
+			} else if value.Valid {
+				cd.DNSVerificationID = value.String
+			}
 		case customdomain.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dns_verification_custom_domains", values[i])
+			} else if value.Valid {
+				cd.dns_verification_custom_domains = new(string)
+				*cd.dns_verification_custom_domains = value.String
+			}
+		case customdomain.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mappable_domain_custom_domains", values[i])
 			} else if value.Valid {
@@ -206,6 +238,11 @@ func (cd *CustomDomain) QueryOwner() *OrganizationQuery {
 // QueryMappableDomain queries the "mappable_domain" edge of the CustomDomain entity.
 func (cd *CustomDomain) QueryMappableDomain() *MappableDomainQuery {
 	return NewCustomDomainClient(cd.config).QueryMappableDomain(cd)
+}
+
+// QueryDNSVerification queries the "dns_verification" edge of the CustomDomain entity.
+func (cd *CustomDomain) QueryDNSVerification() *DNSVerificationQuery {
+	return NewCustomDomainClient(cd.config).QueryDNSVerification(cd)
 }
 
 // Update returns a builder for updating this CustomDomain.
@@ -260,6 +297,9 @@ func (cd *CustomDomain) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("mappable_domain_id=")
 	builder.WriteString(cd.MappableDomainID)
+	builder.WriteString(", ")
+	builder.WriteString("dns_verification_id=")
+	builder.WriteString(cd.DNSVerificationID)
 	builder.WriteByte(')')
 	return builder.String()
 }

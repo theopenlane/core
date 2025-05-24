@@ -1,2 +1,2 @@
-Tags,CnameRecord,OwnerId,MappableDomainId
-example_tags,example_cnamerecord,example_ownerid,example_mappabledomainid
+Tags,CnameRecord,OwnerId,MappableDomainId,DnsVerificationId
+example_tags,example_cnamerecord,example_ownerid,example_mappabledomainid,example_dnsverificationid
