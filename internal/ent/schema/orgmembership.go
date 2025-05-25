@@ -3,7 +3,6 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -87,11 +86,11 @@ func (OrgMembership) Annotations() []schema.Annotation {
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{
 				{
-					Field:   "Orgmembership",
+					Field:   "User", // use the user field because the orgmembership is deleted
 					Through: "GroupMembership",
 				},
 				{
-					Field:   "Orgmembership",
+					Field:   "User", // use the user field because the orgmembership is deleted
 					Through: "ProgramMembership",
 				},
 			},
@@ -102,13 +101,13 @@ func (OrgMembership) Annotations() []schema.Annotation {
 func (OrgMembership) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("user_id", "organization_id").
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Unique().Annotations(),
 	}
 }
 
 // Mixin of the OrgMembership
 func (OrgMembership) Mixin() []ent.Mixin {
-	return mixinConfig{excludeTags: true}.getMixins()
+	return mixinConfig{excludeTags: true, excludeSoftDelete: true}.getMixins()
 }
 
 // Hooks of the OrgMembership

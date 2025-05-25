@@ -1801,12 +1801,6 @@ func (omh *OrgMembershipHistory) changes(new *OrgMembershipHistory) []Change {
 	if !reflect.DeepEqual(omh.CreatedBy, new.CreatedBy) {
 		changes = append(changes, NewChange(orgmembershiphistory.FieldCreatedBy, omh.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(omh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldDeletedAt, omh.DeletedAt, new.DeletedAt))
-	}
-	if !reflect.DeepEqual(omh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(orgmembershiphistory.FieldDeletedBy, omh.DeletedBy, new.DeletedBy))
-	}
 	if !reflect.DeepEqual(omh.Role, new.Role) {
 		changes = append(changes, NewChange(orgmembershiphistory.FieldRole, omh.Role, new.Role))
 	}

@@ -3077,29 +3077,24 @@ func init() {
 		})
 	}
 	orgmembershipMixinHooks0 := orgmembershipMixin[0].Hooks()
-	orgmembershipMixinHooks1 := orgmembershipMixin[1].Hooks()
 	orgmembershipHooks := schema.OrgMembership{}.Hooks()
 
 	orgmembership.Hooks[1] = orgmembershipMixinHooks0[0]
 
-	orgmembership.Hooks[2] = orgmembershipMixinHooks1[0]
+	orgmembership.Hooks[2] = orgmembershipHooks[0]
 
-	orgmembership.Hooks[3] = orgmembershipHooks[0]
+	orgmembership.Hooks[3] = orgmembershipHooks[1]
 
-	orgmembership.Hooks[4] = orgmembershipHooks[1]
+	orgmembership.Hooks[4] = orgmembershipHooks[2]
 
-	orgmembership.Hooks[5] = orgmembershipHooks[2]
-
-	orgmembership.Hooks[6] = orgmembershipHooks[3]
-	orgmembershipMixinInters1 := orgmembershipMixin[1].Interceptors()
+	orgmembership.Hooks[5] = orgmembershipHooks[3]
 	orgmembershipInters := schema.OrgMembership{}.Interceptors()
-	orgmembership.Interceptors[0] = orgmembershipMixinInters1[0]
-	orgmembership.Interceptors[1] = orgmembershipInters[0]
-	orgmembership.Interceptors[2] = orgmembershipInters[1]
+	orgmembership.Interceptors[0] = orgmembershipInters[0]
+	orgmembership.Interceptors[1] = orgmembershipInters[1]
 	orgmembershipMixinFields0 := orgmembershipMixin[0].Fields()
 	_ = orgmembershipMixinFields0
-	orgmembershipMixinFields2 := orgmembershipMixin[2].Fields()
-	_ = orgmembershipMixinFields2
+	orgmembershipMixinFields1 := orgmembershipMixin[1].Fields()
+	_ = orgmembershipMixinFields1
 	orgmembershipFields := schema.OrgMembership{}.Fields()
 	_ = orgmembershipFields
 	// orgmembershipDescCreatedAt is the schema descriptor for created_at field.
@@ -3113,7 +3108,7 @@ func init() {
 	// orgmembership.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	orgmembership.UpdateDefaultUpdatedAt = orgmembershipDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// orgmembershipDescID is the schema descriptor for id field.
-	orgmembershipDescID := orgmembershipMixinFields2[0].Descriptor()
+	orgmembershipDescID := orgmembershipMixinFields1[0].Descriptor()
 	// orgmembership.DefaultID holds the default value on creation for the id field.
 	orgmembership.DefaultID = orgmembershipDescID.Default.(func() string)
 	orgmembershiphistoryInters := schema.OrgMembershipHistory{}.Interceptors()
@@ -3135,7 +3130,7 @@ func init() {
 	// orgmembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	orgmembershiphistory.UpdateDefaultUpdatedAt = orgmembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// orgmembershiphistoryDescID is the schema descriptor for id field.
-	orgmembershiphistoryDescID := orgmembershiphistoryFields[9].Descriptor()
+	orgmembershiphistoryDescID := orgmembershiphistoryFields[7].Descriptor()
 	// orgmembershiphistory.DefaultID holds the default value on creation for the id field.
 	orgmembershiphistory.DefaultID = orgmembershiphistoryDescID.Default.(func() string)
 	orgsubscriptionMixin := schema.OrgSubscription{}.Mixin()

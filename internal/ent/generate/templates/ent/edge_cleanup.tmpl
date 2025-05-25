@@ -40,8 +40,8 @@
                {{- range $schema := $annotation.Schemas }}
                     {{- $field := $schema.Through }}
                     {{/* use the client to delete records where the edge has a field and a through schema (provided by the annotation) containing the ID provided by the func */}}
-                    if exists, err := FromContext(ctx).{{ $field }}.Query().Where(({{ $field | lower }}.Has{{ $schema.Field }}With({{ $node.Name | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
-                        if {{ $field | lower }}Count, err := FromContext(ctx).{{ $field }}.Delete().Where({{ $field | lower }}.Has{{ $schema.Field }}With({{ $node.Name | lower }}.ID(id))).Exec(ctx); err != nil {
+                    if exists, err := FromContext(ctx).{{ $field }}.Query().Where(({{ $field | lower }}.Has{{ $schema.Field }}With({{ $schema.Field | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
+                        if {{ $field | lower }}Count, err := FromContext(ctx).{{ $field }}.Delete().Where({{ $field | lower }}.Has{{ $schema.Field }}With({{ $schema.Field | lower }}.ID(id))).Exec(ctx); err != nil {
                             log.Debug().Err(err).Int("count", {{ $field | lower }}Count).Msg("deleting {{ $field | lower }}")
                             return err
                         }

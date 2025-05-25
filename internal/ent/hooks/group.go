@@ -8,7 +8,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -169,7 +168,7 @@ func HookGroupAuthz() ent.Hook {
 			if m.Op().Is(ent.OpCreate) {
 				// create the group member admin and relationship tuple for parent org
 				err = groupCreateHook(ctx, m)
-			} else if m.Op().Is(ent.OpDelete|ent.OpDeleteOne) || entx.CheckIsSoftDelete(ctx) {
+			} else if isDeleteOp(ctx, m) {
 				// delete all relationship tuples on delete, or soft delete (Update Op)
 				err = groupDeleteHook(ctx, m)
 			}

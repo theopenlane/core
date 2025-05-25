@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -146,7 +145,7 @@ func standardTupleOnUpdateOne(ctx context.Context, m *generated.StandardMutation
 	)
 
 	// if its a soft delete, delete the tuples
-	if entx.CheckIsSoftDelete(ctx) {
+	if isDeleteOp(ctx, m) {
 		return false, true, nil
 	}
 	// check if the systemOwned or isPublic fields have changed

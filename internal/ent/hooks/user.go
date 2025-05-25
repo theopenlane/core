@@ -10,7 +10,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/emailtemplates"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -198,7 +197,7 @@ func HookUserPermissions() ent.Hook {
 func HookDeleteUser() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return hook.UserFunc(func(ctx context.Context, m *generated.UserMutation) (generated.Value, error) {
-			if m.Op().Is(ent.OpDelete|ent.OpDeleteOne) || entx.CheckIsSoftDelete(ctx) {
+			if isDeleteOp(ctx, m) {
 				userID, _ := m.ID()
 				// get the personal org id
 				user, err := m.Client().User.Get(ctx, userID)

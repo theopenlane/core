@@ -65,46 +65,6 @@ func (omu *OrgMembershipUpdate) ClearUpdatedBy() *OrgMembershipUpdate {
 	return omu
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (omu *OrgMembershipUpdate) SetDeletedAt(t time.Time) *OrgMembershipUpdate {
-	omu.mutation.SetDeletedAt(t)
-	return omu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (omu *OrgMembershipUpdate) SetNillableDeletedAt(t *time.Time) *OrgMembershipUpdate {
-	if t != nil {
-		omu.SetDeletedAt(*t)
-	}
-	return omu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (omu *OrgMembershipUpdate) ClearDeletedAt() *OrgMembershipUpdate {
-	omu.mutation.ClearDeletedAt()
-	return omu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (omu *OrgMembershipUpdate) SetDeletedBy(s string) *OrgMembershipUpdate {
-	omu.mutation.SetDeletedBy(s)
-	return omu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omu *OrgMembershipUpdate) SetNillableDeletedBy(s *string) *OrgMembershipUpdate {
-	if s != nil {
-		omu.SetDeletedBy(*s)
-	}
-	return omu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (omu *OrgMembershipUpdate) ClearDeletedBy() *OrgMembershipUpdate {
-	omu.mutation.ClearDeletedBy()
-	return omu
-}
-
 // SetRole sets the "role" field.
 func (omu *OrgMembershipUpdate) SetRole(e enums.Role) *OrgMembershipUpdate {
 	omu.mutation.SetRole(e)
@@ -254,18 +214,6 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if omu.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembership.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := omu.mutation.DeletedAt(); ok {
-		_spec.SetField(orgmembership.FieldDeletedAt, field.TypeTime, value)
-	}
-	if omu.mutation.DeletedAtCleared() {
-		_spec.ClearField(orgmembership.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := omu.mutation.DeletedBy(); ok {
-		_spec.SetField(orgmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if omu.mutation.DeletedByCleared() {
-		_spec.ClearField(orgmembership.FieldDeletedBy, field.TypeString)
-	}
 	if value, ok := omu.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)
 	}
@@ -370,46 +318,6 @@ func (omuo *OrgMembershipUpdateOne) SetNillableUpdatedBy(s *string) *OrgMembersh
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (omuo *OrgMembershipUpdateOne) ClearUpdatedBy() *OrgMembershipUpdateOne {
 	omuo.mutation.ClearUpdatedBy()
-	return omuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (omuo *OrgMembershipUpdateOne) SetDeletedAt(t time.Time) *OrgMembershipUpdateOne {
-	omuo.mutation.SetDeletedAt(t)
-	return omuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (omuo *OrgMembershipUpdateOne) SetNillableDeletedAt(t *time.Time) *OrgMembershipUpdateOne {
-	if t != nil {
-		omuo.SetDeletedAt(*t)
-	}
-	return omuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (omuo *OrgMembershipUpdateOne) ClearDeletedAt() *OrgMembershipUpdateOne {
-	omuo.mutation.ClearDeletedAt()
-	return omuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (omuo *OrgMembershipUpdateOne) SetDeletedBy(s string) *OrgMembershipUpdateOne {
-	omuo.mutation.SetDeletedBy(s)
-	return omuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omuo *OrgMembershipUpdateOne) SetNillableDeletedBy(s *string) *OrgMembershipUpdateOne {
-	if s != nil {
-		omuo.SetDeletedBy(*s)
-	}
-	return omuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (omuo *OrgMembershipUpdateOne) ClearDeletedBy() *OrgMembershipUpdateOne {
-	omuo.mutation.ClearDeletedBy()
 	return omuo
 }
 
@@ -591,18 +499,6 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 	}
 	if omuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembership.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := omuo.mutation.DeletedAt(); ok {
-		_spec.SetField(orgmembership.FieldDeletedAt, field.TypeTime, value)
-	}
-	if omuo.mutation.DeletedAtCleared() {
-		_spec.ClearField(orgmembership.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := omuo.mutation.DeletedBy(); ok {
-		_spec.SetField(orgmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if omuo.mutation.DeletedByCleared() {
-		_spec.ClearField(orgmembership.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := omuo.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)

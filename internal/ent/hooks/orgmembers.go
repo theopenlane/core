@@ -8,7 +8,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -101,7 +100,7 @@ func HookOrgMembers() ent.Hook {
 func HookUpdateManagedGroups() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
-			if !entx.CheckIsSoftDelete(ctx) {
+			if !isDeleteOp(ctx, m) {
 				// update the managed group members when members are added
 				// before the mutation has been executed
 				if err := updateManagedGroupMembers(ctx, m); err != nil {
@@ -111,7 +110,7 @@ func HookUpdateManagedGroups() ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpUpdate|ent.OpUpdateOne)
+	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne) // handle soft deletes as well as hard deletes
 }
 
 // HookOrgMembersDelete is a hook that runs during the delete operation of an org membership

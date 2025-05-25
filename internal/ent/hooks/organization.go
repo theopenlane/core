@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -33,7 +32,7 @@ func HookOrganization() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrganizationFunc(func(ctx context.Context, m *generated.OrganizationMutation) (generated.Value, error) {
 			// if this is a soft delete, skip this hook
-			if entx.CheckIsSoftDelete(ctx) {
+			if isDeleteOp(ctx, m) {
 				return next.Mutate(ctx, m)
 			}
 

@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -137,10 +136,10 @@ func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMu
 	switch op {
 	case ent.OpCreate:
 		return addToManagedGroups(managedCtx, m, orgMember)
-	case ent.OpUpdate, ent.OpUpdateOne:
+	default:
 		// deletes are handled by the cascade delete hook
 		// which will delete the group memberships when the org membership is deleted
-		if !entx.CheckIsSoftDelete(managedCtx) {
+		if !isDeleteOp(ctx, m) {
 			return updateManagedGroups(managedCtx, m, orgMember)
 		}
 	}

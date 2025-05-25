@@ -6006,14 +6006,6 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
 	if role, exists := m.Role(); exists {
 		create = create.SetRole(role)
 	}
@@ -6080,18 +6072,6 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetUpdatedBy(orgmembership.UpdatedBy)
 		}
 
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(orgmembership.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(orgmembership.DeletedBy)
-		}
-
 		if role, exists := m.Role(); exists {
 			create = create.SetRole(role)
 		} else {
@@ -6146,8 +6126,6 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetUpdatedAt(orgmembership.UpdatedAt).
 			SetCreatedBy(orgmembership.CreatedBy).
 			SetUpdatedBy(orgmembership.UpdatedBy).
-			SetDeletedAt(orgmembership.DeletedAt).
-			SetDeletedBy(orgmembership.DeletedBy).
 			SetRole(orgmembership.Role).
 			SetOrganizationID(orgmembership.OrganizationID).
 			SetUserID(orgmembership.UserID).

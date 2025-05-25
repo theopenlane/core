@@ -28,10 +28,6 @@ type OrgMembership struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// OrganizationID holds the value of the "organization_id" field.
@@ -97,9 +93,9 @@ func (*OrgMembership) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orgmembership.FieldID, orgmembership.FieldCreatedBy, orgmembership.FieldUpdatedBy, orgmembership.FieldDeletedBy, orgmembership.FieldRole, orgmembership.FieldOrganizationID, orgmembership.FieldUserID:
+		case orgmembership.FieldID, orgmembership.FieldCreatedBy, orgmembership.FieldUpdatedBy, orgmembership.FieldRole, orgmembership.FieldOrganizationID, orgmembership.FieldUserID:
 			values[i] = new(sql.NullString)
-		case orgmembership.FieldCreatedAt, orgmembership.FieldUpdatedAt, orgmembership.FieldDeletedAt:
+		case orgmembership.FieldCreatedAt, orgmembership.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -145,18 +141,6 @@ func (om *OrgMembership) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				om.UpdatedBy = value.String
-			}
-		case orgmembership.FieldDeletedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
-			} else if value.Valid {
-				om.DeletedAt = value.Time
-			}
-		case orgmembership.FieldDeletedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
-			} else if value.Valid {
-				om.DeletedBy = value.String
 			}
 		case orgmembership.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -238,12 +222,6 @@ func (om *OrgMembership) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(om.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(om.DeletedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(om.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", om.Role))
