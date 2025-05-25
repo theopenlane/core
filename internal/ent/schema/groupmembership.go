@@ -3,7 +3,6 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -98,13 +97,13 @@ func (GroupMembership) Annotations() []schema.Annotation {
 func (GroupMembership) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("user_id", "group_id").
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Unique().Annotations(),
 	}
 }
 
 // Mixin of the GroupMembership
 func (GroupMembership) Mixin() []ent.Mixin {
-	return mixinConfig{excludeTags: true}.getMixins()
+	return mixinConfig{excludeTags: true, excludeSoftDelete: true}.getMixins()
 }
 
 // Interceptors of the GroupMembership

@@ -1865,24 +1865,19 @@ func init() {
 		})
 	}
 	groupmembershipMixinHooks0 := groupmembershipMixin[0].Hooks()
-	groupmembershipMixinHooks1 := groupmembershipMixin[1].Hooks()
 	groupmembershipHooks := schema.GroupMembership{}.Hooks()
 
 	groupmembership.Hooks[1] = groupmembershipMixinHooks0[0]
 
-	groupmembership.Hooks[2] = groupmembershipMixinHooks1[0]
+	groupmembership.Hooks[2] = groupmembershipHooks[0]
 
-	groupmembership.Hooks[3] = groupmembershipHooks[0]
-
-	groupmembership.Hooks[4] = groupmembershipHooks[1]
-	groupmembershipMixinInters1 := groupmembershipMixin[1].Interceptors()
+	groupmembership.Hooks[3] = groupmembershipHooks[1]
 	groupmembershipInters := schema.GroupMembership{}.Interceptors()
-	groupmembership.Interceptors[0] = groupmembershipMixinInters1[0]
-	groupmembership.Interceptors[1] = groupmembershipInters[0]
+	groupmembership.Interceptors[0] = groupmembershipInters[0]
 	groupmembershipMixinFields0 := groupmembershipMixin[0].Fields()
 	_ = groupmembershipMixinFields0
-	groupmembershipMixinFields2 := groupmembershipMixin[2].Fields()
-	_ = groupmembershipMixinFields2
+	groupmembershipMixinFields1 := groupmembershipMixin[1].Fields()
+	_ = groupmembershipMixinFields1
 	groupmembershipFields := schema.GroupMembership{}.Fields()
 	_ = groupmembershipFields
 	// groupmembershipDescCreatedAt is the schema descriptor for created_at field.
@@ -1896,7 +1891,7 @@ func init() {
 	// groupmembership.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	groupmembership.UpdateDefaultUpdatedAt = groupmembershipDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// groupmembershipDescID is the schema descriptor for id field.
-	groupmembershipDescID := groupmembershipMixinFields2[0].Descriptor()
+	groupmembershipDescID := groupmembershipMixinFields1[0].Descriptor()
 	// groupmembership.DefaultID holds the default value on creation for the id field.
 	groupmembership.DefaultID = groupmembershipDescID.Default.(func() string)
 	groupmembershiphistoryInters := schema.GroupMembershipHistory{}.Interceptors()
@@ -1918,7 +1913,7 @@ func init() {
 	// groupmembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	groupmembershiphistory.UpdateDefaultUpdatedAt = groupmembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// groupmembershiphistoryDescID is the schema descriptor for id field.
-	groupmembershiphistoryDescID := groupmembershiphistoryFields[9].Descriptor()
+	groupmembershiphistoryDescID := groupmembershiphistoryFields[7].Descriptor()
 	// groupmembershiphistory.DefaultID holds the default value on creation for the id field.
 	groupmembershiphistory.DefaultID = groupmembershiphistoryDescID.Default.(func() string)
 	groupsettingMixin := schema.GroupSetting{}.Mixin()
@@ -3917,24 +3912,19 @@ func init() {
 		})
 	}
 	programmembershipMixinHooks0 := programmembershipMixin[0].Hooks()
-	programmembershipMixinHooks1 := programmembershipMixin[1].Hooks()
 	programmembershipHooks := schema.ProgramMembership{}.Hooks()
 
 	programmembership.Hooks[1] = programmembershipMixinHooks0[0]
 
-	programmembership.Hooks[2] = programmembershipMixinHooks1[0]
+	programmembership.Hooks[2] = programmembershipHooks[0]
 
-	programmembership.Hooks[3] = programmembershipHooks[0]
-
-	programmembership.Hooks[4] = programmembershipHooks[1]
-	programmembershipMixinInters1 := programmembershipMixin[1].Interceptors()
+	programmembership.Hooks[3] = programmembershipHooks[1]
 	programmembershipInters := schema.ProgramMembership{}.Interceptors()
-	programmembership.Interceptors[0] = programmembershipMixinInters1[0]
-	programmembership.Interceptors[1] = programmembershipInters[0]
+	programmembership.Interceptors[0] = programmembershipInters[0]
 	programmembershipMixinFields0 := programmembershipMixin[0].Fields()
 	_ = programmembershipMixinFields0
-	programmembershipMixinFields2 := programmembershipMixin[2].Fields()
-	_ = programmembershipMixinFields2
+	programmembershipMixinFields1 := programmembershipMixin[1].Fields()
+	_ = programmembershipMixinFields1
 	programmembershipFields := schema.ProgramMembership{}.Fields()
 	_ = programmembershipFields
 	// programmembershipDescCreatedAt is the schema descriptor for created_at field.
@@ -3948,7 +3938,7 @@ func init() {
 	// programmembership.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	programmembership.UpdateDefaultUpdatedAt = programmembershipDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// programmembershipDescID is the schema descriptor for id field.
-	programmembershipDescID := programmembershipMixinFields2[0].Descriptor()
+	programmembershipDescID := programmembershipMixinFields1[0].Descriptor()
 	// programmembership.DefaultID holds the default value on creation for the id field.
 	programmembership.DefaultID = programmembershipDescID.Default.(func() string)
 	programmembershiphistoryInters := schema.ProgramMembershipHistory{}.Interceptors()
@@ -3970,7 +3960,7 @@ func init() {
 	// programmembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	programmembershiphistory.UpdateDefaultUpdatedAt = programmembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// programmembershiphistoryDescID is the schema descriptor for id field.
-	programmembershiphistoryDescID := programmembershiphistoryFields[9].Descriptor()
+	programmembershiphistoryDescID := programmembershiphistoryFields[7].Descriptor()
 	// programmembershiphistory.DefaultID holds the default value on creation for the id field.
 	programmembershiphistory.DefaultID = programmembershiphistoryDescID.Default.(func() string)
 	riskMixin := schema.Risk{}.Mixin()

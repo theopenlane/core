@@ -29,10 +29,6 @@ type ProgramMembership struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// ProgramID holds the value of the "program_id" field.
@@ -99,9 +95,9 @@ func (*ProgramMembership) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case programmembership.FieldID, programmembership.FieldCreatedBy, programmembership.FieldUpdatedBy, programmembership.FieldDeletedBy, programmembership.FieldRole, programmembership.FieldProgramID, programmembership.FieldUserID:
+		case programmembership.FieldID, programmembership.FieldCreatedBy, programmembership.FieldUpdatedBy, programmembership.FieldRole, programmembership.FieldProgramID, programmembership.FieldUserID:
 			values[i] = new(sql.NullString)
-		case programmembership.FieldCreatedAt, programmembership.FieldUpdatedAt, programmembership.FieldDeletedAt:
+		case programmembership.FieldCreatedAt, programmembership.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		case programmembership.ForeignKeys[0]: // program_membership_orgmembership
 			values[i] = new(sql.NullString)
@@ -149,18 +145,6 @@ func (pm *ProgramMembership) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				pm.UpdatedBy = value.String
-			}
-		case programmembership.FieldDeletedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
-			} else if value.Valid {
-				pm.DeletedAt = value.Time
-			}
-		case programmembership.FieldDeletedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
-			} else if value.Valid {
-				pm.DeletedBy = value.String
 			}
 		case programmembership.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -249,12 +233,6 @@ func (pm *ProgramMembership) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(pm.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(pm.DeletedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(pm.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", pm.Role))

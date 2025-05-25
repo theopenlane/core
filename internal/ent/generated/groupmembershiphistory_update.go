@@ -64,46 +64,6 @@ func (gmhu *GroupMembershipHistoryUpdate) ClearUpdatedBy() *GroupMembershipHisto
 	return gmhu
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (gmhu *GroupMembershipHistoryUpdate) SetDeletedAt(t time.Time) *GroupMembershipHistoryUpdate {
-	gmhu.mutation.SetDeletedAt(t)
-	return gmhu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gmhu *GroupMembershipHistoryUpdate) SetNillableDeletedAt(t *time.Time) *GroupMembershipHistoryUpdate {
-	if t != nil {
-		gmhu.SetDeletedAt(*t)
-	}
-	return gmhu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gmhu *GroupMembershipHistoryUpdate) ClearDeletedAt() *GroupMembershipHistoryUpdate {
-	gmhu.mutation.ClearDeletedAt()
-	return gmhu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gmhu *GroupMembershipHistoryUpdate) SetDeletedBy(s string) *GroupMembershipHistoryUpdate {
-	gmhu.mutation.SetDeletedBy(s)
-	return gmhu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmhu *GroupMembershipHistoryUpdate) SetNillableDeletedBy(s *string) *GroupMembershipHistoryUpdate {
-	if s != nil {
-		gmhu.SetDeletedBy(*s)
-	}
-	return gmhu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gmhu *GroupMembershipHistoryUpdate) ClearDeletedBy() *GroupMembershipHistoryUpdate {
-	gmhu.mutation.ClearDeletedBy()
-	return gmhu
-}
-
 // SetRole sets the "role" field.
 func (gmhu *GroupMembershipHistoryUpdate) SetRole(e enums.Role) *GroupMembershipHistoryUpdate {
 	gmhu.mutation.SetRole(e)
@@ -208,18 +168,6 @@ func (gmhu *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	if gmhu.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := gmhu.mutation.DeletedAt(); ok {
-		_spec.SetField(groupmembershiphistory.FieldDeletedAt, field.TypeTime, value)
-	}
-	if gmhu.mutation.DeletedAtCleared() {
-		_spec.ClearField(groupmembershiphistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := gmhu.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembershiphistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if gmhu.mutation.DeletedByCleared() {
-		_spec.ClearField(groupmembershiphistory.FieldDeletedBy, field.TypeString)
-	}
 	if value, ok := gmhu.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
@@ -276,46 +224,6 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) SetNillableUpdatedBy(s *string) *G
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (gmhuo *GroupMembershipHistoryUpdateOne) ClearUpdatedBy() *GroupMembershipHistoryUpdateOne {
 	gmhuo.mutation.ClearUpdatedBy()
-	return gmhuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SetDeletedAt(t time.Time) *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.SetDeletedAt(t)
-	return gmhuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *GroupMembershipHistoryUpdateOne {
-	if t != nil {
-		gmhuo.SetDeletedAt(*t)
-	}
-	return gmhuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gmhuo *GroupMembershipHistoryUpdateOne) ClearDeletedAt() *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.ClearDeletedAt()
-	return gmhuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SetDeletedBy(s string) *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.SetDeletedBy(s)
-	return gmhuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmhuo *GroupMembershipHistoryUpdateOne) SetNillableDeletedBy(s *string) *GroupMembershipHistoryUpdateOne {
-	if s != nil {
-		gmhuo.SetDeletedBy(*s)
-	}
-	return gmhuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gmhuo *GroupMembershipHistoryUpdateOne) ClearDeletedBy() *GroupMembershipHistoryUpdateOne {
-	gmhuo.mutation.ClearDeletedBy()
 	return gmhuo
 }
 
@@ -452,18 +360,6 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if gmhuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := gmhuo.mutation.DeletedAt(); ok {
-		_spec.SetField(groupmembershiphistory.FieldDeletedAt, field.TypeTime, value)
-	}
-	if gmhuo.mutation.DeletedAtCleared() {
-		_spec.ClearField(groupmembershiphistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := gmhuo.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembershiphistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if gmhuo.mutation.DeletedByCleared() {
-		_spec.ClearField(groupmembershiphistory.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := gmhuo.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)

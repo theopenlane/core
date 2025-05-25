@@ -1192,12 +1192,6 @@ func (gmh *GroupMembershipHistory) changes(new *GroupMembershipHistory) []Change
 	if !reflect.DeepEqual(gmh.CreatedBy, new.CreatedBy) {
 		changes = append(changes, NewChange(groupmembershiphistory.FieldCreatedBy, gmh.CreatedBy, new.CreatedBy))
 	}
-	if !reflect.DeepEqual(gmh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldDeletedAt, gmh.DeletedAt, new.DeletedAt))
-	}
-	if !reflect.DeepEqual(gmh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(groupmembershiphistory.FieldDeletedBy, gmh.DeletedBy, new.DeletedBy))
-	}
 	if !reflect.DeepEqual(gmh.Role, new.Role) {
 		changes = append(changes, NewChange(groupmembershiphistory.FieldRole, gmh.Role, new.Role))
 	}
@@ -2283,12 +2277,6 @@ func (pmh *ProgramMembershipHistory) changes(new *ProgramMembershipHistory) []Ch
 	}
 	if !reflect.DeepEqual(pmh.CreatedBy, new.CreatedBy) {
 		changes = append(changes, NewChange(programmembershiphistory.FieldCreatedBy, pmh.CreatedBy, new.CreatedBy))
-	}
-	if !reflect.DeepEqual(pmh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldDeletedAt, pmh.DeletedAt, new.DeletedAt))
-	}
-	if !reflect.DeepEqual(pmh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(programmembershiphistory.FieldDeletedBy, pmh.DeletedBy, new.DeletedBy))
 	}
 	if !reflect.DeepEqual(pmh.Role, new.Role) {
 		changes = append(changes, NewChange(programmembershiphistory.FieldRole, pmh.Role, new.Role))

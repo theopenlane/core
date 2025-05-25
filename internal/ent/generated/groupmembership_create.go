@@ -81,34 +81,6 @@ func (gmc *GroupMembershipCreate) SetNillableUpdatedBy(s *string) *GroupMembersh
 	return gmc
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (gmc *GroupMembershipCreate) SetDeletedAt(t time.Time) *GroupMembershipCreate {
-	gmc.mutation.SetDeletedAt(t)
-	return gmc
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gmc *GroupMembershipCreate) SetNillableDeletedAt(t *time.Time) *GroupMembershipCreate {
-	if t != nil {
-		gmc.SetDeletedAt(*t)
-	}
-	return gmc
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gmc *GroupMembershipCreate) SetDeletedBy(s string) *GroupMembershipCreate {
-	gmc.mutation.SetDeletedBy(s)
-	return gmc
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmc *GroupMembershipCreate) SetNillableDeletedBy(s *string) *GroupMembershipCreate {
-	if s != nil {
-		gmc.SetDeletedBy(*s)
-	}
-	return gmc
-}
-
 // SetRole sets the "role" field.
 func (gmc *GroupMembershipCreate) SetRole(e enums.Role) *GroupMembershipCreate {
 	gmc.mutation.SetRole(e)
@@ -331,14 +303,6 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 	if value, ok := gmc.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupmembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := gmc.mutation.DeletedAt(); ok {
-		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
-	}
-	if value, ok := gmc.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembership.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
 	}
 	if value, ok := gmc.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)

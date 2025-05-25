@@ -3903,14 +3903,6 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
 	if role, exists := m.Role(); exists {
 		create = create.SetRole(role)
 	}
@@ -3977,18 +3969,6 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetUpdatedBy(groupmembership.UpdatedBy)
 		}
 
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(groupmembership.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(groupmembership.DeletedBy)
-		}
-
 		if role, exists := m.Role(); exists {
 			create = create.SetRole(role)
 		} else {
@@ -4043,8 +4023,6 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetUpdatedAt(groupmembership.UpdatedAt).
 			SetCreatedBy(groupmembership.CreatedBy).
 			SetUpdatedBy(groupmembership.UpdatedBy).
-			SetDeletedAt(groupmembership.DeletedAt).
-			SetDeletedBy(groupmembership.DeletedBy).
 			SetRole(groupmembership.Role).
 			SetGroupID(groupmembership.GroupID).
 			SetUserID(groupmembership.UserID).
@@ -7699,14 +7677,6 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 		create = create.SetUpdatedBy(updatedBy)
 	}
 
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
 	if role, exists := m.Role(); exists {
 		create = create.SetRole(role)
 	}
@@ -7773,18 +7743,6 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetUpdatedBy(programmembership.UpdatedBy)
 		}
 
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(programmembership.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(programmembership.DeletedBy)
-		}
-
 		if role, exists := m.Role(); exists {
 			create = create.SetRole(role)
 		} else {
@@ -7839,8 +7797,6 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetUpdatedAt(programmembership.UpdatedAt).
 			SetCreatedBy(programmembership.CreatedBy).
 			SetUpdatedBy(programmembership.UpdatedBy).
-			SetDeletedAt(programmembership.DeletedAt).
-			SetDeletedBy(programmembership.DeletedBy).
 			SetRole(programmembership.Role).
 			SetProgramID(programmembership.ProgramID).
 			SetUserID(programmembership.UserID).

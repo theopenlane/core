@@ -64,46 +64,6 @@ func (pmu *ProgramMembershipUpdate) ClearUpdatedBy() *ProgramMembershipUpdate {
 	return pmu
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (pmu *ProgramMembershipUpdate) SetDeletedAt(t time.Time) *ProgramMembershipUpdate {
-	pmu.mutation.SetDeletedAt(t)
-	return pmu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pmu *ProgramMembershipUpdate) SetNillableDeletedAt(t *time.Time) *ProgramMembershipUpdate {
-	if t != nil {
-		pmu.SetDeletedAt(*t)
-	}
-	return pmu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (pmu *ProgramMembershipUpdate) ClearDeletedAt() *ProgramMembershipUpdate {
-	pmu.mutation.ClearDeletedAt()
-	return pmu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pmu *ProgramMembershipUpdate) SetDeletedBy(s string) *ProgramMembershipUpdate {
-	pmu.mutation.SetDeletedBy(s)
-	return pmu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pmu *ProgramMembershipUpdate) SetNillableDeletedBy(s *string) *ProgramMembershipUpdate {
-	if s != nil {
-		pmu.SetDeletedBy(*s)
-	}
-	return pmu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (pmu *ProgramMembershipUpdate) ClearDeletedBy() *ProgramMembershipUpdate {
-	pmu.mutation.ClearDeletedBy()
-	return pmu
-}
-
 // SetRole sets the "role" field.
 func (pmu *ProgramMembershipUpdate) SetRole(e enums.Role) *ProgramMembershipUpdate {
 	pmu.mutation.SetRole(e)
@@ -217,18 +177,6 @@ func (pmu *ProgramMembershipUpdate) sqlSave(ctx context.Context) (n int, err err
 	if pmu.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pmu.mutation.DeletedAt(); ok {
-		_spec.SetField(programmembership.FieldDeletedAt, field.TypeTime, value)
-	}
-	if pmu.mutation.DeletedAtCleared() {
-		_spec.ClearField(programmembership.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := pmu.mutation.DeletedBy(); ok {
-		_spec.SetField(programmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if pmu.mutation.DeletedByCleared() {
-		_spec.ClearField(programmembership.FieldDeletedBy, field.TypeString)
-	}
 	if value, ok := pmu.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 	}
@@ -285,46 +233,6 @@ func (pmuo *ProgramMembershipUpdateOne) SetNillableUpdatedBy(s *string) *Program
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (pmuo *ProgramMembershipUpdateOne) ClearUpdatedBy() *ProgramMembershipUpdateOne {
 	pmuo.mutation.ClearUpdatedBy()
-	return pmuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (pmuo *ProgramMembershipUpdateOne) SetDeletedAt(t time.Time) *ProgramMembershipUpdateOne {
-	pmuo.mutation.SetDeletedAt(t)
-	return pmuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pmuo *ProgramMembershipUpdateOne) SetNillableDeletedAt(t *time.Time) *ProgramMembershipUpdateOne {
-	if t != nil {
-		pmuo.SetDeletedAt(*t)
-	}
-	return pmuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (pmuo *ProgramMembershipUpdateOne) ClearDeletedAt() *ProgramMembershipUpdateOne {
-	pmuo.mutation.ClearDeletedAt()
-	return pmuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pmuo *ProgramMembershipUpdateOne) SetDeletedBy(s string) *ProgramMembershipUpdateOne {
-	pmuo.mutation.SetDeletedBy(s)
-	return pmuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pmuo *ProgramMembershipUpdateOne) SetNillableDeletedBy(s *string) *ProgramMembershipUpdateOne {
-	if s != nil {
-		pmuo.SetDeletedBy(*s)
-	}
-	return pmuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (pmuo *ProgramMembershipUpdateOne) ClearDeletedBy() *ProgramMembershipUpdateOne {
-	pmuo.mutation.ClearDeletedBy()
 	return pmuo
 }
 
@@ -470,18 +378,6 @@ func (pmuo *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Pro
 	}
 	if pmuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembership.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := pmuo.mutation.DeletedAt(); ok {
-		_spec.SetField(programmembership.FieldDeletedAt, field.TypeTime, value)
-	}
-	if pmuo.mutation.DeletedAtCleared() {
-		_spec.ClearField(programmembership.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := pmuo.mutation.DeletedBy(); ok {
-		_spec.SetField(programmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if pmuo.mutation.DeletedByCleared() {
-		_spec.ClearField(programmembership.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := pmuo.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)

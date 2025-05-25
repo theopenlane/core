@@ -112,34 +112,6 @@ func (gmhc *GroupMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *Group
 	return gmhc
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (gmhc *GroupMembershipHistoryCreate) SetDeletedAt(t time.Time) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetDeletedAt(t)
-	return gmhc
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableDeletedAt(t *time.Time) *GroupMembershipHistoryCreate {
-	if t != nil {
-		gmhc.SetDeletedAt(*t)
-	}
-	return gmhc
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gmhc *GroupMembershipHistoryCreate) SetDeletedBy(s string) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetDeletedBy(s)
-	return gmhc
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmhc *GroupMembershipHistoryCreate) SetNillableDeletedBy(s *string) *GroupMembershipHistoryCreate {
-	if s != nil {
-		gmhc.SetDeletedBy(*s)
-	}
-	return gmhc
-}
-
 // SetRole sets the "role" field.
 func (gmhc *GroupMembershipHistoryCreate) SetRole(e enums.Role) *GroupMembershipHistoryCreate {
 	gmhc.mutation.SetRole(e)
@@ -327,14 +299,6 @@ func (gmhc *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory,
 	if value, ok := gmhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := gmhc.mutation.DeletedAt(); ok {
-		_spec.SetField(groupmembershiphistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
-	}
-	if value, ok := gmhc.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembershiphistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
 	}
 	if value, ok := gmhc.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)
