@@ -599,17 +599,17 @@ func (dvh *DNSVerificationHistory) changes(new *DNSVerificationHistory) []Change
 	if !reflect.DeepEqual(dvh.DNSVerificationStatusReason, new.DNSVerificationStatusReason) {
 		changes = append(changes, NewChange(dnsverificationhistory.FieldDNSVerificationStatusReason, dvh.DNSVerificationStatusReason, new.DNSVerificationStatusReason))
 	}
-	if !reflect.DeepEqual(dvh.SslTxtRecord, new.SslTxtRecord) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldSslTxtRecord, dvh.SslTxtRecord, new.SslTxtRecord))
+	if !reflect.DeepEqual(dvh.AcmeChallengePath, new.AcmeChallengePath) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldAcmeChallengePath, dvh.AcmeChallengePath, new.AcmeChallengePath))
 	}
-	if !reflect.DeepEqual(dvh.SslTxtValue, new.SslTxtValue) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldSslTxtValue, dvh.SslTxtValue, new.SslTxtValue))
+	if !reflect.DeepEqual(dvh.ExpectedAcmeChallengeValue, new.ExpectedAcmeChallengeValue) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldExpectedAcmeChallengeValue, dvh.ExpectedAcmeChallengeValue, new.ExpectedAcmeChallengeValue))
 	}
-	if !reflect.DeepEqual(dvh.SslCertStatus, new.SslCertStatus) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldSslCertStatus, dvh.SslCertStatus, new.SslCertStatus))
+	if !reflect.DeepEqual(dvh.AcmeChallengeStatus, new.AcmeChallengeStatus) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldAcmeChallengeStatus, dvh.AcmeChallengeStatus, new.AcmeChallengeStatus))
 	}
-	if !reflect.DeepEqual(dvh.SslCertStatusReason, new.SslCertStatusReason) {
-		changes = append(changes, NewChange(dnsverificationhistory.FieldSslCertStatusReason, dvh.SslCertStatusReason, new.SslCertStatusReason))
+	if !reflect.DeepEqual(dvh.AcmeChallengeStatusReason, new.AcmeChallengeStatusReason) {
+		changes = append(changes, NewChange(dnsverificationhistory.FieldAcmeChallengeStatusReason, dvh.AcmeChallengeStatusReason, new.AcmeChallengeStatusReason))
 	}
 	return changes
 }

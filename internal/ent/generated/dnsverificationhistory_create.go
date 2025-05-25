@@ -206,42 +206,58 @@ func (dvhc *DNSVerificationHistoryCreate) SetNillableDNSVerificationStatusReason
 	return dvhc
 }
 
-// SetSslTxtRecord sets the "ssl_txt_record" field.
-func (dvhc *DNSVerificationHistoryCreate) SetSslTxtRecord(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetSslTxtRecord(s)
+// SetAcmeChallengePath sets the "acme_challenge_path" field.
+func (dvhc *DNSVerificationHistoryCreate) SetAcmeChallengePath(s string) *DNSVerificationHistoryCreate {
+	dvhc.mutation.SetAcmeChallengePath(s)
 	return dvhc
 }
 
-// SetSslTxtValue sets the "ssl_txt_value" field.
-func (dvhc *DNSVerificationHistoryCreate) SetSslTxtValue(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetSslTxtValue(s)
-	return dvhc
-}
-
-// SetSslCertStatus sets the "ssl_cert_status" field.
-func (dvhc *DNSVerificationHistoryCreate) SetSslCertStatus(eds enums.CustomDomainStatus) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetSslCertStatus(eds)
-	return dvhc
-}
-
-// SetNillableSslCertStatus sets the "ssl_cert_status" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableSslCertStatus(eds *enums.CustomDomainStatus) *DNSVerificationHistoryCreate {
-	if eds != nil {
-		dvhc.SetSslCertStatus(*eds)
+// SetNillableAcmeChallengePath sets the "acme_challenge_path" field if the given value is not nil.
+func (dvhc *DNSVerificationHistoryCreate) SetNillableAcmeChallengePath(s *string) *DNSVerificationHistoryCreate {
+	if s != nil {
+		dvhc.SetAcmeChallengePath(*s)
 	}
 	return dvhc
 }
 
-// SetSslCertStatusReason sets the "ssl_cert_status_reason" field.
-func (dvhc *DNSVerificationHistoryCreate) SetSslCertStatusReason(s string) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetSslCertStatusReason(s)
+// SetExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field.
+func (dvhc *DNSVerificationHistoryCreate) SetExpectedAcmeChallengeValue(s string) *DNSVerificationHistoryCreate {
+	dvhc.mutation.SetExpectedAcmeChallengeValue(s)
 	return dvhc
 }
 
-// SetNillableSslCertStatusReason sets the "ssl_cert_status_reason" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableSslCertStatusReason(s *string) *DNSVerificationHistoryCreate {
+// SetNillableExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field if the given value is not nil.
+func (dvhc *DNSVerificationHistoryCreate) SetNillableExpectedAcmeChallengeValue(s *string) *DNSVerificationHistoryCreate {
 	if s != nil {
-		dvhc.SetSslCertStatusReason(*s)
+		dvhc.SetExpectedAcmeChallengeValue(*s)
+	}
+	return dvhc
+}
+
+// SetAcmeChallengeStatus sets the "acme_challenge_status" field.
+func (dvhc *DNSVerificationHistoryCreate) SetAcmeChallengeStatus(eds enums.CustomDomainStatus) *DNSVerificationHistoryCreate {
+	dvhc.mutation.SetAcmeChallengeStatus(eds)
+	return dvhc
+}
+
+// SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
+func (dvhc *DNSVerificationHistoryCreate) SetNillableAcmeChallengeStatus(eds *enums.CustomDomainStatus) *DNSVerificationHistoryCreate {
+	if eds != nil {
+		dvhc.SetAcmeChallengeStatus(*eds)
+	}
+	return dvhc
+}
+
+// SetAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field.
+func (dvhc *DNSVerificationHistoryCreate) SetAcmeChallengeStatusReason(s string) *DNSVerificationHistoryCreate {
+	dvhc.mutation.SetAcmeChallengeStatusReason(s)
+	return dvhc
+}
+
+// SetNillableAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field if the given value is not nil.
+func (dvhc *DNSVerificationHistoryCreate) SetNillableAcmeChallengeStatusReason(s *string) *DNSVerificationHistoryCreate {
+	if s != nil {
+		dvhc.SetAcmeChallengeStatusReason(*s)
 	}
 	return dvhc
 }
@@ -315,9 +331,9 @@ func (dvhc *DNSVerificationHistoryCreate) defaults() {
 		v := dnsverificationhistory.DefaultDNSVerificationStatus
 		dvhc.mutation.SetDNSVerificationStatus(v)
 	}
-	if _, ok := dvhc.mutation.SslCertStatus(); !ok {
-		v := dnsverificationhistory.DefaultSslCertStatus
-		dvhc.mutation.SetSslCertStatus(v)
+	if _, ok := dvhc.mutation.AcmeChallengeStatus(); !ok {
+		v := dnsverificationhistory.DefaultAcmeChallengeStatus
+		dvhc.mutation.SetAcmeChallengeStatus(v)
 	}
 	if _, ok := dvhc.mutation.ID(); !ok {
 		v := dnsverificationhistory.DefaultID()
@@ -355,18 +371,12 @@ func (dvhc *DNSVerificationHistoryCreate) check() error {
 			return &ValidationError{Name: "dns_verification_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.dns_verification_status": %w`, err)}
 		}
 	}
-	if _, ok := dvhc.mutation.SslTxtRecord(); !ok {
-		return &ValidationError{Name: "ssl_txt_record", err: errors.New(`generated: missing required field "DNSVerificationHistory.ssl_txt_record"`)}
+	if _, ok := dvhc.mutation.AcmeChallengeStatus(); !ok {
+		return &ValidationError{Name: "acme_challenge_status", err: errors.New(`generated: missing required field "DNSVerificationHistory.acme_challenge_status"`)}
 	}
-	if _, ok := dvhc.mutation.SslTxtValue(); !ok {
-		return &ValidationError{Name: "ssl_txt_value", err: errors.New(`generated: missing required field "DNSVerificationHistory.ssl_txt_value"`)}
-	}
-	if _, ok := dvhc.mutation.SslCertStatus(); !ok {
-		return &ValidationError{Name: "ssl_cert_status", err: errors.New(`generated: missing required field "DNSVerificationHistory.ssl_cert_status"`)}
-	}
-	if v, ok := dvhc.mutation.SslCertStatus(); ok {
-		if err := dnsverificationhistory.SslCertStatusValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_cert_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.ssl_cert_status": %w`, err)}
+	if v, ok := dvhc.mutation.AcmeChallengeStatus(); ok {
+		if err := dnsverificationhistory.AcmeChallengeStatusValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerificationHistory.acme_challenge_status": %w`, err)}
 		}
 	}
 	return nil
@@ -469,21 +479,21 @@ func (dvhc *DNSVerificationHistoryCreate) createSpec() (*DNSVerificationHistory,
 		_spec.SetField(dnsverificationhistory.FieldDNSVerificationStatusReason, field.TypeString, value)
 		_node.DNSVerificationStatusReason = value
 	}
-	if value, ok := dvhc.mutation.SslTxtRecord(); ok {
-		_spec.SetField(dnsverificationhistory.FieldSslTxtRecord, field.TypeString, value)
-		_node.SslTxtRecord = value
+	if value, ok := dvhc.mutation.AcmeChallengePath(); ok {
+		_spec.SetField(dnsverificationhistory.FieldAcmeChallengePath, field.TypeString, value)
+		_node.AcmeChallengePath = value
 	}
-	if value, ok := dvhc.mutation.SslTxtValue(); ok {
-		_spec.SetField(dnsverificationhistory.FieldSslTxtValue, field.TypeString, value)
-		_node.SslTxtValue = value
+	if value, ok := dvhc.mutation.ExpectedAcmeChallengeValue(); ok {
+		_spec.SetField(dnsverificationhistory.FieldExpectedAcmeChallengeValue, field.TypeString, value)
+		_node.ExpectedAcmeChallengeValue = value
 	}
-	if value, ok := dvhc.mutation.SslCertStatus(); ok {
-		_spec.SetField(dnsverificationhistory.FieldSslCertStatus, field.TypeEnum, value)
-		_node.SslCertStatus = value
+	if value, ok := dvhc.mutation.AcmeChallengeStatus(); ok {
+		_spec.SetField(dnsverificationhistory.FieldAcmeChallengeStatus, field.TypeEnum, value)
+		_node.AcmeChallengeStatus = value
 	}
-	if value, ok := dvhc.mutation.SslCertStatusReason(); ok {
-		_spec.SetField(dnsverificationhistory.FieldSslCertStatusReason, field.TypeString, value)
-		_node.SslCertStatusReason = value
+	if value, ok := dvhc.mutation.AcmeChallengeStatusReason(); ok {
+		_spec.SetField(dnsverificationhistory.FieldAcmeChallengeStatusReason, field.TypeString, value)
+		_node.AcmeChallengeStatusReason = value
 	}
 	return _node, _spec
 }

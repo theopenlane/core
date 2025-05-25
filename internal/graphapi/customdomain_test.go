@@ -505,6 +505,8 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 func TestGetAllCustomDomains(t *testing.T) {
 	// Create test mappable domain
 	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	deletectx := setContext(systemAdminUser.UserCtx, suite.client.db)
+	suite.client.db.CustomDomain.Delete().ExecX(deletectx)
 
 	// Create test custom domains with different users
 	customDomain1 := (&CustomDomainBuilder{

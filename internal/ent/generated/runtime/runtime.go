@@ -935,46 +935,18 @@ func init() {
 	dnsverificationDescDNSVerificationStatusReason := dnsverificationFields[4].Descriptor()
 	// dnsverification.DNSVerificationStatusReasonValidator is a validator for the "dns_verification_status_reason" field. It is called by the builders before save.
 	dnsverification.DNSVerificationStatusReasonValidator = dnsverificationDescDNSVerificationStatusReason.Validators[0].(func(string) error)
-	// dnsverificationDescSslTxtRecord is the schema descriptor for ssl_txt_record field.
-	dnsverificationDescSslTxtRecord := dnsverificationFields[5].Descriptor()
-	// dnsverification.SslTxtRecordValidator is a validator for the "ssl_txt_record" field. It is called by the builders before save.
-	dnsverification.SslTxtRecordValidator = func() func(string) error {
-		validators := dnsverificationDescSslTxtRecord.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(ssl_txt_record string) error {
-			for _, fn := range fns {
-				if err := fn(ssl_txt_record); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
-	// dnsverificationDescSslTxtValue is the schema descriptor for ssl_txt_value field.
-	dnsverificationDescSslTxtValue := dnsverificationFields[6].Descriptor()
-	// dnsverification.SslTxtValueValidator is a validator for the "ssl_txt_value" field. It is called by the builders before save.
-	dnsverification.SslTxtValueValidator = func() func(string) error {
-		validators := dnsverificationDescSslTxtValue.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(ssl_txt_value string) error {
-			for _, fn := range fns {
-				if err := fn(ssl_txt_value); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
-	// dnsverificationDescSslCertStatusReason is the schema descriptor for ssl_cert_status_reason field.
-	dnsverificationDescSslCertStatusReason := dnsverificationFields[8].Descriptor()
-	// dnsverification.SslCertStatusReasonValidator is a validator for the "ssl_cert_status_reason" field. It is called by the builders before save.
-	dnsverification.SslCertStatusReasonValidator = dnsverificationDescSslCertStatusReason.Validators[0].(func(string) error)
+	// dnsverificationDescAcmeChallengePath is the schema descriptor for acme_challenge_path field.
+	dnsverificationDescAcmeChallengePath := dnsverificationFields[5].Descriptor()
+	// dnsverification.AcmeChallengePathValidator is a validator for the "acme_challenge_path" field. It is called by the builders before save.
+	dnsverification.AcmeChallengePathValidator = dnsverificationDescAcmeChallengePath.Validators[0].(func(string) error)
+	// dnsverificationDescExpectedAcmeChallengeValue is the schema descriptor for expected_acme_challenge_value field.
+	dnsverificationDescExpectedAcmeChallengeValue := dnsverificationFields[6].Descriptor()
+	// dnsverification.ExpectedAcmeChallengeValueValidator is a validator for the "expected_acme_challenge_value" field. It is called by the builders before save.
+	dnsverification.ExpectedAcmeChallengeValueValidator = dnsverificationDescExpectedAcmeChallengeValue.Validators[0].(func(string) error)
+	// dnsverificationDescAcmeChallengeStatusReason is the schema descriptor for acme_challenge_status_reason field.
+	dnsverificationDescAcmeChallengeStatusReason := dnsverificationFields[8].Descriptor()
+	// dnsverification.AcmeChallengeStatusReasonValidator is a validator for the "acme_challenge_status_reason" field. It is called by the builders before save.
+	dnsverification.AcmeChallengeStatusReasonValidator = dnsverificationDescAcmeChallengeStatusReason.Validators[0].(func(string) error)
 	// dnsverificationDescID is the schema descriptor for id field.
 	dnsverificationDescID := dnsverificationMixinFields2[0].Descriptor()
 	// dnsverification.DefaultID holds the default value on creation for the id field.

@@ -1737,9 +1737,9 @@ type CreateDNSVerificationInput struct {
 	DNSTxtValue                 string
 	DNSVerificationStatus       *enums.CustomDomainStatus
 	DNSVerificationStatusReason *string
-	SslTxtRecord                string
-	SslTxtValue                 string
-	SslCertStatus               *enums.CustomDomainStatus
+	AcmeChallengePath           *string
+	ExpectedAcmeChallengeValue  *string
+	AcmeChallengeStatus         *enums.CustomDomainStatus
 	OwnerID                     *string
 	CustomDomainIDs             []string
 }
@@ -1758,10 +1758,14 @@ func (i *CreateDNSVerificationInput) Mutate(m *DNSVerificationMutation) {
 	if v := i.DNSVerificationStatusReason; v != nil {
 		m.SetDNSVerificationStatusReason(*v)
 	}
-	m.SetSslTxtRecord(i.SslTxtRecord)
-	m.SetSslTxtValue(i.SslTxtValue)
-	if v := i.SslCertStatus; v != nil {
-		m.SetSslCertStatus(*v)
+	if v := i.AcmeChallengePath; v != nil {
+		m.SetAcmeChallengePath(*v)
+	}
+	if v := i.ExpectedAcmeChallengeValue; v != nil {
+		m.SetExpectedAcmeChallengeValue(*v)
+	}
+	if v := i.AcmeChallengeStatus; v != nil {
+		m.SetAcmeChallengeStatus(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1787,11 +1791,13 @@ type UpdateDNSVerificationInput struct {
 	DNSVerificationStatus            *enums.CustomDomainStatus
 	ClearDNSVerificationStatusReason bool
 	DNSVerificationStatusReason      *string
-	SslTxtRecord                     *string
-	SslTxtValue                      *string
-	SslCertStatus                    *enums.CustomDomainStatus
-	ClearSslCertStatusReason         bool
-	SslCertStatusReason              *string
+	ClearAcmeChallengePath           bool
+	AcmeChallengePath                *string
+	ClearExpectedAcmeChallengeValue  bool
+	ExpectedAcmeChallengeValue       *string
+	AcmeChallengeStatus              *enums.CustomDomainStatus
+	ClearAcmeChallengeStatusReason   bool
+	AcmeChallengeStatusReason        *string
 	ClearOwner                       bool
 	OwnerID                          *string
 	ClearCustomDomains               bool
@@ -1825,20 +1831,26 @@ func (i *UpdateDNSVerificationInput) Mutate(m *DNSVerificationMutation) {
 	if v := i.DNSVerificationStatusReason; v != nil {
 		m.SetDNSVerificationStatusReason(*v)
 	}
-	if v := i.SslTxtRecord; v != nil {
-		m.SetSslTxtRecord(*v)
+	if i.ClearAcmeChallengePath {
+		m.ClearAcmeChallengePath()
 	}
-	if v := i.SslTxtValue; v != nil {
-		m.SetSslTxtValue(*v)
+	if v := i.AcmeChallengePath; v != nil {
+		m.SetAcmeChallengePath(*v)
 	}
-	if v := i.SslCertStatus; v != nil {
-		m.SetSslCertStatus(*v)
+	if i.ClearExpectedAcmeChallengeValue {
+		m.ClearExpectedAcmeChallengeValue()
 	}
-	if i.ClearSslCertStatusReason {
-		m.ClearSslCertStatusReason()
+	if v := i.ExpectedAcmeChallengeValue; v != nil {
+		m.SetExpectedAcmeChallengeValue(*v)
 	}
-	if v := i.SslCertStatusReason; v != nil {
-		m.SetSslCertStatusReason(*v)
+	if v := i.AcmeChallengeStatus; v != nil {
+		m.SetAcmeChallengeStatus(*v)
+	}
+	if i.ClearAcmeChallengeStatusReason {
+		m.ClearAcmeChallengeStatusReason()
+	}
+	if v := i.AcmeChallengeStatusReason; v != nil {
+		m.SetAcmeChallengeStatusReason(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

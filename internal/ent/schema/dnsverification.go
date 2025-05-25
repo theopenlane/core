@@ -9,7 +9,6 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -69,20 +68,20 @@ func (DNSVerification) Fields() []ent.Field {
 			Comment("Reason of the dns verification status, for giving the user diagnostic info").
 			MaxLen(maxStatusReasonLen).
 			Optional(),
-		field.String("ssl_txt_record").
-			Comment("the name of the ssl txt record").
+		field.String("acme_challenge_path").
+			Comment("Path under /.well-known/acme-challenge/ to serve the ACME challenge").
 			MaxLen(maxDomainNameLen).
-			NotEmpty(),
-		field.String("ssl_txt_value").
-			Comment("the expected value of the ssl txt record").
+			Optional(),
+		field.String("expected_acme_challenge_value").
+			Comment("the expected value of the acme challenge record").
 			MaxLen(maxTXTValueLen).
-			NotEmpty(),
-		field.Enum("ssl_cert_status").
-			Comment("Status of the ssl cert issuance").
+			Optional(),
+		field.Enum("acme_challenge_status").
+			Comment("Status of the ACME challenge validation").
 			Default(enums.CustomDomainStatusPending.String()).
 			GoType(enums.CustomDomainStatus("")),
-		field.String("ssl_cert_status_reason").
-			Comment("Reason of the cert status, for giving the user diagnostic info").
+		field.String("acme_challenge_status_reason").
+			Comment("Reason of the ACME status, for giving the user diagnostic info").
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput),
 			).
@@ -124,7 +123,6 @@ func (DNSVerification) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
-			privacy.AlwaysDenyRule(),
 		),
 	)
 }

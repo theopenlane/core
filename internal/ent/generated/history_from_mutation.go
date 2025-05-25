@@ -1790,20 +1790,20 @@ func (m *DNSVerificationMutation) CreateHistoryFromCreate(ctx context.Context) e
 		create = create.SetDNSVerificationStatusReason(dnsVerificationStatusReason)
 	}
 
-	if sslTxtRecord, exists := m.SslTxtRecord(); exists {
-		create = create.SetSslTxtRecord(sslTxtRecord)
+	if acmeChallengePath, exists := m.AcmeChallengePath(); exists {
+		create = create.SetAcmeChallengePath(acmeChallengePath)
 	}
 
-	if sslTxtValue, exists := m.SslTxtValue(); exists {
-		create = create.SetSslTxtValue(sslTxtValue)
+	if expectedAcmeChallengeValue, exists := m.ExpectedAcmeChallengeValue(); exists {
+		create = create.SetExpectedAcmeChallengeValue(expectedAcmeChallengeValue)
 	}
 
-	if sslCertStatus, exists := m.SslCertStatus(); exists {
-		create = create.SetSslCertStatus(sslCertStatus)
+	if acmeChallengeStatus, exists := m.AcmeChallengeStatus(); exists {
+		create = create.SetAcmeChallengeStatus(acmeChallengeStatus)
 	}
 
-	if sslCertStatusReason, exists := m.SslCertStatusReason(); exists {
-		create = create.SetSslCertStatusReason(sslCertStatusReason)
+	if acmeChallengeStatusReason, exists := m.AcmeChallengeStatusReason(); exists {
+		create = create.SetAcmeChallengeStatusReason(acmeChallengeStatusReason)
 	}
 
 	_, err := create.Save(ctx)
@@ -1914,28 +1914,28 @@ func (m *DNSVerificationMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetDNSVerificationStatusReason(dnsverification.DNSVerificationStatusReason)
 		}
 
-		if sslTxtRecord, exists := m.SslTxtRecord(); exists {
-			create = create.SetSslTxtRecord(sslTxtRecord)
+		if acmeChallengePath, exists := m.AcmeChallengePath(); exists {
+			create = create.SetAcmeChallengePath(acmeChallengePath)
 		} else {
-			create = create.SetSslTxtRecord(dnsverification.SslTxtRecord)
+			create = create.SetAcmeChallengePath(dnsverification.AcmeChallengePath)
 		}
 
-		if sslTxtValue, exists := m.SslTxtValue(); exists {
-			create = create.SetSslTxtValue(sslTxtValue)
+		if expectedAcmeChallengeValue, exists := m.ExpectedAcmeChallengeValue(); exists {
+			create = create.SetExpectedAcmeChallengeValue(expectedAcmeChallengeValue)
 		} else {
-			create = create.SetSslTxtValue(dnsverification.SslTxtValue)
+			create = create.SetExpectedAcmeChallengeValue(dnsverification.ExpectedAcmeChallengeValue)
 		}
 
-		if sslCertStatus, exists := m.SslCertStatus(); exists {
-			create = create.SetSslCertStatus(sslCertStatus)
+		if acmeChallengeStatus, exists := m.AcmeChallengeStatus(); exists {
+			create = create.SetAcmeChallengeStatus(acmeChallengeStatus)
 		} else {
-			create = create.SetSslCertStatus(dnsverification.SslCertStatus)
+			create = create.SetAcmeChallengeStatus(dnsverification.AcmeChallengeStatus)
 		}
 
-		if sslCertStatusReason, exists := m.SslCertStatusReason(); exists {
-			create = create.SetSslCertStatusReason(sslCertStatusReason)
+		if acmeChallengeStatusReason, exists := m.AcmeChallengeStatusReason(); exists {
+			create = create.SetAcmeChallengeStatusReason(acmeChallengeStatusReason)
 		} else {
-			create = create.SetSslCertStatusReason(dnsverification.SslCertStatusReason)
+			create = create.SetAcmeChallengeStatusReason(dnsverification.AcmeChallengeStatusReason)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -1983,10 +1983,10 @@ func (m *DNSVerificationMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetDNSTxtValue(dnsverification.DNSTxtValue).
 			SetDNSVerificationStatus(dnsverification.DNSVerificationStatus).
 			SetDNSVerificationStatusReason(dnsverification.DNSVerificationStatusReason).
-			SetSslTxtRecord(dnsverification.SslTxtRecord).
-			SetSslTxtValue(dnsverification.SslTxtValue).
-			SetSslCertStatus(dnsverification.SslCertStatus).
-			SetSslCertStatusReason(dnsverification.SslCertStatusReason).
+			SetAcmeChallengePath(dnsverification.AcmeChallengePath).
+			SetExpectedAcmeChallengeValue(dnsverification.ExpectedAcmeChallengeValue).
+			SetAcmeChallengeStatus(dnsverification.AcmeChallengeStatus).
+			SetAcmeChallengeStatusReason(dnsverification.AcmeChallengeStatusReason).
 			Save(ctx)
 		if err != nil {
 			return err

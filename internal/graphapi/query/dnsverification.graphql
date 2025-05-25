@@ -2,6 +2,9 @@
 mutation CreateBulkCSVDNSVerification($input: Upload!) {
   createBulkCSVDNSVerification(input: $input) {
     dnsVerifications {
+      acmeChallengePath
+      acmeChallengeStatus
+      acmeChallengeStatusReason
       cloudflareHostnameID
       createdAt
       createdBy
@@ -9,12 +12,9 @@ mutation CreateBulkCSVDNSVerification($input: Upload!) {
       dnsTxtValue
       dnsVerificationStatus
       dnsVerificationStatusReason
+      expectedAcmeChallengeValue
       id
       ownerID
-      sslCertStatus
-      sslCertStatusReason
-      sslTxtRecord
-      sslTxtValue
       tags
       updatedAt
       updatedBy
@@ -25,6 +25,9 @@ mutation CreateBulkCSVDNSVerification($input: Upload!) {
 mutation CreateBulkDNSVerification($input: [CreateDNSVerificationInput!]) {
   createBulkDNSVerification(input: $input) {
     dnsVerifications {
+      acmeChallengePath
+      acmeChallengeStatus
+      acmeChallengeStatusReason
       cloudflareHostnameID
       createdAt
       createdBy
@@ -32,12 +35,9 @@ mutation CreateBulkDNSVerification($input: [CreateDNSVerificationInput!]) {
       dnsTxtValue
       dnsVerificationStatus
       dnsVerificationStatusReason
+      expectedAcmeChallengeValue
       id
       ownerID
-      sslCertStatus
-      sslCertStatusReason
-      sslTxtRecord
-      sslTxtValue
       tags
       updatedAt
       updatedBy
@@ -48,6 +48,9 @@ mutation CreateBulkDNSVerification($input: [CreateDNSVerificationInput!]) {
 mutation CreateDNSVerification($input: CreateDNSVerificationInput!) {
   createDNSVerification(input: $input) {
     dnsVerification {
+      acmeChallengePath
+      acmeChallengeStatus
+      acmeChallengeStatusReason
       cloudflareHostnameID
       createdAt
       createdBy
@@ -55,12 +58,9 @@ mutation CreateDNSVerification($input: CreateDNSVerificationInput!) {
       dnsTxtValue
       dnsVerificationStatus
       dnsVerificationStatusReason
+      expectedAcmeChallengeValue
       id
       ownerID
-      sslCertStatus
-      sslCertStatusReason
-      sslTxtRecord
-      sslTxtValue
       tags
       updatedAt
       updatedBy
@@ -85,6 +85,9 @@ query GetAllDNSVerifications {
     }
     edges {
       node {
+        acmeChallengePath
+        acmeChallengeStatus
+        acmeChallengeStatusReason
         cloudflareHostnameID
         createdAt
         createdBy
@@ -92,12 +95,9 @@ query GetAllDNSVerifications {
         dnsTxtValue
         dnsVerificationStatus
         dnsVerificationStatusReason
+        expectedAcmeChallengeValue
         id
         ownerID
-        sslCertStatus
-        sslCertStatusReason
-        sslTxtRecord
-        sslTxtValue
         tags
         updatedAt
         updatedBy
@@ -107,6 +107,9 @@ query GetAllDNSVerifications {
 }
 query GetDNSVerificationByID($dnsVerificationId: ID!) {
   dnsVerification(id: $dnsVerificationId) {
+    acmeChallengePath
+    acmeChallengeStatus
+    acmeChallengeStatusReason
     cloudflareHostnameID
     createdAt
     createdBy
@@ -114,12 +117,9 @@ query GetDNSVerificationByID($dnsVerificationId: ID!) {
     dnsTxtValue
     dnsVerificationStatus
     dnsVerificationStatusReason
+    expectedAcmeChallengeValue
     id
     ownerID
-    sslCertStatus
-    sslCertStatusReason
-    sslTxtRecord
-    sslTxtValue
     tags
     updatedAt
     updatedBy
@@ -137,6 +137,9 @@ query GetDNSVerifications($first: Int, $last: Int, $where: DNSVerificationWhereI
     }
     edges {
       node {
+        acmeChallengePath
+        acmeChallengeStatus
+        acmeChallengeStatusReason
         cloudflareHostnameID
         createdAt
         createdBy
@@ -144,12 +147,9 @@ query GetDNSVerifications($first: Int, $last: Int, $where: DNSVerificationWhereI
         dnsTxtValue
         dnsVerificationStatus
         dnsVerificationStatusReason
+        expectedAcmeChallengeValue
         id
         ownerID
-        sslCertStatus
-        sslCertStatusReason
-        sslTxtRecord
-        sslTxtValue
         tags
         updatedAt
         updatedBy
@@ -160,6 +160,9 @@ query GetDNSVerifications($first: Int, $last: Int, $where: DNSVerificationWhereI
 mutation UpdateDNSVerification($updateDNSVerificationId: ID!, $input: UpdateDNSVerificationInput!) {
   updateDNSVerification(id: $updateDNSVerificationId, input: $input) {
     dnsVerification {
+      acmeChallengePath
+      acmeChallengeStatus
+      acmeChallengeStatusReason
       cloudflareHostnameID
       createdAt
       createdBy
@@ -167,12 +170,9 @@ mutation UpdateDNSVerification($updateDNSVerificationId: ID!, $input: UpdateDNSV
       dnsTxtValue
       dnsVerificationStatus
       dnsVerificationStatusReason
+      expectedAcmeChallengeValue
       id
       ownerID
-      sslCertStatus
-      sslCertStatusReason
-      sslTxtRecord
-      sslTxtValue
       tags
       updatedAt
       updatedBy

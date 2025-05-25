@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 var updateCmd = &cobra.Command{
@@ -25,8 +25,8 @@ func init() {
 	updateCmd.Flags().StringP("id", "i", "", "DNS verification ID to update")
 	updateCmd.Flags().StringP("dns-verification-status", "d", "", "DNS verification status (PENDING, ACTIVE, FAILED)")
 	updateCmd.Flags().StringP("dns-verification-status-reason", "r", "", "DNS verification status reason")
-	updateCmd.Flags().StringP("ssl-cert-status", "s", "", "SSL certificate status (PENDING, ACTIVE, FAILED)")
-	updateCmd.Flags().StringP("ssl-cert-status-reason", "c", "", "SSL certificate status reason")
+	updateCmd.Flags().StringP("acme-challenge-status", "s", "", "SSL certificate status (PENDING, ACTIVE, FAILED)")
+	updateCmd.Flags().StringP("acme-challenge-status-reason", "c", "", "SSL certificate status reason")
 }
 
 // updateValidation validates the required fields for the command
@@ -46,13 +46,13 @@ func updateValidation() (id string, input openlaneclient.UpdateDNSVerificationIn
 		input.DNSVerificationStatusReason = &dnsStatusReason
 	}
 
-	if sslStatus := cmd.Config.String("ssl-cert-status"); sslStatus != "" {
+	if sslStatus := cmd.Config.String("acme-challenge-status"); sslStatus != "" {
 		status := enums.CustomDomainStatus(sslStatus)
-		input.SslCertStatus = &status
+		input.AcmeChallengeStatus = &status
 	}
 
-	if sslStatusReason := cmd.Config.String("ssl-cert-status-reason"); sslStatusReason != "" {
-		input.SslCertStatusReason = &sslStatusReason
+	if sslStatusReason := cmd.Config.String("acme-challenge-status-reason"); sslStatusReason != "" {
+		input.AcmeChallengeStatusReason = &sslStatusReason
 	}
 
 	return id, input, nil

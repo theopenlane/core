@@ -207,65 +207,77 @@ func (dvu *DNSVerificationUpdate) ClearDNSVerificationStatusReason() *DNSVerific
 	return dvu
 }
 
-// SetSslTxtRecord sets the "ssl_txt_record" field.
-func (dvu *DNSVerificationUpdate) SetSslTxtRecord(s string) *DNSVerificationUpdate {
-	dvu.mutation.SetSslTxtRecord(s)
+// SetAcmeChallengePath sets the "acme_challenge_path" field.
+func (dvu *DNSVerificationUpdate) SetAcmeChallengePath(s string) *DNSVerificationUpdate {
+	dvu.mutation.SetAcmeChallengePath(s)
 	return dvu
 }
 
-// SetNillableSslTxtRecord sets the "ssl_txt_record" field if the given value is not nil.
-func (dvu *DNSVerificationUpdate) SetNillableSslTxtRecord(s *string) *DNSVerificationUpdate {
+// SetNillableAcmeChallengePath sets the "acme_challenge_path" field if the given value is not nil.
+func (dvu *DNSVerificationUpdate) SetNillableAcmeChallengePath(s *string) *DNSVerificationUpdate {
 	if s != nil {
-		dvu.SetSslTxtRecord(*s)
+		dvu.SetAcmeChallengePath(*s)
 	}
 	return dvu
 }
 
-// SetSslTxtValue sets the "ssl_txt_value" field.
-func (dvu *DNSVerificationUpdate) SetSslTxtValue(s string) *DNSVerificationUpdate {
-	dvu.mutation.SetSslTxtValue(s)
+// ClearAcmeChallengePath clears the value of the "acme_challenge_path" field.
+func (dvu *DNSVerificationUpdate) ClearAcmeChallengePath() *DNSVerificationUpdate {
+	dvu.mutation.ClearAcmeChallengePath()
 	return dvu
 }
 
-// SetNillableSslTxtValue sets the "ssl_txt_value" field if the given value is not nil.
-func (dvu *DNSVerificationUpdate) SetNillableSslTxtValue(s *string) *DNSVerificationUpdate {
+// SetExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field.
+func (dvu *DNSVerificationUpdate) SetExpectedAcmeChallengeValue(s string) *DNSVerificationUpdate {
+	dvu.mutation.SetExpectedAcmeChallengeValue(s)
+	return dvu
+}
+
+// SetNillableExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field if the given value is not nil.
+func (dvu *DNSVerificationUpdate) SetNillableExpectedAcmeChallengeValue(s *string) *DNSVerificationUpdate {
 	if s != nil {
-		dvu.SetSslTxtValue(*s)
+		dvu.SetExpectedAcmeChallengeValue(*s)
 	}
 	return dvu
 }
 
-// SetSslCertStatus sets the "ssl_cert_status" field.
-func (dvu *DNSVerificationUpdate) SetSslCertStatus(eds enums.CustomDomainStatus) *DNSVerificationUpdate {
-	dvu.mutation.SetSslCertStatus(eds)
+// ClearExpectedAcmeChallengeValue clears the value of the "expected_acme_challenge_value" field.
+func (dvu *DNSVerificationUpdate) ClearExpectedAcmeChallengeValue() *DNSVerificationUpdate {
+	dvu.mutation.ClearExpectedAcmeChallengeValue()
 	return dvu
 }
 
-// SetNillableSslCertStatus sets the "ssl_cert_status" field if the given value is not nil.
-func (dvu *DNSVerificationUpdate) SetNillableSslCertStatus(eds *enums.CustomDomainStatus) *DNSVerificationUpdate {
+// SetAcmeChallengeStatus sets the "acme_challenge_status" field.
+func (dvu *DNSVerificationUpdate) SetAcmeChallengeStatus(eds enums.CustomDomainStatus) *DNSVerificationUpdate {
+	dvu.mutation.SetAcmeChallengeStatus(eds)
+	return dvu
+}
+
+// SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
+func (dvu *DNSVerificationUpdate) SetNillableAcmeChallengeStatus(eds *enums.CustomDomainStatus) *DNSVerificationUpdate {
 	if eds != nil {
-		dvu.SetSslCertStatus(*eds)
+		dvu.SetAcmeChallengeStatus(*eds)
 	}
 	return dvu
 }
 
-// SetSslCertStatusReason sets the "ssl_cert_status_reason" field.
-func (dvu *DNSVerificationUpdate) SetSslCertStatusReason(s string) *DNSVerificationUpdate {
-	dvu.mutation.SetSslCertStatusReason(s)
+// SetAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field.
+func (dvu *DNSVerificationUpdate) SetAcmeChallengeStatusReason(s string) *DNSVerificationUpdate {
+	dvu.mutation.SetAcmeChallengeStatusReason(s)
 	return dvu
 }
 
-// SetNillableSslCertStatusReason sets the "ssl_cert_status_reason" field if the given value is not nil.
-func (dvu *DNSVerificationUpdate) SetNillableSslCertStatusReason(s *string) *DNSVerificationUpdate {
+// SetNillableAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field if the given value is not nil.
+func (dvu *DNSVerificationUpdate) SetNillableAcmeChallengeStatusReason(s *string) *DNSVerificationUpdate {
 	if s != nil {
-		dvu.SetSslCertStatusReason(*s)
+		dvu.SetAcmeChallengeStatusReason(*s)
 	}
 	return dvu
 }
 
-// ClearSslCertStatusReason clears the value of the "ssl_cert_status_reason" field.
-func (dvu *DNSVerificationUpdate) ClearSslCertStatusReason() *DNSVerificationUpdate {
-	dvu.mutation.ClearSslCertStatusReason()
+// ClearAcmeChallengeStatusReason clears the value of the "acme_challenge_status_reason" field.
+func (dvu *DNSVerificationUpdate) ClearAcmeChallengeStatusReason() *DNSVerificationUpdate {
+	dvu.mutation.ClearAcmeChallengeStatusReason()
 	return dvu
 }
 
@@ -385,24 +397,24 @@ func (dvu *DNSVerificationUpdate) check() error {
 			return &ValidationError{Name: "dns_verification_status_reason", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.dns_verification_status_reason": %w`, err)}
 		}
 	}
-	if v, ok := dvu.mutation.SslTxtRecord(); ok {
-		if err := dnsverification.SslTxtRecordValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_txt_record", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_txt_record": %w`, err)}
+	if v, ok := dvu.mutation.AcmeChallengePath(); ok {
+		if err := dnsverification.AcmeChallengePathValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_path", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.acme_challenge_path": %w`, err)}
 		}
 	}
-	if v, ok := dvu.mutation.SslTxtValue(); ok {
-		if err := dnsverification.SslTxtValueValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_txt_value", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_txt_value": %w`, err)}
+	if v, ok := dvu.mutation.ExpectedAcmeChallengeValue(); ok {
+		if err := dnsverification.ExpectedAcmeChallengeValueValidator(v); err != nil {
+			return &ValidationError{Name: "expected_acme_challenge_value", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.expected_acme_challenge_value": %w`, err)}
 		}
 	}
-	if v, ok := dvu.mutation.SslCertStatus(); ok {
-		if err := dnsverification.SslCertStatusValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_cert_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_cert_status": %w`, err)}
+	if v, ok := dvu.mutation.AcmeChallengeStatus(); ok {
+		if err := dnsverification.AcmeChallengeStatusValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.acme_challenge_status": %w`, err)}
 		}
 	}
-	if v, ok := dvu.mutation.SslCertStatusReason(); ok {
-		if err := dnsverification.SslCertStatusReasonValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_cert_status_reason", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_cert_status_reason": %w`, err)}
+	if v, ok := dvu.mutation.AcmeChallengeStatusReason(); ok {
+		if err := dnsverification.AcmeChallengeStatusReasonValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_status_reason", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.acme_challenge_status_reason": %w`, err)}
 		}
 	}
 	return nil
@@ -482,20 +494,26 @@ func (dvu *DNSVerificationUpdate) sqlSave(ctx context.Context) (n int, err error
 	if dvu.mutation.DNSVerificationStatusReasonCleared() {
 		_spec.ClearField(dnsverification.FieldDNSVerificationStatusReason, field.TypeString)
 	}
-	if value, ok := dvu.mutation.SslTxtRecord(); ok {
-		_spec.SetField(dnsverification.FieldSslTxtRecord, field.TypeString, value)
+	if value, ok := dvu.mutation.AcmeChallengePath(); ok {
+		_spec.SetField(dnsverification.FieldAcmeChallengePath, field.TypeString, value)
 	}
-	if value, ok := dvu.mutation.SslTxtValue(); ok {
-		_spec.SetField(dnsverification.FieldSslTxtValue, field.TypeString, value)
+	if dvu.mutation.AcmeChallengePathCleared() {
+		_spec.ClearField(dnsverification.FieldAcmeChallengePath, field.TypeString)
 	}
-	if value, ok := dvu.mutation.SslCertStatus(); ok {
-		_spec.SetField(dnsverification.FieldSslCertStatus, field.TypeEnum, value)
+	if value, ok := dvu.mutation.ExpectedAcmeChallengeValue(); ok {
+		_spec.SetField(dnsverification.FieldExpectedAcmeChallengeValue, field.TypeString, value)
 	}
-	if value, ok := dvu.mutation.SslCertStatusReason(); ok {
-		_spec.SetField(dnsverification.FieldSslCertStatusReason, field.TypeString, value)
+	if dvu.mutation.ExpectedAcmeChallengeValueCleared() {
+		_spec.ClearField(dnsverification.FieldExpectedAcmeChallengeValue, field.TypeString)
 	}
-	if dvu.mutation.SslCertStatusReasonCleared() {
-		_spec.ClearField(dnsverification.FieldSslCertStatusReason, field.TypeString)
+	if value, ok := dvu.mutation.AcmeChallengeStatus(); ok {
+		_spec.SetField(dnsverification.FieldAcmeChallengeStatus, field.TypeEnum, value)
+	}
+	if value, ok := dvu.mutation.AcmeChallengeStatusReason(); ok {
+		_spec.SetField(dnsverification.FieldAcmeChallengeStatusReason, field.TypeString, value)
+	}
+	if dvu.mutation.AcmeChallengeStatusReasonCleared() {
+		_spec.ClearField(dnsverification.FieldAcmeChallengeStatusReason, field.TypeString)
 	}
 	if dvu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -772,65 +790,77 @@ func (dvuo *DNSVerificationUpdateOne) ClearDNSVerificationStatusReason() *DNSVer
 	return dvuo
 }
 
-// SetSslTxtRecord sets the "ssl_txt_record" field.
-func (dvuo *DNSVerificationUpdateOne) SetSslTxtRecord(s string) *DNSVerificationUpdateOne {
-	dvuo.mutation.SetSslTxtRecord(s)
+// SetAcmeChallengePath sets the "acme_challenge_path" field.
+func (dvuo *DNSVerificationUpdateOne) SetAcmeChallengePath(s string) *DNSVerificationUpdateOne {
+	dvuo.mutation.SetAcmeChallengePath(s)
 	return dvuo
 }
 
-// SetNillableSslTxtRecord sets the "ssl_txt_record" field if the given value is not nil.
-func (dvuo *DNSVerificationUpdateOne) SetNillableSslTxtRecord(s *string) *DNSVerificationUpdateOne {
+// SetNillableAcmeChallengePath sets the "acme_challenge_path" field if the given value is not nil.
+func (dvuo *DNSVerificationUpdateOne) SetNillableAcmeChallengePath(s *string) *DNSVerificationUpdateOne {
 	if s != nil {
-		dvuo.SetSslTxtRecord(*s)
+		dvuo.SetAcmeChallengePath(*s)
 	}
 	return dvuo
 }
 
-// SetSslTxtValue sets the "ssl_txt_value" field.
-func (dvuo *DNSVerificationUpdateOne) SetSslTxtValue(s string) *DNSVerificationUpdateOne {
-	dvuo.mutation.SetSslTxtValue(s)
+// ClearAcmeChallengePath clears the value of the "acme_challenge_path" field.
+func (dvuo *DNSVerificationUpdateOne) ClearAcmeChallengePath() *DNSVerificationUpdateOne {
+	dvuo.mutation.ClearAcmeChallengePath()
 	return dvuo
 }
 
-// SetNillableSslTxtValue sets the "ssl_txt_value" field if the given value is not nil.
-func (dvuo *DNSVerificationUpdateOne) SetNillableSslTxtValue(s *string) *DNSVerificationUpdateOne {
+// SetExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field.
+func (dvuo *DNSVerificationUpdateOne) SetExpectedAcmeChallengeValue(s string) *DNSVerificationUpdateOne {
+	dvuo.mutation.SetExpectedAcmeChallengeValue(s)
+	return dvuo
+}
+
+// SetNillableExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field if the given value is not nil.
+func (dvuo *DNSVerificationUpdateOne) SetNillableExpectedAcmeChallengeValue(s *string) *DNSVerificationUpdateOne {
 	if s != nil {
-		dvuo.SetSslTxtValue(*s)
+		dvuo.SetExpectedAcmeChallengeValue(*s)
 	}
 	return dvuo
 }
 
-// SetSslCertStatus sets the "ssl_cert_status" field.
-func (dvuo *DNSVerificationUpdateOne) SetSslCertStatus(eds enums.CustomDomainStatus) *DNSVerificationUpdateOne {
-	dvuo.mutation.SetSslCertStatus(eds)
+// ClearExpectedAcmeChallengeValue clears the value of the "expected_acme_challenge_value" field.
+func (dvuo *DNSVerificationUpdateOne) ClearExpectedAcmeChallengeValue() *DNSVerificationUpdateOne {
+	dvuo.mutation.ClearExpectedAcmeChallengeValue()
 	return dvuo
 }
 
-// SetNillableSslCertStatus sets the "ssl_cert_status" field if the given value is not nil.
-func (dvuo *DNSVerificationUpdateOne) SetNillableSslCertStatus(eds *enums.CustomDomainStatus) *DNSVerificationUpdateOne {
+// SetAcmeChallengeStatus sets the "acme_challenge_status" field.
+func (dvuo *DNSVerificationUpdateOne) SetAcmeChallengeStatus(eds enums.CustomDomainStatus) *DNSVerificationUpdateOne {
+	dvuo.mutation.SetAcmeChallengeStatus(eds)
+	return dvuo
+}
+
+// SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
+func (dvuo *DNSVerificationUpdateOne) SetNillableAcmeChallengeStatus(eds *enums.CustomDomainStatus) *DNSVerificationUpdateOne {
 	if eds != nil {
-		dvuo.SetSslCertStatus(*eds)
+		dvuo.SetAcmeChallengeStatus(*eds)
 	}
 	return dvuo
 }
 
-// SetSslCertStatusReason sets the "ssl_cert_status_reason" field.
-func (dvuo *DNSVerificationUpdateOne) SetSslCertStatusReason(s string) *DNSVerificationUpdateOne {
-	dvuo.mutation.SetSslCertStatusReason(s)
+// SetAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field.
+func (dvuo *DNSVerificationUpdateOne) SetAcmeChallengeStatusReason(s string) *DNSVerificationUpdateOne {
+	dvuo.mutation.SetAcmeChallengeStatusReason(s)
 	return dvuo
 }
 
-// SetNillableSslCertStatusReason sets the "ssl_cert_status_reason" field if the given value is not nil.
-func (dvuo *DNSVerificationUpdateOne) SetNillableSslCertStatusReason(s *string) *DNSVerificationUpdateOne {
+// SetNillableAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field if the given value is not nil.
+func (dvuo *DNSVerificationUpdateOne) SetNillableAcmeChallengeStatusReason(s *string) *DNSVerificationUpdateOne {
 	if s != nil {
-		dvuo.SetSslCertStatusReason(*s)
+		dvuo.SetAcmeChallengeStatusReason(*s)
 	}
 	return dvuo
 }
 
-// ClearSslCertStatusReason clears the value of the "ssl_cert_status_reason" field.
-func (dvuo *DNSVerificationUpdateOne) ClearSslCertStatusReason() *DNSVerificationUpdateOne {
-	dvuo.mutation.ClearSslCertStatusReason()
+// ClearAcmeChallengeStatusReason clears the value of the "acme_challenge_status_reason" field.
+func (dvuo *DNSVerificationUpdateOne) ClearAcmeChallengeStatusReason() *DNSVerificationUpdateOne {
+	dvuo.mutation.ClearAcmeChallengeStatusReason()
 	return dvuo
 }
 
@@ -963,24 +993,24 @@ func (dvuo *DNSVerificationUpdateOne) check() error {
 			return &ValidationError{Name: "dns_verification_status_reason", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.dns_verification_status_reason": %w`, err)}
 		}
 	}
-	if v, ok := dvuo.mutation.SslTxtRecord(); ok {
-		if err := dnsverification.SslTxtRecordValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_txt_record", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_txt_record": %w`, err)}
+	if v, ok := dvuo.mutation.AcmeChallengePath(); ok {
+		if err := dnsverification.AcmeChallengePathValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_path", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.acme_challenge_path": %w`, err)}
 		}
 	}
-	if v, ok := dvuo.mutation.SslTxtValue(); ok {
-		if err := dnsverification.SslTxtValueValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_txt_value", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_txt_value": %w`, err)}
+	if v, ok := dvuo.mutation.ExpectedAcmeChallengeValue(); ok {
+		if err := dnsverification.ExpectedAcmeChallengeValueValidator(v); err != nil {
+			return &ValidationError{Name: "expected_acme_challenge_value", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.expected_acme_challenge_value": %w`, err)}
 		}
 	}
-	if v, ok := dvuo.mutation.SslCertStatus(); ok {
-		if err := dnsverification.SslCertStatusValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_cert_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_cert_status": %w`, err)}
+	if v, ok := dvuo.mutation.AcmeChallengeStatus(); ok {
+		if err := dnsverification.AcmeChallengeStatusValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.acme_challenge_status": %w`, err)}
 		}
 	}
-	if v, ok := dvuo.mutation.SslCertStatusReason(); ok {
-		if err := dnsverification.SslCertStatusReasonValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_cert_status_reason", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_cert_status_reason": %w`, err)}
+	if v, ok := dvuo.mutation.AcmeChallengeStatusReason(); ok {
+		if err := dnsverification.AcmeChallengeStatusReasonValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_status_reason", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.acme_challenge_status_reason": %w`, err)}
 		}
 	}
 	return nil
@@ -1077,20 +1107,26 @@ func (dvuo *DNSVerificationUpdateOne) sqlSave(ctx context.Context) (_node *DNSVe
 	if dvuo.mutation.DNSVerificationStatusReasonCleared() {
 		_spec.ClearField(dnsverification.FieldDNSVerificationStatusReason, field.TypeString)
 	}
-	if value, ok := dvuo.mutation.SslTxtRecord(); ok {
-		_spec.SetField(dnsverification.FieldSslTxtRecord, field.TypeString, value)
+	if value, ok := dvuo.mutation.AcmeChallengePath(); ok {
+		_spec.SetField(dnsverification.FieldAcmeChallengePath, field.TypeString, value)
 	}
-	if value, ok := dvuo.mutation.SslTxtValue(); ok {
-		_spec.SetField(dnsverification.FieldSslTxtValue, field.TypeString, value)
+	if dvuo.mutation.AcmeChallengePathCleared() {
+		_spec.ClearField(dnsverification.FieldAcmeChallengePath, field.TypeString)
 	}
-	if value, ok := dvuo.mutation.SslCertStatus(); ok {
-		_spec.SetField(dnsverification.FieldSslCertStatus, field.TypeEnum, value)
+	if value, ok := dvuo.mutation.ExpectedAcmeChallengeValue(); ok {
+		_spec.SetField(dnsverification.FieldExpectedAcmeChallengeValue, field.TypeString, value)
 	}
-	if value, ok := dvuo.mutation.SslCertStatusReason(); ok {
-		_spec.SetField(dnsverification.FieldSslCertStatusReason, field.TypeString, value)
+	if dvuo.mutation.ExpectedAcmeChallengeValueCleared() {
+		_spec.ClearField(dnsverification.FieldExpectedAcmeChallengeValue, field.TypeString)
 	}
-	if dvuo.mutation.SslCertStatusReasonCleared() {
-		_spec.ClearField(dnsverification.FieldSslCertStatusReason, field.TypeString)
+	if value, ok := dvuo.mutation.AcmeChallengeStatus(); ok {
+		_spec.SetField(dnsverification.FieldAcmeChallengeStatus, field.TypeEnum, value)
+	}
+	if value, ok := dvuo.mutation.AcmeChallengeStatusReason(); ok {
+		_spec.SetField(dnsverification.FieldAcmeChallengeStatusReason, field.TypeString, value)
+	}
+	if dvuo.mutation.AcmeChallengeStatusReasonCleared() {
+		_spec.ClearField(dnsverification.FieldAcmeChallengeStatusReason, field.TypeString)
 	}
 	if dvuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

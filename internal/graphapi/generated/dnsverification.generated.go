@@ -89,14 +89,14 @@ func (ec *executionContext) fieldContext_DNSVerificationBulkCreatePayload_dnsVer
 				return ec.fieldContext_DNSVerification_dnsVerificationStatus(ctx, field)
 			case "dnsVerificationStatusReason":
 				return ec.fieldContext_DNSVerification_dnsVerificationStatusReason(ctx, field)
-			case "sslTxtRecord":
-				return ec.fieldContext_DNSVerification_sslTxtRecord(ctx, field)
-			case "sslTxtValue":
-				return ec.fieldContext_DNSVerification_sslTxtValue(ctx, field)
-			case "sslCertStatus":
-				return ec.fieldContext_DNSVerification_sslCertStatus(ctx, field)
-			case "sslCertStatusReason":
-				return ec.fieldContext_DNSVerification_sslCertStatusReason(ctx, field)
+			case "acmeChallengePath":
+				return ec.fieldContext_DNSVerification_acmeChallengePath(ctx, field)
+			case "expectedAcmeChallengeValue":
+				return ec.fieldContext_DNSVerification_expectedAcmeChallengeValue(ctx, field)
+			case "acmeChallengeStatus":
+				return ec.fieldContext_DNSVerification_acmeChallengeStatus(ctx, field)
+			case "acmeChallengeStatusReason":
+				return ec.fieldContext_DNSVerification_acmeChallengeStatusReason(ctx, field)
 			case "owner":
 				return ec.fieldContext_DNSVerification_owner(ctx, field)
 			case "customDomains":
@@ -171,14 +171,14 @@ func (ec *executionContext) fieldContext_DNSVerificationCreatePayload_dnsVerific
 				return ec.fieldContext_DNSVerification_dnsVerificationStatus(ctx, field)
 			case "dnsVerificationStatusReason":
 				return ec.fieldContext_DNSVerification_dnsVerificationStatusReason(ctx, field)
-			case "sslTxtRecord":
-				return ec.fieldContext_DNSVerification_sslTxtRecord(ctx, field)
-			case "sslTxtValue":
-				return ec.fieldContext_DNSVerification_sslTxtValue(ctx, field)
-			case "sslCertStatus":
-				return ec.fieldContext_DNSVerification_sslCertStatus(ctx, field)
-			case "sslCertStatusReason":
-				return ec.fieldContext_DNSVerification_sslCertStatusReason(ctx, field)
+			case "acmeChallengePath":
+				return ec.fieldContext_DNSVerification_acmeChallengePath(ctx, field)
+			case "expectedAcmeChallengeValue":
+				return ec.fieldContext_DNSVerification_expectedAcmeChallengeValue(ctx, field)
+			case "acmeChallengeStatus":
+				return ec.fieldContext_DNSVerification_acmeChallengeStatus(ctx, field)
+			case "acmeChallengeStatusReason":
+				return ec.fieldContext_DNSVerification_acmeChallengeStatusReason(ctx, field)
 			case "owner":
 				return ec.fieldContext_DNSVerification_owner(ctx, field)
 			case "customDomains":
@@ -297,14 +297,14 @@ func (ec *executionContext) fieldContext_DNSVerificationUpdatePayload_dnsVerific
 				return ec.fieldContext_DNSVerification_dnsVerificationStatus(ctx, field)
 			case "dnsVerificationStatusReason":
 				return ec.fieldContext_DNSVerification_dnsVerificationStatusReason(ctx, field)
-			case "sslTxtRecord":
-				return ec.fieldContext_DNSVerification_sslTxtRecord(ctx, field)
-			case "sslTxtValue":
-				return ec.fieldContext_DNSVerification_sslTxtValue(ctx, field)
-			case "sslCertStatus":
-				return ec.fieldContext_DNSVerification_sslCertStatus(ctx, field)
-			case "sslCertStatusReason":
-				return ec.fieldContext_DNSVerification_sslCertStatusReason(ctx, field)
+			case "acmeChallengePath":
+				return ec.fieldContext_DNSVerification_acmeChallengePath(ctx, field)
+			case "expectedAcmeChallengeValue":
+				return ec.fieldContext_DNSVerification_expectedAcmeChallengeValue(ctx, field)
+			case "acmeChallengeStatus":
+				return ec.fieldContext_DNSVerification_acmeChallengeStatus(ctx, field)
+			case "acmeChallengeStatusReason":
+				return ec.fieldContext_DNSVerification_acmeChallengeStatusReason(ctx, field)
 			case "owner":
 				return ec.fieldContext_DNSVerification_owner(ctx, field)
 			case "customDomains":

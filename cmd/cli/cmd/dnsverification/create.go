@@ -25,8 +25,8 @@ func init() {
 	createCmd.Flags().StringP("cloudflare-hostname-id", "c", "", "Cloudflare hostname ID")
 	createCmd.Flags().StringP("dns-txt-record", "d", "", "DNS TXT record name")
 	createCmd.Flags().StringP("dns-txt-value", "v", "", "DNS TXT record value")
-	createCmd.Flags().StringP("ssl-txt-record", "s", "", "SSL TXT record name")
-	createCmd.Flags().StringP("ssl-txt-value", "t", "", "SSL TXT record value")
+	createCmd.Flags().StringP("acme-challenge-path", "s", "", "SSL TXT record name")
+	createCmd.Flags().StringP("acme-challenge-value", "t", "", "SSL TXT record value")
 	createCmd.Flags().StringP("org-id", "o", "", "Organization ID to associate the DNS verification with")
 }
 
@@ -46,14 +46,14 @@ func createValidation() error {
 		return cmd.NewRequiredFieldMissingError("dns-txt-value")
 	}
 
-	sslTxtRecord := cmd.Config.String("ssl-txt-record")
+	sslTxtRecord := cmd.Config.String("acme-challenge-path")
 	if sslTxtRecord == "" {
-		return cmd.NewRequiredFieldMissingError("ssl-txt-record")
+		return cmd.NewRequiredFieldMissingError("acme-challenge-path")
 	}
 
-	sslTxtValue := cmd.Config.String("ssl-txt-value")
+	sslTxtValue := cmd.Config.String("acme-challenge-value")
 	if sslTxtValue == "" {
-		return cmd.NewRequiredFieldMissingError("ssl-txt-value")
+		return cmd.NewRequiredFieldMissingError("acme-challenge-value")
 	}
 
 	return nil
@@ -73,12 +73,12 @@ func create(ctx context.Context) error {
 	cobra.CheckErr(createValidation())
 
 	input := openlaneclient.CreateDNSVerificationInput{
-		CloudflareHostnameID: cmd.Config.String("cloudflare-hostname-id"),
-		DNSTxtRecord:         cmd.Config.String("dns-txt-record"),
-		DNSTxtValue:          cmd.Config.String("dns-txt-value"),
-		SslTxtRecord:         cmd.Config.String("ssl-txt-record"),
-		SslTxtValue:          cmd.Config.String("ssl-txt-value"),
-		OwnerID:              lo.ToPtr(cmd.Config.String("org-id")),
+		CloudflareHostnameID:       cmd.Config.String("cloudflare-hostname-id"),
+		DNSTxtRecord:               cmd.Config.String("dns-txt-record"),
+		DNSTxtValue:                cmd.Config.String("dns-txt-value"),
+		AcmeChallengePath:          lo.ToPtr(cmd.Config.String("acme-challenge-path")),
+		ExpectedAcmeChallengeValue: lo.ToPtr(cmd.Config.String("acme-challenge-value")),
+		OwnerID:                    lo.ToPtr(cmd.Config.String("org-id")),
 	}
 
 	o, err := client.CreateDNSVerification(ctx, input)

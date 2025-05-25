@@ -12694,58 +12694,62 @@ type DNSVerificationWhereInput struct {
 	DNSVerificationStatusReasonEqualFold    *string  `json:"dnsVerificationStatusReasonEqualFold,omitempty"`
 	DNSVerificationStatusReasonContainsFold *string  `json:"dnsVerificationStatusReasonContainsFold,omitempty"`
 
-	// "ssl_txt_record" field predicates.
-	SslTxtRecord             *string  `json:"sslTxtRecord,omitempty"`
-	SslTxtRecordNEQ          *string  `json:"sslTxtRecordNEQ,omitempty"`
-	SslTxtRecordIn           []string `json:"sslTxtRecordIn,omitempty"`
-	SslTxtRecordNotIn        []string `json:"sslTxtRecordNotIn,omitempty"`
-	SslTxtRecordGT           *string  `json:"sslTxtRecordGT,omitempty"`
-	SslTxtRecordGTE          *string  `json:"sslTxtRecordGTE,omitempty"`
-	SslTxtRecordLT           *string  `json:"sslTxtRecordLT,omitempty"`
-	SslTxtRecordLTE          *string  `json:"sslTxtRecordLTE,omitempty"`
-	SslTxtRecordContains     *string  `json:"sslTxtRecordContains,omitempty"`
-	SslTxtRecordHasPrefix    *string  `json:"sslTxtRecordHasPrefix,omitempty"`
-	SslTxtRecordHasSuffix    *string  `json:"sslTxtRecordHasSuffix,omitempty"`
-	SslTxtRecordEqualFold    *string  `json:"sslTxtRecordEqualFold,omitempty"`
-	SslTxtRecordContainsFold *string  `json:"sslTxtRecordContainsFold,omitempty"`
+	// "acme_challenge_path" field predicates.
+	AcmeChallengePath             *string  `json:"acmeChallengePath,omitempty"`
+	AcmeChallengePathNEQ          *string  `json:"acmeChallengePathNEQ,omitempty"`
+	AcmeChallengePathIn           []string `json:"acmeChallengePathIn,omitempty"`
+	AcmeChallengePathNotIn        []string `json:"acmeChallengePathNotIn,omitempty"`
+	AcmeChallengePathGT           *string  `json:"acmeChallengePathGT,omitempty"`
+	AcmeChallengePathGTE          *string  `json:"acmeChallengePathGTE,omitempty"`
+	AcmeChallengePathLT           *string  `json:"acmeChallengePathLT,omitempty"`
+	AcmeChallengePathLTE          *string  `json:"acmeChallengePathLTE,omitempty"`
+	AcmeChallengePathContains     *string  `json:"acmeChallengePathContains,omitempty"`
+	AcmeChallengePathHasPrefix    *string  `json:"acmeChallengePathHasPrefix,omitempty"`
+	AcmeChallengePathHasSuffix    *string  `json:"acmeChallengePathHasSuffix,omitempty"`
+	AcmeChallengePathIsNil        bool     `json:"acmeChallengePathIsNil,omitempty"`
+	AcmeChallengePathNotNil       bool     `json:"acmeChallengePathNotNil,omitempty"`
+	AcmeChallengePathEqualFold    *string  `json:"acmeChallengePathEqualFold,omitempty"`
+	AcmeChallengePathContainsFold *string  `json:"acmeChallengePathContainsFold,omitempty"`
 
-	// "ssl_txt_value" field predicates.
-	SslTxtValue             *string  `json:"sslTxtValue,omitempty"`
-	SslTxtValueNEQ          *string  `json:"sslTxtValueNEQ,omitempty"`
-	SslTxtValueIn           []string `json:"sslTxtValueIn,omitempty"`
-	SslTxtValueNotIn        []string `json:"sslTxtValueNotIn,omitempty"`
-	SslTxtValueGT           *string  `json:"sslTxtValueGT,omitempty"`
-	SslTxtValueGTE          *string  `json:"sslTxtValueGTE,omitempty"`
-	SslTxtValueLT           *string  `json:"sslTxtValueLT,omitempty"`
-	SslTxtValueLTE          *string  `json:"sslTxtValueLTE,omitempty"`
-	SslTxtValueContains     *string  `json:"sslTxtValueContains,omitempty"`
-	SslTxtValueHasPrefix    *string  `json:"sslTxtValueHasPrefix,omitempty"`
-	SslTxtValueHasSuffix    *string  `json:"sslTxtValueHasSuffix,omitempty"`
-	SslTxtValueEqualFold    *string  `json:"sslTxtValueEqualFold,omitempty"`
-	SslTxtValueContainsFold *string  `json:"sslTxtValueContainsFold,omitempty"`
+	// "expected_acme_challenge_value" field predicates.
+	ExpectedAcmeChallengeValue             *string  `json:"expectedAcmeChallengeValue,omitempty"`
+	ExpectedAcmeChallengeValueNEQ          *string  `json:"expectedAcmeChallengeValueNEQ,omitempty"`
+	ExpectedAcmeChallengeValueIn           []string `json:"expectedAcmeChallengeValueIn,omitempty"`
+	ExpectedAcmeChallengeValueNotIn        []string `json:"expectedAcmeChallengeValueNotIn,omitempty"`
+	ExpectedAcmeChallengeValueGT           *string  `json:"expectedAcmeChallengeValueGT,omitempty"`
+	ExpectedAcmeChallengeValueGTE          *string  `json:"expectedAcmeChallengeValueGTE,omitempty"`
+	ExpectedAcmeChallengeValueLT           *string  `json:"expectedAcmeChallengeValueLT,omitempty"`
+	ExpectedAcmeChallengeValueLTE          *string  `json:"expectedAcmeChallengeValueLTE,omitempty"`
+	ExpectedAcmeChallengeValueContains     *string  `json:"expectedAcmeChallengeValueContains,omitempty"`
+	ExpectedAcmeChallengeValueHasPrefix    *string  `json:"expectedAcmeChallengeValueHasPrefix,omitempty"`
+	ExpectedAcmeChallengeValueHasSuffix    *string  `json:"expectedAcmeChallengeValueHasSuffix,omitempty"`
+	ExpectedAcmeChallengeValueIsNil        bool     `json:"expectedAcmeChallengeValueIsNil,omitempty"`
+	ExpectedAcmeChallengeValueNotNil       bool     `json:"expectedAcmeChallengeValueNotNil,omitempty"`
+	ExpectedAcmeChallengeValueEqualFold    *string  `json:"expectedAcmeChallengeValueEqualFold,omitempty"`
+	ExpectedAcmeChallengeValueContainsFold *string  `json:"expectedAcmeChallengeValueContainsFold,omitempty"`
 
-	// "ssl_cert_status" field predicates.
-	SslCertStatus      *enums.CustomDomainStatus  `json:"sslCertStatus,omitempty"`
-	SslCertStatusNEQ   *enums.CustomDomainStatus  `json:"sslCertStatusNEQ,omitempty"`
-	SslCertStatusIn    []enums.CustomDomainStatus `json:"sslCertStatusIn,omitempty"`
-	SslCertStatusNotIn []enums.CustomDomainStatus `json:"sslCertStatusNotIn,omitempty"`
+	// "acme_challenge_status" field predicates.
+	AcmeChallengeStatus      *enums.CustomDomainStatus  `json:"acmeChallengeStatus,omitempty"`
+	AcmeChallengeStatusNEQ   *enums.CustomDomainStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
+	AcmeChallengeStatusIn    []enums.CustomDomainStatus `json:"acmeChallengeStatusIn,omitempty"`
+	AcmeChallengeStatusNotIn []enums.CustomDomainStatus `json:"acmeChallengeStatusNotIn,omitempty"`
 
-	// "ssl_cert_status_reason" field predicates.
-	SslCertStatusReason             *string  `json:"sslCertStatusReason,omitempty"`
-	SslCertStatusReasonNEQ          *string  `json:"sslCertStatusReasonNEQ,omitempty"`
-	SslCertStatusReasonIn           []string `json:"sslCertStatusReasonIn,omitempty"`
-	SslCertStatusReasonNotIn        []string `json:"sslCertStatusReasonNotIn,omitempty"`
-	SslCertStatusReasonGT           *string  `json:"sslCertStatusReasonGT,omitempty"`
-	SslCertStatusReasonGTE          *string  `json:"sslCertStatusReasonGTE,omitempty"`
-	SslCertStatusReasonLT           *string  `json:"sslCertStatusReasonLT,omitempty"`
-	SslCertStatusReasonLTE          *string  `json:"sslCertStatusReasonLTE,omitempty"`
-	SslCertStatusReasonContains     *string  `json:"sslCertStatusReasonContains,omitempty"`
-	SslCertStatusReasonHasPrefix    *string  `json:"sslCertStatusReasonHasPrefix,omitempty"`
-	SslCertStatusReasonHasSuffix    *string  `json:"sslCertStatusReasonHasSuffix,omitempty"`
-	SslCertStatusReasonIsNil        bool     `json:"sslCertStatusReasonIsNil,omitempty"`
-	SslCertStatusReasonNotNil       bool     `json:"sslCertStatusReasonNotNil,omitempty"`
-	SslCertStatusReasonEqualFold    *string  `json:"sslCertStatusReasonEqualFold,omitempty"`
-	SslCertStatusReasonContainsFold *string  `json:"sslCertStatusReasonContainsFold,omitempty"`
+	// "acme_challenge_status_reason" field predicates.
+	AcmeChallengeStatusReason             *string  `json:"acmeChallengeStatusReason,omitempty"`
+	AcmeChallengeStatusReasonNEQ          *string  `json:"acmeChallengeStatusReasonNEQ,omitempty"`
+	AcmeChallengeStatusReasonIn           []string `json:"acmeChallengeStatusReasonIn,omitempty"`
+	AcmeChallengeStatusReasonNotIn        []string `json:"acmeChallengeStatusReasonNotIn,omitempty"`
+	AcmeChallengeStatusReasonGT           *string  `json:"acmeChallengeStatusReasonGT,omitempty"`
+	AcmeChallengeStatusReasonGTE          *string  `json:"acmeChallengeStatusReasonGTE,omitempty"`
+	AcmeChallengeStatusReasonLT           *string  `json:"acmeChallengeStatusReasonLT,omitempty"`
+	AcmeChallengeStatusReasonLTE          *string  `json:"acmeChallengeStatusReasonLTE,omitempty"`
+	AcmeChallengeStatusReasonContains     *string  `json:"acmeChallengeStatusReasonContains,omitempty"`
+	AcmeChallengeStatusReasonHasPrefix    *string  `json:"acmeChallengeStatusReasonHasPrefix,omitempty"`
+	AcmeChallengeStatusReasonHasSuffix    *string  `json:"acmeChallengeStatusReasonHasSuffix,omitempty"`
+	AcmeChallengeStatusReasonIsNil        bool     `json:"acmeChallengeStatusReasonIsNil,omitempty"`
+	AcmeChallengeStatusReasonNotNil       bool     `json:"acmeChallengeStatusReasonNotNil,omitempty"`
+	AcmeChallengeStatusReasonEqualFold    *string  `json:"acmeChallengeStatusReasonEqualFold,omitempty"`
+	AcmeChallengeStatusReasonContainsFold *string  `json:"acmeChallengeStatusReasonContainsFold,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -13226,140 +13230,152 @@ func (i *DNSVerificationWhereInput) P() (predicate.DNSVerification, error) {
 	if i.DNSVerificationStatusReasonContainsFold != nil {
 		predicates = append(predicates, dnsverification.DNSVerificationStatusReasonContainsFold(*i.DNSVerificationStatusReasonContainsFold))
 	}
-	if i.SslTxtRecord != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordEQ(*i.SslTxtRecord))
+	if i.AcmeChallengePath != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathEQ(*i.AcmeChallengePath))
 	}
-	if i.SslTxtRecordNEQ != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordNEQ(*i.SslTxtRecordNEQ))
+	if i.AcmeChallengePathNEQ != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathNEQ(*i.AcmeChallengePathNEQ))
 	}
-	if len(i.SslTxtRecordIn) > 0 {
-		predicates = append(predicates, dnsverification.SslTxtRecordIn(i.SslTxtRecordIn...))
+	if len(i.AcmeChallengePathIn) > 0 {
+		predicates = append(predicates, dnsverification.AcmeChallengePathIn(i.AcmeChallengePathIn...))
 	}
-	if len(i.SslTxtRecordNotIn) > 0 {
-		predicates = append(predicates, dnsverification.SslTxtRecordNotIn(i.SslTxtRecordNotIn...))
+	if len(i.AcmeChallengePathNotIn) > 0 {
+		predicates = append(predicates, dnsverification.AcmeChallengePathNotIn(i.AcmeChallengePathNotIn...))
 	}
-	if i.SslTxtRecordGT != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordGT(*i.SslTxtRecordGT))
+	if i.AcmeChallengePathGT != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathGT(*i.AcmeChallengePathGT))
 	}
-	if i.SslTxtRecordGTE != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordGTE(*i.SslTxtRecordGTE))
+	if i.AcmeChallengePathGTE != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathGTE(*i.AcmeChallengePathGTE))
 	}
-	if i.SslTxtRecordLT != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordLT(*i.SslTxtRecordLT))
+	if i.AcmeChallengePathLT != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathLT(*i.AcmeChallengePathLT))
 	}
-	if i.SslTxtRecordLTE != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordLTE(*i.SslTxtRecordLTE))
+	if i.AcmeChallengePathLTE != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathLTE(*i.AcmeChallengePathLTE))
 	}
-	if i.SslTxtRecordContains != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordContains(*i.SslTxtRecordContains))
+	if i.AcmeChallengePathContains != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathContains(*i.AcmeChallengePathContains))
 	}
-	if i.SslTxtRecordHasPrefix != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordHasPrefix(*i.SslTxtRecordHasPrefix))
+	if i.AcmeChallengePathHasPrefix != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathHasPrefix(*i.AcmeChallengePathHasPrefix))
 	}
-	if i.SslTxtRecordHasSuffix != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordHasSuffix(*i.SslTxtRecordHasSuffix))
+	if i.AcmeChallengePathHasSuffix != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathHasSuffix(*i.AcmeChallengePathHasSuffix))
 	}
-	if i.SslTxtRecordEqualFold != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordEqualFold(*i.SslTxtRecordEqualFold))
+	if i.AcmeChallengePathIsNil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathIsNil())
 	}
-	if i.SslTxtRecordContainsFold != nil {
-		predicates = append(predicates, dnsverification.SslTxtRecordContainsFold(*i.SslTxtRecordContainsFold))
+	if i.AcmeChallengePathNotNil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathNotNil())
 	}
-	if i.SslTxtValue != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueEQ(*i.SslTxtValue))
+	if i.AcmeChallengePathEqualFold != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathEqualFold(*i.AcmeChallengePathEqualFold))
 	}
-	if i.SslTxtValueNEQ != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueNEQ(*i.SslTxtValueNEQ))
+	if i.AcmeChallengePathContainsFold != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengePathContainsFold(*i.AcmeChallengePathContainsFold))
 	}
-	if len(i.SslTxtValueIn) > 0 {
-		predicates = append(predicates, dnsverification.SslTxtValueIn(i.SslTxtValueIn...))
+	if i.ExpectedAcmeChallengeValue != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueEQ(*i.ExpectedAcmeChallengeValue))
 	}
-	if len(i.SslTxtValueNotIn) > 0 {
-		predicates = append(predicates, dnsverification.SslTxtValueNotIn(i.SslTxtValueNotIn...))
+	if i.ExpectedAcmeChallengeValueNEQ != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueNEQ(*i.ExpectedAcmeChallengeValueNEQ))
 	}
-	if i.SslTxtValueGT != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueGT(*i.SslTxtValueGT))
+	if len(i.ExpectedAcmeChallengeValueIn) > 0 {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueIn(i.ExpectedAcmeChallengeValueIn...))
 	}
-	if i.SslTxtValueGTE != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueGTE(*i.SslTxtValueGTE))
+	if len(i.ExpectedAcmeChallengeValueNotIn) > 0 {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueNotIn(i.ExpectedAcmeChallengeValueNotIn...))
 	}
-	if i.SslTxtValueLT != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueLT(*i.SslTxtValueLT))
+	if i.ExpectedAcmeChallengeValueGT != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueGT(*i.ExpectedAcmeChallengeValueGT))
 	}
-	if i.SslTxtValueLTE != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueLTE(*i.SslTxtValueLTE))
+	if i.ExpectedAcmeChallengeValueGTE != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueGTE(*i.ExpectedAcmeChallengeValueGTE))
 	}
-	if i.SslTxtValueContains != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueContains(*i.SslTxtValueContains))
+	if i.ExpectedAcmeChallengeValueLT != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueLT(*i.ExpectedAcmeChallengeValueLT))
 	}
-	if i.SslTxtValueHasPrefix != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueHasPrefix(*i.SslTxtValueHasPrefix))
+	if i.ExpectedAcmeChallengeValueLTE != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueLTE(*i.ExpectedAcmeChallengeValueLTE))
 	}
-	if i.SslTxtValueHasSuffix != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueHasSuffix(*i.SslTxtValueHasSuffix))
+	if i.ExpectedAcmeChallengeValueContains != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueContains(*i.ExpectedAcmeChallengeValueContains))
 	}
-	if i.SslTxtValueEqualFold != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueEqualFold(*i.SslTxtValueEqualFold))
+	if i.ExpectedAcmeChallengeValueHasPrefix != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueHasPrefix(*i.ExpectedAcmeChallengeValueHasPrefix))
 	}
-	if i.SslTxtValueContainsFold != nil {
-		predicates = append(predicates, dnsverification.SslTxtValueContainsFold(*i.SslTxtValueContainsFold))
+	if i.ExpectedAcmeChallengeValueHasSuffix != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueHasSuffix(*i.ExpectedAcmeChallengeValueHasSuffix))
 	}
-	if i.SslCertStatus != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusEQ(*i.SslCertStatus))
+	if i.ExpectedAcmeChallengeValueIsNil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueIsNil())
 	}
-	if i.SslCertStatusNEQ != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusNEQ(*i.SslCertStatusNEQ))
+	if i.ExpectedAcmeChallengeValueNotNil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueNotNil())
 	}
-	if len(i.SslCertStatusIn) > 0 {
-		predicates = append(predicates, dnsverification.SslCertStatusIn(i.SslCertStatusIn...))
+	if i.ExpectedAcmeChallengeValueEqualFold != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueEqualFold(*i.ExpectedAcmeChallengeValueEqualFold))
 	}
-	if len(i.SslCertStatusNotIn) > 0 {
-		predicates = append(predicates, dnsverification.SslCertStatusNotIn(i.SslCertStatusNotIn...))
+	if i.ExpectedAcmeChallengeValueContainsFold != nil {
+		predicates = append(predicates, dnsverification.ExpectedAcmeChallengeValueContainsFold(*i.ExpectedAcmeChallengeValueContainsFold))
 	}
-	if i.SslCertStatusReason != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonEQ(*i.SslCertStatusReason))
+	if i.AcmeChallengeStatus != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusEQ(*i.AcmeChallengeStatus))
 	}
-	if i.SslCertStatusReasonNEQ != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonNEQ(*i.SslCertStatusReasonNEQ))
+	if i.AcmeChallengeStatusNEQ != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusNEQ(*i.AcmeChallengeStatusNEQ))
 	}
-	if len(i.SslCertStatusReasonIn) > 0 {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonIn(i.SslCertStatusReasonIn...))
+	if len(i.AcmeChallengeStatusIn) > 0 {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusIn(i.AcmeChallengeStatusIn...))
 	}
-	if len(i.SslCertStatusReasonNotIn) > 0 {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonNotIn(i.SslCertStatusReasonNotIn...))
+	if len(i.AcmeChallengeStatusNotIn) > 0 {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusNotIn(i.AcmeChallengeStatusNotIn...))
 	}
-	if i.SslCertStatusReasonGT != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonGT(*i.SslCertStatusReasonGT))
+	if i.AcmeChallengeStatusReason != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonEQ(*i.AcmeChallengeStatusReason))
 	}
-	if i.SslCertStatusReasonGTE != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonGTE(*i.SslCertStatusReasonGTE))
+	if i.AcmeChallengeStatusReasonNEQ != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonNEQ(*i.AcmeChallengeStatusReasonNEQ))
 	}
-	if i.SslCertStatusReasonLT != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonLT(*i.SslCertStatusReasonLT))
+	if len(i.AcmeChallengeStatusReasonIn) > 0 {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonIn(i.AcmeChallengeStatusReasonIn...))
 	}
-	if i.SslCertStatusReasonLTE != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonLTE(*i.SslCertStatusReasonLTE))
+	if len(i.AcmeChallengeStatusReasonNotIn) > 0 {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonNotIn(i.AcmeChallengeStatusReasonNotIn...))
 	}
-	if i.SslCertStatusReasonContains != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonContains(*i.SslCertStatusReasonContains))
+	if i.AcmeChallengeStatusReasonGT != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonGT(*i.AcmeChallengeStatusReasonGT))
 	}
-	if i.SslCertStatusReasonHasPrefix != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonHasPrefix(*i.SslCertStatusReasonHasPrefix))
+	if i.AcmeChallengeStatusReasonGTE != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonGTE(*i.AcmeChallengeStatusReasonGTE))
 	}
-	if i.SslCertStatusReasonHasSuffix != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonHasSuffix(*i.SslCertStatusReasonHasSuffix))
+	if i.AcmeChallengeStatusReasonLT != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonLT(*i.AcmeChallengeStatusReasonLT))
 	}
-	if i.SslCertStatusReasonIsNil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonIsNil())
+	if i.AcmeChallengeStatusReasonLTE != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonLTE(*i.AcmeChallengeStatusReasonLTE))
 	}
-	if i.SslCertStatusReasonNotNil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonNotNil())
+	if i.AcmeChallengeStatusReasonContains != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonContains(*i.AcmeChallengeStatusReasonContains))
 	}
-	if i.SslCertStatusReasonEqualFold != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonEqualFold(*i.SslCertStatusReasonEqualFold))
+	if i.AcmeChallengeStatusReasonHasPrefix != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonHasPrefix(*i.AcmeChallengeStatusReasonHasPrefix))
 	}
-	if i.SslCertStatusReasonContainsFold != nil {
-		predicates = append(predicates, dnsverification.SslCertStatusReasonContainsFold(*i.SslCertStatusReasonContainsFold))
+	if i.AcmeChallengeStatusReasonHasSuffix != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonHasSuffix(*i.AcmeChallengeStatusReasonHasSuffix))
+	}
+	if i.AcmeChallengeStatusReasonIsNil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonIsNil())
+	}
+	if i.AcmeChallengeStatusReasonNotNil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonNotNil())
+	}
+	if i.AcmeChallengeStatusReasonEqualFold != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonEqualFold(*i.AcmeChallengeStatusReasonEqualFold))
+	}
+	if i.AcmeChallengeStatusReasonContainsFold != nil {
+		predicates = append(predicates, dnsverification.AcmeChallengeStatusReasonContainsFold(*i.AcmeChallengeStatusReasonContainsFold))
 	}
 
 	if i.HasOwner != nil {
@@ -13603,58 +13619,62 @@ type DNSVerificationHistoryWhereInput struct {
 	DNSVerificationStatusReasonEqualFold    *string  `json:"dnsVerificationStatusReasonEqualFold,omitempty"`
 	DNSVerificationStatusReasonContainsFold *string  `json:"dnsVerificationStatusReasonContainsFold,omitempty"`
 
-	// "ssl_txt_record" field predicates.
-	SslTxtRecord             *string  `json:"sslTxtRecord,omitempty"`
-	SslTxtRecordNEQ          *string  `json:"sslTxtRecordNEQ,omitempty"`
-	SslTxtRecordIn           []string `json:"sslTxtRecordIn,omitempty"`
-	SslTxtRecordNotIn        []string `json:"sslTxtRecordNotIn,omitempty"`
-	SslTxtRecordGT           *string  `json:"sslTxtRecordGT,omitempty"`
-	SslTxtRecordGTE          *string  `json:"sslTxtRecordGTE,omitempty"`
-	SslTxtRecordLT           *string  `json:"sslTxtRecordLT,omitempty"`
-	SslTxtRecordLTE          *string  `json:"sslTxtRecordLTE,omitempty"`
-	SslTxtRecordContains     *string  `json:"sslTxtRecordContains,omitempty"`
-	SslTxtRecordHasPrefix    *string  `json:"sslTxtRecordHasPrefix,omitempty"`
-	SslTxtRecordHasSuffix    *string  `json:"sslTxtRecordHasSuffix,omitempty"`
-	SslTxtRecordEqualFold    *string  `json:"sslTxtRecordEqualFold,omitempty"`
-	SslTxtRecordContainsFold *string  `json:"sslTxtRecordContainsFold,omitempty"`
+	// "acme_challenge_path" field predicates.
+	AcmeChallengePath             *string  `json:"acmeChallengePath,omitempty"`
+	AcmeChallengePathNEQ          *string  `json:"acmeChallengePathNEQ,omitempty"`
+	AcmeChallengePathIn           []string `json:"acmeChallengePathIn,omitempty"`
+	AcmeChallengePathNotIn        []string `json:"acmeChallengePathNotIn,omitempty"`
+	AcmeChallengePathGT           *string  `json:"acmeChallengePathGT,omitempty"`
+	AcmeChallengePathGTE          *string  `json:"acmeChallengePathGTE,omitempty"`
+	AcmeChallengePathLT           *string  `json:"acmeChallengePathLT,omitempty"`
+	AcmeChallengePathLTE          *string  `json:"acmeChallengePathLTE,omitempty"`
+	AcmeChallengePathContains     *string  `json:"acmeChallengePathContains,omitempty"`
+	AcmeChallengePathHasPrefix    *string  `json:"acmeChallengePathHasPrefix,omitempty"`
+	AcmeChallengePathHasSuffix    *string  `json:"acmeChallengePathHasSuffix,omitempty"`
+	AcmeChallengePathIsNil        bool     `json:"acmeChallengePathIsNil,omitempty"`
+	AcmeChallengePathNotNil       bool     `json:"acmeChallengePathNotNil,omitempty"`
+	AcmeChallengePathEqualFold    *string  `json:"acmeChallengePathEqualFold,omitempty"`
+	AcmeChallengePathContainsFold *string  `json:"acmeChallengePathContainsFold,omitempty"`
 
-	// "ssl_txt_value" field predicates.
-	SslTxtValue             *string  `json:"sslTxtValue,omitempty"`
-	SslTxtValueNEQ          *string  `json:"sslTxtValueNEQ,omitempty"`
-	SslTxtValueIn           []string `json:"sslTxtValueIn,omitempty"`
-	SslTxtValueNotIn        []string `json:"sslTxtValueNotIn,omitempty"`
-	SslTxtValueGT           *string  `json:"sslTxtValueGT,omitempty"`
-	SslTxtValueGTE          *string  `json:"sslTxtValueGTE,omitempty"`
-	SslTxtValueLT           *string  `json:"sslTxtValueLT,omitempty"`
-	SslTxtValueLTE          *string  `json:"sslTxtValueLTE,omitempty"`
-	SslTxtValueContains     *string  `json:"sslTxtValueContains,omitempty"`
-	SslTxtValueHasPrefix    *string  `json:"sslTxtValueHasPrefix,omitempty"`
-	SslTxtValueHasSuffix    *string  `json:"sslTxtValueHasSuffix,omitempty"`
-	SslTxtValueEqualFold    *string  `json:"sslTxtValueEqualFold,omitempty"`
-	SslTxtValueContainsFold *string  `json:"sslTxtValueContainsFold,omitempty"`
+	// "expected_acme_challenge_value" field predicates.
+	ExpectedAcmeChallengeValue             *string  `json:"expectedAcmeChallengeValue,omitempty"`
+	ExpectedAcmeChallengeValueNEQ          *string  `json:"expectedAcmeChallengeValueNEQ,omitempty"`
+	ExpectedAcmeChallengeValueIn           []string `json:"expectedAcmeChallengeValueIn,omitempty"`
+	ExpectedAcmeChallengeValueNotIn        []string `json:"expectedAcmeChallengeValueNotIn,omitempty"`
+	ExpectedAcmeChallengeValueGT           *string  `json:"expectedAcmeChallengeValueGT,omitempty"`
+	ExpectedAcmeChallengeValueGTE          *string  `json:"expectedAcmeChallengeValueGTE,omitempty"`
+	ExpectedAcmeChallengeValueLT           *string  `json:"expectedAcmeChallengeValueLT,omitempty"`
+	ExpectedAcmeChallengeValueLTE          *string  `json:"expectedAcmeChallengeValueLTE,omitempty"`
+	ExpectedAcmeChallengeValueContains     *string  `json:"expectedAcmeChallengeValueContains,omitempty"`
+	ExpectedAcmeChallengeValueHasPrefix    *string  `json:"expectedAcmeChallengeValueHasPrefix,omitempty"`
+	ExpectedAcmeChallengeValueHasSuffix    *string  `json:"expectedAcmeChallengeValueHasSuffix,omitempty"`
+	ExpectedAcmeChallengeValueIsNil        bool     `json:"expectedAcmeChallengeValueIsNil,omitempty"`
+	ExpectedAcmeChallengeValueNotNil       bool     `json:"expectedAcmeChallengeValueNotNil,omitempty"`
+	ExpectedAcmeChallengeValueEqualFold    *string  `json:"expectedAcmeChallengeValueEqualFold,omitempty"`
+	ExpectedAcmeChallengeValueContainsFold *string  `json:"expectedAcmeChallengeValueContainsFold,omitempty"`
 
-	// "ssl_cert_status" field predicates.
-	SslCertStatus      *enums.CustomDomainStatus  `json:"sslCertStatus,omitempty"`
-	SslCertStatusNEQ   *enums.CustomDomainStatus  `json:"sslCertStatusNEQ,omitempty"`
-	SslCertStatusIn    []enums.CustomDomainStatus `json:"sslCertStatusIn,omitempty"`
-	SslCertStatusNotIn []enums.CustomDomainStatus `json:"sslCertStatusNotIn,omitempty"`
+	// "acme_challenge_status" field predicates.
+	AcmeChallengeStatus      *enums.CustomDomainStatus  `json:"acmeChallengeStatus,omitempty"`
+	AcmeChallengeStatusNEQ   *enums.CustomDomainStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
+	AcmeChallengeStatusIn    []enums.CustomDomainStatus `json:"acmeChallengeStatusIn,omitempty"`
+	AcmeChallengeStatusNotIn []enums.CustomDomainStatus `json:"acmeChallengeStatusNotIn,omitempty"`
 
-	// "ssl_cert_status_reason" field predicates.
-	SslCertStatusReason             *string  `json:"sslCertStatusReason,omitempty"`
-	SslCertStatusReasonNEQ          *string  `json:"sslCertStatusReasonNEQ,omitempty"`
-	SslCertStatusReasonIn           []string `json:"sslCertStatusReasonIn,omitempty"`
-	SslCertStatusReasonNotIn        []string `json:"sslCertStatusReasonNotIn,omitempty"`
-	SslCertStatusReasonGT           *string  `json:"sslCertStatusReasonGT,omitempty"`
-	SslCertStatusReasonGTE          *string  `json:"sslCertStatusReasonGTE,omitempty"`
-	SslCertStatusReasonLT           *string  `json:"sslCertStatusReasonLT,omitempty"`
-	SslCertStatusReasonLTE          *string  `json:"sslCertStatusReasonLTE,omitempty"`
-	SslCertStatusReasonContains     *string  `json:"sslCertStatusReasonContains,omitempty"`
-	SslCertStatusReasonHasPrefix    *string  `json:"sslCertStatusReasonHasPrefix,omitempty"`
-	SslCertStatusReasonHasSuffix    *string  `json:"sslCertStatusReasonHasSuffix,omitempty"`
-	SslCertStatusReasonIsNil        bool     `json:"sslCertStatusReasonIsNil,omitempty"`
-	SslCertStatusReasonNotNil       bool     `json:"sslCertStatusReasonNotNil,omitempty"`
-	SslCertStatusReasonEqualFold    *string  `json:"sslCertStatusReasonEqualFold,omitempty"`
-	SslCertStatusReasonContainsFold *string  `json:"sslCertStatusReasonContainsFold,omitempty"`
+	// "acme_challenge_status_reason" field predicates.
+	AcmeChallengeStatusReason             *string  `json:"acmeChallengeStatusReason,omitempty"`
+	AcmeChallengeStatusReasonNEQ          *string  `json:"acmeChallengeStatusReasonNEQ,omitempty"`
+	AcmeChallengeStatusReasonIn           []string `json:"acmeChallengeStatusReasonIn,omitempty"`
+	AcmeChallengeStatusReasonNotIn        []string `json:"acmeChallengeStatusReasonNotIn,omitempty"`
+	AcmeChallengeStatusReasonGT           *string  `json:"acmeChallengeStatusReasonGT,omitempty"`
+	AcmeChallengeStatusReasonGTE          *string  `json:"acmeChallengeStatusReasonGTE,omitempty"`
+	AcmeChallengeStatusReasonLT           *string  `json:"acmeChallengeStatusReasonLT,omitempty"`
+	AcmeChallengeStatusReasonLTE          *string  `json:"acmeChallengeStatusReasonLTE,omitempty"`
+	AcmeChallengeStatusReasonContains     *string  `json:"acmeChallengeStatusReasonContains,omitempty"`
+	AcmeChallengeStatusReasonHasPrefix    *string  `json:"acmeChallengeStatusReasonHasPrefix,omitempty"`
+	AcmeChallengeStatusReasonHasSuffix    *string  `json:"acmeChallengeStatusReasonHasSuffix,omitempty"`
+	AcmeChallengeStatusReasonIsNil        bool     `json:"acmeChallengeStatusReasonIsNil,omitempty"`
+	AcmeChallengeStatusReasonNotNil       bool     `json:"acmeChallengeStatusReasonNotNil,omitempty"`
+	AcmeChallengeStatusReasonEqualFold    *string  `json:"acmeChallengeStatusReasonEqualFold,omitempty"`
+	AcmeChallengeStatusReasonContainsFold *string  `json:"acmeChallengeStatusReasonContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -14208,140 +14228,152 @@ func (i *DNSVerificationHistoryWhereInput) P() (predicate.DNSVerificationHistory
 	if i.DNSVerificationStatusReasonContainsFold != nil {
 		predicates = append(predicates, dnsverificationhistory.DNSVerificationStatusReasonContainsFold(*i.DNSVerificationStatusReasonContainsFold))
 	}
-	if i.SslTxtRecord != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordEQ(*i.SslTxtRecord))
+	if i.AcmeChallengePath != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathEQ(*i.AcmeChallengePath))
 	}
-	if i.SslTxtRecordNEQ != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordNEQ(*i.SslTxtRecordNEQ))
+	if i.AcmeChallengePathNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathNEQ(*i.AcmeChallengePathNEQ))
 	}
-	if len(i.SslTxtRecordIn) > 0 {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordIn(i.SslTxtRecordIn...))
+	if len(i.AcmeChallengePathIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathIn(i.AcmeChallengePathIn...))
 	}
-	if len(i.SslTxtRecordNotIn) > 0 {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordNotIn(i.SslTxtRecordNotIn...))
+	if len(i.AcmeChallengePathNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathNotIn(i.AcmeChallengePathNotIn...))
 	}
-	if i.SslTxtRecordGT != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordGT(*i.SslTxtRecordGT))
+	if i.AcmeChallengePathGT != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathGT(*i.AcmeChallengePathGT))
 	}
-	if i.SslTxtRecordGTE != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordGTE(*i.SslTxtRecordGTE))
+	if i.AcmeChallengePathGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathGTE(*i.AcmeChallengePathGTE))
 	}
-	if i.SslTxtRecordLT != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordLT(*i.SslTxtRecordLT))
+	if i.AcmeChallengePathLT != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathLT(*i.AcmeChallengePathLT))
 	}
-	if i.SslTxtRecordLTE != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordLTE(*i.SslTxtRecordLTE))
+	if i.AcmeChallengePathLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathLTE(*i.AcmeChallengePathLTE))
 	}
-	if i.SslTxtRecordContains != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordContains(*i.SslTxtRecordContains))
+	if i.AcmeChallengePathContains != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathContains(*i.AcmeChallengePathContains))
 	}
-	if i.SslTxtRecordHasPrefix != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordHasPrefix(*i.SslTxtRecordHasPrefix))
+	if i.AcmeChallengePathHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathHasPrefix(*i.AcmeChallengePathHasPrefix))
 	}
-	if i.SslTxtRecordHasSuffix != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordHasSuffix(*i.SslTxtRecordHasSuffix))
+	if i.AcmeChallengePathHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathHasSuffix(*i.AcmeChallengePathHasSuffix))
 	}
-	if i.SslTxtRecordEqualFold != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordEqualFold(*i.SslTxtRecordEqualFold))
+	if i.AcmeChallengePathIsNil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathIsNil())
 	}
-	if i.SslTxtRecordContainsFold != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtRecordContainsFold(*i.SslTxtRecordContainsFold))
+	if i.AcmeChallengePathNotNil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathNotNil())
 	}
-	if i.SslTxtValue != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueEQ(*i.SslTxtValue))
+	if i.AcmeChallengePathEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathEqualFold(*i.AcmeChallengePathEqualFold))
 	}
-	if i.SslTxtValueNEQ != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueNEQ(*i.SslTxtValueNEQ))
+	if i.AcmeChallengePathContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengePathContainsFold(*i.AcmeChallengePathContainsFold))
 	}
-	if len(i.SslTxtValueIn) > 0 {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueIn(i.SslTxtValueIn...))
+	if i.ExpectedAcmeChallengeValue != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueEQ(*i.ExpectedAcmeChallengeValue))
 	}
-	if len(i.SslTxtValueNotIn) > 0 {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueNotIn(i.SslTxtValueNotIn...))
+	if i.ExpectedAcmeChallengeValueNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueNEQ(*i.ExpectedAcmeChallengeValueNEQ))
 	}
-	if i.SslTxtValueGT != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueGT(*i.SslTxtValueGT))
+	if len(i.ExpectedAcmeChallengeValueIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueIn(i.ExpectedAcmeChallengeValueIn...))
 	}
-	if i.SslTxtValueGTE != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueGTE(*i.SslTxtValueGTE))
+	if len(i.ExpectedAcmeChallengeValueNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueNotIn(i.ExpectedAcmeChallengeValueNotIn...))
 	}
-	if i.SslTxtValueLT != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueLT(*i.SslTxtValueLT))
+	if i.ExpectedAcmeChallengeValueGT != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueGT(*i.ExpectedAcmeChallengeValueGT))
 	}
-	if i.SslTxtValueLTE != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueLTE(*i.SslTxtValueLTE))
+	if i.ExpectedAcmeChallengeValueGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueGTE(*i.ExpectedAcmeChallengeValueGTE))
 	}
-	if i.SslTxtValueContains != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueContains(*i.SslTxtValueContains))
+	if i.ExpectedAcmeChallengeValueLT != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueLT(*i.ExpectedAcmeChallengeValueLT))
 	}
-	if i.SslTxtValueHasPrefix != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueHasPrefix(*i.SslTxtValueHasPrefix))
+	if i.ExpectedAcmeChallengeValueLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueLTE(*i.ExpectedAcmeChallengeValueLTE))
 	}
-	if i.SslTxtValueHasSuffix != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueHasSuffix(*i.SslTxtValueHasSuffix))
+	if i.ExpectedAcmeChallengeValueContains != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueContains(*i.ExpectedAcmeChallengeValueContains))
 	}
-	if i.SslTxtValueEqualFold != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueEqualFold(*i.SslTxtValueEqualFold))
+	if i.ExpectedAcmeChallengeValueHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueHasPrefix(*i.ExpectedAcmeChallengeValueHasPrefix))
 	}
-	if i.SslTxtValueContainsFold != nil {
-		predicates = append(predicates, dnsverificationhistory.SslTxtValueContainsFold(*i.SslTxtValueContainsFold))
+	if i.ExpectedAcmeChallengeValueHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueHasSuffix(*i.ExpectedAcmeChallengeValueHasSuffix))
 	}
-	if i.SslCertStatus != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusEQ(*i.SslCertStatus))
+	if i.ExpectedAcmeChallengeValueIsNil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueIsNil())
 	}
-	if i.SslCertStatusNEQ != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusNEQ(*i.SslCertStatusNEQ))
+	if i.ExpectedAcmeChallengeValueNotNil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueNotNil())
 	}
-	if len(i.SslCertStatusIn) > 0 {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusIn(i.SslCertStatusIn...))
+	if i.ExpectedAcmeChallengeValueEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueEqualFold(*i.ExpectedAcmeChallengeValueEqualFold))
 	}
-	if len(i.SslCertStatusNotIn) > 0 {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusNotIn(i.SslCertStatusNotIn...))
+	if i.ExpectedAcmeChallengeValueContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.ExpectedAcmeChallengeValueContainsFold(*i.ExpectedAcmeChallengeValueContainsFold))
 	}
-	if i.SslCertStatusReason != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonEQ(*i.SslCertStatusReason))
+	if i.AcmeChallengeStatus != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusEQ(*i.AcmeChallengeStatus))
 	}
-	if i.SslCertStatusReasonNEQ != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonNEQ(*i.SslCertStatusReasonNEQ))
+	if i.AcmeChallengeStatusNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusNEQ(*i.AcmeChallengeStatusNEQ))
 	}
-	if len(i.SslCertStatusReasonIn) > 0 {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonIn(i.SslCertStatusReasonIn...))
+	if len(i.AcmeChallengeStatusIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusIn(i.AcmeChallengeStatusIn...))
 	}
-	if len(i.SslCertStatusReasonNotIn) > 0 {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonNotIn(i.SslCertStatusReasonNotIn...))
+	if len(i.AcmeChallengeStatusNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusNotIn(i.AcmeChallengeStatusNotIn...))
 	}
-	if i.SslCertStatusReasonGT != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonGT(*i.SslCertStatusReasonGT))
+	if i.AcmeChallengeStatusReason != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonEQ(*i.AcmeChallengeStatusReason))
 	}
-	if i.SslCertStatusReasonGTE != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonGTE(*i.SslCertStatusReasonGTE))
+	if i.AcmeChallengeStatusReasonNEQ != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonNEQ(*i.AcmeChallengeStatusReasonNEQ))
 	}
-	if i.SslCertStatusReasonLT != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonLT(*i.SslCertStatusReasonLT))
+	if len(i.AcmeChallengeStatusReasonIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonIn(i.AcmeChallengeStatusReasonIn...))
 	}
-	if i.SslCertStatusReasonLTE != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonLTE(*i.SslCertStatusReasonLTE))
+	if len(i.AcmeChallengeStatusReasonNotIn) > 0 {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonNotIn(i.AcmeChallengeStatusReasonNotIn...))
 	}
-	if i.SslCertStatusReasonContains != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonContains(*i.SslCertStatusReasonContains))
+	if i.AcmeChallengeStatusReasonGT != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonGT(*i.AcmeChallengeStatusReasonGT))
 	}
-	if i.SslCertStatusReasonHasPrefix != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonHasPrefix(*i.SslCertStatusReasonHasPrefix))
+	if i.AcmeChallengeStatusReasonGTE != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonGTE(*i.AcmeChallengeStatusReasonGTE))
 	}
-	if i.SslCertStatusReasonHasSuffix != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonHasSuffix(*i.SslCertStatusReasonHasSuffix))
+	if i.AcmeChallengeStatusReasonLT != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonLT(*i.AcmeChallengeStatusReasonLT))
 	}
-	if i.SslCertStatusReasonIsNil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonIsNil())
+	if i.AcmeChallengeStatusReasonLTE != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonLTE(*i.AcmeChallengeStatusReasonLTE))
 	}
-	if i.SslCertStatusReasonNotNil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonNotNil())
+	if i.AcmeChallengeStatusReasonContains != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonContains(*i.AcmeChallengeStatusReasonContains))
 	}
-	if i.SslCertStatusReasonEqualFold != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonEqualFold(*i.SslCertStatusReasonEqualFold))
+	if i.AcmeChallengeStatusReasonHasPrefix != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonHasPrefix(*i.AcmeChallengeStatusReasonHasPrefix))
 	}
-	if i.SslCertStatusReasonContainsFold != nil {
-		predicates = append(predicates, dnsverificationhistory.SslCertStatusReasonContainsFold(*i.SslCertStatusReasonContainsFold))
+	if i.AcmeChallengeStatusReasonHasSuffix != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonHasSuffix(*i.AcmeChallengeStatusReasonHasSuffix))
+	}
+	if i.AcmeChallengeStatusReasonIsNil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonIsNil())
+	}
+	if i.AcmeChallengeStatusReasonNotNil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonNotNil())
+	}
+	if i.AcmeChallengeStatusReasonEqualFold != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonEqualFold(*i.AcmeChallengeStatusReasonEqualFold))
+	}
+	if i.AcmeChallengeStatusReasonContainsFold != nil {
+		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonContainsFold(*i.AcmeChallengeStatusReasonContainsFold))
 	}
 
 	switch len(predicates) {

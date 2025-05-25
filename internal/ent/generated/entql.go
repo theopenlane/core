@@ -544,10 +544,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			dnsverification.FieldDNSTxtValue:                 {Type: field.TypeString, Column: dnsverification.FieldDNSTxtValue},
 			dnsverification.FieldDNSVerificationStatus:       {Type: field.TypeEnum, Column: dnsverification.FieldDNSVerificationStatus},
 			dnsverification.FieldDNSVerificationStatusReason: {Type: field.TypeString, Column: dnsverification.FieldDNSVerificationStatusReason},
-			dnsverification.FieldSslTxtRecord:                {Type: field.TypeString, Column: dnsverification.FieldSslTxtRecord},
-			dnsverification.FieldSslTxtValue:                 {Type: field.TypeString, Column: dnsverification.FieldSslTxtValue},
-			dnsverification.FieldSslCertStatus:               {Type: field.TypeEnum, Column: dnsverification.FieldSslCertStatus},
-			dnsverification.FieldSslCertStatusReason:         {Type: field.TypeString, Column: dnsverification.FieldSslCertStatusReason},
+			dnsverification.FieldAcmeChallengePath:           {Type: field.TypeString, Column: dnsverification.FieldAcmeChallengePath},
+			dnsverification.FieldExpectedAcmeChallengeValue:  {Type: field.TypeString, Column: dnsverification.FieldExpectedAcmeChallengeValue},
+			dnsverification.FieldAcmeChallengeStatus:         {Type: field.TypeEnum, Column: dnsverification.FieldAcmeChallengeStatus},
+			dnsverification.FieldAcmeChallengeStatusReason:   {Type: field.TypeString, Column: dnsverification.FieldAcmeChallengeStatusReason},
 		},
 	}
 	graph.Nodes[14] = &sqlgraph.Node{
@@ -577,10 +577,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			dnsverificationhistory.FieldDNSTxtValue:                 {Type: field.TypeString, Column: dnsverificationhistory.FieldDNSTxtValue},
 			dnsverificationhistory.FieldDNSVerificationStatus:       {Type: field.TypeEnum, Column: dnsverificationhistory.FieldDNSVerificationStatus},
 			dnsverificationhistory.FieldDNSVerificationStatusReason: {Type: field.TypeString, Column: dnsverificationhistory.FieldDNSVerificationStatusReason},
-			dnsverificationhistory.FieldSslTxtRecord:                {Type: field.TypeString, Column: dnsverificationhistory.FieldSslTxtRecord},
-			dnsverificationhistory.FieldSslTxtValue:                 {Type: field.TypeString, Column: dnsverificationhistory.FieldSslTxtValue},
-			dnsverificationhistory.FieldSslCertStatus:               {Type: field.TypeEnum, Column: dnsverificationhistory.FieldSslCertStatus},
-			dnsverificationhistory.FieldSslCertStatusReason:         {Type: field.TypeString, Column: dnsverificationhistory.FieldSslCertStatusReason},
+			dnsverificationhistory.FieldAcmeChallengePath:           {Type: field.TypeString, Column: dnsverificationhistory.FieldAcmeChallengePath},
+			dnsverificationhistory.FieldExpectedAcmeChallengeValue:  {Type: field.TypeString, Column: dnsverificationhistory.FieldExpectedAcmeChallengeValue},
+			dnsverificationhistory.FieldAcmeChallengeStatus:         {Type: field.TypeEnum, Column: dnsverificationhistory.FieldAcmeChallengeStatus},
+			dnsverificationhistory.FieldAcmeChallengeStatusReason:   {Type: field.TypeString, Column: dnsverificationhistory.FieldAcmeChallengeStatusReason},
 		},
 	}
 	graph.Nodes[15] = &sqlgraph.Node{
@@ -9245,24 +9245,24 @@ func (f *DNSVerificationFilter) WhereDNSVerificationStatusReason(p entql.StringP
 	f.Where(p.Field(dnsverification.FieldDNSVerificationStatusReason))
 }
 
-// WhereSslTxtRecord applies the entql string predicate on the ssl_txt_record field.
-func (f *DNSVerificationFilter) WhereSslTxtRecord(p entql.StringP) {
-	f.Where(p.Field(dnsverification.FieldSslTxtRecord))
+// WhereAcmeChallengePath applies the entql string predicate on the acme_challenge_path field.
+func (f *DNSVerificationFilter) WhereAcmeChallengePath(p entql.StringP) {
+	f.Where(p.Field(dnsverification.FieldAcmeChallengePath))
 }
 
-// WhereSslTxtValue applies the entql string predicate on the ssl_txt_value field.
-func (f *DNSVerificationFilter) WhereSslTxtValue(p entql.StringP) {
-	f.Where(p.Field(dnsverification.FieldSslTxtValue))
+// WhereExpectedAcmeChallengeValue applies the entql string predicate on the expected_acme_challenge_value field.
+func (f *DNSVerificationFilter) WhereExpectedAcmeChallengeValue(p entql.StringP) {
+	f.Where(p.Field(dnsverification.FieldExpectedAcmeChallengeValue))
 }
 
-// WhereSslCertStatus applies the entql string predicate on the ssl_cert_status field.
-func (f *DNSVerificationFilter) WhereSslCertStatus(p entql.StringP) {
-	f.Where(p.Field(dnsverification.FieldSslCertStatus))
+// WhereAcmeChallengeStatus applies the entql string predicate on the acme_challenge_status field.
+func (f *DNSVerificationFilter) WhereAcmeChallengeStatus(p entql.StringP) {
+	f.Where(p.Field(dnsverification.FieldAcmeChallengeStatus))
 }
 
-// WhereSslCertStatusReason applies the entql string predicate on the ssl_cert_status_reason field.
-func (f *DNSVerificationFilter) WhereSslCertStatusReason(p entql.StringP) {
-	f.Where(p.Field(dnsverification.FieldSslCertStatusReason))
+// WhereAcmeChallengeStatusReason applies the entql string predicate on the acme_challenge_status_reason field.
+func (f *DNSVerificationFilter) WhereAcmeChallengeStatusReason(p entql.StringP) {
+	f.Where(p.Field(dnsverification.FieldAcmeChallengeStatusReason))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -9413,24 +9413,24 @@ func (f *DNSVerificationHistoryFilter) WhereDNSVerificationStatusReason(p entql.
 	f.Where(p.Field(dnsverificationhistory.FieldDNSVerificationStatusReason))
 }
 
-// WhereSslTxtRecord applies the entql string predicate on the ssl_txt_record field.
-func (f *DNSVerificationHistoryFilter) WhereSslTxtRecord(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldSslTxtRecord))
+// WhereAcmeChallengePath applies the entql string predicate on the acme_challenge_path field.
+func (f *DNSVerificationHistoryFilter) WhereAcmeChallengePath(p entql.StringP) {
+	f.Where(p.Field(dnsverificationhistory.FieldAcmeChallengePath))
 }
 
-// WhereSslTxtValue applies the entql string predicate on the ssl_txt_value field.
-func (f *DNSVerificationHistoryFilter) WhereSslTxtValue(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldSslTxtValue))
+// WhereExpectedAcmeChallengeValue applies the entql string predicate on the expected_acme_challenge_value field.
+func (f *DNSVerificationHistoryFilter) WhereExpectedAcmeChallengeValue(p entql.StringP) {
+	f.Where(p.Field(dnsverificationhistory.FieldExpectedAcmeChallengeValue))
 }
 
-// WhereSslCertStatus applies the entql string predicate on the ssl_cert_status field.
-func (f *DNSVerificationHistoryFilter) WhereSslCertStatus(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldSslCertStatus))
+// WhereAcmeChallengeStatus applies the entql string predicate on the acme_challenge_status field.
+func (f *DNSVerificationHistoryFilter) WhereAcmeChallengeStatus(p entql.StringP) {
+	f.Where(p.Field(dnsverificationhistory.FieldAcmeChallengeStatus))
 }
 
-// WhereSslCertStatusReason applies the entql string predicate on the ssl_cert_status_reason field.
-func (f *DNSVerificationHistoryFilter) WhereSslCertStatusReason(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldSslCertStatusReason))
+// WhereAcmeChallengeStatusReason applies the entql string predicate on the acme_challenge_status_reason field.
+func (f *DNSVerificationHistoryFilter) WhereAcmeChallengeStatusReason(p entql.StringP) {
+	f.Where(p.Field(dnsverificationhistory.FieldAcmeChallengeStatusReason))
 }
 
 // addPredicate implements the predicateAdder interface.

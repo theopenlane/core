@@ -9,7 +9,6 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -119,7 +118,6 @@ func (CustomDomain) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpUpdateOne|ent.OpUpdate,
 			rule.AllowMutationIfSystemAdmin(),
-			privacy.AlwaysDenyRule(),
 		),
 		policy.WithOnMutationRules(
 			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,

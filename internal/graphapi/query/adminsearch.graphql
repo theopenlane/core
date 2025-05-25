@@ -176,9 +176,9 @@ query AdminSearch($query: String!) {
           dnsTxtRecord
           dnsTxtValue
           dnsVerificationStatusReason
-          sslTxtRecord
-          sslTxtValue
-          sslCertStatusReason
+          acmeChallengePath
+          expectedAcmeChallengeValue
+          acmeChallengeStatusReason
         }
       }
     }

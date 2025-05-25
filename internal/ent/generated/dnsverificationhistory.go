@@ -52,15 +52,15 @@ type DNSVerificationHistory struct {
 	DNSVerificationStatus enums.CustomDomainStatus `json:"dns_verification_status,omitempty"`
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason string `json:"dns_verification_status_reason,omitempty"`
-	// the name of the ssl txt record
-	SslTxtRecord string `json:"ssl_txt_record,omitempty"`
-	// the expected value of the ssl txt record
-	SslTxtValue string `json:"ssl_txt_value,omitempty"`
-	// Status of the ssl cert issuance
-	SslCertStatus enums.CustomDomainStatus `json:"ssl_cert_status,omitempty"`
-	// Reason of the cert status, for giving the user diagnostic info
-	SslCertStatusReason string `json:"ssl_cert_status_reason,omitempty"`
-	selectValues        sql.SelectValues
+	// Path under /.well-known/acme-challenge/ to serve the ACME challenge
+	AcmeChallengePath string `json:"acme_challenge_path,omitempty"`
+	// the expected value of the acme challenge record
+	ExpectedAcmeChallengeValue string `json:"expected_acme_challenge_value,omitempty"`
+	// Status of the ACME challenge validation
+	AcmeChallengeStatus enums.CustomDomainStatus `json:"acme_challenge_status,omitempty"`
+	// Reason of the ACME status, for giving the user diagnostic info
+	AcmeChallengeStatusReason string `json:"acme_challenge_status_reason,omitempty"`
+	selectValues              sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -72,7 +72,7 @@ func (*DNSVerificationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case dnsverificationhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case dnsverificationhistory.FieldID, dnsverificationhistory.FieldRef, dnsverificationhistory.FieldCreatedBy, dnsverificationhistory.FieldUpdatedBy, dnsverificationhistory.FieldDeletedBy, dnsverificationhistory.FieldOwnerID, dnsverificationhistory.FieldCloudflareHostnameID, dnsverificationhistory.FieldDNSTxtRecord, dnsverificationhistory.FieldDNSTxtValue, dnsverificationhistory.FieldDNSVerificationStatus, dnsverificationhistory.FieldDNSVerificationStatusReason, dnsverificationhistory.FieldSslTxtRecord, dnsverificationhistory.FieldSslTxtValue, dnsverificationhistory.FieldSslCertStatus, dnsverificationhistory.FieldSslCertStatusReason:
+		case dnsverificationhistory.FieldID, dnsverificationhistory.FieldRef, dnsverificationhistory.FieldCreatedBy, dnsverificationhistory.FieldUpdatedBy, dnsverificationhistory.FieldDeletedBy, dnsverificationhistory.FieldOwnerID, dnsverificationhistory.FieldCloudflareHostnameID, dnsverificationhistory.FieldDNSTxtRecord, dnsverificationhistory.FieldDNSTxtValue, dnsverificationhistory.FieldDNSVerificationStatus, dnsverificationhistory.FieldDNSVerificationStatusReason, dnsverificationhistory.FieldAcmeChallengePath, dnsverificationhistory.FieldExpectedAcmeChallengeValue, dnsverificationhistory.FieldAcmeChallengeStatus, dnsverificationhistory.FieldAcmeChallengeStatusReason:
 			values[i] = new(sql.NullString)
 		case dnsverificationhistory.FieldHistoryTime, dnsverificationhistory.FieldCreatedAt, dnsverificationhistory.FieldUpdatedAt, dnsverificationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -195,29 +195,29 @@ func (dvh *DNSVerificationHistory) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				dvh.DNSVerificationStatusReason = value.String
 			}
-		case dnsverificationhistory.FieldSslTxtRecord:
+		case dnsverificationhistory.FieldAcmeChallengePath:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field ssl_txt_record", values[i])
+				return fmt.Errorf("unexpected type %T for field acme_challenge_path", values[i])
 			} else if value.Valid {
-				dvh.SslTxtRecord = value.String
+				dvh.AcmeChallengePath = value.String
 			}
-		case dnsverificationhistory.FieldSslTxtValue:
+		case dnsverificationhistory.FieldExpectedAcmeChallengeValue:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field ssl_txt_value", values[i])
+				return fmt.Errorf("unexpected type %T for field expected_acme_challenge_value", values[i])
 			} else if value.Valid {
-				dvh.SslTxtValue = value.String
+				dvh.ExpectedAcmeChallengeValue = value.String
 			}
-		case dnsverificationhistory.FieldSslCertStatus:
+		case dnsverificationhistory.FieldAcmeChallengeStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field ssl_cert_status", values[i])
+				return fmt.Errorf("unexpected type %T for field acme_challenge_status", values[i])
 			} else if value.Valid {
-				dvh.SslCertStatus = enums.CustomDomainStatus(value.String)
+				dvh.AcmeChallengeStatus = enums.CustomDomainStatus(value.String)
 			}
-		case dnsverificationhistory.FieldSslCertStatusReason:
+		case dnsverificationhistory.FieldAcmeChallengeStatusReason:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field ssl_cert_status_reason", values[i])
+				return fmt.Errorf("unexpected type %T for field acme_challenge_status_reason", values[i])
 			} else if value.Valid {
-				dvh.SslCertStatusReason = value.String
+				dvh.AcmeChallengeStatusReason = value.String
 			}
 		default:
 			dvh.selectValues.Set(columns[i], values[i])
@@ -303,17 +303,17 @@ func (dvh *DNSVerificationHistory) String() string {
 	builder.WriteString("dns_verification_status_reason=")
 	builder.WriteString(dvh.DNSVerificationStatusReason)
 	builder.WriteString(", ")
-	builder.WriteString("ssl_txt_record=")
-	builder.WriteString(dvh.SslTxtRecord)
+	builder.WriteString("acme_challenge_path=")
+	builder.WriteString(dvh.AcmeChallengePath)
 	builder.WriteString(", ")
-	builder.WriteString("ssl_txt_value=")
-	builder.WriteString(dvh.SslTxtValue)
+	builder.WriteString("expected_acme_challenge_value=")
+	builder.WriteString(dvh.ExpectedAcmeChallengeValue)
 	builder.WriteString(", ")
-	builder.WriteString("ssl_cert_status=")
-	builder.WriteString(fmt.Sprintf("%v", dvh.SslCertStatus))
+	builder.WriteString("acme_challenge_status=")
+	builder.WriteString(fmt.Sprintf("%v", dvh.AcmeChallengeStatus))
 	builder.WriteString(", ")
-	builder.WriteString("ssl_cert_status_reason=")
-	builder.WriteString(dvh.SslCertStatusReason)
+	builder.WriteString("acme_challenge_status_reason=")
+	builder.WriteString(dvh.AcmeChallengeStatusReason)
 	builder.WriteByte(')')
 	return builder.String()
 }

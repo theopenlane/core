@@ -11,6 +11,9 @@ query GetAllDNSVerificationHistories {
     }
     edges {
       node {
+        acmeChallengePath
+        acmeChallengeStatus
+        acmeChallengeStatusReason
         cloudflareHostnameID
         createdAt
         createdBy
@@ -18,15 +21,12 @@ query GetAllDNSVerificationHistories {
         dnsTxtValue
         dnsVerificationStatus
         dnsVerificationStatusReason
+        expectedAcmeChallengeValue
         historyTime
         id
         operation
         ownerID
         ref
-        sslCertStatus
-        sslCertStatusReason
-        sslTxtRecord
-        sslTxtValue
         tags
         updatedAt
         updatedBy
@@ -46,6 +46,9 @@ query GetDNSVerificationHistories($first: Int, $last: Int, $where: DNSVerificati
     }
     edges {
       node {
+        acmeChallengePath
+        acmeChallengeStatus
+        acmeChallengeStatusReason
         cloudflareHostnameID
         createdAt
         createdBy
@@ -53,15 +56,12 @@ query GetDNSVerificationHistories($first: Int, $last: Int, $where: DNSVerificati
         dnsTxtValue
         dnsVerificationStatus
         dnsVerificationStatusReason
+        expectedAcmeChallengeValue
         historyTime
         id
         operation
         ownerID
         ref
-        sslCertStatus
-        sslCertStatusReason
-        sslTxtRecord
-        sslTxtValue
         tags
         updatedAt
         updatedBy

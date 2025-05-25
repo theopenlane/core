@@ -131,19 +131,19 @@ func DNSVerificationStatusReason(v string) predicate.DNSVerificationHistory {
 	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldDNSVerificationStatusReason, v))
 }
 
-// SslTxtRecord applies equality check predicate on the "ssl_txt_record" field. It's identical to SslTxtRecordEQ.
-func SslTxtRecord(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldSslTxtRecord, v))
+// AcmeChallengePath applies equality check predicate on the "acme_challenge_path" field. It's identical to AcmeChallengePathEQ.
+func AcmeChallengePath(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldAcmeChallengePath, v))
 }
 
-// SslTxtValue applies equality check predicate on the "ssl_txt_value" field. It's identical to SslTxtValueEQ.
-func SslTxtValue(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValue applies equality check predicate on the "expected_acme_challenge_value" field. It's identical to ExpectedAcmeChallengeValueEQ.
+func ExpectedAcmeChallengeValue(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslCertStatusReason applies equality check predicate on the "ssl_cert_status_reason" field. It's identical to SslCertStatusReasonEQ.
-func SslCertStatusReason(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReason applies equality check predicate on the "acme_challenge_status_reason" field. It's identical to AcmeChallengeStatusReasonEQ.
+func AcmeChallengeStatusReason(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldAcmeChallengeStatusReason, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -1041,239 +1041,259 @@ func DNSVerificationStatusReasonContainsFold(v string) predicate.DNSVerification
 	return predicate.DNSVerificationHistory(sql.FieldContainsFold(FieldDNSVerificationStatusReason, v))
 }
 
-// SslTxtRecordEQ applies the EQ predicate on the "ssl_txt_record" field.
-func SslTxtRecordEQ(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldSslTxtRecord, v))
+// AcmeChallengePathEQ applies the EQ predicate on the "acme_challenge_path" field.
+func AcmeChallengePathEQ(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldAcmeChallengePath, v))
 }
 
-// SslTxtRecordNEQ applies the NEQ predicate on the "ssl_txt_record" field.
-func SslTxtRecordNEQ(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldSslTxtRecord, v))
+// AcmeChallengePathNEQ applies the NEQ predicate on the "acme_challenge_path" field.
+func AcmeChallengePathNEQ(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldAcmeChallengePath, v))
 }
 
-// SslTxtRecordIn applies the In predicate on the "ssl_txt_record" field.
-func SslTxtRecordIn(vs ...string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldIn(FieldSslTxtRecord, vs...))
+// AcmeChallengePathIn applies the In predicate on the "acme_challenge_path" field.
+func AcmeChallengePathIn(vs ...string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldIn(FieldAcmeChallengePath, vs...))
 }
 
-// SslTxtRecordNotIn applies the NotIn predicate on the "ssl_txt_record" field.
-func SslTxtRecordNotIn(vs ...string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldNotIn(FieldSslTxtRecord, vs...))
+// AcmeChallengePathNotIn applies the NotIn predicate on the "acme_challenge_path" field.
+func AcmeChallengePathNotIn(vs ...string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldNotIn(FieldAcmeChallengePath, vs...))
 }
 
-// SslTxtRecordGT applies the GT predicate on the "ssl_txt_record" field.
-func SslTxtRecordGT(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldGT(FieldSslTxtRecord, v))
+// AcmeChallengePathGT applies the GT predicate on the "acme_challenge_path" field.
+func AcmeChallengePathGT(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldGT(FieldAcmeChallengePath, v))
 }
 
-// SslTxtRecordGTE applies the GTE predicate on the "ssl_txt_record" field.
-func SslTxtRecordGTE(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldGTE(FieldSslTxtRecord, v))
+// AcmeChallengePathGTE applies the GTE predicate on the "acme_challenge_path" field.
+func AcmeChallengePathGTE(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldGTE(FieldAcmeChallengePath, v))
 }
 
-// SslTxtRecordLT applies the LT predicate on the "ssl_txt_record" field.
-func SslTxtRecordLT(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldLT(FieldSslTxtRecord, v))
+// AcmeChallengePathLT applies the LT predicate on the "acme_challenge_path" field.
+func AcmeChallengePathLT(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldLT(FieldAcmeChallengePath, v))
 }
 
-// SslTxtRecordLTE applies the LTE predicate on the "ssl_txt_record" field.
-func SslTxtRecordLTE(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldLTE(FieldSslTxtRecord, v))
+// AcmeChallengePathLTE applies the LTE predicate on the "acme_challenge_path" field.
+func AcmeChallengePathLTE(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldLTE(FieldAcmeChallengePath, v))
 }
 
-// SslTxtRecordContains applies the Contains predicate on the "ssl_txt_record" field.
-func SslTxtRecordContains(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldContains(FieldSslTxtRecord, v))
+// AcmeChallengePathContains applies the Contains predicate on the "acme_challenge_path" field.
+func AcmeChallengePathContains(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldContains(FieldAcmeChallengePath, v))
 }
 
-// SslTxtRecordHasPrefix applies the HasPrefix predicate on the "ssl_txt_record" field.
-func SslTxtRecordHasPrefix(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldHasPrefix(FieldSslTxtRecord, v))
+// AcmeChallengePathHasPrefix applies the HasPrefix predicate on the "acme_challenge_path" field.
+func AcmeChallengePathHasPrefix(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldHasPrefix(FieldAcmeChallengePath, v))
 }
 
-// SslTxtRecordHasSuffix applies the HasSuffix predicate on the "ssl_txt_record" field.
-func SslTxtRecordHasSuffix(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldHasSuffix(FieldSslTxtRecord, v))
+// AcmeChallengePathHasSuffix applies the HasSuffix predicate on the "acme_challenge_path" field.
+func AcmeChallengePathHasSuffix(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldHasSuffix(FieldAcmeChallengePath, v))
 }
 
-// SslTxtRecordEqualFold applies the EqualFold predicate on the "ssl_txt_record" field.
-func SslTxtRecordEqualFold(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldEqualFold(FieldSslTxtRecord, v))
+// AcmeChallengePathIsNil applies the IsNil predicate on the "acme_challenge_path" field.
+func AcmeChallengePathIsNil() predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldIsNull(FieldAcmeChallengePath))
 }
 
-// SslTxtRecordContainsFold applies the ContainsFold predicate on the "ssl_txt_record" field.
-func SslTxtRecordContainsFold(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldContainsFold(FieldSslTxtRecord, v))
+// AcmeChallengePathNotNil applies the NotNil predicate on the "acme_challenge_path" field.
+func AcmeChallengePathNotNil() predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldNotNull(FieldAcmeChallengePath))
 }
 
-// SslTxtValueEQ applies the EQ predicate on the "ssl_txt_value" field.
-func SslTxtValueEQ(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldSslTxtValue, v))
+// AcmeChallengePathEqualFold applies the EqualFold predicate on the "acme_challenge_path" field.
+func AcmeChallengePathEqualFold(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldEqualFold(FieldAcmeChallengePath, v))
 }
 
-// SslTxtValueNEQ applies the NEQ predicate on the "ssl_txt_value" field.
-func SslTxtValueNEQ(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldSslTxtValue, v))
+// AcmeChallengePathContainsFold applies the ContainsFold predicate on the "acme_challenge_path" field.
+func AcmeChallengePathContainsFold(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldContainsFold(FieldAcmeChallengePath, v))
 }
 
-// SslTxtValueIn applies the In predicate on the "ssl_txt_value" field.
-func SslTxtValueIn(vs ...string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldIn(FieldSslTxtValue, vs...))
+// ExpectedAcmeChallengeValueEQ applies the EQ predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueEQ(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslTxtValueNotIn applies the NotIn predicate on the "ssl_txt_value" field.
-func SslTxtValueNotIn(vs ...string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldNotIn(FieldSslTxtValue, vs...))
+// ExpectedAcmeChallengeValueNEQ applies the NEQ predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueNEQ(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslTxtValueGT applies the GT predicate on the "ssl_txt_value" field.
-func SslTxtValueGT(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldGT(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValueIn applies the In predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueIn(vs ...string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldIn(FieldExpectedAcmeChallengeValue, vs...))
 }
 
-// SslTxtValueGTE applies the GTE predicate on the "ssl_txt_value" field.
-func SslTxtValueGTE(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldGTE(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValueNotIn applies the NotIn predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueNotIn(vs ...string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldNotIn(FieldExpectedAcmeChallengeValue, vs...))
 }
 
-// SslTxtValueLT applies the LT predicate on the "ssl_txt_value" field.
-func SslTxtValueLT(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldLT(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValueGT applies the GT predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueGT(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldGT(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslTxtValueLTE applies the LTE predicate on the "ssl_txt_value" field.
-func SslTxtValueLTE(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldLTE(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValueGTE applies the GTE predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueGTE(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldGTE(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslTxtValueContains applies the Contains predicate on the "ssl_txt_value" field.
-func SslTxtValueContains(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldContains(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValueLT applies the LT predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueLT(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldLT(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslTxtValueHasPrefix applies the HasPrefix predicate on the "ssl_txt_value" field.
-func SslTxtValueHasPrefix(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldHasPrefix(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValueLTE applies the LTE predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueLTE(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldLTE(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslTxtValueHasSuffix applies the HasSuffix predicate on the "ssl_txt_value" field.
-func SslTxtValueHasSuffix(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldHasSuffix(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValueContains applies the Contains predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueContains(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldContains(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslTxtValueEqualFold applies the EqualFold predicate on the "ssl_txt_value" field.
-func SslTxtValueEqualFold(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldEqualFold(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValueHasPrefix applies the HasPrefix predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueHasPrefix(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldHasPrefix(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslTxtValueContainsFold applies the ContainsFold predicate on the "ssl_txt_value" field.
-func SslTxtValueContainsFold(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldContainsFold(FieldSslTxtValue, v))
+// ExpectedAcmeChallengeValueHasSuffix applies the HasSuffix predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueHasSuffix(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldHasSuffix(FieldExpectedAcmeChallengeValue, v))
 }
 
-// SslCertStatusEQ applies the EQ predicate on the "ssl_cert_status" field.
-func SslCertStatusEQ(v enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+// ExpectedAcmeChallengeValueIsNil applies the IsNil predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueIsNil() predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldIsNull(FieldExpectedAcmeChallengeValue))
+}
+
+// ExpectedAcmeChallengeValueNotNil applies the NotNil predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueNotNil() predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldNotNull(FieldExpectedAcmeChallengeValue))
+}
+
+// ExpectedAcmeChallengeValueEqualFold applies the EqualFold predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueEqualFold(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldEqualFold(FieldExpectedAcmeChallengeValue, v))
+}
+
+// ExpectedAcmeChallengeValueContainsFold applies the ContainsFold predicate on the "expected_acme_challenge_value" field.
+func ExpectedAcmeChallengeValueContainsFold(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldContainsFold(FieldExpectedAcmeChallengeValue, v))
+}
+
+// AcmeChallengeStatusEQ applies the EQ predicate on the "acme_challenge_status" field.
+func AcmeChallengeStatusEQ(v enums.CustomDomainStatus) predicate.DNSVerificationHistory {
 	vc := v
-	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldSslCertStatus, vc))
+	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldAcmeChallengeStatus, vc))
 }
 
-// SslCertStatusNEQ applies the NEQ predicate on the "ssl_cert_status" field.
-func SslCertStatusNEQ(v enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+// AcmeChallengeStatusNEQ applies the NEQ predicate on the "acme_challenge_status" field.
+func AcmeChallengeStatusNEQ(v enums.CustomDomainStatus) predicate.DNSVerificationHistory {
 	vc := v
-	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldSslCertStatus, vc))
+	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldAcmeChallengeStatus, vc))
 }
 
-// SslCertStatusIn applies the In predicate on the "ssl_cert_status" field.
-func SslCertStatusIn(vs ...enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+// AcmeChallengeStatusIn applies the In predicate on the "acme_challenge_status" field.
+func AcmeChallengeStatusIn(vs ...enums.CustomDomainStatus) predicate.DNSVerificationHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
-	return predicate.DNSVerificationHistory(sql.FieldIn(FieldSslCertStatus, v...))
+	return predicate.DNSVerificationHistory(sql.FieldIn(FieldAcmeChallengeStatus, v...))
 }
 
-// SslCertStatusNotIn applies the NotIn predicate on the "ssl_cert_status" field.
-func SslCertStatusNotIn(vs ...enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+// AcmeChallengeStatusNotIn applies the NotIn predicate on the "acme_challenge_status" field.
+func AcmeChallengeStatusNotIn(vs ...enums.CustomDomainStatus) predicate.DNSVerificationHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
-	return predicate.DNSVerificationHistory(sql.FieldNotIn(FieldSslCertStatus, v...))
+	return predicate.DNSVerificationHistory(sql.FieldNotIn(FieldAcmeChallengeStatus, v...))
 }
 
-// SslCertStatusReasonEQ applies the EQ predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonEQ(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonEQ applies the EQ predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonEQ(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonNEQ applies the NEQ predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonNEQ(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonNEQ applies the NEQ predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonNEQ(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonIn applies the In predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonIn(vs ...string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldIn(FieldSslCertStatusReason, vs...))
+// AcmeChallengeStatusReasonIn applies the In predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonIn(vs ...string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldIn(FieldAcmeChallengeStatusReason, vs...))
 }
 
-// SslCertStatusReasonNotIn applies the NotIn predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonNotIn(vs ...string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldNotIn(FieldSslCertStatusReason, vs...))
+// AcmeChallengeStatusReasonNotIn applies the NotIn predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonNotIn(vs ...string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldNotIn(FieldAcmeChallengeStatusReason, vs...))
 }
 
-// SslCertStatusReasonGT applies the GT predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonGT(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldGT(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonGT applies the GT predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonGT(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldGT(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonGTE applies the GTE predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonGTE(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldGTE(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonGTE applies the GTE predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonGTE(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldGTE(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonLT applies the LT predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonLT(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldLT(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonLT applies the LT predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonLT(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldLT(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonLTE applies the LTE predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonLTE(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldLTE(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonLTE applies the LTE predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonLTE(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldLTE(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonContains applies the Contains predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonContains(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldContains(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonContains applies the Contains predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonContains(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldContains(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonHasPrefix applies the HasPrefix predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonHasPrefix(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldHasPrefix(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonHasPrefix applies the HasPrefix predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonHasPrefix(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldHasPrefix(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonHasSuffix applies the HasSuffix predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonHasSuffix(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldHasSuffix(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonHasSuffix applies the HasSuffix predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonHasSuffix(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldHasSuffix(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonIsNil applies the IsNil predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonIsNil() predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldIsNull(FieldSslCertStatusReason))
+// AcmeChallengeStatusReasonIsNil applies the IsNil predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonIsNil() predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldIsNull(FieldAcmeChallengeStatusReason))
 }
 
-// SslCertStatusReasonNotNil applies the NotNil predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonNotNil() predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldNotNull(FieldSslCertStatusReason))
+// AcmeChallengeStatusReasonNotNil applies the NotNil predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonNotNil() predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldNotNull(FieldAcmeChallengeStatusReason))
 }
 
-// SslCertStatusReasonEqualFold applies the EqualFold predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonEqualFold(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldEqualFold(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonEqualFold applies the EqualFold predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonEqualFold(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldEqualFold(FieldAcmeChallengeStatusReason, v))
 }
 
-// SslCertStatusReasonContainsFold applies the ContainsFold predicate on the "ssl_cert_status_reason" field.
-func SslCertStatusReasonContainsFold(v string) predicate.DNSVerificationHistory {
-	return predicate.DNSVerificationHistory(sql.FieldContainsFold(FieldSslCertStatusReason, v))
+// AcmeChallengeStatusReasonContainsFold applies the ContainsFold predicate on the "acme_challenge_status_reason" field.
+func AcmeChallengeStatusReasonContainsFold(v string) predicate.DNSVerificationHistory {
+	return predicate.DNSVerificationHistory(sql.FieldContainsFold(FieldAcmeChallengeStatusReason, v))
 }
 
 // And groups predicates with the AND operator between them.

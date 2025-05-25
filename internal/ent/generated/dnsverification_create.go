@@ -173,42 +173,58 @@ func (dvc *DNSVerificationCreate) SetNillableDNSVerificationStatusReason(s *stri
 	return dvc
 }
 
-// SetSslTxtRecord sets the "ssl_txt_record" field.
-func (dvc *DNSVerificationCreate) SetSslTxtRecord(s string) *DNSVerificationCreate {
-	dvc.mutation.SetSslTxtRecord(s)
+// SetAcmeChallengePath sets the "acme_challenge_path" field.
+func (dvc *DNSVerificationCreate) SetAcmeChallengePath(s string) *DNSVerificationCreate {
+	dvc.mutation.SetAcmeChallengePath(s)
 	return dvc
 }
 
-// SetSslTxtValue sets the "ssl_txt_value" field.
-func (dvc *DNSVerificationCreate) SetSslTxtValue(s string) *DNSVerificationCreate {
-	dvc.mutation.SetSslTxtValue(s)
-	return dvc
-}
-
-// SetSslCertStatus sets the "ssl_cert_status" field.
-func (dvc *DNSVerificationCreate) SetSslCertStatus(eds enums.CustomDomainStatus) *DNSVerificationCreate {
-	dvc.mutation.SetSslCertStatus(eds)
-	return dvc
-}
-
-// SetNillableSslCertStatus sets the "ssl_cert_status" field if the given value is not nil.
-func (dvc *DNSVerificationCreate) SetNillableSslCertStatus(eds *enums.CustomDomainStatus) *DNSVerificationCreate {
-	if eds != nil {
-		dvc.SetSslCertStatus(*eds)
+// SetNillableAcmeChallengePath sets the "acme_challenge_path" field if the given value is not nil.
+func (dvc *DNSVerificationCreate) SetNillableAcmeChallengePath(s *string) *DNSVerificationCreate {
+	if s != nil {
+		dvc.SetAcmeChallengePath(*s)
 	}
 	return dvc
 }
 
-// SetSslCertStatusReason sets the "ssl_cert_status_reason" field.
-func (dvc *DNSVerificationCreate) SetSslCertStatusReason(s string) *DNSVerificationCreate {
-	dvc.mutation.SetSslCertStatusReason(s)
+// SetExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field.
+func (dvc *DNSVerificationCreate) SetExpectedAcmeChallengeValue(s string) *DNSVerificationCreate {
+	dvc.mutation.SetExpectedAcmeChallengeValue(s)
 	return dvc
 }
 
-// SetNillableSslCertStatusReason sets the "ssl_cert_status_reason" field if the given value is not nil.
-func (dvc *DNSVerificationCreate) SetNillableSslCertStatusReason(s *string) *DNSVerificationCreate {
+// SetNillableExpectedAcmeChallengeValue sets the "expected_acme_challenge_value" field if the given value is not nil.
+func (dvc *DNSVerificationCreate) SetNillableExpectedAcmeChallengeValue(s *string) *DNSVerificationCreate {
 	if s != nil {
-		dvc.SetSslCertStatusReason(*s)
+		dvc.SetExpectedAcmeChallengeValue(*s)
+	}
+	return dvc
+}
+
+// SetAcmeChallengeStatus sets the "acme_challenge_status" field.
+func (dvc *DNSVerificationCreate) SetAcmeChallengeStatus(eds enums.CustomDomainStatus) *DNSVerificationCreate {
+	dvc.mutation.SetAcmeChallengeStatus(eds)
+	return dvc
+}
+
+// SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
+func (dvc *DNSVerificationCreate) SetNillableAcmeChallengeStatus(eds *enums.CustomDomainStatus) *DNSVerificationCreate {
+	if eds != nil {
+		dvc.SetAcmeChallengeStatus(*eds)
+	}
+	return dvc
+}
+
+// SetAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field.
+func (dvc *DNSVerificationCreate) SetAcmeChallengeStatusReason(s string) *DNSVerificationCreate {
+	dvc.mutation.SetAcmeChallengeStatusReason(s)
+	return dvc
+}
+
+// SetNillableAcmeChallengeStatusReason sets the "acme_challenge_status_reason" field if the given value is not nil.
+func (dvc *DNSVerificationCreate) SetNillableAcmeChallengeStatusReason(s *string) *DNSVerificationCreate {
+	if s != nil {
+		dvc.SetAcmeChallengeStatusReason(*s)
 	}
 	return dvc
 }
@@ -306,9 +322,9 @@ func (dvc *DNSVerificationCreate) defaults() error {
 		v := dnsverification.DefaultDNSVerificationStatus
 		dvc.mutation.SetDNSVerificationStatus(v)
 	}
-	if _, ok := dvc.mutation.SslCertStatus(); !ok {
-		v := dnsverification.DefaultSslCertStatus
-		dvc.mutation.SetSslCertStatus(v)
+	if _, ok := dvc.mutation.AcmeChallengeStatus(); !ok {
+		v := dnsverification.DefaultAcmeChallengeStatus
+		dvc.mutation.SetAcmeChallengeStatus(v)
 	}
 	if _, ok := dvc.mutation.ID(); !ok {
 		if dnsverification.DefaultID == nil {
@@ -359,33 +375,27 @@ func (dvc *DNSVerificationCreate) check() error {
 			return &ValidationError{Name: "dns_verification_status_reason", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.dns_verification_status_reason": %w`, err)}
 		}
 	}
-	if _, ok := dvc.mutation.SslTxtRecord(); !ok {
-		return &ValidationError{Name: "ssl_txt_record", err: errors.New(`generated: missing required field "DNSVerification.ssl_txt_record"`)}
-	}
-	if v, ok := dvc.mutation.SslTxtRecord(); ok {
-		if err := dnsverification.SslTxtRecordValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_txt_record", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_txt_record": %w`, err)}
+	if v, ok := dvc.mutation.AcmeChallengePath(); ok {
+		if err := dnsverification.AcmeChallengePathValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_path", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.acme_challenge_path": %w`, err)}
 		}
 	}
-	if _, ok := dvc.mutation.SslTxtValue(); !ok {
-		return &ValidationError{Name: "ssl_txt_value", err: errors.New(`generated: missing required field "DNSVerification.ssl_txt_value"`)}
-	}
-	if v, ok := dvc.mutation.SslTxtValue(); ok {
-		if err := dnsverification.SslTxtValueValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_txt_value", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_txt_value": %w`, err)}
+	if v, ok := dvc.mutation.ExpectedAcmeChallengeValue(); ok {
+		if err := dnsverification.ExpectedAcmeChallengeValueValidator(v); err != nil {
+			return &ValidationError{Name: "expected_acme_challenge_value", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.expected_acme_challenge_value": %w`, err)}
 		}
 	}
-	if _, ok := dvc.mutation.SslCertStatus(); !ok {
-		return &ValidationError{Name: "ssl_cert_status", err: errors.New(`generated: missing required field "DNSVerification.ssl_cert_status"`)}
+	if _, ok := dvc.mutation.AcmeChallengeStatus(); !ok {
+		return &ValidationError{Name: "acme_challenge_status", err: errors.New(`generated: missing required field "DNSVerification.acme_challenge_status"`)}
 	}
-	if v, ok := dvc.mutation.SslCertStatus(); ok {
-		if err := dnsverification.SslCertStatusValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_cert_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_cert_status": %w`, err)}
+	if v, ok := dvc.mutation.AcmeChallengeStatus(); ok {
+		if err := dnsverification.AcmeChallengeStatusValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_status", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.acme_challenge_status": %w`, err)}
 		}
 	}
-	if v, ok := dvc.mutation.SslCertStatusReason(); ok {
-		if err := dnsverification.SslCertStatusReasonValidator(v); err != nil {
-			return &ValidationError{Name: "ssl_cert_status_reason", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.ssl_cert_status_reason": %w`, err)}
+	if v, ok := dvc.mutation.AcmeChallengeStatusReason(); ok {
+		if err := dnsverification.AcmeChallengeStatusReasonValidator(v); err != nil {
+			return &ValidationError{Name: "acme_challenge_status_reason", err: fmt.Errorf(`generated: validator failed for field "DNSVerification.acme_challenge_status_reason": %w`, err)}
 		}
 	}
 	return nil
@@ -472,21 +482,21 @@ func (dvc *DNSVerificationCreate) createSpec() (*DNSVerification, *sqlgraph.Crea
 		_spec.SetField(dnsverification.FieldDNSVerificationStatusReason, field.TypeString, value)
 		_node.DNSVerificationStatusReason = value
 	}
-	if value, ok := dvc.mutation.SslTxtRecord(); ok {
-		_spec.SetField(dnsverification.FieldSslTxtRecord, field.TypeString, value)
-		_node.SslTxtRecord = value
+	if value, ok := dvc.mutation.AcmeChallengePath(); ok {
+		_spec.SetField(dnsverification.FieldAcmeChallengePath, field.TypeString, value)
+		_node.AcmeChallengePath = value
 	}
-	if value, ok := dvc.mutation.SslTxtValue(); ok {
-		_spec.SetField(dnsverification.FieldSslTxtValue, field.TypeString, value)
-		_node.SslTxtValue = value
+	if value, ok := dvc.mutation.ExpectedAcmeChallengeValue(); ok {
+		_spec.SetField(dnsverification.FieldExpectedAcmeChallengeValue, field.TypeString, value)
+		_node.ExpectedAcmeChallengeValue = value
 	}
-	if value, ok := dvc.mutation.SslCertStatus(); ok {
-		_spec.SetField(dnsverification.FieldSslCertStatus, field.TypeEnum, value)
-		_node.SslCertStatus = value
+	if value, ok := dvc.mutation.AcmeChallengeStatus(); ok {
+		_spec.SetField(dnsverification.FieldAcmeChallengeStatus, field.TypeEnum, value)
+		_node.AcmeChallengeStatus = value
 	}
-	if value, ok := dvc.mutation.SslCertStatusReason(); ok {
-		_spec.SetField(dnsverification.FieldSslCertStatusReason, field.TypeString, value)
-		_node.SslCertStatusReason = value
+	if value, ok := dvc.mutation.AcmeChallengeStatusReason(); ok {
+		_spec.SetField(dnsverification.FieldAcmeChallengeStatusReason, field.TypeString, value)
+		_node.AcmeChallengeStatusReason = value
 	}
 	if nodes := dvc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

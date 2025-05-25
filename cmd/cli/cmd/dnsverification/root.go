@@ -103,7 +103,7 @@ func tableOutput(out []openlaneclient.DNSVerification) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Cloudflare ID", "DNS Status", "SSL Status", "Created At")
 	for _, i := range out {
-		writer.AddRow(i.ID, i.CloudflareHostnameID, i.DNSVerificationStatus, i.SslCertStatus, i.CreatedAt)
+		writer.AddRow(i.ID, i.CloudflareHostnameID, i.DNSVerificationStatus, i.AcmeChallengeStatus, i.CreatedAt)
 	}
 
 	writer.Render()

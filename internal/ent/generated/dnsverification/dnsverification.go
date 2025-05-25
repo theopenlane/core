@@ -44,14 +44,14 @@ const (
 	FieldDNSVerificationStatus = "dns_verification_status"
 	// FieldDNSVerificationStatusReason holds the string denoting the dns_verification_status_reason field in the database.
 	FieldDNSVerificationStatusReason = "dns_verification_status_reason"
-	// FieldSslTxtRecord holds the string denoting the ssl_txt_record field in the database.
-	FieldSslTxtRecord = "ssl_txt_record"
-	// FieldSslTxtValue holds the string denoting the ssl_txt_value field in the database.
-	FieldSslTxtValue = "ssl_txt_value"
-	// FieldSslCertStatus holds the string denoting the ssl_cert_status field in the database.
-	FieldSslCertStatus = "ssl_cert_status"
-	// FieldSslCertStatusReason holds the string denoting the ssl_cert_status_reason field in the database.
-	FieldSslCertStatusReason = "ssl_cert_status_reason"
+	// FieldAcmeChallengePath holds the string denoting the acme_challenge_path field in the database.
+	FieldAcmeChallengePath = "acme_challenge_path"
+	// FieldExpectedAcmeChallengeValue holds the string denoting the expected_acme_challenge_value field in the database.
+	FieldExpectedAcmeChallengeValue = "expected_acme_challenge_value"
+	// FieldAcmeChallengeStatus holds the string denoting the acme_challenge_status field in the database.
+	FieldAcmeChallengeStatus = "acme_challenge_status"
+	// FieldAcmeChallengeStatusReason holds the string denoting the acme_challenge_status_reason field in the database.
+	FieldAcmeChallengeStatusReason = "acme_challenge_status_reason"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeCustomDomains holds the string denoting the custom_domains edge name in mutations.
@@ -90,10 +90,10 @@ var Columns = []string{
 	FieldDNSTxtValue,
 	FieldDNSVerificationStatus,
 	FieldDNSVerificationStatusReason,
-	FieldSslTxtRecord,
-	FieldSslTxtValue,
-	FieldSslCertStatus,
-	FieldSslCertStatusReason,
+	FieldAcmeChallengePath,
+	FieldExpectedAcmeChallengeValue,
+	FieldAcmeChallengeStatus,
+	FieldAcmeChallengeStatusReason,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -131,12 +131,12 @@ var (
 	DNSTxtValueValidator func(string) error
 	// DNSVerificationStatusReasonValidator is a validator for the "dns_verification_status_reason" field. It is called by the builders before save.
 	DNSVerificationStatusReasonValidator func(string) error
-	// SslTxtRecordValidator is a validator for the "ssl_txt_record" field. It is called by the builders before save.
-	SslTxtRecordValidator func(string) error
-	// SslTxtValueValidator is a validator for the "ssl_txt_value" field. It is called by the builders before save.
-	SslTxtValueValidator func(string) error
-	// SslCertStatusReasonValidator is a validator for the "ssl_cert_status_reason" field. It is called by the builders before save.
-	SslCertStatusReasonValidator func(string) error
+	// AcmeChallengePathValidator is a validator for the "acme_challenge_path" field. It is called by the builders before save.
+	AcmeChallengePathValidator func(string) error
+	// ExpectedAcmeChallengeValueValidator is a validator for the "expected_acme_challenge_value" field. It is called by the builders before save.
+	ExpectedAcmeChallengeValueValidator func(string) error
+	// AcmeChallengeStatusReasonValidator is a validator for the "acme_challenge_status_reason" field. It is called by the builders before save.
+	AcmeChallengeStatusReasonValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -153,15 +153,15 @@ func DNSVerificationStatusValidator(dvs enums.CustomDomainStatus) error {
 	}
 }
 
-const DefaultSslCertStatus enums.CustomDomainStatus = "PENDING"
+const DefaultAcmeChallengeStatus enums.CustomDomainStatus = "PENDING"
 
-// SslCertStatusValidator is a validator for the "ssl_cert_status" field enum values. It is called by the builders before save.
-func SslCertStatusValidator(scs enums.CustomDomainStatus) error {
-	switch scs.String() {
+// AcmeChallengeStatusValidator is a validator for the "acme_challenge_status" field enum values. It is called by the builders before save.
+func AcmeChallengeStatusValidator(acs enums.CustomDomainStatus) error {
+	switch acs.String() {
 	case "INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING":
 		return nil
 	default:
-		return fmt.Errorf("dnsverification: invalid enum value for ssl_cert_status field: %q", scs)
+		return fmt.Errorf("dnsverification: invalid enum value for acme_challenge_status field: %q", acs)
 	}
 }
 
@@ -233,24 +233,24 @@ func ByDNSVerificationStatusReason(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDNSVerificationStatusReason, opts...).ToFunc()
 }
 
-// BySslTxtRecord orders the results by the ssl_txt_record field.
-func BySslTxtRecord(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSslTxtRecord, opts...).ToFunc()
+// ByAcmeChallengePath orders the results by the acme_challenge_path field.
+func ByAcmeChallengePath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAcmeChallengePath, opts...).ToFunc()
 }
 
-// BySslTxtValue orders the results by the ssl_txt_value field.
-func BySslTxtValue(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSslTxtValue, opts...).ToFunc()
+// ByExpectedAcmeChallengeValue orders the results by the expected_acme_challenge_value field.
+func ByExpectedAcmeChallengeValue(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpectedAcmeChallengeValue, opts...).ToFunc()
 }
 
-// BySslCertStatus orders the results by the ssl_cert_status field.
-func BySslCertStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSslCertStatus, opts...).ToFunc()
+// ByAcmeChallengeStatus orders the results by the acme_challenge_status field.
+func ByAcmeChallengeStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAcmeChallengeStatus, opts...).ToFunc()
 }
 
-// BySslCertStatusReason orders the results by the ssl_cert_status_reason field.
-func BySslCertStatusReason(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSslCertStatusReason, opts...).ToFunc()
+// ByAcmeChallengeStatusReason orders the results by the acme_challenge_status_reason field.
+func ByAcmeChallengeStatusReason(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAcmeChallengeStatusReason, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

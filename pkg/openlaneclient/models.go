@@ -3781,14 +3781,14 @@ type CreateDNSVerificationInput struct {
 	DNSVerificationStatus *enums.CustomDomainStatus `json:"dnsVerificationStatus,omitempty"`
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason *string `json:"dnsVerificationStatusReason,omitempty"`
-	// the name of the ssl txt record
-	SslTxtRecord string `json:"sslTxtRecord"`
-	// the expected value of the ssl txt record
-	SslTxtValue string `json:"sslTxtValue"`
-	// Status of the ssl cert issuance
-	SslCertStatus   *enums.CustomDomainStatus `json:"sslCertStatus,omitempty"`
-	OwnerID         *string                   `json:"ownerID,omitempty"`
-	CustomDomainIDs []string                  `json:"customDomainIDs,omitempty"`
+	// Path under /.well-known/acme-challenge/ to serve the ACME challenge
+	AcmeChallengePath *string `json:"acmeChallengePath,omitempty"`
+	// the expected value of the acme challenge record
+	ExpectedAcmeChallengeValue *string `json:"expectedAcmeChallengeValue,omitempty"`
+	// Status of the ACME challenge validation
+	AcmeChallengeStatus *enums.CustomDomainStatus `json:"acmeChallengeStatus,omitempty"`
+	OwnerID             *string                   `json:"ownerID,omitempty"`
+	CustomDomainIDs     []string                  `json:"customDomainIDs,omitempty"`
 }
 
 // CreateDocumentDataInput is used for create DocumentData object.
@@ -5155,16 +5155,16 @@ type DNSVerification struct {
 	DNSVerificationStatus enums.CustomDomainStatus `json:"dnsVerificationStatus"`
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason *string `json:"dnsVerificationStatusReason,omitempty"`
-	// the name of the ssl txt record
-	SslTxtRecord string `json:"sslTxtRecord"`
-	// the expected value of the ssl txt record
-	SslTxtValue string `json:"sslTxtValue"`
-	// Status of the ssl cert issuance
-	SslCertStatus enums.CustomDomainStatus `json:"sslCertStatus"`
-	// Reason of the cert status, for giving the user diagnostic info
-	SslCertStatusReason *string                 `json:"sslCertStatusReason,omitempty"`
-	Owner               *Organization           `json:"owner,omitempty"`
-	CustomDomains       *CustomDomainConnection `json:"customDomains"`
+	// Path under /.well-known/acme-challenge/ to serve the ACME challenge
+	AcmeChallengePath *string `json:"acmeChallengePath,omitempty"`
+	// the expected value of the acme challenge record
+	ExpectedAcmeChallengeValue *string `json:"expectedAcmeChallengeValue,omitempty"`
+	// Status of the ACME challenge validation
+	AcmeChallengeStatus enums.CustomDomainStatus `json:"acmeChallengeStatus"`
+	// Reason of the ACME status, for giving the user diagnostic info
+	AcmeChallengeStatusReason *string                 `json:"acmeChallengeStatusReason,omitempty"`
+	Owner                     *Organization           `json:"owner,omitempty"`
+	CustomDomains             *CustomDomainConnection `json:"customDomains"`
 }
 
 func (DNSVerification) IsNode() {}
@@ -5228,14 +5228,14 @@ type DNSVerificationHistory struct {
 	DNSVerificationStatus enums.CustomDomainStatus `json:"dnsVerificationStatus"`
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason *string `json:"dnsVerificationStatusReason,omitempty"`
-	// the name of the ssl txt record
-	SslTxtRecord string `json:"sslTxtRecord"`
-	// the expected value of the ssl txt record
-	SslTxtValue string `json:"sslTxtValue"`
-	// Status of the ssl cert issuance
-	SslCertStatus enums.CustomDomainStatus `json:"sslCertStatus"`
-	// Reason of the cert status, for giving the user diagnostic info
-	SslCertStatusReason *string `json:"sslCertStatusReason,omitempty"`
+	// Path under /.well-known/acme-challenge/ to serve the ACME challenge
+	AcmeChallengePath *string `json:"acmeChallengePath,omitempty"`
+	// the expected value of the acme challenge record
+	ExpectedAcmeChallengeValue *string `json:"expectedAcmeChallengeValue,omitempty"`
+	// Status of the ACME challenge validation
+	AcmeChallengeStatus enums.CustomDomainStatus `json:"acmeChallengeStatus"`
+	// Reason of the ACME status, for giving the user diagnostic info
+	AcmeChallengeStatusReason *string `json:"acmeChallengeStatusReason,omitempty"`
 }
 
 func (DNSVerificationHistory) IsNode() {}
@@ -5446,55 +5446,59 @@ type DNSVerificationHistoryWhereInput struct {
 	DNSVerificationStatusReasonNotNil       *bool    `json:"dnsVerificationStatusReasonNotNil,omitempty"`
 	DNSVerificationStatusReasonEqualFold    *string  `json:"dnsVerificationStatusReasonEqualFold,omitempty"`
 	DNSVerificationStatusReasonContainsFold *string  `json:"dnsVerificationStatusReasonContainsFold,omitempty"`
-	// ssl_txt_record field predicates
-	SslTxtRecord             *string  `json:"sslTxtRecord,omitempty"`
-	SslTxtRecordNeq          *string  `json:"sslTxtRecordNEQ,omitempty"`
-	SslTxtRecordIn           []string `json:"sslTxtRecordIn,omitempty"`
-	SslTxtRecordNotIn        []string `json:"sslTxtRecordNotIn,omitempty"`
-	SslTxtRecordGt           *string  `json:"sslTxtRecordGT,omitempty"`
-	SslTxtRecordGte          *string  `json:"sslTxtRecordGTE,omitempty"`
-	SslTxtRecordLt           *string  `json:"sslTxtRecordLT,omitempty"`
-	SslTxtRecordLte          *string  `json:"sslTxtRecordLTE,omitempty"`
-	SslTxtRecordContains     *string  `json:"sslTxtRecordContains,omitempty"`
-	SslTxtRecordHasPrefix    *string  `json:"sslTxtRecordHasPrefix,omitempty"`
-	SslTxtRecordHasSuffix    *string  `json:"sslTxtRecordHasSuffix,omitempty"`
-	SslTxtRecordEqualFold    *string  `json:"sslTxtRecordEqualFold,omitempty"`
-	SslTxtRecordContainsFold *string  `json:"sslTxtRecordContainsFold,omitempty"`
-	// ssl_txt_value field predicates
-	SslTxtValue             *string  `json:"sslTxtValue,omitempty"`
-	SslTxtValueNeq          *string  `json:"sslTxtValueNEQ,omitempty"`
-	SslTxtValueIn           []string `json:"sslTxtValueIn,omitempty"`
-	SslTxtValueNotIn        []string `json:"sslTxtValueNotIn,omitempty"`
-	SslTxtValueGt           *string  `json:"sslTxtValueGT,omitempty"`
-	SslTxtValueGte          *string  `json:"sslTxtValueGTE,omitempty"`
-	SslTxtValueLt           *string  `json:"sslTxtValueLT,omitempty"`
-	SslTxtValueLte          *string  `json:"sslTxtValueLTE,omitempty"`
-	SslTxtValueContains     *string  `json:"sslTxtValueContains,omitempty"`
-	SslTxtValueHasPrefix    *string  `json:"sslTxtValueHasPrefix,omitempty"`
-	SslTxtValueHasSuffix    *string  `json:"sslTxtValueHasSuffix,omitempty"`
-	SslTxtValueEqualFold    *string  `json:"sslTxtValueEqualFold,omitempty"`
-	SslTxtValueContainsFold *string  `json:"sslTxtValueContainsFold,omitempty"`
-	// ssl_cert_status field predicates
-	SslCertStatus      *enums.CustomDomainStatus  `json:"sslCertStatus,omitempty"`
-	SslCertStatusNeq   *enums.CustomDomainStatus  `json:"sslCertStatusNEQ,omitempty"`
-	SslCertStatusIn    []enums.CustomDomainStatus `json:"sslCertStatusIn,omitempty"`
-	SslCertStatusNotIn []enums.CustomDomainStatus `json:"sslCertStatusNotIn,omitempty"`
-	// ssl_cert_status_reason field predicates
-	SslCertStatusReason             *string  `json:"sslCertStatusReason,omitempty"`
-	SslCertStatusReasonNeq          *string  `json:"sslCertStatusReasonNEQ,omitempty"`
-	SslCertStatusReasonIn           []string `json:"sslCertStatusReasonIn,omitempty"`
-	SslCertStatusReasonNotIn        []string `json:"sslCertStatusReasonNotIn,omitempty"`
-	SslCertStatusReasonGt           *string  `json:"sslCertStatusReasonGT,omitempty"`
-	SslCertStatusReasonGte          *string  `json:"sslCertStatusReasonGTE,omitempty"`
-	SslCertStatusReasonLt           *string  `json:"sslCertStatusReasonLT,omitempty"`
-	SslCertStatusReasonLte          *string  `json:"sslCertStatusReasonLTE,omitempty"`
-	SslCertStatusReasonContains     *string  `json:"sslCertStatusReasonContains,omitempty"`
-	SslCertStatusReasonHasPrefix    *string  `json:"sslCertStatusReasonHasPrefix,omitempty"`
-	SslCertStatusReasonHasSuffix    *string  `json:"sslCertStatusReasonHasSuffix,omitempty"`
-	SslCertStatusReasonIsNil        *bool    `json:"sslCertStatusReasonIsNil,omitempty"`
-	SslCertStatusReasonNotNil       *bool    `json:"sslCertStatusReasonNotNil,omitempty"`
-	SslCertStatusReasonEqualFold    *string  `json:"sslCertStatusReasonEqualFold,omitempty"`
-	SslCertStatusReasonContainsFold *string  `json:"sslCertStatusReasonContainsFold,omitempty"`
+	// acme_challenge_path field predicates
+	AcmeChallengePath             *string  `json:"acmeChallengePath,omitempty"`
+	AcmeChallengePathNeq          *string  `json:"acmeChallengePathNEQ,omitempty"`
+	AcmeChallengePathIn           []string `json:"acmeChallengePathIn,omitempty"`
+	AcmeChallengePathNotIn        []string `json:"acmeChallengePathNotIn,omitempty"`
+	AcmeChallengePathGt           *string  `json:"acmeChallengePathGT,omitempty"`
+	AcmeChallengePathGte          *string  `json:"acmeChallengePathGTE,omitempty"`
+	AcmeChallengePathLt           *string  `json:"acmeChallengePathLT,omitempty"`
+	AcmeChallengePathLte          *string  `json:"acmeChallengePathLTE,omitempty"`
+	AcmeChallengePathContains     *string  `json:"acmeChallengePathContains,omitempty"`
+	AcmeChallengePathHasPrefix    *string  `json:"acmeChallengePathHasPrefix,omitempty"`
+	AcmeChallengePathHasSuffix    *string  `json:"acmeChallengePathHasSuffix,omitempty"`
+	AcmeChallengePathIsNil        *bool    `json:"acmeChallengePathIsNil,omitempty"`
+	AcmeChallengePathNotNil       *bool    `json:"acmeChallengePathNotNil,omitempty"`
+	AcmeChallengePathEqualFold    *string  `json:"acmeChallengePathEqualFold,omitempty"`
+	AcmeChallengePathContainsFold *string  `json:"acmeChallengePathContainsFold,omitempty"`
+	// expected_acme_challenge_value field predicates
+	ExpectedAcmeChallengeValue             *string  `json:"expectedAcmeChallengeValue,omitempty"`
+	ExpectedAcmeChallengeValueNeq          *string  `json:"expectedAcmeChallengeValueNEQ,omitempty"`
+	ExpectedAcmeChallengeValueIn           []string `json:"expectedAcmeChallengeValueIn,omitempty"`
+	ExpectedAcmeChallengeValueNotIn        []string `json:"expectedAcmeChallengeValueNotIn,omitempty"`
+	ExpectedAcmeChallengeValueGt           *string  `json:"expectedAcmeChallengeValueGT,omitempty"`
+	ExpectedAcmeChallengeValueGte          *string  `json:"expectedAcmeChallengeValueGTE,omitempty"`
+	ExpectedAcmeChallengeValueLt           *string  `json:"expectedAcmeChallengeValueLT,omitempty"`
+	ExpectedAcmeChallengeValueLte          *string  `json:"expectedAcmeChallengeValueLTE,omitempty"`
+	ExpectedAcmeChallengeValueContains     *string  `json:"expectedAcmeChallengeValueContains,omitempty"`
+	ExpectedAcmeChallengeValueHasPrefix    *string  `json:"expectedAcmeChallengeValueHasPrefix,omitempty"`
+	ExpectedAcmeChallengeValueHasSuffix    *string  `json:"expectedAcmeChallengeValueHasSuffix,omitempty"`
+	ExpectedAcmeChallengeValueIsNil        *bool    `json:"expectedAcmeChallengeValueIsNil,omitempty"`
+	ExpectedAcmeChallengeValueNotNil       *bool    `json:"expectedAcmeChallengeValueNotNil,omitempty"`
+	ExpectedAcmeChallengeValueEqualFold    *string  `json:"expectedAcmeChallengeValueEqualFold,omitempty"`
+	ExpectedAcmeChallengeValueContainsFold *string  `json:"expectedAcmeChallengeValueContainsFold,omitempty"`
+	// acme_challenge_status field predicates
+	AcmeChallengeStatus      *enums.CustomDomainStatus  `json:"acmeChallengeStatus,omitempty"`
+	AcmeChallengeStatusNeq   *enums.CustomDomainStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
+	AcmeChallengeStatusIn    []enums.CustomDomainStatus `json:"acmeChallengeStatusIn,omitempty"`
+	AcmeChallengeStatusNotIn []enums.CustomDomainStatus `json:"acmeChallengeStatusNotIn,omitempty"`
+	// acme_challenge_status_reason field predicates
+	AcmeChallengeStatusReason             *string  `json:"acmeChallengeStatusReason,omitempty"`
+	AcmeChallengeStatusReasonNeq          *string  `json:"acmeChallengeStatusReasonNEQ,omitempty"`
+	AcmeChallengeStatusReasonIn           []string `json:"acmeChallengeStatusReasonIn,omitempty"`
+	AcmeChallengeStatusReasonNotIn        []string `json:"acmeChallengeStatusReasonNotIn,omitempty"`
+	AcmeChallengeStatusReasonGt           *string  `json:"acmeChallengeStatusReasonGT,omitempty"`
+	AcmeChallengeStatusReasonGte          *string  `json:"acmeChallengeStatusReasonGTE,omitempty"`
+	AcmeChallengeStatusReasonLt           *string  `json:"acmeChallengeStatusReasonLT,omitempty"`
+	AcmeChallengeStatusReasonLte          *string  `json:"acmeChallengeStatusReasonLTE,omitempty"`
+	AcmeChallengeStatusReasonContains     *string  `json:"acmeChallengeStatusReasonContains,omitempty"`
+	AcmeChallengeStatusReasonHasPrefix    *string  `json:"acmeChallengeStatusReasonHasPrefix,omitempty"`
+	AcmeChallengeStatusReasonHasSuffix    *string  `json:"acmeChallengeStatusReasonHasSuffix,omitempty"`
+	AcmeChallengeStatusReasonIsNil        *bool    `json:"acmeChallengeStatusReasonIsNil,omitempty"`
+	AcmeChallengeStatusReasonNotNil       *bool    `json:"acmeChallengeStatusReasonNotNil,omitempty"`
+	AcmeChallengeStatusReasonEqualFold    *string  `json:"acmeChallengeStatusReasonEqualFold,omitempty"`
+	AcmeChallengeStatusReasonContainsFold *string  `json:"acmeChallengeStatusReasonContainsFold,omitempty"`
 }
 
 // Ordering options for DNSVerification connections
@@ -5661,55 +5665,59 @@ type DNSVerificationWhereInput struct {
 	DNSVerificationStatusReasonNotNil       *bool    `json:"dnsVerificationStatusReasonNotNil,omitempty"`
 	DNSVerificationStatusReasonEqualFold    *string  `json:"dnsVerificationStatusReasonEqualFold,omitempty"`
 	DNSVerificationStatusReasonContainsFold *string  `json:"dnsVerificationStatusReasonContainsFold,omitempty"`
-	// ssl_txt_record field predicates
-	SslTxtRecord             *string  `json:"sslTxtRecord,omitempty"`
-	SslTxtRecordNeq          *string  `json:"sslTxtRecordNEQ,omitempty"`
-	SslTxtRecordIn           []string `json:"sslTxtRecordIn,omitempty"`
-	SslTxtRecordNotIn        []string `json:"sslTxtRecordNotIn,omitempty"`
-	SslTxtRecordGt           *string  `json:"sslTxtRecordGT,omitempty"`
-	SslTxtRecordGte          *string  `json:"sslTxtRecordGTE,omitempty"`
-	SslTxtRecordLt           *string  `json:"sslTxtRecordLT,omitempty"`
-	SslTxtRecordLte          *string  `json:"sslTxtRecordLTE,omitempty"`
-	SslTxtRecordContains     *string  `json:"sslTxtRecordContains,omitempty"`
-	SslTxtRecordHasPrefix    *string  `json:"sslTxtRecordHasPrefix,omitempty"`
-	SslTxtRecordHasSuffix    *string  `json:"sslTxtRecordHasSuffix,omitempty"`
-	SslTxtRecordEqualFold    *string  `json:"sslTxtRecordEqualFold,omitempty"`
-	SslTxtRecordContainsFold *string  `json:"sslTxtRecordContainsFold,omitempty"`
-	// ssl_txt_value field predicates
-	SslTxtValue             *string  `json:"sslTxtValue,omitempty"`
-	SslTxtValueNeq          *string  `json:"sslTxtValueNEQ,omitempty"`
-	SslTxtValueIn           []string `json:"sslTxtValueIn,omitempty"`
-	SslTxtValueNotIn        []string `json:"sslTxtValueNotIn,omitempty"`
-	SslTxtValueGt           *string  `json:"sslTxtValueGT,omitempty"`
-	SslTxtValueGte          *string  `json:"sslTxtValueGTE,omitempty"`
-	SslTxtValueLt           *string  `json:"sslTxtValueLT,omitempty"`
-	SslTxtValueLte          *string  `json:"sslTxtValueLTE,omitempty"`
-	SslTxtValueContains     *string  `json:"sslTxtValueContains,omitempty"`
-	SslTxtValueHasPrefix    *string  `json:"sslTxtValueHasPrefix,omitempty"`
-	SslTxtValueHasSuffix    *string  `json:"sslTxtValueHasSuffix,omitempty"`
-	SslTxtValueEqualFold    *string  `json:"sslTxtValueEqualFold,omitempty"`
-	SslTxtValueContainsFold *string  `json:"sslTxtValueContainsFold,omitempty"`
-	// ssl_cert_status field predicates
-	SslCertStatus      *enums.CustomDomainStatus  `json:"sslCertStatus,omitempty"`
-	SslCertStatusNeq   *enums.CustomDomainStatus  `json:"sslCertStatusNEQ,omitempty"`
-	SslCertStatusIn    []enums.CustomDomainStatus `json:"sslCertStatusIn,omitempty"`
-	SslCertStatusNotIn []enums.CustomDomainStatus `json:"sslCertStatusNotIn,omitempty"`
-	// ssl_cert_status_reason field predicates
-	SslCertStatusReason             *string  `json:"sslCertStatusReason,omitempty"`
-	SslCertStatusReasonNeq          *string  `json:"sslCertStatusReasonNEQ,omitempty"`
-	SslCertStatusReasonIn           []string `json:"sslCertStatusReasonIn,omitempty"`
-	SslCertStatusReasonNotIn        []string `json:"sslCertStatusReasonNotIn,omitempty"`
-	SslCertStatusReasonGt           *string  `json:"sslCertStatusReasonGT,omitempty"`
-	SslCertStatusReasonGte          *string  `json:"sslCertStatusReasonGTE,omitempty"`
-	SslCertStatusReasonLt           *string  `json:"sslCertStatusReasonLT,omitempty"`
-	SslCertStatusReasonLte          *string  `json:"sslCertStatusReasonLTE,omitempty"`
-	SslCertStatusReasonContains     *string  `json:"sslCertStatusReasonContains,omitempty"`
-	SslCertStatusReasonHasPrefix    *string  `json:"sslCertStatusReasonHasPrefix,omitempty"`
-	SslCertStatusReasonHasSuffix    *string  `json:"sslCertStatusReasonHasSuffix,omitempty"`
-	SslCertStatusReasonIsNil        *bool    `json:"sslCertStatusReasonIsNil,omitempty"`
-	SslCertStatusReasonNotNil       *bool    `json:"sslCertStatusReasonNotNil,omitempty"`
-	SslCertStatusReasonEqualFold    *string  `json:"sslCertStatusReasonEqualFold,omitempty"`
-	SslCertStatusReasonContainsFold *string  `json:"sslCertStatusReasonContainsFold,omitempty"`
+	// acme_challenge_path field predicates
+	AcmeChallengePath             *string  `json:"acmeChallengePath,omitempty"`
+	AcmeChallengePathNeq          *string  `json:"acmeChallengePathNEQ,omitempty"`
+	AcmeChallengePathIn           []string `json:"acmeChallengePathIn,omitempty"`
+	AcmeChallengePathNotIn        []string `json:"acmeChallengePathNotIn,omitempty"`
+	AcmeChallengePathGt           *string  `json:"acmeChallengePathGT,omitempty"`
+	AcmeChallengePathGte          *string  `json:"acmeChallengePathGTE,omitempty"`
+	AcmeChallengePathLt           *string  `json:"acmeChallengePathLT,omitempty"`
+	AcmeChallengePathLte          *string  `json:"acmeChallengePathLTE,omitempty"`
+	AcmeChallengePathContains     *string  `json:"acmeChallengePathContains,omitempty"`
+	AcmeChallengePathHasPrefix    *string  `json:"acmeChallengePathHasPrefix,omitempty"`
+	AcmeChallengePathHasSuffix    *string  `json:"acmeChallengePathHasSuffix,omitempty"`
+	AcmeChallengePathIsNil        *bool    `json:"acmeChallengePathIsNil,omitempty"`
+	AcmeChallengePathNotNil       *bool    `json:"acmeChallengePathNotNil,omitempty"`
+	AcmeChallengePathEqualFold    *string  `json:"acmeChallengePathEqualFold,omitempty"`
+	AcmeChallengePathContainsFold *string  `json:"acmeChallengePathContainsFold,omitempty"`
+	// expected_acme_challenge_value field predicates
+	ExpectedAcmeChallengeValue             *string  `json:"expectedAcmeChallengeValue,omitempty"`
+	ExpectedAcmeChallengeValueNeq          *string  `json:"expectedAcmeChallengeValueNEQ,omitempty"`
+	ExpectedAcmeChallengeValueIn           []string `json:"expectedAcmeChallengeValueIn,omitempty"`
+	ExpectedAcmeChallengeValueNotIn        []string `json:"expectedAcmeChallengeValueNotIn,omitempty"`
+	ExpectedAcmeChallengeValueGt           *string  `json:"expectedAcmeChallengeValueGT,omitempty"`
+	ExpectedAcmeChallengeValueGte          *string  `json:"expectedAcmeChallengeValueGTE,omitempty"`
+	ExpectedAcmeChallengeValueLt           *string  `json:"expectedAcmeChallengeValueLT,omitempty"`
+	ExpectedAcmeChallengeValueLte          *string  `json:"expectedAcmeChallengeValueLTE,omitempty"`
+	ExpectedAcmeChallengeValueContains     *string  `json:"expectedAcmeChallengeValueContains,omitempty"`
+	ExpectedAcmeChallengeValueHasPrefix    *string  `json:"expectedAcmeChallengeValueHasPrefix,omitempty"`
+	ExpectedAcmeChallengeValueHasSuffix    *string  `json:"expectedAcmeChallengeValueHasSuffix,omitempty"`
+	ExpectedAcmeChallengeValueIsNil        *bool    `json:"expectedAcmeChallengeValueIsNil,omitempty"`
+	ExpectedAcmeChallengeValueNotNil       *bool    `json:"expectedAcmeChallengeValueNotNil,omitempty"`
+	ExpectedAcmeChallengeValueEqualFold    *string  `json:"expectedAcmeChallengeValueEqualFold,omitempty"`
+	ExpectedAcmeChallengeValueContainsFold *string  `json:"expectedAcmeChallengeValueContainsFold,omitempty"`
+	// acme_challenge_status field predicates
+	AcmeChallengeStatus      *enums.CustomDomainStatus  `json:"acmeChallengeStatus,omitempty"`
+	AcmeChallengeStatusNeq   *enums.CustomDomainStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
+	AcmeChallengeStatusIn    []enums.CustomDomainStatus `json:"acmeChallengeStatusIn,omitempty"`
+	AcmeChallengeStatusNotIn []enums.CustomDomainStatus `json:"acmeChallengeStatusNotIn,omitempty"`
+	// acme_challenge_status_reason field predicates
+	AcmeChallengeStatusReason             *string  `json:"acmeChallengeStatusReason,omitempty"`
+	AcmeChallengeStatusReasonNeq          *string  `json:"acmeChallengeStatusReasonNEQ,omitempty"`
+	AcmeChallengeStatusReasonIn           []string `json:"acmeChallengeStatusReasonIn,omitempty"`
+	AcmeChallengeStatusReasonNotIn        []string `json:"acmeChallengeStatusReasonNotIn,omitempty"`
+	AcmeChallengeStatusReasonGt           *string  `json:"acmeChallengeStatusReasonGT,omitempty"`
+	AcmeChallengeStatusReasonGte          *string  `json:"acmeChallengeStatusReasonGTE,omitempty"`
+	AcmeChallengeStatusReasonLt           *string  `json:"acmeChallengeStatusReasonLT,omitempty"`
+	AcmeChallengeStatusReasonLte          *string  `json:"acmeChallengeStatusReasonLTE,omitempty"`
+	AcmeChallengeStatusReasonContains     *string  `json:"acmeChallengeStatusReasonContains,omitempty"`
+	AcmeChallengeStatusReasonHasPrefix    *string  `json:"acmeChallengeStatusReasonHasPrefix,omitempty"`
+	AcmeChallengeStatusReasonHasSuffix    *string  `json:"acmeChallengeStatusReasonHasSuffix,omitempty"`
+	AcmeChallengeStatusReasonIsNil        *bool    `json:"acmeChallengeStatusReasonIsNil,omitempty"`
+	AcmeChallengeStatusReasonNotNil       *bool    `json:"acmeChallengeStatusReasonNotNil,omitempty"`
+	AcmeChallengeStatusReasonEqualFold    *string  `json:"acmeChallengeStatusReasonEqualFold,omitempty"`
+	AcmeChallengeStatusReasonContainsFold *string  `json:"acmeChallengeStatusReasonContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -22571,20 +22579,22 @@ type UpdateDNSVerificationInput struct {
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason      *string `json:"dnsVerificationStatusReason,omitempty"`
 	ClearDNSVerificationStatusReason *bool   `json:"clearDNSVerificationStatusReason,omitempty"`
-	// the name of the ssl txt record
-	SslTxtRecord *string `json:"sslTxtRecord,omitempty"`
-	// the expected value of the ssl txt record
-	SslTxtValue *string `json:"sslTxtValue,omitempty"`
-	// Status of the ssl cert issuance
-	SslCertStatus *enums.CustomDomainStatus `json:"sslCertStatus,omitempty"`
-	// Reason of the cert status, for giving the user diagnostic info
-	SslCertStatusReason      *string  `json:"sslCertStatusReason,omitempty"`
-	ClearSslCertStatusReason *bool    `json:"clearSslCertStatusReason,omitempty"`
-	OwnerID                  *string  `json:"ownerID,omitempty"`
-	ClearOwner               *bool    `json:"clearOwner,omitempty"`
-	AddCustomDomainIDs       []string `json:"addCustomDomainIDs,omitempty"`
-	RemoveCustomDomainIDs    []string `json:"removeCustomDomainIDs,omitempty"`
-	ClearCustomDomains       *bool    `json:"clearCustomDomains,omitempty"`
+	// Path under /.well-known/acme-challenge/ to serve the ACME challenge
+	AcmeChallengePath      *string `json:"acmeChallengePath,omitempty"`
+	ClearAcmeChallengePath *bool   `json:"clearAcmeChallengePath,omitempty"`
+	// the expected value of the acme challenge record
+	ExpectedAcmeChallengeValue      *string `json:"expectedAcmeChallengeValue,omitempty"`
+	ClearExpectedAcmeChallengeValue *bool   `json:"clearExpectedAcmeChallengeValue,omitempty"`
+	// Status of the ACME challenge validation
+	AcmeChallengeStatus *enums.CustomDomainStatus `json:"acmeChallengeStatus,omitempty"`
+	// Reason of the ACME status, for giving the user diagnostic info
+	AcmeChallengeStatusReason      *string  `json:"acmeChallengeStatusReason,omitempty"`
+	ClearAcmeChallengeStatusReason *bool    `json:"clearAcmeChallengeStatusReason,omitempty"`
+	OwnerID                        *string  `json:"ownerID,omitempty"`
+	ClearOwner                     *bool    `json:"clearOwner,omitempty"`
+	AddCustomDomainIDs             []string `json:"addCustomDomainIDs,omitempty"`
+	RemoveCustomDomainIDs          []string `json:"removeCustomDomainIDs,omitempty"`
+	ClearCustomDomains             *bool    `json:"clearCustomDomains,omitempty"`
 }
 
 // UpdateDocumentDataInput is used for update DocumentData object.

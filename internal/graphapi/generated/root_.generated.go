@@ -660,6 +660,9 @@ type ComplexityRoot struct {
 	}
 
 	DNSVerification struct {
+		AcmeChallengePath           func(childComplexity int) int
+		AcmeChallengeStatus         func(childComplexity int) int
+		AcmeChallengeStatusReason   func(childComplexity int) int
 		CloudflareHostnameID        func(childComplexity int) int
 		CreatedAt                   func(childComplexity int) int
 		CreatedBy                   func(childComplexity int) int
@@ -668,13 +671,10 @@ type ComplexityRoot struct {
 		DNSTxtValue                 func(childComplexity int) int
 		DNSVerificationStatus       func(childComplexity int) int
 		DNSVerificationStatusReason func(childComplexity int) int
+		ExpectedAcmeChallengeValue  func(childComplexity int) int
 		ID                          func(childComplexity int) int
 		Owner                       func(childComplexity int) int
 		OwnerID                     func(childComplexity int) int
-		SslCertStatus               func(childComplexity int) int
-		SslCertStatusReason         func(childComplexity int) int
-		SslTxtRecord                func(childComplexity int) int
-		SslTxtValue                 func(childComplexity int) int
 		Tags                        func(childComplexity int) int
 		UpdatedAt                   func(childComplexity int) int
 		UpdatedBy                   func(childComplexity int) int
@@ -704,6 +704,9 @@ type ComplexityRoot struct {
 	}
 
 	DNSVerificationHistory struct {
+		AcmeChallengePath           func(childComplexity int) int
+		AcmeChallengeStatus         func(childComplexity int) int
+		AcmeChallengeStatusReason   func(childComplexity int) int
 		CloudflareHostnameID        func(childComplexity int) int
 		CreatedAt                   func(childComplexity int) int
 		CreatedBy                   func(childComplexity int) int
@@ -711,15 +714,12 @@ type ComplexityRoot struct {
 		DNSTxtValue                 func(childComplexity int) int
 		DNSVerificationStatus       func(childComplexity int) int
 		DNSVerificationStatusReason func(childComplexity int) int
+		ExpectedAcmeChallengeValue  func(childComplexity int) int
 		HistoryTime                 func(childComplexity int) int
 		ID                          func(childComplexity int) int
 		Operation                   func(childComplexity int) int
 		OwnerID                     func(childComplexity int) int
 		Ref                         func(childComplexity int) int
-		SslCertStatus               func(childComplexity int) int
-		SslCertStatusReason         func(childComplexity int) int
-		SslTxtRecord                func(childComplexity int) int
-		SslTxtValue                 func(childComplexity int) int
 		Tags                        func(childComplexity int) int
 		UpdatedAt                   func(childComplexity int) int
 		UpdatedBy                   func(childComplexity int) int
@@ -6939,6 +6939,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomainUpdatePayload.CustomDomain(childComplexity), true
 
+	case "DNSVerification.acmeChallengePath":
+		if e.complexity.DNSVerification.AcmeChallengePath == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.AcmeChallengePath(childComplexity), true
+
+	case "DNSVerification.acmeChallengeStatus":
+		if e.complexity.DNSVerification.AcmeChallengeStatus == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.AcmeChallengeStatus(childComplexity), true
+
+	case "DNSVerification.acmeChallengeStatusReason":
+		if e.complexity.DNSVerification.AcmeChallengeStatusReason == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.AcmeChallengeStatusReason(childComplexity), true
+
 	case "DNSVerification.cloudflareHostnameID":
 		if e.complexity.DNSVerification.CloudflareHostnameID == nil {
 			break
@@ -7000,6 +7021,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DNSVerification.DNSVerificationStatusReason(childComplexity), true
 
+	case "DNSVerification.expectedAcmeChallengeValue":
+		if e.complexity.DNSVerification.ExpectedAcmeChallengeValue == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.ExpectedAcmeChallengeValue(childComplexity), true
+
 	case "DNSVerification.id":
 		if e.complexity.DNSVerification.ID == nil {
 			break
@@ -7020,34 +7048,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DNSVerification.OwnerID(childComplexity), true
-
-	case "DNSVerification.sslCertStatus":
-		if e.complexity.DNSVerification.SslCertStatus == nil {
-			break
-		}
-
-		return e.complexity.DNSVerification.SslCertStatus(childComplexity), true
-
-	case "DNSVerification.sslCertStatusReason":
-		if e.complexity.DNSVerification.SslCertStatusReason == nil {
-			break
-		}
-
-		return e.complexity.DNSVerification.SslCertStatusReason(childComplexity), true
-
-	case "DNSVerification.sslTxtRecord":
-		if e.complexity.DNSVerification.SslTxtRecord == nil {
-			break
-		}
-
-		return e.complexity.DNSVerification.SslTxtRecord(childComplexity), true
-
-	case "DNSVerification.sslTxtValue":
-		if e.complexity.DNSVerification.SslTxtValue == nil {
-			break
-		}
-
-		return e.complexity.DNSVerification.SslTxtValue(childComplexity), true
 
 	case "DNSVerification.tags":
 		if e.complexity.DNSVerification.Tags == nil {
@@ -7126,6 +7126,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DNSVerificationEdge.Node(childComplexity), true
 
+	case "DNSVerificationHistory.acmeChallengePath":
+		if e.complexity.DNSVerificationHistory.AcmeChallengePath == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.AcmeChallengePath(childComplexity), true
+
+	case "DNSVerificationHistory.acmeChallengeStatus":
+		if e.complexity.DNSVerificationHistory.AcmeChallengeStatus == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.AcmeChallengeStatus(childComplexity), true
+
+	case "DNSVerificationHistory.acmeChallengeStatusReason":
+		if e.complexity.DNSVerificationHistory.AcmeChallengeStatusReason == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.AcmeChallengeStatusReason(childComplexity), true
+
 	case "DNSVerificationHistory.cloudflareHostnameID":
 		if e.complexity.DNSVerificationHistory.CloudflareHostnameID == nil {
 			break
@@ -7175,6 +7196,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DNSVerificationHistory.DNSVerificationStatusReason(childComplexity), true
 
+	case "DNSVerificationHistory.expectedAcmeChallengeValue":
+		if e.complexity.DNSVerificationHistory.ExpectedAcmeChallengeValue == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.ExpectedAcmeChallengeValue(childComplexity), true
+
 	case "DNSVerificationHistory.historyTime":
 		if e.complexity.DNSVerificationHistory.HistoryTime == nil {
 			break
@@ -7209,34 +7237,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DNSVerificationHistory.Ref(childComplexity), true
-
-	case "DNSVerificationHistory.sslCertStatus":
-		if e.complexity.DNSVerificationHistory.SslCertStatus == nil {
-			break
-		}
-
-		return e.complexity.DNSVerificationHistory.SslCertStatus(childComplexity), true
-
-	case "DNSVerificationHistory.sslCertStatusReason":
-		if e.complexity.DNSVerificationHistory.SslCertStatusReason == nil {
-			break
-		}
-
-		return e.complexity.DNSVerificationHistory.SslCertStatusReason(childComplexity), true
-
-	case "DNSVerificationHistory.sslTxtRecord":
-		if e.complexity.DNSVerificationHistory.SslTxtRecord == nil {
-			break
-		}
-
-		return e.complexity.DNSVerificationHistory.SslTxtRecord(childComplexity), true
-
-	case "DNSVerificationHistory.sslTxtValue":
-		if e.complexity.DNSVerificationHistory.SslTxtValue == nil {
-			break
-		}
-
-		return e.complexity.DNSVerificationHistory.SslTxtValue(childComplexity), true
 
 	case "DNSVerificationHistory.tags":
 		if e.complexity.DNSVerificationHistory.Tags == nil {
@@ -34311,17 +34311,17 @@ input CreateDNSVerificationInput {
   """
   dnsVerificationStatusReason: String
   """
-  the name of the ssl txt record
+  Path under /.well-known/acme-challenge/ to serve the ACME challenge
   """
-  sslTxtRecord: String!
+  acmeChallengePath: String
   """
-  the expected value of the ssl txt record
+  the expected value of the acme challenge record
   """
-  sslTxtValue: String!
+  expectedAcmeChallengeValue: String
   """
-  Status of the ssl cert issuance
+  Status of the ACME challenge validation
   """
-  sslCertStatus: DNSVerificationCustomDomainStatus
+  acmeChallengeStatus: DNSVerificationCustomDomainStatus
   ownerID: ID
   customDomainIDs: [ID!]
 }
@@ -36250,21 +36250,21 @@ type DNSVerification implements Node {
   """
   dnsVerificationStatusReason: String
   """
-  the name of the ssl txt record
+  Path under /.well-known/acme-challenge/ to serve the ACME challenge
   """
-  sslTxtRecord: String!
+  acmeChallengePath: String
   """
-  the expected value of the ssl txt record
+  the expected value of the acme challenge record
   """
-  sslTxtValue: String!
+  expectedAcmeChallengeValue: String
   """
-  Status of the ssl cert issuance
+  Status of the ACME challenge validation
   """
-  sslCertStatus: DNSVerificationCustomDomainStatus!
+  acmeChallengeStatus: DNSVerificationCustomDomainStatus!
   """
-  Reason of the cert status, for giving the user diagnostic info
+  Reason of the ACME status, for giving the user diagnostic info
   """
-  sslCertStatusReason: String
+  acmeChallengeStatusReason: String
   owner: Organization
   customDomains(
     """
@@ -36375,21 +36375,21 @@ type DNSVerificationHistory implements Node {
   """
   dnsVerificationStatusReason: String
   """
-  the name of the ssl txt record
+  Path under /.well-known/acme-challenge/ to serve the ACME challenge
   """
-  sslTxtRecord: String!
+  acmeChallengePath: String
   """
-  the expected value of the ssl txt record
+  the expected value of the acme challenge record
   """
-  sslTxtValue: String!
+  expectedAcmeChallengeValue: String
   """
-  Status of the ssl cert issuance
+  Status of the ACME challenge validation
   """
-  sslCertStatus: DNSVerificationHistoryCustomDomainStatus!
+  acmeChallengeStatus: DNSVerificationHistoryCustomDomainStatus!
   """
-  Reason of the cert status, for giving the user diagnostic info
+  Reason of the ACME status, for giving the user diagnostic info
   """
-  sslCertStatusReason: String
+  acmeChallengeStatusReason: String
 }
 """
 A connection to a list of items.
@@ -36669,62 +36669,66 @@ input DNSVerificationHistoryWhereInput {
   dnsVerificationStatusReasonEqualFold: String
   dnsVerificationStatusReasonContainsFold: String
   """
-  ssl_txt_record field predicates
+  acme_challenge_path field predicates
   """
-  sslTxtRecord: String
-  sslTxtRecordNEQ: String
-  sslTxtRecordIn: [String!]
-  sslTxtRecordNotIn: [String!]
-  sslTxtRecordGT: String
-  sslTxtRecordGTE: String
-  sslTxtRecordLT: String
-  sslTxtRecordLTE: String
-  sslTxtRecordContains: String
-  sslTxtRecordHasPrefix: String
-  sslTxtRecordHasSuffix: String
-  sslTxtRecordEqualFold: String
-  sslTxtRecordContainsFold: String
+  acmeChallengePath: String
+  acmeChallengePathNEQ: String
+  acmeChallengePathIn: [String!]
+  acmeChallengePathNotIn: [String!]
+  acmeChallengePathGT: String
+  acmeChallengePathGTE: String
+  acmeChallengePathLT: String
+  acmeChallengePathLTE: String
+  acmeChallengePathContains: String
+  acmeChallengePathHasPrefix: String
+  acmeChallengePathHasSuffix: String
+  acmeChallengePathIsNil: Boolean
+  acmeChallengePathNotNil: Boolean
+  acmeChallengePathEqualFold: String
+  acmeChallengePathContainsFold: String
   """
-  ssl_txt_value field predicates
+  expected_acme_challenge_value field predicates
   """
-  sslTxtValue: String
-  sslTxtValueNEQ: String
-  sslTxtValueIn: [String!]
-  sslTxtValueNotIn: [String!]
-  sslTxtValueGT: String
-  sslTxtValueGTE: String
-  sslTxtValueLT: String
-  sslTxtValueLTE: String
-  sslTxtValueContains: String
-  sslTxtValueHasPrefix: String
-  sslTxtValueHasSuffix: String
-  sslTxtValueEqualFold: String
-  sslTxtValueContainsFold: String
+  expectedAcmeChallengeValue: String
+  expectedAcmeChallengeValueNEQ: String
+  expectedAcmeChallengeValueIn: [String!]
+  expectedAcmeChallengeValueNotIn: [String!]
+  expectedAcmeChallengeValueGT: String
+  expectedAcmeChallengeValueGTE: String
+  expectedAcmeChallengeValueLT: String
+  expectedAcmeChallengeValueLTE: String
+  expectedAcmeChallengeValueContains: String
+  expectedAcmeChallengeValueHasPrefix: String
+  expectedAcmeChallengeValueHasSuffix: String
+  expectedAcmeChallengeValueIsNil: Boolean
+  expectedAcmeChallengeValueNotNil: Boolean
+  expectedAcmeChallengeValueEqualFold: String
+  expectedAcmeChallengeValueContainsFold: String
   """
-  ssl_cert_status field predicates
+  acme_challenge_status field predicates
   """
-  sslCertStatus: DNSVerificationHistoryCustomDomainStatus
-  sslCertStatusNEQ: DNSVerificationHistoryCustomDomainStatus
-  sslCertStatusIn: [DNSVerificationHistoryCustomDomainStatus!]
-  sslCertStatusNotIn: [DNSVerificationHistoryCustomDomainStatus!]
+  acmeChallengeStatus: DNSVerificationHistoryCustomDomainStatus
+  acmeChallengeStatusNEQ: DNSVerificationHistoryCustomDomainStatus
+  acmeChallengeStatusIn: [DNSVerificationHistoryCustomDomainStatus!]
+  acmeChallengeStatusNotIn: [DNSVerificationHistoryCustomDomainStatus!]
   """
-  ssl_cert_status_reason field predicates
+  acme_challenge_status_reason field predicates
   """
-  sslCertStatusReason: String
-  sslCertStatusReasonNEQ: String
-  sslCertStatusReasonIn: [String!]
-  sslCertStatusReasonNotIn: [String!]
-  sslCertStatusReasonGT: String
-  sslCertStatusReasonGTE: String
-  sslCertStatusReasonLT: String
-  sslCertStatusReasonLTE: String
-  sslCertStatusReasonContains: String
-  sslCertStatusReasonHasPrefix: String
-  sslCertStatusReasonHasSuffix: String
-  sslCertStatusReasonIsNil: Boolean
-  sslCertStatusReasonNotNil: Boolean
-  sslCertStatusReasonEqualFold: String
-  sslCertStatusReasonContainsFold: String
+  acmeChallengeStatusReason: String
+  acmeChallengeStatusReasonNEQ: String
+  acmeChallengeStatusReasonIn: [String!]
+  acmeChallengeStatusReasonNotIn: [String!]
+  acmeChallengeStatusReasonGT: String
+  acmeChallengeStatusReasonGTE: String
+  acmeChallengeStatusReasonLT: String
+  acmeChallengeStatusReasonLTE: String
+  acmeChallengeStatusReasonContains: String
+  acmeChallengeStatusReasonHasPrefix: String
+  acmeChallengeStatusReasonHasSuffix: String
+  acmeChallengeStatusReasonIsNil: Boolean
+  acmeChallengeStatusReasonNotNil: Boolean
+  acmeChallengeStatusReasonEqualFold: String
+  acmeChallengeStatusReasonContainsFold: String
 }
 """
 Ordering options for DNSVerification connections
@@ -36921,62 +36925,66 @@ input DNSVerificationWhereInput {
   dnsVerificationStatusReasonEqualFold: String
   dnsVerificationStatusReasonContainsFold: String
   """
-  ssl_txt_record field predicates
+  acme_challenge_path field predicates
   """
-  sslTxtRecord: String
-  sslTxtRecordNEQ: String
-  sslTxtRecordIn: [String!]
-  sslTxtRecordNotIn: [String!]
-  sslTxtRecordGT: String
-  sslTxtRecordGTE: String
-  sslTxtRecordLT: String
-  sslTxtRecordLTE: String
-  sslTxtRecordContains: String
-  sslTxtRecordHasPrefix: String
-  sslTxtRecordHasSuffix: String
-  sslTxtRecordEqualFold: String
-  sslTxtRecordContainsFold: String
+  acmeChallengePath: String
+  acmeChallengePathNEQ: String
+  acmeChallengePathIn: [String!]
+  acmeChallengePathNotIn: [String!]
+  acmeChallengePathGT: String
+  acmeChallengePathGTE: String
+  acmeChallengePathLT: String
+  acmeChallengePathLTE: String
+  acmeChallengePathContains: String
+  acmeChallengePathHasPrefix: String
+  acmeChallengePathHasSuffix: String
+  acmeChallengePathIsNil: Boolean
+  acmeChallengePathNotNil: Boolean
+  acmeChallengePathEqualFold: String
+  acmeChallengePathContainsFold: String
   """
-  ssl_txt_value field predicates
+  expected_acme_challenge_value field predicates
   """
-  sslTxtValue: String
-  sslTxtValueNEQ: String
-  sslTxtValueIn: [String!]
-  sslTxtValueNotIn: [String!]
-  sslTxtValueGT: String
-  sslTxtValueGTE: String
-  sslTxtValueLT: String
-  sslTxtValueLTE: String
-  sslTxtValueContains: String
-  sslTxtValueHasPrefix: String
-  sslTxtValueHasSuffix: String
-  sslTxtValueEqualFold: String
-  sslTxtValueContainsFold: String
+  expectedAcmeChallengeValue: String
+  expectedAcmeChallengeValueNEQ: String
+  expectedAcmeChallengeValueIn: [String!]
+  expectedAcmeChallengeValueNotIn: [String!]
+  expectedAcmeChallengeValueGT: String
+  expectedAcmeChallengeValueGTE: String
+  expectedAcmeChallengeValueLT: String
+  expectedAcmeChallengeValueLTE: String
+  expectedAcmeChallengeValueContains: String
+  expectedAcmeChallengeValueHasPrefix: String
+  expectedAcmeChallengeValueHasSuffix: String
+  expectedAcmeChallengeValueIsNil: Boolean
+  expectedAcmeChallengeValueNotNil: Boolean
+  expectedAcmeChallengeValueEqualFold: String
+  expectedAcmeChallengeValueContainsFold: String
   """
-  ssl_cert_status field predicates
+  acme_challenge_status field predicates
   """
-  sslCertStatus: DNSVerificationCustomDomainStatus
-  sslCertStatusNEQ: DNSVerificationCustomDomainStatus
-  sslCertStatusIn: [DNSVerificationCustomDomainStatus!]
-  sslCertStatusNotIn: [DNSVerificationCustomDomainStatus!]
+  acmeChallengeStatus: DNSVerificationCustomDomainStatus
+  acmeChallengeStatusNEQ: DNSVerificationCustomDomainStatus
+  acmeChallengeStatusIn: [DNSVerificationCustomDomainStatus!]
+  acmeChallengeStatusNotIn: [DNSVerificationCustomDomainStatus!]
   """
-  ssl_cert_status_reason field predicates
+  acme_challenge_status_reason field predicates
   """
-  sslCertStatusReason: String
-  sslCertStatusReasonNEQ: String
-  sslCertStatusReasonIn: [String!]
-  sslCertStatusReasonNotIn: [String!]
-  sslCertStatusReasonGT: String
-  sslCertStatusReasonGTE: String
-  sslCertStatusReasonLT: String
-  sslCertStatusReasonLTE: String
-  sslCertStatusReasonContains: String
-  sslCertStatusReasonHasPrefix: String
-  sslCertStatusReasonHasSuffix: String
-  sslCertStatusReasonIsNil: Boolean
-  sslCertStatusReasonNotNil: Boolean
-  sslCertStatusReasonEqualFold: String
-  sslCertStatusReasonContainsFold: String
+  acmeChallengeStatusReason: String
+  acmeChallengeStatusReasonNEQ: String
+  acmeChallengeStatusReasonIn: [String!]
+  acmeChallengeStatusReasonNotIn: [String!]
+  acmeChallengeStatusReasonGT: String
+  acmeChallengeStatusReasonGTE: String
+  acmeChallengeStatusReasonLT: String
+  acmeChallengeStatusReasonLTE: String
+  acmeChallengeStatusReasonContains: String
+  acmeChallengeStatusReasonHasPrefix: String
+  acmeChallengeStatusReasonHasSuffix: String
+  acmeChallengeStatusReasonIsNil: Boolean
+  acmeChallengeStatusReasonNotNil: Boolean
+  acmeChallengeStatusReasonEqualFold: String
+  acmeChallengeStatusReasonContainsFold: String
   """
   owner edge predicates
   """
@@ -65786,22 +65794,24 @@ input UpdateDNSVerificationInput {
   dnsVerificationStatusReason: String
   clearDNSVerificationStatusReason: Boolean
   """
-  the name of the ssl txt record
+  Path under /.well-known/acme-challenge/ to serve the ACME challenge
   """
-  sslTxtRecord: String
+  acmeChallengePath: String
+  clearAcmeChallengePath: Boolean
   """
-  the expected value of the ssl txt record
+  the expected value of the acme challenge record
   """
-  sslTxtValue: String
+  expectedAcmeChallengeValue: String
+  clearExpectedAcmeChallengeValue: Boolean
   """
-  Status of the ssl cert issuance
+  Status of the ACME challenge validation
   """
-  sslCertStatus: DNSVerificationCustomDomainStatus
+  acmeChallengeStatus: DNSVerificationCustomDomainStatus
   """
-  Reason of the cert status, for giving the user diagnostic info
+  Reason of the ACME status, for giving the user diagnostic info
   """
-  sslCertStatusReason: String
-  clearSslCertStatusReason: Boolean
+  acmeChallengeStatusReason: String
+  clearAcmeChallengeStatusReason: Boolean
   ownerID: ID
   clearOwner: Boolean
   addCustomDomainIDs: [ID!]

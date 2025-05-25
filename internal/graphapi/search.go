@@ -410,9 +410,9 @@ func adminSearchDNSVerifications(ctx context.Context, query string, after *entgq
 				dnsverification.DNSTxtRecordContainsFold(query),                // search by DNSTxtRecord
 				dnsverification.DNSTxtValueContainsFold(query),                 // search by DNSTxtValue
 				dnsverification.DNSVerificationStatusReasonContainsFold(query), // search by DNSVerificationStatusReason
-				dnsverification.SslTxtRecordContainsFold(query),                // search by SslTxtRecord
-				dnsverification.SslTxtValueContainsFold(query),                 // search by SslTxtValue
-				dnsverification.SslCertStatusReasonContainsFold(query),         // search by SslCertStatusReason
+				dnsverification.AcmeChallengePathContainsFold(query),           // search by AcmeChallengePath
+				dnsverification.ExpectedAcmeChallengeValueContainsFold(query),  // search by ExpectedAcmeChallengeValue
+				dnsverification.AcmeChallengeStatusReasonContainsFold(query),   // search by AcmeChallengeStatusReason
 			),
 		)
 

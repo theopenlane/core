@@ -5500,25 +5500,25 @@ func (dv *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, dnsverification.FieldDNSVerificationStatusReason)
 				fieldSeen[dnsverification.FieldDNSVerificationStatusReason] = struct{}{}
 			}
-		case "sslTxtRecord":
-			if _, ok := fieldSeen[dnsverification.FieldSslTxtRecord]; !ok {
-				selectedFields = append(selectedFields, dnsverification.FieldSslTxtRecord)
-				fieldSeen[dnsverification.FieldSslTxtRecord] = struct{}{}
+		case "acmeChallengePath":
+			if _, ok := fieldSeen[dnsverification.FieldAcmeChallengePath]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldAcmeChallengePath)
+				fieldSeen[dnsverification.FieldAcmeChallengePath] = struct{}{}
 			}
-		case "sslTxtValue":
-			if _, ok := fieldSeen[dnsverification.FieldSslTxtValue]; !ok {
-				selectedFields = append(selectedFields, dnsverification.FieldSslTxtValue)
-				fieldSeen[dnsverification.FieldSslTxtValue] = struct{}{}
+		case "expectedAcmeChallengeValue":
+			if _, ok := fieldSeen[dnsverification.FieldExpectedAcmeChallengeValue]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldExpectedAcmeChallengeValue)
+				fieldSeen[dnsverification.FieldExpectedAcmeChallengeValue] = struct{}{}
 			}
-		case "sslCertStatus":
-			if _, ok := fieldSeen[dnsverification.FieldSslCertStatus]; !ok {
-				selectedFields = append(selectedFields, dnsverification.FieldSslCertStatus)
-				fieldSeen[dnsverification.FieldSslCertStatus] = struct{}{}
+		case "acmeChallengeStatus":
+			if _, ok := fieldSeen[dnsverification.FieldAcmeChallengeStatus]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldAcmeChallengeStatus)
+				fieldSeen[dnsverification.FieldAcmeChallengeStatus] = struct{}{}
 			}
-		case "sslCertStatusReason":
-			if _, ok := fieldSeen[dnsverification.FieldSslCertStatusReason]; !ok {
-				selectedFields = append(selectedFields, dnsverification.FieldSslCertStatusReason)
-				fieldSeen[dnsverification.FieldSslCertStatusReason] = struct{}{}
+		case "acmeChallengeStatusReason":
+			if _, ok := fieldSeen[dnsverification.FieldAcmeChallengeStatusReason]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldAcmeChallengeStatusReason)
+				fieldSeen[dnsverification.FieldAcmeChallengeStatusReason] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -5680,25 +5680,25 @@ func (dvh *DNSVerificationHistoryQuery) collectField(ctx context.Context, oneNod
 				selectedFields = append(selectedFields, dnsverificationhistory.FieldDNSVerificationStatusReason)
 				fieldSeen[dnsverificationhistory.FieldDNSVerificationStatusReason] = struct{}{}
 			}
-		case "sslTxtRecord":
-			if _, ok := fieldSeen[dnsverificationhistory.FieldSslTxtRecord]; !ok {
-				selectedFields = append(selectedFields, dnsverificationhistory.FieldSslTxtRecord)
-				fieldSeen[dnsverificationhistory.FieldSslTxtRecord] = struct{}{}
+		case "acmeChallengePath":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldAcmeChallengePath]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldAcmeChallengePath)
+				fieldSeen[dnsverificationhistory.FieldAcmeChallengePath] = struct{}{}
 			}
-		case "sslTxtValue":
-			if _, ok := fieldSeen[dnsverificationhistory.FieldSslTxtValue]; !ok {
-				selectedFields = append(selectedFields, dnsverificationhistory.FieldSslTxtValue)
-				fieldSeen[dnsverificationhistory.FieldSslTxtValue] = struct{}{}
+		case "expectedAcmeChallengeValue":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldExpectedAcmeChallengeValue]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldExpectedAcmeChallengeValue)
+				fieldSeen[dnsverificationhistory.FieldExpectedAcmeChallengeValue] = struct{}{}
 			}
-		case "sslCertStatus":
-			if _, ok := fieldSeen[dnsverificationhistory.FieldSslCertStatus]; !ok {
-				selectedFields = append(selectedFields, dnsverificationhistory.FieldSslCertStatus)
-				fieldSeen[dnsverificationhistory.FieldSslCertStatus] = struct{}{}
+		case "acmeChallengeStatus":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldAcmeChallengeStatus]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldAcmeChallengeStatus)
+				fieldSeen[dnsverificationhistory.FieldAcmeChallengeStatus] = struct{}{}
 			}
-		case "sslCertStatusReason":
-			if _, ok := fieldSeen[dnsverificationhistory.FieldSslCertStatusReason]; !ok {
-				selectedFields = append(selectedFields, dnsverificationhistory.FieldSslCertStatusReason)
-				fieldSeen[dnsverificationhistory.FieldSslCertStatusReason] = struct{}{}
+		case "acmeChallengeStatusReason":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldAcmeChallengeStatusReason]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldAcmeChallengeStatusReason)
+				fieldSeen[dnsverificationhistory.FieldAcmeChallengeStatusReason] = struct{}{}
 			}
 		case "id":
 		case "__typename":

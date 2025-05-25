@@ -1226,9 +1226,10 @@ type DNSVerificationBuilder struct {
 	DNSTxtValue                 string
 	DNSVerificationStatus       *enums.CustomDomainStatus
 	DNSVerificationStatusReason *string
-	SslTxtRecord                string
-	SslTxtValue                 string
-	SslCertStatus               *enums.CustomDomainStatus
+	AcmeChallengePath           string
+	ExpectedAcmeChallengeValue  string
+	AcmeChallengeStatus         *enums.CustomDomainStatus
+	AcmeChallengeStatusReason   *string
 	OwnerID                     string
 	CustomDomainIDs             []string
 }
@@ -1331,14 +1332,6 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 		d.DNSTxtValue = gofakeit.UUID()
 	}
 
-	if d.SslTxtRecord == "" {
-		d.SslTxtRecord = "_acme-challenge." + gofakeit.DomainName()
-	}
-
-	if d.SslTxtValue == "" {
-		d.SslTxtValue = gofakeit.UUID()
-	}
-
 	if d.OwnerID == "" {
 		// Use the organization ID from the test user
 		d.OwnerID = testUser1.OrganizationID
@@ -1348,8 +1341,8 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 		SetCloudflareHostnameID(d.CloudflareHostnameID).
 		SetDNSTxtRecord(d.DNSTxtRecord).
 		SetDNSTxtValue(d.DNSTxtValue).
-		SetSslTxtRecord(d.SslTxtRecord).
-		SetSslTxtValue(d.SslTxtValue).
+		SetAcmeChallengePath(d.AcmeChallengePath).
+		SetExpectedAcmeChallengeValue(d.ExpectedAcmeChallengeValue).
 		SetOwnerID(d.OwnerID)
 
 	if d.DNSVerificationStatus != nil {
@@ -1360,8 +1353,12 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 		mutation.SetDNSVerificationStatusReason(*d.DNSVerificationStatusReason)
 	}
 
-	if d.SslCertStatus != nil {
-		mutation.SetSslCertStatus(*d.SslCertStatus)
+	if d.AcmeChallengeStatus != nil {
+		mutation.SetAcmeChallengeStatus(*d.AcmeChallengeStatus)
+	}
+
+	if d.AcmeChallengeStatusReason != nil {
+		mutation.SetAcmeChallengeStatusReason(*d.AcmeChallengeStatusReason)
 	}
 
 	if len(d.CustomDomainIDs) > 0 {

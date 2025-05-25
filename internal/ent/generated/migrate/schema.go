@@ -653,10 +653,10 @@ var (
 		{Name: "dns_txt_value", Type: field.TypeString, Size: 64},
 		{Name: "dns_verification_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
 		{Name: "dns_verification_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
-		{Name: "ssl_txt_record", Type: field.TypeString, Size: 255},
-		{Name: "ssl_txt_value", Type: field.TypeString, Size: 64},
-		{Name: "ssl_cert_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
-		{Name: "ssl_cert_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "acme_challenge_path", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "expected_acme_challenge_value", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "acme_challenge_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "acme_challenge_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// DNSVerificationsTable holds the schema information for the "dns_verifications" table.
@@ -707,10 +707,10 @@ var (
 		{Name: "dns_txt_value", Type: field.TypeString, Size: 64},
 		{Name: "dns_verification_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
 		{Name: "dns_verification_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
-		{Name: "ssl_txt_record", Type: field.TypeString, Size: 255},
-		{Name: "ssl_txt_value", Type: field.TypeString, Size: 64},
-		{Name: "ssl_cert_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
-		{Name: "ssl_cert_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "acme_challenge_path", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "expected_acme_challenge_value", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "acme_challenge_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "acme_challenge_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
 	}
 	// DNSVerificationHistoryTable holds the schema information for the "dns_verification_history" table.
 	DNSVerificationHistoryTable = &schema.Table{
