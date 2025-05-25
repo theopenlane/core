@@ -3121,9 +3121,6 @@ var (
 				Name:    "programmembership_user_id_program_id",
 				Unique:  true,
 				Columns: []*schema.Column{ProgramMembershipsColumns[7], ProgramMembershipsColumns[6]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}

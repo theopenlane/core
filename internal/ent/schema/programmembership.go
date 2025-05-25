@@ -3,7 +3,6 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -97,7 +96,7 @@ func (ProgramMembership) Annotations() []schema.Annotation {
 func (ProgramMembership) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("user_id", "program_id").
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Unique().Annotations(),
 	}
 }
 
