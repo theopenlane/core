@@ -636,7 +636,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		{
 			name: "add program member, cannot add self",
 			request: openlaneclient.UpdateProgramInput{
-				AddProgramMembers: []*openlaneclient.CreateProgramMembershipInput{
+				AddProgramMembers: []*openlaneclient.AddProgramMembershipInput{
 					{
 						UserID: adminUser.ID,
 					},
@@ -649,7 +649,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		{
 			name: "add program member, can add another user",
 			request: openlaneclient.UpdateProgramInput{
-				AddProgramMembers: []*openlaneclient.CreateProgramMembershipInput{
+				AddProgramMembers: []*openlaneclient.AddProgramMembershipInput{
 					{
 						UserID: adminUser.ID,
 					},
