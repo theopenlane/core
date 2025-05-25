@@ -21,6 +21,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -501,6 +503,60 @@ func (f TraverseCustomDomainHistory) Traverse(ctx context.Context, q generated.Q
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.CustomDomainHistoryQuery", q)
+}
+
+// The DNSVerificationFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DNSVerificationFunc func(context.Context, *generated.DNSVerificationQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DNSVerificationFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DNSVerificationQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DNSVerificationQuery", q)
+}
+
+// The TraverseDNSVerification type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDNSVerification func(context.Context, *generated.DNSVerificationQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDNSVerification) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDNSVerification) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DNSVerificationQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DNSVerificationQuery", q)
+}
+
+// The DNSVerificationHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DNSVerificationHistoryFunc func(context.Context, *generated.DNSVerificationHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DNSVerificationHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DNSVerificationHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DNSVerificationHistoryQuery", q)
+}
+
+// The TraverseDNSVerificationHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDNSVerificationHistory func(context.Context, *generated.DNSVerificationHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDNSVerificationHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDNSVerificationHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DNSVerificationHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DNSVerificationHistoryQuery", q)
 }
 
 // The DocumentDataFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2476,6 +2532,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.CustomDomainQuery, predicate.CustomDomain, customdomain.OrderOption]{typ: generated.TypeCustomDomain, tq: q}, nil
 	case *generated.CustomDomainHistoryQuery:
 		return &query[*generated.CustomDomainHistoryQuery, predicate.CustomDomainHistory, customdomainhistory.OrderOption]{typ: generated.TypeCustomDomainHistory, tq: q}, nil
+	case *generated.DNSVerificationQuery:
+		return &query[*generated.DNSVerificationQuery, predicate.DNSVerification, dnsverification.OrderOption]{typ: generated.TypeDNSVerification, tq: q}, nil
+	case *generated.DNSVerificationHistoryQuery:
+		return &query[*generated.DNSVerificationHistoryQuery, predicate.DNSVerificationHistory, dnsverificationhistory.OrderOption]{typ: generated.TypeDNSVerificationHistory, tq: q}, nil
 	case *generated.DocumentDataQuery:
 		return &query[*generated.DocumentDataQuery, predicate.DocumentData, documentdata.OrderOption]{typ: generated.TypeDocumentData, tq: q}, nil
 	case *generated.DocumentDataHistoryQuery:

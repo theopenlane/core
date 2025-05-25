@@ -26,6 +26,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*CustomDomainMutation]() {
 		c.CustomDomain.Use(hook)
 	}
+	for _, hook := range history.Hooks[*DNSVerificationMutation]() {
+		c.DNSVerification.Use(hook)
+	}
 	for _, hook := range history.Hooks[*DocumentDataMutation]() {
 		c.DocumentData.Use(hook)
 	}

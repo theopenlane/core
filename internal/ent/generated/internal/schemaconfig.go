@@ -35,6 +35,8 @@ type SchemaConfig struct {
 	ControlObjectiveHistory          string // ControlObjectiveHistory table.
 	CustomDomain                     string // CustomDomain table.
 	CustomDomainHistory              string // CustomDomainHistory table.
+	DNSVerification                  string // DNSVerification table.
+	DNSVerificationHistory           string // DNSVerificationHistory table.
 	DocumentData                     string // DocumentData table.
 	DocumentDataFiles                string // DocumentData-files->File table.
 	DocumentDataHistory              string // DocumentDataHistory table.

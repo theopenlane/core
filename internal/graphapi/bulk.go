@@ -142,6 +142,25 @@ func (r *mutationResolver) bulkCreateCustomDomain(ctx context.Context, input []*
 	}, nil
 }
 
+// bulkCreateDNSVerification uses the CreateBulk function to create multiple DNSVerification entities
+func (r *mutationResolver) bulkCreateDNSVerification(ctx context.Context, input []*generated.CreateDNSVerificationInput) (*model.DNSVerificationBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.DNSVerificationCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.DNSVerification.Create().SetInput(*data)
+	}
+
+	res, err := c.DNSVerification.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "dnsverification"})
+	}
+
+	// return response
+	return &model.DNSVerificationBulkCreatePayload{
+		DNSVerifications: res,
+	}, nil
+}
+
 // bulkCreateDocumentData uses the CreateBulk function to create multiple DocumentData entities
 func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*model.DocumentDataBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

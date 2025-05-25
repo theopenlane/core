@@ -29,6 +29,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		controlimplementationResults      *generated.ControlImplementationConnection
 		controlobjectiveResults           *generated.ControlObjectiveConnection
 		customdomainResults               *generated.CustomDomainConnection
+		dnsverificationResults            *generated.DNSVerificationConnection
 		documentdataResults               *generated.DocumentDataConnection
 		entityResults                     *generated.EntityConnection
 		entitytypeResults                 *generated.EntityTypeConnection
@@ -108,6 +109,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		func() {
 			var err error
 			customdomainResults, err = searchCustomDomains(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			dnsverificationResults, err = searchDNSVerifications(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -375,6 +383,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += customdomainResults.TotalCount
 	}
+	if dnsverificationResults != nil && len(dnsverificationResults.Edges) > 0 {
+		res.DNSVerifications = dnsverificationResults
+
+		res.TotalCount += dnsverificationResults.TotalCount
+	}
 	if documentdataResults != nil && len(documentdataResults.Edges) > 0 {
 		res.DocumentData = documentdataResults
 
@@ -602,6 +615,16 @@ func (r *queryResolver) CustomDomainSearch(ctx context.Context, query string, af
 
 	// return the results
 	return customdomainResults, nil
+}
+func (r *queryResolver) DNSVerificationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DNSVerificationConnection, error) {
+	dnsverificationResults, err := searchDNSVerifications(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return dnsverificationResults, nil
 }
 func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
 	documentdataResults, err := searchDocumentData(ctx, query, after, first, before, last)

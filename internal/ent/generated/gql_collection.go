@@ -23,6 +23,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -5045,6 +5047,21 @@ func (cd *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, customdomain.FieldMappableDomainID)
 				fieldSeen[customdomain.FieldMappableDomainID] = struct{}{}
 			}
+
+		case "dnsVerification":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DNSVerificationClient{config: cd.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, dnsverificationImplementors)...); err != nil {
+				return err
+			}
+			cd.withDNSVerification = query
+			if _, ok := fieldSeen[customdomain.FieldDNSVerificationID]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldDNSVerificationID)
+				fieldSeen[customdomain.FieldDNSVerificationID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[customdomain.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, customdomain.FieldCreatedAt)
@@ -5084,6 +5101,11 @@ func (cd *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[customdomain.FieldMappableDomainID]; !ok {
 				selectedFields = append(selectedFields, customdomain.FieldMappableDomainID)
 				fieldSeen[customdomain.FieldMappableDomainID] = struct{}{}
+			}
+		case "dnsVerificationID":
+			if _, ok := fieldSeen[customdomain.FieldDNSVerificationID]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldDNSVerificationID)
+				fieldSeen[customdomain.FieldDNSVerificationID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -5230,6 +5252,11 @@ func (cdh *CustomDomainHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, customdomainhistory.FieldMappableDomainID)
 				fieldSeen[customdomainhistory.FieldMappableDomainID] = struct{}{}
 			}
+		case "dnsVerificationID":
+			if _, ok := fieldSeen[customdomainhistory.FieldDNSVerificationID]; !ok {
+				selectedFields = append(selectedFields, customdomainhistory.FieldDNSVerificationID)
+				fieldSeen[customdomainhistory.FieldDNSVerificationID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -5289,6 +5316,449 @@ func newCustomDomainHistoryPaginateArgs(rv map[string]any) *customdomainhistoryP
 	}
 	if v, ok := rv[whereField].(*CustomDomainHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithCustomDomainHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (dv *DNSVerificationQuery) CollectFields(ctx context.Context, satisfies ...string) (*DNSVerificationQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return dv, nil
+	}
+	if err := dv.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return dv, nil
+}
+
+func (dv *DNSVerificationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(dnsverification.Columns))
+		selectedFields = []string{dnsverification.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: dv.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			dv.withOwner = query
+			if _, ok := fieldSeen[dnsverification.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldOwnerID)
+				fieldSeen[dnsverification.FieldOwnerID] = struct{}{}
+			}
+
+		case "customDomains":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomDomainClient{config: dv.config}).Query()
+			)
+			args := newCustomDomainPaginateArgs(fieldArgs(ctx, new(CustomDomainWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newCustomDomainPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					dv.loadTotal = append(dv.loadTotal, func(ctx context.Context, nodes []*DNSVerification) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"dns_verification_custom_domains"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(dnsverification.CustomDomainsColumn), ids...))
+						})
+						if err := query.GroupBy(dnsverification.CustomDomainsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				} else {
+					dv.loadTotal = append(dv.loadTotal, func(_ context.Context, nodes []*DNSVerification) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.CustomDomains)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, customdomainImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(dnsverification.CustomDomainsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			dv.WithNamedCustomDomains(alias, func(wq *CustomDomainQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[dnsverification.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldCreatedAt)
+				fieldSeen[dnsverification.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[dnsverification.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldUpdatedAt)
+				fieldSeen[dnsverification.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[dnsverification.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldCreatedBy)
+				fieldSeen[dnsverification.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[dnsverification.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldUpdatedBy)
+				fieldSeen[dnsverification.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[dnsverification.FieldTags]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldTags)
+				fieldSeen[dnsverification.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[dnsverification.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldOwnerID)
+				fieldSeen[dnsverification.FieldOwnerID] = struct{}{}
+			}
+		case "cloudflareHostnameID":
+			if _, ok := fieldSeen[dnsverification.FieldCloudflareHostnameID]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldCloudflareHostnameID)
+				fieldSeen[dnsverification.FieldCloudflareHostnameID] = struct{}{}
+			}
+		case "dnsTxtRecord":
+			if _, ok := fieldSeen[dnsverification.FieldDNSTxtRecord]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldDNSTxtRecord)
+				fieldSeen[dnsverification.FieldDNSTxtRecord] = struct{}{}
+			}
+		case "dnsTxtValue":
+			if _, ok := fieldSeen[dnsverification.FieldDNSTxtValue]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldDNSTxtValue)
+				fieldSeen[dnsverification.FieldDNSTxtValue] = struct{}{}
+			}
+		case "dnsVerificationStatus":
+			if _, ok := fieldSeen[dnsverification.FieldDNSVerificationStatus]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldDNSVerificationStatus)
+				fieldSeen[dnsverification.FieldDNSVerificationStatus] = struct{}{}
+			}
+		case "dnsVerificationStatusReason":
+			if _, ok := fieldSeen[dnsverification.FieldDNSVerificationStatusReason]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldDNSVerificationStatusReason)
+				fieldSeen[dnsverification.FieldDNSVerificationStatusReason] = struct{}{}
+			}
+		case "acmeChallengePath":
+			if _, ok := fieldSeen[dnsverification.FieldAcmeChallengePath]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldAcmeChallengePath)
+				fieldSeen[dnsverification.FieldAcmeChallengePath] = struct{}{}
+			}
+		case "expectedAcmeChallengeValue":
+			if _, ok := fieldSeen[dnsverification.FieldExpectedAcmeChallengeValue]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldExpectedAcmeChallengeValue)
+				fieldSeen[dnsverification.FieldExpectedAcmeChallengeValue] = struct{}{}
+			}
+		case "acmeChallengeStatus":
+			if _, ok := fieldSeen[dnsverification.FieldAcmeChallengeStatus]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldAcmeChallengeStatus)
+				fieldSeen[dnsverification.FieldAcmeChallengeStatus] = struct{}{}
+			}
+		case "acmeChallengeStatusReason":
+			if _, ok := fieldSeen[dnsverification.FieldAcmeChallengeStatusReason]; !ok {
+				selectedFields = append(selectedFields, dnsverification.FieldAcmeChallengeStatusReason)
+				fieldSeen[dnsverification.FieldAcmeChallengeStatusReason] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		dv.Select(selectedFields...)
+	}
+	return nil
+}
+
+type dnsverificationPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DNSVerificationPaginateOption
+}
+
+func newDNSVerificationPaginateArgs(rv map[string]any) *dnsverificationPaginateArgs {
+	args := &dnsverificationPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*DNSVerificationOrder:
+			args.opts = append(args.opts, WithDNSVerificationOrder(v))
+		case []any:
+			var orders []*DNSVerificationOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &DNSVerificationOrder{Field: &DNSVerificationOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithDNSVerificationOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*DNSVerificationWhereInput); ok {
+		args.opts = append(args.opts, WithDNSVerificationFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (dvh *DNSVerificationHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*DNSVerificationHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return dvh, nil
+	}
+	if err := dvh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return dvh, nil
+}
+
+func (dvh *DNSVerificationHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(dnsverificationhistory.Columns))
+		selectedFields = []string{dnsverificationhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldHistoryTime)
+				fieldSeen[dnsverificationhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldRef)
+				fieldSeen[dnsverificationhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldOperation)
+				fieldSeen[dnsverificationhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldCreatedAt)
+				fieldSeen[dnsverificationhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldUpdatedAt)
+				fieldSeen[dnsverificationhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldCreatedBy)
+				fieldSeen[dnsverificationhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldUpdatedBy)
+				fieldSeen[dnsverificationhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldTags)
+				fieldSeen[dnsverificationhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldOwnerID)
+				fieldSeen[dnsverificationhistory.FieldOwnerID] = struct{}{}
+			}
+		case "cloudflareHostnameID":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldCloudflareHostnameID]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldCloudflareHostnameID)
+				fieldSeen[dnsverificationhistory.FieldCloudflareHostnameID] = struct{}{}
+			}
+		case "dnsTxtRecord":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldDNSTxtRecord]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldDNSTxtRecord)
+				fieldSeen[dnsverificationhistory.FieldDNSTxtRecord] = struct{}{}
+			}
+		case "dnsTxtValue":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldDNSTxtValue]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldDNSTxtValue)
+				fieldSeen[dnsverificationhistory.FieldDNSTxtValue] = struct{}{}
+			}
+		case "dnsVerificationStatus":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldDNSVerificationStatus]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldDNSVerificationStatus)
+				fieldSeen[dnsverificationhistory.FieldDNSVerificationStatus] = struct{}{}
+			}
+		case "dnsVerificationStatusReason":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldDNSVerificationStatusReason]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldDNSVerificationStatusReason)
+				fieldSeen[dnsverificationhistory.FieldDNSVerificationStatusReason] = struct{}{}
+			}
+		case "acmeChallengePath":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldAcmeChallengePath]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldAcmeChallengePath)
+				fieldSeen[dnsverificationhistory.FieldAcmeChallengePath] = struct{}{}
+			}
+		case "expectedAcmeChallengeValue":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldExpectedAcmeChallengeValue]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldExpectedAcmeChallengeValue)
+				fieldSeen[dnsverificationhistory.FieldExpectedAcmeChallengeValue] = struct{}{}
+			}
+		case "acmeChallengeStatus":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldAcmeChallengeStatus]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldAcmeChallengeStatus)
+				fieldSeen[dnsverificationhistory.FieldAcmeChallengeStatus] = struct{}{}
+			}
+		case "acmeChallengeStatusReason":
+			if _, ok := fieldSeen[dnsverificationhistory.FieldAcmeChallengeStatusReason]; !ok {
+				selectedFields = append(selectedFields, dnsverificationhistory.FieldAcmeChallengeStatusReason)
+				fieldSeen[dnsverificationhistory.FieldAcmeChallengeStatusReason] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		dvh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type dnsverificationhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DNSVerificationHistoryPaginateOption
+}
+
+func newDNSVerificationHistoryPaginateArgs(rv map[string]any) *dnsverificationhistoryPaginateArgs {
+	args := &dnsverificationhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &DNSVerificationHistoryOrder{Field: &DNSVerificationHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithDNSVerificationHistoryOrder(order))
+			}
+		case *DNSVerificationHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithDNSVerificationHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*DNSVerificationHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithDNSVerificationHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -15045,6 +15515,11 @@ func (md *MappableDomainQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, mappabledomain.FieldName)
 				fieldSeen[mappabledomain.FieldName] = struct{}{}
 			}
+		case "zoneID":
+			if _, ok := fieldSeen[mappabledomain.FieldZoneID]; !ok {
+				selectedFields = append(selectedFields, mappabledomain.FieldZoneID)
+				fieldSeen[mappabledomain.FieldZoneID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -15179,6 +15654,11 @@ func (mdh *MappableDomainHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[mappabledomainhistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, mappabledomainhistory.FieldName)
 				fieldSeen[mappabledomainhistory.FieldName] = struct{}{}
+			}
+		case "zoneID":
+			if _, ok := fieldSeen[mappabledomainhistory.FieldZoneID]; !ok {
+				selectedFields = append(selectedFields, mappabledomainhistory.FieldZoneID)
+				fieldSeen[mappabledomainhistory.FieldZoneID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -20982,6 +21462,95 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "dnsVerifications":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DNSVerificationClient{config: o.config}).Query()
+			)
+			args := newDNSVerificationPaginateArgs(fieldArgs(ctx, new(DNSVerificationWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDNSVerificationPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.DNSVerificationsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.DNSVerificationsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[47] == nil {
+								nodes[i].Edges.totalCount[47] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[47][alias] = n
+						}
+						return nil
+					})
+				} else {
+					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DNSVerifications)
+							if nodes[i].Edges.totalCount[47] == nil {
+								nodes[i].Edges.totalCount[47] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[47][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, dnsverificationImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.DNSVerificationsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			o.WithNamedDNSVerifications(alias, func(wq *DNSVerificationQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -21025,10 +21594,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[47] == nil {
-								nodes[i].Edges.totalCount[47] = make(map[string]int)
+							if nodes[i].Edges.totalCount[48] == nil {
+								nodes[i].Edges.totalCount[48] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[47][alias] = n
+							nodes[i].Edges.totalCount[48][alias] = n
 						}
 						return nil
 					})
@@ -21036,10 +21605,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[47] == nil {
-								nodes[i].Edges.totalCount[47] = make(map[string]int)
+							if nodes[i].Edges.totalCount[48] == nil {
+								nodes[i].Edges.totalCount[48] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[47][alias] = n
+							nodes[i].Edges.totalCount[48][alias] = n
 						}
 						return nil
 					})

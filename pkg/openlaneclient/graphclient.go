@@ -83,6 +83,16 @@ type OpenlaneGraphClient interface {
 	UpdateCustomDomain(ctx context.Context, updateCustomDomainID string, input UpdateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCustomDomain, error)
 	GetAllCustomDomainHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllCustomDomainHistories, error)
 	GetCustomDomainHistories(ctx context.Context, first *int64, last *int64, where *CustomDomainHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCustomDomainHistories, error)
+	CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVDNSVerification, error)
+	CreateBulkDNSVerification(ctx context.Context, input []*CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkDNSVerification, error)
+	CreateDNSVerification(ctx context.Context, input CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*CreateDNSVerification, error)
+	DeleteDNSVerification(ctx context.Context, deleteDNSVerificationID string, interceptors ...clientv2.RequestInterceptor) (*DeleteDNSVerification, error)
+	GetAllDNSVerifications(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllDNSVerifications, error)
+	GetDNSVerificationByID(ctx context.Context, dnsVerificationID string, interceptors ...clientv2.RequestInterceptor) (*GetDNSVerificationByID, error)
+	GetDNSVerifications(ctx context.Context, first *int64, last *int64, where *DNSVerificationWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetDNSVerifications, error)
+	UpdateDNSVerification(ctx context.Context, updateDNSVerificationID string, input UpdateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*UpdateDNSVerification, error)
+	GetAllDNSVerificationHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllDNSVerificationHistories, error)
+	GetDNSVerificationHistories(ctx context.Context, first *int64, last *int64, where *DNSVerificationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetDNSVerificationHistories, error)
 	CreateDocumentData(ctx context.Context, input CreateDocumentDataInput, interceptors ...clientv2.RequestInterceptor) (*CreateDocumentData, error)
 	DeleteDocumentData(ctx context.Context, deleteDocumentDataID string, interceptors ...clientv2.RequestInterceptor) (*DeleteDocumentData, error)
 	GetDocumentDataByID(ctx context.Context, documentDataID string, interceptors ...clientv2.RequestInterceptor) (*GetDocumentDataByID, error)
@@ -2591,11 +2601,12 @@ func (t *AdminSearch_AdminSearch_CustomDomains_PageInfo) GetStartCursor() *strin
 }
 
 type AdminSearch_AdminSearch_CustomDomains_Edges_Node struct {
-	CnameRecord      string   "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	ID               string   "json:\"id\" graphql:\"id\""
-	MappableDomainID string   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID          *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags             []string "json:\"tags,omitempty\" graphql:\"tags\""
+	CnameRecord       string   "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	DNSVerificationID *string  "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string   "json:\"id\" graphql:\"id\""
+	MappableDomainID  string   "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetCnameRecord() string {
@@ -2603,6 +2614,12 @@ func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetCnameRecord() stri
 		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
 	}
 	return t.CnameRecord
+}
+func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_CustomDomains_Edges_Node{}
+	}
+	return t.DNSVerificationID
 }
 func (t *AdminSearch_AdminSearch_CustomDomains_Edges_Node) GetID() string {
 	if t == nil {
@@ -2661,6 +2678,148 @@ func (t *AdminSearch_AdminSearch_CustomDomains) GetPageInfo() *AdminSearch_Admin
 func (t *AdminSearch_AdminSearch_CustomDomains) GetTotalCount() int64 {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_CustomDomains{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_DNSVerifications_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_DNSVerifications_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_DNSVerifications_Edges_Node struct {
+	AcmeChallengePath           *string  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatusReason   *string  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	DNSTxtRecord                string   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatusReason *string  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string   "json:\"id\" graphql:\"id\""
+	OwnerID                     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetDNSTxtValue() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.DNSTxtValue
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_DNSVerifications_Edges struct {
+	Node *AdminSearch_AdminSearch_DNSVerifications_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_DNSVerifications_Edges) GetNode() *AdminSearch_AdminSearch_DNSVerifications_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_DNSVerifications struct {
+	Edges      []*AdminSearch_AdminSearch_DNSVerifications_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_DNSVerifications_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_DNSVerifications) GetEdges() []*AdminSearch_AdminSearch_DNSVerifications_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications) GetPageInfo() *AdminSearch_AdminSearch_DNSVerifications_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_DNSVerifications) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_DNSVerifications{}
 	}
 	return t.TotalCount
 }
@@ -4236,9 +4395,10 @@ func (t *AdminSearch_AdminSearch_MappableDomains_PageInfo) GetStartCursor() *str
 }
 
 type AdminSearch_AdminSearch_MappableDomains_Edges_Node struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Name string   "json:\"name\" graphql:\"name\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID     string   "json:\"id\" graphql:\"id\""
+	Name   string   "json:\"name\" graphql:\"name\""
+	Tags   []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ZoneID string   "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *AdminSearch_AdminSearch_MappableDomains_Edges_Node) GetID() string {
@@ -4258,6 +4418,12 @@ func (t *AdminSearch_AdminSearch_MappableDomains_Edges_Node) GetTags() []string 
 		t = &AdminSearch_AdminSearch_MappableDomains_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_MappableDomains_Edges_Node) GetZoneID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappableDomains_Edges_Node{}
+	}
+	return t.ZoneID
 }
 
 type AdminSearch_AdminSearch_MappableDomains_Edges struct {
@@ -6564,6 +6730,7 @@ type AdminSearch_AdminSearch struct {
 	ControlObjectives           *AdminSearch_AdminSearch_ControlObjectives           "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
 	Controls                    *AdminSearch_AdminSearch_Controls                    "json:\"controls,omitempty\" graphql:\"controls\""
 	CustomDomains               *AdminSearch_AdminSearch_CustomDomains               "json:\"customDomains,omitempty\" graphql:\"customDomains\""
+	DNSVerifications            *AdminSearch_AdminSearch_DNSVerifications            "json:\"dnsVerifications,omitempty\" graphql:\"dnsVerifications\""
 	DocumentData                *AdminSearch_AdminSearch_DocumentData                "json:\"documentData,omitempty\" graphql:\"documentData\""
 	Entities                    *AdminSearch_AdminSearch_Entities                    "json:\"entities,omitempty\" graphql:\"entities\""
 	EntityTypes                 *AdminSearch_AdminSearch_EntityTypes                 "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
@@ -6639,6 +6806,12 @@ func (t *AdminSearch_AdminSearch) GetCustomDomains() *AdminSearch_AdminSearch_Cu
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.CustomDomains
+}
+func (t *AdminSearch_AdminSearch) GetDNSVerifications() *AdminSearch_AdminSearch_DNSVerifications {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.DNSVerifications
 }
 func (t *AdminSearch_AdminSearch) GetDocumentData() *AdminSearch_AdminSearch_DocumentData {
 	if t == nil {
@@ -16039,15 +16212,16 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 }
 
 type CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains struct {
-	CnameRecord      string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID               string     "json:\"id\" graphql:\"id\""
-	MappableDomainID string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags             []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord       string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerificationID *string    "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string     "json:\"id\" graphql:\"id\""
+	MappableDomainID  string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetCnameRecord() string {
@@ -16067,6 +16241,12 @@ func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetC
 		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
 	}
 	return t.CreatedBy
+}
+func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
+	}
+	return t.DNSVerificationID
 }
 func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetID() string {
 	if t == nil {
@@ -16117,15 +16297,16 @@ func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain) GetCustomDomains()
 }
 
 type CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains struct {
-	CnameRecord      string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID               string     "json:\"id\" graphql:\"id\""
-	MappableDomainID string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags             []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord       string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerificationID *string    "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string     "json:\"id\" graphql:\"id\""
+	MappableDomainID  string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetCnameRecord() string {
@@ -16145,6 +16326,12 @@ func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetCreated
 		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
 	}
 	return t.CreatedBy
+}
+func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
+	}
+	return t.DNSVerificationID
 }
 func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetID() string {
 	if t == nil {
@@ -16195,15 +16382,16 @@ func (t *CreateBulkCustomDomain_CreateBulkCustomDomain) GetCustomDomains() []*Cr
 }
 
 type CreateCustomDomain_CreateCustomDomain_CustomDomain struct {
-	CnameRecord      string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID               string     "json:\"id\" graphql:\"id\""
-	MappableDomainID string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags             []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord       string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerificationID *string    "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string     "json:\"id\" graphql:\"id\""
+	MappableDomainID  string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetCnameRecord() string {
@@ -16223,6 +16411,12 @@ func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetCreatedBy() *str
 		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
 	}
 	return t.CreatedBy
+}
+func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
+	}
+	return t.DNSVerificationID
 }
 func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetID() string {
 	if t == nil {
@@ -16316,15 +16510,16 @@ func (t *GetAllCustomDomains_CustomDomains_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllCustomDomains_CustomDomains_Edges_Node struct {
-	CnameRecord      string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID               string     "json:\"id\" graphql:\"id\""
-	MappableDomainID string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags             []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord       string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerificationID *string    "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string     "json:\"id\" graphql:\"id\""
+	MappableDomainID  string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetCnameRecord() string {
@@ -16344,6 +16539,12 @@ func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetCreatedBy() *string {
 		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &GetAllCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.DNSVerificationID
 }
 func (t *GetAllCustomDomains_CustomDomains_Edges_Node) GetID() string {
 	if t == nil {
@@ -16419,15 +16620,16 @@ func (t *GetAllCustomDomains_CustomDomains) GetTotalCount() int64 {
 }
 
 type GetCustomDomainByID_CustomDomain struct {
-	CnameRecord      string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID               string     "json:\"id\" graphql:\"id\""
-	MappableDomainID string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags             []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord       string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerificationID *string    "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string     "json:\"id\" graphql:\"id\""
+	MappableDomainID  string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetCustomDomainByID_CustomDomain) GetCnameRecord() string {
@@ -16447,6 +16649,12 @@ func (t *GetCustomDomainByID_CustomDomain) GetCreatedBy() *string {
 		t = &GetCustomDomainByID_CustomDomain{}
 	}
 	return t.CreatedBy
+}
+func (t *GetCustomDomainByID_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &GetCustomDomainByID_CustomDomain{}
+	}
+	return t.DNSVerificationID
 }
 func (t *GetCustomDomainByID_CustomDomain) GetID() string {
 	if t == nil {
@@ -16518,15 +16726,16 @@ func (t *GetCustomDomains_CustomDomains_PageInfo) GetStartCursor() *string {
 }
 
 type GetCustomDomains_CustomDomains_Edges_Node struct {
-	CnameRecord      string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID               string     "json:\"id\" graphql:\"id\""
-	MappableDomainID string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags             []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord       string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerificationID *string    "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string     "json:\"id\" graphql:\"id\""
+	MappableDomainID  string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetCustomDomains_CustomDomains_Edges_Node) GetCnameRecord() string {
@@ -16546,6 +16755,12 @@ func (t *GetCustomDomains_CustomDomains_Edges_Node) GetCreatedBy() *string {
 		t = &GetCustomDomains_CustomDomains_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetCustomDomains_CustomDomains_Edges_Node) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &GetCustomDomains_CustomDomains_Edges_Node{}
+	}
+	return t.DNSVerificationID
 }
 func (t *GetCustomDomains_CustomDomains_Edges_Node) GetID() string {
 	if t == nil {
@@ -16621,15 +16836,16 @@ func (t *GetCustomDomains_CustomDomains) GetTotalCount() int64 {
 }
 
 type UpdateCustomDomain_UpdateCustomDomain_CustomDomain struct {
-	CnameRecord      string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt        *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID               string     "json:\"id\" graphql:\"id\""
-	MappableDomainID string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	OwnerID          *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags             []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord       string     "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerificationID *string    "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	ID                string     "json:\"id\" graphql:\"id\""
+	MappableDomainID  string     "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	OwnerID           *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetCnameRecord() string {
@@ -16649,6 +16865,12 @@ func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetCreatedBy() *str
 		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
 	}
 	return t.CreatedBy
+}
+func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
+	}
+	return t.DNSVerificationID
 }
 func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetID() string {
 	if t == nil {
@@ -16731,18 +16953,19 @@ func (t *GetAllCustomDomainHistories_CustomDomainHistories_PageInfo) GetStartCur
 }
 
 type GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node struct {
-	CnameRecord      string         "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt        *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime      time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID               string         "json:\"id\" graphql:\"id\""
-	MappableDomainID string         "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	Operation        history.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID          *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref              *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags             []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord       string         "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerificationID *string        "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	HistoryTime       time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string         "json:\"id\" graphql:\"id\""
+	MappableDomainID  string         "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	Operation         history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID           *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref               *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags              []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCnameRecord() string {
@@ -16762,6 +16985,12 @@ func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCreate
 		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.DNSVerificationID
 }
 func (t *GetAllCustomDomainHistories_CustomDomainHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -16887,18 +17116,19 @@ func (t *GetCustomDomainHistories_CustomDomainHistories_PageInfo) GetStartCursor
 }
 
 type GetCustomDomainHistories_CustomDomainHistories_Edges_Node struct {
-	CnameRecord      string         "json:\"cnameRecord\" graphql:\"cnameRecord\""
-	CreatedAt        *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime      time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID               string         "json:\"id\" graphql:\"id\""
-	MappableDomainID string         "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
-	Operation        history.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID          *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref              *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags             []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CnameRecord       string         "json:\"cnameRecord\" graphql:\"cnameRecord\""
+	CreatedAt         *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSVerificationID *string        "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	HistoryTime       time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string         "json:\"id\" graphql:\"id\""
+	MappableDomainID  string         "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
+	Operation         history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID           *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref               *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags              []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCnameRecord() string {
@@ -16918,6 +17148,12 @@ func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetCreatedBy
 		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetDNSVerificationID() *string {
+	if t == nil {
+		t = &GetCustomDomainHistories_CustomDomainHistories_Edges_Node{}
+	}
+	return t.DNSVerificationID
 }
 func (t *GetCustomDomainHistories_CustomDomainHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -17006,6 +17242,1419 @@ func (t *GetCustomDomainHistories_CustomDomainHistories) GetPageInfo() *GetCusto
 func (t *GetCustomDomainHistories_CustomDomainHistories) GetTotalCount() int64 {
 	if t == nil {
 		t = &GetCustomDomainHistories_CustomDomainHistories{}
+	}
+	return t.TotalCount
+}
+
+type CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications struct {
+	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                   "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return &t.AcmeChallengeStatus
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSTxtValue() string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.DNSTxtValue
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification struct {
+	DNSVerifications []*CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications "json:\"dnsVerifications,omitempty\" graphql:\"dnsVerifications\""
+}
+
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification) GetDNSVerifications() []*CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification{}
+	}
+	return t.DNSVerifications
+}
+
+type CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications struct {
+	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                   "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return &t.AcmeChallengeStatus
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSTxtValue() string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.DNSTxtValue
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetID() string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.ID
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkDNSVerification_CreateBulkDNSVerification struct {
+	DNSVerifications []*CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications "json:\"dnsVerifications,omitempty\" graphql:\"dnsVerifications\""
+}
+
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification) GetDNSVerifications() []*CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications {
+	if t == nil {
+		t = &CreateBulkDNSVerification_CreateBulkDNSVerification{}
+	}
+	return t.DNSVerifications
+}
+
+type CreateDNSVerification_CreateDNSVerification_DNSVerification struct {
+	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                   "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return &t.AcmeChallengeStatus
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetDNSTxtValue() string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.DNSTxtValue
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetID() string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.ID
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.OwnerID
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetTags() []string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.Tags
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateDNSVerification_CreateDNSVerification struct {
+	DNSVerification CreateDNSVerification_CreateDNSVerification_DNSVerification "json:\"dnsVerification\" graphql:\"dnsVerification\""
+}
+
+func (t *CreateDNSVerification_CreateDNSVerification) GetDNSVerification() *CreateDNSVerification_CreateDNSVerification_DNSVerification {
+	if t == nil {
+		t = &CreateDNSVerification_CreateDNSVerification{}
+	}
+	return &t.DNSVerification
+}
+
+type DeleteDNSVerification_DeleteDNSVerification struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteDNSVerification_DeleteDNSVerification) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteDNSVerification_DeleteDNSVerification{}
+	}
+	return t.DeletedID
+}
+
+type GetAllDNSVerifications_DNSVerifications_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllDNSVerifications_DNSVerifications_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllDNSVerifications_DNSVerifications_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllDNSVerifications_DNSVerifications_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllDNSVerifications_DNSVerifications_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllDNSVerifications_DNSVerifications_Edges_Node struct {
+	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                   "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return &t.AcmeChallengeStatus
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetDNSTxtValue() string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.DNSTxtValue
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllDNSVerifications_DNSVerifications_Edges struct {
+	Node *GetAllDNSVerifications_DNSVerifications_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllDNSVerifications_DNSVerifications_Edges) GetNode() *GetAllDNSVerifications_DNSVerifications_Edges_Node {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllDNSVerifications_DNSVerifications struct {
+	Edges      []*GetAllDNSVerifications_DNSVerifications_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllDNSVerifications_DNSVerifications_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllDNSVerifications_DNSVerifications) GetEdges() []*GetAllDNSVerifications_DNSVerifications_Edges {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications{}
+	}
+	return t.Edges
+}
+func (t *GetAllDNSVerifications_DNSVerifications) GetPageInfo() *GetAllDNSVerifications_DNSVerifications_PageInfo {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllDNSVerifications_DNSVerifications) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllDNSVerifications_DNSVerifications{}
+	}
+	return t.TotalCount
+}
+
+type GetDNSVerificationByID_DNSVerification struct {
+	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                   "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetDNSVerificationByID_DNSVerification) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return &t.AcmeChallengeStatus
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.CreatedAt
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.CreatedBy
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetDNSTxtValue() string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.DNSTxtValue
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetID() string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.ID
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetOwnerID() *string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.OwnerID
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetTags() []string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.Tags
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetDNSVerificationByID_DNSVerification) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetDNSVerificationByID_DNSVerification{}
+	}
+	return t.UpdatedBy
+}
+
+type GetDNSVerifications_DNSVerifications_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetDNSVerifications_DNSVerifications_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetDNSVerifications_DNSVerifications_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetDNSVerifications_DNSVerifications_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetDNSVerifications_DNSVerifications_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetDNSVerifications_DNSVerifications_Edges_Node struct {
+	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                   "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return &t.AcmeChallengeStatus
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetDNSTxtValue() string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.DNSTxtValue
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetDNSVerifications_DNSVerifications_Edges struct {
+	Node *GetDNSVerifications_DNSVerifications_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetDNSVerifications_DNSVerifications_Edges) GetNode() *GetDNSVerifications_DNSVerifications_Edges_Node {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications_Edges{}
+	}
+	return t.Node
+}
+
+type GetDNSVerifications_DNSVerifications struct {
+	Edges      []*GetDNSVerifications_DNSVerifications_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetDNSVerifications_DNSVerifications_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetDNSVerifications_DNSVerifications) GetEdges() []*GetDNSVerifications_DNSVerifications_Edges {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications{}
+	}
+	return t.Edges
+}
+func (t *GetDNSVerifications_DNSVerifications) GetPageInfo() *GetDNSVerifications_DNSVerifications_PageInfo {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications{}
+	}
+	return &t.PageInfo
+}
+func (t *GetDNSVerifications_DNSVerifications) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetDNSVerifications_DNSVerifications{}
+	}
+	return t.TotalCount
+}
+
+type UpdateDNSVerification_UpdateDNSVerification_DNSVerification struct {
+	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                   "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return &t.AcmeChallengeStatus
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetDNSTxtValue() string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.DNSTxtValue
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetID() string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.ID
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetTags() []string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.Tags
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateDNSVerification_UpdateDNSVerification struct {
+	DNSVerification UpdateDNSVerification_UpdateDNSVerification_DNSVerification "json:\"dnsVerification\" graphql:\"dnsVerification\""
+}
+
+func (t *UpdateDNSVerification_UpdateDNSVerification) GetDNSVerification() *UpdateDNSVerification_UpdateDNSVerification_DNSVerification {
+	if t == nil {
+		t = &UpdateDNSVerification_UpdateDNSVerification{}
+	}
+	return &t.DNSVerification
+}
+
+type GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node struct {
+	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	HistoryTime                 time.Time                "json:\"historyTime\" graphql:\"historyTime\""
+	ID                          string                   "json:\"id\" graphql:\"id\""
+	Operation                   history.OpType           "json:\"operation\" graphql:\"operation\""
+	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                         *string                  "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return &t.AcmeChallengeStatus
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSTxtValue() string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.DNSTxtValue
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllDNSVerificationHistories_DNSVerificationHistories_Edges struct {
+	Node *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges) GetNode() *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllDNSVerificationHistories_DNSVerificationHistories struct {
+	Edges      []*GetAllDNSVerificationHistories_DNSVerificationHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories) GetEdges() []*GetAllDNSVerificationHistories_DNSVerificationHistories_Edges {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories) GetPageInfo() *GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories_DNSVerificationHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetDNSVerificationHistories_DNSVerificationHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node struct {
+	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	HistoryTime                 time.Time                "json:\"historyTime\" graphql:\"historyTime\""
+	ID                          string                   "json:\"id\" graphql:\"id\""
+	Operation                   history.OpType           "json:\"operation\" graphql:\"operation\""
+	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                         *string                  "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengePath() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.AcmeChallengePath
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return &t.AcmeChallengeStatus
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengeStatusReason() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.AcmeChallengeStatusReason
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetCloudflareHostnameID() string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.CloudflareHostnameID
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSTxtRecord() string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.DNSTxtRecord
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSTxtValue() string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.DNSTxtValue
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return &t.DNSVerificationStatus
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSVerificationStatusReason() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.DNSVerificationStatusReason
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetExpectedAcmeChallengeValue() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.ExpectedAcmeChallengeValue
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetDNSVerificationHistories_DNSVerificationHistories_Edges struct {
+	Node *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges) GetNode() *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetDNSVerificationHistories_DNSVerificationHistories struct {
+	Edges      []*GetDNSVerificationHistories_DNSVerificationHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetDNSVerificationHistories_DNSVerificationHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetDNSVerificationHistories_DNSVerificationHistories) GetEdges() []*GetDNSVerificationHistories_DNSVerificationHistories_Edges {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories{}
+	}
+	return t.Edges
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories) GetPageInfo() *GetDNSVerificationHistories_DNSVerificationHistories_PageInfo {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetDNSVerificationHistories_DNSVerificationHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetDNSVerificationHistories_DNSVerificationHistories{}
 	}
 	return t.TotalCount
 }
@@ -36288,6 +37937,7 @@ type CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains str
 	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ZoneID    string     "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetCreatedAt() *time.Time {
@@ -36332,6 +37982,12 @@ func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains
 	}
 	return t.UpdatedBy
 }
+func (t *CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains) GetZoneID() string {
+	if t == nil {
+		t = &CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains{}
+	}
+	return t.ZoneID
+}
 
 type CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain struct {
 	MappableDomains []*CreateBulkCSVMappableDomain_CreateBulkCSVMappableDomain_MappableDomains "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
@@ -36352,6 +38008,7 @@ type CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains struct {
 	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ZoneID    string     "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetCreatedAt() *time.Time {
@@ -36396,6 +38053,12 @@ func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetU
 	}
 	return t.UpdatedBy
 }
+func (t *CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains) GetZoneID() string {
+	if t == nil {
+		t = &CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains{}
+	}
+	return t.ZoneID
+}
 
 type CreateBulkMappableDomain_CreateBulkMappableDomain struct {
 	MappableDomains []*CreateBulkMappableDomain_CreateBulkMappableDomain_MappableDomains "json:\"mappableDomains,omitempty\" graphql:\"mappableDomains\""
@@ -36416,6 +38079,7 @@ type CreateMappableDomain_CreateMappableDomain_MappableDomain struct {
 	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ZoneID    string     "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetCreatedAt() *time.Time {
@@ -36459,6 +38123,12 @@ func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetUpdatedBy(
 		t = &CreateMappableDomain_CreateMappableDomain_MappableDomain{}
 	}
 	return t.UpdatedBy
+}
+func (t *CreateMappableDomain_CreateMappableDomain_MappableDomain) GetZoneID() string {
+	if t == nil {
+		t = &CreateMappableDomain_CreateMappableDomain_MappableDomain{}
+	}
+	return t.ZoneID
 }
 
 type CreateMappableDomain_CreateMappableDomain struct {
@@ -36523,6 +38193,7 @@ type GetAllMappableDomains_MappableDomains_Edges_Node struct {
 	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ZoneID    string     "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetCreatedAt() *time.Time {
@@ -36566,6 +38237,12 @@ func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetUpdatedBy() *strin
 		t = &GetAllMappableDomains_MappableDomains_Edges_Node{}
 	}
 	return t.UpdatedBy
+}
+func (t *GetAllMappableDomains_MappableDomains_Edges_Node) GetZoneID() string {
+	if t == nil {
+		t = &GetAllMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.ZoneID
 }
 
 type GetAllMappableDomains_MappableDomains_Edges struct {
@@ -36612,6 +38289,7 @@ type GetMappableDomainByID_MappableDomain struct {
 	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ZoneID    string     "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *GetMappableDomainByID_MappableDomain) GetCreatedAt() *time.Time {
@@ -36656,6 +38334,12 @@ func (t *GetMappableDomainByID_MappableDomain) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetMappableDomainByID_MappableDomain) GetZoneID() string {
+	if t == nil {
+		t = &GetMappableDomainByID_MappableDomain{}
+	}
+	return t.ZoneID
+}
 
 type GetMappableDomains_MappableDomains_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
@@ -36697,6 +38381,7 @@ type GetMappableDomains_MappableDomains_Edges_Node struct {
 	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ZoneID    string     "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *GetMappableDomains_MappableDomains_Edges_Node) GetCreatedAt() *time.Time {
@@ -36740,6 +38425,12 @@ func (t *GetMappableDomains_MappableDomains_Edges_Node) GetUpdatedBy() *string {
 		t = &GetMappableDomains_MappableDomains_Edges_Node{}
 	}
 	return t.UpdatedBy
+}
+func (t *GetMappableDomains_MappableDomains_Edges_Node) GetZoneID() string {
+	if t == nil {
+		t = &GetMappableDomains_MappableDomains_Edges_Node{}
+	}
+	return t.ZoneID
 }
 
 type GetMappableDomains_MappableDomains_Edges struct {
@@ -36786,6 +38477,7 @@ type UpdateMappableDomain_UpdateMappableDomain_MappableDomain struct {
 	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ZoneID    string     "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetCreatedAt() *time.Time {
@@ -36829,6 +38521,12 @@ func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetUpdatedBy(
 		t = &UpdateMappableDomain_UpdateMappableDomain_MappableDomain{}
 	}
 	return t.UpdatedBy
+}
+func (t *UpdateMappableDomain_UpdateMappableDomain_MappableDomain) GetZoneID() string {
+	if t == nil {
+		t = &UpdateMappableDomain_UpdateMappableDomain_MappableDomain{}
+	}
+	return t.ZoneID
 }
 
 type UpdateMappableDomain_UpdateMappableDomain struct {
@@ -36885,6 +38583,7 @@ type GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node struct {
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ZoneID      string         "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -36946,6 +38645,12 @@ func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetUp
 		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
+}
+func (t *GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node) GetZoneID() string {
+	if t == nil {
+		t = &GetAllMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.ZoneID
 }
 
 type GetAllMappableDomainHistories_MappableDomainHistories_Edges struct {
@@ -37027,6 +38732,7 @@ type GetMappableDomainHistories_MappableDomainHistories_Edges_Node struct {
 	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	ZoneID      string         "json:\"zoneID\" graphql:\"zoneID\""
 }
 
 func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -37088,6 +38794,12 @@ func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetUpdat
 		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
+}
+func (t *GetMappableDomainHistories_MappableDomainHistories_Edges_Node) GetZoneID() string {
+	if t == nil {
+		t = &GetMappableDomainHistories_MappableDomainHistories_Edges_Node{}
+	}
+	return t.ZoneID
 }
 
 type GetMappableDomainHistories_MappableDomainHistories_Edges struct {
@@ -57053,6 +58765,92 @@ func (t *GlobalSearch_Search_CustomDomains) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_DNSVerifications_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_DNSVerifications_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_DNSVerifications_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_DNSVerifications_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_DNSVerifications_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_DNSVerifications_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_DNSVerifications_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_DNSVerifications_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_DNSVerifications_Edges struct {
+	Node *GlobalSearch_Search_DNSVerifications_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_DNSVerifications_Edges) GetNode() *GlobalSearch_Search_DNSVerifications_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_DNSVerifications struct {
+	Edges      []*GlobalSearch_Search_DNSVerifications_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_DNSVerifications_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_DNSVerifications) GetEdges() []*GlobalSearch_Search_DNSVerifications_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_DNSVerifications) GetPageInfo() *GlobalSearch_Search_DNSVerifications_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_DNSVerifications) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_DNSVerifications{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_DocumentData_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -60028,6 +61826,7 @@ type GlobalSearch_Search struct {
 	ControlObjectives           *GlobalSearch_Search_ControlObjectives           "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
 	Controls                    *GlobalSearch_Search_Controls                    "json:\"controls,omitempty\" graphql:\"controls\""
 	CustomDomains               *GlobalSearch_Search_CustomDomains               "json:\"customDomains,omitempty\" graphql:\"customDomains\""
+	DNSVerifications            *GlobalSearch_Search_DNSVerifications            "json:\"dnsVerifications,omitempty\" graphql:\"dnsVerifications\""
 	DocumentData                *GlobalSearch_Search_DocumentData                "json:\"documentData,omitempty\" graphql:\"documentData\""
 	Entities                    *GlobalSearch_Search_Entities                    "json:\"entities,omitempty\" graphql:\"entities\""
 	EntityTypes                 *GlobalSearch_Search_EntityTypes                 "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
@@ -60103,6 +61902,12 @@ func (t *GlobalSearch_Search) GetCustomDomains() *GlobalSearch_Search_CustomDoma
 		t = &GlobalSearch_Search{}
 	}
 	return t.CustomDomains
+}
+func (t *GlobalSearch_Search) GetDNSVerifications() *GlobalSearch_Search_DNSVerifications {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.DNSVerifications
 }
 func (t *GlobalSearch_Search) GetDocumentData() *GlobalSearch_Search_DocumentData {
 	if t == nil {
@@ -72301,6 +74106,116 @@ func (t *GetCustomDomainHistories) GetCustomDomainHistories() *GetCustomDomainHi
 	return &t.CustomDomainHistories
 }
 
+type CreateBulkCSVDNSVerification struct {
+	CreateBulkCSVDNSVerification CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification "json:\"createBulkCSVDNSVerification\" graphql:\"createBulkCSVDNSVerification\""
+}
+
+func (t *CreateBulkCSVDNSVerification) GetCreateBulkCSVDNSVerification() *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification {
+	if t == nil {
+		t = &CreateBulkCSVDNSVerification{}
+	}
+	return &t.CreateBulkCSVDNSVerification
+}
+
+type CreateBulkDNSVerification struct {
+	CreateBulkDNSVerification CreateBulkDNSVerification_CreateBulkDNSVerification "json:\"createBulkDNSVerification\" graphql:\"createBulkDNSVerification\""
+}
+
+func (t *CreateBulkDNSVerification) GetCreateBulkDNSVerification() *CreateBulkDNSVerification_CreateBulkDNSVerification {
+	if t == nil {
+		t = &CreateBulkDNSVerification{}
+	}
+	return &t.CreateBulkDNSVerification
+}
+
+type CreateDNSVerification struct {
+	CreateDNSVerification CreateDNSVerification_CreateDNSVerification "json:\"createDNSVerification\" graphql:\"createDNSVerification\""
+}
+
+func (t *CreateDNSVerification) GetCreateDNSVerification() *CreateDNSVerification_CreateDNSVerification {
+	if t == nil {
+		t = &CreateDNSVerification{}
+	}
+	return &t.CreateDNSVerification
+}
+
+type DeleteDNSVerification struct {
+	DeleteDNSVerification DeleteDNSVerification_DeleteDNSVerification "json:\"deleteDNSVerification\" graphql:\"deleteDNSVerification\""
+}
+
+func (t *DeleteDNSVerification) GetDeleteDNSVerification() *DeleteDNSVerification_DeleteDNSVerification {
+	if t == nil {
+		t = &DeleteDNSVerification{}
+	}
+	return &t.DeleteDNSVerification
+}
+
+type GetAllDNSVerifications struct {
+	DNSVerifications GetAllDNSVerifications_DNSVerifications "json:\"dnsVerifications\" graphql:\"dnsVerifications\""
+}
+
+func (t *GetAllDNSVerifications) GetDNSVerifications() *GetAllDNSVerifications_DNSVerifications {
+	if t == nil {
+		t = &GetAllDNSVerifications{}
+	}
+	return &t.DNSVerifications
+}
+
+type GetDNSVerificationByID struct {
+	DNSVerification GetDNSVerificationByID_DNSVerification "json:\"dnsVerification\" graphql:\"dnsVerification\""
+}
+
+func (t *GetDNSVerificationByID) GetDNSVerification() *GetDNSVerificationByID_DNSVerification {
+	if t == nil {
+		t = &GetDNSVerificationByID{}
+	}
+	return &t.DNSVerification
+}
+
+type GetDNSVerifications struct {
+	DNSVerifications GetDNSVerifications_DNSVerifications "json:\"dnsVerifications\" graphql:\"dnsVerifications\""
+}
+
+func (t *GetDNSVerifications) GetDNSVerifications() *GetDNSVerifications_DNSVerifications {
+	if t == nil {
+		t = &GetDNSVerifications{}
+	}
+	return &t.DNSVerifications
+}
+
+type UpdateDNSVerification struct {
+	UpdateDNSVerification UpdateDNSVerification_UpdateDNSVerification "json:\"updateDNSVerification\" graphql:\"updateDNSVerification\""
+}
+
+func (t *UpdateDNSVerification) GetUpdateDNSVerification() *UpdateDNSVerification_UpdateDNSVerification {
+	if t == nil {
+		t = &UpdateDNSVerification{}
+	}
+	return &t.UpdateDNSVerification
+}
+
+type GetAllDNSVerificationHistories struct {
+	DNSVerificationHistories GetAllDNSVerificationHistories_DNSVerificationHistories "json:\"dnsVerificationHistories\" graphql:\"dnsVerificationHistories\""
+}
+
+func (t *GetAllDNSVerificationHistories) GetDNSVerificationHistories() *GetAllDNSVerificationHistories_DNSVerificationHistories {
+	if t == nil {
+		t = &GetAllDNSVerificationHistories{}
+	}
+	return &t.DNSVerificationHistories
+}
+
+type GetDNSVerificationHistories struct {
+	DNSVerificationHistories GetDNSVerificationHistories_DNSVerificationHistories "json:\"dnsVerificationHistories\" graphql:\"dnsVerificationHistories\""
+}
+
+func (t *GetDNSVerificationHistories) GetDNSVerificationHistories() *GetDNSVerificationHistories_DNSVerificationHistories {
+	if t == nil {
+		t = &GetDNSVerificationHistories{}
+	}
+	return &t.DNSVerificationHistories
+}
+
 type CreateDocumentData struct {
 	CreateDocumentData CreateDocumentData_CreateDocumentData "json:\"createDocumentData\" graphql:\"createDocumentData\""
 }
@@ -76323,6 +78238,30 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					cnameRecord
 					mappableDomainID
+					dnsVerificationID
+				}
+			}
+		}
+		dnsVerifications {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+					ownerID
+					cloudflareHostnameID
+					dnsTxtRecord
+					dnsTxtValue
+					dnsVerificationStatusReason
+					acmeChallengePath
+					expectedAcmeChallengeValue
+					acmeChallengeStatusReason
 				}
 			}
 		}
@@ -76594,6 +78533,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					id
 					tags
 					name
+					zoneID
 				}
 			}
 		}
@@ -79462,6 +81402,7 @@ const CreateBulkCSVCustomDomainDocument = `mutation CreateBulkCSVCustomDomain ($
 			cnameRecord
 			createdAt
 			createdBy
+			dnsVerificationID
 			id
 			mappableDomainID
 			ownerID
@@ -79496,6 +81437,7 @@ const CreateBulkCustomDomainDocument = `mutation CreateBulkCustomDomain ($input:
 			cnameRecord
 			createdAt
 			createdBy
+			dnsVerificationID
 			id
 			mappableDomainID
 			ownerID
@@ -79530,6 +81472,7 @@ const CreateCustomDomainDocument = `mutation CreateCustomDomain ($input: CreateC
 			cnameRecord
 			createdAt
 			createdBy
+			dnsVerificationID
 			id
 			mappableDomainID
 			ownerID
@@ -79596,6 +81539,7 @@ const GetAllCustomDomainsDocument = `query GetAllCustomDomains {
 				cnameRecord
 				createdAt
 				createdBy
+				dnsVerificationID
 				id
 				mappableDomainID
 				ownerID
@@ -79628,6 +81572,7 @@ const GetCustomDomainByIDDocument = `query GetCustomDomainByID ($customDomainId:
 		cnameRecord
 		createdAt
 		createdBy
+		dnsVerificationID
 		id
 		mappableDomainID
 		ownerID
@@ -79669,6 +81614,7 @@ const GetCustomDomainsDocument = `query GetCustomDomains ($first: Int, $last: In
 				cnameRecord
 				createdAt
 				createdBy
+				dnsVerificationID
 				id
 				mappableDomainID
 				ownerID
@@ -79706,6 +81652,7 @@ const UpdateCustomDomainDocument = `mutation UpdateCustomDomain ($updateCustomDo
 			cnameRecord
 			createdAt
 			createdBy
+			dnsVerificationID
 			id
 			mappableDomainID
 			ownerID
@@ -79749,6 +81696,7 @@ const GetAllCustomDomainHistoriesDocument = `query GetAllCustomDomainHistories {
 				cnameRecord
 				createdAt
 				createdBy
+				dnsVerificationID
 				historyTime
 				id
 				mappableDomainID
@@ -79793,6 +81741,7 @@ const GetCustomDomainHistoriesDocument = `query GetCustomDomainHistories ($first
 				cnameRecord
 				createdAt
 				createdBy
+				dnsVerificationID
 				historyTime
 				id
 				mappableDomainID
@@ -79817,6 +81766,440 @@ func (c *Client) GetCustomDomainHistories(ctx context.Context, first *int64, las
 
 	var res GetCustomDomainHistories
 	if err := c.Client.Post(ctx, "GetCustomDomainHistories", GetCustomDomainHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVDNSVerificationDocument = `mutation CreateBulkCSVDNSVerification ($input: Upload!) {
+	createBulkCSVDNSVerification(input: $input) {
+		dnsVerifications {
+			acmeChallengePath
+			acmeChallengeStatus
+			acmeChallengeStatusReason
+			cloudflareHostnameID
+			createdAt
+			createdBy
+			dnsTxtRecord
+			dnsTxtValue
+			dnsVerificationStatus
+			dnsVerificationStatusReason
+			expectedAcmeChallengeValue
+			id
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVDNSVerification, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVDNSVerification
+	if err := c.Client.Post(ctx, "CreateBulkCSVDNSVerification", CreateBulkCSVDNSVerificationDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkDNSVerificationDocument = `mutation CreateBulkDNSVerification ($input: [CreateDNSVerificationInput!]) {
+	createBulkDNSVerification(input: $input) {
+		dnsVerifications {
+			acmeChallengePath
+			acmeChallengeStatus
+			acmeChallengeStatusReason
+			cloudflareHostnameID
+			createdAt
+			createdBy
+			dnsTxtRecord
+			dnsTxtValue
+			dnsVerificationStatus
+			dnsVerificationStatusReason
+			expectedAcmeChallengeValue
+			id
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkDNSVerification(ctx context.Context, input []*CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkDNSVerification, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkDNSVerification
+	if err := c.Client.Post(ctx, "CreateBulkDNSVerification", CreateBulkDNSVerificationDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateDNSVerificationDocument = `mutation CreateDNSVerification ($input: CreateDNSVerificationInput!) {
+	createDNSVerification(input: $input) {
+		dnsVerification {
+			acmeChallengePath
+			acmeChallengeStatus
+			acmeChallengeStatusReason
+			cloudflareHostnameID
+			createdAt
+			createdBy
+			dnsTxtRecord
+			dnsTxtValue
+			dnsVerificationStatus
+			dnsVerificationStatusReason
+			expectedAcmeChallengeValue
+			id
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateDNSVerification(ctx context.Context, input CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*CreateDNSVerification, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateDNSVerification
+	if err := c.Client.Post(ctx, "CreateDNSVerification", CreateDNSVerificationDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteDNSVerificationDocument = `mutation DeleteDNSVerification ($deleteDNSVerificationId: ID!) {
+	deleteDNSVerification(id: $deleteDNSVerificationId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteDNSVerification(ctx context.Context, deleteDNSVerificationID string, interceptors ...clientv2.RequestInterceptor) (*DeleteDNSVerification, error) {
+	vars := map[string]any{
+		"deleteDNSVerificationId": deleteDNSVerificationID,
+	}
+
+	var res DeleteDNSVerification
+	if err := c.Client.Post(ctx, "DeleteDNSVerification", DeleteDNSVerificationDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllDNSVerificationsDocument = `query GetAllDNSVerifications {
+	dnsVerifications {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				acmeChallengePath
+				acmeChallengeStatus
+				acmeChallengeStatusReason
+				cloudflareHostnameID
+				createdAt
+				createdBy
+				dnsTxtRecord
+				dnsTxtValue
+				dnsVerificationStatus
+				dnsVerificationStatusReason
+				expectedAcmeChallengeValue
+				id
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllDNSVerifications(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllDNSVerifications, error) {
+	vars := map[string]any{}
+
+	var res GetAllDNSVerifications
+	if err := c.Client.Post(ctx, "GetAllDNSVerifications", GetAllDNSVerificationsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetDNSVerificationByIDDocument = `query GetDNSVerificationByID ($dnsVerificationId: ID!) {
+	dnsVerification(id: $dnsVerificationId) {
+		acmeChallengePath
+		acmeChallengeStatus
+		acmeChallengeStatusReason
+		cloudflareHostnameID
+		createdAt
+		createdBy
+		dnsTxtRecord
+		dnsTxtValue
+		dnsVerificationStatus
+		dnsVerificationStatusReason
+		expectedAcmeChallengeValue
+		id
+		ownerID
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetDNSVerificationByID(ctx context.Context, dnsVerificationID string, interceptors ...clientv2.RequestInterceptor) (*GetDNSVerificationByID, error) {
+	vars := map[string]any{
+		"dnsVerificationId": dnsVerificationID,
+	}
+
+	var res GetDNSVerificationByID
+	if err := c.Client.Post(ctx, "GetDNSVerificationByID", GetDNSVerificationByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetDNSVerificationsDocument = `query GetDNSVerifications ($first: Int, $last: Int, $where: DNSVerificationWhereInput) {
+	dnsVerifications(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				acmeChallengePath
+				acmeChallengeStatus
+				acmeChallengeStatusReason
+				cloudflareHostnameID
+				createdAt
+				createdBy
+				dnsTxtRecord
+				dnsTxtValue
+				dnsVerificationStatus
+				dnsVerificationStatusReason
+				expectedAcmeChallengeValue
+				id
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetDNSVerifications(ctx context.Context, first *int64, last *int64, where *DNSVerificationWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetDNSVerifications, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetDNSVerifications
+	if err := c.Client.Post(ctx, "GetDNSVerifications", GetDNSVerificationsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateDNSVerificationDocument = `mutation UpdateDNSVerification ($updateDNSVerificationId: ID!, $input: UpdateDNSVerificationInput!) {
+	updateDNSVerification(id: $updateDNSVerificationId, input: $input) {
+		dnsVerification {
+			acmeChallengePath
+			acmeChallengeStatus
+			acmeChallengeStatusReason
+			cloudflareHostnameID
+			createdAt
+			createdBy
+			dnsTxtRecord
+			dnsTxtValue
+			dnsVerificationStatus
+			dnsVerificationStatusReason
+			expectedAcmeChallengeValue
+			id
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateDNSVerification(ctx context.Context, updateDNSVerificationID string, input UpdateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor) (*UpdateDNSVerification, error) {
+	vars := map[string]any{
+		"updateDNSVerificationId": updateDNSVerificationID,
+		"input":                   input,
+	}
+
+	var res UpdateDNSVerification
+	if err := c.Client.Post(ctx, "UpdateDNSVerification", UpdateDNSVerificationDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllDNSVerificationHistoriesDocument = `query GetAllDNSVerificationHistories {
+	dnsVerificationHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				acmeChallengePath
+				acmeChallengeStatus
+				acmeChallengeStatusReason
+				cloudflareHostnameID
+				createdAt
+				createdBy
+				dnsTxtRecord
+				dnsTxtValue
+				dnsVerificationStatus
+				dnsVerificationStatusReason
+				expectedAcmeChallengeValue
+				historyTime
+				id
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllDNSVerificationHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllDNSVerificationHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllDNSVerificationHistories
+	if err := c.Client.Post(ctx, "GetAllDNSVerificationHistories", GetAllDNSVerificationHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetDNSVerificationHistoriesDocument = `query GetDNSVerificationHistories ($first: Int, $last: Int, $where: DNSVerificationHistoryWhereInput) {
+	dnsVerificationHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				acmeChallengePath
+				acmeChallengeStatus
+				acmeChallengeStatusReason
+				cloudflareHostnameID
+				createdAt
+				createdBy
+				dnsTxtRecord
+				dnsTxtValue
+				dnsVerificationStatus
+				dnsVerificationStatusReason
+				expectedAcmeChallengeValue
+				historyTime
+				id
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetDNSVerificationHistories(ctx context.Context, first *int64, last *int64, where *DNSVerificationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetDNSVerificationHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetDNSVerificationHistories
+	if err := c.Client.Post(ctx, "GetDNSVerificationHistories", GetDNSVerificationHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -85729,6 +88112,7 @@ const CreateBulkCSVMappableDomainDocument = `mutation CreateBulkCSVMappableDomai
 			tags
 			updatedAt
 			updatedBy
+			zoneID
 		}
 	}
 }
@@ -85761,6 +88145,7 @@ const CreateBulkMappableDomainDocument = `mutation CreateBulkMappableDomain ($in
 			tags
 			updatedAt
 			updatedBy
+			zoneID
 		}
 	}
 }
@@ -85793,6 +88178,7 @@ const CreateMappableDomainDocument = `mutation CreateMappableDomain ($input: Cre
 			tags
 			updatedAt
 			updatedBy
+			zoneID
 		}
 	}
 }
@@ -85857,6 +88243,7 @@ const GetAllMappableDomainsDocument = `query GetAllMappableDomains {
 				tags
 				updatedAt
 				updatedBy
+				zoneID
 			}
 		}
 	}
@@ -85887,6 +88274,7 @@ const GetMappableDomainByIDDocument = `query GetMappableDomainByID ($mappableDom
 		tags
 		updatedAt
 		updatedBy
+		zoneID
 	}
 }
 `
@@ -85926,6 +88314,7 @@ const GetMappableDomainsDocument = `query GetMappableDomains ($first: Int, $last
 				tags
 				updatedAt
 				updatedBy
+				zoneID
 			}
 		}
 	}
@@ -85961,6 +88350,7 @@ const UpdateMappableDomainDocument = `mutation UpdateMappableDomain ($updateMapp
 			tags
 			updatedAt
 			updatedBy
+			zoneID
 		}
 	}
 }
@@ -86005,6 +88395,7 @@ const GetAllMappableDomainHistoriesDocument = `query GetAllMappableDomainHistori
 				tags
 				updatedAt
 				updatedBy
+				zoneID
 			}
 		}
 	}
@@ -86047,6 +88438,7 @@ const GetMappableDomainHistoriesDocument = `query GetMappableDomainHistories ($f
 				tags
 				updatedAt
 				updatedBy
+				zoneID
 			}
 		}
 	}
@@ -91518,6 +93910,21 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		dnsVerifications {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
 		documentData {
 			totalCount
 			pageInfo {
@@ -95283,6 +97690,16 @@ var DocumentOperationNames = map[string]string{
 	UpdateCustomDomainDocument:                   "UpdateCustomDomain",
 	GetAllCustomDomainHistoriesDocument:          "GetAllCustomDomainHistories",
 	GetCustomDomainHistoriesDocument:             "GetCustomDomainHistories",
+	CreateBulkCSVDNSVerificationDocument:         "CreateBulkCSVDNSVerification",
+	CreateBulkDNSVerificationDocument:            "CreateBulkDNSVerification",
+	CreateDNSVerificationDocument:                "CreateDNSVerification",
+	DeleteDNSVerificationDocument:                "DeleteDNSVerification",
+	GetAllDNSVerificationsDocument:               "GetAllDNSVerifications",
+	GetDNSVerificationByIDDocument:               "GetDNSVerificationByID",
+	GetDNSVerificationsDocument:                  "GetDNSVerifications",
+	UpdateDNSVerificationDocument:                "UpdateDNSVerification",
+	GetAllDNSVerificationHistoriesDocument:       "GetAllDNSVerificationHistories",
+	GetDNSVerificationHistoriesDocument:          "GetDNSVerificationHistories",
 	CreateDocumentDataDocument:                   "CreateDocumentData",
 	DeleteDocumentDataDocument:                   "DeleteDocumentData",
 	GetDocumentDataByIDDocument:                  "GetDocumentDataByID",

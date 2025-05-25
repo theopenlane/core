@@ -541,6 +541,8 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
 		{Name: "mappable_domain_id", Type: field.TypeString},
+		{Name: "dns_verification_id", Type: field.TypeString, Nullable: true},
+		{Name: "dns_verification_custom_domains", Type: field.TypeString, Nullable: true},
 		{Name: "mappable_domain_custom_domains", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -557,14 +559,26 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "custom_domains_mappable_domains_custom_domains",
+				Symbol:     "custom_domains_dns_verifications_dns_verification",
 				Columns:    []*schema.Column{CustomDomainsColumns[10]},
+				RefColumns: []*schema.Column{DNSVerificationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "custom_domains_dns_verifications_custom_domains",
+				Columns:    []*schema.Column{CustomDomainsColumns[11]},
+				RefColumns: []*schema.Column{DNSVerificationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "custom_domains_mappable_domains_custom_domains",
+				Columns:    []*schema.Column{CustomDomainsColumns[12]},
 				RefColumns: []*schema.Column{MappableDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "custom_domains_organizations_custom_domains",
-				Columns:    []*schema.Column{CustomDomainsColumns[11]},
+				Columns:    []*schema.Column{CustomDomainsColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -586,7 +600,7 @@ var (
 			{
 				Name:    "customdomain_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{CustomDomainsColumns[11]},
+				Columns: []*schema.Column{CustomDomainsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -609,6 +623,7 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
 		{Name: "mappable_domain_id", Type: field.TypeString},
+		{Name: "dns_verification_id", Type: field.TypeString, Nullable: true},
 	}
 	// CustomDomainHistoryTable holds the schema information for the "custom_domain_history" table.
 	CustomDomainHistoryTable = &schema.Table{
@@ -620,6 +635,93 @@ var (
 				Name:    "customdomainhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{CustomDomainHistoryColumns[1]},
+			},
+		},
+	}
+	// DNSVerificationsColumns holds the columns for the "dns_verifications" table.
+	DNSVerificationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "cloudflare_hostname_id", Type: field.TypeString, Size: 64},
+		{Name: "dns_txt_record", Type: field.TypeString, Size: 255},
+		{Name: "dns_txt_value", Type: field.TypeString, Size: 64},
+		{Name: "dns_verification_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "dns_verification_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "acme_challenge_path", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "expected_acme_challenge_value", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "acme_challenge_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "acme_challenge_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// DNSVerificationsTable holds the schema information for the "dns_verifications" table.
+	DNSVerificationsTable = &schema.Table{
+		Name:       "dns_verifications",
+		Columns:    DNSVerificationsColumns,
+		PrimaryKey: []*schema.Column{DNSVerificationsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "dns_verifications_organizations_dns_verifications",
+				Columns:    []*schema.Column{DNSVerificationsColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "dnsverification_id",
+				Unique:  true,
+				Columns: []*schema.Column{DNSVerificationsColumns[0]},
+			},
+			{
+				Name:    "dnsverification_cloudflare_hostname_id",
+				Unique:  true,
+				Columns: []*schema.Column{DNSVerificationsColumns[8]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// DNSVerificationHistoryColumns holds the columns for the "dns_verification_history" table.
+	DNSVerificationHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "cloudflare_hostname_id", Type: field.TypeString, Size: 64},
+		{Name: "dns_txt_record", Type: field.TypeString, Size: 255},
+		{Name: "dns_txt_value", Type: field.TypeString, Size: 64},
+		{Name: "dns_verification_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "dns_verification_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "acme_challenge_path", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "expected_acme_challenge_value", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "acme_challenge_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "acme_challenge_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
+	}
+	// DNSVerificationHistoryTable holds the schema information for the "dns_verification_history" table.
+	DNSVerificationHistoryTable = &schema.Table{
+		Name:       "dns_verification_history",
+		Columns:    DNSVerificationHistoryColumns,
+		PrimaryKey: []*schema.Column{DNSVerificationHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "dnsverificationhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{DNSVerificationHistoryColumns[1]},
 			},
 		},
 	}
@@ -1902,6 +2004,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 255},
+		{Name: "zone_id", Type: field.TypeString},
 	}
 	// MappableDomainsTable holds the schema information for the "mappable_domains" table.
 	MappableDomainsTable = &schema.Table{
@@ -1938,6 +2041,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 255},
+		{Name: "zone_id", Type: field.TypeString},
 	}
 	// MappableDomainHistoryTable holds the schema information for the "mappable_domain_history" table.
 	MappableDomainHistoryTable = &schema.Table{
@@ -6012,6 +6116,8 @@ var (
 		ControlObjectiveHistoryTable,
 		CustomDomainsTable,
 		CustomDomainHistoryTable,
+		DNSVerificationsTable,
+		DNSVerificationHistoryTable,
 		DocumentDataTable,
 		DocumentDataHistoryTable,
 		EmailVerificationTokensTable,
@@ -6205,10 +6311,16 @@ func init() {
 		Table: "control_objective_history",
 	}
 	CustomDomainsTable.ForeignKeys[0].RefTable = MappableDomainsTable
-	CustomDomainsTable.ForeignKeys[1].RefTable = MappableDomainsTable
-	CustomDomainsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	CustomDomainsTable.ForeignKeys[1].RefTable = DNSVerificationsTable
+	CustomDomainsTable.ForeignKeys[2].RefTable = DNSVerificationsTable
+	CustomDomainsTable.ForeignKeys[3].RefTable = MappableDomainsTable
+	CustomDomainsTable.ForeignKeys[4].RefTable = OrganizationsTable
 	CustomDomainHistoryTable.Annotation = &entsql.Annotation{
 		Table: "custom_domain_history",
+	}
+	DNSVerificationsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	DNSVerificationHistoryTable.Annotation = &entsql.Annotation{
+		Table: "dns_verification_history",
 	}
 	DocumentDataTable.ForeignKeys[0].RefTable = OrganizationsTable
 	DocumentDataTable.ForeignKeys[1].RefTable = TemplatesTable

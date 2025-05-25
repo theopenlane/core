@@ -154,13 +154,15 @@ type OrganizationEdges struct {
 	JobRunnerTokens []*JobRunnerToken `json:"job_runner_tokens,omitempty"`
 	// JobRunnerRegistrationTokens holds the value of the job_runner_registration_tokens edge.
 	JobRunnerRegistrationTokens []*JobRunnerRegistrationToken `json:"job_runner_registration_tokens,omitempty"`
+	// DNSVerifications holds the value of the dns_verifications edge.
+	DNSVerifications []*DNSVerification `json:"dns_verifications,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [48]bool
+	loadedTypes [49]bool
 	// totalCount holds the count of the edges above.
-	totalCount [48]map[string]int
+	totalCount [49]map[string]int
 
 	namedControlCreators             map[string][]*Group
 	namedControlObjectiveCreators    map[string][]*Group
@@ -206,6 +208,7 @@ type OrganizationEdges struct {
 	namedJobRunners                  map[string][]*JobRunner
 	namedJobRunnerTokens             map[string][]*JobRunnerToken
 	namedJobRunnerRegistrationTokens map[string][]*JobRunnerRegistrationToken
+	namedDNSVerifications            map[string][]*DNSVerification
 	namedMembers                     map[string][]*OrgMembership
 }
 
@@ -638,10 +641,19 @@ func (e OrganizationEdges) JobRunnerRegistrationTokensOrErr() ([]*JobRunnerRegis
 	return nil, &NotLoadedError{edge: "job_runner_registration_tokens"}
 }
 
+// DNSVerificationsOrErr returns the DNSVerifications value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) DNSVerificationsOrErr() ([]*DNSVerification, error) {
+	if e.loadedTypes[47] {
+		return e.DNSVerifications, nil
+	}
+	return nil, &NotLoadedError{edge: "dns_verifications"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[47] {
+	if e.loadedTypes[48] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1028,6 +1040,11 @@ func (o *Organization) QueryJobRunnerTokens() *JobRunnerTokenQuery {
 // QueryJobRunnerRegistrationTokens queries the "job_runner_registration_tokens" edge of the Organization entity.
 func (o *Organization) QueryJobRunnerRegistrationTokens() *JobRunnerRegistrationTokenQuery {
 	return NewOrganizationClient(o.config).QueryJobRunnerRegistrationTokens(o)
+}
+
+// QueryDNSVerifications queries the "dns_verifications" edge of the Organization entity.
+func (o *Organization) QueryDNSVerifications() *DNSVerificationQuery {
+	return NewOrganizationClient(o.config).QueryDNSVerifications(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2168,6 +2185,30 @@ func (o *Organization) appendNamedJobRunnerRegistrationTokens(name string, edges
 		o.Edges.namedJobRunnerRegistrationTokens[name] = []*JobRunnerRegistrationToken{}
 	} else {
 		o.Edges.namedJobRunnerRegistrationTokens[name] = append(o.Edges.namedJobRunnerRegistrationTokens[name], edges...)
+	}
+}
+
+// NamedDNSVerifications returns the DNSVerifications named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedDNSVerifications(name string) ([]*DNSVerification, error) {
+	if o.Edges.namedDNSVerifications == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedDNSVerifications[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedDNSVerifications(name string, edges ...*DNSVerification) {
+	if o.Edges.namedDNSVerifications == nil {
+		o.Edges.namedDNSVerifications = make(map[string][]*DNSVerification)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedDNSVerifications[name] = []*DNSVerification{}
+	} else {
+		o.Edges.namedDNSVerifications[name] = append(o.Edges.namedDNSVerifications[name], edges...)
 	}
 }
 

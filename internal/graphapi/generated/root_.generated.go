@@ -590,17 +590,19 @@ type ComplexityRoot struct {
 	}
 
 	CustomDomain struct {
-		CnameRecord      func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		ID               func(childComplexity int) int
-		MappableDomain   func(childComplexity int) int
-		MappableDomainID func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CnameRecord       func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		DNSVerification   func(childComplexity int) int
+		DNSVerificationID func(childComplexity int) int
+		ID                func(childComplexity int) int
+		MappableDomain    func(childComplexity int) int
+		MappableDomainID  func(childComplexity int) int
+		Owner             func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	CustomDomainBulkCreatePayload struct {
@@ -627,18 +629,19 @@ type ComplexityRoot struct {
 	}
 
 	CustomDomainHistory struct {
-		CnameRecord      func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		MappableDomainID func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CnameRecord       func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		DNSVerificationID func(childComplexity int) int
+		HistoryTime       func(childComplexity int) int
+		ID                func(childComplexity int) int
+		MappableDomainID  func(childComplexity int) int
+		Operation         func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		Ref               func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	CustomDomainHistoryConnection struct {
@@ -654,6 +657,87 @@ type ComplexityRoot struct {
 
 	CustomDomainUpdatePayload struct {
 		CustomDomain func(childComplexity int) int
+	}
+
+	DNSVerification struct {
+		AcmeChallengePath           func(childComplexity int) int
+		AcmeChallengeStatus         func(childComplexity int) int
+		AcmeChallengeStatusReason   func(childComplexity int) int
+		CloudflareHostnameID        func(childComplexity int) int
+		CreatedAt                   func(childComplexity int) int
+		CreatedBy                   func(childComplexity int) int
+		CustomDomains               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		DNSTxtRecord                func(childComplexity int) int
+		DNSTxtValue                 func(childComplexity int) int
+		DNSVerificationStatus       func(childComplexity int) int
+		DNSVerificationStatusReason func(childComplexity int) int
+		ExpectedAcmeChallengeValue  func(childComplexity int) int
+		ID                          func(childComplexity int) int
+		Owner                       func(childComplexity int) int
+		OwnerID                     func(childComplexity int) int
+		Tags                        func(childComplexity int) int
+		UpdatedAt                   func(childComplexity int) int
+		UpdatedBy                   func(childComplexity int) int
+	}
+
+	DNSVerificationBulkCreatePayload struct {
+		DNSVerifications func(childComplexity int) int
+	}
+
+	DNSVerificationConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DNSVerificationCreatePayload struct {
+		DNSVerification func(childComplexity int) int
+	}
+
+	DNSVerificationDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	DNSVerificationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DNSVerificationHistory struct {
+		AcmeChallengePath           func(childComplexity int) int
+		AcmeChallengeStatus         func(childComplexity int) int
+		AcmeChallengeStatusReason   func(childComplexity int) int
+		CloudflareHostnameID        func(childComplexity int) int
+		CreatedAt                   func(childComplexity int) int
+		CreatedBy                   func(childComplexity int) int
+		DNSTxtRecord                func(childComplexity int) int
+		DNSTxtValue                 func(childComplexity int) int
+		DNSVerificationStatus       func(childComplexity int) int
+		DNSVerificationStatusReason func(childComplexity int) int
+		ExpectedAcmeChallengeValue  func(childComplexity int) int
+		HistoryTime                 func(childComplexity int) int
+		ID                          func(childComplexity int) int
+		Operation                   func(childComplexity int) int
+		OwnerID                     func(childComplexity int) int
+		Ref                         func(childComplexity int) int
+		Tags                        func(childComplexity int) int
+		UpdatedAt                   func(childComplexity int) int
+		UpdatedBy                   func(childComplexity int) int
+	}
+
+	DNSVerificationHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DNSVerificationHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DNSVerificationUpdatePayload struct {
+		DNSVerification func(childComplexity int) int
 	}
 
 	DocumentData struct {
@@ -1804,6 +1888,7 @@ type ComplexityRoot struct {
 		Tags          func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
+		ZoneID        func(childComplexity int) int
 	}
 
 	MappableDomainBulkCreatePayload struct {
@@ -1840,6 +1925,7 @@ type ComplexityRoot struct {
 		Tags        func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		UpdatedBy   func(childComplexity int) int
+		ZoneID      func(childComplexity int) int
 	}
 
 	MappableDomainHistoryConnection struct {
@@ -1934,6 +2020,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVControlImplementation func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControlObjective      func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCustomDomain          func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDNSVerification       func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDocumentData          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntity                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntityType            func(childComplexity int, input graphql.Upload) int
@@ -1964,6 +2051,7 @@ type ComplexityRoot struct {
 		CreateBulkControlImplementation    func(childComplexity int, input []*generated.CreateControlImplementationInput) int
 		CreateBulkControlObjective         func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
 		CreateBulkCustomDomain             func(childComplexity int, input []*generated.CreateCustomDomainInput) int
+		CreateBulkDNSVerification          func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
 		CreateBulkDocumentData             func(childComplexity int, input []*generated.CreateDocumentDataInput) int
 		CreateBulkEntity                   func(childComplexity int, input []*generated.CreateEntityInput) int
 		CreateBulkEntityType               func(childComplexity int, input []*generated.CreateEntityTypeInput) int
@@ -1996,6 +2084,7 @@ type ComplexityRoot struct {
 		CreateControlWithSubcontrols       func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
 		CreateControlsByClone              func(childComplexity int, input *model.CloneControlInput) int
 		CreateCustomDomain                 func(childComplexity int, input generated.CreateCustomDomainInput) int
+		CreateDNSVerification              func(childComplexity int, input generated.CreateDNSVerificationInput) int
 		CreateDocumentData                 func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEntity                       func(childComplexity int, input generated.CreateEntityInput) int
 		CreateEntityType                   func(childComplexity int, input generated.CreateEntityTypeInput) int
@@ -2042,6 +2131,7 @@ type ComplexityRoot struct {
 		DeleteControlImplementation        func(childComplexity int, id string) int
 		DeleteControlObjective             func(childComplexity int, id string) int
 		DeleteCustomDomain                 func(childComplexity int, id string) int
+		DeleteDNSVerification              func(childComplexity int, id string) int
 		DeleteDocumentData                 func(childComplexity int, id string) int
 		DeleteEntity                       func(childComplexity int, id string) int
 		DeleteEntityType                   func(childComplexity int, id string) int
@@ -2083,6 +2173,7 @@ type ComplexityRoot struct {
 		UpdateControlImplementation        func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
 		UpdateControlObjective             func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
 		UpdateCustomDomain                 func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
+		UpdateDNSVerification              func(childComplexity int, id string, input generated.UpdateDNSVerificationInput) int
 		UpdateDocumentData                 func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
 		UpdateEntity                       func(childComplexity int, id string, input generated.UpdateEntityInput) int
 		UpdateEntityType                   func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
@@ -2419,6 +2510,7 @@ type ComplexityRoot struct {
 		CreatedAt                   func(childComplexity int) int
 		CreatedBy                   func(childComplexity int) int
 		CustomDomains               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		DNSVerifications            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
 		DedicatedDb                 func(childComplexity int) int
 		Description                 func(childComplexity int) int
 		DisplayName                 func(childComplexity int) int
@@ -2946,6 +3038,7 @@ type ComplexityRoot struct {
 		AdminControlObjectiveSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminControlSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminCustomDomainSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminDNSVerificationSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminDocumentDataSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminEntitySearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminEntityTypeSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -2999,6 +3092,10 @@ type ComplexityRoot struct {
 		CustomDomainHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) int
 		CustomDomainSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		CustomDomains                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		DNSVerification                       func(childComplexity int, id string) int
+		DNSVerificationHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DNSVerificationHistoryOrder, where *generated.DNSVerificationHistoryWhereInput) int
+		DNSVerificationSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		DNSVerifications                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
 		DocumentData                          func(childComplexity int, id string) int
 		DocumentDataHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) int
 		DocumentDataSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3250,6 +3347,7 @@ type ComplexityRoot struct {
 		ControlObjectives           func(childComplexity int) int
 		Controls                    func(childComplexity int) int
 		CustomDomains               func(childComplexity int) int
+		DNSVerifications            func(childComplexity int) int
 		DocumentData                func(childComplexity int) int
 		Entities                    func(childComplexity int) int
 		EntityTypes                 func(childComplexity int) int
@@ -6582,6 +6680,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomain.CreatedBy(childComplexity), true
 
+	case "CustomDomain.dnsVerification":
+		if e.complexity.CustomDomain.DNSVerification == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.DNSVerification(childComplexity), true
+
+	case "CustomDomain.dnsVerificationID":
+		if e.complexity.CustomDomain.DNSVerificationID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomain.DNSVerificationID(childComplexity), true
+
 	case "CustomDomain.id":
 		if e.complexity.CustomDomain.ID == nil {
 			break
@@ -6715,6 +6827,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.CustomDomainHistory.CreatedBy(childComplexity), true
 
+	case "CustomDomainHistory.dnsVerificationID":
+		if e.complexity.CustomDomainHistory.DNSVerificationID == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainHistory.DNSVerificationID(childComplexity), true
+
 	case "CustomDomainHistory.historyTime":
 		if e.complexity.CustomDomainHistory.HistoryTime == nil {
 			break
@@ -6819,6 +6938,368 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomDomainUpdatePayload.CustomDomain(childComplexity), true
+
+	case "DNSVerification.acmeChallengePath":
+		if e.complexity.DNSVerification.AcmeChallengePath == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.AcmeChallengePath(childComplexity), true
+
+	case "DNSVerification.acmeChallengeStatus":
+		if e.complexity.DNSVerification.AcmeChallengeStatus == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.AcmeChallengeStatus(childComplexity), true
+
+	case "DNSVerification.acmeChallengeStatusReason":
+		if e.complexity.DNSVerification.AcmeChallengeStatusReason == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.AcmeChallengeStatusReason(childComplexity), true
+
+	case "DNSVerification.cloudflareHostnameID":
+		if e.complexity.DNSVerification.CloudflareHostnameID == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.CloudflareHostnameID(childComplexity), true
+
+	case "DNSVerification.createdAt":
+		if e.complexity.DNSVerification.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.CreatedAt(childComplexity), true
+
+	case "DNSVerification.createdBy":
+		if e.complexity.DNSVerification.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.CreatedBy(childComplexity), true
+
+	case "DNSVerification.customDomains":
+		if e.complexity.DNSVerification.CustomDomains == nil {
+			break
+		}
+
+		args, err := ec.field_DNSVerification_customDomains_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DNSVerification.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
+
+	case "DNSVerification.dnsTxtRecord":
+		if e.complexity.DNSVerification.DNSTxtRecord == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.DNSTxtRecord(childComplexity), true
+
+	case "DNSVerification.dnsTxtValue":
+		if e.complexity.DNSVerification.DNSTxtValue == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.DNSTxtValue(childComplexity), true
+
+	case "DNSVerification.dnsVerificationStatus":
+		if e.complexity.DNSVerification.DNSVerificationStatus == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.DNSVerificationStatus(childComplexity), true
+
+	case "DNSVerification.dnsVerificationStatusReason":
+		if e.complexity.DNSVerification.DNSVerificationStatusReason == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.DNSVerificationStatusReason(childComplexity), true
+
+	case "DNSVerification.expectedAcmeChallengeValue":
+		if e.complexity.DNSVerification.ExpectedAcmeChallengeValue == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.ExpectedAcmeChallengeValue(childComplexity), true
+
+	case "DNSVerification.id":
+		if e.complexity.DNSVerification.ID == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.ID(childComplexity), true
+
+	case "DNSVerification.owner":
+		if e.complexity.DNSVerification.Owner == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.Owner(childComplexity), true
+
+	case "DNSVerification.ownerID":
+		if e.complexity.DNSVerification.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.OwnerID(childComplexity), true
+
+	case "DNSVerification.tags":
+		if e.complexity.DNSVerification.Tags == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.Tags(childComplexity), true
+
+	case "DNSVerification.updatedAt":
+		if e.complexity.DNSVerification.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.UpdatedAt(childComplexity), true
+
+	case "DNSVerification.updatedBy":
+		if e.complexity.DNSVerification.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DNSVerification.UpdatedBy(childComplexity), true
+
+	case "DNSVerificationBulkCreatePayload.dnsVerifications":
+		if e.complexity.DNSVerificationBulkCreatePayload.DNSVerifications == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationBulkCreatePayload.DNSVerifications(childComplexity), true
+
+	case "DNSVerificationConnection.edges":
+		if e.complexity.DNSVerificationConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationConnection.Edges(childComplexity), true
+
+	case "DNSVerificationConnection.pageInfo":
+		if e.complexity.DNSVerificationConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationConnection.PageInfo(childComplexity), true
+
+	case "DNSVerificationConnection.totalCount":
+		if e.complexity.DNSVerificationConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationConnection.TotalCount(childComplexity), true
+
+	case "DNSVerificationCreatePayload.dnsVerification":
+		if e.complexity.DNSVerificationCreatePayload.DNSVerification == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationCreatePayload.DNSVerification(childComplexity), true
+
+	case "DNSVerificationDeletePayload.deletedID":
+		if e.complexity.DNSVerificationDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationDeletePayload.DeletedID(childComplexity), true
+
+	case "DNSVerificationEdge.cursor":
+		if e.complexity.DNSVerificationEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationEdge.Cursor(childComplexity), true
+
+	case "DNSVerificationEdge.node":
+		if e.complexity.DNSVerificationEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationEdge.Node(childComplexity), true
+
+	case "DNSVerificationHistory.acmeChallengePath":
+		if e.complexity.DNSVerificationHistory.AcmeChallengePath == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.AcmeChallengePath(childComplexity), true
+
+	case "DNSVerificationHistory.acmeChallengeStatus":
+		if e.complexity.DNSVerificationHistory.AcmeChallengeStatus == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.AcmeChallengeStatus(childComplexity), true
+
+	case "DNSVerificationHistory.acmeChallengeStatusReason":
+		if e.complexity.DNSVerificationHistory.AcmeChallengeStatusReason == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.AcmeChallengeStatusReason(childComplexity), true
+
+	case "DNSVerificationHistory.cloudflareHostnameID":
+		if e.complexity.DNSVerificationHistory.CloudflareHostnameID == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.CloudflareHostnameID(childComplexity), true
+
+	case "DNSVerificationHistory.createdAt":
+		if e.complexity.DNSVerificationHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.CreatedAt(childComplexity), true
+
+	case "DNSVerificationHistory.createdBy":
+		if e.complexity.DNSVerificationHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.CreatedBy(childComplexity), true
+
+	case "DNSVerificationHistory.dnsTxtRecord":
+		if e.complexity.DNSVerificationHistory.DNSTxtRecord == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.DNSTxtRecord(childComplexity), true
+
+	case "DNSVerificationHistory.dnsTxtValue":
+		if e.complexity.DNSVerificationHistory.DNSTxtValue == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.DNSTxtValue(childComplexity), true
+
+	case "DNSVerificationHistory.dnsVerificationStatus":
+		if e.complexity.DNSVerificationHistory.DNSVerificationStatus == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.DNSVerificationStatus(childComplexity), true
+
+	case "DNSVerificationHistory.dnsVerificationStatusReason":
+		if e.complexity.DNSVerificationHistory.DNSVerificationStatusReason == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.DNSVerificationStatusReason(childComplexity), true
+
+	case "DNSVerificationHistory.expectedAcmeChallengeValue":
+		if e.complexity.DNSVerificationHistory.ExpectedAcmeChallengeValue == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.ExpectedAcmeChallengeValue(childComplexity), true
+
+	case "DNSVerificationHistory.historyTime":
+		if e.complexity.DNSVerificationHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.HistoryTime(childComplexity), true
+
+	case "DNSVerificationHistory.id":
+		if e.complexity.DNSVerificationHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.ID(childComplexity), true
+
+	case "DNSVerificationHistory.operation":
+		if e.complexity.DNSVerificationHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.Operation(childComplexity), true
+
+	case "DNSVerificationHistory.ownerID":
+		if e.complexity.DNSVerificationHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.OwnerID(childComplexity), true
+
+	case "DNSVerificationHistory.ref":
+		if e.complexity.DNSVerificationHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.Ref(childComplexity), true
+
+	case "DNSVerificationHistory.tags":
+		if e.complexity.DNSVerificationHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.Tags(childComplexity), true
+
+	case "DNSVerificationHistory.updatedAt":
+		if e.complexity.DNSVerificationHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.UpdatedAt(childComplexity), true
+
+	case "DNSVerificationHistory.updatedBy":
+		if e.complexity.DNSVerificationHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistory.UpdatedBy(childComplexity), true
+
+	case "DNSVerificationHistoryConnection.edges":
+		if e.complexity.DNSVerificationHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistoryConnection.Edges(childComplexity), true
+
+	case "DNSVerificationHistoryConnection.pageInfo":
+		if e.complexity.DNSVerificationHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistoryConnection.PageInfo(childComplexity), true
+
+	case "DNSVerificationHistoryConnection.totalCount":
+		if e.complexity.DNSVerificationHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistoryConnection.TotalCount(childComplexity), true
+
+	case "DNSVerificationHistoryEdge.cursor":
+		if e.complexity.DNSVerificationHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistoryEdge.Cursor(childComplexity), true
+
+	case "DNSVerificationHistoryEdge.node":
+		if e.complexity.DNSVerificationHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationHistoryEdge.Node(childComplexity), true
+
+	case "DNSVerificationUpdatePayload.dnsVerification":
+		if e.complexity.DNSVerificationUpdatePayload.DNSVerification == nil {
+			break
+		}
+
+		return e.complexity.DNSVerificationUpdatePayload.DNSVerification(childComplexity), true
 
 	case "DocumentData.createdAt":
 		if e.complexity.DocumentData.CreatedAt == nil {
@@ -12054,6 +12535,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappableDomain.UpdatedBy(childComplexity), true
 
+	case "MappableDomain.zoneID":
+		if e.complexity.MappableDomain.ZoneID == nil {
+			break
+		}
+
+		return e.complexity.MappableDomain.ZoneID(childComplexity), true
+
 	case "MappableDomainBulkCreatePayload.mappableDomains":
 		if e.complexity.MappableDomainBulkCreatePayload.MappableDomains == nil {
 			break
@@ -12179,6 +12667,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappableDomainHistory.UpdatedBy(childComplexity), true
+
+	case "MappableDomainHistory.zoneID":
+		if e.complexity.MappableDomainHistory.ZoneID == nil {
+			break
+		}
+
+		return e.complexity.MappableDomainHistory.ZoneID(childComplexity), true
 
 	case "MappableDomainHistoryConnection.edges":
 		if e.complexity.MappableDomainHistoryConnection.Edges == nil {
@@ -12609,6 +13104,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVCustomDomain(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVDNSVerification":
+		if e.complexity.Mutation.CreateBulkCSVDNSVerification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVDNSVerification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVDNSVerification(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVDocumentData":
 		if e.complexity.Mutation.CreateBulkCSVDocumentData == nil {
 			break
@@ -12968,6 +13475,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCustomDomain(childComplexity, args["input"].([]*generated.CreateCustomDomainInput)), true
+
+	case "Mutation.createBulkDNSVerification":
+		if e.complexity.Mutation.CreateBulkDNSVerification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkDNSVerification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkDNSVerification(childComplexity, args["input"].([]*generated.CreateDNSVerificationInput)), true
 
 	case "Mutation.createBulkDocumentData":
 		if e.complexity.Mutation.CreateBulkDocumentData == nil {
@@ -13352,6 +13871,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateCustomDomain(childComplexity, args["input"].(generated.CreateCustomDomainInput)), true
+
+	case "Mutation.createDNSVerification":
+		if e.complexity.Mutation.CreateDNSVerification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDNSVerification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDNSVerification(childComplexity, args["input"].(generated.CreateDNSVerificationInput)), true
 
 	case "Mutation.createDocumentData":
 		if e.complexity.Mutation.CreateDocumentData == nil {
@@ -13905,6 +14436,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteCustomDomain(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteDNSVerification":
+		if e.complexity.Mutation.DeleteDNSVerification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDNSVerification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteDNSVerification(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteDocumentData":
 		if e.complexity.Mutation.DeleteDocumentData == nil {
 			break
@@ -14396,6 +14939,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateCustomDomain(childComplexity, args["id"].(string), args["input"].(generated.UpdateCustomDomainInput)), true
+
+	case "Mutation.updateDNSVerification":
+		if e.complexity.Mutation.UpdateDNSVerification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDNSVerification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDNSVerification(childComplexity, args["id"].(string), args["input"].(generated.UpdateDNSVerificationInput)), true
 
 	case "Mutation.updateDocumentData":
 		if e.complexity.Mutation.UpdateDocumentData == nil {
@@ -16253,6 +16808,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
+
+	case "Organization.dnsVerifications":
+		if e.complexity.Organization.DNSVerifications == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_dnsVerifications_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.DNSVerifications(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DNSVerificationOrder), args["where"].(*generated.DNSVerificationWhereInput)), true
 
 	case "Organization.dedicatedDb":
 		if e.complexity.Organization.DedicatedDb == nil {
@@ -19050,6 +19617,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminCustomDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminDNSVerificationSearch":
+		if e.complexity.Query.AdminDNSVerificationSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminDNSVerificationSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminDNSVerificationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminDocumentDataSearch":
 		if e.complexity.Query.AdminDocumentDataSearch == nil {
 			break
@@ -19685,6 +20264,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.CustomDomains(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CustomDomainOrder), args["where"].(*generated.CustomDomainWhereInput)), true
+
+	case "Query.dnsVerification":
+		if e.complexity.Query.DNSVerification == nil {
+			break
+		}
+
+		args, err := ec.field_Query_dnsVerification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DNSVerification(childComplexity, args["id"].(string)), true
+
+	case "Query.dnsVerificationHistories":
+		if e.complexity.Query.DNSVerificationHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_dnsVerificationHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DNSVerificationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.DNSVerificationHistoryOrder), args["where"].(*generated.DNSVerificationHistoryWhereInput)), true
+
+	case "Query.dnsVerificationSearch":
+		if e.complexity.Query.DNSVerificationSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_dnsVerificationSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DNSVerificationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.dnsVerifications":
+		if e.complexity.Query.DNSVerifications == nil {
+			break
+		}
+
+		args, err := ec.field_Query_dnsVerifications_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DNSVerifications(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DNSVerificationOrder), args["where"].(*generated.DNSVerificationWhereInput)), true
 
 	case "Query.documentData":
 		if e.complexity.Query.DocumentData == nil {
@@ -21946,6 +22573,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.CustomDomains(childComplexity), true
+
+	case "SearchResults.dnsVerifications":
+		if e.complexity.SearchResults.DNSVerifications == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.DNSVerifications(childComplexity), true
 
 	case "SearchResults.documentData":
 		if e.complexity.SearchResults.DocumentData == nil {
@@ -25460,6 +26094,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateControlObjectiveInput,
 		ec.unmarshalInputCreateControlWithSubcontrolsInput,
 		ec.unmarshalInputCreateCustomDomainInput,
+		ec.unmarshalInputCreateDNSVerificationInput,
 		ec.unmarshalInputCreateDocumentDataInput,
 		ec.unmarshalInputCreateEntityInput,
 		ec.unmarshalInputCreateEntityTypeInput,
@@ -25504,6 +26139,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCustomDomainHistoryWhereInput,
 		ec.unmarshalInputCustomDomainOrder,
 		ec.unmarshalInputCustomDomainWhereInput,
+		ec.unmarshalInputDNSVerificationHistoryOrder,
+		ec.unmarshalInputDNSVerificationHistoryWhereInput,
+		ec.unmarshalInputDNSVerificationOrder,
+		ec.unmarshalInputDNSVerificationWhereInput,
 		ec.unmarshalInputDocumentDataHistoryOrder,
 		ec.unmarshalInputDocumentDataHistoryWhereInput,
 		ec.unmarshalInputDocumentDataOrder,
@@ -25642,6 +26281,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateControlInput,
 		ec.unmarshalInputUpdateControlObjectiveInput,
 		ec.unmarshalInputUpdateCustomDomainInput,
+		ec.unmarshalInputUpdateDNSVerificationInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
 		ec.unmarshalInputUpdateEntityInput,
 		ec.unmarshalInputUpdateEntityTypeInput,
@@ -26064,6 +26704,31 @@ type ActionPlanBulkCreatePayload {
         """
         last: Int
     ): CustomDomainConnection
+    """
+    Search across DNSVerification objects
+    """
+    adminDNSVerificationSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): DNSVerificationConnection
     """
     Search across DocumentData objects
     """
@@ -27556,6 +28221,109 @@ type CustomDomainBulkCreatePayload {
 }`, BuiltIn: false},
 	{Name: "../schema/directives.graphql", Input: `directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
 `, BuiltIn: false},
+	{Name: "../schema/dnsverification.graphql", Input: `extend type Query {
+    """
+    Look up dnsVerification by ID
+    """
+     dnsVerification(
+        """
+        ID of the dnsVerification
+        """
+        id: ID!
+    ):  DNSVerification!
+}
+
+extend type Mutation{
+    """
+    Create a new dnsVerification
+    """
+    createDNSVerification(
+        """
+        values of the dnsVerification
+        """
+        input: CreateDNSVerificationInput!
+    ): DNSVerificationCreatePayload!
+    """
+    Create multiple new dnsVerifications
+    """
+    createBulkDNSVerification(
+        """
+        values of the dnsVerification
+        """
+        input: [CreateDNSVerificationInput!]
+    ): DNSVerificationBulkCreatePayload!
+    """
+    Create multiple new dnsVerifications via file upload
+    """
+    createBulkCSVDNSVerification(
+        """
+        csv file containing values of the dnsVerification
+        """
+        input: Upload!
+    ): DNSVerificationBulkCreatePayload!
+    """
+    Update an existing dnsVerification
+    """
+    updateDNSVerification(
+        """
+        ID of the dnsVerification
+        """
+        id: ID!
+        """
+        New values for the dnsVerification
+        """
+        input: UpdateDNSVerificationInput!
+    ): DNSVerificationUpdatePayload!
+    """
+    Delete an existing dnsVerification
+    """
+    deleteDNSVerification(
+        """
+        ID of the dnsVerification
+        """
+        id: ID!
+    ): DNSVerificationDeletePayload!
+}
+
+"""
+Return response for createDNSVerification mutation
+"""
+type DNSVerificationCreatePayload {
+    """
+    Created dnsVerification
+    """
+    dnsVerification: DNSVerification!
+}
+
+"""
+Return response for updateDNSVerification mutation
+"""
+type DNSVerificationUpdatePayload {
+    """
+    Updated dnsVerification
+    """
+    dnsVerification: DNSVerification!
+}
+
+"""
+Return response for deleteDNSVerification mutation
+"""
+type DNSVerificationDeletePayload {
+    """
+    Deleted dnsVerification ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDNSVerification mutation
+"""
+type DNSVerificationBulkCreatePayload {
+    """
+    Created dnsVerifications
+    """
+    dnsVerifications: [DNSVerification!]
+}`, BuiltIn: false},
 	{Name: "../schema/documentdata.graphql", Input: `extend type Query {
     """
     Look up documentData by ID
@@ -33511,6 +34279,51 @@ input CreateCustomDomainInput {
   cnameRecord: String!
   ownerID: ID
   mappableDomainID: ID!
+  dnsVerificationID: ID
+}
+"""
+CreateDNSVerificationInput is used for create DNSVerification object.
+Input was generated by ent.
+"""
+input CreateDNSVerificationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  The ID of the custom domain in cloudflare
+  """
+  cloudflareHostnameID: String!
+  """
+  the name of the dns txt record
+  """
+  dnsTxtRecord: String!
+  """
+  the expected value of the dns txt record
+  """
+  dnsTxtValue: String!
+  """
+  Status of the domain verification
+  """
+  dnsVerificationStatus: DNSVerificationCustomDomainStatus
+  """
+  Reason of the dns verification status, for giving the user diagnostic info
+  """
+  dnsVerificationStatusReason: String
+  """
+  Path under /.well-known/acme-challenge/ to serve the ACME challenge
+  """
+  acmeChallengePath: String
+  """
+  the expected value of the acme challenge record
+  """
+  expectedAcmeChallengeValue: String
+  """
+  Status of the ACME challenge validation
+  """
+  acmeChallengeStatus: DNSVerificationCustomDomainStatus
+  ownerID: ID
+  customDomainIDs: [ID!]
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -34028,6 +34841,10 @@ input CreateMappableDomainInput {
   Name of the mappable domain
   """
   name: String!
+  """
+  DNS Zone ID of the mappable domain.
+  """
+  zoneID: String!
   customDomainIDs: [ID!]
 }
 """
@@ -34212,6 +35029,7 @@ input CreateOrganizationInput {
   jobRunnerIDs: [ID!]
   jobRunnerTokenIDs: [ID!]
   jobRunnerRegistrationTokenIDs: [ID!]
+  dnsVerificationIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -34894,8 +35712,13 @@ type CustomDomain implements Node {
   The mappable domain id that this custom domain maps to
   """
   mappableDomainID: ID!
+  """
+  The ID of the dns verification record
+  """
+  dnsVerificationID: ID
   owner: Organization
   mappableDomain: MappableDomain!
+  dnsVerification: DNSVerification
 }
 """
 A connection to a list of items.
@@ -34952,6 +35775,10 @@ type CustomDomainHistory implements Node {
   The mappable domain id that this custom domain maps to
   """
   mappableDomainID: String!
+  """
+  The ID of the dns verification record
+  """
+  dnsVerificationID: String
 }
 """
 A connection to a list of items.
@@ -35181,6 +36008,24 @@ input CustomDomainHistoryWhereInput {
   mappableDomainIDHasSuffix: String
   mappableDomainIDEqualFold: String
   mappableDomainIDContainsFold: String
+  """
+  dns_verification_id field predicates
+  """
+  dnsVerificationID: String
+  dnsVerificationIDNEQ: String
+  dnsVerificationIDIn: [String!]
+  dnsVerificationIDNotIn: [String!]
+  dnsVerificationIDGT: String
+  dnsVerificationIDGTE: String
+  dnsVerificationIDLT: String
+  dnsVerificationIDLTE: String
+  dnsVerificationIDContains: String
+  dnsVerificationIDHasPrefix: String
+  dnsVerificationIDHasSuffix: String
+  dnsVerificationIDIsNil: Boolean
+  dnsVerificationIDNotNil: Boolean
+  dnsVerificationIDEqualFold: String
+  dnsVerificationIDContainsFold: String
 }
 """
 Ordering options for CustomDomain connections
@@ -35337,6 +36182,24 @@ input CustomDomainWhereInput {
   mappableDomainIDEqualFold: ID
   mappableDomainIDContainsFold: ID
   """
+  dns_verification_id field predicates
+  """
+  dnsVerificationID: ID
+  dnsVerificationIDNEQ: ID
+  dnsVerificationIDIn: [ID!]
+  dnsVerificationIDNotIn: [ID!]
+  dnsVerificationIDGT: ID
+  dnsVerificationIDGTE: ID
+  dnsVerificationIDLT: ID
+  dnsVerificationIDLTE: ID
+  dnsVerificationIDContains: ID
+  dnsVerificationIDHasPrefix: ID
+  dnsVerificationIDHasSuffix: ID
+  dnsVerificationIDIsNil: Boolean
+  dnsVerificationIDNotNil: Boolean
+  dnsVerificationIDEqualFold: ID
+  dnsVerificationIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -35346,6 +36209,792 @@ input CustomDomainWhereInput {
   """
   hasMappableDomain: Boolean
   hasMappableDomainWith: [MappableDomainWhereInput!]
+  """
+  dns_verification edge predicates
+  """
+  hasDNSVerification: Boolean
+  hasDNSVerificationWith: [DNSVerificationWhereInput!]
+}
+type DNSVerification implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  The ID of the custom domain in cloudflare
+  """
+  cloudflareHostnameID: String!
+  """
+  the name of the dns txt record
+  """
+  dnsTxtRecord: String!
+  """
+  the expected value of the dns txt record
+  """
+  dnsTxtValue: String!
+  """
+  Status of the domain verification
+  """
+  dnsVerificationStatus: DNSVerificationCustomDomainStatus!
+  """
+  Reason of the dns verification status, for giving the user diagnostic info
+  """
+  dnsVerificationStatusReason: String
+  """
+  Path under /.well-known/acme-challenge/ to serve the ACME challenge
+  """
+  acmeChallengePath: String
+  """
+  the expected value of the acme challenge record
+  """
+  expectedAcmeChallengeValue: String
+  """
+  Status of the ACME challenge validation
+  """
+  acmeChallengeStatus: DNSVerificationCustomDomainStatus!
+  """
+  Reason of the ACME status, for giving the user diagnostic info
+  """
+  acmeChallengeStatusReason: String
+  owner: Organization
+  customDomains(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CustomDomains returned from the connection.
+    """
+    orderBy: [CustomDomainOrder!]
+
+    """
+    Filtering options for CustomDomains returned from the connection.
+    """
+    where: CustomDomainWhereInput
+  ): CustomDomainConnection!
+}
+"""
+A connection to a list of items.
+"""
+type DNSVerificationConnection {
+  """
+  A list of edges.
+  """
+  edges: [DNSVerificationEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+DNSVerificationCustomDomainStatus is enum for the field dns_verification_status
+"""
+enum DNSVerificationCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
+  INVALID
+  VERIFIED
+  FAILED_VERIFY
+  PENDING
+}
+"""
+An edge in a connection.
+"""
+type DNSVerificationEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DNSVerification
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type DNSVerificationHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: DNSVerificationHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  The ID of the custom domain in cloudflare
+  """
+  cloudflareHostnameID: String!
+  """
+  the name of the dns txt record
+  """
+  dnsTxtRecord: String!
+  """
+  the expected value of the dns txt record
+  """
+  dnsTxtValue: String!
+  """
+  Status of the domain verification
+  """
+  dnsVerificationStatus: DNSVerificationHistoryCustomDomainStatus!
+  """
+  Reason of the dns verification status, for giving the user diagnostic info
+  """
+  dnsVerificationStatusReason: String
+  """
+  Path under /.well-known/acme-challenge/ to serve the ACME challenge
+  """
+  acmeChallengePath: String
+  """
+  the expected value of the acme challenge record
+  """
+  expectedAcmeChallengeValue: String
+  """
+  Status of the ACME challenge validation
+  """
+  acmeChallengeStatus: DNSVerificationHistoryCustomDomainStatus!
+  """
+  Reason of the ACME status, for giving the user diagnostic info
+  """
+  acmeChallengeStatusReason: String
+}
+"""
+A connection to a list of items.
+"""
+type DNSVerificationHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [DNSVerificationHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+DNSVerificationHistoryCustomDomainStatus is enum for the field dns_verification_status
+"""
+enum DNSVerificationHistoryCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
+  INVALID
+  VERIFIED
+  FAILED_VERIFY
+  PENDING
+}
+"""
+An edge in a connection.
+"""
+type DNSVerificationHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DNSVerificationHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+DNSVerificationHistoryOpType is enum for the field operation
+"""
+enum DNSVerificationHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for DNSVerificationHistory connections
+"""
+input DNSVerificationHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DNSVerificationHistories.
+  """
+  field: DNSVerificationHistoryOrderField!
+}
+"""
+Properties by which DNSVerificationHistory connections can be ordered.
+"""
+enum DNSVerificationHistoryOrderField {
+  created_at
+  updated_at
+}
+"""
+DNSVerificationHistoryWhereInput is used for filtering DNSVerificationHistory objects.
+Input was generated by ent.
+"""
+input DNSVerificationHistoryWhereInput {
+  not: DNSVerificationHistoryWhereInput
+  and: [DNSVerificationHistoryWhereInput!]
+  or: [DNSVerificationHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: DNSVerificationHistoryOpType
+  operationNEQ: DNSVerificationHistoryOpType
+  operationIn: [DNSVerificationHistoryOpType!]
+  operationNotIn: [DNSVerificationHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  cloudflare_hostname_id field predicates
+  """
+  cloudflareHostnameID: String
+  cloudflareHostnameIDNEQ: String
+  cloudflareHostnameIDIn: [String!]
+  cloudflareHostnameIDNotIn: [String!]
+  cloudflareHostnameIDGT: String
+  cloudflareHostnameIDGTE: String
+  cloudflareHostnameIDLT: String
+  cloudflareHostnameIDLTE: String
+  cloudflareHostnameIDContains: String
+  cloudflareHostnameIDHasPrefix: String
+  cloudflareHostnameIDHasSuffix: String
+  cloudflareHostnameIDEqualFold: String
+  cloudflareHostnameIDContainsFold: String
+  """
+  dns_txt_record field predicates
+  """
+  dnsTxtRecord: String
+  dnsTxtRecordNEQ: String
+  dnsTxtRecordIn: [String!]
+  dnsTxtRecordNotIn: [String!]
+  dnsTxtRecordGT: String
+  dnsTxtRecordGTE: String
+  dnsTxtRecordLT: String
+  dnsTxtRecordLTE: String
+  dnsTxtRecordContains: String
+  dnsTxtRecordHasPrefix: String
+  dnsTxtRecordHasSuffix: String
+  dnsTxtRecordEqualFold: String
+  dnsTxtRecordContainsFold: String
+  """
+  dns_txt_value field predicates
+  """
+  dnsTxtValue: String
+  dnsTxtValueNEQ: String
+  dnsTxtValueIn: [String!]
+  dnsTxtValueNotIn: [String!]
+  dnsTxtValueGT: String
+  dnsTxtValueGTE: String
+  dnsTxtValueLT: String
+  dnsTxtValueLTE: String
+  dnsTxtValueContains: String
+  dnsTxtValueHasPrefix: String
+  dnsTxtValueHasSuffix: String
+  dnsTxtValueEqualFold: String
+  dnsTxtValueContainsFold: String
+  """
+  dns_verification_status field predicates
+  """
+  dnsVerificationStatus: DNSVerificationHistoryCustomDomainStatus
+  dnsVerificationStatusNEQ: DNSVerificationHistoryCustomDomainStatus
+  dnsVerificationStatusIn: [DNSVerificationHistoryCustomDomainStatus!]
+  dnsVerificationStatusNotIn: [DNSVerificationHistoryCustomDomainStatus!]
+  """
+  dns_verification_status_reason field predicates
+  """
+  dnsVerificationStatusReason: String
+  dnsVerificationStatusReasonNEQ: String
+  dnsVerificationStatusReasonIn: [String!]
+  dnsVerificationStatusReasonNotIn: [String!]
+  dnsVerificationStatusReasonGT: String
+  dnsVerificationStatusReasonGTE: String
+  dnsVerificationStatusReasonLT: String
+  dnsVerificationStatusReasonLTE: String
+  dnsVerificationStatusReasonContains: String
+  dnsVerificationStatusReasonHasPrefix: String
+  dnsVerificationStatusReasonHasSuffix: String
+  dnsVerificationStatusReasonIsNil: Boolean
+  dnsVerificationStatusReasonNotNil: Boolean
+  dnsVerificationStatusReasonEqualFold: String
+  dnsVerificationStatusReasonContainsFold: String
+  """
+  acme_challenge_path field predicates
+  """
+  acmeChallengePath: String
+  acmeChallengePathNEQ: String
+  acmeChallengePathIn: [String!]
+  acmeChallengePathNotIn: [String!]
+  acmeChallengePathGT: String
+  acmeChallengePathGTE: String
+  acmeChallengePathLT: String
+  acmeChallengePathLTE: String
+  acmeChallengePathContains: String
+  acmeChallengePathHasPrefix: String
+  acmeChallengePathHasSuffix: String
+  acmeChallengePathIsNil: Boolean
+  acmeChallengePathNotNil: Boolean
+  acmeChallengePathEqualFold: String
+  acmeChallengePathContainsFold: String
+  """
+  expected_acme_challenge_value field predicates
+  """
+  expectedAcmeChallengeValue: String
+  expectedAcmeChallengeValueNEQ: String
+  expectedAcmeChallengeValueIn: [String!]
+  expectedAcmeChallengeValueNotIn: [String!]
+  expectedAcmeChallengeValueGT: String
+  expectedAcmeChallengeValueGTE: String
+  expectedAcmeChallengeValueLT: String
+  expectedAcmeChallengeValueLTE: String
+  expectedAcmeChallengeValueContains: String
+  expectedAcmeChallengeValueHasPrefix: String
+  expectedAcmeChallengeValueHasSuffix: String
+  expectedAcmeChallengeValueIsNil: Boolean
+  expectedAcmeChallengeValueNotNil: Boolean
+  expectedAcmeChallengeValueEqualFold: String
+  expectedAcmeChallengeValueContainsFold: String
+  """
+  acme_challenge_status field predicates
+  """
+  acmeChallengeStatus: DNSVerificationHistoryCustomDomainStatus
+  acmeChallengeStatusNEQ: DNSVerificationHistoryCustomDomainStatus
+  acmeChallengeStatusIn: [DNSVerificationHistoryCustomDomainStatus!]
+  acmeChallengeStatusNotIn: [DNSVerificationHistoryCustomDomainStatus!]
+  """
+  acme_challenge_status_reason field predicates
+  """
+  acmeChallengeStatusReason: String
+  acmeChallengeStatusReasonNEQ: String
+  acmeChallengeStatusReasonIn: [String!]
+  acmeChallengeStatusReasonNotIn: [String!]
+  acmeChallengeStatusReasonGT: String
+  acmeChallengeStatusReasonGTE: String
+  acmeChallengeStatusReasonLT: String
+  acmeChallengeStatusReasonLTE: String
+  acmeChallengeStatusReasonContains: String
+  acmeChallengeStatusReasonHasPrefix: String
+  acmeChallengeStatusReasonHasSuffix: String
+  acmeChallengeStatusReasonIsNil: Boolean
+  acmeChallengeStatusReasonNotNil: Boolean
+  acmeChallengeStatusReasonEqualFold: String
+  acmeChallengeStatusReasonContainsFold: String
+}
+"""
+Ordering options for DNSVerification connections
+"""
+input DNSVerificationOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DNSVerifications.
+  """
+  field: DNSVerificationOrderField!
+}
+"""
+Properties by which DNSVerification connections can be ordered.
+"""
+enum DNSVerificationOrderField {
+  created_at
+  updated_at
+}
+"""
+DNSVerificationWhereInput is used for filtering DNSVerification objects.
+Input was generated by ent.
+"""
+input DNSVerificationWhereInput {
+  not: DNSVerificationWhereInput
+  and: [DNSVerificationWhereInput!]
+  or: [DNSVerificationWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  cloudflare_hostname_id field predicates
+  """
+  cloudflareHostnameID: String
+  cloudflareHostnameIDNEQ: String
+  cloudflareHostnameIDIn: [String!]
+  cloudflareHostnameIDNotIn: [String!]
+  cloudflareHostnameIDGT: String
+  cloudflareHostnameIDGTE: String
+  cloudflareHostnameIDLT: String
+  cloudflareHostnameIDLTE: String
+  cloudflareHostnameIDContains: String
+  cloudflareHostnameIDHasPrefix: String
+  cloudflareHostnameIDHasSuffix: String
+  cloudflareHostnameIDEqualFold: String
+  cloudflareHostnameIDContainsFold: String
+  """
+  dns_txt_record field predicates
+  """
+  dnsTxtRecord: String
+  dnsTxtRecordNEQ: String
+  dnsTxtRecordIn: [String!]
+  dnsTxtRecordNotIn: [String!]
+  dnsTxtRecordGT: String
+  dnsTxtRecordGTE: String
+  dnsTxtRecordLT: String
+  dnsTxtRecordLTE: String
+  dnsTxtRecordContains: String
+  dnsTxtRecordHasPrefix: String
+  dnsTxtRecordHasSuffix: String
+  dnsTxtRecordEqualFold: String
+  dnsTxtRecordContainsFold: String
+  """
+  dns_txt_value field predicates
+  """
+  dnsTxtValue: String
+  dnsTxtValueNEQ: String
+  dnsTxtValueIn: [String!]
+  dnsTxtValueNotIn: [String!]
+  dnsTxtValueGT: String
+  dnsTxtValueGTE: String
+  dnsTxtValueLT: String
+  dnsTxtValueLTE: String
+  dnsTxtValueContains: String
+  dnsTxtValueHasPrefix: String
+  dnsTxtValueHasSuffix: String
+  dnsTxtValueEqualFold: String
+  dnsTxtValueContainsFold: String
+  """
+  dns_verification_status field predicates
+  """
+  dnsVerificationStatus: DNSVerificationCustomDomainStatus
+  dnsVerificationStatusNEQ: DNSVerificationCustomDomainStatus
+  dnsVerificationStatusIn: [DNSVerificationCustomDomainStatus!]
+  dnsVerificationStatusNotIn: [DNSVerificationCustomDomainStatus!]
+  """
+  dns_verification_status_reason field predicates
+  """
+  dnsVerificationStatusReason: String
+  dnsVerificationStatusReasonNEQ: String
+  dnsVerificationStatusReasonIn: [String!]
+  dnsVerificationStatusReasonNotIn: [String!]
+  dnsVerificationStatusReasonGT: String
+  dnsVerificationStatusReasonGTE: String
+  dnsVerificationStatusReasonLT: String
+  dnsVerificationStatusReasonLTE: String
+  dnsVerificationStatusReasonContains: String
+  dnsVerificationStatusReasonHasPrefix: String
+  dnsVerificationStatusReasonHasSuffix: String
+  dnsVerificationStatusReasonIsNil: Boolean
+  dnsVerificationStatusReasonNotNil: Boolean
+  dnsVerificationStatusReasonEqualFold: String
+  dnsVerificationStatusReasonContainsFold: String
+  """
+  acme_challenge_path field predicates
+  """
+  acmeChallengePath: String
+  acmeChallengePathNEQ: String
+  acmeChallengePathIn: [String!]
+  acmeChallengePathNotIn: [String!]
+  acmeChallengePathGT: String
+  acmeChallengePathGTE: String
+  acmeChallengePathLT: String
+  acmeChallengePathLTE: String
+  acmeChallengePathContains: String
+  acmeChallengePathHasPrefix: String
+  acmeChallengePathHasSuffix: String
+  acmeChallengePathIsNil: Boolean
+  acmeChallengePathNotNil: Boolean
+  acmeChallengePathEqualFold: String
+  acmeChallengePathContainsFold: String
+  """
+  expected_acme_challenge_value field predicates
+  """
+  expectedAcmeChallengeValue: String
+  expectedAcmeChallengeValueNEQ: String
+  expectedAcmeChallengeValueIn: [String!]
+  expectedAcmeChallengeValueNotIn: [String!]
+  expectedAcmeChallengeValueGT: String
+  expectedAcmeChallengeValueGTE: String
+  expectedAcmeChallengeValueLT: String
+  expectedAcmeChallengeValueLTE: String
+  expectedAcmeChallengeValueContains: String
+  expectedAcmeChallengeValueHasPrefix: String
+  expectedAcmeChallengeValueHasSuffix: String
+  expectedAcmeChallengeValueIsNil: Boolean
+  expectedAcmeChallengeValueNotNil: Boolean
+  expectedAcmeChallengeValueEqualFold: String
+  expectedAcmeChallengeValueContainsFold: String
+  """
+  acme_challenge_status field predicates
+  """
+  acmeChallengeStatus: DNSVerificationCustomDomainStatus
+  acmeChallengeStatusNEQ: DNSVerificationCustomDomainStatus
+  acmeChallengeStatusIn: [DNSVerificationCustomDomainStatus!]
+  acmeChallengeStatusNotIn: [DNSVerificationCustomDomainStatus!]
+  """
+  acme_challenge_status_reason field predicates
+  """
+  acmeChallengeStatusReason: String
+  acmeChallengeStatusReasonNEQ: String
+  acmeChallengeStatusReasonIn: [String!]
+  acmeChallengeStatusReasonNotIn: [String!]
+  acmeChallengeStatusReasonGT: String
+  acmeChallengeStatusReasonGTE: String
+  acmeChallengeStatusReasonLT: String
+  acmeChallengeStatusReasonLTE: String
+  acmeChallengeStatusReasonContains: String
+  acmeChallengeStatusReasonHasPrefix: String
+  acmeChallengeStatusReasonHasSuffix: String
+  acmeChallengeStatusReasonIsNil: Boolean
+  acmeChallengeStatusReasonNotNil: Boolean
+  acmeChallengeStatusReasonEqualFold: String
+  acmeChallengeStatusReasonContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  custom_domains edge predicates
+  """
+  hasCustomDomains: Boolean
+  hasCustomDomainsWith: [CustomDomainWhereInput!]
 }
 type DocumentData implements Node {
   id: ID!
@@ -45552,6 +47201,10 @@ type MappableDomain implements Node {
   Name of the mappable domain
   """
   name: String!
+  """
+  DNS Zone ID of the mappable domain.
+  """
+  zoneID: String!
   customDomains(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -45631,6 +47284,10 @@ type MappableDomainHistory implements Node {
   Name of the mappable domain
   """
   name: String!
+  """
+  DNS Zone ID of the mappable domain.
+  """
+  zoneID: String!
 }
 """
 A connection to a list of items.
@@ -45826,6 +47483,22 @@ input MappableDomainHistoryWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  zone_id field predicates
+  """
+  zoneID: String
+  zoneIDNEQ: String
+  zoneIDIn: [String!]
+  zoneIDNotIn: [String!]
+  zoneIDGT: String
+  zoneIDGTE: String
+  zoneIDLT: String
+  zoneIDLTE: String
+  zoneIDContains: String
+  zoneIDHasPrefix: String
+  zoneIDHasSuffix: String
+  zoneIDEqualFold: String
+  zoneIDContainsFold: String
 }
 """
 Ordering options for MappableDomain connections
@@ -45947,6 +47620,22 @@ input MappableDomainWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  zone_id field predicates
+  """
+  zoneID: String
+  zoneIDNEQ: String
+  zoneIDIn: [String!]
+  zoneIDNotIn: [String!]
+  zoneIDGT: String
+  zoneIDGTE: String
+  zoneIDLT: String
+  zoneIDLTE: String
+  zoneIDContains: String
+  zoneIDHasPrefix: String
+  zoneIDHasSuffix: String
+  zoneIDEqualFold: String
+  zoneIDContainsFold: String
   """
   custom_domains edge predicates
   """
@@ -50189,6 +51878,37 @@ type Organization implements Node {
     """
     where: JobRunnerRegistrationTokenWhereInput
   ): JobRunnerRegistrationTokenConnection!
+  dnsVerifications(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DNSVerifications returned from the connection.
+    """
+    orderBy: [DNSVerificationOrder!]
+
+    """
+    Filtering options for DNSVerifications returned from the connection.
+    """
+    where: DNSVerificationWhereInput
+  ): DNSVerificationConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -51680,6 +53400,11 @@ input OrganizationWhereInput {
   """
   hasJobRunnerRegistrationTokens: Boolean
   hasJobRunnerRegistrationTokensWith: [JobRunnerRegistrationTokenWhereInput!]
+  """
+  dns_verifications edge predicates
+  """
+  hasDNSVerifications: Boolean
+  hasDNSVerificationsWith: [DNSVerificationWhereInput!]
   """
   members edge predicates
   """
@@ -55452,6 +57177,68 @@ type Query {
     """
     where: CustomDomainHistoryWhereInput
   ): CustomDomainHistoryConnection!
+  dnsVerifications(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DNSVerifications returned from the connection.
+    """
+    orderBy: [DNSVerificationOrder!]
+
+    """
+    Filtering options for DNSVerifications returned from the connection.
+    """
+    where: DNSVerificationWhereInput
+  ): DNSVerificationConnection!
+  dnsVerificationHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DNSVerificationHistories returned from the connection.
+    """
+    orderBy: DNSVerificationHistoryOrder
+
+    """
+    Filtering options for DNSVerificationHistories returned from the connection.
+    """
+    where: DNSVerificationHistoryWhereInput
+  ): DNSVerificationHistoryConnection!
   documentDataSlice(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -63975,6 +65762,61 @@ input UpdateCustomDomainInput {
   clearTags: Boolean
   ownerID: ID
   clearOwner: Boolean
+  dnsVerificationID: ID
+  clearDNSVerification: Boolean
+}
+"""
+UpdateDNSVerificationInput is used for update DNSVerification object.
+Input was generated by ent.
+"""
+input UpdateDNSVerificationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the name of the dns txt record
+  """
+  dnsTxtRecord: String
+  """
+  the expected value of the dns txt record
+  """
+  dnsTxtValue: String
+  """
+  Status of the domain verification
+  """
+  dnsVerificationStatus: DNSVerificationCustomDomainStatus
+  """
+  Reason of the dns verification status, for giving the user diagnostic info
+  """
+  dnsVerificationStatusReason: String
+  clearDNSVerificationStatusReason: Boolean
+  """
+  Path under /.well-known/acme-challenge/ to serve the ACME challenge
+  """
+  acmeChallengePath: String
+  clearAcmeChallengePath: Boolean
+  """
+  the expected value of the acme challenge record
+  """
+  expectedAcmeChallengeValue: String
+  clearExpectedAcmeChallengeValue: Boolean
+  """
+  Status of the ACME challenge validation
+  """
+  acmeChallengeStatus: DNSVerificationCustomDomainStatus
+  """
+  Reason of the ACME status, for giving the user diagnostic info
+  """
+  acmeChallengeStatusReason: String
+  clearAcmeChallengeStatusReason: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addCustomDomainIDs: [ID!]
+  removeCustomDomainIDs: [ID!]
+  clearCustomDomains: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -64970,6 +66812,9 @@ input UpdateOrganizationInput {
   addJobRunnerRegistrationTokenIDs: [ID!]
   removeJobRunnerRegistrationTokenIDs: [ID!]
   clearJobRunnerRegistrationTokens: Boolean
+  addDNSVerificationIDs: [ID!]
+  removeDNSVerificationIDs: [ID!]
+  clearDNSVerifications: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -70988,6 +72833,31 @@ scalar AAGUID
         last: Int
     ): CustomDomainConnection
     """
+    Search across DNSVerification objects
+    """
+    dnsVerificationSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): DNSVerificationConnection
+    """
     Search across DocumentData objects
     """
     documentDataSearch(
@@ -71779,6 +73649,7 @@ type SearchResults{
   controlImplementations: ControlImplementationConnection
   controlObjectives: ControlObjectiveConnection
   customDomains: CustomDomainConnection
+  dnsVerifications: DNSVerificationConnection
   documentData: DocumentDataConnection
   entities: EntityConnection
   entityTypes: EntityTypeConnection

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
@@ -320,6 +321,52 @@ func (cdhq *CustomDomainHistoryQuery) AsOf(ctx context.Context, time time.Time) 
 	return cdhq.
 		Where(customdomainhistory.HistoryTimeLTE(time)).
 		Order(customdomainhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dv *DNSVerification) History() *DNSVerificationHistoryQuery {
+	historyClient := NewDNSVerificationHistoryClient(dv.config)
+	return historyClient.Query().Where(dnsverificationhistory.Ref(dv.ID))
+}
+
+func (dvh *DNSVerificationHistory) Next(ctx context.Context) (*DNSVerificationHistory, error) {
+	client := NewDNSVerificationHistoryClient(dvh.config)
+	return client.Query().
+		Where(
+			dnsverificationhistory.Ref(dvh.Ref),
+			dnsverificationhistory.HistoryTimeGT(dvh.HistoryTime),
+		).
+		Order(dnsverificationhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (dvh *DNSVerificationHistory) Prev(ctx context.Context) (*DNSVerificationHistory, error) {
+	client := NewDNSVerificationHistoryClient(dvh.config)
+	return client.Query().
+		Where(
+			dnsverificationhistory.Ref(dvh.Ref),
+			dnsverificationhistory.HistoryTimeLT(dvh.HistoryTime),
+		).
+		Order(dnsverificationhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dvhq *DNSVerificationHistoryQuery) Earliest(ctx context.Context) (*DNSVerificationHistory, error) {
+	return dvhq.
+		Order(dnsverificationhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (dvhq *DNSVerificationHistoryQuery) Latest(ctx context.Context) (*DNSVerificationHistory, error) {
+	return dvhq.
+		Order(dnsverificationhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dvhq *DNSVerificationHistoryQuery) AsOf(ctx context.Context, time time.Time) (*DNSVerificationHistory, error) {
+	return dvhq.
+		Where(dnsverificationhistory.HistoryTimeLTE(time)).
+		Order(dnsverificationhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
