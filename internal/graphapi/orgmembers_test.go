@@ -242,18 +242,24 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 }
 
 func TestMutationUpdateOrgMembers(t *testing.T) {
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
 
-	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser1.UserCtx, &openlaneclient.OrgMembershipWhereInput{
-		OrganizationID: &testUser1.OrganizationID,
+	// create another user for this test
+	// so it doesn't interfere with the other tests
+	testUserOrg := suite.userBuilder(context.Background(), t)
+
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUserOrg.UserCtx, t)
+
+	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUserOrg.UserCtx, &openlaneclient.OrgMembershipWhereInput{
+		OrganizationID: &testUserOrg.OrganizationID,
 	})
 	assert.NilError(t, err)
 
-	testUser1OrgMember := ""
+	testUserOrgMember := ""
 
 	for _, edge := range orgMembers.OrgMemberships.Edges {
-		if edge.Node.UserID == testUser1.ID {
-			testUser1OrgMember = edge.Node.ID
+		if edge.Node.UserID == testUserOrg.ID {
+			testUserOrgMember = edge.Node.ID
 			break
 		}
 	}
@@ -281,7 +287,7 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 		},
 		{
 			name:        "update self from admin to member, not allowed",
-			orgMemberID: testUser1OrgMember,
+			orgMemberID: testUserOrgMember,
 			role:        enums.RoleMember,
 			errMsg:      notAuthorizedErrorMsg,
 		},
@@ -299,7 +305,7 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 				Role: &tc.role,
 			}
 
-			resp, err := suite.client.api.UpdateUserRoleInOrg(testUser1.UserCtx, tc.orgMemberID, input)
+			resp, err := suite.client.api.UpdateUserRoleInOrg(testUserOrg.UserCtx, tc.orgMemberID, input)
 
 			if tc.errMsg != "" {
 				assert.ErrorContains(t, err, tc.errMsg)
@@ -314,7 +320,7 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 	}
 
 	// delete created org members
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUserOrg.UserCtx, t)
 }
 
 func TestMutationDeleteOrgMembers(t *testing.T) {
