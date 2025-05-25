@@ -27864,6 +27864,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputActionPlanHistoryWhereInput,
 		ec.unmarshalInputActionPlanOrder,
 		ec.unmarshalInputActionPlanWhereInput,
+		ec.unmarshalInputAddProgramMembershipInput,
 		ec.unmarshalInputAuditLogWhereInput,
 		ec.unmarshalInputCloneControlInput,
 		ec.unmarshalInputContactHistoryOrder,
@@ -78229,8 +78230,16 @@ type ProgramBulkCreatePayload {
     programs: [Program!]
 }`, BuiltIn: false},
 	{Name: "../schema/programextended.graphql", Input: `extend input UpdateProgramInput {
-  addProgramMembers: [CreateProgramMembershipInput!]
+  addProgramMembers: [AddProgramMembershipInput!]
   removeProgramMembers: [ID!]
+}
+
+"""
+AddProgramMembershipInput is used for create ProgramMembership object under an existing program
+"""
+input AddProgramMembershipInput {
+  role: ProgramMembershipRole
+  userID: ID!
 }
 
 extend input ProgramMembershipWhereInput {

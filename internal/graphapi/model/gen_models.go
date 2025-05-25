@@ -62,6 +62,12 @@ type ActionPlanUpdatePayload struct {
 	ActionPlan *generated.ActionPlan `json:"actionPlan"`
 }
 
+// AddProgramMembershipInput is used for create ProgramMembership object under an existing program
+type AddProgramMembershipInput struct {
+	Role   *enums.Role `json:"role,omitempty"`
+	UserID string      `json:"userID"`
+}
+
 type AuditLog struct {
 	Table     *string    `json:"table,omitempty"`
 	Time      *time.Time `json:"time,omitempty"`

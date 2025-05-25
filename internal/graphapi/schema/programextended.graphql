@@ -1,6 +1,14 @@
 extend input UpdateProgramInput {
-  addProgramMembers: [CreateProgramMembershipInput!]
+  addProgramMembers: [AddProgramMembershipInput!]
   removeProgramMembers: [ID!]
+}
+
+"""
+AddProgramMembershipInput is used for create ProgramMembership object under an existing program
+"""
+input AddProgramMembershipInput {
+  role: ProgramMembershipRole
+  userID: ID!
 }
 
 extend input ProgramMembershipWhereInput {

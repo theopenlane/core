@@ -27,6 +27,40 @@ import (
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputAddProgramMembershipInput(ctx context.Context, obj any) (model.AddProgramMembershipInput, error) {
+	var it model.AddProgramMembershipInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"role", "userID"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "role":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
+			data, err := ec.unmarshalOProgramMembershipRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐRole(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Role = data
+		case "userID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userID"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserID = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreateControlWithSubcontrolsInput(ctx context.Context, obj any) (model.CreateControlWithSubcontrolsInput, error) {
 	var it model.CreateControlWithSubcontrolsInput
 	asMap := map[string]any{}
@@ -217,6 +251,11 @@ func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx cont
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNAddProgramMembershipInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAddProgramMembershipInput(ctx context.Context, v any) (*model.AddProgramMembershipInput, error) {
+	res, err := ec.unmarshalInputAddProgramMembershipInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCreateControlWithSubcontrolsInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateControlWithSubcontrolsInput(ctx context.Context, v any) (model.CreateControlWithSubcontrolsInput, error) {
 	res, err := ec.unmarshalInputCreateControlWithSubcontrolsInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -240,6 +279,24 @@ func (ec *executionContext) unmarshalNCreateMemberWithProgramInput2ᚖgithubᚗc
 func (ec *executionContext) unmarshalNCreateProgramWithMembersInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateProgramWithMembersInput(ctx context.Context, v any) (model.CreateProgramWithMembersInput, error) {
 	res, err := ec.unmarshalInputCreateProgramWithMembersInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOAddProgramMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAddProgramMembershipInputᚄ(ctx context.Context, v any) ([]*model.AddProgramMembershipInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]*model.AddProgramMembershipInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAddProgramMembershipInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAddProgramMembershipInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
 }
 
 func (ec *executionContext) unmarshalOCreateControlWithSubcontrolsInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateControlWithSubcontrolsInputᚄ(ctx context.Context, v any) ([]*model.CreateControlWithSubcontrolsInput, error) {

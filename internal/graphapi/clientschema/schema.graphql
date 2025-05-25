@@ -1476,6 +1476,13 @@ input ActionPlanWhereInput {
 	hasProgramsWith: [ProgramWhereInput!]
 }
 """
+AddProgramMembershipInput is used for create ProgramMembership object under an existing program
+"""
+input AddProgramMembershipInput {
+	role: ProgramMembershipRole
+	userID: ID!
+}
+"""
 The `Address` scalar type represents a physical or mailing address.
 This scalar can be used to store and validate address information in the GraphQL schema.
 It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`
@@ -49192,7 +49199,7 @@ input UpdateProgramInput {
 	addActionPlanIDs: [ID!]
 	removeActionPlanIDs: [ID!]
 	clearActionPlans: Boolean
-	addProgramMembers: [CreateProgramMembershipInput!]
+	addProgramMembers: [AddProgramMembershipInput!]
 	removeProgramMembers: [ID!]
 }
 """
