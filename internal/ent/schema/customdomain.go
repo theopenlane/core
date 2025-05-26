@@ -128,6 +128,7 @@ func (CustomDomain) Policy() ent.Policy {
 
 func (CustomDomain) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookCustomDomain(),
+		hooks.HookCreateCustomDomain(),
+		hooks.HookDeleteCustomDomain(),
 	}
 }

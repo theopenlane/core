@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
+	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
@@ -506,7 +507,11 @@ func TestGetAllCustomDomains(t *testing.T) {
 	// Create test mappable domain
 	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 	deletectx := setContext(systemAdminUser.UserCtx, suite.client.db)
-	suite.client.db.CustomDomain.Delete().ExecX(deletectx)
+	d, err := suite.client.db.CustomDomain.Query().All(deletectx)
+	require.Nil(t, err)
+	for _, cd := range d {
+		suite.client.db.CustomDomain.DeleteOneID(cd.ID).ExecX(deletectx)
+	}
 
 	// Create test custom domains with different users
 	customDomain1 := (&CustomDomainBuilder{
