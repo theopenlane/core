@@ -62,8 +62,8 @@ func (DNSVerification) Fields() []ent.Field {
 			NotEmpty(),
 		field.Enum("dns_verification_status").
 			Comment("Status of the domain verification").
-			Default(enums.CustomDomainStatusPending.String()).
-			GoType(enums.CustomDomainStatus("")),
+			Default(string(enums.DNSVerificationStatusPending)).
+			GoType(enums.DNSVerificationStatus("")),
 		field.String("dns_verification_status_reason").
 			Comment("Reason of the dns verification status, for giving the user diagnostic info").
 			MaxLen(maxStatusReasonLen).
@@ -78,8 +78,8 @@ func (DNSVerification) Fields() []ent.Field {
 			Optional(),
 		field.Enum("acme_challenge_status").
 			Comment("Status of the ACME challenge validation").
-			Default(enums.CustomDomainStatusPending.String()).
-			GoType(enums.CustomDomainStatus("")),
+			Default(string(enums.SSLVerificationStatusInitializing)).
+			GoType(enums.SSLVerificationStatus("")),
 		field.String("acme_challenge_status_reason").
 			Comment("Reason of the ACME status, for giving the user diagnostic info").
 			Annotations(

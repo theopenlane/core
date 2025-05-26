@@ -312,8 +312,8 @@ func TestUpdateDNSVerification(t *testing.T) {
 			client:  suite.client.api,
 			ctx:     systemAdminUser.UserCtx,
 			updateInput: openlaneclient.UpdateDNSVerificationInput{
-				AcmeChallengeStatus:         lo.ToPtr(enums.CustomDomainStatusVerified),
-				DNSVerificationStatus:       lo.ToPtr(enums.CustomDomainStatusVerified),
+				AcmeChallengeStatus:         lo.ToPtr(enums.SSLVerificationStatusActive),
+				DNSVerificationStatus:       lo.ToPtr(enums.DNSVerificationStatusActive),
 				AcmeChallengeStatusReason:   lo.ToPtr("all good!"),
 				DNSVerificationStatusReason: lo.ToPtr("all good for the domain!"),
 				OwnerID:                     lo.ToPtr(testUser1.OrganizationID),

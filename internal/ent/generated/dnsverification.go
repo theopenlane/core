@@ -43,7 +43,7 @@ type DNSVerification struct {
 	// the expected value of the dns txt record
 	DNSTxtValue string `json:"dns_txt_value,omitempty"`
 	// Status of the domain verification
-	DNSVerificationStatus enums.CustomDomainStatus `json:"dns_verification_status,omitempty"`
+	DNSVerificationStatus enums.DNSVerificationStatus `json:"dns_verification_status,omitempty"`
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason string `json:"dns_verification_status_reason,omitempty"`
 	// Path under /.well-known/acme-challenge/ to serve the ACME challenge
@@ -51,7 +51,7 @@ type DNSVerification struct {
 	// the expected value of the acme challenge record
 	ExpectedAcmeChallengeValue string `json:"expected_acme_challenge_value,omitempty"`
 	// Status of the ACME challenge validation
-	AcmeChallengeStatus enums.CustomDomainStatus `json:"acme_challenge_status,omitempty"`
+	AcmeChallengeStatus enums.SSLVerificationStatus `json:"acme_challenge_status,omitempty"`
 	// Reason of the ACME status, for giving the user diagnostic info
 	AcmeChallengeStatusReason string `json:"acme_challenge_status_reason,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -199,7 +199,7 @@ func (dv *DNSVerification) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dns_verification_status", values[i])
 			} else if value.Valid {
-				dv.DNSVerificationStatus = enums.CustomDomainStatus(value.String)
+				dv.DNSVerificationStatus = enums.DNSVerificationStatus(value.String)
 			}
 		case dnsverification.FieldDNSVerificationStatusReason:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -223,7 +223,7 @@ func (dv *DNSVerification) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field acme_challenge_status", values[i])
 			} else if value.Valid {
-				dv.AcmeChallengeStatus = enums.CustomDomainStatus(value.String)
+				dv.AcmeChallengeStatus = enums.SSLVerificationStatus(value.String)
 			}
 		case dnsverification.FieldAcmeChallengeStatusReason:
 			if value, ok := values[i].(*sql.NullString); !ok {

@@ -1877,11 +1877,11 @@ type CreateDNSVerificationInput struct {
 	CloudflareHostnameID        string
 	DNSTxtRecord                string
 	DNSTxtValue                 string
-	DNSVerificationStatus       *enums.CustomDomainStatus
+	DNSVerificationStatus       *enums.DNSVerificationStatus
 	DNSVerificationStatusReason *string
 	AcmeChallengePath           *string
 	ExpectedAcmeChallengeValue  *string
-	AcmeChallengeStatus         *enums.CustomDomainStatus
+	AcmeChallengeStatus         *enums.SSLVerificationStatus
 	OwnerID                     *string
 	CustomDomainIDs             []string
 }
@@ -1930,14 +1930,14 @@ type UpdateDNSVerificationInput struct {
 	AppendTags                       []string
 	DNSTxtRecord                     *string
 	DNSTxtValue                      *string
-	DNSVerificationStatus            *enums.CustomDomainStatus
+	DNSVerificationStatus            *enums.DNSVerificationStatus
 	ClearDNSVerificationStatusReason bool
 	DNSVerificationStatusReason      *string
 	ClearAcmeChallengePath           bool
 	AcmeChallengePath                *string
 	ClearExpectedAcmeChallengeValue  bool
 	ExpectedAcmeChallengeValue       *string
-	AcmeChallengeStatus              *enums.CustomDomainStatus
+	AcmeChallengeStatus              *enums.SSLVerificationStatus
 	ClearAcmeChallengeStatusReason   bool
 	AcmeChallengeStatusReason        *string
 	ClearOwner                       bool

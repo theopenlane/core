@@ -174,15 +174,15 @@ func (dvu *DNSVerificationUpdate) SetNillableDNSTxtValue(s *string) *DNSVerifica
 }
 
 // SetDNSVerificationStatus sets the "dns_verification_status" field.
-func (dvu *DNSVerificationUpdate) SetDNSVerificationStatus(eds enums.CustomDomainStatus) *DNSVerificationUpdate {
-	dvu.mutation.SetDNSVerificationStatus(eds)
+func (dvu *DNSVerificationUpdate) SetDNSVerificationStatus(evs enums.DNSVerificationStatus) *DNSVerificationUpdate {
+	dvu.mutation.SetDNSVerificationStatus(evs)
 	return dvu
 }
 
 // SetNillableDNSVerificationStatus sets the "dns_verification_status" field if the given value is not nil.
-func (dvu *DNSVerificationUpdate) SetNillableDNSVerificationStatus(eds *enums.CustomDomainStatus) *DNSVerificationUpdate {
-	if eds != nil {
-		dvu.SetDNSVerificationStatus(*eds)
+func (dvu *DNSVerificationUpdate) SetNillableDNSVerificationStatus(evs *enums.DNSVerificationStatus) *DNSVerificationUpdate {
+	if evs != nil {
+		dvu.SetDNSVerificationStatus(*evs)
 	}
 	return dvu
 }
@@ -248,15 +248,15 @@ func (dvu *DNSVerificationUpdate) ClearExpectedAcmeChallengeValue() *DNSVerifica
 }
 
 // SetAcmeChallengeStatus sets the "acme_challenge_status" field.
-func (dvu *DNSVerificationUpdate) SetAcmeChallengeStatus(eds enums.CustomDomainStatus) *DNSVerificationUpdate {
-	dvu.mutation.SetAcmeChallengeStatus(eds)
+func (dvu *DNSVerificationUpdate) SetAcmeChallengeStatus(evs enums.SSLVerificationStatus) *DNSVerificationUpdate {
+	dvu.mutation.SetAcmeChallengeStatus(evs)
 	return dvu
 }
 
 // SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
-func (dvu *DNSVerificationUpdate) SetNillableAcmeChallengeStatus(eds *enums.CustomDomainStatus) *DNSVerificationUpdate {
-	if eds != nil {
-		dvu.SetAcmeChallengeStatus(*eds)
+func (dvu *DNSVerificationUpdate) SetNillableAcmeChallengeStatus(evs *enums.SSLVerificationStatus) *DNSVerificationUpdate {
+	if evs != nil {
+		dvu.SetAcmeChallengeStatus(*evs)
 	}
 	return dvu
 }
@@ -757,15 +757,15 @@ func (dvuo *DNSVerificationUpdateOne) SetNillableDNSTxtValue(s *string) *DNSVeri
 }
 
 // SetDNSVerificationStatus sets the "dns_verification_status" field.
-func (dvuo *DNSVerificationUpdateOne) SetDNSVerificationStatus(eds enums.CustomDomainStatus) *DNSVerificationUpdateOne {
-	dvuo.mutation.SetDNSVerificationStatus(eds)
+func (dvuo *DNSVerificationUpdateOne) SetDNSVerificationStatus(evs enums.DNSVerificationStatus) *DNSVerificationUpdateOne {
+	dvuo.mutation.SetDNSVerificationStatus(evs)
 	return dvuo
 }
 
 // SetNillableDNSVerificationStatus sets the "dns_verification_status" field if the given value is not nil.
-func (dvuo *DNSVerificationUpdateOne) SetNillableDNSVerificationStatus(eds *enums.CustomDomainStatus) *DNSVerificationUpdateOne {
-	if eds != nil {
-		dvuo.SetDNSVerificationStatus(*eds)
+func (dvuo *DNSVerificationUpdateOne) SetNillableDNSVerificationStatus(evs *enums.DNSVerificationStatus) *DNSVerificationUpdateOne {
+	if evs != nil {
+		dvuo.SetDNSVerificationStatus(*evs)
 	}
 	return dvuo
 }
@@ -831,15 +831,15 @@ func (dvuo *DNSVerificationUpdateOne) ClearExpectedAcmeChallengeValue() *DNSVeri
 }
 
 // SetAcmeChallengeStatus sets the "acme_challenge_status" field.
-func (dvuo *DNSVerificationUpdateOne) SetAcmeChallengeStatus(eds enums.CustomDomainStatus) *DNSVerificationUpdateOne {
-	dvuo.mutation.SetAcmeChallengeStatus(eds)
+func (dvuo *DNSVerificationUpdateOne) SetAcmeChallengeStatus(evs enums.SSLVerificationStatus) *DNSVerificationUpdateOne {
+	dvuo.mutation.SetAcmeChallengeStatus(evs)
 	return dvuo
 }
 
 // SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
-func (dvuo *DNSVerificationUpdateOne) SetNillableAcmeChallengeStatus(eds *enums.CustomDomainStatus) *DNSVerificationUpdateOne {
-	if eds != nil {
-		dvuo.SetAcmeChallengeStatus(*eds)
+func (dvuo *DNSVerificationUpdateOne) SetNillableAcmeChallengeStatus(evs *enums.SSLVerificationStatus) *DNSVerificationUpdateOne {
+	if evs != nil {
+		dvuo.SetAcmeChallengeStatus(*evs)
 	}
 	return dvuo
 }

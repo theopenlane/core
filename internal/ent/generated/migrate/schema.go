@@ -732,11 +732,11 @@ var (
 		{Name: "cloudflare_hostname_id", Type: field.TypeString, Size: 64},
 		{Name: "dns_txt_record", Type: field.TypeString, Size: 255},
 		{Name: "dns_txt_value", Type: field.TypeString, Size: 64},
-		{Name: "dns_verification_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "dns_verification_status", Type: field.TypeEnum, Enums: []string{"active", "pending", "active_redeploying", "moved", "pending_deletion", "deleted", "pending_blocked", "pending_migration", "pending_provisioned", "test_pending", "test_active", "test_active_apex", "test_blocked", "test_failed", "provisioned", "blocked"}, Default: "pending"},
 		{Name: "dns_verification_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "acme_challenge_path", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "expected_acme_challenge_value", Type: field.TypeString, Nullable: true, Size: 64},
-		{Name: "acme_challenge_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "acme_challenge_status", Type: field.TypeEnum, Enums: []string{"initializing", "pending_validation", "deleted", "pending_issuance", "pending_deployment", "pending_deletion", "pending_expiration", "expired", "active", "initializing_timed_out", "validation_timed_out", "issuance_timed_out", "deployment_timed_out", "deletion_timed_out", "pending_cleanup", "staging_deployment", "staging_active", "deactivating", "inactive", "backup_issued", "holding_deployment"}, Default: "initializing"},
 		{Name: "acme_challenge_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -786,11 +786,11 @@ var (
 		{Name: "cloudflare_hostname_id", Type: field.TypeString, Size: 64},
 		{Name: "dns_txt_record", Type: field.TypeString, Size: 255},
 		{Name: "dns_txt_value", Type: field.TypeString, Size: 64},
-		{Name: "dns_verification_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "dns_verification_status", Type: field.TypeEnum, Enums: []string{"active", "pending", "active_redeploying", "moved", "pending_deletion", "deleted", "pending_blocked", "pending_migration", "pending_provisioned", "test_pending", "test_active", "test_active_apex", "test_blocked", "test_failed", "provisioned", "blocked"}, Default: "pending"},
 		{Name: "dns_verification_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "acme_challenge_path", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "expected_acme_challenge_value", Type: field.TypeString, Nullable: true, Size: 64},
-		{Name: "acme_challenge_status", Type: field.TypeEnum, Enums: []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}, Default: "PENDING"},
+		{Name: "acme_challenge_status", Type: field.TypeEnum, Enums: []string{"initializing", "pending_validation", "deleted", "pending_issuance", "pending_deployment", "pending_deletion", "pending_expiration", "expired", "active", "initializing_timed_out", "validation_timed_out", "issuance_timed_out", "deployment_timed_out", "deletion_timed_out", "pending_cleanup", "staging_deployment", "staging_active", "deactivating", "inactive", "backup_issued", "holding_deployment"}, Default: "initializing"},
 		{Name: "acme_challenge_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
 	}
 	// DNSVerificationHistoryTable holds the schema information for the "dns_verification_history" table.

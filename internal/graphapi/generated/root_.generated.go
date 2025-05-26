@@ -36584,7 +36584,7 @@ input CreateDNSVerificationInput {
   """
   Status of the domain verification
   """
-  dnsVerificationStatus: DNSVerificationCustomDomainStatus
+  dnsVerificationStatus: DNSVerificationDNSVerificationStatus
   """
   Reason of the dns verification status, for giving the user diagnostic info
   """
@@ -36600,7 +36600,7 @@ input CreateDNSVerificationInput {
   """
   Status of the ACME challenge validation
   """
-  acmeChallengeStatus: DNSVerificationCustomDomainStatus
+  acmeChallengeStatus: DNSVerificationSSLVerificationStatus
   ownerID: ID
   customDomainIDs: [ID!]
 }
@@ -38609,7 +38609,7 @@ type DNSVerification implements Node {
   """
   Status of the domain verification
   """
-  dnsVerificationStatus: DNSVerificationCustomDomainStatus!
+  dnsVerificationStatus: DNSVerificationDNSVerificationStatus!
   """
   Reason of the dns verification status, for giving the user diagnostic info
   """
@@ -38625,7 +38625,7 @@ type DNSVerification implements Node {
   """
   Status of the ACME challenge validation
   """
-  acmeChallengeStatus: DNSVerificationCustomDomainStatus!
+  acmeChallengeStatus: DNSVerificationSSLVerificationStatus!
   """
   Reason of the ACME status, for giving the user diagnostic info
   """
@@ -38681,13 +38681,25 @@ type DNSVerificationConnection {
   totalCount: Int!
 }
 """
-DNSVerificationCustomDomainStatus is enum for the field dns_verification_status
+DNSVerificationDNSVerificationStatus is enum for the field dns_verification_status
 """
-enum DNSVerificationCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
-  INVALID
-  VERIFIED
-  FAILED_VERIFY
-  PENDING
+enum DNSVerificationDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DNSVerificationStatus") {
+  active
+  pending
+  active_redeploying
+  moved
+  pending_deletion
+  deleted
+  pending_blocked
+  pending_migration
+  pending_provisioned
+  test_pending
+  test_active
+  test_active_apex
+  test_blocked
+  test_failed
+  provisioned
+  blocked
 }
 """
 An edge in a connection.
@@ -38734,7 +38746,7 @@ type DNSVerificationHistory implements Node {
   """
   Status of the domain verification
   """
-  dnsVerificationStatus: DNSVerificationHistoryCustomDomainStatus!
+  dnsVerificationStatus: DNSVerificationHistoryDNSVerificationStatus!
   """
   Reason of the dns verification status, for giving the user diagnostic info
   """
@@ -38750,7 +38762,7 @@ type DNSVerificationHistory implements Node {
   """
   Status of the ACME challenge validation
   """
-  acmeChallengeStatus: DNSVerificationHistoryCustomDomainStatus!
+  acmeChallengeStatus: DNSVerificationHistorySSLVerificationStatus!
   """
   Reason of the ACME status, for giving the user diagnostic info
   """
@@ -38774,13 +38786,25 @@ type DNSVerificationHistoryConnection {
   totalCount: Int!
 }
 """
-DNSVerificationHistoryCustomDomainStatus is enum for the field dns_verification_status
+DNSVerificationHistoryDNSVerificationStatus is enum for the field dns_verification_status
 """
-enum DNSVerificationHistoryCustomDomainStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.CustomDomainStatus") {
-  INVALID
-  VERIFIED
-  FAILED_VERIFY
-  PENDING
+enum DNSVerificationHistoryDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DNSVerificationStatus") {
+  active
+  pending
+  active_redeploying
+  moved
+  pending_deletion
+  deleted
+  pending_blocked
+  pending_migration
+  pending_provisioned
+  test_pending
+  test_active
+  test_active_apex
+  test_blocked
+  test_failed
+  provisioned
+  blocked
 }
 """
 An edge in a connection.
@@ -38822,6 +38846,32 @@ Properties by which DNSVerificationHistory connections can be ordered.
 enum DNSVerificationHistoryOrderField {
   created_at
   updated_at
+}
+"""
+DNSVerificationHistorySSLVerificationStatus is enum for the field acme_challenge_status
+"""
+enum DNSVerificationHistorySSLVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.SSLVerificationStatus") {
+  initializing
+  pending_validation
+  deleted
+  pending_issuance
+  pending_deployment
+  pending_deletion
+  pending_expiration
+  expired
+  active
+  initializing_timed_out
+  validation_timed_out
+  issuance_timed_out
+  deployment_timed_out
+  deletion_timed_out
+  pending_cleanup
+  staging_deployment
+  staging_active
+  deactivating
+  inactive
+  backup_issued
+  holding_deployment
 }
 """
 DNSVerificationHistoryWhereInput is used for filtering DNSVerificationHistory objects.
@@ -39011,10 +39061,10 @@ input DNSVerificationHistoryWhereInput {
   """
   dns_verification_status field predicates
   """
-  dnsVerificationStatus: DNSVerificationHistoryCustomDomainStatus
-  dnsVerificationStatusNEQ: DNSVerificationHistoryCustomDomainStatus
-  dnsVerificationStatusIn: [DNSVerificationHistoryCustomDomainStatus!]
-  dnsVerificationStatusNotIn: [DNSVerificationHistoryCustomDomainStatus!]
+  dnsVerificationStatus: DNSVerificationHistoryDNSVerificationStatus
+  dnsVerificationStatusNEQ: DNSVerificationHistoryDNSVerificationStatus
+  dnsVerificationStatusIn: [DNSVerificationHistoryDNSVerificationStatus!]
+  dnsVerificationStatusNotIn: [DNSVerificationHistoryDNSVerificationStatus!]
   """
   dns_verification_status_reason field predicates
   """
@@ -39072,10 +39122,10 @@ input DNSVerificationHistoryWhereInput {
   """
   acme_challenge_status field predicates
   """
-  acmeChallengeStatus: DNSVerificationHistoryCustomDomainStatus
-  acmeChallengeStatusNEQ: DNSVerificationHistoryCustomDomainStatus
-  acmeChallengeStatusIn: [DNSVerificationHistoryCustomDomainStatus!]
-  acmeChallengeStatusNotIn: [DNSVerificationHistoryCustomDomainStatus!]
+  acmeChallengeStatus: DNSVerificationHistorySSLVerificationStatus
+  acmeChallengeStatusNEQ: DNSVerificationHistorySSLVerificationStatus
+  acmeChallengeStatusIn: [DNSVerificationHistorySSLVerificationStatus!]
+  acmeChallengeStatusNotIn: [DNSVerificationHistorySSLVerificationStatus!]
   """
   acme_challenge_status_reason field predicates
   """
@@ -39114,6 +39164,32 @@ Properties by which DNSVerification connections can be ordered.
 enum DNSVerificationOrderField {
   created_at
   updated_at
+}
+"""
+DNSVerificationSSLVerificationStatus is enum for the field acme_challenge_status
+"""
+enum DNSVerificationSSLVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.SSLVerificationStatus") {
+  initializing
+  pending_validation
+  deleted
+  pending_issuance
+  pending_deployment
+  pending_deletion
+  pending_expiration
+  expired
+  active
+  initializing_timed_out
+  validation_timed_out
+  issuance_timed_out
+  deployment_timed_out
+  deletion_timed_out
+  pending_cleanup
+  staging_deployment
+  staging_active
+  deactivating
+  inactive
+  backup_issued
+  holding_deployment
 }
 """
 DNSVerificationWhereInput is used for filtering DNSVerification objects.
@@ -39267,10 +39343,10 @@ input DNSVerificationWhereInput {
   """
   dns_verification_status field predicates
   """
-  dnsVerificationStatus: DNSVerificationCustomDomainStatus
-  dnsVerificationStatusNEQ: DNSVerificationCustomDomainStatus
-  dnsVerificationStatusIn: [DNSVerificationCustomDomainStatus!]
-  dnsVerificationStatusNotIn: [DNSVerificationCustomDomainStatus!]
+  dnsVerificationStatus: DNSVerificationDNSVerificationStatus
+  dnsVerificationStatusNEQ: DNSVerificationDNSVerificationStatus
+  dnsVerificationStatusIn: [DNSVerificationDNSVerificationStatus!]
+  dnsVerificationStatusNotIn: [DNSVerificationDNSVerificationStatus!]
   """
   dns_verification_status_reason field predicates
   """
@@ -39328,10 +39404,10 @@ input DNSVerificationWhereInput {
   """
   acme_challenge_status field predicates
   """
-  acmeChallengeStatus: DNSVerificationCustomDomainStatus
-  acmeChallengeStatusNEQ: DNSVerificationCustomDomainStatus
-  acmeChallengeStatusIn: [DNSVerificationCustomDomainStatus!]
-  acmeChallengeStatusNotIn: [DNSVerificationCustomDomainStatus!]
+  acmeChallengeStatus: DNSVerificationSSLVerificationStatus
+  acmeChallengeStatusNEQ: DNSVerificationSSLVerificationStatus
+  acmeChallengeStatusIn: [DNSVerificationSSLVerificationStatus!]
+  acmeChallengeStatusNotIn: [DNSVerificationSSLVerificationStatus!]
   """
   acme_challenge_status_reason field predicates
   """
@@ -69678,7 +69754,7 @@ input UpdateDNSVerificationInput {
   """
   Status of the domain verification
   """
-  dnsVerificationStatus: DNSVerificationCustomDomainStatus
+  dnsVerificationStatus: DNSVerificationDNSVerificationStatus
   """
   Reason of the dns verification status, for giving the user diagnostic info
   """
@@ -69697,7 +69773,7 @@ input UpdateDNSVerificationInput {
   """
   Status of the ACME challenge validation
   """
-  acmeChallengeStatus: DNSVerificationCustomDomainStatus
+  acmeChallengeStatus: DNSVerificationSSLVerificationStatus
   """
   Reason of the ACME status, for giving the user diagnostic info
   """

@@ -13960,10 +13960,10 @@ type DNSVerificationWhereInput struct {
 	DNSTxtValueContainsFold *string  `json:"dnsTxtValueContainsFold,omitempty"`
 
 	// "dns_verification_status" field predicates.
-	DNSVerificationStatus      *enums.CustomDomainStatus  `json:"dnsVerificationStatus,omitempty"`
-	DNSVerificationStatusNEQ   *enums.CustomDomainStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
-	DNSVerificationStatusIn    []enums.CustomDomainStatus `json:"dnsVerificationStatusIn,omitempty"`
-	DNSVerificationStatusNotIn []enums.CustomDomainStatus `json:"dnsVerificationStatusNotIn,omitempty"`
+	DNSVerificationStatus      *enums.DNSVerificationStatus  `json:"dnsVerificationStatus,omitempty"`
+	DNSVerificationStatusNEQ   *enums.DNSVerificationStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
+	DNSVerificationStatusIn    []enums.DNSVerificationStatus `json:"dnsVerificationStatusIn,omitempty"`
+	DNSVerificationStatusNotIn []enums.DNSVerificationStatus `json:"dnsVerificationStatusNotIn,omitempty"`
 
 	// "dns_verification_status_reason" field predicates.
 	DNSVerificationStatusReason             *string  `json:"dnsVerificationStatusReason,omitempty"`
@@ -14017,10 +14017,10 @@ type DNSVerificationWhereInput struct {
 	ExpectedAcmeChallengeValueContainsFold *string  `json:"expectedAcmeChallengeValueContainsFold,omitempty"`
 
 	// "acme_challenge_status" field predicates.
-	AcmeChallengeStatus      *enums.CustomDomainStatus  `json:"acmeChallengeStatus,omitempty"`
-	AcmeChallengeStatusNEQ   *enums.CustomDomainStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
-	AcmeChallengeStatusIn    []enums.CustomDomainStatus `json:"acmeChallengeStatusIn,omitempty"`
-	AcmeChallengeStatusNotIn []enums.CustomDomainStatus `json:"acmeChallengeStatusNotIn,omitempty"`
+	AcmeChallengeStatus      *enums.SSLVerificationStatus  `json:"acmeChallengeStatus,omitempty"`
+	AcmeChallengeStatusNEQ   *enums.SSLVerificationStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
+	AcmeChallengeStatusIn    []enums.SSLVerificationStatus `json:"acmeChallengeStatusIn,omitempty"`
+	AcmeChallengeStatusNotIn []enums.SSLVerificationStatus `json:"acmeChallengeStatusNotIn,omitempty"`
 
 	// "acme_challenge_status_reason" field predicates.
 	AcmeChallengeStatusReason             *string  `json:"acmeChallengeStatusReason,omitempty"`
@@ -14885,10 +14885,10 @@ type DNSVerificationHistoryWhereInput struct {
 	DNSTxtValueContainsFold *string  `json:"dnsTxtValueContainsFold,omitempty"`
 
 	// "dns_verification_status" field predicates.
-	DNSVerificationStatus      *enums.CustomDomainStatus  `json:"dnsVerificationStatus,omitempty"`
-	DNSVerificationStatusNEQ   *enums.CustomDomainStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
-	DNSVerificationStatusIn    []enums.CustomDomainStatus `json:"dnsVerificationStatusIn,omitempty"`
-	DNSVerificationStatusNotIn []enums.CustomDomainStatus `json:"dnsVerificationStatusNotIn,omitempty"`
+	DNSVerificationStatus      *enums.DNSVerificationStatus  `json:"dnsVerificationStatus,omitempty"`
+	DNSVerificationStatusNEQ   *enums.DNSVerificationStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
+	DNSVerificationStatusIn    []enums.DNSVerificationStatus `json:"dnsVerificationStatusIn,omitempty"`
+	DNSVerificationStatusNotIn []enums.DNSVerificationStatus `json:"dnsVerificationStatusNotIn,omitempty"`
 
 	// "dns_verification_status_reason" field predicates.
 	DNSVerificationStatusReason             *string  `json:"dnsVerificationStatusReason,omitempty"`
@@ -14942,10 +14942,10 @@ type DNSVerificationHistoryWhereInput struct {
 	ExpectedAcmeChallengeValueContainsFold *string  `json:"expectedAcmeChallengeValueContainsFold,omitempty"`
 
 	// "acme_challenge_status" field predicates.
-	AcmeChallengeStatus      *enums.CustomDomainStatus  `json:"acmeChallengeStatus,omitempty"`
-	AcmeChallengeStatusNEQ   *enums.CustomDomainStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
-	AcmeChallengeStatusIn    []enums.CustomDomainStatus `json:"acmeChallengeStatusIn,omitempty"`
-	AcmeChallengeStatusNotIn []enums.CustomDomainStatus `json:"acmeChallengeStatusNotIn,omitempty"`
+	AcmeChallengeStatus      *enums.SSLVerificationStatus  `json:"acmeChallengeStatus,omitempty"`
+	AcmeChallengeStatusNEQ   *enums.SSLVerificationStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
+	AcmeChallengeStatusIn    []enums.SSLVerificationStatus `json:"acmeChallengeStatusIn,omitempty"`
+	AcmeChallengeStatusNotIn []enums.SSLVerificationStatus `json:"acmeChallengeStatusNotIn,omitempty"`
 
 	// "acme_challenge_status_reason" field predicates.
 	AcmeChallengeStatusReason             *string  `json:"acmeChallengeStatusReason,omitempty"`

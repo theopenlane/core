@@ -937,19 +937,19 @@ func DNSTxtValueContainsFold(v string) predicate.DNSVerificationHistory {
 }
 
 // DNSVerificationStatusEQ applies the EQ predicate on the "dns_verification_status" field.
-func DNSVerificationStatusEQ(v enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+func DNSVerificationStatusEQ(v enums.DNSVerificationStatus) predicate.DNSVerificationHistory {
 	vc := v
 	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldDNSVerificationStatus, vc))
 }
 
 // DNSVerificationStatusNEQ applies the NEQ predicate on the "dns_verification_status" field.
-func DNSVerificationStatusNEQ(v enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+func DNSVerificationStatusNEQ(v enums.DNSVerificationStatus) predicate.DNSVerificationHistory {
 	vc := v
 	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldDNSVerificationStatus, vc))
 }
 
 // DNSVerificationStatusIn applies the In predicate on the "dns_verification_status" field.
-func DNSVerificationStatusIn(vs ...enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+func DNSVerificationStatusIn(vs ...enums.DNSVerificationStatus) predicate.DNSVerificationHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -958,7 +958,7 @@ func DNSVerificationStatusIn(vs ...enums.CustomDomainStatus) predicate.DNSVerifi
 }
 
 // DNSVerificationStatusNotIn applies the NotIn predicate on the "dns_verification_status" field.
-func DNSVerificationStatusNotIn(vs ...enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+func DNSVerificationStatusNotIn(vs ...enums.DNSVerificationStatus) predicate.DNSVerificationHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1192,19 +1192,19 @@ func ExpectedAcmeChallengeValueContainsFold(v string) predicate.DNSVerificationH
 }
 
 // AcmeChallengeStatusEQ applies the EQ predicate on the "acme_challenge_status" field.
-func AcmeChallengeStatusEQ(v enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+func AcmeChallengeStatusEQ(v enums.SSLVerificationStatus) predicate.DNSVerificationHistory {
 	vc := v
 	return predicate.DNSVerificationHistory(sql.FieldEQ(FieldAcmeChallengeStatus, vc))
 }
 
 // AcmeChallengeStatusNEQ applies the NEQ predicate on the "acme_challenge_status" field.
-func AcmeChallengeStatusNEQ(v enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+func AcmeChallengeStatusNEQ(v enums.SSLVerificationStatus) predicate.DNSVerificationHistory {
 	vc := v
 	return predicate.DNSVerificationHistory(sql.FieldNEQ(FieldAcmeChallengeStatus, vc))
 }
 
 // AcmeChallengeStatusIn applies the In predicate on the "acme_challenge_status" field.
-func AcmeChallengeStatusIn(vs ...enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+func AcmeChallengeStatusIn(vs ...enums.SSLVerificationStatus) predicate.DNSVerificationHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -1213,7 +1213,7 @@ func AcmeChallengeStatusIn(vs ...enums.CustomDomainStatus) predicate.DNSVerifica
 }
 
 // AcmeChallengeStatusNotIn applies the NotIn predicate on the "acme_challenge_status" field.
-func AcmeChallengeStatusNotIn(vs ...enums.CustomDomainStatus) predicate.DNSVerificationHistory {
+func AcmeChallengeStatusNotIn(vs ...enums.SSLVerificationStatus) predicate.DNSVerificationHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
