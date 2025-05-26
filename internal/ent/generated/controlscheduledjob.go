@@ -36,13 +36,13 @@ type ControlScheduledJob struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// JobID holds the value of the "job_id" field.
+	// the scheduled_job id to take the script to run from
 	JobID string `json:"job_id,omitempty"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// the schedule to run this job
+	// the schedule to run this job. If not provided, it would inherit the cadence of the parent job
 	Cadence models.JobCadence `json:"cadence,omitempty"`
-	// cron syntax
+	// cron syntax. If not provided, it would inherit the cron of the parent job
 	Cron *string `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID string `json:"job_runner_id,omitempty"`

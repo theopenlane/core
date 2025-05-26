@@ -35,11 +35,11 @@ type JobResult struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// ScheduledJobID holds the value of the "scheduled_job_id" field.
+	// the job this result belongs to
 	ScheduledJobID string `json:"scheduled_job_id,omitempty"`
-	// Status holds the value of the "status" field.
+	// the status of this job. did it fail? did it succeed?
 	Status enums.JobExecutionStatus `json:"status,omitempty"`
-	// ExitCode holds the value of the "exit_code" field.
+	// the exit code from the script that was executed
 	ExitCode *int `json:"exit_code,omitempty"`
 	// The time the job finished it's execution. This is different from the db insertion time
 	FinishedAt time.Time `json:"finished_at,omitempty"`

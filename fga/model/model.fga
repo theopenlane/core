@@ -58,7 +58,8 @@ type organization
     define can_invite_admins: can_edit or can_invite_admins from parent
     ## only allow admins/owners be able to create scheduled jobs
     ## and enable a job that can be run and be linked to a control
-    define can_create_scheduled_job: can_edit
+    define scheduled_job_creator: [group#member]
+    define can_create_scheduled_job: can_edit or scheduled_job_creator
     define can_create_control_scheduled_job: can_edit
     # object creation permissions
     # these permissions should all be defined as:

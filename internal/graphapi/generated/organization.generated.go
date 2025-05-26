@@ -193,8 +193,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_jobs(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Organization_scheduledJobs(ctx, field)
-			case "scheduledJobResults":
-				return ec.fieldContext_Organization_scheduledJobResults(ctx, field)
+			case "jobResults":
+				return ec.fieldContext_Organization_jobResults(ctx, field)
 			case "scheduledJobRuns":
 				return ec.fieldContext_Organization_scheduledJobRuns(ctx, field)
 			case "members":
@@ -373,8 +373,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_jobs(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Organization_scheduledJobs(ctx, field)
-			case "scheduledJobResults":
-				return ec.fieldContext_Organization_scheduledJobResults(ctx, field)
+			case "jobResults":
+				return ec.fieldContext_Organization_jobResults(ctx, field)
 			case "scheduledJobRuns":
 				return ec.fieldContext_Organization_scheduledJobRuns(ctx, field)
 			case "members":
@@ -597,8 +597,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_jobs(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Organization_scheduledJobs(ctx, field)
-			case "scheduledJobResults":
-				return ec.fieldContext_Organization_scheduledJobResults(ctx, field)
+			case "jobResults":
+				return ec.fieldContext_Organization_jobResults(ctx, field)
 			case "scheduledJobRuns":
 				return ec.fieldContext_Organization_scheduledJobRuns(ctx, field)
 			case "members":

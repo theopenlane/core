@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx/history"
 )
 
 // ControlScheduledJob holds the schema definition for the ControlScheduledJob entity
@@ -39,7 +38,8 @@ func (ControlScheduledJob) PluralName() string {
 // Fields of the ControlScheduledJob
 func (ControlScheduledJob) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("job_id"),
+		field.String("job_id").
+			Comment("the scheduled_job id to take the script to run from"),
 
 		field.JSON("configuration", models.JobConfiguration{}).
 			Annotations(
@@ -48,14 +48,14 @@ func (ControlScheduledJob) Fields() []ent.Field {
 			Comment("the configuration to run this job"),
 
 		field.JSON("cadence", models.JobCadence{}).
-			Comment("the schedule to run this job").
+			Comment("the schedule to run this job. If not provided, it would inherit the cadence of the parent job").
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
 			).
 			Optional(),
 
 		field.String("cron").
-			Comment("cron syntax").
+			Comment("cron syntax. If not provided, it would inherit the cron of the parent job").
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput |
 					entgql.SkipOrderField,
@@ -111,10 +111,6 @@ func (ControlScheduledJob) Indexes() []ent.Index {
 func (ControlScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		// entfga.SelfAccessChecks(),
-		entgql.RelayConnection(),
-		history.Annotations{
-			Exclude: true,
-		},
 	}
 }
 
@@ -132,15 +128,11 @@ func (ControlScheduledJob) Interceptors() []ent.Interceptor {
 
 // Policy of the ControlScheduledJob
 func (ControlScheduledJob) Policy() ent.Policy {
-	// add the new policy here, the default post-policy is to deny all
-	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			// add query rules here, the below is the recommended default
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-			// add mutation rules here, the below is the recommended default
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

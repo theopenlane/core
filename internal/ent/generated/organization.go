@@ -160,8 +160,8 @@ type OrganizationEdges struct {
 	Jobs []*ScheduledJob `json:"jobs,omitempty"`
 	// ScheduledJobs holds the value of the scheduled_jobs edge.
 	ScheduledJobs []*ControlScheduledJob `json:"scheduled_jobs,omitempty"`
-	// ScheduledJobResults holds the value of the scheduled_job_results edge.
-	ScheduledJobResults []*JobResult `json:"scheduled_job_results,omitempty"`
+	// JobResults holds the value of the job_results edge.
+	JobResults []*JobResult `json:"job_results,omitempty"`
 	// ScheduledJobRuns holds the value of the scheduled_job_runs edge.
 	ScheduledJobRuns []*ScheduledJobRun `json:"scheduled_job_runs,omitempty"`
 	// Members holds the value of the members edge.
@@ -219,7 +219,7 @@ type OrganizationEdges struct {
 	namedDNSVerifications            map[string][]*DNSVerification
 	namedJobs                        map[string][]*ScheduledJob
 	namedScheduledJobs               map[string][]*ControlScheduledJob
-	namedScheduledJobResults         map[string][]*JobResult
+	namedJobResults                  map[string][]*JobResult
 	namedScheduledJobRuns            map[string][]*ScheduledJobRun
 	namedMembers                     map[string][]*OrgMembership
 }
@@ -680,13 +680,13 @@ func (e OrganizationEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) 
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
 }
 
-// ScheduledJobResultsOrErr returns the ScheduledJobResults value or an error if the edge
+// JobResultsOrErr returns the JobResults value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrganizationEdges) ScheduledJobResultsOrErr() ([]*JobResult, error) {
+func (e OrganizationEdges) JobResultsOrErr() ([]*JobResult, error) {
 	if e.loadedTypes[50] {
-		return e.ScheduledJobResults, nil
+		return e.JobResults, nil
 	}
-	return nil, &NotLoadedError{edge: "scheduled_job_results"}
+	return nil, &NotLoadedError{edge: "job_results"}
 }
 
 // ScheduledJobRunsOrErr returns the ScheduledJobRuns value or an error if the edge
@@ -1105,9 +1105,9 @@ func (o *Organization) QueryScheduledJobs() *ControlScheduledJobQuery {
 	return NewOrganizationClient(o.config).QueryScheduledJobs(o)
 }
 
-// QueryScheduledJobResults queries the "scheduled_job_results" edge of the Organization entity.
-func (o *Organization) QueryScheduledJobResults() *JobResultQuery {
-	return NewOrganizationClient(o.config).QueryScheduledJobResults(o)
+// QueryJobResults queries the "job_results" edge of the Organization entity.
+func (o *Organization) QueryJobResults() *JobResultQuery {
+	return NewOrganizationClient(o.config).QueryJobResults(o)
 }
 
 // QueryScheduledJobRuns queries the "scheduled_job_runs" edge of the Organization entity.
@@ -2328,27 +2328,27 @@ func (o *Organization) appendNamedScheduledJobs(name string, edges ...*ControlSc
 	}
 }
 
-// NamedScheduledJobResults returns the ScheduledJobResults named value or an error if the edge was not
+// NamedJobResults returns the JobResults named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedScheduledJobResults(name string) ([]*JobResult, error) {
-	if o.Edges.namedScheduledJobResults == nil {
+func (o *Organization) NamedJobResults(name string) ([]*JobResult, error) {
+	if o.Edges.namedJobResults == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedScheduledJobResults[name]
+	nodes, ok := o.Edges.namedJobResults[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedScheduledJobResults(name string, edges ...*JobResult) {
-	if o.Edges.namedScheduledJobResults == nil {
-		o.Edges.namedScheduledJobResults = make(map[string][]*JobResult)
+func (o *Organization) appendNamedJobResults(name string, edges ...*JobResult) {
+	if o.Edges.namedJobResults == nil {
+		o.Edges.namedJobResults = make(map[string][]*JobResult)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedScheduledJobResults[name] = []*JobResult{}
+		o.Edges.namedJobResults[name] = []*JobResult{}
 	} else {
-		o.Edges.namedScheduledJobResults[name] = append(o.Edges.namedScheduledJobResults[name], edges...)
+		o.Edges.namedJobResults[name] = append(o.Edges.namedJobResults[name], edges...)
 	}
 }
 

@@ -3733,7 +3733,7 @@ func (o *Organization) ScheduledJobs(
 	return o.QueryScheduledJobs().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (o *Organization) ScheduledJobResults(
+func (o *Organization) JobResults(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*JobResultOrder, where *JobResultWhereInput,
 ) (*JobResultConnection, error) {
 	opts := []JobResultPaginateOption{
@@ -3742,7 +3742,7 @@ func (o *Organization) ScheduledJobResults(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := o.Edges.totalCount[50][alias]
-	if nodes, err := o.NamedScheduledJobResults(alias); err == nil || hasTotalCount {
+	if nodes, err := o.NamedJobResults(alias); err == nil || hasTotalCount {
 		pager, err := newJobResultPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -3751,7 +3751,7 @@ func (o *Organization) ScheduledJobResults(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return o.QueryScheduledJobResults().Paginate(ctx, after, first, before, last, opts...)
+	return o.QueryJobResults().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (o *Organization) ScheduledJobRuns(

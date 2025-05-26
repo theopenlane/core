@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
@@ -83,6 +84,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
@@ -5460,6 +5462,155 @@ func newControlScheduledJobPaginateArgs(rv map[string]any) *controlscheduledjobP
 	}
 	if v, ok := rv[whereField].(*ControlScheduledJobWhereInput); ok {
 		args.opts = append(args.opts, WithControlScheduledJobFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (csjh *ControlScheduledJobHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ControlScheduledJobHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return csjh, nil
+	}
+	if err := csjh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return csjh, nil
+}
+
+func (csjh *ControlScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(controlscheduledjobhistory.Columns))
+		selectedFields = []string{controlscheduledjobhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldHistoryTime)
+				fieldSeen[controlscheduledjobhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldRef)
+				fieldSeen[controlscheduledjobhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldOperation)
+				fieldSeen[controlscheduledjobhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldCreatedAt)
+				fieldSeen[controlscheduledjobhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldUpdatedAt)
+				fieldSeen[controlscheduledjobhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldCreatedBy)
+				fieldSeen[controlscheduledjobhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldUpdatedBy)
+				fieldSeen[controlscheduledjobhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldOwnerID)
+				fieldSeen[controlscheduledjobhistory.FieldOwnerID] = struct{}{}
+			}
+		case "jobID":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldJobID]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldJobID)
+				fieldSeen[controlscheduledjobhistory.FieldJobID] = struct{}{}
+			}
+		case "configuration":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldConfiguration]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldConfiguration)
+				fieldSeen[controlscheduledjobhistory.FieldConfiguration] = struct{}{}
+			}
+		case "cadence":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldCadence]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldCadence)
+				fieldSeen[controlscheduledjobhistory.FieldCadence] = struct{}{}
+			}
+		case "cron":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldCron]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldCron)
+				fieldSeen[controlscheduledjobhistory.FieldCron] = struct{}{}
+			}
+		case "jobRunnerID":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldJobRunnerID]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldJobRunnerID)
+				fieldSeen[controlscheduledjobhistory.FieldJobRunnerID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		csjh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type controlscheduledjobhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ControlScheduledJobHistoryPaginateOption
+}
+
+func newControlScheduledJobHistoryPaginateArgs(rv map[string]any) *controlscheduledjobhistoryPaginateArgs {
+	args := &controlscheduledjobhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &ControlScheduledJobHistoryOrder{Field: &ControlScheduledJobHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithControlScheduledJobHistoryOrder(order))
+			}
+		case *ControlScheduledJobHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithControlScheduledJobHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*ControlScheduledJobHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithControlScheduledJobHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -22387,7 +22538,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
-		case "scheduledJobResults":
+		case "jobResults":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -22419,9 +22570,9 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(organization.ScheduledJobResultsColumn), ids...))
+							s.Where(sql.InValues(s.C(organization.JobResultsColumn), ids...))
 						})
-						if err := query.GroupBy(organization.ScheduledJobResultsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(organization.JobResultsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -22440,7 +22591,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				} else {
 					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.ScheduledJobResults)
+							n := len(nodes[i].Edges.JobResults)
 							if nodes[i].Edges.totalCount[50] == nil {
 								nodes[i].Edges.totalCount[50] = make(map[string]int)
 							}
@@ -22466,13 +22617,13 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(organization.ScheduledJobResultsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(organization.JobResultsColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedScheduledJobResults(alias, func(wq *JobResultQuery) {
+			o.WithNamedJobResults(alias, func(wq *JobResultQuery) {
 				*wq = *query
 			})
 
@@ -28167,6 +28318,180 @@ func newScheduledJobPaginateArgs(rv map[string]any) *scheduledjobPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*ScheduledJobWhereInput); ok {
 		args.opts = append(args.opts, WithScheduledJobFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (sjh *ScheduledJobHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return sjh, nil
+	}
+	if err := sjh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return sjh, nil
+}
+
+func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(scheduledjobhistory.Columns))
+		selectedFields = []string{scheduledjobhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldHistoryTime)
+				fieldSeen[scheduledjobhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldRef)
+				fieldSeen[scheduledjobhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldOperation)
+				fieldSeen[scheduledjobhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldCreatedAt)
+				fieldSeen[scheduledjobhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldUpdatedAt)
+				fieldSeen[scheduledjobhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldCreatedBy)
+				fieldSeen[scheduledjobhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldUpdatedBy)
+				fieldSeen[scheduledjobhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldDisplayID)
+				fieldSeen[scheduledjobhistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldTags)
+				fieldSeen[scheduledjobhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldOwnerID)
+				fieldSeen[scheduledjobhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldSystemOwned)
+				fieldSeen[scheduledjobhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldTitle)
+				fieldSeen[scheduledjobhistory.FieldTitle] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldDescription)
+				fieldSeen[scheduledjobhistory.FieldDescription] = struct{}{}
+			}
+		case "jobType":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldJobType]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldJobType)
+				fieldSeen[scheduledjobhistory.FieldJobType] = struct{}{}
+			}
+		case "script":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldScript]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldScript)
+				fieldSeen[scheduledjobhistory.FieldScript] = struct{}{}
+			}
+		case "configuration":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldConfiguration]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldConfiguration)
+				fieldSeen[scheduledjobhistory.FieldConfiguration] = struct{}{}
+			}
+		case "cadence":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldCadence]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldCadence)
+				fieldSeen[scheduledjobhistory.FieldCadence] = struct{}{}
+			}
+		case "cron":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldCron]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldCron)
+				fieldSeen[scheduledjobhistory.FieldCron] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		sjh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type scheduledjobhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ScheduledJobHistoryPaginateOption
+}
+
+func newScheduledJobHistoryPaginateArgs(rv map[string]any) *scheduledjobhistoryPaginateArgs {
+	args := &scheduledjobhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &ScheduledJobHistoryOrder{Field: &ScheduledJobHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithScheduledJobHistoryOrder(order))
+			}
+		case *ScheduledJobHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithScheduledJobHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*ScheduledJobHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithScheduledJobHistoryFilter(v.Filter))
 	}
 	return args
 }

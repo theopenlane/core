@@ -2487,12 +2487,12 @@ func HasScheduledJobsWith(preds ...predicate.ControlScheduledJob) predicate.Orga
 	})
 }
 
-// HasScheduledJobResults applies the HasEdge predicate on the "scheduled_job_results" edge.
-func HasScheduledJobResults() predicate.Organization {
+// HasJobResults applies the HasEdge predicate on the "job_results" edge.
+func HasJobResults() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobResultsTable, ScheduledJobResultsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, JobResultsTable, JobResultsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.JobResult
@@ -2501,10 +2501,10 @@ func HasScheduledJobResults() predicate.Organization {
 	})
 }
 
-// HasScheduledJobResultsWith applies the HasEdge predicate on the "scheduled_job_results" edge with a given conditions (other predicates).
-func HasScheduledJobResultsWith(preds ...predicate.JobResult) predicate.Organization {
+// HasJobResultsWith applies the HasEdge predicate on the "job_results" edge with a given conditions (other predicates).
+func HasJobResultsWith(preds ...predicate.JobResult) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newScheduledJobResultsStep()
+		step := newJobResultsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.JobResult
 		step.Edge.Schema = schemaConfig.JobResult

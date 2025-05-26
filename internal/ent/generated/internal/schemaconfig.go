@@ -36,6 +36,7 @@ type SchemaConfig struct {
 	ControlScheduledJob              string // ControlScheduledJob table.
 	ControlScheduledJobControls      string // ControlScheduledJob-controls->Control table.
 	ControlScheduledJobSubcontrols   string // ControlScheduledJob-subcontrols->Subcontrol table.
+	ControlScheduledJobHistory       string // ControlScheduledJobHistory table.
 	CustomDomain                     string // CustomDomain table.
 	CustomDomainHistory              string // CustomDomainHistory table.
 	DNSVerification                  string // DNSVerification table.
@@ -161,6 +162,7 @@ type SchemaConfig struct {
 	RiskTasks                        string // Risk-tasks->Task table.
 	RiskHistory                      string // RiskHistory table.
 	ScheduledJob                     string // ScheduledJob table.
+	ScheduledJobHistory              string // ScheduledJobHistory table.
 	ScheduledJobRun                  string // ScheduledJobRun table.
 	Standard                         string // Standard table.
 	StandardHistory                  string // StandardHistory table.

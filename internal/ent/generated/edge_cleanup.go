@@ -139,6 +139,12 @@ func ControlScheduledJobEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func ControlScheduledJobHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlscheduledjobhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func CustomDomainEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomain edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -821,6 +827,12 @@ func RiskHistoryEdgeCleanup(ctx context.Context, id string) error {
 
 func ScheduledJobEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjob edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ScheduledJobHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjobhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

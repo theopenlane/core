@@ -23,7 +23,7 @@ type JobResult struct {
 }
 
 // SchemaJobResultis the name of the schema in snake case
-const SchemaJobResult = "scheduled_job_result"
+const SchemaJobResult = "job_result"
 
 // Name is the name of the schema in snake case
 func (JobResult) Name() string {
@@ -43,16 +43,20 @@ func (JobResult) PluralName() string {
 // Fields of the JobResult
 func (JobResult) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("scheduled_job_id"),
+		field.String("scheduled_job_id").
+			Comment("the job this result belongs to"),
+
 		field.Enum("status").
 			GoType(enums.JobExecutionStatus("")).
+			Comment("the status of this job. did it fail? did it succeed?").
 			Annotations(
-				entgql.OrderField("status"),
+				entgql.OrderField("STATUS"),
 			),
 		field.Int("exit_code").
 			Annotations(
 				entgql.OrderField("exit_code"),
 			).
+			Comment("the exit code from the script that was executed").
 			NonNegative().
 			Nillable().
 			Immutable(),
@@ -141,18 +145,12 @@ func (JobResult) Interceptors() []ent.Interceptor {
 
 // Policy of the JobResult
 func (JobResult) Policy() ent.Policy {
-	// add the new policy here, the default post-policy is to deny all
-	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			// add query rules here, the below is the recommended default
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
-			// add mutation rules here, the below is the recommended default
 			policy.CheckCreateAccess(),
-			// this needs to be commented out for the first run that had the entfga annotation
-
 			// entfga.CheckEditAccess[*generated.JobResultMutation](),
 		),
 	)

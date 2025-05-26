@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/history"
 )
 
 // ScheduledJob holds the schema definition for the ScheduledJob entity
@@ -59,7 +58,7 @@ func (ScheduledJob) Fields() []ent.Field {
 			GoType(enums.JobType("")).
 			Default(enums.JobTypeSsl.String()).
 			Annotations(
-				entgql.OrderField("job_type"),
+				entgql.OrderField("JOB_TYPE"),
 			).
 			Comment("the type of this job"),
 
@@ -118,9 +117,6 @@ func (ScheduledJob) Indexes() []ent.Index {
 func (ScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		// entfga.SelfAccessChecks(),
-		history.Annotations{
-			Exclude: true,
-		},
 	}
 }
 

@@ -62,6 +62,10 @@ var (
 	ErrEmailDomainNotAllowed = errors.New("email domain not allowed in organization")
 	// ErrUserNotFound is returned when a user is not found in the system
 	ErrUserNotFound = errors.New("user not found")
+	// ErrCadenceOrCronRequired is returned when a user does not provide either a cadence or cron
+	ErrCadenceOrCronRequired = errors.New("either cadence or cron must be specified")
+	// ErrEitherCadenceOrCron is returned when both a cadence and cron is specified
+	ErrEitherCadenceOrCron = errors.New("only one of cadence or cron must be specified")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

@@ -39,7 +39,7 @@ type ScheduledJobRun struct {
 	// The status of the job to be executed. By default will be pending but when
 	// 			scheduled on a runner, this will change to acquired.
 	Status enums.ScheduledJobRunStatus `json:"status,omitempty"`
-	// ScheduledJobID holds the value of the "scheduled_job_id" field.
+	// the parent job for this run
 	ScheduledJobID string `json:"scheduled_job_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduledJobRunQuery when eager-loading is set.

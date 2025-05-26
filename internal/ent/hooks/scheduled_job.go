@@ -13,7 +13,7 @@ import (
 )
 
 // HookScheduledJobCreate verifies a scheduled job has
-// the a cadence set or a cron and the configuration matches what is expected
+// a cadence set or a cron and the configuration matches what is expected
 func HookScheduledJobCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ScheduledJobFunc(func(ctx context.Context,
@@ -45,8 +45,8 @@ func HookScheduledJobCreate() ent.Hook {
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpCreate)
 }
 
-// HookScheduledJobCreate verifies a job that can be attached to a control/subcontrol has
-// the a cadence set or a cron and the configuration matches what is expected
+// HookControlScheduledJobCreate verifies a job that can be attached to a control/subcontrol has
+// a cadence set or a cron and the configuration matches what is expected
 func HookControlScheduledJobCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ControlScheduledJobFunc(func(ctx context.Context,
@@ -69,11 +69,11 @@ func HookControlScheduledJobCreate() ent.Hook {
 
 func validateCadenceOrCron(cadence *models.JobCadence, hasCadence bool, cron string, hasCron bool) error {
 	if !hasCadence && (!hasCron || cron == "") {
-		return errors.New("either cadence or cron must be specified") // nolint:err113
+		return nil
 	}
 
 	if hasCadence && hasCron {
-		return errors.New("only one of cadence or cron must be specified") // nolint:err113
+		return ErrEitherCadenceOrCron
 	}
 
 	if hasCadence {

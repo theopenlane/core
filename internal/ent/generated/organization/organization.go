@@ -147,8 +147,8 @@ const (
 	EdgeJobs = "jobs"
 	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
 	EdgeScheduledJobs = "scheduled_jobs"
-	// EdgeScheduledJobResults holds the string denoting the scheduled_job_results edge name in mutations.
-	EdgeScheduledJobResults = "scheduled_job_results"
+	// EdgeJobResults holds the string denoting the job_results edge name in mutations.
+	EdgeJobResults = "job_results"
 	// EdgeScheduledJobRuns holds the string denoting the scheduled_job_runs edge name in mutations.
 	EdgeScheduledJobRuns = "scheduled_job_runs"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
@@ -491,13 +491,13 @@ const (
 	ScheduledJobsInverseTable = "control_scheduled_jobs"
 	// ScheduledJobsColumn is the table column denoting the scheduled_jobs relation/edge.
 	ScheduledJobsColumn = "owner_id"
-	// ScheduledJobResultsTable is the table that holds the scheduled_job_results relation/edge.
-	ScheduledJobResultsTable = "job_results"
-	// ScheduledJobResultsInverseTable is the table name for the JobResult entity.
+	// JobResultsTable is the table that holds the job_results relation/edge.
+	JobResultsTable = "job_results"
+	// JobResultsInverseTable is the table name for the JobResult entity.
 	// It exists in this package in order to avoid circular dependency with the "jobresult" package.
-	ScheduledJobResultsInverseTable = "job_results"
-	// ScheduledJobResultsColumn is the table column denoting the scheduled_job_results relation/edge.
-	ScheduledJobResultsColumn = "owner_id"
+	JobResultsInverseTable = "job_results"
+	// JobResultsColumn is the table column denoting the job_results relation/edge.
+	JobResultsColumn = "owner_id"
 	// ScheduledJobRunsTable is the table that holds the scheduled_job_runs relation/edge.
 	ScheduledJobRunsTable = "scheduled_job_runs"
 	// ScheduledJobRunsInverseTable is the table name for the ScheduledJobRun entity.
@@ -1359,17 +1359,17 @@ func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByScheduledJobResultsCount orders the results by scheduled_job_results count.
-func ByScheduledJobResultsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByJobResultsCount orders the results by job_results count.
+func ByJobResultsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newScheduledJobResultsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newJobResultsStep(), opts...)
 	}
 }
 
-// ByScheduledJobResults orders the results by scheduled_job_results terms.
-func ByScheduledJobResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByJobResults orders the results by job_results terms.
+func ByJobResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newScheduledJobResultsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newJobResultsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1750,11 +1750,11 @@ func newScheduledJobsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobsTable, ScheduledJobsColumn),
 	)
 }
-func newScheduledJobResultsStep() *sqlgraph.Step {
+func newJobResultsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ScheduledJobResultsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobResultsTable, ScheduledJobResultsColumn),
+		sqlgraph.To(JobResultsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, JobResultsTable, JobResultsColumn),
 	)
 }
 func newScheduledJobRunsStep() *sqlgraph.Step {

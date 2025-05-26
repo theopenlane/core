@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
@@ -87,6 +88,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
@@ -175,6 +177,7 @@ func checkColumn(table, column string) error {
 			controlobjective.Table:             controlobjective.ValidColumn,
 			controlobjectivehistory.Table:      controlobjectivehistory.ValidColumn,
 			controlscheduledjob.Table:          controlscheduledjob.ValidColumn,
+			controlscheduledjobhistory.Table:   controlscheduledjobhistory.ValidColumn,
 			customdomain.Table:                 customdomain.ValidColumn,
 			customdomainhistory.Table:          customdomainhistory.ValidColumn,
 			dnsverification.Table:              dnsverification.ValidColumn,
@@ -238,6 +241,7 @@ func checkColumn(table, column string) error {
 			risk.Table:                         risk.ValidColumn,
 			riskhistory.Table:                  riskhistory.ValidColumn,
 			scheduledjob.Table:                 scheduledjob.ValidColumn,
+			scheduledjobhistory.Table:          scheduledjobhistory.ValidColumn,
 			scheduledjobrun.Table:              scheduledjobrun.ValidColumn,
 			standard.Table:                     standard.ValidColumn,
 			standardhistory.Table:              standardhistory.ValidColumn,

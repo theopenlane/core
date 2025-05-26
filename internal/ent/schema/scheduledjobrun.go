@@ -50,7 +50,8 @@ func (ScheduledJobRun) Fields() []ent.Field {
 			Comment(`The status of the job to be executed. By default will be pending but when 
 			scheduled on a runner, this will change to acquired.`),
 
-		field.String("scheduled_job_id"),
+		field.String("scheduled_job_id").
+			Comment("the parent job for this run"),
 	}
 }
 

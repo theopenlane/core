@@ -1045,19 +1045,19 @@ func (oc *OrganizationCreate) AddScheduledJobs(c ...*ControlScheduledJob) *Organ
 	return oc.AddScheduledJobIDs(ids...)
 }
 
-// AddScheduledJobResultIDs adds the "scheduled_job_results" edge to the JobResult entity by IDs.
-func (oc *OrganizationCreate) AddScheduledJobResultIDs(ids ...string) *OrganizationCreate {
-	oc.mutation.AddScheduledJobResultIDs(ids...)
+// AddJobResultIDs adds the "job_results" edge to the JobResult entity by IDs.
+func (oc *OrganizationCreate) AddJobResultIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddJobResultIDs(ids...)
 	return oc
 }
 
-// AddScheduledJobResults adds the "scheduled_job_results" edges to the JobResult entity.
-func (oc *OrganizationCreate) AddScheduledJobResults(j ...*JobResult) *OrganizationCreate {
+// AddJobResults adds the "job_results" edges to the JobResult entity.
+func (oc *OrganizationCreate) AddJobResults(j ...*JobResult) *OrganizationCreate {
 	ids := make([]string, len(j))
 	for i := range j {
 		ids[i] = j[i].ID
 	}
-	return oc.AddScheduledJobResultIDs(ids...)
+	return oc.AddJobResultIDs(ids...)
 }
 
 // AddScheduledJobRunIDs adds the "scheduled_job_runs" edge to the ScheduledJobRun entity by IDs.
@@ -2151,12 +2151,12 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := oc.mutation.ScheduledJobResultsIDs(); len(nodes) > 0 {
+	if nodes := oc.mutation.JobResultsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.ScheduledJobResultsTable,
-			Columns: []string{organization.ScheduledJobResultsColumn},
+			Table:   organization.JobResultsTable,
+			Columns: []string{organization.JobResultsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),

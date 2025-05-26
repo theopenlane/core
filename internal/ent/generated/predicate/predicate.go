@@ -42,6 +42,9 @@ type ControlObjectiveHistory func(*sql.Selector)
 // ControlScheduledJob is the predicate function for controlscheduledjob builders.
 type ControlScheduledJob func(*sql.Selector)
 
+// ControlScheduledJobHistory is the predicate function for controlscheduledjobhistory builders.
+type ControlScheduledJobHistory func(*sql.Selector)
+
 // CustomDomain is the predicate function for customdomain builders.
 type CustomDomain func(*sql.Selector)
 
@@ -230,6 +233,9 @@ type RiskHistory func(*sql.Selector)
 
 // ScheduledJob is the predicate function for scheduledjob builders.
 type ScheduledJob func(*sql.Selector)
+
+// ScheduledJobHistory is the predicate function for scheduledjobhistory builders.
+type ScheduledJobHistory func(*sql.Selector)
 
 // ScheduledJobRun is the predicate function for scheduledjobrun builders.
 type ScheduledJobRun func(*sql.Selector)

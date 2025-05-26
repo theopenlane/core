@@ -117,7 +117,7 @@ type OrganizationQuery struct {
 	withDNSVerifications                 *DNSVerificationQuery
 	withJobs                             *ScheduledJobQuery
 	withScheduledJobs                    *ControlScheduledJobQuery
-	withScheduledJobResults              *JobResultQuery
+	withJobResults                       *JobResultQuery
 	withScheduledJobRuns                 *ScheduledJobRunQuery
 	withMembers                          *OrgMembershipQuery
 	loadTotal                            []func(context.Context, []*Organization) error
@@ -169,7 +169,7 @@ type OrganizationQuery struct {
 	withNamedDNSVerifications            map[string]*DNSVerificationQuery
 	withNamedJobs                        map[string]*ScheduledJobQuery
 	withNamedScheduledJobs               map[string]*ControlScheduledJobQuery
-	withNamedScheduledJobResults         map[string]*JobResultQuery
+	withNamedJobResults                  map[string]*JobResultQuery
 	withNamedScheduledJobRuns            map[string]*ScheduledJobRunQuery
 	withNamedMembers                     map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
@@ -1458,8 +1458,8 @@ func (oq *OrganizationQuery) QueryScheduledJobs() *ControlScheduledJobQuery {
 	return query
 }
 
-// QueryScheduledJobResults chains the current query on the "scheduled_job_results" edge.
-func (oq *OrganizationQuery) QueryScheduledJobResults() *JobResultQuery {
+// QueryJobResults chains the current query on the "job_results" edge.
+func (oq *OrganizationQuery) QueryJobResults() *JobResultQuery {
 	query := (&JobResultClient{config: oq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := oq.prepareQuery(ctx); err != nil {
@@ -1472,7 +1472,7 @@ func (oq *OrganizationQuery) QueryScheduledJobResults() *JobResultQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(jobresult.Table, jobresult.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobResultsTable, organization.ScheduledJobResultsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobResultsTable, organization.JobResultsColumn),
 		)
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.JobResult
@@ -1775,7 +1775,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withDNSVerifications:            oq.withDNSVerifications.Clone(),
 		withJobs:                        oq.withJobs.Clone(),
 		withScheduledJobs:               oq.withScheduledJobs.Clone(),
-		withScheduledJobResults:         oq.withScheduledJobResults.Clone(),
+		withJobResults:                  oq.withJobResults.Clone(),
 		withScheduledJobRuns:            oq.withScheduledJobRuns.Clone(),
 		withMembers:                     oq.withMembers.Clone(),
 		// clone intermediate query.
@@ -2335,14 +2335,14 @@ func (oq *OrganizationQuery) WithScheduledJobs(opts ...func(*ControlScheduledJob
 	return oq
 }
 
-// WithScheduledJobResults tells the query-builder to eager-load the nodes that are connected to
-// the "scheduled_job_results" edge. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithScheduledJobResults(opts ...func(*JobResultQuery)) *OrganizationQuery {
+// WithJobResults tells the query-builder to eager-load the nodes that are connected to
+// the "job_results" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithJobResults(opts ...func(*JobResultQuery)) *OrganizationQuery {
 	query := (&JobResultClient{config: oq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	oq.withScheduledJobResults = query
+	oq.withJobResults = query
 	return oq
 }
 
@@ -2503,7 +2503,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withDNSVerifications != nil,
 			oq.withJobs != nil,
 			oq.withScheduledJobs != nil,
-			oq.withScheduledJobResults != nil,
+			oq.withJobResults != nil,
 			oq.withScheduledJobRuns != nil,
 			oq.withMembers != nil,
 		}
@@ -2898,12 +2898,10 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	if query := oq.withScheduledJobResults; query != nil {
-		if err := oq.loadScheduledJobResults(ctx, query, nodes,
-			func(n *Organization) { n.Edges.ScheduledJobResults = []*JobResult{} },
-			func(n *Organization, e *JobResult) {
-				n.Edges.ScheduledJobResults = append(n.Edges.ScheduledJobResults, e)
-			}); err != nil {
+	if query := oq.withJobResults; query != nil {
+		if err := oq.loadJobResults(ctx, query, nodes,
+			func(n *Organization) { n.Edges.JobResults = []*JobResult{} },
+			func(n *Organization, e *JobResult) { n.Edges.JobResults = append(n.Edges.JobResults, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3254,10 +3252,10 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	for name, query := range oq.withNamedScheduledJobResults {
-		if err := oq.loadScheduledJobResults(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedScheduledJobResults(name) },
-			func(n *Organization, e *JobResult) { n.appendNamedScheduledJobResults(name, e) }); err != nil {
+	for name, query := range oq.withNamedJobResults {
+		if err := oq.loadJobResults(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedJobResults(name) },
+			func(n *Organization, e *JobResult) { n.appendNamedJobResults(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4928,7 +4926,7 @@ func (oq *OrganizationQuery) loadScheduledJobs(ctx context.Context, query *Contr
 	}
 	return nil
 }
-func (oq *OrganizationQuery) loadScheduledJobResults(ctx context.Context, query *JobResultQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *JobResult)) error {
+func (oq *OrganizationQuery) loadJobResults(ctx context.Context, query *JobResultQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *JobResult)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
 	for i := range nodes {
@@ -4942,7 +4940,7 @@ func (oq *OrganizationQuery) loadScheduledJobResults(ctx context.Context, query 
 		query.ctx.AppendFieldOnce(jobresult.FieldOwnerID)
 	}
 	query.Where(predicate.JobResult(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.ScheduledJobResultsColumn), fks...))
+		s.Where(sql.InValues(s.C(organization.JobResultsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -5781,17 +5779,17 @@ func (oq *OrganizationQuery) WithNamedScheduledJobs(name string, opts ...func(*C
 	return oq
 }
 
-// WithNamedScheduledJobResults tells the query-builder to eager-load the nodes that are connected to the "scheduled_job_results"
+// WithNamedJobResults tells the query-builder to eager-load the nodes that are connected to the "job_results"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (oq *OrganizationQuery) WithNamedScheduledJobResults(name string, opts ...func(*JobResultQuery)) *OrganizationQuery {
+func (oq *OrganizationQuery) WithNamedJobResults(name string, opts ...func(*JobResultQuery)) *OrganizationQuery {
 	query := (&JobResultClient{config: oq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if oq.withNamedScheduledJobResults == nil {
-		oq.withNamedScheduledJobResults = make(map[string]*JobResultQuery)
+	if oq.withNamedJobResults == nil {
+		oq.withNamedJobResults = make(map[string]*JobResultQuery)
 	}
-	oq.withNamedScheduledJobResults[name] = query
+	oq.withNamedJobResults[name] = query
 	return oq
 }
 

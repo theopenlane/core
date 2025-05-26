@@ -342,6 +342,38 @@ func (r *queryResolver) ControlScheduledJobs(ctx context.Context, after *entgql.
 	return res, err
 }
 
+// ControlScheduledJobHistories is the resolver for the controlScheduledJobHistories field.
+func (r *queryResolver) ControlScheduledJobHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlScheduledJobHistoryOrder, where *generated.ControlScheduledJobHistoryWhereInput) (*generated.ControlScheduledJobHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.ControlScheduledJobHistoryOrder{
+			Field:     generated.ControlScheduledJobHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ControlScheduledJobHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjobhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithControlScheduledJobHistoryOrder(orderBy),
+		generated.WithControlScheduledJobHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjobhistory"})
+	}
+
+	return res, err
+}
+
 // CustomDomains is the resolver for the customDomains field.
 func (r *queryResolver) CustomDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) (*generated.CustomDomainConnection, error) {
 	// set page limit if nothing was set
@@ -1855,6 +1887,38 @@ func (r *queryResolver) ScheduledJobs(ctx context.Context, after *entgql.Cursor[
 		generated.WithScheduledJobFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+	}
+
+	return res, err
+}
+
+// ScheduledJobHistories is the resolver for the scheduledJobHistories field.
+func (r *queryResolver) ScheduledJobHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScheduledJobHistoryOrder, where *generated.ScheduledJobHistoryWhereInput) (*generated.ScheduledJobHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.ScheduledJobHistoryOrder{
+			Field:     generated.ScheduledJobHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ScheduledJobHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScheduledJobHistoryOrder(orderBy),
+		generated.WithScheduledJobHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobhistory"})
 	}
 
 	return res, err

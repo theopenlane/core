@@ -5585,7 +5585,7 @@ type CreateOrganizationInput struct {
 	DNSVerificationIDs            []string
 	JobIDs                        []string
 	ScheduledJobIDs               []string
-	ScheduledJobResultIDs         []string
+	JobResultIDs                  []string
 	ScheduledJobRunIDs            []string
 }
 
@@ -5757,8 +5757,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ScheduledJobIDs; len(v) > 0 {
 		m.AddScheduledJobIDs(v...)
 	}
-	if v := i.ScheduledJobResultIDs; len(v) > 0 {
-		m.AddScheduledJobResultIDs(v...)
+	if v := i.JobResultIDs; len(v) > 0 {
+		m.AddJobResultIDs(v...)
 	}
 	if v := i.ScheduledJobRunIDs; len(v) > 0 {
 		m.AddScheduledJobRunIDs(v...)
@@ -5923,9 +5923,9 @@ type UpdateOrganizationInput struct {
 	ClearScheduledJobs                  bool
 	AddScheduledJobIDs                  []string
 	RemoveScheduledJobIDs               []string
-	ClearScheduledJobResults            bool
-	AddScheduledJobResultIDs            []string
-	RemoveScheduledJobResultIDs         []string
+	ClearJobResults                     bool
+	AddJobResultIDs                     []string
+	RemoveJobResultIDs                  []string
 	ClearScheduledJobRuns               bool
 	AddScheduledJobRunIDs               []string
 	RemoveScheduledJobRunIDs            []string
@@ -6383,14 +6383,14 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveScheduledJobIDs; len(v) > 0 {
 		m.RemoveScheduledJobIDs(v...)
 	}
-	if i.ClearScheduledJobResults {
-		m.ClearScheduledJobResults()
+	if i.ClearJobResults {
+		m.ClearJobResults()
 	}
-	if v := i.AddScheduledJobResultIDs; len(v) > 0 {
-		m.AddScheduledJobResultIDs(v...)
+	if v := i.AddJobResultIDs; len(v) > 0 {
+		m.AddJobResultIDs(v...)
 	}
-	if v := i.RemoveScheduledJobResultIDs; len(v) > 0 {
-		m.RemoveScheduledJobResultIDs(v...)
+	if v := i.RemoveJobResultIDs; len(v) > 0 {
+		m.RemoveJobResultIDs(v...)
 	}
 	if i.ClearScheduledJobRuns {
 		m.ClearScheduledJobRuns()
