@@ -59,6 +59,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		procedureResults                  *generated.ProcedureConnection
 		programResults                    *generated.ProgramConnection
 		riskResults                       *generated.RiskConnection
+		scheduledjobResults               *generated.ScheduledJobConnection
 		standardResults                   *generated.StandardConnection
 		subcontrolResults                 *generated.SubcontrolConnection
 		subscriberResults                 *generated.SubscriberConnection
@@ -289,6 +290,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
+			scheduledjobResults, err = searchScheduledJobs(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			standardResults, err = searchStandards(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -508,6 +516,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.Risks = riskResults
 
 		res.TotalCount += riskResults.TotalCount
+	}
+	if scheduledjobResults != nil && len(scheduledjobResults.Edges) > 0 {
+		res.ScheduledJobs = scheduledjobResults
+
+		res.TotalCount += scheduledjobResults.TotalCount
 	}
 	if standardResults != nil && len(standardResults.Edges) > 0 {
 		res.Standards = standardResults
@@ -1109,6 +1122,24 @@ func (r *queryResolver) AdminRiskSearch(ctx context.Context, query string, after
 
 	// return the results
 	return riskResults, nil
+}
+func (r *queryResolver) AdminScheduledJobSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScheduledJobConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	scheduledjobResults, err := adminSearchScheduledJobs(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return scheduledjobResults, nil
 }
 func (r *queryResolver) AdminStandardSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.StandardConnection, error) {
 	// ensure the user is a system admin

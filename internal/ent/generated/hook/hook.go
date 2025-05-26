@@ -141,6 +141,18 @@ func (f ControlObjectiveHistoryFunc) Mutate(ctx context.Context, m generated.Mut
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ControlObjectiveHistoryMutation", m)
 }
 
+// The ControlScheduledJobFunc type is an adapter to allow the use of ordinary
+// function as ControlScheduledJob mutator.
+type ControlScheduledJobFunc func(context.Context, *generated.ControlScheduledJobMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ControlScheduledJobFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ControlScheduledJobMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ControlScheduledJobMutation", m)
+}
+
 // The CustomDomainFunc type is an adapter to allow the use of ordinary
 // function as CustomDomain mutator.
 type CustomDomainFunc func(context.Context, *generated.CustomDomainMutation) (generated.Value, error)
@@ -499,6 +511,18 @@ func (f InviteFunc) Mutate(ctx context.Context, m generated.Mutation) (generated
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.InviteMutation", m)
+}
+
+// The JobResultFunc type is an adapter to allow the use of ordinary
+// function as JobResult mutator.
+type JobResultFunc func(context.Context, *generated.JobResultMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobResultFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobResultMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobResultMutation", m)
 }
 
 // The JobRunnerFunc type is an adapter to allow the use of ordinary
@@ -871,6 +895,30 @@ func (f RiskHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.RiskHistoryMutation", m)
+}
+
+// The ScheduledJobFunc type is an adapter to allow the use of ordinary
+// function as ScheduledJob mutator.
+type ScheduledJobFunc func(context.Context, *generated.ScheduledJobMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScheduledJobFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ScheduledJobMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScheduledJobMutation", m)
+}
+
+// The ScheduledJobRunFunc type is an adapter to allow the use of ordinary
+// function as ScheduledJobRun mutator.
+type ScheduledJobRunFunc func(context.Context, *generated.ScheduledJobRunMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScheduledJobRunFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ScheduledJobRunMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScheduledJobRunMutation", m)
 }
 
 // The StandardFunc type is an adapter to allow the use of ordinary

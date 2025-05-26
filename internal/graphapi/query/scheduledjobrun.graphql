@@ -1,0 +1,62 @@
+query GetAllScheduledJobRuns {
+  scheduledJobRuns {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        jobRunnerID
+        ownerID
+        scheduledJobID
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetScheduledJobRunByID($scheduledJobRunId: ID!) {
+  scheduledJobRun(id: $scheduledJobRunId) {
+    createdAt
+    createdBy
+    id
+    jobRunnerID
+    ownerID
+    scheduledJobID
+    status
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetScheduledJobRuns($first: Int, $last: Int, $where: ScheduledJobRunWhereInput) {
+  scheduledJobRuns(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        jobRunnerID
+        ownerID
+        scheduledJobID
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

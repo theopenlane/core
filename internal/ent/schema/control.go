@@ -82,6 +82,11 @@ func (c Control) Edges() []ent.Edge {
 			edgeSchema:    Subcontrol{},
 			cascadeDelete: "Control",
 		}),
+
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: ControlScheduledJob{},
+		}),
 	}
 }
 

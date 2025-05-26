@@ -56,6 +56,10 @@ type organization
     define can_invite_members: can_view or can_edit or can_invite_members from parent
     # only allow users with edit access to the org to invite other admins
     define can_invite_admins: can_edit or can_invite_admins from parent
+    ## only allow admins/owners be able to create scheduled jobs
+    ## and enable a job that can be run and be linked to a control
+    define can_create_scheduled_job: can_edit
+    define can_create_control_scheduled_job: can_edit
     # object creation permissions
     # these permissions should all be defined as:
     #     define [object]_creator: [group#member]

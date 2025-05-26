@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
@@ -53,6 +54,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
@@ -84,6 +86,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -170,6 +174,7 @@ func checkColumn(table, column string) error {
 			controlimplementationhistory.Table: controlimplementationhistory.ValidColumn,
 			controlobjective.Table:             controlobjective.ValidColumn,
 			controlobjectivehistory.Table:      controlobjectivehistory.ValidColumn,
+			controlscheduledjob.Table:          controlscheduledjob.ValidColumn,
 			customdomain.Table:                 customdomain.ValidColumn,
 			customdomainhistory.Table:          customdomainhistory.ValidColumn,
 			dnsverification.Table:              dnsverification.ValidColumn,
@@ -200,6 +205,7 @@ func checkColumn(table, column string) error {
 			internalpolicy.Table:               internalpolicy.ValidColumn,
 			internalpolicyhistory.Table:        internalpolicyhistory.ValidColumn,
 			invite.Table:                       invite.ValidColumn,
+			jobresult.Table:                    jobresult.ValidColumn,
 			jobrunner.Table:                    jobrunner.ValidColumn,
 			jobrunnerhistory.Table:             jobrunnerhistory.ValidColumn,
 			jobrunnerregistrationtoken.Table:   jobrunnerregistrationtoken.ValidColumn,
@@ -231,6 +237,8 @@ func checkColumn(table, column string) error {
 			programmembershiphistory.Table:     programmembershiphistory.ValidColumn,
 			risk.Table:                         risk.ValidColumn,
 			riskhistory.Table:                  riskhistory.ValidColumn,
+			scheduledjob.Table:                 scheduledjob.ValidColumn,
+			scheduledjobrun.Table:              scheduledjobrun.ValidColumn,
 			standard.Table:                     standard.ValidColumn,
 			standardhistory.Table:              standardhistory.ValidColumn,
 			subcontrol.Table:                   subcontrol.ValidColumn,

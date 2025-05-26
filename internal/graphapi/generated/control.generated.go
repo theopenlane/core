@@ -159,6 +159,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_controlImplementations(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_Control_subcontrols(ctx, field)
+			case "scheduledJobs":
+				return ec.fieldContext_Control_scheduledJobs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -299,6 +301,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_controlImplementations(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_Control_subcontrols(ctx, field)
+			case "scheduledJobs":
+				return ec.fieldContext_Control_scheduledJobs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -483,6 +487,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_controlImplementations(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_Control_subcontrols(ctx, field)
+			case "scheduledJobs":
+				return ec.fieldContext_Control_scheduledJobs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},

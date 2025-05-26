@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -537,6 +538,21 @@ func (sc *SubcontrolCreate) AddControlImplementations(c ...*ControlImplementatio
 	return sc.AddControlImplementationIDs(ids...)
 }
 
+// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ControlScheduledJob entity by IDs.
+func (sc *SubcontrolCreate) AddScheduledJobIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddScheduledJobIDs(ids...)
+	return sc
+}
+
+// AddScheduledJobs adds the "scheduled_jobs" edges to the ControlScheduledJob entity.
+func (sc *SubcontrolCreate) AddScheduledJobs(c ...*ControlScheduledJob) *SubcontrolCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return sc.AddScheduledJobIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (sc *SubcontrolCreate) Mutation() *SubcontrolMutation {
 	return sc.mutation
@@ -1036,6 +1052,23 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = sc.schemaConfig.SubcontrolControlImplementations
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.ScheduledJobsTable,
+			Columns: subcontrol.ScheduledJobsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.ControlScheduledJobSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

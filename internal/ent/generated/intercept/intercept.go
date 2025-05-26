@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
@@ -49,6 +50,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
@@ -81,6 +83,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -449,6 +453,33 @@ func (f TraverseControlObjectiveHistory) Traverse(ctx context.Context, q generat
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.ControlObjectiveHistoryQuery", q)
+}
+
+// The ControlScheduledJobFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ControlScheduledJobFunc func(context.Context, *generated.ControlScheduledJobQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ControlScheduledJobFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ControlScheduledJobQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ControlScheduledJobQuery", q)
+}
+
+// The TraverseControlScheduledJob type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseControlScheduledJob func(context.Context, *generated.ControlScheduledJobQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseControlScheduledJob) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseControlScheduledJob) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ControlScheduledJobQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ControlScheduledJobQuery", q)
 }
 
 // The CustomDomainFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1259,6 +1290,33 @@ func (f TraverseInvite) Traverse(ctx context.Context, q generated.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.InviteQuery", q)
+}
+
+// The JobResultFunc type is an adapter to allow the use of ordinary function as a Querier.
+type JobResultFunc func(context.Context, *generated.JobResultQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f JobResultFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.JobResultQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.JobResultQuery", q)
+}
+
+// The TraverseJobResult type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseJobResult func(context.Context, *generated.JobResultQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseJobResult) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseJobResult) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.JobResultQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.JobResultQuery", q)
 }
 
 // The JobRunnerFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2098,6 +2156,60 @@ func (f TraverseRiskHistory) Traverse(ctx context.Context, q generated.Query) er
 	return fmt.Errorf("unexpected query type %T. expect *generated.RiskHistoryQuery", q)
 }
 
+// The ScheduledJobFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ScheduledJobFunc func(context.Context, *generated.ScheduledJobQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ScheduledJobFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ScheduledJobQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ScheduledJobQuery", q)
+}
+
+// The TraverseScheduledJob type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseScheduledJob func(context.Context, *generated.ScheduledJobQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseScheduledJob) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseScheduledJob) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ScheduledJobQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ScheduledJobQuery", q)
+}
+
+// The ScheduledJobRunFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ScheduledJobRunFunc func(context.Context, *generated.ScheduledJobRunQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ScheduledJobRunFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ScheduledJobRunQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ScheduledJobRunQuery", q)
+}
+
+// The TraverseScheduledJobRun type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseScheduledJobRun func(context.Context, *generated.ScheduledJobRunQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseScheduledJobRun) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseScheduledJobRun) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ScheduledJobRunQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ScheduledJobRunQuery", q)
+}
+
 // The StandardFunc type is an adapter to allow the use of ordinary function as a Querier.
 type StandardFunc func(context.Context, *generated.StandardQuery) (generated.Value, error)
 
@@ -2528,6 +2640,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ControlObjectiveQuery, predicate.ControlObjective, controlobjective.OrderOption]{typ: generated.TypeControlObjective, tq: q}, nil
 	case *generated.ControlObjectiveHistoryQuery:
 		return &query[*generated.ControlObjectiveHistoryQuery, predicate.ControlObjectiveHistory, controlobjectivehistory.OrderOption]{typ: generated.TypeControlObjectiveHistory, tq: q}, nil
+	case *generated.ControlScheduledJobQuery:
+		return &query[*generated.ControlScheduledJobQuery, predicate.ControlScheduledJob, controlscheduledjob.OrderOption]{typ: generated.TypeControlScheduledJob, tq: q}, nil
 	case *generated.CustomDomainQuery:
 		return &query[*generated.CustomDomainQuery, predicate.CustomDomain, customdomain.OrderOption]{typ: generated.TypeCustomDomain, tq: q}, nil
 	case *generated.CustomDomainHistoryQuery:
@@ -2588,6 +2702,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.InternalPolicyHistoryQuery, predicate.InternalPolicyHistory, internalpolicyhistory.OrderOption]{typ: generated.TypeInternalPolicyHistory, tq: q}, nil
 	case *generated.InviteQuery:
 		return &query[*generated.InviteQuery, predicate.Invite, invite.OrderOption]{typ: generated.TypeInvite, tq: q}, nil
+	case *generated.JobResultQuery:
+		return &query[*generated.JobResultQuery, predicate.JobResult, jobresult.OrderOption]{typ: generated.TypeJobResult, tq: q}, nil
 	case *generated.JobRunnerQuery:
 		return &query[*generated.JobRunnerQuery, predicate.JobRunner, jobrunner.OrderOption]{typ: generated.TypeJobRunner, tq: q}, nil
 	case *generated.JobRunnerHistoryQuery:
@@ -2650,6 +2766,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.RiskQuery, predicate.Risk, risk.OrderOption]{typ: generated.TypeRisk, tq: q}, nil
 	case *generated.RiskHistoryQuery:
 		return &query[*generated.RiskHistoryQuery, predicate.RiskHistory, riskhistory.OrderOption]{typ: generated.TypeRiskHistory, tq: q}, nil
+	case *generated.ScheduledJobQuery:
+		return &query[*generated.ScheduledJobQuery, predicate.ScheduledJob, scheduledjob.OrderOption]{typ: generated.TypeScheduledJob, tq: q}, nil
+	case *generated.ScheduledJobRunQuery:
+		return &query[*generated.ScheduledJobRunQuery, predicate.ScheduledJobRun, scheduledjobrun.OrderOption]{typ: generated.TypeScheduledJobRun, tq: q}, nil
 	case *generated.StandardQuery:
 		return &query[*generated.StandardQuery, predicate.Standard, standard.OrderOption]{typ: generated.TypeStandard, tq: q}, nil
 	case *generated.StandardHistoryQuery:

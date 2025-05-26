@@ -42,6 +42,10 @@ models:
     model: github.com/theopenlane/core/pkg/models.DateTime
   AAGUID:
     model: github.com/theopenlane/core/pkg/models.AAGUID
+  JobConfiguration:
+    model: github.com/theopenlane/core/pkg/models.JobConfiguration
+  JobCadence:
+    model: github.com/theopenlane/core/pkg/models.JobCadence
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:
