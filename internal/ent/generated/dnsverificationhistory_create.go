@@ -179,15 +179,15 @@ func (dvhc *DNSVerificationHistoryCreate) SetDNSTxtValue(s string) *DNSVerificat
 }
 
 // SetDNSVerificationStatus sets the "dns_verification_status" field.
-func (dvhc *DNSVerificationHistoryCreate) SetDNSVerificationStatus(eds enums.CustomDomainStatus) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetDNSVerificationStatus(eds)
+func (dvhc *DNSVerificationHistoryCreate) SetDNSVerificationStatus(evs enums.DNSVerificationStatus) *DNSVerificationHistoryCreate {
+	dvhc.mutation.SetDNSVerificationStatus(evs)
 	return dvhc
 }
 
 // SetNillableDNSVerificationStatus sets the "dns_verification_status" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableDNSVerificationStatus(eds *enums.CustomDomainStatus) *DNSVerificationHistoryCreate {
-	if eds != nil {
-		dvhc.SetDNSVerificationStatus(*eds)
+func (dvhc *DNSVerificationHistoryCreate) SetNillableDNSVerificationStatus(evs *enums.DNSVerificationStatus) *DNSVerificationHistoryCreate {
+	if evs != nil {
+		dvhc.SetDNSVerificationStatus(*evs)
 	}
 	return dvhc
 }
@@ -235,15 +235,15 @@ func (dvhc *DNSVerificationHistoryCreate) SetNillableExpectedAcmeChallengeValue(
 }
 
 // SetAcmeChallengeStatus sets the "acme_challenge_status" field.
-func (dvhc *DNSVerificationHistoryCreate) SetAcmeChallengeStatus(eds enums.CustomDomainStatus) *DNSVerificationHistoryCreate {
-	dvhc.mutation.SetAcmeChallengeStatus(eds)
+func (dvhc *DNSVerificationHistoryCreate) SetAcmeChallengeStatus(evs enums.SSLVerificationStatus) *DNSVerificationHistoryCreate {
+	dvhc.mutation.SetAcmeChallengeStatus(evs)
 	return dvhc
 }
 
 // SetNillableAcmeChallengeStatus sets the "acme_challenge_status" field if the given value is not nil.
-func (dvhc *DNSVerificationHistoryCreate) SetNillableAcmeChallengeStatus(eds *enums.CustomDomainStatus) *DNSVerificationHistoryCreate {
-	if eds != nil {
-		dvhc.SetAcmeChallengeStatus(*eds)
+func (dvhc *DNSVerificationHistoryCreate) SetNillableAcmeChallengeStatus(evs *enums.SSLVerificationStatus) *DNSVerificationHistoryCreate {
+	if evs != nil {
+		dvhc.SetAcmeChallengeStatus(*evs)
 	}
 	return dvhc
 }

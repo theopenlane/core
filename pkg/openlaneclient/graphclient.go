@@ -18506,22 +18506,22 @@ func (t *GetCustomDomainHistories_CustomDomainHistories) GetTotalCount() int64 {
 }
 
 type CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications struct {
-	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	ID                          string                   "json:\"id\" graphql:\"id\""
-	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                      "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetAcmeChallengePath() *string {
@@ -18530,7 +18530,7 @@ func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerificati
 	}
 	return t.AcmeChallengePath
 }
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
 	if t == nil {
 		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
 	}
@@ -18572,7 +18572,7 @@ func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerificati
 	}
 	return t.DNSTxtValue
 }
-func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
 	if t == nil {
 		t = &CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification_DNSVerifications{}
 	}
@@ -18633,22 +18633,22 @@ func (t *CreateBulkCSVDNSVerification_CreateBulkCSVDNSVerification) GetDNSVerifi
 }
 
 type CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications struct {
-	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	ID                          string                   "json:\"id\" graphql:\"id\""
-	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                      "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetAcmeChallengePath() *string {
@@ -18657,7 +18657,7 @@ func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) G
 	}
 	return t.AcmeChallengePath
 }
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
 	if t == nil {
 		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
 	}
@@ -18699,7 +18699,7 @@ func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) G
 	}
 	return t.DNSTxtValue
 }
-func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+func (t *CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
 	if t == nil {
 		t = &CreateBulkDNSVerification_CreateBulkDNSVerification_DNSVerifications{}
 	}
@@ -18760,22 +18760,22 @@ func (t *CreateBulkDNSVerification_CreateBulkDNSVerification) GetDNSVerification
 }
 
 type CreateDNSVerification_CreateDNSVerification_DNSVerification struct {
-	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	ID                          string                   "json:\"id\" graphql:\"id\""
-	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                      "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetAcmeChallengePath() *string {
@@ -18784,7 +18784,7 @@ func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetAcmeCha
 	}
 	return t.AcmeChallengePath
 }
-func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
 	if t == nil {
 		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
 	}
@@ -18826,7 +18826,7 @@ func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetDNSTxtV
 	}
 	return t.DNSTxtValue
 }
-func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+func (t *CreateDNSVerification_CreateDNSVerification_DNSVerification) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
 	if t == nil {
 		t = &CreateDNSVerification_CreateDNSVerification_DNSVerification{}
 	}
@@ -18930,22 +18930,22 @@ func (t *GetAllDNSVerifications_DNSVerifications_PageInfo) GetStartCursor() *str
 }
 
 type GetAllDNSVerifications_DNSVerifications_Edges_Node struct {
-	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	ID                          string                   "json:\"id\" graphql:\"id\""
-	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                      "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengePath() *string {
@@ -18954,7 +18954,7 @@ func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengePat
 	}
 	return t.AcmeChallengePath
 }
-func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
 	if t == nil {
 		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
 	}
@@ -18996,7 +18996,7 @@ func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetDNSTxtValue() st
 	}
 	return t.DNSTxtValue
 }
-func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+func (t *GetAllDNSVerifications_DNSVerifications_Edges_Node) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
 	if t == nil {
 		t = &GetAllDNSVerifications_DNSVerifications_Edges_Node{}
 	}
@@ -19082,22 +19082,22 @@ func (t *GetAllDNSVerifications_DNSVerifications) GetTotalCount() int64 {
 }
 
 type GetDNSVerificationByID_DNSVerification struct {
-	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	ID                          string                   "json:\"id\" graphql:\"id\""
-	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                      "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetDNSVerificationByID_DNSVerification) GetAcmeChallengePath() *string {
@@ -19106,7 +19106,7 @@ func (t *GetDNSVerificationByID_DNSVerification) GetAcmeChallengePath() *string 
 	}
 	return t.AcmeChallengePath
 }
-func (t *GetDNSVerificationByID_DNSVerification) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+func (t *GetDNSVerificationByID_DNSVerification) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
 	if t == nil {
 		t = &GetDNSVerificationByID_DNSVerification{}
 	}
@@ -19148,7 +19148,7 @@ func (t *GetDNSVerificationByID_DNSVerification) GetDNSTxtValue() string {
 	}
 	return t.DNSTxtValue
 }
-func (t *GetDNSVerificationByID_DNSVerification) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+func (t *GetDNSVerificationByID_DNSVerification) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
 	if t == nil {
 		t = &GetDNSVerificationByID_DNSVerification{}
 	}
@@ -19230,22 +19230,22 @@ func (t *GetDNSVerifications_DNSVerifications_PageInfo) GetStartCursor() *string
 }
 
 type GetDNSVerifications_DNSVerifications_Edges_Node struct {
-	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	ID                          string                   "json:\"id\" graphql:\"id\""
-	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                      "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengePath() *string {
@@ -19254,7 +19254,7 @@ func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengePath()
 	}
 	return t.AcmeChallengePath
 }
-func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
 	if t == nil {
 		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
 	}
@@ -19296,7 +19296,7 @@ func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetDNSTxtValue() strin
 	}
 	return t.DNSTxtValue
 }
-func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+func (t *GetDNSVerifications_DNSVerifications_Edges_Node) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
 	if t == nil {
 		t = &GetDNSVerifications_DNSVerifications_Edges_Node{}
 	}
@@ -19382,22 +19382,22 @@ func (t *GetDNSVerifications_DNSVerifications) GetTotalCount() int64 {
 }
 
 type UpdateDNSVerification_UpdateDNSVerification_DNSVerification struct {
-	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	ID                          string                   "json:\"id\" graphql:\"id\""
-	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	ID                          string                      "json:\"id\" graphql:\"id\""
+	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetAcmeChallengePath() *string {
@@ -19406,7 +19406,7 @@ func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetAcmeCha
 	}
 	return t.AcmeChallengePath
 }
-func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
 	if t == nil {
 		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
 	}
@@ -19448,7 +19448,7 @@ func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetDNSTxtV
 	}
 	return t.DNSTxtValue
 }
-func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+func (t *UpdateDNSVerification_UpdateDNSVerification_DNSVerification) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
 	if t == nil {
 		t = &UpdateDNSVerification_UpdateDNSVerification_DNSVerification{}
 	}
@@ -19541,25 +19541,25 @@ func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetSt
 }
 
 type GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node struct {
-	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	HistoryTime                 time.Time                "json:\"historyTime\" graphql:\"historyTime\""
-	ID                          string                   "json:\"id\" graphql:\"id\""
-	Operation                   history.OpType           "json:\"operation\" graphql:\"operation\""
-	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref                         *string                  "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	HistoryTime                 time.Time                   "json:\"historyTime\" graphql:\"historyTime\""
+	ID                          string                      "json:\"id\" graphql:\"id\""
+	Operation                   history.OpType              "json:\"operation\" graphql:\"operation\""
+	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                         *string                     "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengePath() *string {
@@ -19568,7 +19568,7 @@ func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) Get
 	}
 	return t.AcmeChallengePath
 }
-func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
 	if t == nil {
 		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
 	}
@@ -19610,7 +19610,7 @@ func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) Get
 	}
 	return t.DNSTxtValue
 }
-func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+func (t *GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
 	if t == nil {
 		t = &GetAllDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
 	}
@@ -19746,25 +19746,25 @@ func (t *GetDNSVerificationHistories_DNSVerificationHistories_PageInfo) GetStart
 }
 
 type GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node struct {
-	AcmeChallengePath           *string                  "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
-	AcmeChallengeStatus         enums.CustomDomainStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
-	AcmeChallengeStatusReason   *string                  "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
-	CloudflareHostnameID        string                   "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
-	CreatedAt                   *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                   *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DNSTxtRecord                string                   "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
-	DNSTxtValue                 string                   "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
-	DNSVerificationStatus       enums.CustomDomainStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
-	DNSVerificationStatusReason *string                  "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
-	ExpectedAcmeChallengeValue  *string                  "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
-	HistoryTime                 time.Time                "json:\"historyTime\" graphql:\"historyTime\""
-	ID                          string                   "json:\"id\" graphql:\"id\""
-	Operation                   history.OpType           "json:\"operation\" graphql:\"operation\""
-	OwnerID                     *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref                         *string                  "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags                        []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                   *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                   *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AcmeChallengePath           *string                     "json:\"acmeChallengePath,omitempty\" graphql:\"acmeChallengePath\""
+	AcmeChallengeStatus         enums.SSLVerificationStatus "json:\"acmeChallengeStatus\" graphql:\"acmeChallengeStatus\""
+	AcmeChallengeStatusReason   *string                     "json:\"acmeChallengeStatusReason,omitempty\" graphql:\"acmeChallengeStatusReason\""
+	CloudflareHostnameID        string                      "json:\"cloudflareHostnameID\" graphql:\"cloudflareHostnameID\""
+	CreatedAt                   *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                   *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DNSTxtRecord                string                      "json:\"dnsTxtRecord\" graphql:\"dnsTxtRecord\""
+	DNSTxtValue                 string                      "json:\"dnsTxtValue\" graphql:\"dnsTxtValue\""
+	DNSVerificationStatus       enums.DNSVerificationStatus "json:\"dnsVerificationStatus\" graphql:\"dnsVerificationStatus\""
+	DNSVerificationStatusReason *string                     "json:\"dnsVerificationStatusReason,omitempty\" graphql:\"dnsVerificationStatusReason\""
+	ExpectedAcmeChallengeValue  *string                     "json:\"expectedAcmeChallengeValue,omitempty\" graphql:\"expectedAcmeChallengeValue\""
+	HistoryTime                 time.Time                   "json:\"historyTime\" graphql:\"historyTime\""
+	ID                          string                      "json:\"id\" graphql:\"id\""
+	Operation                   history.OpType              "json:\"operation\" graphql:\"operation\""
+	OwnerID                     *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                         *string                     "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags                        []string                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                   *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                   *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengePath() *string {
@@ -19773,7 +19773,7 @@ func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcm
 	}
 	return t.AcmeChallengePath
 }
-func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengeStatus() *enums.CustomDomainStatus {
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetAcmeChallengeStatus() *enums.SSLVerificationStatus {
 	if t == nil {
 		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
 	}
@@ -19815,7 +19815,7 @@ func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNS
 	}
 	return t.DNSTxtValue
 }
-func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSVerificationStatus() *enums.CustomDomainStatus {
+func (t *GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node) GetDNSVerificationStatus() *enums.DNSVerificationStatus {
 	if t == nil {
 		t = &GetDNSVerificationHistories_DNSVerificationHistories_Edges_Node{}
 	}

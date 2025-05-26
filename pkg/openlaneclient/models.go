@@ -4210,7 +4210,7 @@ type CreateDNSVerificationInput struct {
 	// the expected value of the dns txt record
 	DNSTxtValue string `json:"dnsTxtValue"`
 	// Status of the domain verification
-	DNSVerificationStatus *enums.CustomDomainStatus `json:"dnsVerificationStatus,omitempty"`
+	DNSVerificationStatus *enums.DNSVerificationStatus `json:"dnsVerificationStatus,omitempty"`
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason *string `json:"dnsVerificationStatusReason,omitempty"`
 	// Path under /.well-known/acme-challenge/ to serve the ACME challenge
@@ -4218,9 +4218,9 @@ type CreateDNSVerificationInput struct {
 	// the expected value of the acme challenge record
 	ExpectedAcmeChallengeValue *string `json:"expectedAcmeChallengeValue,omitempty"`
 	// Status of the ACME challenge validation
-	AcmeChallengeStatus *enums.CustomDomainStatus `json:"acmeChallengeStatus,omitempty"`
-	OwnerID             *string                   `json:"ownerID,omitempty"`
-	CustomDomainIDs     []string                  `json:"customDomainIDs,omitempty"`
+	AcmeChallengeStatus *enums.SSLVerificationStatus `json:"acmeChallengeStatus,omitempty"`
+	OwnerID             *string                      `json:"ownerID,omitempty"`
+	CustomDomainIDs     []string                     `json:"customDomainIDs,omitempty"`
 }
 
 // CreateDocumentDataInput is used for create DocumentData object.
@@ -5639,7 +5639,7 @@ type DNSVerification struct {
 	// the expected value of the dns txt record
 	DNSTxtValue string `json:"dnsTxtValue"`
 	// Status of the domain verification
-	DNSVerificationStatus enums.CustomDomainStatus `json:"dnsVerificationStatus"`
+	DNSVerificationStatus enums.DNSVerificationStatus `json:"dnsVerificationStatus"`
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason *string `json:"dnsVerificationStatusReason,omitempty"`
 	// Path under /.well-known/acme-challenge/ to serve the ACME challenge
@@ -5647,7 +5647,7 @@ type DNSVerification struct {
 	// the expected value of the acme challenge record
 	ExpectedAcmeChallengeValue *string `json:"expectedAcmeChallengeValue,omitempty"`
 	// Status of the ACME challenge validation
-	AcmeChallengeStatus enums.CustomDomainStatus `json:"acmeChallengeStatus"`
+	AcmeChallengeStatus enums.SSLVerificationStatus `json:"acmeChallengeStatus"`
 	// Reason of the ACME status, for giving the user diagnostic info
 	AcmeChallengeStatusReason *string                 `json:"acmeChallengeStatusReason,omitempty"`
 	Owner                     *Organization           `json:"owner,omitempty"`
@@ -5712,7 +5712,7 @@ type DNSVerificationHistory struct {
 	// the expected value of the dns txt record
 	DNSTxtValue string `json:"dnsTxtValue"`
 	// Status of the domain verification
-	DNSVerificationStatus enums.CustomDomainStatus `json:"dnsVerificationStatus"`
+	DNSVerificationStatus enums.DNSVerificationStatus `json:"dnsVerificationStatus"`
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason *string `json:"dnsVerificationStatusReason,omitempty"`
 	// Path under /.well-known/acme-challenge/ to serve the ACME challenge
@@ -5720,7 +5720,7 @@ type DNSVerificationHistory struct {
 	// the expected value of the acme challenge record
 	ExpectedAcmeChallengeValue *string `json:"expectedAcmeChallengeValue,omitempty"`
 	// Status of the ACME challenge validation
-	AcmeChallengeStatus enums.CustomDomainStatus `json:"acmeChallengeStatus"`
+	AcmeChallengeStatus enums.SSLVerificationStatus `json:"acmeChallengeStatus"`
 	// Reason of the ACME status, for giving the user diagnostic info
 	AcmeChallengeStatusReason *string `json:"acmeChallengeStatusReason,omitempty"`
 }
@@ -5913,10 +5913,10 @@ type DNSVerificationHistoryWhereInput struct {
 	DNSTxtValueEqualFold    *string  `json:"dnsTxtValueEqualFold,omitempty"`
 	DNSTxtValueContainsFold *string  `json:"dnsTxtValueContainsFold,omitempty"`
 	// dns_verification_status field predicates
-	DNSVerificationStatus      *enums.CustomDomainStatus  `json:"dnsVerificationStatus,omitempty"`
-	DNSVerificationStatusNeq   *enums.CustomDomainStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
-	DNSVerificationStatusIn    []enums.CustomDomainStatus `json:"dnsVerificationStatusIn,omitempty"`
-	DNSVerificationStatusNotIn []enums.CustomDomainStatus `json:"dnsVerificationStatusNotIn,omitempty"`
+	DNSVerificationStatus      *enums.DNSVerificationStatus  `json:"dnsVerificationStatus,omitempty"`
+	DNSVerificationStatusNeq   *enums.DNSVerificationStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
+	DNSVerificationStatusIn    []enums.DNSVerificationStatus `json:"dnsVerificationStatusIn,omitempty"`
+	DNSVerificationStatusNotIn []enums.DNSVerificationStatus `json:"dnsVerificationStatusNotIn,omitempty"`
 	// dns_verification_status_reason field predicates
 	DNSVerificationStatusReason             *string  `json:"dnsVerificationStatusReason,omitempty"`
 	DNSVerificationStatusReasonNeq          *string  `json:"dnsVerificationStatusReasonNEQ,omitempty"`
@@ -5966,10 +5966,10 @@ type DNSVerificationHistoryWhereInput struct {
 	ExpectedAcmeChallengeValueEqualFold    *string  `json:"expectedAcmeChallengeValueEqualFold,omitempty"`
 	ExpectedAcmeChallengeValueContainsFold *string  `json:"expectedAcmeChallengeValueContainsFold,omitempty"`
 	// acme_challenge_status field predicates
-	AcmeChallengeStatus      *enums.CustomDomainStatus  `json:"acmeChallengeStatus,omitempty"`
-	AcmeChallengeStatusNeq   *enums.CustomDomainStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
-	AcmeChallengeStatusIn    []enums.CustomDomainStatus `json:"acmeChallengeStatusIn,omitempty"`
-	AcmeChallengeStatusNotIn []enums.CustomDomainStatus `json:"acmeChallengeStatusNotIn,omitempty"`
+	AcmeChallengeStatus      *enums.SSLVerificationStatus  `json:"acmeChallengeStatus,omitempty"`
+	AcmeChallengeStatusNeq   *enums.SSLVerificationStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
+	AcmeChallengeStatusIn    []enums.SSLVerificationStatus `json:"acmeChallengeStatusIn,omitempty"`
+	AcmeChallengeStatusNotIn []enums.SSLVerificationStatus `json:"acmeChallengeStatusNotIn,omitempty"`
 	// acme_challenge_status_reason field predicates
 	AcmeChallengeStatusReason             *string  `json:"acmeChallengeStatusReason,omitempty"`
 	AcmeChallengeStatusReasonNeq          *string  `json:"acmeChallengeStatusReasonNEQ,omitempty"`
@@ -6132,10 +6132,10 @@ type DNSVerificationWhereInput struct {
 	DNSTxtValueEqualFold    *string  `json:"dnsTxtValueEqualFold,omitempty"`
 	DNSTxtValueContainsFold *string  `json:"dnsTxtValueContainsFold,omitempty"`
 	// dns_verification_status field predicates
-	DNSVerificationStatus      *enums.CustomDomainStatus  `json:"dnsVerificationStatus,omitempty"`
-	DNSVerificationStatusNeq   *enums.CustomDomainStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
-	DNSVerificationStatusIn    []enums.CustomDomainStatus `json:"dnsVerificationStatusIn,omitempty"`
-	DNSVerificationStatusNotIn []enums.CustomDomainStatus `json:"dnsVerificationStatusNotIn,omitempty"`
+	DNSVerificationStatus      *enums.DNSVerificationStatus  `json:"dnsVerificationStatus,omitempty"`
+	DNSVerificationStatusNeq   *enums.DNSVerificationStatus  `json:"dnsVerificationStatusNEQ,omitempty"`
+	DNSVerificationStatusIn    []enums.DNSVerificationStatus `json:"dnsVerificationStatusIn,omitempty"`
+	DNSVerificationStatusNotIn []enums.DNSVerificationStatus `json:"dnsVerificationStatusNotIn,omitempty"`
 	// dns_verification_status_reason field predicates
 	DNSVerificationStatusReason             *string  `json:"dnsVerificationStatusReason,omitempty"`
 	DNSVerificationStatusReasonNeq          *string  `json:"dnsVerificationStatusReasonNEQ,omitempty"`
@@ -6185,10 +6185,10 @@ type DNSVerificationWhereInput struct {
 	ExpectedAcmeChallengeValueEqualFold    *string  `json:"expectedAcmeChallengeValueEqualFold,omitempty"`
 	ExpectedAcmeChallengeValueContainsFold *string  `json:"expectedAcmeChallengeValueContainsFold,omitempty"`
 	// acme_challenge_status field predicates
-	AcmeChallengeStatus      *enums.CustomDomainStatus  `json:"acmeChallengeStatus,omitempty"`
-	AcmeChallengeStatusNeq   *enums.CustomDomainStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
-	AcmeChallengeStatusIn    []enums.CustomDomainStatus `json:"acmeChallengeStatusIn,omitempty"`
-	AcmeChallengeStatusNotIn []enums.CustomDomainStatus `json:"acmeChallengeStatusNotIn,omitempty"`
+	AcmeChallengeStatus      *enums.SSLVerificationStatus  `json:"acmeChallengeStatus,omitempty"`
+	AcmeChallengeStatusNeq   *enums.SSLVerificationStatus  `json:"acmeChallengeStatusNEQ,omitempty"`
+	AcmeChallengeStatusIn    []enums.SSLVerificationStatus `json:"acmeChallengeStatusIn,omitempty"`
+	AcmeChallengeStatusNotIn []enums.SSLVerificationStatus `json:"acmeChallengeStatusNotIn,omitempty"`
 	// acme_challenge_status_reason field predicates
 	AcmeChallengeStatusReason             *string  `json:"acmeChallengeStatusReason,omitempty"`
 	AcmeChallengeStatusReasonNeq          *string  `json:"acmeChallengeStatusReasonNEQ,omitempty"`
@@ -23960,7 +23960,7 @@ type UpdateDNSVerificationInput struct {
 	// the expected value of the dns txt record
 	DNSTxtValue *string `json:"dnsTxtValue,omitempty"`
 	// Status of the domain verification
-	DNSVerificationStatus *enums.CustomDomainStatus `json:"dnsVerificationStatus,omitempty"`
+	DNSVerificationStatus *enums.DNSVerificationStatus `json:"dnsVerificationStatus,omitempty"`
 	// Reason of the dns verification status, for giving the user diagnostic info
 	DNSVerificationStatusReason      *string `json:"dnsVerificationStatusReason,omitempty"`
 	ClearDNSVerificationStatusReason *bool   `json:"clearDNSVerificationStatusReason,omitempty"`
@@ -23971,7 +23971,7 @@ type UpdateDNSVerificationInput struct {
 	ExpectedAcmeChallengeValue      *string `json:"expectedAcmeChallengeValue,omitempty"`
 	ClearExpectedAcmeChallengeValue *bool   `json:"clearExpectedAcmeChallengeValue,omitempty"`
 	// Status of the ACME challenge validation
-	AcmeChallengeStatus *enums.CustomDomainStatus `json:"acmeChallengeStatus,omitempty"`
+	AcmeChallengeStatus *enums.SSLVerificationStatus `json:"acmeChallengeStatus,omitempty"`
 	// Reason of the ACME status, for giving the user diagnostic info
 	AcmeChallengeStatusReason      *string  `json:"acmeChallengeStatusReason,omitempty"`
 	ClearAcmeChallengeStatusReason *bool    `json:"clearAcmeChallengeStatusReason,omitempty"`

@@ -141,24 +141,24 @@ var (
 	DefaultID func() string
 )
 
-const DefaultDNSVerificationStatus enums.CustomDomainStatus = "PENDING"
+const DefaultDNSVerificationStatus enums.DNSVerificationStatus = "pending"
 
 // DNSVerificationStatusValidator is a validator for the "dns_verification_status" field enum values. It is called by the builders before save.
-func DNSVerificationStatusValidator(dvs enums.CustomDomainStatus) error {
+func DNSVerificationStatusValidator(dvs enums.DNSVerificationStatus) error {
 	switch dvs.String() {
-	case "INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING":
+	case "active", "pending", "active_redeploying", "moved", "pending_deletion", "deleted", "pending_blocked", "pending_migration", "pending_provisioned", "test_pending", "test_active", "test_active_apex", "test_blocked", "test_failed", "provisioned", "blocked":
 		return nil
 	default:
 		return fmt.Errorf("dnsverification: invalid enum value for dns_verification_status field: %q", dvs)
 	}
 }
 
-const DefaultAcmeChallengeStatus enums.CustomDomainStatus = "PENDING"
+const DefaultAcmeChallengeStatus enums.SSLVerificationStatus = "initializing"
 
 // AcmeChallengeStatusValidator is a validator for the "acme_challenge_status" field enum values. It is called by the builders before save.
-func AcmeChallengeStatusValidator(acs enums.CustomDomainStatus) error {
+func AcmeChallengeStatusValidator(acs enums.SSLVerificationStatus) error {
 	switch acs.String() {
-	case "INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING":
+	case "initializing", "pending_validation", "deleted", "pending_issuance", "pending_deployment", "pending_deletion", "pending_expiration", "expired", "active", "initializing_timed_out", "validation_timed_out", "issuance_timed_out", "deployment_timed_out", "deletion_timed_out", "pending_cleanup", "staging_deployment", "staging_active", "deactivating", "inactive", "backup_issued", "holding_deployment":
 		return nil
 	default:
 		return fmt.Errorf("dnsverification: invalid enum value for acme_challenge_status field: %q", acs)
@@ -289,15 +289,15 @@ func newCustomDomainsStep() *sqlgraph.Step {
 }
 
 var (
-	// enums.CustomDomainStatus must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.CustomDomainStatus)(nil)
-	// enums.CustomDomainStatus must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.CustomDomainStatus)(nil)
+	// enums.DNSVerificationStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.DNSVerificationStatus)(nil)
+	// enums.DNSVerificationStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.DNSVerificationStatus)(nil)
 )
 
 var (
-	// enums.CustomDomainStatus must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.CustomDomainStatus)(nil)
-	// enums.CustomDomainStatus must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.CustomDomainStatus)(nil)
+	// enums.SSLVerificationStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.SSLVerificationStatus)(nil)
+	// enums.SSLVerificationStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.SSLVerificationStatus)(nil)
 )

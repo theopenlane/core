@@ -1224,11 +1224,11 @@ type DNSVerificationBuilder struct {
 	CloudflareHostnameID        string
 	DNSTxtRecord                string
 	DNSTxtValue                 string
-	DNSVerificationStatus       *enums.CustomDomainStatus
+	DNSVerificationStatus       *enums.DNSVerificationStatus
 	DNSVerificationStatusReason *string
 	AcmeChallengePath           string
 	ExpectedAcmeChallengeValue  string
-	AcmeChallengeStatus         *enums.CustomDomainStatus
+	AcmeChallengeStatus         *enums.SSLVerificationStatus
 	AcmeChallengeStatusReason   *string
 	OwnerID                     string
 	CustomDomainIDs             []string

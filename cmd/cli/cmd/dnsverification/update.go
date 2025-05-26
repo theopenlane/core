@@ -38,7 +38,7 @@ func updateValidation() (id string, input openlaneclient.UpdateDNSVerificationIn
 
 	// Build the update input with optional fields
 	if dnsStatus := cmd.Config.String("dns-verification-status"); dnsStatus != "" {
-		status := enums.CustomDomainStatus(dnsStatus)
+		status := enums.DNSVerificationStatus(dnsStatus)
 		input.DNSVerificationStatus = &status
 	}
 
@@ -47,7 +47,7 @@ func updateValidation() (id string, input openlaneclient.UpdateDNSVerificationIn
 	}
 
 	if sslStatus := cmd.Config.String("acme-challenge-status"); sslStatus != "" {
-		status := enums.CustomDomainStatus(sslStatus)
+		status := enums.SSLVerificationStatus(sslStatus)
 		input.AcmeChallengeStatus = &status
 	}
 

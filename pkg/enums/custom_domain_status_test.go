@@ -8,9 +8,14 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCustomDomainStatusValues(t *testing.T) {
-	expected := []string{"INVALID", "VERIFIED", "FAILED_VERIFY", "PENDING"}
-	values := CustomDomainStatus("").Values()
+func TestDNSVerificationStatusValues(t *testing.T) {
+	expected := []string{
+		"active", "pending", "active_redeploying", "moved", "pending_deletion",
+		"deleted", "pending_blocked", "pending_migration", "pending_provisioned",
+		"test_pending", "test_active", "test_active_apex", "test_blocked",
+		"test_failed", "provisioned", "blocked",
+	}
+	values := DNSVerificationStatus("").Values()
 
 	assert.Equal(t, len(expected), len(values))
 
@@ -19,15 +24,18 @@ func TestCustomDomainStatusValues(t *testing.T) {
 	}
 }
 
-func TestCustomDomainStatusString(t *testing.T) {
+func TestDNSVerificationStatusString(t *testing.T) {
 	tests := []struct {
-		status   CustomDomainStatus
+		status   DNSVerificationStatus
 		expected string
 	}{
-		{CustomDomainStatusVerified, "VERIFIED"},
-		{CustomDomainStatusFailedVerify, "FAILED_VERIFY"},
-		{CustomDomainStatusPending, "PENDING"},
-		{CustomDomainStatusInvalid, "INVALID"},
+		{DNSVerificationStatusActive, "active"},
+		{DNSVerificationStatusPending, "pending"},
+		{DNSVerificationStatusActiveRedeploying, "active_redeploying"},
+		{DNSVerificationStatusMoved, "moved"},
+		{DNSVerificationStatusPendingDeletion, "pending_deletion"},
+		{DNSVerificationStatusDeleted, "deleted"},
+		{DNSVerificationStatusInvalid, "invalid"},
 	}
 
 	for _, test := range tests {
@@ -35,36 +43,39 @@ func TestCustomDomainStatusString(t *testing.T) {
 	}
 }
 
-func TestToCustomDomainStatus(t *testing.T) {
+func TestToDNSVerificationStatus(t *testing.T) {
 	tests := []struct {
 		input    string
-		expected *CustomDomainStatus
+		expected *DNSVerificationStatus
 	}{
-		{"VERIFIED", &CustomDomainStatusVerified},
-		{"FAILED_VERIFY", &CustomDomainStatusFailedVerify},
-		{"PENDING", &CustomDomainStatusPending},
-		{"verified", &CustomDomainStatusVerified},
-		{"failed_verify", &CustomDomainStatusFailedVerify},
-		{"pending", &CustomDomainStatusPending},
-		{"unknown", &CustomDomainStatusInvalid},
-		{"", &CustomDomainStatusInvalid},
+		{"active", &DNSVerificationStatusActive},
+		{"pending", &DNSVerificationStatusPending},
+		{"active_redeploying", &DNSVerificationStatusActiveRedeploying},
+		{"moved", &DNSVerificationStatusMoved},
+		{"pending_deletion", &DNSVerificationStatusPendingDeletion},
+		{"deleted", &DNSVerificationStatusDeleted},
+		{"ACTIVE", &DNSVerificationStatusActive},
+		{"PENDING", &DNSVerificationStatusPending},
+		{"unknown", &DNSVerificationStatusInvalid},
+		{"", &DNSVerificationStatusInvalid},
 	}
 
 	for _, test := range tests {
-		result := ToCustomDomainStatus(test.input)
-		assert.Equal(t, test.expected, result, "ToCustomDomainStatus(%q)", test.input)
+		result := ToDNSVerificationStatus(test.input)
+		assert.Equal(t, test.expected, result, "ToDNSVerificationStatus(%q)", test.input)
 	}
 }
 
-func TestCustomDomainStatusMarshalGQL(t *testing.T) {
+func TestDNSVerificationStatusMarshalGQL(t *testing.T) {
 	tests := []struct {
-		status   CustomDomainStatus
+		status   DNSVerificationStatus
 		expected string
 	}{
-		{CustomDomainStatusVerified, `"VERIFIED"`},
-		{CustomDomainStatusFailedVerify, `"FAILED_VERIFY"`},
-		{CustomDomainStatusPending, `"PENDING"`},
-		{CustomDomainStatusInvalid, `"INVALID"`},
+		{DNSVerificationStatusActive, `"active"`},
+		{DNSVerificationStatusPending, `"pending"`},
+		{DNSVerificationStatusActiveRedeploying, `"active_redeploying"`},
+		{DNSVerificationStatusMoved, `"moved"`},
+		{DNSVerificationStatusInvalid, `"invalid"`},
 	}
 
 	for _, test := range tests {
@@ -75,21 +86,127 @@ func TestCustomDomainStatusMarshalGQL(t *testing.T) {
 	}
 }
 
-func TestCustomDomainStatusUnmarshalGQL(t *testing.T) {
+func TestDNSVerificationStatusUnmarshalGQL(t *testing.T) {
 	tests := []struct {
 		input    interface{}
-		expected CustomDomainStatus
+		expected DNSVerificationStatus
 		hasError bool
 	}{
-		{"VERIFIED", CustomDomainStatusVerified, false},
-		{"FAILED_VERIFY", CustomDomainStatusFailedVerify, false},
-		{"PENDING", CustomDomainStatusPending, false},
-		{"INVALID", CustomDomainStatusInvalid, false},
+		{"active", DNSVerificationStatusActive, false},
+		{"pending", DNSVerificationStatusPending, false},
+		{"active_redeploying", DNSVerificationStatusActiveRedeploying, false},
+		{"moved", DNSVerificationStatusMoved, false},
+		{"invalid", DNSVerificationStatusInvalid, false},
 		{123, "", true},
 	}
 
 	for _, test := range tests {
-		var status CustomDomainStatus
+		var status DNSVerificationStatus
+		err := status.UnmarshalGQL(test.input)
+		if test.hasError {
+			require.Error(t, err)
+		} else {
+			require.NoError(t, err)
+			assert.Equal(t, test.expected, status)
+		}
+	}
+}
+
+func TestSSLVerificationStatusValues(t *testing.T) {
+	expected := []string{
+		"initializing", "pending_validation", "deleted", "pending_issuance",
+		"pending_deployment", "pending_deletion", "pending_expiration", "expired",
+		"active", "initializing_timed_out", "validation_timed_out", "issuance_timed_out",
+		"deployment_timed_out", "deletion_timed_out", "pending_cleanup", "staging_deployment",
+		"staging_active", "deactivating", "inactive", "backup_issued", "holding_deployment",
+	}
+	values := SSLVerificationStatus("").Values()
+
+	assert.Equal(t, len(expected), len(values))
+
+	for i, v := range values {
+		assert.Equal(t, expected[i], v)
+	}
+}
+
+func TestSSLVerificationStatusString(t *testing.T) {
+	tests := []struct {
+		status   SSLVerificationStatus
+		expected string
+	}{
+		{SSLVerificationStatusInitializing, "initializing"},
+		{SSLVerificationStatusPendingValidation, "pending_validation"},
+		{SSLVerificationStatusDeleted, "deleted"},
+		{SSLVerificationStatusPendingIssuance, "pending_issuance"},
+		{SSLVerificationStatusActive, "active"},
+		{SSLVerificationStatusExpired, "expired"},
+		{SSLVerificationStatusInvalid, "invalid"},
+	}
+
+	for _, test := range tests {
+		assert.Equal(t, test.expected, test.status.String())
+	}
+}
+
+func TestToSSLVerificationStatus(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected *SSLVerificationStatus
+	}{
+		{"initializing", &SSLVerificationStatusInitializing},
+		{"pending_validation", &SSLVerificationStatusPendingValidation},
+		{"deleted", &SSLVerificationStatusDeleted},
+		{"pending_issuance", &SSLVerificationStatusPendingIssuance},
+		{"active", &SSLVerificationStatusActive},
+		{"expired", &SSLVerificationStatusExpired},
+		{"INITIALIZING", &SSLVerificationStatusInitializing},
+		{"ACTIVE", &SSLVerificationStatusActive},
+		{"unknown", &SSLVerificationStatusInvalid},
+		{"", &SSLVerificationStatusInvalid},
+	}
+
+	for _, test := range tests {
+		result := ToSSLVerificationStatus(test.input)
+		assert.Equal(t, test.expected, result, "ToSSLVerificationStatus(%q)", test.input)
+	}
+}
+
+func TestSSLVerificationStatusMarshalGQL(t *testing.T) {
+	tests := []struct {
+		status   SSLVerificationStatus
+		expected string
+	}{
+		{SSLVerificationStatusInitializing, `"initializing"`},
+		{SSLVerificationStatusPendingValidation, `"pending_validation"`},
+		{SSLVerificationStatusDeleted, `"deleted"`},
+		{SSLVerificationStatusActive, `"active"`},
+		{SSLVerificationStatusInvalid, `"invalid"`},
+	}
+
+	for _, test := range tests {
+		var writer strings.Builder
+		test.status.MarshalGQL(&writer)
+
+		assert.Equal(t, test.expected, writer.String())
+	}
+}
+
+func TestSSLVerificationStatusUnmarshalGQL(t *testing.T) {
+	tests := []struct {
+		input    interface{}
+		expected SSLVerificationStatus
+		hasError bool
+	}{
+		{"initializing", SSLVerificationStatusInitializing, false},
+		{"pending_validation", SSLVerificationStatusPendingValidation, false},
+		{"deleted", SSLVerificationStatusDeleted, false},
+		{"active", SSLVerificationStatusActive, false},
+		{"invalid", SSLVerificationStatusInvalid, false},
+		{123, "", true},
+	}
+
+	for _, test := range tests {
+		var status SSLVerificationStatus
 		err := status.UnmarshalGQL(test.input)
 		if test.hasError {
 			require.Error(t, err)
