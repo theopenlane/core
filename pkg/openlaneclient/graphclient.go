@@ -73,6 +73,16 @@ type OpenlaneGraphClient interface {
 	UpdateControlObjective(ctx context.Context, updateControlObjectiveID string, input UpdateControlObjectiveInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControlObjective, error)
 	GetAllControlObjectiveHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlObjectiveHistories, error)
 	GetControlObjectiveHistories(ctx context.Context, where *ControlObjectiveHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlObjectiveHistories, error)
+	CreateBulkCSVControlScheduledJob(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlScheduledJob, error)
+	CreateBulkControlScheduledJob(ctx context.Context, input []*CreateControlScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControlScheduledJob, error)
+	CreateControlScheduledJob(ctx context.Context, input CreateControlScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlScheduledJob, error)
+	DeleteControlScheduledJob(ctx context.Context, deleteControlScheduledJobID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControlScheduledJob, error)
+	GetAllControlScheduledJobs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlScheduledJobs, error)
+	GetControlScheduledJobByID(ctx context.Context, controlScheduledJobID string, interceptors ...clientv2.RequestInterceptor) (*GetControlScheduledJobByID, error)
+	GetControlScheduledJobs(ctx context.Context, first *int64, last *int64, where *ControlScheduledJobWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlScheduledJobs, error)
+	UpdateControlScheduledJob(ctx context.Context, updateControlScheduledJobID string, input UpdateControlScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControlScheduledJob, error)
+	GetAllControlScheduledJobHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlScheduledJobHistories, error)
+	GetControlScheduledJobHistories(ctx context.Context, first *int64, last *int64, where *ControlScheduledJobHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlScheduledJobHistories, error)
 	CreateBulkCSVCustomDomain(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCustomDomain, error)
 	CreateBulkCustomDomain(ctx context.Context, input []*CreateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCustomDomain, error)
 	CreateCustomDomain(ctx context.Context, input CreateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*CreateCustomDomain, error)
@@ -206,6 +216,9 @@ type OpenlaneGraphClient interface {
 	GetAllInvites(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInvites, error)
 	GetInviteByID(ctx context.Context, inviteID string, interceptors ...clientv2.RequestInterceptor) (*GetInviteByID, error)
 	InvitesByOrgID(ctx context.Context, where *InviteWhereInput, interceptors ...clientv2.RequestInterceptor) (*InvitesByOrgID, error)
+	GetAllJobResults(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobResults, error)
+	GetJobResultByID(ctx context.Context, jobResultID string, interceptors ...clientv2.RequestInterceptor) (*GetJobResultByID, error)
+	GetJobResults(ctx context.Context, first *int64, last *int64, where *JobResultWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobResults, error)
 	DeleteJobRunner(ctx context.Context, deleteJobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunner, error)
 	GetAllJobRunners(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunners, error)
 	GetJobRunnerByID(ctx context.Context, jobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerByID, error)
@@ -340,6 +353,19 @@ type OpenlaneGraphClient interface {
 	UpdateRisk(ctx context.Context, updateRiskID string, input UpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateRisk, error)
 	GetAllRiskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllRiskHistories, error)
 	GetRiskHistories(ctx context.Context, where *RiskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetRiskHistories, error)
+	CreateBulkCSVScheduledJob(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVScheduledJob, error)
+	CreateBulkScheduledJob(ctx context.Context, input []*CreateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkScheduledJob, error)
+	CreateScheduledJob(ctx context.Context, input CreateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateScheduledJob, error)
+	DeleteScheduledJob(ctx context.Context, deleteScheduledJobID string, interceptors ...clientv2.RequestInterceptor) (*DeleteScheduledJob, error)
+	GetAllScheduledJobs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScheduledJobs, error)
+	GetScheduledJobByID(ctx context.Context, scheduledJobID string, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobByID, error)
+	GetScheduledJobs(ctx context.Context, first *int64, last *int64, where *ScheduledJobWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobs, error)
+	UpdateScheduledJob(ctx context.Context, updateScheduledJobID string, input UpdateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*UpdateScheduledJob, error)
+	GetAllScheduledJobHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScheduledJobHistories, error)
+	GetScheduledJobHistories(ctx context.Context, first *int64, last *int64, where *ScheduledJobHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobHistories, error)
+	GetAllScheduledJobRuns(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScheduledJobRuns, error)
+	GetScheduledJobRunByID(ctx context.Context, scheduledJobRunID string, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobRunByID, error)
+	GetScheduledJobRuns(ctx context.Context, first *int64, last *int64, where *ScheduledJobRunWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobRuns, error)
 	GlobalSearch(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*GlobalSearch, error)
 	CreateStandard(ctx context.Context, input CreateStandardInput, interceptors ...clientv2.RequestInterceptor) (*CreateStandard, error)
 	DeleteStandard(ctx context.Context, deleteStandardID string, interceptors ...clientv2.RequestInterceptor) (*DeleteStandard, error)
@@ -5649,6 +5675,134 @@ func (t *AdminSearch_AdminSearch_Risks) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_ScheduledJobs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_ScheduledJobs_Edges_Node struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+}
+
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return &t.Configuration
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
+	}
+	return t.Title
+}
+
+type AdminSearch_AdminSearch_ScheduledJobs_Edges struct {
+	Node *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges) GetNode() *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_ScheduledJobs struct {
+	Edges      []*AdminSearch_AdminSearch_ScheduledJobs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_ScheduledJobs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_ScheduledJobs) GetEdges() []*AdminSearch_AdminSearch_ScheduledJobs_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs) GetPageInfo() *AdminSearch_AdminSearch_ScheduledJobs_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_ScheduledJobs) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ScheduledJobs{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch_Standards_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -6754,6 +6908,7 @@ type AdminSearch_AdminSearch struct {
 	Procedures                  *AdminSearch_AdminSearch_Procedures                  "json:\"procedures,omitempty\" graphql:\"procedures\""
 	Programs                    *AdminSearch_AdminSearch_Programs                    "json:\"programs,omitempty\" graphql:\"programs\""
 	Risks                       *AdminSearch_AdminSearch_Risks                       "json:\"risks,omitempty\" graphql:\"risks\""
+	ScheduledJobs               *AdminSearch_AdminSearch_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *AdminSearch_AdminSearch_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *AdminSearch_AdminSearch_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Subscribers                 *AdminSearch_AdminSearch_Subscribers                 "json:\"subscribers,omitempty\" graphql:\"subscribers\""
@@ -6950,6 +7105,12 @@ func (t *AdminSearch_AdminSearch) GetRisks() *AdminSearch_AdminSearch_Risks {
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.Risks
+}
+func (t *AdminSearch_AdminSearch) GetScheduledJobs() *AdminSearch_AdminSearch_ScheduledJobs {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.ScheduledJobs
 }
 func (t *AdminSearch_AdminSearch) GetStandards() *AdminSearch_AdminSearch_Standards {
 	if t == nil {
@@ -16209,6 +16370,1104 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories{}
 	}
 	return t.Edges
+}
+
+type CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobID         string                  "json:\"jobID\" graphql:\"jobID\""
+	JobRunnerID   *string                 "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.Cadence
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return &t.Configuration
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetCron() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.Cron
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetJobID() string {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.JobID
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetJobRunnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.JobRunnerID
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob struct {
+	ControlScheduledJobs []*CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs "json:\"controlScheduledJobs,omitempty\" graphql:\"controlScheduledJobs\""
+}
+
+func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob) GetControlScheduledJobs() []*CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob{}
+	}
+	return t.ControlScheduledJobs
+}
+
+type CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobID         string                  "json:\"jobID\" graphql:\"jobID\""
+	JobRunnerID   *string                 "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.Cadence
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return &t.Configuration
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetCron() *string {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.Cron
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetID() string {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.ID
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetJobID() string {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.JobID
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetJobRunnerID() *string {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.JobRunnerID
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkControlScheduledJob_CreateBulkControlScheduledJob struct {
+	ControlScheduledJobs []*CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs "json:\"controlScheduledJobs,omitempty\" graphql:\"controlScheduledJobs\""
+}
+
+func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob) GetControlScheduledJobs() []*CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob{}
+	}
+	return t.ControlScheduledJobs
+}
+
+type CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobID         string                  "json:\"jobID\" graphql:\"jobID\""
+	JobRunnerID   *string                 "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.Cadence
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return &t.Configuration
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetCron() *string {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.Cron
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetID() string {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.ID
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetJobID() string {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.JobID
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetJobRunnerID() *string {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.JobRunnerID
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.OwnerID
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateControlScheduledJob_CreateControlScheduledJob struct {
+	ControlScheduledJob CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob "json:\"controlScheduledJob\" graphql:\"controlScheduledJob\""
+}
+
+func (t *CreateControlScheduledJob_CreateControlScheduledJob) GetControlScheduledJob() *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob {
+	if t == nil {
+		t = &CreateControlScheduledJob_CreateControlScheduledJob{}
+	}
+	return &t.ControlScheduledJob
+}
+
+type DeleteControlScheduledJob_DeleteControlScheduledJob struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteControlScheduledJob_DeleteControlScheduledJob) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteControlScheduledJob_DeleteControlScheduledJob{}
+	}
+	return t.DeletedID
+}
+
+type GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobID         string                  "json:\"jobID\" graphql:\"jobID\""
+	JobRunnerID   *string                 "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return &t.Configuration
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCron() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.Cron
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetJobID() string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.JobID
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllControlScheduledJobs_ControlScheduledJobs_Edges struct {
+	Node *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges) GetNode() *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllControlScheduledJobs_ControlScheduledJobs struct {
+	Edges      []*GetAllControlScheduledJobs_ControlScheduledJobs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs) GetEdges() []*GetAllControlScheduledJobs_ControlScheduledJobs_Edges {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs{}
+	}
+	return t.Edges
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs) GetPageInfo() *GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllControlScheduledJobs_ControlScheduledJobs{}
+	}
+	return t.TotalCount
+}
+
+type GetControlScheduledJobByID_ControlScheduledJob struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobID         string                  "json:\"jobID\" graphql:\"jobID\""
+	JobRunnerID   *string                 "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.Cadence
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return &t.Configuration
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.CreatedAt
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.CreatedBy
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetCron() *string {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.Cron
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetID() string {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.ID
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetJobID() string {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.JobID
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetOwnerID() *string {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.OwnerID
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetControlScheduledJobByID_ControlScheduledJob) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetControlScheduledJobByID_ControlScheduledJob{}
+	}
+	return t.UpdatedBy
+}
+
+type GetControlScheduledJobs_ControlScheduledJobs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetControlScheduledJobs_ControlScheduledJobs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobID         string                  "json:\"jobID\" graphql:\"jobID\""
+	JobRunnerID   *string                 "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return &t.Configuration
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCron() *string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.Cron
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetJobID() string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.JobID
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetControlScheduledJobs_ControlScheduledJobs_Edges struct {
+	Node *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges) GetNode() *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlScheduledJobs_ControlScheduledJobs struct {
+	Edges      []*GetControlScheduledJobs_ControlScheduledJobs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetControlScheduledJobs_ControlScheduledJobs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetControlScheduledJobs_ControlScheduledJobs) GetEdges() []*GetControlScheduledJobs_ControlScheduledJobs_Edges {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs{}
+	}
+	return t.Edges
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs) GetPageInfo() *GetControlScheduledJobs_ControlScheduledJobs_PageInfo {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs{}
+	}
+	return &t.PageInfo
+}
+func (t *GetControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetControlScheduledJobs_ControlScheduledJobs{}
+	}
+	return t.TotalCount
+}
+
+type UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobID         string                  "json:\"jobID\" graphql:\"jobID\""
+	JobRunnerID   *string                 "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.Cadence
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return &t.Configuration
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetCron() *string {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.Cron
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetID() string {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.ID
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetJobID() string {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.JobID
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetJobRunnerID() *string {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.JobRunnerID
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateControlScheduledJob_UpdateControlScheduledJob struct {
+	ControlScheduledJob UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob "json:\"controlScheduledJob\" graphql:\"controlScheduledJob\""
+}
+
+func (t *UpdateControlScheduledJob_UpdateControlScheduledJob) GetControlScheduledJob() *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob {
+	if t == nil {
+		t = &UpdateControlScheduledJob_UpdateControlScheduledJob{}
+	}
+	return &t.ControlScheduledJob
+}
+
+type GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	HistoryTime   time.Time               "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobID         string                  "json:\"jobID\" graphql:\"jobID\""
+	JobRunnerID   *string                 "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return &t.Configuration
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCron() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.Cron
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetJobID() string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.JobID
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges struct {
+	Node *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges) GetNode() *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllControlScheduledJobHistories_ControlScheduledJobHistories struct {
+	Edges      []*GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories) GetEdges() []*GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories) GetPageInfo() *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	HistoryTime   time.Time               "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobID         string                  "json:\"jobID\" graphql:\"jobID\""
+	JobRunnerID   *string                 "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return &t.Configuration
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCron() *string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.Cron
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetJobID() string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.JobID
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges struct {
+	Node *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges) GetNode() *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlScheduledJobHistories_ControlScheduledJobHistories struct {
+	Edges      []*GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories) GetEdges() []*GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories{}
+	}
+	return t.Edges
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories) GetPageInfo() *GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains struct {
@@ -36057,6 +37316,406 @@ func (t *InvitesByOrgID_Invites) GetEdges() []*InvitesByOrgID_Invites_Edges {
 		t = &InvitesByOrgID_Invites{}
 	}
 	return t.Edges
+}
+
+type GetAllJobResults_JobResults_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllJobResults_JobResults_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllJobResults_JobResults_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllJobResults_JobResults_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllJobResults_JobResults_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllJobResults_JobResults_Edges_Node struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FileID         string                   "json:\"fileID\" graphql:\"fileID\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllJobResults_JobResults_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetExitCode() int64 {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.ExitCode
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetFileID() string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.FileID
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return &t.FinishedAt
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetScheduledJobID() string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.ScheduledJobID
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllJobResults_JobResults_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllJobResults_JobResults_Edges struct {
+	Node *GetAllJobResults_JobResults_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllJobResults_JobResults_Edges) GetNode() *GetAllJobResults_JobResults_Edges_Node {
+	if t == nil {
+		t = &GetAllJobResults_JobResults_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllJobResults_JobResults struct {
+	Edges      []*GetAllJobResults_JobResults_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllJobResults_JobResults_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllJobResults_JobResults) GetEdges() []*GetAllJobResults_JobResults_Edges {
+	if t == nil {
+		t = &GetAllJobResults_JobResults{}
+	}
+	return t.Edges
+}
+func (t *GetAllJobResults_JobResults) GetPageInfo() *GetAllJobResults_JobResults_PageInfo {
+	if t == nil {
+		t = &GetAllJobResults_JobResults{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllJobResults_JobResults) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllJobResults_JobResults{}
+	}
+	return t.TotalCount
+}
+
+type GetJobResultByID_JobResult struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FileID         string                   "json:\"fileID\" graphql:\"fileID\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobResultByID_JobResult) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobResultByID_JobResult) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobResultByID_JobResult) GetExitCode() int64 {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.ExitCode
+}
+func (t *GetJobResultByID_JobResult) GetFileID() string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.FileID
+}
+func (t *GetJobResultByID_JobResult) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return &t.FinishedAt
+}
+func (t *GetJobResultByID_JobResult) GetID() string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.ID
+}
+func (t *GetJobResultByID_JobResult) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobResultByID_JobResult) GetScheduledJobID() string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.ScheduledJobID
+}
+func (t *GetJobResultByID_JobResult) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return &t.StartedAt
+}
+func (t *GetJobResultByID_JobResult) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return &t.Status
+}
+func (t *GetJobResultByID_JobResult) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobResultByID_JobResult) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobResultByID_JobResult{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobResults_JobResults_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetJobResults_JobResults_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetJobResults_JobResults_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetJobResults_JobResults_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetJobResults_JobResults_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetJobResults_JobResults_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetJobResults_JobResults_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetJobResults_JobResults_Edges_Node struct {
+	CreatedAt      *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExitCode       int64                    "json:\"exitCode\" graphql:\"exitCode\""
+	FileID         string                   "json:\"fileID\" graphql:\"fileID\""
+	FinishedAt     time.Time                "json:\"finishedAt\" graphql:\"finishedAt\""
+	ID             string                   "json:\"id\" graphql:\"id\""
+	OwnerID        *string                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                   "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	StartedAt      time.Time                "json:\"startedAt\" graphql:\"startedAt\""
+	Status         enums.JobExecutionStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetJobResults_JobResults_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetExitCode() int64 {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.ExitCode
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetFileID() string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.FileID
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetFinishedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return &t.FinishedAt
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetScheduledJobID() string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.ScheduledJobID
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetStartedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return &t.StartedAt
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetStatus() *enums.JobExecutionStatus {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetJobResults_JobResults_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetJobResults_JobResults_Edges struct {
+	Node *GetJobResults_JobResults_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetJobResults_JobResults_Edges) GetNode() *GetJobResults_JobResults_Edges_Node {
+	if t == nil {
+		t = &GetJobResults_JobResults_Edges{}
+	}
+	return t.Node
+}
+
+type GetJobResults_JobResults struct {
+	Edges      []*GetJobResults_JobResults_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetJobResults_JobResults_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetJobResults_JobResults) GetEdges() []*GetJobResults_JobResults_Edges {
+	if t == nil {
+		t = &GetJobResults_JobResults{}
+	}
+	return t.Edges
+}
+func (t *GetJobResults_JobResults) GetPageInfo() *GetJobResults_JobResults_PageInfo {
+	if t == nil {
+		t = &GetJobResults_JobResults{}
+	}
+	return &t.PageInfo
+}
+func (t *GetJobResults_JobResults) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetJobResults_JobResults{}
+	}
+	return t.TotalCount
 }
 
 type DeleteJobRunner_DeleteJobRunner struct {
@@ -58065,6 +59724,1756 @@ func (t *GetRiskHistories_RiskHistories) GetEdges() []*GetRiskHistories_RiskHist
 	return t.Edges
 }
 
+type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
+	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.Cadence
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return &t.Configuration
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetCron() *string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.Cron
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetJobType() *enums.JobType {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return &t.JobType
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetScript() *string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.Script
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetTitle() string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.Title
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob struct {
+	ScheduledJobs []*CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
+}
+
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob) GetScheduledJobs() []*CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob{}
+	}
+	return t.ScheduledJobs
+}
+
+type CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
+	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.Cadence
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return &t.Configuration
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetCron() *string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.Cron
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.Description
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetID() string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.ID
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetJobType() *enums.JobType {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return &t.JobType
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetScript() *string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.Script
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetTitle() string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.Title
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkScheduledJob_CreateBulkScheduledJob struct {
+	ScheduledJobs []*CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
+}
+
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob) GetScheduledJobs() []*CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs {
+	if t == nil {
+		t = &CreateBulkScheduledJob_CreateBulkScheduledJob{}
+	}
+	return t.ScheduledJobs
+}
+
+type CreateScheduledJob_CreateScheduledJob_ScheduledJob struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
+	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.Cadence
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return &t.Configuration
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetCron() *string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.Cron
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetDescription() *string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.Description
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetDisplayID() string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.DisplayID
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetID() string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.ID
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetJobType() *enums.JobType {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return &t.JobType
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.OwnerID
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetScript() *string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.Script
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.SystemOwned
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetTags() []string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.Tags
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetTitle() string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.Title
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateScheduledJob_CreateScheduledJob struct {
+	ScheduledJob CreateScheduledJob_CreateScheduledJob_ScheduledJob "json:\"scheduledJob\" graphql:\"scheduledJob\""
+}
+
+func (t *CreateScheduledJob_CreateScheduledJob) GetScheduledJob() *CreateScheduledJob_CreateScheduledJob_ScheduledJob {
+	if t == nil {
+		t = &CreateScheduledJob_CreateScheduledJob{}
+	}
+	return &t.ScheduledJob
+}
+
+type DeleteScheduledJob_DeleteScheduledJob struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteScheduledJob_DeleteScheduledJob) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteScheduledJob_DeleteScheduledJob{}
+	}
+	return t.DeletedID
+}
+
+type GetAllScheduledJobs_ScheduledJobs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllScheduledJobs_ScheduledJobs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllScheduledJobs_ScheduledJobs_Edges_Node struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
+	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return &t.Configuration
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetCron() *string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Cron
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetJobType() *enums.JobType {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return &t.JobType
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetScript() *string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Script
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.SystemOwned
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllScheduledJobs_ScheduledJobs_Edges struct {
+	Node *GetAllScheduledJobs_ScheduledJobs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges) GetNode() *GetAllScheduledJobs_ScheduledJobs_Edges_Node {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllScheduledJobs_ScheduledJobs struct {
+	Edges      []*GetAllScheduledJobs_ScheduledJobs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllScheduledJobs_ScheduledJobs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllScheduledJobs_ScheduledJobs) GetEdges() []*GetAllScheduledJobs_ScheduledJobs_Edges {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs{}
+	}
+	return t.Edges
+}
+func (t *GetAllScheduledJobs_ScheduledJobs) GetPageInfo() *GetAllScheduledJobs_ScheduledJobs_PageInfo {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllScheduledJobs_ScheduledJobs) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllScheduledJobs_ScheduledJobs{}
+	}
+	return t.TotalCount
+}
+
+type GetScheduledJobByID_ScheduledJob struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
+	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetScheduledJobByID_ScheduledJob) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.Cadence
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return &t.Configuration
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.CreatedAt
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.CreatedBy
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetCron() *string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.Cron
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetDescription() *string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.Description
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetDisplayID() string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.DisplayID
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetID() string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.ID
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetJobType() *enums.JobType {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return &t.JobType
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetOwnerID() *string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.OwnerID
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetScript() *string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.Script
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.SystemOwned
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetTags() []string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.Tags
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetTitle() string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.Title
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetScheduledJobByID_ScheduledJob) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobByID_ScheduledJob{}
+	}
+	return t.UpdatedBy
+}
+
+type GetScheduledJobs_ScheduledJobs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetScheduledJobs_ScheduledJobs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetScheduledJobs_ScheduledJobs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetScheduledJobs_ScheduledJobs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetScheduledJobs_ScheduledJobs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetScheduledJobs_ScheduledJobs_Edges_Node struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
+	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return &t.Configuration
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetCron() *string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Cron
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetJobType() *enums.JobType {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return &t.JobType
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetScript() *string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Script
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.SystemOwned
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetScheduledJobs_ScheduledJobs_Edges struct {
+	Node *GetScheduledJobs_ScheduledJobs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetScheduledJobs_ScheduledJobs_Edges) GetNode() *GetScheduledJobs_ScheduledJobs_Edges_Node {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs_Edges{}
+	}
+	return t.Node
+}
+
+type GetScheduledJobs_ScheduledJobs struct {
+	Edges      []*GetScheduledJobs_ScheduledJobs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetScheduledJobs_ScheduledJobs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetScheduledJobs_ScheduledJobs) GetEdges() []*GetScheduledJobs_ScheduledJobs_Edges {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs{}
+	}
+	return t.Edges
+}
+func (t *GetScheduledJobs_ScheduledJobs) GetPageInfo() *GetScheduledJobs_ScheduledJobs_PageInfo {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs{}
+	}
+	return &t.PageInfo
+}
+func (t *GetScheduledJobs_ScheduledJobs) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetScheduledJobs_ScheduledJobs{}
+	}
+	return t.TotalCount
+}
+
+type UpdateScheduledJob_UpdateScheduledJob_ScheduledJob struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
+	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.Cadence
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return &t.Configuration
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetCron() *string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.Cron
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetDescription() *string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.Description
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetID() string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.ID
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetJobType() *enums.JobType {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return &t.JobType
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetScript() *string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.Script
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetSystemOwned() *bool {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.SystemOwned
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetTags() []string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.Tags
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetTitle() string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.Title
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateScheduledJob_UpdateScheduledJob struct {
+	ScheduledJob UpdateScheduledJob_UpdateScheduledJob_ScheduledJob "json:\"scheduledJob\" graphql:\"scheduledJob\""
+}
+
+func (t *UpdateScheduledJob_UpdateScheduledJob) GetScheduledJob() *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob {
+	if t == nil {
+		t = &UpdateScheduledJob_UpdateScheduledJob{}
+	}
+	return &t.ScheduledJob
+}
+
+type GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime   time.Time               "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
+	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
+	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return &t.Configuration
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCron() *string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Cron
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetJobType() *enums.JobType {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return &t.JobType
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetScript() *string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Script
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.SystemOwned
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllScheduledJobHistories_ScheduledJobHistories_Edges struct {
+	Node *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges) GetNode() *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllScheduledJobHistories_ScheduledJobHistories struct {
+	Edges      []*GetAllScheduledJobHistories_ScheduledJobHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories) GetEdges() []*GetAllScheduledJobHistories_ScheduledJobHistories_Edges {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories) GetPageInfo() *GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllScheduledJobHistories_ScheduledJobHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetScheduledJobHistories_ScheduledJobHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetScheduledJobHistories_ScheduledJobHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
+	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
+	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
+	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
+	HistoryTime   time.Time               "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string                  "json:\"id\" graphql:\"id\""
+	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
+	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
+	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
+	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	Title         string                  "json:\"title\" graphql:\"title\""
+	UpdatedAt     *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Cadence
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return &t.Configuration
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCron() *string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Cron
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetJobType() *enums.JobType {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return &t.JobType
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetScript() *string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Script
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.SystemOwned
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetScheduledJobHistories_ScheduledJobHistories_Edges struct {
+	Node *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges) GetNode() *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetScheduledJobHistories_ScheduledJobHistories struct {
+	Edges      []*GetScheduledJobHistories_ScheduledJobHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetScheduledJobHistories_ScheduledJobHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetScheduledJobHistories_ScheduledJobHistories) GetEdges() []*GetScheduledJobHistories_ScheduledJobHistories_Edges {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories{}
+	}
+	return t.Edges
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories) GetPageInfo() *GetScheduledJobHistories_ScheduledJobHistories_PageInfo {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetScheduledJobHistories_ScheduledJobHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetScheduledJobHistories_ScheduledJobHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node struct {
+	CreatedAt      *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string                      "json:\"id\" graphql:\"id\""
+	JobRunnerID    *string                     "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID        *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                      "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	Status         enums.ScheduledJobRunStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetScheduledJobID() string {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.ScheduledJobID
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetStatus() *enums.ScheduledJobRunStatus {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllScheduledJobRuns_ScheduledJobRuns_Edges struct {
+	Node *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges) GetNode() *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllScheduledJobRuns_ScheduledJobRuns struct {
+	Edges      []*GetAllScheduledJobRuns_ScheduledJobRuns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns) GetEdges() []*GetAllScheduledJobRuns_ScheduledJobRuns_Edges {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns{}
+	}
+	return t.Edges
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns) GetPageInfo() *GetAllScheduledJobRuns_ScheduledJobRuns_PageInfo {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllScheduledJobRuns_ScheduledJobRuns{}
+	}
+	return t.TotalCount
+}
+
+type GetScheduledJobRunByID_ScheduledJobRun struct {
+	CreatedAt      *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string                      "json:\"id\" graphql:\"id\""
+	JobRunnerID    *string                     "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID        *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                      "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	Status         enums.ScheduledJobRunStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobRunByID_ScheduledJobRun{}
+	}
+	return t.CreatedAt
+}
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobRunByID_ScheduledJobRun{}
+	}
+	return t.CreatedBy
+}
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetID() string {
+	if t == nil {
+		t = &GetScheduledJobRunByID_ScheduledJobRun{}
+	}
+	return t.ID
+}
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetScheduledJobRunByID_ScheduledJobRun{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetOwnerID() *string {
+	if t == nil {
+		t = &GetScheduledJobRunByID_ScheduledJobRun{}
+	}
+	return t.OwnerID
+}
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetScheduledJobID() string {
+	if t == nil {
+		t = &GetScheduledJobRunByID_ScheduledJobRun{}
+	}
+	return t.ScheduledJobID
+}
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetStatus() *enums.ScheduledJobRunStatus {
+	if t == nil {
+		t = &GetScheduledJobRunByID_ScheduledJobRun{}
+	}
+	return &t.Status
+}
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobRunByID_ScheduledJobRun{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobRunByID_ScheduledJobRun{}
+	}
+	return t.UpdatedBy
+}
+
+type GetScheduledJobRuns_ScheduledJobRuns_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetScheduledJobRuns_ScheduledJobRuns_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetScheduledJobRuns_ScheduledJobRuns_Edges_Node struct {
+	CreatedAt      *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string                      "json:\"id\" graphql:\"id\""
+	JobRunnerID    *string                     "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	OwnerID        *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScheduledJobID string                      "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
+	Status         enums.ScheduledJobRunStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt      *time.Time                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetJobRunnerID() *string {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.JobRunnerID
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetScheduledJobID() string {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.ScheduledJobID
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetStatus() *enums.ScheduledJobRunStatus {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetScheduledJobRuns_ScheduledJobRuns_Edges struct {
+	Node *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges) GetNode() *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges{}
+	}
+	return t.Node
+}
+
+type GetScheduledJobRuns_ScheduledJobRuns struct {
+	Edges      []*GetScheduledJobRuns_ScheduledJobRuns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetScheduledJobRuns_ScheduledJobRuns_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetScheduledJobRuns_ScheduledJobRuns) GetEdges() []*GetScheduledJobRuns_ScheduledJobRuns_Edges {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns{}
+	}
+	return t.Edges
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns) GetPageInfo() *GetScheduledJobRuns_ScheduledJobRuns_PageInfo {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns{}
+	}
+	return &t.PageInfo
+}
+func (t *GetScheduledJobRuns_ScheduledJobRuns) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetScheduledJobRuns_ScheduledJobRuns{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_APITokens_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -61011,6 +64420,113 @@ func (t *GlobalSearch_Search_Risks) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_ScheduledJobs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_ScheduledJobs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_ScheduledJobs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_ScheduledJobs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_ScheduledJobs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_ScheduledJobs_Edges_Node struct {
+	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID   string   "json:\"displayID\" graphql:\"displayID\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string   "json:\"title\" graphql:\"title\""
+}
+
+func (t *GlobalSearch_Search_ScheduledJobs_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GlobalSearch_Search_ScheduledJobs_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GlobalSearch_Search_ScheduledJobs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_ScheduledJobs_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GlobalSearch_Search_ScheduledJobs_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_Edges_Node{}
+	}
+	return t.Title
+}
+
+type GlobalSearch_Search_ScheduledJobs_Edges struct {
+	Node *GlobalSearch_Search_ScheduledJobs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_ScheduledJobs_Edges) GetNode() *GlobalSearch_Search_ScheduledJobs_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_ScheduledJobs struct {
+	Edges      []*GlobalSearch_Search_ScheduledJobs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_ScheduledJobs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_ScheduledJobs) GetEdges() []*GlobalSearch_Search_ScheduledJobs_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_ScheduledJobs) GetPageInfo() *GlobalSearch_Search_ScheduledJobs_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_ScheduledJobs) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_ScheduledJobs{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_Standards_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -61850,6 +65366,7 @@ type GlobalSearch_Search struct {
 	Procedures                  *GlobalSearch_Search_Procedures                  "json:\"procedures,omitempty\" graphql:\"procedures\""
 	Programs                    *GlobalSearch_Search_Programs                    "json:\"programs,omitempty\" graphql:\"programs\""
 	Risks                       *GlobalSearch_Search_Risks                       "json:\"risks,omitempty\" graphql:\"risks\""
+	ScheduledJobs               *GlobalSearch_Search_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *GlobalSearch_Search_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *GlobalSearch_Search_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Subscribers                 *GlobalSearch_Search_Subscribers                 "json:\"subscribers,omitempty\" graphql:\"subscribers\""
@@ -62046,6 +65563,12 @@ func (t *GlobalSearch_Search) GetRisks() *GlobalSearch_Search_Risks {
 		t = &GlobalSearch_Search{}
 	}
 	return t.Risks
+}
+func (t *GlobalSearch_Search) GetScheduledJobs() *GlobalSearch_Search_ScheduledJobs {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.ScheduledJobs
 }
 func (t *GlobalSearch_Search) GetStandards() *GlobalSearch_Search_Standards {
 	if t == nil {
@@ -73996,6 +77519,116 @@ func (t *GetControlObjectiveHistories) GetControlObjectiveHistories() *GetContro
 	return &t.ControlObjectiveHistories
 }
 
+type CreateBulkCSVControlScheduledJob struct {
+	CreateBulkCSVControlScheduledJob CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob "json:\"createBulkCSVControlScheduledJob\" graphql:\"createBulkCSVControlScheduledJob\""
+}
+
+func (t *CreateBulkCSVControlScheduledJob) GetCreateBulkCSVControlScheduledJob() *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob {
+	if t == nil {
+		t = &CreateBulkCSVControlScheduledJob{}
+	}
+	return &t.CreateBulkCSVControlScheduledJob
+}
+
+type CreateBulkControlScheduledJob struct {
+	CreateBulkControlScheduledJob CreateBulkControlScheduledJob_CreateBulkControlScheduledJob "json:\"createBulkControlScheduledJob\" graphql:\"createBulkControlScheduledJob\""
+}
+
+func (t *CreateBulkControlScheduledJob) GetCreateBulkControlScheduledJob() *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob {
+	if t == nil {
+		t = &CreateBulkControlScheduledJob{}
+	}
+	return &t.CreateBulkControlScheduledJob
+}
+
+type CreateControlScheduledJob struct {
+	CreateControlScheduledJob CreateControlScheduledJob_CreateControlScheduledJob "json:\"createControlScheduledJob\" graphql:\"createControlScheduledJob\""
+}
+
+func (t *CreateControlScheduledJob) GetCreateControlScheduledJob() *CreateControlScheduledJob_CreateControlScheduledJob {
+	if t == nil {
+		t = &CreateControlScheduledJob{}
+	}
+	return &t.CreateControlScheduledJob
+}
+
+type DeleteControlScheduledJob struct {
+	DeleteControlScheduledJob DeleteControlScheduledJob_DeleteControlScheduledJob "json:\"deleteControlScheduledJob\" graphql:\"deleteControlScheduledJob\""
+}
+
+func (t *DeleteControlScheduledJob) GetDeleteControlScheduledJob() *DeleteControlScheduledJob_DeleteControlScheduledJob {
+	if t == nil {
+		t = &DeleteControlScheduledJob{}
+	}
+	return &t.DeleteControlScheduledJob
+}
+
+type GetAllControlScheduledJobs struct {
+	ControlScheduledJobs GetAllControlScheduledJobs_ControlScheduledJobs "json:\"controlScheduledJobs\" graphql:\"controlScheduledJobs\""
+}
+
+func (t *GetAllControlScheduledJobs) GetControlScheduledJobs() *GetAllControlScheduledJobs_ControlScheduledJobs {
+	if t == nil {
+		t = &GetAllControlScheduledJobs{}
+	}
+	return &t.ControlScheduledJobs
+}
+
+type GetControlScheduledJobByID struct {
+	ControlScheduledJob GetControlScheduledJobByID_ControlScheduledJob "json:\"controlScheduledJob\" graphql:\"controlScheduledJob\""
+}
+
+func (t *GetControlScheduledJobByID) GetControlScheduledJob() *GetControlScheduledJobByID_ControlScheduledJob {
+	if t == nil {
+		t = &GetControlScheduledJobByID{}
+	}
+	return &t.ControlScheduledJob
+}
+
+type GetControlScheduledJobs struct {
+	ControlScheduledJobs GetControlScheduledJobs_ControlScheduledJobs "json:\"controlScheduledJobs\" graphql:\"controlScheduledJobs\""
+}
+
+func (t *GetControlScheduledJobs) GetControlScheduledJobs() *GetControlScheduledJobs_ControlScheduledJobs {
+	if t == nil {
+		t = &GetControlScheduledJobs{}
+	}
+	return &t.ControlScheduledJobs
+}
+
+type UpdateControlScheduledJob struct {
+	UpdateControlScheduledJob UpdateControlScheduledJob_UpdateControlScheduledJob "json:\"updateControlScheduledJob\" graphql:\"updateControlScheduledJob\""
+}
+
+func (t *UpdateControlScheduledJob) GetUpdateControlScheduledJob() *UpdateControlScheduledJob_UpdateControlScheduledJob {
+	if t == nil {
+		t = &UpdateControlScheduledJob{}
+	}
+	return &t.UpdateControlScheduledJob
+}
+
+type GetAllControlScheduledJobHistories struct {
+	ControlScheduledJobHistories GetAllControlScheduledJobHistories_ControlScheduledJobHistories "json:\"controlScheduledJobHistories\" graphql:\"controlScheduledJobHistories\""
+}
+
+func (t *GetAllControlScheduledJobHistories) GetControlScheduledJobHistories() *GetAllControlScheduledJobHistories_ControlScheduledJobHistories {
+	if t == nil {
+		t = &GetAllControlScheduledJobHistories{}
+	}
+	return &t.ControlScheduledJobHistories
+}
+
+type GetControlScheduledJobHistories struct {
+	ControlScheduledJobHistories GetControlScheduledJobHistories_ControlScheduledJobHistories "json:\"controlScheduledJobHistories\" graphql:\"controlScheduledJobHistories\""
+}
+
+func (t *GetControlScheduledJobHistories) GetControlScheduledJobHistories() *GetControlScheduledJobHistories_ControlScheduledJobHistories {
+	if t == nil {
+		t = &GetControlScheduledJobHistories{}
+	}
+	return &t.ControlScheduledJobHistories
+}
+
 type CreateBulkCSVCustomDomain struct {
 	CreateBulkCSVCustomDomain CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain "json:\"createBulkCSVCustomDomain\" graphql:\"createBulkCSVCustomDomain\""
 }
@@ -75457,6 +79090,39 @@ func (t *InvitesByOrgID) GetInvites() *InvitesByOrgID_Invites {
 		t = &InvitesByOrgID{}
 	}
 	return &t.Invites
+}
+
+type GetAllJobResults struct {
+	JobResults GetAllJobResults_JobResults "json:\"jobResults\" graphql:\"jobResults\""
+}
+
+func (t *GetAllJobResults) GetJobResults() *GetAllJobResults_JobResults {
+	if t == nil {
+		t = &GetAllJobResults{}
+	}
+	return &t.JobResults
+}
+
+type GetJobResultByID struct {
+	JobResult GetJobResultByID_JobResult "json:\"jobResult\" graphql:\"jobResult\""
+}
+
+func (t *GetJobResultByID) GetJobResult() *GetJobResultByID_JobResult {
+	if t == nil {
+		t = &GetJobResultByID{}
+	}
+	return &t.JobResult
+}
+
+type GetJobResults struct {
+	JobResults GetJobResults_JobResults "json:\"jobResults\" graphql:\"jobResults\""
+}
+
+func (t *GetJobResults) GetJobResults() *GetJobResults_JobResults {
+	if t == nil {
+		t = &GetJobResults{}
+	}
+	return &t.JobResults
 }
 
 type DeleteJobRunner struct {
@@ -76931,6 +80597,149 @@ func (t *GetRiskHistories) GetRiskHistories() *GetRiskHistories_RiskHistories {
 		t = &GetRiskHistories{}
 	}
 	return &t.RiskHistories
+}
+
+type CreateBulkCSVScheduledJob struct {
+	CreateBulkCSVScheduledJob CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob "json:\"createBulkCSVScheduledJob\" graphql:\"createBulkCSVScheduledJob\""
+}
+
+func (t *CreateBulkCSVScheduledJob) GetCreateBulkCSVScheduledJob() *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob {
+	if t == nil {
+		t = &CreateBulkCSVScheduledJob{}
+	}
+	return &t.CreateBulkCSVScheduledJob
+}
+
+type CreateBulkScheduledJob struct {
+	CreateBulkScheduledJob CreateBulkScheduledJob_CreateBulkScheduledJob "json:\"createBulkScheduledJob\" graphql:\"createBulkScheduledJob\""
+}
+
+func (t *CreateBulkScheduledJob) GetCreateBulkScheduledJob() *CreateBulkScheduledJob_CreateBulkScheduledJob {
+	if t == nil {
+		t = &CreateBulkScheduledJob{}
+	}
+	return &t.CreateBulkScheduledJob
+}
+
+type CreateScheduledJob struct {
+	CreateScheduledJob CreateScheduledJob_CreateScheduledJob "json:\"createScheduledJob\" graphql:\"createScheduledJob\""
+}
+
+func (t *CreateScheduledJob) GetCreateScheduledJob() *CreateScheduledJob_CreateScheduledJob {
+	if t == nil {
+		t = &CreateScheduledJob{}
+	}
+	return &t.CreateScheduledJob
+}
+
+type DeleteScheduledJob struct {
+	DeleteScheduledJob DeleteScheduledJob_DeleteScheduledJob "json:\"deleteScheduledJob\" graphql:\"deleteScheduledJob\""
+}
+
+func (t *DeleteScheduledJob) GetDeleteScheduledJob() *DeleteScheduledJob_DeleteScheduledJob {
+	if t == nil {
+		t = &DeleteScheduledJob{}
+	}
+	return &t.DeleteScheduledJob
+}
+
+type GetAllScheduledJobs struct {
+	ScheduledJobs GetAllScheduledJobs_ScheduledJobs "json:\"scheduledJobs\" graphql:\"scheduledJobs\""
+}
+
+func (t *GetAllScheduledJobs) GetScheduledJobs() *GetAllScheduledJobs_ScheduledJobs {
+	if t == nil {
+		t = &GetAllScheduledJobs{}
+	}
+	return &t.ScheduledJobs
+}
+
+type GetScheduledJobByID struct {
+	ScheduledJob GetScheduledJobByID_ScheduledJob "json:\"scheduledJob\" graphql:\"scheduledJob\""
+}
+
+func (t *GetScheduledJobByID) GetScheduledJob() *GetScheduledJobByID_ScheduledJob {
+	if t == nil {
+		t = &GetScheduledJobByID{}
+	}
+	return &t.ScheduledJob
+}
+
+type GetScheduledJobs struct {
+	ScheduledJobs GetScheduledJobs_ScheduledJobs "json:\"scheduledJobs\" graphql:\"scheduledJobs\""
+}
+
+func (t *GetScheduledJobs) GetScheduledJobs() *GetScheduledJobs_ScheduledJobs {
+	if t == nil {
+		t = &GetScheduledJobs{}
+	}
+	return &t.ScheduledJobs
+}
+
+type UpdateScheduledJob struct {
+	UpdateScheduledJob UpdateScheduledJob_UpdateScheduledJob "json:\"updateScheduledJob\" graphql:\"updateScheduledJob\""
+}
+
+func (t *UpdateScheduledJob) GetUpdateScheduledJob() *UpdateScheduledJob_UpdateScheduledJob {
+	if t == nil {
+		t = &UpdateScheduledJob{}
+	}
+	return &t.UpdateScheduledJob
+}
+
+type GetAllScheduledJobHistories struct {
+	ScheduledJobHistories GetAllScheduledJobHistories_ScheduledJobHistories "json:\"scheduledJobHistories\" graphql:\"scheduledJobHistories\""
+}
+
+func (t *GetAllScheduledJobHistories) GetScheduledJobHistories() *GetAllScheduledJobHistories_ScheduledJobHistories {
+	if t == nil {
+		t = &GetAllScheduledJobHistories{}
+	}
+	return &t.ScheduledJobHistories
+}
+
+type GetScheduledJobHistories struct {
+	ScheduledJobHistories GetScheduledJobHistories_ScheduledJobHistories "json:\"scheduledJobHistories\" graphql:\"scheduledJobHistories\""
+}
+
+func (t *GetScheduledJobHistories) GetScheduledJobHistories() *GetScheduledJobHistories_ScheduledJobHistories {
+	if t == nil {
+		t = &GetScheduledJobHistories{}
+	}
+	return &t.ScheduledJobHistories
+}
+
+type GetAllScheduledJobRuns struct {
+	ScheduledJobRuns GetAllScheduledJobRuns_ScheduledJobRuns "json:\"scheduledJobRuns\" graphql:\"scheduledJobRuns\""
+}
+
+func (t *GetAllScheduledJobRuns) GetScheduledJobRuns() *GetAllScheduledJobRuns_ScheduledJobRuns {
+	if t == nil {
+		t = &GetAllScheduledJobRuns{}
+	}
+	return &t.ScheduledJobRuns
+}
+
+type GetScheduledJobRunByID struct {
+	ScheduledJobRun GetScheduledJobRunByID_ScheduledJobRun "json:\"scheduledJobRun\" graphql:\"scheduledJobRun\""
+}
+
+func (t *GetScheduledJobRunByID) GetScheduledJobRun() *GetScheduledJobRunByID_ScheduledJobRun {
+	if t == nil {
+		t = &GetScheduledJobRunByID{}
+	}
+	return &t.ScheduledJobRun
+}
+
+type GetScheduledJobRuns struct {
+	ScheduledJobRuns GetScheduledJobRuns_ScheduledJobRuns "json:\"scheduledJobRuns\" graphql:\"scheduledJobRuns\""
+}
+
+func (t *GetScheduledJobRuns) GetScheduledJobRuns() *GetScheduledJobRuns_ScheduledJobRuns {
+	if t == nil {
+		t = &GetScheduledJobRuns{}
+	}
+	return &t.ScheduledJobRuns
 }
 
 type GlobalSearch struct {
@@ -78728,6 +82537,27 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					businessCosts
 					stakeholderID
 					delegateID
+				}
+			}
+		}
+		scheduledJobs {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					displayID
+					tags
+					ownerID
+					title
+					description
+					configuration
+					cadence
 				}
 			}
 		}
@@ -81386,6 +85216,395 @@ func (c *Client) GetControlObjectiveHistories(ctx context.Context, where *Contro
 
 	var res GetControlObjectiveHistories
 	if err := c.Client.Post(ctx, "GetControlObjectiveHistories", GetControlObjectiveHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVControlScheduledJobDocument = `mutation CreateBulkCSVControlScheduledJob ($input: Upload!) {
+	createBulkCSVControlScheduledJob(input: $input) {
+		controlScheduledJobs {
+			cadence
+			configuration
+			createdAt
+			createdBy
+			cron
+			id
+			jobID
+			jobRunnerID
+			ownerID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVControlScheduledJob(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVControlScheduledJob, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVControlScheduledJob
+	if err := c.Client.Post(ctx, "CreateBulkCSVControlScheduledJob", CreateBulkCSVControlScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkControlScheduledJobDocument = `mutation CreateBulkControlScheduledJob ($input: [CreateControlScheduledJobInput!]) {
+	createBulkControlScheduledJob(input: $input) {
+		controlScheduledJobs {
+			cadence
+			configuration
+			createdAt
+			createdBy
+			cron
+			id
+			jobID
+			jobRunnerID
+			ownerID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkControlScheduledJob(ctx context.Context, input []*CreateControlScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControlScheduledJob, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkControlScheduledJob
+	if err := c.Client.Post(ctx, "CreateBulkControlScheduledJob", CreateBulkControlScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateControlScheduledJobDocument = `mutation CreateControlScheduledJob ($input: CreateControlScheduledJobInput!) {
+	createControlScheduledJob(input: $input) {
+		controlScheduledJob {
+			cadence
+			configuration
+			createdAt
+			createdBy
+			cron
+			id
+			jobID
+			jobRunnerID
+			ownerID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateControlScheduledJob(ctx context.Context, input CreateControlScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlScheduledJob, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateControlScheduledJob
+	if err := c.Client.Post(ctx, "CreateControlScheduledJob", CreateControlScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteControlScheduledJobDocument = `mutation DeleteControlScheduledJob ($deleteControlScheduledJobId: ID!) {
+	deleteControlScheduledJob(id: $deleteControlScheduledJobId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteControlScheduledJob(ctx context.Context, deleteControlScheduledJobID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControlScheduledJob, error) {
+	vars := map[string]any{
+		"deleteControlScheduledJobId": deleteControlScheduledJobID,
+	}
+
+	var res DeleteControlScheduledJob
+	if err := c.Client.Post(ctx, "DeleteControlScheduledJob", DeleteControlScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllControlScheduledJobsDocument = `query GetAllControlScheduledJobs {
+	controlScheduledJobs {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cadence
+				configuration
+				createdAt
+				createdBy
+				cron
+				id
+				jobID
+				jobRunnerID
+				ownerID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllControlScheduledJobs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlScheduledJobs, error) {
+	vars := map[string]any{}
+
+	var res GetAllControlScheduledJobs
+	if err := c.Client.Post(ctx, "GetAllControlScheduledJobs", GetAllControlScheduledJobsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlScheduledJobByIDDocument = `query GetControlScheduledJobByID ($controlScheduledJobId: ID!) {
+	controlScheduledJob(id: $controlScheduledJobId) {
+		cadence
+		configuration
+		createdAt
+		createdBy
+		cron
+		id
+		jobID
+		jobRunnerID
+		ownerID
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetControlScheduledJobByID(ctx context.Context, controlScheduledJobID string, interceptors ...clientv2.RequestInterceptor) (*GetControlScheduledJobByID, error) {
+	vars := map[string]any{
+		"controlScheduledJobId": controlScheduledJobID,
+	}
+
+	var res GetControlScheduledJobByID
+	if err := c.Client.Post(ctx, "GetControlScheduledJobByID", GetControlScheduledJobByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlScheduledJobsDocument = `query GetControlScheduledJobs ($first: Int, $last: Int, $where: ControlScheduledJobWhereInput) {
+	controlScheduledJobs(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cadence
+				configuration
+				createdAt
+				createdBy
+				cron
+				id
+				jobID
+				jobRunnerID
+				ownerID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetControlScheduledJobs(ctx context.Context, first *int64, last *int64, where *ControlScheduledJobWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlScheduledJobs, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetControlScheduledJobs
+	if err := c.Client.Post(ctx, "GetControlScheduledJobs", GetControlScheduledJobsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateControlScheduledJobDocument = `mutation UpdateControlScheduledJob ($updateControlScheduledJobId: ID!, $input: UpdateControlScheduledJobInput!) {
+	updateControlScheduledJob(id: $updateControlScheduledJobId, input: $input) {
+		controlScheduledJob {
+			cadence
+			configuration
+			createdAt
+			createdBy
+			cron
+			id
+			jobID
+			jobRunnerID
+			ownerID
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateControlScheduledJob(ctx context.Context, updateControlScheduledJobID string, input UpdateControlScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControlScheduledJob, error) {
+	vars := map[string]any{
+		"updateControlScheduledJobId": updateControlScheduledJobID,
+		"input":                       input,
+	}
+
+	var res UpdateControlScheduledJob
+	if err := c.Client.Post(ctx, "UpdateControlScheduledJob", UpdateControlScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllControlScheduledJobHistoriesDocument = `query GetAllControlScheduledJobHistories {
+	controlScheduledJobHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cadence
+				configuration
+				createdAt
+				createdBy
+				cron
+				historyTime
+				id
+				jobID
+				jobRunnerID
+				operation
+				ownerID
+				ref
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllControlScheduledJobHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlScheduledJobHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllControlScheduledJobHistories
+	if err := c.Client.Post(ctx, "GetAllControlScheduledJobHistories", GetAllControlScheduledJobHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlScheduledJobHistoriesDocument = `query GetControlScheduledJobHistories ($first: Int, $last: Int, $where: ControlScheduledJobHistoryWhereInput) {
+	controlScheduledJobHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cadence
+				configuration
+				createdAt
+				createdBy
+				cron
+				historyTime
+				id
+				jobID
+				jobRunnerID
+				operation
+				ownerID
+				ref
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetControlScheduledJobHistories(ctx context.Context, first *int64, last *int64, where *ControlScheduledJobHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlScheduledJobHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetControlScheduledJobHistories
+	if err := c.Client.Post(ctx, "GetControlScheduledJobHistories", GetControlScheduledJobHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -87431,6 +91650,133 @@ func (c *Client) InvitesByOrgID(ctx context.Context, where *InviteWhereInput, in
 
 	var res InvitesByOrgID
 	if err := c.Client.Post(ctx, "InvitesByOrgID", InvitesByOrgIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllJobResultsDocument = `query GetAllJobResults {
+	jobResults {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exitCode
+				fileID
+				finishedAt
+				id
+				ownerID
+				scheduledJobID
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllJobResults(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobResults, error) {
+	vars := map[string]any{}
+
+	var res GetAllJobResults
+	if err := c.Client.Post(ctx, "GetAllJobResults", GetAllJobResultsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobResultByIDDocument = `query GetJobResultByID ($jobResultId: ID!) {
+	jobResult(id: $jobResultId) {
+		createdAt
+		createdBy
+		exitCode
+		fileID
+		finishedAt
+		id
+		ownerID
+		scheduledJobID
+		startedAt
+		status
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetJobResultByID(ctx context.Context, jobResultID string, interceptors ...clientv2.RequestInterceptor) (*GetJobResultByID, error) {
+	vars := map[string]any{
+		"jobResultId": jobResultID,
+	}
+
+	var res GetJobResultByID
+	if err := c.Client.Post(ctx, "GetJobResultByID", GetJobResultByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetJobResultsDocument = `query GetJobResults ($first: Int, $last: Int, $where: JobResultWhereInput) {
+	jobResults(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exitCode
+				fileID
+				finishedAt
+				id
+				ownerID
+				scheduledJobID
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetJobResults(ctx context.Context, first *int64, last *int64, where *JobResultWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobResults, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetJobResults
+	if err := c.Client.Post(ctx, "GetJobResults", GetJobResultsDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -93788,6 +98134,558 @@ func (c *Client) GetRiskHistories(ctx context.Context, where *RiskHistoryWhereIn
 	return &res, nil
 }
 
+const CreateBulkCSVScheduledJobDocument = `mutation CreateBulkCSVScheduledJob ($input: Upload!) {
+	createBulkCSVScheduledJob(input: $input) {
+		scheduledJobs {
+			cadence
+			configuration
+			createdAt
+			createdBy
+			cron
+			description
+			displayID
+			id
+			jobType
+			ownerID
+			script
+			systemOwned
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVScheduledJob(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVScheduledJob, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVScheduledJob
+	if err := c.Client.Post(ctx, "CreateBulkCSVScheduledJob", CreateBulkCSVScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkScheduledJobDocument = `mutation CreateBulkScheduledJob ($input: [CreateScheduledJobInput!]) {
+	createBulkScheduledJob(input: $input) {
+		scheduledJobs {
+			cadence
+			configuration
+			createdAt
+			createdBy
+			cron
+			description
+			displayID
+			id
+			jobType
+			ownerID
+			script
+			systemOwned
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkScheduledJob(ctx context.Context, input []*CreateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkScheduledJob, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkScheduledJob
+	if err := c.Client.Post(ctx, "CreateBulkScheduledJob", CreateBulkScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateScheduledJobDocument = `mutation CreateScheduledJob ($input: CreateScheduledJobInput!) {
+	createScheduledJob(input: $input) {
+		scheduledJob {
+			cadence
+			configuration
+			createdAt
+			createdBy
+			cron
+			description
+			displayID
+			id
+			jobType
+			ownerID
+			script
+			systemOwned
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateScheduledJob(ctx context.Context, input CreateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateScheduledJob, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateScheduledJob
+	if err := c.Client.Post(ctx, "CreateScheduledJob", CreateScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteScheduledJobDocument = `mutation DeleteScheduledJob ($deleteScheduledJobId: ID!) {
+	deleteScheduledJob(id: $deleteScheduledJobId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteScheduledJob(ctx context.Context, deleteScheduledJobID string, interceptors ...clientv2.RequestInterceptor) (*DeleteScheduledJob, error) {
+	vars := map[string]any{
+		"deleteScheduledJobId": deleteScheduledJobID,
+	}
+
+	var res DeleteScheduledJob
+	if err := c.Client.Post(ctx, "DeleteScheduledJob", DeleteScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllScheduledJobsDocument = `query GetAllScheduledJobs {
+	scheduledJobs {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cadence
+				configuration
+				createdAt
+				createdBy
+				cron
+				description
+				displayID
+				id
+				jobType
+				ownerID
+				script
+				systemOwned
+				tags
+				title
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllScheduledJobs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScheduledJobs, error) {
+	vars := map[string]any{}
+
+	var res GetAllScheduledJobs
+	if err := c.Client.Post(ctx, "GetAllScheduledJobs", GetAllScheduledJobsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetScheduledJobByIDDocument = `query GetScheduledJobByID ($scheduledJobId: ID!) {
+	scheduledJob(id: $scheduledJobId) {
+		cadence
+		configuration
+		createdAt
+		createdBy
+		cron
+		description
+		displayID
+		id
+		jobType
+		ownerID
+		script
+		systemOwned
+		tags
+		title
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetScheduledJobByID(ctx context.Context, scheduledJobID string, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobByID, error) {
+	vars := map[string]any{
+		"scheduledJobId": scheduledJobID,
+	}
+
+	var res GetScheduledJobByID
+	if err := c.Client.Post(ctx, "GetScheduledJobByID", GetScheduledJobByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetScheduledJobsDocument = `query GetScheduledJobs ($first: Int, $last: Int, $where: ScheduledJobWhereInput) {
+	scheduledJobs(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cadence
+				configuration
+				createdAt
+				createdBy
+				cron
+				description
+				displayID
+				id
+				jobType
+				ownerID
+				script
+				systemOwned
+				tags
+				title
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetScheduledJobs(ctx context.Context, first *int64, last *int64, where *ScheduledJobWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobs, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetScheduledJobs
+	if err := c.Client.Post(ctx, "GetScheduledJobs", GetScheduledJobsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateScheduledJobDocument = `mutation UpdateScheduledJob ($updateScheduledJobId: ID!, $input: UpdateScheduledJobInput!) {
+	updateScheduledJob(id: $updateScheduledJobId, input: $input) {
+		scheduledJob {
+			cadence
+			configuration
+			createdAt
+			createdBy
+			cron
+			description
+			displayID
+			id
+			jobType
+			ownerID
+			script
+			systemOwned
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateScheduledJob(ctx context.Context, updateScheduledJobID string, input UpdateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*UpdateScheduledJob, error) {
+	vars := map[string]any{
+		"updateScheduledJobId": updateScheduledJobID,
+		"input":                input,
+	}
+
+	var res UpdateScheduledJob
+	if err := c.Client.Post(ctx, "UpdateScheduledJob", UpdateScheduledJobDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllScheduledJobHistoriesDocument = `query GetAllScheduledJobHistories {
+	scheduledJobHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cadence
+				configuration
+				createdAt
+				createdBy
+				cron
+				description
+				displayID
+				historyTime
+				id
+				jobType
+				operation
+				ownerID
+				ref
+				script
+				systemOwned
+				tags
+				title
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllScheduledJobHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScheduledJobHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllScheduledJobHistories
+	if err := c.Client.Post(ctx, "GetAllScheduledJobHistories", GetAllScheduledJobHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetScheduledJobHistoriesDocument = `query GetScheduledJobHistories ($first: Int, $last: Int, $where: ScheduledJobHistoryWhereInput) {
+	scheduledJobHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				cadence
+				configuration
+				createdAt
+				createdBy
+				cron
+				description
+				displayID
+				historyTime
+				id
+				jobType
+				operation
+				ownerID
+				ref
+				script
+				systemOwned
+				tags
+				title
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetScheduledJobHistories(ctx context.Context, first *int64, last *int64, where *ScheduledJobHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetScheduledJobHistories
+	if err := c.Client.Post(ctx, "GetScheduledJobHistories", GetScheduledJobHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllScheduledJobRunsDocument = `query GetAllScheduledJobRuns {
+	scheduledJobRuns {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				jobRunnerID
+				ownerID
+				scheduledJobID
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllScheduledJobRuns(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScheduledJobRuns, error) {
+	vars := map[string]any{}
+
+	var res GetAllScheduledJobRuns
+	if err := c.Client.Post(ctx, "GetAllScheduledJobRuns", GetAllScheduledJobRunsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetScheduledJobRunByIDDocument = `query GetScheduledJobRunByID ($scheduledJobRunId: ID!) {
+	scheduledJobRun(id: $scheduledJobRunId) {
+		createdAt
+		createdBy
+		id
+		jobRunnerID
+		ownerID
+		scheduledJobID
+		status
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetScheduledJobRunByID(ctx context.Context, scheduledJobRunID string, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobRunByID, error) {
+	vars := map[string]any{
+		"scheduledJobRunId": scheduledJobRunID,
+	}
+
+	var res GetScheduledJobRunByID
+	if err := c.Client.Post(ctx, "GetScheduledJobRunByID", GetScheduledJobRunByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetScheduledJobRunsDocument = `query GetScheduledJobRuns ($first: Int, $last: Int, $where: ScheduledJobRunWhereInput) {
+	scheduledJobRuns(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				jobRunnerID
+				ownerID
+				scheduledJobID
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetScheduledJobRuns(ctx context.Context, first *int64, last *int64, where *ScheduledJobRunWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScheduledJobRuns, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetScheduledJobRuns
+	if err := c.Client.Post(ctx, "GetScheduledJobRuns", GetScheduledJobRunsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 	search(query: $query) {
 		totalCount
@@ -94293,6 +99191,24 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					id
 					name
 					tags
+				}
+			}
+		}
+		scheduledJobs {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					description
+					displayID
+					id
+					tags
+					title
 				}
 			}
 		}
@@ -97680,6 +102596,16 @@ var DocumentOperationNames = map[string]string{
 	UpdateControlObjectiveDocument:               "UpdateControlObjective",
 	GetAllControlObjectiveHistoriesDocument:      "GetAllControlObjectiveHistories",
 	GetControlObjectiveHistoriesDocument:         "GetControlObjectiveHistories",
+	CreateBulkCSVControlScheduledJobDocument:     "CreateBulkCSVControlScheduledJob",
+	CreateBulkControlScheduledJobDocument:        "CreateBulkControlScheduledJob",
+	CreateControlScheduledJobDocument:            "CreateControlScheduledJob",
+	DeleteControlScheduledJobDocument:            "DeleteControlScheduledJob",
+	GetAllControlScheduledJobsDocument:           "GetAllControlScheduledJobs",
+	GetControlScheduledJobByIDDocument:           "GetControlScheduledJobByID",
+	GetControlScheduledJobsDocument:              "GetControlScheduledJobs",
+	UpdateControlScheduledJobDocument:            "UpdateControlScheduledJob",
+	GetAllControlScheduledJobHistoriesDocument:   "GetAllControlScheduledJobHistories",
+	GetControlScheduledJobHistoriesDocument:      "GetControlScheduledJobHistories",
 	CreateBulkCSVCustomDomainDocument:            "CreateBulkCSVCustomDomain",
 	CreateBulkCustomDomainDocument:               "CreateBulkCustomDomain",
 	CreateCustomDomainDocument:                   "CreateCustomDomain",
@@ -97813,6 +102739,9 @@ var DocumentOperationNames = map[string]string{
 	GetAllInvitesDocument:                        "GetAllInvites",
 	GetInviteByIDDocument:                        "GetInviteByID",
 	InvitesByOrgIDDocument:                       "InvitesByOrgID",
+	GetAllJobResultsDocument:                     "GetAllJobResults",
+	GetJobResultByIDDocument:                     "GetJobResultByID",
+	GetJobResultsDocument:                        "GetJobResults",
 	DeleteJobRunnerDocument:                      "DeleteJobRunner",
 	GetAllJobRunnersDocument:                     "GetAllJobRunners",
 	GetJobRunnerByIDDocument:                     "GetJobRunnerByID",
@@ -97947,6 +102876,19 @@ var DocumentOperationNames = map[string]string{
 	UpdateRiskDocument:                           "UpdateRisk",
 	GetAllRiskHistoriesDocument:                  "GetAllRiskHistories",
 	GetRiskHistoriesDocument:                     "GetRiskHistories",
+	CreateBulkCSVScheduledJobDocument:            "CreateBulkCSVScheduledJob",
+	CreateBulkScheduledJobDocument:               "CreateBulkScheduledJob",
+	CreateScheduledJobDocument:                   "CreateScheduledJob",
+	DeleteScheduledJobDocument:                   "DeleteScheduledJob",
+	GetAllScheduledJobsDocument:                  "GetAllScheduledJobs",
+	GetScheduledJobByIDDocument:                  "GetScheduledJobByID",
+	GetScheduledJobsDocument:                     "GetScheduledJobs",
+	UpdateScheduledJobDocument:                   "UpdateScheduledJob",
+	GetAllScheduledJobHistoriesDocument:          "GetAllScheduledJobHistories",
+	GetScheduledJobHistoriesDocument:             "GetScheduledJobHistories",
+	GetAllScheduledJobRunsDocument:               "GetAllScheduledJobRuns",
+	GetScheduledJobRunByIDDocument:               "GetScheduledJobRunByID",
+	GetScheduledJobRunsDocument:                  "GetScheduledJobRuns",
 	GlobalSearchDocument:                         "GlobalSearch",
 	CreateStandardDocument:                       "CreateStandard",
 	DeleteStandardDocument:                       "DeleteStandard",

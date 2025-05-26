@@ -104,6 +104,8 @@ const (
 	EdgeControl = "control"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
 	EdgeControlImplementations = "control_implementations"
+	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
+	EdgeScheduledJobs = "scheduled_jobs"
 	// Table holds the table name of the subcontrol in the database.
 	Table = "subcontrols"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
@@ -188,6 +190,11 @@ const (
 	// ControlImplementationsInverseTable is the table name for the ControlImplementation entity.
 	// It exists in this package in order to avoid circular dependency with the "controlimplementation" package.
 	ControlImplementationsInverseTable = "control_implementations"
+	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge. The primary key declared below.
+	ScheduledJobsTable = "control_scheduled_job_subcontrols"
+	// ScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
+	ScheduledJobsInverseTable = "control_scheduled_jobs"
 )
 
 // Columns holds all SQL columns for subcontrol fields.
@@ -256,6 +263,9 @@ var (
 	// ControlImplementationsPrimaryKey and ControlImplementationsColumn2 are the table columns denoting the
 	// primary key for the control_implementations relation (M2M).
 	ControlImplementationsPrimaryKey = []string{"subcontrol_id", "control_implementation_id"}
+	// ScheduledJobsPrimaryKey and ScheduledJobsColumn2 are the table columns denoting the
+	// primary key for the scheduled_jobs relation (M2M).
+	ScheduledJobsPrimaryKey = []string{"control_scheduled_job_id", "subcontrol_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -618,6 +628,20 @@ func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 		sqlgraph.OrderByNeighborTerms(s, newControlImplementationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByScheduledJobsCount orders the results by scheduled_jobs count.
+func ByScheduledJobsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScheduledJobsStep(), opts...)
+	}
+}
+
+// ByScheduledJobs orders the results by scheduled_jobs terms.
+func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newEvidenceStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -714,6 +738,13 @@ func newControlImplementationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ControlImplementationsTable, ControlImplementationsPrimaryKey...),
+	)
+}
+func newScheduledJobsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ScheduledJobsTable, ScheduledJobsPrimaryKey...),
 	)
 }
 

@@ -1370,3 +1370,66 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 
 	return dnsVerification
 }
+
+type ScheduledJobBuilder struct {
+	client *client
+}
+
+func (w *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ScheduledJob {
+	ctx = setContext(ctx, w.client.db)
+	wn, err := w.client.db.ScheduledJob.Create().
+		SetConfiguration(models.JobConfiguration{
+			SSL: models.SSLJobConfig{
+				URL: "https://google.com",
+			},
+		}).
+		SetTitle("SSL checks").
+		SetDescription("Check and verify a tls certificate is valid").
+		SetScript(`
+echo | openssl s_client -servername {{ .URL }} -connect {{ .URL }}:443 2>/dev/null | openssl x509 -noout -dates -issuer -subject
+		`).
+		SetCadence(models.JobCadence{
+			Frequency: enums.JobCadenceFrequencyDaily,
+			Time:      "15:09",
+		}).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	return wn
+}
+
+type ControlScheduledJobBuilder struct {
+	client *client
+
+	// Fields
+	JobID         string
+	Configuration models.JobConfiguration
+	Cron          *string
+	JobRunnerID   string
+	ControlIDs    []string
+}
+
+func (b *ControlScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *generated.ControlScheduledJob {
+	ctx = setContext(ctx, b.client.db)
+
+	job := b.client.db.ControlScheduledJob.Create().
+		SetJobID(b.JobID).
+		SetConfiguration(b.Configuration).
+		SetCadence(models.JobCadence{
+			Time:      "15:09",
+			Frequency: enums.JobCadenceFrequencyDaily,
+		})
+
+	if b.JobRunnerID != "" {
+		job.SetJobRunnerID(b.JobRunnerID)
+	}
+
+	if len(b.ControlIDs) > 0 {
+		job.AddControlIDs(b.ControlIDs...)
+	}
+
+	result, err := job.Save(ctx)
+	assert.NilError(t, err)
+
+	return result
+}

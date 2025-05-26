@@ -34,6 +34,10 @@ type Tx struct {
 	ControlObjective *ControlObjectiveClient
 	// ControlObjectiveHistory is the client for interacting with the ControlObjectiveHistory builders.
 	ControlObjectiveHistory *ControlObjectiveHistoryClient
+	// ControlScheduledJob is the client for interacting with the ControlScheduledJob builders.
+	ControlScheduledJob *ControlScheduledJobClient
+	// ControlScheduledJobHistory is the client for interacting with the ControlScheduledJobHistory builders.
+	ControlScheduledJobHistory *ControlScheduledJobHistoryClient
 	// CustomDomain is the client for interacting with the CustomDomain builders.
 	CustomDomain *CustomDomainClient
 	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
@@ -94,6 +98,8 @@ type Tx struct {
 	InternalPolicyHistory *InternalPolicyHistoryClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
+	// JobResult is the client for interacting with the JobResult builders.
+	JobResult *JobResultClient
 	// JobRunner is the client for interacting with the JobRunner builders.
 	JobRunner *JobRunnerClient
 	// JobRunnerHistory is the client for interacting with the JobRunnerHistory builders.
@@ -156,6 +162,12 @@ type Tx struct {
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// ScheduledJob is the client for interacting with the ScheduledJob builders.
+	ScheduledJob *ScheduledJobClient
+	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
+	ScheduledJobHistory *ScheduledJobHistoryClient
+	// ScheduledJobRun is the client for interacting with the ScheduledJobRun builders.
+	ScheduledJobRun *ScheduledJobRunClient
 	// Standard is the client for interacting with the Standard builders.
 	Standard *StandardClient
 	// StandardHistory is the client for interacting with the StandardHistory builders.
@@ -328,6 +340,8 @@ func (tx *Tx) init() {
 	tx.ControlImplementationHistory = NewControlImplementationHistoryClient(tx.config)
 	tx.ControlObjective = NewControlObjectiveClient(tx.config)
 	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
+	tx.ControlScheduledJob = NewControlScheduledJobClient(tx.config)
+	tx.ControlScheduledJobHistory = NewControlScheduledJobHistoryClient(tx.config)
 	tx.CustomDomain = NewCustomDomainClient(tx.config)
 	tx.CustomDomainHistory = NewCustomDomainHistoryClient(tx.config)
 	tx.DNSVerification = NewDNSVerificationClient(tx.config)
@@ -358,6 +372,7 @@ func (tx *Tx) init() {
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)
 	tx.InternalPolicyHistory = NewInternalPolicyHistoryClient(tx.config)
 	tx.Invite = NewInviteClient(tx.config)
+	tx.JobResult = NewJobResultClient(tx.config)
 	tx.JobRunner = NewJobRunnerClient(tx.config)
 	tx.JobRunnerHistory = NewJobRunnerHistoryClient(tx.config)
 	tx.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(tx.config)
@@ -389,6 +404,9 @@ func (tx *Tx) init() {
 	tx.ProgramMembershipHistory = NewProgramMembershipHistoryClient(tx.config)
 	tx.Risk = NewRiskClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
+	tx.ScheduledJob = NewScheduledJobClient(tx.config)
+	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
+	tx.ScheduledJobRun = NewScheduledJobRunClient(tx.config)
 	tx.Standard = NewStandardClient(tx.config)
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)
 	tx.Subcontrol = NewSubcontrolClient(tx.config)

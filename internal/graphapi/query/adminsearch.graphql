@@ -648,6 +648,27 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    scheduledJobs {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          title
+          description
+          configuration
+          cadence
+        }
+      }
+    }
     standards {
       totalCount
       pageInfo {

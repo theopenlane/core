@@ -43,7 +43,7 @@ func (JobWeekday) Values() []string {
 
 // String returns the string representation of the JobWeekday value.
 func (r JobWeekday) String() string {
-	return string(r)
+	return strings.ToUpper(string(r))
 }
 
 // ToJobWeekday converts a string to its corresponding JobWeekday enum value.

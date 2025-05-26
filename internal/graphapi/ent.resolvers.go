@@ -308,6 +308,72 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 	return res, err
 }
 
+// ControlScheduledJobs is the resolver for the controlScheduledJobs field.
+func (r *queryResolver) ControlScheduledJobs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) (*generated.ControlScheduledJobConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ControlScheduledJobOrder{
+			{
+				Field:     generated.ControlScheduledJobOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ControlScheduledJob.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjob"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithControlScheduledJobOrder(orderBy),
+		generated.WithControlScheduledJobFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjob"})
+	}
+
+	return res, err
+}
+
+// ControlScheduledJobHistories is the resolver for the controlScheduledJobHistories field.
+func (r *queryResolver) ControlScheduledJobHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlScheduledJobHistoryOrder, where *generated.ControlScheduledJobHistoryWhereInput) (*generated.ControlScheduledJobHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.ControlScheduledJobHistoryOrder{
+			Field:     generated.ControlScheduledJobHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ControlScheduledJobHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjobhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithControlScheduledJobHistoryOrder(orderBy),
+		generated.WithControlScheduledJobHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjobhistory"})
+	}
+
+	return res, err
+}
+
 // CustomDomains is the resolver for the customDomains field.
 func (r *queryResolver) CustomDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) (*generated.CustomDomainConnection, error) {
 	// set page limit if nothing was set
@@ -1033,6 +1099,40 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 	return res, err
 }
 
+// JobResults is the resolver for the jobResults field.
+func (r *queryResolver) JobResults(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) (*generated.JobResultConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.JobResultOrder{
+			{
+				Field:     generated.JobResultOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).JobResult.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobresult"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithJobResultOrder(orderBy),
+		generated.WithJobResultFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobresult"})
+	}
+
+	return res, err
+}
+
 // JobRunners is the resolver for the jobRunners field.
 func (r *queryResolver) JobRunners(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) (*generated.JobRunnerConnection, error) {
 	// set page limit if nothing was set
@@ -1753,6 +1853,106 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithRiskHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "riskhistory"})
+	}
+
+	return res, err
+}
+
+// ScheduledJobs is the resolver for the scheduledJobs field.
+func (r *queryResolver) ScheduledJobs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) (*generated.ScheduledJobConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ScheduledJobOrder{
+			{
+				Field:     generated.ScheduledJobOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ScheduledJob.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScheduledJobOrder(orderBy),
+		generated.WithScheduledJobFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+	}
+
+	return res, err
+}
+
+// ScheduledJobHistories is the resolver for the scheduledJobHistories field.
+func (r *queryResolver) ScheduledJobHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScheduledJobHistoryOrder, where *generated.ScheduledJobHistoryWhereInput) (*generated.ScheduledJobHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.ScheduledJobHistoryOrder{
+			Field:     generated.ScheduledJobHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ScheduledJobHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScheduledJobHistoryOrder(orderBy),
+		generated.WithScheduledJobHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobhistory"})
+	}
+
+	return res, err
+}
+
+// ScheduledJobRuns is the resolver for the scheduledJobRuns field.
+func (r *queryResolver) ScheduledJobRuns(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) (*generated.ScheduledJobRunConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ScheduledJobRunOrder{
+			{
+				Field:     generated.ScheduledJobRunOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ScheduledJobRun.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobrun"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScheduledJobRunOrder(orderBy),
+		generated.WithScheduledJobRunFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobrun"})
 	}
 
 	return res, err

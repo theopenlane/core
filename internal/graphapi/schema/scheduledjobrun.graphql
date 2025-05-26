@@ -1,0 +1,12 @@
+extend type Query {
+    """
+    Look up scheduledJobRun by ID
+    """
+     scheduledJobRun(
+        """
+        ID of the scheduledJobRun
+        """
+        id: ID!
+    ):  ScheduledJobRun!
+}
+

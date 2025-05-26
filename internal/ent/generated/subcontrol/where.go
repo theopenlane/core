@@ -2009,6 +2009,35 @@ func HasControlImplementationsWith(preds ...predicate.ControlImplementation) pre
 	})
 }
 
+// HasScheduledJobs applies the HasEdge predicate on the "scheduled_jobs" edge.
+func HasScheduledJobs() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ScheduledJobsTable, ScheduledJobsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ControlScheduledJob
+		step.Edge.Schema = schemaConfig.ControlScheduledJobSubcontrols
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasScheduledJobsWith applies the HasEdge predicate on the "scheduled_jobs" edge with a given conditions (other predicates).
+func HasScheduledJobsWith(preds ...predicate.ControlScheduledJob) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newScheduledJobsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ControlScheduledJob
+		step.Edge.Schema = schemaConfig.ControlScheduledJobSubcontrols
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Subcontrol) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.AndPredicates(predicates...))

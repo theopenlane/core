@@ -127,11 +127,13 @@ type ControlEdges struct {
 	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// ScheduledJobs holds the value of the scheduled_jobs edge.
+	ScheduledJobs []*ControlScheduledJob `json:"scheduled_jobs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [20]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -148,6 +150,7 @@ type ControlEdges struct {
 	namedPrograms               map[string][]*Program
 	namedControlImplementations map[string][]*ControlImplementation
 	namedSubcontrols            map[string][]*Subcontrol
+	namedScheduledJobs          map[string][]*ControlScheduledJob
 }
 
 // EvidenceOrErr returns the Evidence value or an error if the edge
@@ -327,6 +330,15 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
+// ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
+	if e.loadedTypes[19] {
+		return e.ScheduledJobs, nil
+	}
+	return nil, &NotLoadedError{edge: "scheduled_jobs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -657,6 +669,11 @@ func (c *Control) QueryControlImplementations() *ControlImplementationQuery {
 // QuerySubcontrols queries the "subcontrols" edge of the Control entity.
 func (c *Control) QuerySubcontrols() *SubcontrolQuery {
 	return NewControlClient(c.config).QuerySubcontrols(c)
+}
+
+// QueryScheduledJobs queries the "scheduled_jobs" edge of the Control entity.
+func (c *Control) QueryScheduledJobs() *ControlScheduledJobQuery {
+	return NewControlClient(c.config).QueryScheduledJobs(c)
 }
 
 // Update returns a builder for updating this Control.
@@ -1129,6 +1146,30 @@ func (c *Control) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 		c.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
 		c.Edges.namedSubcontrols[name] = append(c.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
+// NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Control) NamedScheduledJobs(name string) ([]*ControlScheduledJob, error) {
+	if c.Edges.namedScheduledJobs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedScheduledJobs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Control) appendNamedScheduledJobs(name string, edges ...*ControlScheduledJob) {
+	if c.Edges.namedScheduledJobs == nil {
+		c.Edges.namedScheduledJobs = make(map[string][]*ControlScheduledJob)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedScheduledJobs[name] = []*ControlScheduledJob{}
+	} else {
+		c.Edges.namedScheduledJobs[name] = append(c.Edges.namedScheduledJobs[name], edges...)
 	}
 }
 

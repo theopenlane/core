@@ -77,6 +77,11 @@ func (s Subcontrol) Edges() []ent.Edge {
 			edgeSchema: ControlImplementation{},
 			comment:    "the implementation(s) of the subcontrol",
 		}),
+
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: ControlScheduledJob{},
+		}),
 	}
 }
 

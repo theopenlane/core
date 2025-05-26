@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up scheduledJob by ID
+    """
+     scheduledJob(
+        """
+        ID of the scheduledJob
+        """
+        id: ID!
+    ):  ScheduledJob!
+}
+
+extend type Mutation{
+    """
+    Create a new scheduledJob
+    """
+    createScheduledJob(
+        """
+        values of the scheduledJob
+        """
+        input: CreateScheduledJobInput!
+    ): ScheduledJobCreatePayload!
+    """
+    Create multiple new scheduledJobs
+    """
+    createBulkScheduledJob(
+        """
+        values of the scheduledJob
+        """
+        input: [CreateScheduledJobInput!]
+    ): ScheduledJobBulkCreatePayload!
+    """
+    Create multiple new scheduledJobs via file upload
+    """
+    createBulkCSVScheduledJob(
+        """
+        csv file containing values of the scheduledJob
+        """
+        input: Upload!
+    ): ScheduledJobBulkCreatePayload!
+    """
+    Update an existing scheduledJob
+    """
+    updateScheduledJob(
+        """
+        ID of the scheduledJob
+        """
+        id: ID!
+        """
+        New values for the scheduledJob
+        """
+        input: UpdateScheduledJobInput!
+    ): ScheduledJobUpdatePayload!
+    """
+    Delete an existing scheduledJob
+    """
+    deleteScheduledJob(
+        """
+        ID of the scheduledJob
+        """
+        id: ID!
+    ): ScheduledJobDeletePayload!
+}
+
+"""
+Return response for createScheduledJob mutation
+"""
+type ScheduledJobCreatePayload {
+    """
+    Created scheduledJob
+    """
+    scheduledJob: ScheduledJob!
+}
+
+"""
+Return response for updateScheduledJob mutation
+"""
+type ScheduledJobUpdatePayload {
+    """
+    Updated scheduledJob
+    """
+    scheduledJob: ScheduledJob!
+}
+
+"""
+Return response for deleteScheduledJob mutation
+"""
+type ScheduledJobDeletePayload {
+    """
+    Deleted scheduledJob ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkScheduledJob mutation
+"""
+type ScheduledJobBulkCreatePayload {
+    """
+    Created scheduledJobs
+    """
+    scheduledJobs: [ScheduledJob!]
+}

@@ -31,7 +31,7 @@ func (JobCadenceFrequency) Values() []string {
 
 // String returns the string representation of the JobCadenceFrequency value.
 func (r JobCadenceFrequency) String() string {
-	return string(r)
+	return strings.ToUpper(string(r))
 }
 
 // ToJobCadenceFrequency converts a string to its corresponding JobCadenceFrequency enum value.

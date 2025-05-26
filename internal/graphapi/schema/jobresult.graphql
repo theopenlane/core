@@ -1,0 +1,12 @@
+extend type Query {
+    """
+    Look up jobResult by ID
+    """
+     jobResult(
+        """
+        ID of the jobResult
+        """
+        id: ID!
+    ):  JobResult!
+}
+
