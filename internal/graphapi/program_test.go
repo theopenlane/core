@@ -667,6 +667,19 @@ func TestMutationUpdateProgram(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
+			name: "happy path, re-add program member as editor",
+			request: openlaneclient.UpdateProgramInput{
+				AddProgramMembers: []*openlaneclient.AddProgramMembershipInput{
+					{
+						UserID: pm.UserID,
+						Role:   &enums.RoleAdmin,
+					},
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
 			name: "happy path, update edge - procedure",
 			request: openlaneclient.UpdateProgramInput{
 				AddProcedureIDs: []string{procedure1.ID},
@@ -841,10 +854,22 @@ func TestMutationUpdateProgram(t *testing.T) {
 			if len(tc.request.AddProgramMembers) > 0 {
 				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 3))
 
-				// it should have the owner and the admin user and the other user added in the test setup
-				assert.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)
-				assert.Equal(t, programUser.ID, resp.UpdateProgram.Program.Members.Edges[1].Node.User.ID)
-				assert.Equal(t, adminUser.ID, resp.UpdateProgram.Program.Members.Edges[2].Node.User.ID)
+				testUserFound := false
+				programUserFound := false
+				adminUserFound := false
+				for _, edge := range resp.UpdateProgram.Program.Members.Edges {
+					if edge.Node.User.ID == testUser1.ID {
+						testUserFound = true
+					} else if edge.Node.User.ID == programUser.ID {
+						programUserFound = true
+					} else if edge.Node.User.ID == adminUser.ID {
+						adminUserFound = true
+					}
+				}
+				assert.Check(t, testUserFound, "test user not found in program members")
+				// here originally, and then later re-added as an admin
+				assert.Check(t, programUserFound, "program user not found in program members")
+				assert.Check(t, adminUserFound, "admin user not found in program members")
 			}
 
 			// member was removed, ensure there are two members left

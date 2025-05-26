@@ -857,7 +857,7 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 
 	if pm.UserID == "" {
 		// first create an org member
-		orgMember := (&OrgMemberBuilder{client: pm.client}).MustNew(testUser1.UserCtx, t)
+		orgMember := (&OrgMemberBuilder{client: pm.client}).MustNew(ctx, t)
 		pm.UserID = orgMember.UserID
 	}
 

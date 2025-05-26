@@ -21,6 +21,8 @@ func TestQueryOrgMembers(t *testing.T) {
 	testOrgMemberUser := suite.userBuilder(context.Background(), t)
 	org1Member := (&OrgMemberBuilder{client: suite.client}).MustNew(testOrgMemberUser.UserCtx, t)
 
+	pm := (&ProgramMemberBuilder{client: suite.client}).MustNew(testOrgMemberUser.UserCtx, t)
+
 	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: testOrgMemberUser.OrganizationID}).MustNew(testOrgMemberUser.UserCtx, t)
 
 	childReqCtx := auth.NewTestContextWithOrgID(testOrgMemberUser.ID, childOrg.ID)
@@ -29,25 +31,84 @@ func TestQueryOrgMembers(t *testing.T) {
 	(&OrgMemberBuilder{client: suite.client, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
 
 	testCases := []struct {
-		name        string
-		queryID     string
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedLen int
-		expectErr   bool
+		name                string
+		queryID             string
+		deleteProgramMember bool
+		whereInput          *openlaneclient.OrgMembershipWhereInput
+		client              *openlaneclient.OpenlaneClient
+		ctx                 context.Context
+		expectedLen         int
+		expectErr           bool
 	}{
 		{
 			name:        "happy path, get org members by org id",
 			queryID:     testOrgMemberUser.OrganizationID,
 			client:      suite.client.api,
 			ctx:         testOrgMemberUser.UserCtx,
-			expectedLen: 2,
+			expectedLen: 3,
 		},
 		{
 			name:        "happy path, get org with parent members based on context",
 			client:      suite.client.api,
 			ctx:         childReqCtx,
-			expectedLen: 3, // 2 from child org, 1 from parent org because we dedupe
+			expectedLen: 4, // 2 from child org, 2 from parent org because we dedupe plus the program member
+		},
+		{
+			name:    "where input, get members in program",
+			queryID: testOrgMemberUser.OrganizationID,
+			client:  suite.client.api,
+			ctx:     testOrgMemberUser.UserCtx,
+			whereInput: &openlaneclient.OrgMembershipWhereInput{
+				HasUserWith: []*openlaneclient.UserWhereInput{
+					{
+						HasProgramMembershipsWith: []*openlaneclient.ProgramMembershipWhereInput{
+							{
+								ProgramID: &pm.ProgramID,
+							},
+						},
+					},
+				},
+			},
+			expectedLen: 2, // owner and program member
+		},
+		{
+			name:    "where input, get members not in program",
+			queryID: testOrgMemberUser.OrganizationID,
+			client:  suite.client.api,
+			ctx:     testOrgMemberUser.UserCtx,
+			whereInput: &openlaneclient.OrgMembershipWhereInput{
+				Not: &openlaneclient.OrgMembershipWhereInput{
+					HasUserWith: []*openlaneclient.UserWhereInput{
+						{
+							HasProgramMembershipsWith: []*openlaneclient.ProgramMembershipWhereInput{
+								{
+									ProgramID: &pm.ProgramID,
+								},
+							},
+						},
+					},
+				},
+			},
+			expectedLen: 1, // everyone not the owner and the program member
+		},
+		{
+			name:                "where input, get members in program, after deleting a member",
+			deleteProgramMember: true,
+			queryID:             testOrgMemberUser.OrganizationID,
+			client:              suite.client.api,
+			ctx:                 testOrgMemberUser.UserCtx,
+			whereInput: &openlaneclient.OrgMembershipWhereInput{
+				HasUserWith: []*openlaneclient.UserWhereInput{
+					{
+						HasProgramMembershipsWith: []*openlaneclient.ProgramMembershipWhereInput{
+							{
+								ProgramID: &pm.ProgramID,
+							},
+						},
+					},
+				},
+			},
+			expectedLen: 1, // only the owner remains
 		},
 		{
 			name:        "happy path, get org with parent members using org ID, only direct members will be returned",
@@ -76,14 +137,23 @@ func TestQueryOrgMembers(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			orgID := tc.queryID
-			whereInput := openlaneclient.OrgMembershipWhereInput{}
-
-			if orgID != "" {
-				whereInput.OrganizationID = &orgID
+			if tc.deleteProgramMember {
+				// delete the program member to test the where input
+				_, err := tc.client.DeleteProgramMembership(tc.ctx, pm.ID)
+				assert.NilError(t, err)
 			}
 
-			resp, err := tc.client.GetOrgMembersByOrgID(tc.ctx, &whereInput)
+			orgID := tc.queryID
+
+			if tc.whereInput == nil {
+				tc.whereInput = &openlaneclient.OrgMembershipWhereInput{}
+			}
+
+			if orgID != "" {
+				tc.whereInput.OrganizationID = &orgID
+			}
+
+			resp, err := tc.client.GetOrgMembersByOrgID(tc.ctx, tc.whereInput)
 
 			if tc.expectErr {
 				assert.Assert(t, err != nil)
