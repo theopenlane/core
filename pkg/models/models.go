@@ -968,3 +968,8 @@ var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationResponse{
 	Reply:   rout.Reply{Success: true},
 	Message: "Job runner node registered",
 }
+
+// AcmeSolverRequest is the request to solve an acme challenge
+type AcmeSolverRequest struct {
+	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}

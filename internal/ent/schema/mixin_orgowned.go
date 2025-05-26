@@ -270,6 +270,11 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 		return true
 	}
 
+	// skip the interceptor if the context has the acme solver context key
+	if _, acmeSolver := contextx.From[auth.AcmeSolverContextKey](ctx); acmeSolver {
+		return true
+	}
+
 	// skip interceptor if the context has the managed group key
 	if _, managedGroup := contextx.From[hooks.ManagedContextKey](ctx); managedGroup {
 		return true
@@ -291,6 +296,11 @@ func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context, m ent.Mutation) (b
 	// skip the interceptor if the context has the organization creation context key
 	// the events need to query for objects such as api tokens, which are org owned
 	if _, orgSubscription := contextx.From[auth.OrgSubscriptionContextKey](ctx); orgSubscription {
+		return true, nil
+	}
+
+	// skip the interceptor if the context has the acme solver context key
+	if _, acmeSolver := contextx.From[auth.AcmeSolverContextKey](ctx); acmeSolver {
 		return true, nil
 	}
 
