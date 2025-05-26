@@ -370,6 +370,11 @@ func (csju *ControlScheduledJobUpdate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := csju.mutation.Cadence(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cadence": %w`, err)}
+		}
+	}
 	if csju.mutation.JobCleared() && len(csju.mutation.JobIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job"`)
 	}
@@ -999,6 +1004,11 @@ func (csjuo *ControlScheduledJobUpdateOne) check() error {
 	if v, ok := csjuo.mutation.OwnerID(); ok {
 		if err := controlscheduledjob.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := csjuo.mutation.Cadence(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cadence": %w`, err)}
 		}
 	}
 	if csjuo.mutation.JobCleared() && len(csjuo.mutation.JobIDs()) > 0 {

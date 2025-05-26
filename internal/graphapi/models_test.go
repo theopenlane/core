@@ -1314,7 +1314,7 @@ func (j *JobScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *gen
 		SetJobType(enums.JobTypeSsl).
 		SetCron("30 7 * * *").
 		SetScript(`
-echo | openssl s_client -servername google.com -connect google.com:443 2>/dev/null | openssl x509 -noout -dates -issuer -subject
+echo | openssl s_client -servername {{ .URL }} -connect {{ .URL }}:443 2>/dev/null | openssl x509 -noout -dates -issuer -subject
 		`)
 
 	job, err := create.Save(ctx)
@@ -1323,32 +1323,30 @@ echo | openssl s_client -servername google.com -connect google.com:443 2>/dev/nu
 	return job
 }
 
-// type JobScheduledJobBuilder struct {
-// 	client      *client
-// 	jobRunnerID string
-// }
-//
-// func (j *JobScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *generated.ScheduledJob {
-// 	ctx = setContext(ctx, j.client.db)
-//
-// 	assert.Assert(t, j.jobRunnerID != "")
-//
-// 	create := j.client.db.ScheduledJob.Create().
-// 		SetTitle(randomName(t)).
-// 		SetDescription(gofakeit.Sentence(60)).
-// 		SetConfiguration(models.JobConfiguration{
-// 			SSL: models.SSLJobConfig{
-// 				URL: "https://google.com",
-// 			},
-// 		}).
-// 		SetJobType(enums.JobTypeSsl).
-// 		SetCron("30 7 * * *").
-// 		SetScript(`
-// echo | openssl s_client -servername google.com -connect google.com:443 2>/dev/null | openssl x509 -noout -dates -issuer -subject
-// 		`)
-//
-// 	job, err := create.Save(ctx)
-// 	assert.NilError(t, err)
-//
-// 	return job
-// }
+type ControlJobBuilder struct {
+	client        *client
+	jobScheduleID string
+	jobRunnerID   string
+}
+
+func (j *ControlJobBuilder) MustNew(ctx context.Context, t *testing.T) *generated.ControlScheduledJob {
+	ctx = setContext(ctx, j.client.db)
+
+	assert.Assert(t, j.jobScheduleID)
+	assert.Assert(t, j.jobRunnerID)
+
+	create := j.client.db.ControlScheduledJob.Create().
+		SetConfiguration(models.JobConfiguration{
+			SSL: models.SSLJobConfig{
+				URL: "https://google.com",
+			},
+		}).
+		SetCron("30 7 * * *").
+		SetJobID(j.jobScheduleID).
+		SetJobRunnerID(j.jobRunnerID)
+
+	job, err := create.Save(ctx)
+	assert.NilError(t, err)
+
+	return job
+}

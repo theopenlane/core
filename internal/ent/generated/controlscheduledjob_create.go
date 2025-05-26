@@ -303,6 +303,11 @@ func (csjc *ControlScheduledJobCreate) check() error {
 	if _, ok := csjc.mutation.Configuration(); !ok {
 		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ControlScheduledJob.configuration"`)}
 	}
+	if v, ok := csjc.mutation.Cadence(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cadence": %w`, err)}
+		}
+	}
 	if _, ok := csjc.mutation.JobRunnerID(); !ok {
 		return &ValidationError{Name: "job_runner_id", err: errors.New(`generated: missing required field "ControlScheduledJob.job_runner_id"`)}
 	}

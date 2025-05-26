@@ -350,6 +350,11 @@ func (sjc *ScheduledJobCreate) check() error {
 	if _, ok := sjc.mutation.Configuration(); !ok {
 		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ScheduledJob.configuration"`)}
 	}
+	if v, ok := sjc.mutation.Cadence(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
+		}
+	}
 	return nil
 }
 

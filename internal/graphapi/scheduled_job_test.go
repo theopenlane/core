@@ -15,7 +15,9 @@ func TestQueryScheduledJobs(t *testing.T) {
 	secondJob := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	thirdJob := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
-	systemJob := (&JobScheduledJobBuilder{client: suite.client, jobRunnerID: firstJob.ID}).
+	firstScheduledJob := (&JobScheduledJobBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	systemJob := (&ControlJobBuilder{client: suite.client, jobRunnerID: firstJob.ID, jobScheduleID: firstScheduledJob.ID}).
 		MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {

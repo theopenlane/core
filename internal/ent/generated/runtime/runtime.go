@@ -745,12 +745,15 @@ func init() {
 	controlscheduledjobMixinHooks0 := controlscheduledjobMixin[0].Hooks()
 	controlscheduledjobMixinHooks1 := controlscheduledjobMixin[1].Hooks()
 	controlscheduledjobMixinHooks4 := controlscheduledjobMixin[4].Hooks()
+	controlscheduledjobHooks := schema.ControlScheduledJob{}.Hooks()
 
 	controlscheduledjob.Hooks[1] = controlscheduledjobMixinHooks0[0]
 
 	controlscheduledjob.Hooks[2] = controlscheduledjobMixinHooks1[0]
 
 	controlscheduledjob.Hooks[3] = controlscheduledjobMixinHooks4[0]
+
+	controlscheduledjob.Hooks[4] = controlscheduledjobHooks[0]
 	controlscheduledjobMixinInters1 := controlscheduledjobMixin[1].Interceptors()
 	controlscheduledjobMixinInters4 := controlscheduledjobMixin[4].Interceptors()
 	controlscheduledjob.Interceptors[0] = controlscheduledjobMixinInters1[0]
@@ -3924,6 +3927,7 @@ func init() {
 	scheduledjobMixinHooks2 := scheduledjobMixin[2].Hooks()
 	scheduledjobMixinHooks5 := scheduledjobMixin[5].Hooks()
 	scheduledjobMixinHooks6 := scheduledjobMixin[6].Hooks()
+	scheduledjobHooks := schema.ScheduledJob{}.Hooks()
 
 	scheduledjob.Hooks[1] = scheduledjobMixinHooks0[0]
 
@@ -3934,6 +3938,8 @@ func init() {
 	scheduledjob.Hooks[4] = scheduledjobMixinHooks5[0]
 
 	scheduledjob.Hooks[5] = scheduledjobMixinHooks6[0]
+
+	scheduledjob.Hooks[6] = scheduledjobHooks[0]
 	scheduledjobMixinInters1 := scheduledjobMixin[1].Interceptors()
 	scheduledjobMixinInters5 := scheduledjobMixin[5].Interceptors()
 	scheduledjob.Interceptors[0] = scheduledjobMixinInters1[0]

@@ -8,6 +8,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
@@ -125,7 +126,9 @@ func (ScheduledJob) Annotations() []schema.Annotation {
 
 // Hooks of the ScheduledJob
 func (ScheduledJob) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookScheduledJobCreate(),
+	}
 }
 
 // Interceptors of the ScheduledJob

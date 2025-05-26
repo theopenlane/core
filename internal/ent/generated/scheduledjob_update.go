@@ -337,6 +337,11 @@ func (sju *ScheduledJobUpdate) check() error {
 			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_type": %w`, err)}
 		}
 	}
+	if v, ok := sju.mutation.Cadence(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -803,6 +808,11 @@ func (sjuo *ScheduledJobUpdateOne) check() error {
 	if v, ok := sjuo.mutation.JobType(); ok {
 		if err := scheduledjob.JobTypeValidator(v); err != nil {
 			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_type": %w`, err)}
+		}
+	}
+	if v, ok := sjuo.mutation.Cadence(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
 		}
 	}
 	return nil

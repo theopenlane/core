@@ -47,11 +47,15 @@ func (job *JobConfiguration) Validate(typ enums.JobType) error {
 }
 
 func (s SSLJobConfig) Validate() error {
-	_, err := validateURL(s.URL)
+	_, err := ValidateURL(s.URL)
 	return err
 }
 
-func validateURL(s string) (string, error) {
+func ValidateURL(s string) (string, error) {
+	if s == "" {
+		return "", ErrInvalidURL
+	}
+
 	u, err := url.Parse(s)
 	if err != nil {
 		return "", ErrInvalidURL

@@ -11,6 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
@@ -22,6 +23,28 @@ func (r *mutationResolver) CreateControlScheduledJob(ctx context.Context, input 
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	// by default copy the cadence or cron from the "scheduled job" template
+	// if this is not provided here
+	query, err := withTransactionalMutation(ctx).ScheduledJob.Query().
+		Where(scheduledjob.ID(input.JobID)).
+		CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+	}
+
+	scheduledJob, err := query.Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+	}
+
+	if input.Cadence == nil && input.Cron == nil {
+		if !scheduledJob.Cadence.IsZero() {
+			input.Cadence = &scheduledJob.Cadence
+		} else if scheduledJob.Cron != nil {
+			input.Cron = scheduledJob.Cron
+		}
 	}
 
 	res, err := withTransactionalMutation(ctx).ControlScheduledJob.Create().SetInput(input).Save(ctx)
@@ -87,6 +110,14 @@ func (r *mutationResolver) UpdateControlScheduledJob(ctx context.Context, id str
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
+	}
+
+	if input.Cadence == nil && input.Cron == nil {
+		if !res.Cadence.IsZero() {
+			input.Cadence = &res.Cadence
+		} else if res.Cron != nil {
+			input.Cron = res.Cron
+		}
 	}
 
 	// setup update request
