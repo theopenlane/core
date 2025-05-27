@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"time"
 )
 
 // JobWeekday is a custom type representing the various states of JobWeekday.
@@ -44,6 +45,29 @@ func (JobWeekday) Values() []string {
 // String returns the string representation of the JobWeekday value.
 func (r JobWeekday) String() string {
 	return strings.ToUpper(string(r))
+}
+
+// ToTimeWeekday maps the human readable enums to Go's weekday type
+func ToTimeWeekday(r JobWeekday) time.Weekday {
+	switch r {
+	case JobWeekdaySunday:
+		return time.Sunday
+	case JobWeekdayMonday:
+		return time.Monday
+	case JobWeekdayTuesday:
+		return time.Tuesday
+	case JobWeekdayWednesday:
+		return time.Wednesday
+	case JobWeekdayThursday:
+		return time.Thursday
+	case JobWeekdayFriday:
+		return time.Friday
+	case JobWeekdaySaturday:
+		return time.Saturday
+	default:
+		const defaultWeekDay = 10
+		return time.Weekday(defaultWeekDay)
+	}
 }
 
 // ToJobWeekday converts a string to its corresponding JobWeekday enum value.

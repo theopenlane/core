@@ -21,6 +21,12 @@ const (
 	nextNCronExecutions = 5
 )
 
+var (
+	// ErrComputeNextRunInvalid is used to define an error when a weekly run cannot be
+	// computed
+	ErrComputeNextRunInvalid = errors.New("could not compute next run time in weekly cadence")
+)
+
 // Days is used to provide a human readable version of weekdays
 type Days []enums.JobWeekday
 
@@ -122,6 +128,71 @@ func (c *JobCadence) Validate() error {
 	}
 
 	return nil
+}
+
+// Next calculates the next execution time for a JobCadence
+func (c *JobCadence) Next(from time.Time) (time.Time, error) {
+	// we do not call Validate again as the db hook
+	// already does that
+	expectedRunTime, err := time.Parse("15:04", c.Time)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("invalid time format in cadence: %w", err)
+	}
+
+	expectedTargetHour := expectedRunTime.Hour()
+	expectedTargetMinute := expectedRunTime.Minute()
+
+	switch c.Frequency {
+	case enums.JobCadenceFrequencyDaily:
+		// if it's past the expected time today, then set the next run time to the next 24 hours
+		expectedNextRun := time.Date(from.Year(), from.Month(), from.Day(), expectedTargetHour,
+			expectedTargetMinute, 0, 0, from.Location())
+
+		if expectedNextRun.Before(from) {
+			const next24Hours = 24 * time.Hour
+			expectedNextRun = expectedNextRun.Add(next24Hours)
+		}
+
+		return expectedNextRun, nil
+
+	case enums.JobCadenceFrequencyWeekly:
+		targetWeekdays := make([]time.Weekday, 0, len(c.Days))
+		for _, day := range c.Days {
+			targetWeekdays = append(targetWeekdays, enums.ToTimeWeekday(day))
+		}
+
+		// peek into the next 2 weeks
+		for i := range 14 {
+			next := from.AddDate(0, 0, i)
+			for _, d := range targetWeekdays {
+				if next.Weekday() == d {
+					currentCandidateCheck := time.Date(next.Year(), next.Month(), next.Day(), expectedTargetHour,
+						expectedTargetMinute, 0, 0, from.Location())
+
+					if currentCandidateCheck.After(from) {
+						return currentCandidateCheck, nil
+					}
+				}
+			}
+		}
+
+		return time.Time{}, ErrComputeNextRunInvalid
+
+	case enums.JobCadenceFrequencyMonthly:
+		// initial run time should be set to the target time on the same day of the current month
+		expectedNextRun := time.Date(from.Year(), from.Month(), from.Day(), expectedTargetHour,
+			expectedTargetMinute, 0, 0, from.Location())
+
+		// past time today? move to the same day next month
+		if expectedNextRun.Before(from) {
+			expectedNextRun = expectedNextRun.AddDate(0, 1, 0)
+		}
+
+		return expectedNextRun, nil
+
+	default:
+		return time.Time{}, fmt.Errorf("unsupported cadence frequency: %s", c.Frequency) // nolint:err113
+	}
 }
 
 // ValidateCronExpression checks a cron to make sure it is valid .
