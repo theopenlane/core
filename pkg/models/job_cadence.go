@@ -8,17 +8,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/gorhill/cronexpr"
 	"github.com/theopenlane/core/pkg/enums"
-)
-
-const (
-	// MaxRunsInBetween defines how much time each job must have between runs
-	// Maybe make this configurable or maybe we need to take this down to like
-	// 5/10 minutes
-	MaxRunsInBetween = 30 * time.Minute
-
-	nextNCronExecutions = 5
 )
 
 var (
@@ -131,7 +121,7 @@ func (c *JobCadence) Validate() error {
 }
 
 // Next calculates the next execution time for a JobCadence
-func (c *JobCadence) Next(from time.Time) (time.Time, error) {
+func (c JobCadence) Next(from time.Time) (time.Time, error) {
 	// we do not call Validate again as the db hook
 	// already does that
 	expectedRunTime, err := time.Parse("15:04", c.Time)
@@ -193,29 +183,4 @@ func (c *JobCadence) Next(from time.Time) (time.Time, error) {
 	default:
 		return time.Time{}, fmt.Errorf("unsupported cadence frequency: %s", c.Frequency) // nolint:err113
 	}
-}
-
-// ValidateCronExpression checks a cron to make sure it is valid .
-// It also limits concurrent runs to 30 minutes interval of the last run
-// so it parses the cron - look at next few executions and check the elapsed time
-func ValidateCronExpression(expr string) error {
-	cron, err := cronexpr.Parse(expr)
-	if err != nil {
-		return fmt.Errorf("invalid cron syntax: %w", err) // nolint:err113
-	}
-
-	// compute the next 5 execution times to cover cases like
-	// 0,20,40 * * * * where the user can request to run in the 20th and 40th minute
-	// that would break the 30 minute check
-	currentTime := time.Now()
-	executions := cron.NextN(currentTime, nextNCronExecutions)
-
-	for i := 1; i < len(executions); i++ {
-		interval := executions[i].Sub(executions[i-1])
-		if interval < MaxRunsInBetween {
-			return fmt.Errorf("cron runs too frequently: %s between runs, must be at least 30 minutes", interval) // nolint:err113
-		}
-	}
-
-	return nil
 }
