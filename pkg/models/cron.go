@@ -25,6 +25,10 @@ type Cron string
 // It also limits concurrent runs to 30 minutes interval of the last run
 // so it parses the cron - look at next few executions and check the elapsed time
 func (c Cron) Validate() error {
+	if c.String() == "" {
+		return nil
+	}
+
 	cron, err := cronexpr.Parse(c.String())
 	if err != nil {
 		return fmt.Errorf("invalid cron syntax: %w", err) // nolint:err113
