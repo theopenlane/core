@@ -67,7 +67,7 @@ func HookControlScheduledJobCreate() ent.Hook {
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpCreate)
 }
 
-func validateCadenceOrCron(cadence *models.JobCadence, hasCadence bool, cron string, hasCron bool) error {
+func validateCadenceOrCron(cadence *models.JobCadence, hasCadence bool, cron models.Cron, hasCron bool) error {
 	if !hasCadence && (!hasCron || cron == "") {
 		return nil
 	}
@@ -83,9 +83,7 @@ func validateCadenceOrCron(cadence *models.JobCadence, hasCadence bool, cron str
 	}
 
 	if hasCron {
-		if err := models.ValidateCronExpression(cron); err != nil {
-			return err
-		}
+		return cron.Validate()
 	}
 
 	return nil

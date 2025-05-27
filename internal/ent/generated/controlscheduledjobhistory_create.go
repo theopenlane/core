@@ -181,15 +181,15 @@ func (csjhc *ControlScheduledJobHistoryCreate) SetNillableCadence(mc *models.Job
 }
 
 // SetCron sets the "cron" field.
-func (csjhc *ControlScheduledJobHistoryCreate) SetCron(s string) *ControlScheduledJobHistoryCreate {
-	csjhc.mutation.SetCron(s)
+func (csjhc *ControlScheduledJobHistoryCreate) SetCron(m models.Cron) *ControlScheduledJobHistoryCreate {
+	csjhc.mutation.SetCron(m)
 	return csjhc
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (csjhc *ControlScheduledJobHistoryCreate) SetNillableCron(s *string) *ControlScheduledJobHistoryCreate {
-	if s != nil {
-		csjhc.SetCron(*s)
+func (csjhc *ControlScheduledJobHistoryCreate) SetNillableCron(m *models.Cron) *ControlScheduledJobHistoryCreate {
+	if m != nil {
+		csjhc.SetCron(*m)
 	}
 	return csjhc
 }
@@ -297,6 +297,11 @@ func (csjhc *ControlScheduledJobHistoryCreate) check() error {
 	if v, ok := csjhc.mutation.Cadence(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJobHistory.cadence": %w`, err)}
+		}
+	}
+	if v, ok := csjhc.mutation.Cron(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJobHistory.cron": %w`, err)}
 		}
 	}
 	return nil

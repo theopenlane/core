@@ -248,15 +248,15 @@ func (sju *ScheduledJobUpdate) ClearCadence() *ScheduledJobUpdate {
 }
 
 // SetCron sets the "cron" field.
-func (sju *ScheduledJobUpdate) SetCron(s string) *ScheduledJobUpdate {
-	sju.mutation.SetCron(s)
+func (sju *ScheduledJobUpdate) SetCron(m models.Cron) *ScheduledJobUpdate {
+	sju.mutation.SetCron(m)
 	return sju
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableCron(s *string) *ScheduledJobUpdate {
-	if s != nil {
-		sju.SetCron(*s)
+func (sju *ScheduledJobUpdate) SetNillableCron(m *models.Cron) *ScheduledJobUpdate {
+	if m != nil {
+		sju.SetCron(*m)
 	}
 	return sju
 }
@@ -340,6 +340,11 @@ func (sju *ScheduledJobUpdate) check() error {
 	if v, ok := sju.mutation.Cadence(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
+		}
+	}
+	if v, ok := sju.mutation.Cron(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cron": %w`, err)}
 		}
 	}
 	return nil
@@ -708,15 +713,15 @@ func (sjuo *ScheduledJobUpdateOne) ClearCadence() *ScheduledJobUpdateOne {
 }
 
 // SetCron sets the "cron" field.
-func (sjuo *ScheduledJobUpdateOne) SetCron(s string) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetCron(s)
+func (sjuo *ScheduledJobUpdateOne) SetCron(m models.Cron) *ScheduledJobUpdateOne {
+	sjuo.mutation.SetCron(m)
 	return sjuo
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableCron(s *string) *ScheduledJobUpdateOne {
-	if s != nil {
-		sjuo.SetCron(*s)
+func (sjuo *ScheduledJobUpdateOne) SetNillableCron(m *models.Cron) *ScheduledJobUpdateOne {
+	if m != nil {
+		sjuo.SetCron(*m)
 	}
 	return sjuo
 }
@@ -813,6 +818,11 @@ func (sjuo *ScheduledJobUpdateOne) check() error {
 	if v, ok := sjuo.mutation.Cadence(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
+		}
+	}
+	if v, ok := sjuo.mutation.Cron(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cron": %w`, err)}
 		}
 	}
 	return nil

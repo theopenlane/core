@@ -55,6 +55,7 @@ func (ControlScheduledJob) Fields() []ent.Field {
 			Optional(),
 
 		field.String("cron").
+			GoType(models.Cron("")).
 			Comment("cron syntax. If not provided, it would inherit the cron of the parent job").
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput |

@@ -8,17 +8,13 @@ import (
 	"io"
 	"time"
 
-	"github.com/gorhill/cronexpr"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
-const (
-	// MaxRunsInBetween defines how much time each job must have between runs
-	// Maybe make this configurable or maybe we need to take this down to like
-	// 5/10 minutes
-	MaxRunsInBetween = 30 * time.Minute
-
-	nextNCronExecutions = 5
+var (
+	// ErrComputeNextRunInvalid is used to define an error when a weekly run cannot be
+	// computed
+	ErrComputeNextRunInvalid = errors.New("could not compute next run time in weekly cadence")
 )
 
 // Days is used to provide a human readable version of weekdays
@@ -124,27 +120,67 @@ func (c *JobCadence) Validate() error {
 	return nil
 }
 
-// ValidateCronExpression checks a cron to make sure it is valid .
-// It also limits concurrent runs to 30 minutes interval of the last run
-// so it parses the cron - look at next few executions and check the elapsed time
-func ValidateCronExpression(expr string) error {
-	cron, err := cronexpr.Parse(expr)
+// Next calculates the next execution time for a JobCadence
+func (c JobCadence) Next(from time.Time) (time.Time, error) {
+	// we do not call Validate again as the db hook
+	// already does that
+	expectedRunTime, err := time.Parse("15:04", c.Time)
 	if err != nil {
-		return fmt.Errorf("invalid cron syntax: %w", err) // nolint:err113
+		return time.Time{}, fmt.Errorf("invalid time format in cadence: %w", err)
 	}
 
-	// compute the next 5 execution times to cover cases like
-	// 0,20,40 * * * * where the user can request to run in the 20th and 40th minute
-	// that would break the 30 minute check
-	currentTime := time.Now()
-	executions := cron.NextN(currentTime, nextNCronExecutions)
+	expectedTargetHour := expectedRunTime.Hour()
+	expectedTargetMinute := expectedRunTime.Minute()
 
-	for i := 1; i < len(executions); i++ {
-		interval := executions[i].Sub(executions[i-1])
-		if interval < MaxRunsInBetween {
-			return fmt.Errorf("cron runs too frequently: %s between runs, must be at least 30 minutes", interval) // nolint:err113
+	switch c.Frequency {
+	case enums.JobCadenceFrequencyDaily:
+		// if it's past the expected time today, then set the next run time to the next 24 hours
+		expectedNextRun := time.Date(from.Year(), from.Month(), from.Day(), expectedTargetHour,
+			expectedTargetMinute, 0, 0, from.Location())
+
+		if expectedNextRun.Before(from) {
+			const next24Hours = 24 * time.Hour
+			expectedNextRun = expectedNextRun.Add(next24Hours)
 		}
-	}
 
-	return nil
+		return expectedNextRun, nil
+
+	case enums.JobCadenceFrequencyWeekly:
+		targetWeekdays := make([]time.Weekday, 0, len(c.Days))
+		for _, day := range c.Days {
+			targetWeekdays = append(targetWeekdays, enums.ToTimeWeekday(day))
+		}
+
+		// peek into the next 2 weeks
+		for i := range 14 {
+			next := from.AddDate(0, 0, i)
+			for _, d := range targetWeekdays {
+				if next.Weekday() == d {
+					currentCandidateCheck := time.Date(next.Year(), next.Month(), next.Day(), expectedTargetHour,
+						expectedTargetMinute, 0, 0, from.Location())
+
+					if currentCandidateCheck.After(from) {
+						return currentCandidateCheck, nil
+					}
+				}
+			}
+		}
+
+		return time.Time{}, ErrComputeNextRunInvalid
+
+	case enums.JobCadenceFrequencyMonthly:
+		// initial run time should be set to the target time on the same day of the current month
+		expectedNextRun := time.Date(from.Year(), from.Month(), from.Day(), expectedTargetHour,
+			expectedTargetMinute, 0, 0, from.Location())
+
+		// past time today? move to the same day next month
+		if expectedNextRun.Before(from) {
+			expectedNextRun = expectedNextRun.AddDate(0, 1, 0)
+		}
+
+		return expectedNextRun, nil
+
+	default:
+		return time.Time{}, fmt.Errorf("unsupported cadence frequency: %s", c.Frequency) // nolint:err113
+	}
 }

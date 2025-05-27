@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -108,7 +109,7 @@ func JobID(v string) predicate.ControlScheduledJob {
 }
 
 // Cron applies equality check predicate on the "cron" field. It's identical to CronEQ.
-func Cron(v string) predicate.ControlScheduledJob {
+func Cron(v models.Cron) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldEQ(FieldCron, v))
 }
 
@@ -643,58 +644,61 @@ func CadenceNotNil() predicate.ControlScheduledJob {
 }
 
 // CronEQ applies the EQ predicate on the "cron" field.
-func CronEQ(v string) predicate.ControlScheduledJob {
+func CronEQ(v models.Cron) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldEQ(FieldCron, v))
 }
 
 // CronNEQ applies the NEQ predicate on the "cron" field.
-func CronNEQ(v string) predicate.ControlScheduledJob {
+func CronNEQ(v models.Cron) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldNEQ(FieldCron, v))
 }
 
 // CronIn applies the In predicate on the "cron" field.
-func CronIn(vs ...string) predicate.ControlScheduledJob {
+func CronIn(vs ...models.Cron) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldIn(FieldCron, vs...))
 }
 
 // CronNotIn applies the NotIn predicate on the "cron" field.
-func CronNotIn(vs ...string) predicate.ControlScheduledJob {
+func CronNotIn(vs ...models.Cron) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldNotIn(FieldCron, vs...))
 }
 
 // CronGT applies the GT predicate on the "cron" field.
-func CronGT(v string) predicate.ControlScheduledJob {
+func CronGT(v models.Cron) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldGT(FieldCron, v))
 }
 
 // CronGTE applies the GTE predicate on the "cron" field.
-func CronGTE(v string) predicate.ControlScheduledJob {
+func CronGTE(v models.Cron) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldGTE(FieldCron, v))
 }
 
 // CronLT applies the LT predicate on the "cron" field.
-func CronLT(v string) predicate.ControlScheduledJob {
+func CronLT(v models.Cron) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldLT(FieldCron, v))
 }
 
 // CronLTE applies the LTE predicate on the "cron" field.
-func CronLTE(v string) predicate.ControlScheduledJob {
+func CronLTE(v models.Cron) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldLTE(FieldCron, v))
 }
 
 // CronContains applies the Contains predicate on the "cron" field.
-func CronContains(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldContains(FieldCron, v))
+func CronContains(v models.Cron) predicate.ControlScheduledJob {
+	vc := string(v)
+	return predicate.ControlScheduledJob(sql.FieldContains(FieldCron, vc))
 }
 
 // CronHasPrefix applies the HasPrefix predicate on the "cron" field.
-func CronHasPrefix(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldHasPrefix(FieldCron, v))
+func CronHasPrefix(v models.Cron) predicate.ControlScheduledJob {
+	vc := string(v)
+	return predicate.ControlScheduledJob(sql.FieldHasPrefix(FieldCron, vc))
 }
 
 // CronHasSuffix applies the HasSuffix predicate on the "cron" field.
-func CronHasSuffix(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldHasSuffix(FieldCron, v))
+func CronHasSuffix(v models.Cron) predicate.ControlScheduledJob {
+	vc := string(v)
+	return predicate.ControlScheduledJob(sql.FieldHasSuffix(FieldCron, vc))
 }
 
 // CronIsNil applies the IsNil predicate on the "cron" field.
@@ -708,13 +712,15 @@ func CronNotNil() predicate.ControlScheduledJob {
 }
 
 // CronEqualFold applies the EqualFold predicate on the "cron" field.
-func CronEqualFold(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldEqualFold(FieldCron, v))
+func CronEqualFold(v models.Cron) predicate.ControlScheduledJob {
+	vc := string(v)
+	return predicate.ControlScheduledJob(sql.FieldEqualFold(FieldCron, vc))
 }
 
 // CronContainsFold applies the ContainsFold predicate on the "cron" field.
-func CronContainsFold(v string) predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldContainsFold(FieldCron, v))
+func CronContainsFold(v models.Cron) predicate.ControlScheduledJob {
+	vc := string(v)
+	return predicate.ControlScheduledJob(sql.FieldContainsFold(FieldCron, vc))
 }
 
 // JobRunnerIDEQ applies the EQ predicate on the "job_runner_id" field.

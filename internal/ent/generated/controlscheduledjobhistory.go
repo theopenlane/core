@@ -47,7 +47,7 @@ type ControlScheduledJobHistory struct {
 	// the schedule to run this job. If not provided, it would inherit the cadence of the parent job
 	Cadence models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax. If not provided, it would inherit the cron of the parent job
-	Cron *string `json:"cron,omitempty"`
+	Cron *models.Cron `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID  string `json:"job_runner_id,omitempty"`
 	selectValues sql.SelectValues
@@ -58,11 +58,13 @@ func (*ControlScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case controlscheduledjobhistory.FieldCron:
+			values[i] = &sql.NullScanner{S: new(models.Cron)}
 		case controlscheduledjobhistory.FieldConfiguration, controlscheduledjobhistory.FieldCadence:
 			values[i] = new([]byte)
 		case controlscheduledjobhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlscheduledjobhistory.FieldID, controlscheduledjobhistory.FieldRef, controlscheduledjobhistory.FieldCreatedBy, controlscheduledjobhistory.FieldUpdatedBy, controlscheduledjobhistory.FieldDeletedBy, controlscheduledjobhistory.FieldOwnerID, controlscheduledjobhistory.FieldJobID, controlscheduledjobhistory.FieldCron, controlscheduledjobhistory.FieldJobRunnerID:
+		case controlscheduledjobhistory.FieldID, controlscheduledjobhistory.FieldRef, controlscheduledjobhistory.FieldCreatedBy, controlscheduledjobhistory.FieldUpdatedBy, controlscheduledjobhistory.FieldDeletedBy, controlscheduledjobhistory.FieldOwnerID, controlscheduledjobhistory.FieldJobID, controlscheduledjobhistory.FieldJobRunnerID:
 			values[i] = new(sql.NullString)
 		case controlscheduledjobhistory.FieldHistoryTime, controlscheduledjobhistory.FieldCreatedAt, controlscheduledjobhistory.FieldUpdatedAt, controlscheduledjobhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -170,11 +172,11 @@ func (csjh *ControlScheduledJobHistory) assignValues(columns []string, values []
 				}
 			}
 		case controlscheduledjobhistory.FieldCron:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
 			} else if value.Valid {
-				csjh.Cron = new(string)
-				*csjh.Cron = value.String
+				csjh.Cron = new(models.Cron)
+				*csjh.Cron = *value.S.(*models.Cron)
 			}
 		case controlscheduledjobhistory.FieldJobRunnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -259,7 +261,7 @@ func (csjh *ControlScheduledJobHistory) String() string {
 	builder.WriteString(", ")
 	if v := csjh.Cron; v != nil {
 		builder.WriteString("cron=")
-		builder.WriteString(*v)
+		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("job_runner_id=")
