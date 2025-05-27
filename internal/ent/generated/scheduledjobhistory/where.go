@@ -1047,16 +1047,6 @@ func ScriptHasSuffix(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldHasSuffix(FieldScript, v))
 }
 
-// ScriptIsNil applies the IsNil predicate on the "script" field.
-func ScriptIsNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldScript))
-}
-
-// ScriptNotNil applies the NotNil predicate on the "script" field.
-func ScriptNotNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldScript))
-}
-
 // ScriptEqualFold applies the EqualFold predicate on the "script" field.
 func ScriptEqualFold(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEqualFold(FieldScript, v))

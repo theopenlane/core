@@ -221,14 +221,6 @@ func (sjhc *ScheduledJobHistoryCreate) SetScript(s string) *ScheduledJobHistoryC
 	return sjhc
 }
 
-// SetNillableScript sets the "script" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableScript(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetScript(*s)
-	}
-	return sjhc
-}
-
 // SetConfiguration sets the "configuration" field.
 func (sjhc *ScheduledJobHistoryCreate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryCreate {
 	sjhc.mutation.SetConfiguration(mc)
@@ -368,6 +360,9 @@ func (sjhc *ScheduledJobHistoryCreate) check() error {
 		if err := scheduledjobhistory.JobTypeValidator(v); err != nil {
 			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.job_type": %w`, err)}
 		}
+	}
+	if _, ok := sjhc.mutation.Script(); !ok {
+		return &ValidationError{Name: "script", err: errors.New(`generated: missing required field "ScheduledJobHistory.script"`)}
 	}
 	if _, ok := sjhc.mutation.Configuration(); !ok {
 		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ScheduledJobHistory.configuration"`)}

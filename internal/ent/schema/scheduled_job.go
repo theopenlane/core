@@ -69,8 +69,7 @@ func (ScheduledJob) Fields() []ent.Field {
 						entgql.SkipWhereInput,
 				),
 			).
-			Comment("the script to run").
-			Optional(),
+			Comment("the script to run"),
 
 		// Default config values
 		field.JSON("configuration", models.JobConfiguration{}).

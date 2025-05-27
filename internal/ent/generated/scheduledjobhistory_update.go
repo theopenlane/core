@@ -206,12 +206,6 @@ func (sjhu *ScheduledJobHistoryUpdate) SetNillableScript(s *string) *ScheduledJo
 	return sjhu
 }
 
-// ClearScript clears the value of the "script" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearScript() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearScript()
-	return sjhu
-}
-
 // SetConfiguration sets the "configuration" field.
 func (sjhu *ScheduledJobHistoryUpdate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdate {
 	sjhu.mutation.SetConfiguration(mc)
@@ -412,9 +406,6 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if value, ok := sjhu.mutation.Script(); ok {
 		_spec.SetField(scheduledjobhistory.FieldScript, field.TypeString, value)
-	}
-	if sjhu.mutation.ScriptCleared() {
-		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
 	}
 	if value, ok := sjhu.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
@@ -624,12 +615,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableScript(s *string) *Schedul
 	if s != nil {
 		sjhuo.SetScript(*s)
 	}
-	return sjhuo
-}
-
-// ClearScript clears the value of the "script" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearScript() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearScript()
 	return sjhuo
 }
 
@@ -863,9 +848,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if value, ok := sjhuo.mutation.Script(); ok {
 		_spec.SetField(scheduledjobhistory.FieldScript, field.TypeString, value)
-	}
-	if sjhuo.mutation.ScriptCleared() {
-		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
 	}
 	if value, ok := sjhuo.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
