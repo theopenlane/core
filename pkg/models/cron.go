@@ -85,6 +85,7 @@ func (c *Cron) Scan(value interface{}) error {
 	}
 
 	*c = Cron(str)
+
 	return nil
 }
 
