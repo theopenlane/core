@@ -54,7 +54,7 @@ type ScheduledJob struct {
 	// the schedule to run this job
 	Cadence models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
-	Cron *string `json:"cron,omitempty"`
+	Cron *models.Cron `json:"cron,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduledJobQuery when eager-loading is set.
 	Edges        ScheduledJobEdges `json:"edges"`
@@ -88,11 +88,13 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case scheduledjob.FieldCron:
+			values[i] = &sql.NullScanner{S: new(models.Cron)}
 		case scheduledjob.FieldTags, scheduledjob.FieldConfiguration, scheduledjob.FieldCadence:
 			values[i] = new([]byte)
 		case scheduledjob.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldJobType, scheduledjob.FieldScript, scheduledjob.FieldCron:
+		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldJobType, scheduledjob.FieldScript:
 			values[i] = new(sql.NullString)
 		case scheduledjob.FieldCreatedAt, scheduledjob.FieldUpdatedAt, scheduledjob.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -220,11 +222,11 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 				}
 			}
 		case scheduledjob.FieldCron:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
 			} else if value.Valid {
-				sj.Cron = new(string)
-				*sj.Cron = value.String
+				sj.Cron = new(models.Cron)
+				*sj.Cron = *value.S.(*models.Cron)
 			}
 		default:
 			sj.selectValues.Set(columns[i], values[i])
@@ -317,7 +319,7 @@ func (sj *ScheduledJob) String() string {
 	builder.WriteString(", ")
 	if v := sj.Cron; v != nil {
 		builder.WriteString("cron=")
-		builder.WriteString(*v)
+		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteByte(')')
 	return builder.String()

@@ -173,15 +173,15 @@ func (csjhu *ControlScheduledJobHistoryUpdate) ClearCadence() *ControlScheduledJ
 }
 
 // SetCron sets the "cron" field.
-func (csjhu *ControlScheduledJobHistoryUpdate) SetCron(s string) *ControlScheduledJobHistoryUpdate {
-	csjhu.mutation.SetCron(s)
+func (csjhu *ControlScheduledJobHistoryUpdate) SetCron(m models.Cron) *ControlScheduledJobHistoryUpdate {
+	csjhu.mutation.SetCron(m)
 	return csjhu
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (csjhu *ControlScheduledJobHistoryUpdate) SetNillableCron(s *string) *ControlScheduledJobHistoryUpdate {
-	if s != nil {
-		csjhu.SetCron(*s)
+func (csjhu *ControlScheduledJobHistoryUpdate) SetNillableCron(m *models.Cron) *ControlScheduledJobHistoryUpdate {
+	if m != nil {
+		csjhu.SetCron(*m)
 	}
 	return csjhu
 }
@@ -496,15 +496,15 @@ func (csjhuo *ControlScheduledJobHistoryUpdateOne) ClearCadence() *ControlSchedu
 }
 
 // SetCron sets the "cron" field.
-func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetCron(s string) *ControlScheduledJobHistoryUpdateOne {
-	csjhuo.mutation.SetCron(s)
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetCron(m models.Cron) *ControlScheduledJobHistoryUpdateOne {
+	csjhuo.mutation.SetCron(m)
 	return csjhuo
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetNillableCron(s *string) *ControlScheduledJobHistoryUpdateOne {
-	if s != nil {
-		csjhuo.SetCron(*s)
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetNillableCron(m *models.Cron) *ControlScheduledJobHistoryUpdateOne {
+	if m != nil {
+		csjhuo.SetCron(*m)
 	}
 	return csjhuo
 }

@@ -1671,7 +1671,7 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 type CreateControlScheduledJobInput struct {
 	Configuration models.JobConfiguration
 	Cadence       *models.JobCadence
-	Cron          *string
+	Cron          *models.Cron
 	OwnerID       *string
 	JobID         string
 	ControlIDs    []string
@@ -1715,7 +1715,7 @@ type UpdateControlScheduledJobInput struct {
 	ClearCadence        bool
 	Cadence             *models.JobCadence
 	ClearCron           bool
-	Cron                *string
+	Cron                *models.Cron
 	ClearOwner          bool
 	OwnerID             *string
 	JobID               *string
@@ -7908,7 +7908,7 @@ type CreateScheduledJobInput struct {
 	Script        *string
 	Configuration models.JobConfiguration
 	Cadence       *models.JobCadence
-	Cron          *string
+	Cron          *models.Cron
 	OwnerID       *string
 }
 
@@ -7960,7 +7960,7 @@ type UpdateScheduledJobInput struct {
 	ClearCadence     bool
 	Cadence          *models.JobCadence
 	ClearCron        bool
-	Cron             *string
+	Cron             *models.Cron
 	ClearOwner       bool
 	OwnerID          *string
 }

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql/driver"
 	"fmt"
 	"io"
 	"time"
@@ -67,6 +68,24 @@ func (c Cron) String() string { return string(c) }
 // MarshalGQL implement the Marshaler interface for gqlgen
 func (c Cron) MarshalGQL(w io.Writer) {
 	_, _ = io.WriteString(w, fmt.Sprintf("%q", c.String()))
+}
+
+func (c Cron) Value() (driver.Value, error) {
+	return c, nil
+}
+
+func (c *Cron) Scan(value interface{}) error {
+	if value == nil {
+		return nil
+	}
+
+	str, ok := value.(string)
+	if !ok {
+		return fmt.Errorf("unsupported Scan type for Cron: %T", value) //nolint:err113
+	}
+
+	*c = Cron(str)
+	return nil
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen

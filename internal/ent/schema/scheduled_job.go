@@ -81,6 +81,7 @@ func (ScheduledJob) Fields() []ent.Field {
 			Optional(),
 
 		field.String("cron").
+			GoType(models.Cron("")).
 			Comment("cron syntax").
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),

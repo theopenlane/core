@@ -178,15 +178,15 @@ func (csju *ControlScheduledJobUpdate) ClearCadence() *ControlScheduledJobUpdate
 }
 
 // SetCron sets the "cron" field.
-func (csju *ControlScheduledJobUpdate) SetCron(s string) *ControlScheduledJobUpdate {
-	csju.mutation.SetCron(s)
+func (csju *ControlScheduledJobUpdate) SetCron(m models.Cron) *ControlScheduledJobUpdate {
+	csju.mutation.SetCron(m)
 	return csju
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (csju *ControlScheduledJobUpdate) SetNillableCron(s *string) *ControlScheduledJobUpdate {
-	if s != nil {
-		csju.SetCron(*s)
+func (csju *ControlScheduledJobUpdate) SetNillableCron(m *models.Cron) *ControlScheduledJobUpdate {
+	if m != nil {
+		csju.SetCron(*m)
 	}
 	return csju
 }
@@ -379,6 +379,11 @@ func (csju *ControlScheduledJobUpdate) check() error {
 	if v, ok := csju.mutation.Cadence(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cadence": %w`, err)}
+		}
+	}
+	if v, ok := csju.mutation.Cron(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cron": %w`, err)}
 		}
 	}
 	if csju.mutation.JobCleared() && len(csju.mutation.JobIDs()) > 0 {
@@ -804,15 +809,15 @@ func (csjuo *ControlScheduledJobUpdateOne) ClearCadence() *ControlScheduledJobUp
 }
 
 // SetCron sets the "cron" field.
-func (csjuo *ControlScheduledJobUpdateOne) SetCron(s string) *ControlScheduledJobUpdateOne {
-	csjuo.mutation.SetCron(s)
+func (csjuo *ControlScheduledJobUpdateOne) SetCron(m models.Cron) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.SetCron(m)
 	return csjuo
 }
 
 // SetNillableCron sets the "cron" field if the given value is not nil.
-func (csjuo *ControlScheduledJobUpdateOne) SetNillableCron(s *string) *ControlScheduledJobUpdateOne {
-	if s != nil {
-		csjuo.SetCron(*s)
+func (csjuo *ControlScheduledJobUpdateOne) SetNillableCron(m *models.Cron) *ControlScheduledJobUpdateOne {
+	if m != nil {
+		csjuo.SetCron(*m)
 	}
 	return csjuo
 }
@@ -1018,6 +1023,11 @@ func (csjuo *ControlScheduledJobUpdateOne) check() error {
 	if v, ok := csjuo.mutation.Cadence(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cadence": %w`, err)}
+		}
+	}
+	if v, ok := csjuo.mutation.Cron(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cron": %w`, err)}
 		}
 	}
 	if csjuo.mutation.JobCleared() && len(csjuo.mutation.JobIDs()) > 0 {
