@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -30,7 +29,7 @@ func HookProgramAuthz() ent.Hook {
 			if m.Op().Is(ent.OpCreate) {
 				// create the program member admin and relationship tuple for parent org
 				err = programCreateHook(ctx, m)
-			} else if m.Op().Is(ent.OpDelete|ent.OpDeleteOne) || entx.CheckIsSoftDelete(ctx) {
+			} else if isDeleteOp(ctx, m) {
 				// delete all relationship tuples on delete, or soft delete (Update Op)
 				err = programDeleteHook(ctx, m)
 			}

@@ -1473,8 +1473,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
@@ -1488,19 +1486,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "group_memberships_groups_group",
-				Columns:    []*schema.Column{GroupMembershipsColumns[8]},
+				Columns:    []*schema.Column{GroupMembershipsColumns[6]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "group_memberships_users_user",
-				Columns:    []*schema.Column{GroupMembershipsColumns[9]},
+				Columns:    []*schema.Column{GroupMembershipsColumns[7]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "group_memberships_org_memberships_orgmembership",
-				Columns:    []*schema.Column{GroupMembershipsColumns[10]},
+				Columns:    []*schema.Column{GroupMembershipsColumns[8]},
 				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1514,10 +1512,7 @@ var (
 			{
 				Name:    "groupmembership_user_id_group_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupMembershipsColumns[9], GroupMembershipsColumns[8]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
+				Columns: []*schema.Column{GroupMembershipsColumns[7], GroupMembershipsColumns[6]},
 			},
 		},
 	}
@@ -1531,8 +1526,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
@@ -2459,8 +2452,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
@@ -2473,13 +2464,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_memberships_organizations_organization",
-				Columns:    []*schema.Column{OrgMembershipsColumns[8]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[6]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "org_memberships_users_user",
-				Columns:    []*schema.Column{OrgMembershipsColumns[9]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[7]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -2493,10 +2484,7 @@ var (
 			{
 				Name:    "orgmembership_user_id_organization_id",
 				Unique:  true,
-				Columns: []*schema.Column{OrgMembershipsColumns[9], OrgMembershipsColumns[8]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
+				Columns: []*schema.Column{OrgMembershipsColumns[7], OrgMembershipsColumns[6]},
 			},
 		},
 	}
@@ -2510,8 +2498,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
@@ -3088,8 +3074,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
@@ -3103,19 +3087,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "program_memberships_programs_program",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[8]},
+				Columns:    []*schema.Column{ProgramMembershipsColumns[6]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "program_memberships_users_user",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[9]},
+				Columns:    []*schema.Column{ProgramMembershipsColumns[7]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "program_memberships_org_memberships_orgmembership",
-				Columns:    []*schema.Column{ProgramMembershipsColumns[10]},
+				Columns:    []*schema.Column{ProgramMembershipsColumns[8]},
 				RefColumns: []*schema.Column{OrgMembershipsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3129,10 +3113,7 @@ var (
 			{
 				Name:    "programmembership_user_id_program_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProgramMembershipsColumns[9], ProgramMembershipsColumns[8]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
+				Columns: []*schema.Column{ProgramMembershipsColumns[7], ProgramMembershipsColumns[6]},
 			},
 		},
 	}
@@ -3146,8 +3127,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},

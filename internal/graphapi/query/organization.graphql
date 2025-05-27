@@ -160,52 +160,84 @@ query GetAllOrganizations {
           id
         }
         controlCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         programCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         procedureCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         internalPolicyCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         controlObjectiveCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         narrativeCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         riskCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         templateCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         createdAt
         updatedAt
@@ -277,52 +309,84 @@ query GetOrganizationByID($organizationId: ID!) {
       id
     }
     controlCreators {
-      id
-      displayID
-      name
-      displayName
+      edges {
+        node {
+          id
+          displayID
+          name
+          displayName
+        }
+      }
     }
     programCreators {
-      id
-      displayID
-      name
-      displayName
+      edges {
+        node {
+          id
+          displayID
+          name
+          displayName
+        }
+      }
     }
     procedureCreators {
-      id
-      displayID
-      name
-      displayName
+      edges {
+        node {
+          id
+          displayID
+          name
+          displayName
+        }
+      }
     }
     internalPolicyCreators {
-      id
-      displayID
-      name
-      displayName
+      edges {
+        node {
+          id
+          displayID
+          name
+          displayName
+        }
+      }
     }
     controlObjectiveCreators {
-      id
-      displayID
-      name
-      displayName
+      edges {
+        node {
+          id
+          displayID
+          name
+          displayName
+        }
+      }
     }
     narrativeCreators {
-      id
-      displayID
-      name
-      displayName
+      edges {
+        node {
+          id
+          displayID
+          name
+          displayName
+        }
+      }
     }
     riskCreators {
-      id
-      displayID
-      name
-      displayName
+      edges {
+        node {
+          id
+          displayID
+          name
+          displayName
+        }
+      }
     }
     templateCreators {
-      id
-      displayID
-      name
-      displayName
+      edges {
+        node {
+          id
+          displayID
+          name
+          displayName
+        }
+      }
     }
     createdAt
     createdBy
@@ -394,52 +458,84 @@ query GetOrganizations($where: OrganizationWhereInput) {
           id
         }
         controlCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         programCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         procedureCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         internalPolicyCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         controlObjectiveCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         narrativeCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         riskCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         templateCreators {
-          id
-          displayID
-          name
-          displayName
+          edges {
+            node {
+              id
+              displayID
+              name
+              displayName
+            }
+          }
         }
         createdAt
         updatedAt
@@ -501,52 +597,84 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
         id
       }
       controlCreators {
-        id
-        displayID
-        name
-        displayName
+        edges {
+          node {
+            id
+            displayID
+            name
+            displayName
+          }
+        }
       }
       programCreators {
-        id
-        displayID
-        name
-        displayName
+        edges {
+          node {
+            id
+            displayID
+            name
+            displayName
+          }
+        }
       }
       procedureCreators {
-        id
-        displayID
-        name
-        displayName
+        edges {
+          node {
+            id
+            displayID
+            name
+            displayName
+          }
+        }
       }
       internalPolicyCreators {
-        id
-        displayID
-        name
-        displayName
+        edges {
+          node {
+            id
+            displayID
+            name
+            displayName
+          }
+        }
       }
       controlObjectiveCreators {
-        id
-        displayID
-        name
-        displayName
+        edges {
+          node {
+            id
+            displayID
+            name
+            displayName
+          }
+        }
       }
       narrativeCreators {
-        id
-        displayID
-        name
-        displayName
+        edges {
+          node {
+            id
+            displayID
+            name
+            displayName
+          }
+        }
       }
       riskCreators {
-        id
-        displayID
-        name
-        displayName
+        edges {
+          node {
+            id
+            displayID
+            name
+            displayName
+          }
+        }
       }
       templateCreators {
-        id
-        displayID
-        name
-        displayName
+        edges {
+          node {
+            id
+            displayID
+            name
+            displayName
+          }
+        }
       }
     }
   }

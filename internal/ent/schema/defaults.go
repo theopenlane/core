@@ -44,6 +44,8 @@ type mixinConfig struct {
 	prefix string
 	// excludeTags if true, the TagMixin will be excluded
 	excludeTags bool
+	// excludeSoftDelete if true, the SoftDeleteMixin will be excluded
+	excludeSoftDelete bool
 	// includeRevision if true, the RevisionMixin will be included
 	includeRevision bool
 	// excludeAnnotations if true, the AnnotationMixin will be excluded
@@ -57,8 +59,6 @@ type mixinConfig struct {
 var baseDefaultMixins = []ent.Mixin{
 	// audit mixin includes created_at, updated_at, and created_by
 	emixin.AuditMixin{},
-	// soft delete mixin includes deleted_at and history tables
-	mixin.SoftDeleteMixin{},
 }
 
 // getMixins returns the mixins based on the configuration provided
@@ -72,6 +72,10 @@ var baseDefaultMixins = []ent.Mixin{
 // - any additional mixins can  be appended using the additionalMixins field
 func (m mixinConfig) getMixins() []ent.Mixin {
 	mixins := baseDefaultMixins
+
+	if !m.excludeSoftDelete {
+		mixins = append(mixins, mixin.SoftDeleteMixin{})
+	}
 
 	// always include the IDMixin, if a prefix is provided it will be used
 	idMixin := emixin.IDMixin{}

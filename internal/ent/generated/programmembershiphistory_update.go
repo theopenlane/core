@@ -64,46 +64,6 @@ func (pmhu *ProgramMembershipHistoryUpdate) ClearUpdatedBy() *ProgramMembershipH
 	return pmhu
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (pmhu *ProgramMembershipHistoryUpdate) SetDeletedAt(t time.Time) *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.SetDeletedAt(t)
-	return pmhu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pmhu *ProgramMembershipHistoryUpdate) SetNillableDeletedAt(t *time.Time) *ProgramMembershipHistoryUpdate {
-	if t != nil {
-		pmhu.SetDeletedAt(*t)
-	}
-	return pmhu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (pmhu *ProgramMembershipHistoryUpdate) ClearDeletedAt() *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.ClearDeletedAt()
-	return pmhu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pmhu *ProgramMembershipHistoryUpdate) SetDeletedBy(s string) *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.SetDeletedBy(s)
-	return pmhu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pmhu *ProgramMembershipHistoryUpdate) SetNillableDeletedBy(s *string) *ProgramMembershipHistoryUpdate {
-	if s != nil {
-		pmhu.SetDeletedBy(*s)
-	}
-	return pmhu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (pmhu *ProgramMembershipHistoryUpdate) ClearDeletedBy() *ProgramMembershipHistoryUpdate {
-	pmhu.mutation.ClearDeletedBy()
-	return pmhu
-}
-
 // SetRole sets the "role" field.
 func (pmhu *ProgramMembershipHistoryUpdate) SetRole(e enums.Role) *ProgramMembershipHistoryUpdate {
 	pmhu.mutation.SetRole(e)
@@ -208,18 +168,6 @@ func (pmhu *ProgramMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int,
 	if pmhu.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembershiphistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := pmhu.mutation.DeletedAt(); ok {
-		_spec.SetField(programmembershiphistory.FieldDeletedAt, field.TypeTime, value)
-	}
-	if pmhu.mutation.DeletedAtCleared() {
-		_spec.ClearField(programmembershiphistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := pmhu.mutation.DeletedBy(); ok {
-		_spec.SetField(programmembershiphistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if pmhu.mutation.DeletedByCleared() {
-		_spec.ClearField(programmembershiphistory.FieldDeletedBy, field.TypeString)
-	}
 	if value, ok := pmhu.mutation.Role(); ok {
 		_spec.SetField(programmembershiphistory.FieldRole, field.TypeEnum, value)
 	}
@@ -276,46 +224,6 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) SetNillableUpdatedBy(s *string) 
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (pmhuo *ProgramMembershipHistoryUpdateOne) ClearUpdatedBy() *ProgramMembershipHistoryUpdateOne {
 	pmhuo.mutation.ClearUpdatedBy()
-	return pmhuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SetDeletedAt(t time.Time) *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.SetDeletedAt(t)
-	return pmhuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SetNillableDeletedAt(t *time.Time) *ProgramMembershipHistoryUpdateOne {
-	if t != nil {
-		pmhuo.SetDeletedAt(*t)
-	}
-	return pmhuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) ClearDeletedAt() *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.ClearDeletedAt()
-	return pmhuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SetDeletedBy(s string) *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.SetDeletedBy(s)
-	return pmhuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) SetNillableDeletedBy(s *string) *ProgramMembershipHistoryUpdateOne {
-	if s != nil {
-		pmhuo.SetDeletedBy(*s)
-	}
-	return pmhuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) ClearDeletedBy() *ProgramMembershipHistoryUpdateOne {
-	pmhuo.mutation.ClearDeletedBy()
 	return pmhuo
 }
 
@@ -452,18 +360,6 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_n
 	}
 	if pmhuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(programmembershiphistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := pmhuo.mutation.DeletedAt(); ok {
-		_spec.SetField(programmembershiphistory.FieldDeletedAt, field.TypeTime, value)
-	}
-	if pmhuo.mutation.DeletedAtCleared() {
-		_spec.ClearField(programmembershiphistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := pmhuo.mutation.DeletedBy(); ok {
-		_spec.SetField(programmembershiphistory.FieldDeletedBy, field.TypeString, value)
-	}
-	if pmhuo.mutation.DeletedByCleared() {
-		_spec.ClearField(programmembershiphistory.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := pmhuo.mutation.Role(); ok {
 		_spec.SetField(programmembershiphistory.FieldRole, field.TypeEnum, value)

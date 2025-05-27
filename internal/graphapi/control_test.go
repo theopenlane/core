@@ -559,23 +559,23 @@ func TestMutationCreateControl(t *testing.T) {
 			}
 
 			if len(tc.request.EditorIDs) > 0 {
-				assert.Check(t, is.Len(resp.CreateControl.Control.Editors, 1))
-				for _, edge := range resp.CreateControl.Control.Editors {
-					assert.Equal(t, testUser1.GroupID, edge.ID)
+				assert.Check(t, is.Len(resp.CreateControl.Control.Editors.Edges, 1))
+				for _, edge := range resp.CreateControl.Control.Editors.Edges {
+					assert.Equal(t, testUser1.GroupID, edge.Node.ID)
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
-				assert.Check(t, is.Len(resp.CreateControl.Control.BlockedGroups, 1))
-				for _, edge := range resp.CreateControl.Control.BlockedGroups {
-					assert.Equal(t, blockedGroup.ID, edge.ID)
+				assert.Check(t, is.Len(resp.CreateControl.Control.BlockedGroups.Edges, 1))
+				for _, edge := range resp.CreateControl.Control.BlockedGroups.Edges {
+					assert.Equal(t, blockedGroup.ID, edge.Node.ID)
 				}
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
-				assert.Check(t, is.Len(resp.CreateControl.Control.Viewers, 1))
-				for _, edge := range resp.CreateControl.Control.Viewers {
-					assert.Equal(t, viewerGroup.ID, edge.ID)
+				assert.Check(t, is.Len(resp.CreateControl.Control.Viewers.Edges, 1))
+				for _, edge := range resp.CreateControl.Control.Viewers.Edges {
+					assert.Equal(t, viewerGroup.ID, edge.Node.ID)
 				}
 			}
 
@@ -1114,10 +1114,10 @@ func TestMutationUpdateControl(t *testing.T) {
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateControl.Control.Viewers, 1))
+				assert.Assert(t, is.Len(resp.UpdateControl.Control.Viewers.Edges, 1))
 				found := false
-				for _, edge := range resp.UpdateControl.Control.Viewers {
-					if edge.ID == tc.request.AddViewerIDs[0] {
+				for _, edge := range resp.UpdateControl.Control.Viewers.Edges {
+					if edge.Node.ID == tc.request.AddViewerIDs[0] {
 						found = true
 						break
 					}

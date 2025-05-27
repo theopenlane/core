@@ -90,11 +90,16 @@ func (r *mutationResolver) UpdateOrgMembership(ctx context.Context, id string, i
 
 // DeleteOrgMembership is the resolver for the deleteOrgMembership field.
 func (r *mutationResolver) DeleteOrgMembership(ctx context.Context, id string) (*model.OrgMembershipDeletePayload, error) {
+	res, err := withTransactionalMutation(ctx).OrgMembership.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "orgmembership"})
+	}
+
 	if err := withTransactionalMutation(ctx).OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "orgmembership"})
 	}
 
-	if err := generated.OrgMembershipEdgeCleanup(ctx, id); err != nil {
+	if err := generated.OrgMembershipEdgeCleanup(ctx, res.UserID); err != nil {
 		return nil, newCascadeDeleteError(err)
 	}
 

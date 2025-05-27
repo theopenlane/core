@@ -3,6 +3,7 @@ package schema
 import (
 	"fmt"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
@@ -107,13 +108,28 @@ func withSkipViewPermissions() groupPermissionsOption {
 // Edges of the GroupPermissionsMixin
 func (g GroupPermissionsMixin) Edges() []ent.Edge {
 	blockEdge := edge.To("blocked_groups", Group.Type).
-		Comment("groups that are blocked from viewing or editing the risk")
+		Comment("groups that are blocked from viewing or editing the risk").
+		Annotations(
+			entgql.RelayConnection(),
+			entgql.QueryField(),
+			entgql.MultiOrder(),
+		)
 
 	editEdge := edge.To("editors", Group.Type).
-		Comment("provides edit access to the risk to members of the group")
+		Comment("provides edit access to the risk to members of the group").
+		Annotations(
+			entgql.RelayConnection(),
+			entgql.QueryField(),
+			entgql.MultiOrder(),
+		)
 
 	viewEdge := edge.To("viewers", Group.Type).
-		Comment("provides view access to the risk to members of the group")
+		Comment("provides view access to the risk to members of the group").
+		Annotations(
+			entgql.RelayConnection(),
+			entgql.QueryField(),
+			entgql.MultiOrder(),
+		)
 
 	edges := []ent.Edge{blockEdge, editEdge}
 
@@ -173,9 +189,19 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 
 		var defaultReverseEdges = []ent.Edge{
 			edge.From(fmt.Sprintf("%s_editors", sch.Name()), sch.GetType()).
-				Ref("editors"),
+				Ref("editors").
+				Annotations(
+					entgql.RelayConnection(),
+					entgql.QueryField(),
+					entgql.MultiOrder(),
+				),
 			edge.From(fmt.Sprintf("%s_blocked_groups", sch.Name()), sch.GetType()).
-				Ref("blocked_groups"),
+				Ref("blocked_groups").
+				Annotations(
+					entgql.RelayConnection(),
+					entgql.QueryField(),
+					entgql.MultiOrder(),
+				),
 		}
 
 		edges = append(edges, defaultReverseEdges...)
@@ -183,7 +209,12 @@ func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
 		// add the view edge if the view permissions are enabled
 		if schema.ViewPermissions {
 			viewerEdge := edge.From(fmt.Sprintf("%s_viewers", sch.Name()), sch.GetType()).
-				Ref("viewers")
+				Ref("viewers").
+				Annotations(
+					entgql.RelayConnection(),
+					entgql.QueryField(),
+					entgql.MultiOrder(),
+				)
 
 			edges = append(edges, viewerEdge)
 		}

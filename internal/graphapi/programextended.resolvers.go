@@ -243,7 +243,7 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 }
 
 // AddProgramMembers is the resolver for the addProgramMembers field.
-func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj *generated.UpdateProgramInput, data []*generated.CreateProgramMembershipInput) error {
+func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj *generated.UpdateProgramInput, data []*model.AddProgramMembershipInput) error {
 	programID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if programID == nil {
 		log.Error().Msg("unable to get program from context")
@@ -259,8 +259,12 @@ func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj 
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.ProgramMembershipCreate, len(data))
 	for i := range data {
-		input := *data[i]
-		input.ProgramID = *programID
+		input := generated.CreateProgramMembershipInput{
+			ProgramID: *programID,
+			UserID:    data[i].UserID,
+			Role:      data[i].Role,
+		}
+
 		builders[i] = c.ProgramMembership.Create().SetInput(input)
 	}
 

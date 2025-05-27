@@ -489,23 +489,23 @@ func TestMutationCreateProgram(t *testing.T) {
 			}
 
 			if len(tc.request.EditorIDs) > 0 {
-				assert.Assert(t, is.Len(resp.CreateProgram.Program.Editors, 1))
-				for _, edge := range resp.CreateProgram.Program.Editors {
-					assert.Check(t, is.Equal(testUser1.GroupID, edge.ID))
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.Editors.Edges, 1))
+				for _, edge := range resp.CreateProgram.Program.Editors.Edges {
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
-				assert.Assert(t, is.Len(resp.CreateProgram.Program.BlockedGroups, 1))
-				for _, edge := range resp.CreateProgram.Program.BlockedGroups {
-					assert.Check(t, is.Equal(blockedGroup.ID, edge.ID))
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.BlockedGroups.Edges, 1))
+				for _, edge := range resp.CreateProgram.Program.BlockedGroups.Edges {
+					assert.Check(t, is.Equal(blockedGroup.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.ViewerIDs) > 0 {
-				assert.Assert(t, is.Len(resp.CreateProgram.Program.Viewers, 1))
-				for _, edge := range resp.CreateProgram.Program.Viewers {
-					assert.Check(t, is.Equal(viewerGroup.ID, edge.ID))
+				assert.Assert(t, is.Len(resp.CreateProgram.Program.Viewers.Edges, 1))
+				for _, edge := range resp.CreateProgram.Program.Viewers.Edges {
+					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}
 			}
 
@@ -529,9 +529,7 @@ func TestMutationCreateProgram(t *testing.T) {
 func TestMutationUpdateProgram(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{
-		ProgramID: &program.ID,
-	})
+	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &openlaneclient.ProgramMembershipWhereInput{})
 	assert.NilError(t, err)
 
 	testUserProgramMemberID := ""
@@ -638,7 +636,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		{
 			name: "add program member, cannot add self",
 			request: openlaneclient.UpdateProgramInput{
-				AddProgramMembers: []*openlaneclient.CreateProgramMembershipInput{
+				AddProgramMembers: []*openlaneclient.AddProgramMembershipInput{
 					{
 						UserID: adminUser.ID,
 					},
@@ -651,7 +649,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 		{
 			name: "add program member, can add another user",
 			request: openlaneclient.UpdateProgramInput{
-				AddProgramMembers: []*openlaneclient.CreateProgramMembershipInput{
+				AddProgramMembers: []*openlaneclient.AddProgramMembershipInput{
 					{
 						UserID: adminUser.ID,
 					},
@@ -667,6 +665,19 @@ func TestMutationUpdateProgram(t *testing.T) {
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, re-add program member as editor",
+			request: openlaneclient.UpdateProgramInput{
+				AddProgramMembers: []*openlaneclient.AddProgramMembershipInput{
+					{
+						UserID: pm.UserID,
+						Role:   &enums.RoleAdmin,
+					},
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, update edge - procedure",
@@ -814,23 +825,23 @@ func TestMutationUpdateProgram(t *testing.T) {
 			}
 
 			if len(tc.request.AddEditorIDs) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Editors, 1))
-				for _, edge := range resp.UpdateProgram.Program.Editors {
-					assert.Check(t, is.Equal(testUser1.GroupID, edge.ID))
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Editors.Edges, 1))
+				for _, edge := range resp.UpdateProgram.Program.Editors.Edges {
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.AddBlockedGroupIDs) > 0 {
 				assert.Assert(t, is.Len(resp.UpdateProgram.Program.BlockedGroups, 1))
-				for _, edge := range resp.UpdateProgram.Program.BlockedGroups {
-					assert.Check(t, is.Equal(blockGroup.ID, edge.ID))
+				for _, edge := range resp.UpdateProgram.Program.BlockedGroups.Edges {
+					assert.Check(t, is.Equal(blockGroup.ID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Viewers, 1))
-				for _, edge := range resp.UpdateProgram.Program.Viewers {
-					assert.Check(t, is.Equal(viewerGroup.ID, edge.ID))
+				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Viewers.Edges, 1))
+				for _, edge := range resp.UpdateProgram.Program.Viewers.Edges {
+					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}
 
 				// ensure the user has access to the program now
@@ -843,10 +854,22 @@ func TestMutationUpdateProgram(t *testing.T) {
 			if len(tc.request.AddProgramMembers) > 0 {
 				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Members.Edges, 3))
 
-				// it should have the owner and the admin user and the other user added in the test setup
-				assert.Equal(t, testUser1.ID, resp.UpdateProgram.Program.Members.Edges[0].Node.User.ID)
-				assert.Equal(t, programUser.ID, resp.UpdateProgram.Program.Members.Edges[1].Node.User.ID)
-				assert.Equal(t, adminUser.ID, resp.UpdateProgram.Program.Members.Edges[2].Node.User.ID)
+				testUserFound := false
+				programUserFound := false
+				adminUserFound := false
+				for _, edge := range resp.UpdateProgram.Program.Members.Edges {
+					if edge.Node.User.ID == testUser1.ID {
+						testUserFound = true
+					} else if edge.Node.User.ID == programUser.ID {
+						programUserFound = true
+					} else if edge.Node.User.ID == adminUser.ID {
+						adminUserFound = true
+					}
+				}
+				assert.Check(t, testUserFound, "test user not found in program members")
+				// here originally, and then later re-added as an admin
+				assert.Check(t, programUserFound, "program user not found in program members")
+				assert.Check(t, adminUserFound, "admin user not found in program members")
 			}
 
 			// member was removed, ensure there are two members left

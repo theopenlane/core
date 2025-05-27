@@ -1476,6 +1476,13 @@ input ActionPlanWhereInput {
 	hasProgramsWith: [ProgramWhereInput!]
 }
 """
+AddProgramMembershipInput is used for create ProgramMembership object under an existing program
+"""
+input AddProgramMembershipInput {
+	role: ProgramMembershipRole
+	userID: ID!
+}
+"""
 The `Address` scalar type represents a physical or mailing address.
 This scalar can be used to store and validate address information in the GraphQL schema.
 It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`
@@ -2737,18 +2744,99 @@ type Control implements Node {
 	"""
 	delegate: Group
 	owner: Organization
-	"""
-	groups that are blocked from viewing or editing the risk
-	"""
-	blockedGroups: [Group!]
-	"""
-	provides edit access to the risk to members of the group
-	"""
-	editors: [Group!]
-	"""
-	provides view access to the risk to members of the group
-	"""
-	viewers: [Group!]
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	standard: Standard
 	programs(
 		"""
@@ -4249,18 +4337,99 @@ type ControlObjective implements Node {
 	"""
 	subcategory: String
 	owner: Organization
-	"""
-	groups that are blocked from viewing or editing the risk
-	"""
-	blockedGroups: [Group!]
-	"""
-	provides edit access to the risk to members of the group
-	"""
-	editors: [Group!]
-	"""
-	provides view access to the risk to members of the group
-	"""
-	viewers: [Group!]
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	programs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -14617,25 +14786,595 @@ type Group implements Node {
 	"""
 	displayName: String!
 	owner: Organization
-	programEditors: [Program!]
-	programBlockedGroups: [Program!]
-	programViewers: [Program!]
-	riskEditors: [Risk!]
-	riskBlockedGroups: [Risk!]
-	riskViewers: [Risk!]
-	controlObjectiveEditors: [ControlObjective!]
-	controlObjectiveBlockedGroups: [ControlObjective!]
-	controlObjectiveViewers: [ControlObjective!]
-	controlEditors: [Control!]
-	controlBlockedGroups: [Control!]
-	controlViewers: [Control!]
-	narrativeEditors: [Narrative!]
-	narrativeBlockedGroups: [Narrative!]
-	narrativeViewers: [Narrative!]
-	procedureEditors: [Procedure!]
-	procedureBlockedGroups: [Procedure!]
-	internalPolicyEditors: [InternalPolicy!]
-	internalPolicyBlockedGroups: [InternalPolicy!]
+	programEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Programs returned from the connection.
+		"""
+		orderBy: [ProgramOrder!]
+
+		"""
+		Filtering options for Programs returned from the connection.
+		"""
+		where: ProgramWhereInput
+	): ProgramConnection!
+	programBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Programs returned from the connection.
+		"""
+		orderBy: [ProgramOrder!]
+
+		"""
+		Filtering options for Programs returned from the connection.
+		"""
+		where: ProgramWhereInput
+	): ProgramConnection!
+	programViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Programs returned from the connection.
+		"""
+		orderBy: [ProgramOrder!]
+
+		"""
+		Filtering options for Programs returned from the connection.
+		"""
+		where: ProgramWhereInput
+	): ProgramConnection!
+	riskEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Risks returned from the connection.
+		"""
+		orderBy: [RiskOrder!]
+
+		"""
+		Filtering options for Risks returned from the connection.
+		"""
+		where: RiskWhereInput
+	): RiskConnection!
+	riskBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Risks returned from the connection.
+		"""
+		orderBy: [RiskOrder!]
+
+		"""
+		Filtering options for Risks returned from the connection.
+		"""
+		where: RiskWhereInput
+	): RiskConnection!
+	riskViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Risks returned from the connection.
+		"""
+		orderBy: [RiskOrder!]
+
+		"""
+		Filtering options for Risks returned from the connection.
+		"""
+		where: RiskWhereInput
+	): RiskConnection!
+	controlObjectiveEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlObjectives returned from the connection.
+		"""
+		orderBy: [ControlObjectiveOrder!]
+
+		"""
+		Filtering options for ControlObjectives returned from the connection.
+		"""
+		where: ControlObjectiveWhereInput
+	): ControlObjectiveConnection!
+	controlObjectiveBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlObjectives returned from the connection.
+		"""
+		orderBy: [ControlObjectiveOrder!]
+
+		"""
+		Filtering options for ControlObjectives returned from the connection.
+		"""
+		where: ControlObjectiveWhereInput
+	): ControlObjectiveConnection!
+	controlObjectiveViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlObjectives returned from the connection.
+		"""
+		orderBy: [ControlObjectiveOrder!]
+
+		"""
+		Filtering options for ControlObjectives returned from the connection.
+		"""
+		where: ControlObjectiveWhereInput
+	): ControlObjectiveConnection!
+	controlEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	controlBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	controlViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	narrativeEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Narratives returned from the connection.
+		"""
+		orderBy: [NarrativeOrder!]
+
+		"""
+		Filtering options for Narratives returned from the connection.
+		"""
+		where: NarrativeWhereInput
+	): NarrativeConnection!
+	narrativeBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Narratives returned from the connection.
+		"""
+		orderBy: [NarrativeOrder!]
+
+		"""
+		Filtering options for Narratives returned from the connection.
+		"""
+		where: NarrativeWhereInput
+	): NarrativeConnection!
+	narrativeViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Narratives returned from the connection.
+		"""
+		orderBy: [NarrativeOrder!]
+
+		"""
+		Filtering options for Narratives returned from the connection.
+		"""
+		where: NarrativeWhereInput
+	): NarrativeConnection!
+	procedureEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
+		Filtering options for Procedures returned from the connection.
+		"""
+		where: ProcedureWhereInput
+	): ProcedureConnection!
+	procedureBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
+		Filtering options for Procedures returned from the connection.
+		"""
+		where: ProcedureWhereInput
+	): ProcedureConnection!
+	internalPolicyEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
+	internalPolicyBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 	setting: GroupSetting
 	users(
 		"""
@@ -14826,7 +15565,27 @@ type Group implements Node {
 	"""
 	permissions the group provides
 	"""
-	permissions: [GroupPermissions!]
+	permissions(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): GroupPermissionConnection!
 }
 """
 Return response for createBulkGroup mutation
@@ -15683,16 +16442,142 @@ enum GroupOrderField {
 	display_name
 }
 """
-GroupPermissions contains details for the related object and the permissions
+GroupPermission contains details for the related object and the permissions
 the group provides (or removes in the case of blocked) to the object within the
 organization
 """
-type GroupPermissions {
+type GroupPermission implements Node {
+	"""
+	the type of object the permissions are for, e.g. Program, Control, etc.
+	"""
 	objectType: String!
+	"""
+	the permissions the group has in relation to the object, e.g. EDITOR, VIEWER, BLOCKED
+	"""
 	permissions: Permission!
-	id: ID
+	"""
+	the ID of the object the group was given permissions to
+	"""
+	id: ID!
+	"""
+	the displayID of the object the group was given permissions to
+	"""
 	displayID: String
+	"""
+	the  name of the object the group was given permissions to
+	"""
 	name: String
+}
+"""
+A connection to a list of items.
+"""
+type GroupPermissionConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [GroupPermissionEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type GroupPermissionEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: GroupPermission
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+Ordering options for GroupPermission connections
+"""
+input GroupPermissionOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order GroupPermission.
+	"""
+	field: GroupPermissionOrderField!
+}
+"""
+Properties by which GroupPermission connections can be ordered.
+"""
+enum GroupPermissionOrderField {
+	name
+	permission
+	objectType
+}
+"""
+GroupPermissionWhereInput is used for filtering GroupPermission objects.
+"""
+input GroupPermissionWhereInput {
+	not: GroupPermissionWhereInput
+	and: [GroupPermissionWhereInput!]
+	or: [GroupPermissionWhereInput!]
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
+	"""
+	objectType field predicates
+	"""
+	objectType: String
+	objectTypeNEQ: String
+	objectTypeIn: [String!]
+	objectTypeNotIn: [String!]
+	objectTypeGT: String
+	objectTypeGTE: String
+	objectTypeLT: String
+	objectTypeLTE: String
+	objectTypeContains: String
+	objectTypeHasPrefix: String
+	objectTypeHasSuffix: String
+	objectTypeIsNil: Boolean
+	objectTypeNotNil: Boolean
+	objectTypeEqualFold: String
+	objectTypeContainsFold: String
+	"""
+	permission field predicates
+	"""
+	permission: String
+	permissionNEQ: String
+	permissionIn: [String!]
+	permissionNotIn: [String!]
+	permissionGT: String
+	permissionGTE: String
+	permissionLT: String
+	permissionLTE: String
+	permissionContains: String
+	permissionHasPrefix: String
+	permissionHasSuffix: String
+	permissionIsNil: Boolean
+	permissionNotNil: Boolean
+	permissionEqualFold: String
+	permissionContainsFold: String
 }
 type GroupSetting implements Node {
 	id: ID!
@@ -17806,14 +18691,68 @@ type InternalPolicy implements Node {
 	delegateID: ID
 	summary: String
 	owner: Organization
-	"""
-	groups that are blocked from viewing or editing the risk
-	"""
-	blockedGroups: [Group!]
-	"""
-	provides edit access to the risk to members of the group
-	"""
-	editors: [Group!]
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	"""
 	the group of users who are responsible for approving the policy
 	"""
@@ -23990,18 +24929,99 @@ type Narrative implements Node {
 	"""
 	details: String
 	owner: Organization
-	"""
-	groups that are blocked from viewing or editing the risk
-	"""
-	blockedGroups: [Group!]
-	"""
-	provides edit access to the risk to members of the group
-	"""
-	editors: [Group!]
-	"""
-	provides view access to the risk to members of the group
-	"""
-	viewers: [Group!]
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	satisfies(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -26697,42 +27717,285 @@ type Organization implements Node {
 	Whether the organization has a dedicated database
 	"""
 	dedicatedDb: Boolean!
-	"""
-	groups that are allowed to create controls
-	"""
-	controlCreators: [Group!]
-	"""
-	groups that are allowed to create control_objectives
-	"""
-	controlObjectiveCreators: [Group!]
-	"""
-	groups that are allowed to create groups
-	"""
-	groupCreators: [Group!]
-	"""
-	groups that are allowed to create internal_policys
-	"""
-	internalPolicyCreators: [Group!]
-	"""
-	groups that are allowed to create narratives
-	"""
-	narrativeCreators: [Group!]
-	"""
-	groups that are allowed to create procedures
-	"""
-	procedureCreators: [Group!]
-	"""
-	groups that are allowed to create programs
-	"""
-	programCreators: [Group!]
-	"""
-	groups that are allowed to create risks
-	"""
-	riskCreators: [Group!]
-	"""
-	groups that are allowed to create templates
-	"""
-	templateCreators: [Group!]
+	controlCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	controlObjectiveCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	groupCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	internalPolicyCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	narrativeCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	procedureCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	programCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	riskCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	templateCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	parent: Organization
 	children(
 		"""
@@ -30027,14 +31290,68 @@ type Procedure implements Node {
 	delegateID: ID
 	summary: String
 	owner: Organization
-	"""
-	groups that are blocked from viewing or editing the risk
-	"""
-	blockedGroups: [Group!]
-	"""
-	provides edit access to the risk to members of the group
-	"""
-	editors: [Group!]
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	"""
 	the group of users who are responsible for approving the procedure
 	"""
@@ -31207,18 +32524,99 @@ type Program implements Node {
 	"""
 	auditorEmail: String
 	owner: Organization
-	"""
-	groups that are blocked from viewing or editing the risk
-	"""
-	blockedGroups: [Group!]
-	"""
-	provides edit access to the risk to members of the group
-	"""
-	editors: [Group!]
-	"""
-	provides view access to the risk to members of the group
-	"""
-	viewers: [Group!]
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -38773,18 +40171,99 @@ type Risk implements Node {
 	"""
 	delegateID: ID
 	owner: Organization
-	"""
-	groups that are blocked from viewing or editing the risk
-	"""
-	blockedGroups: [Group!]
-	"""
-	provides edit access to the risk to members of the group
-	"""
-	editors: [Group!]
-	"""
-	provides view access to the risk to members of the group
-	"""
-	viewers: [Group!]
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -47720,7 +49199,7 @@ input UpdateProgramInput {
 	addActionPlanIDs: [ID!]
 	removeActionPlanIDs: [ID!]
 	clearActionPlans: Boolean
-	addProgramMembers: [CreateProgramMembershipInput!]
+	addProgramMembers: [AddProgramMembershipInput!]
 	removeProgramMembers: [ID!]
 }
 """
@@ -48838,7 +50317,37 @@ type User implements Node {
 		"""
 		where: TaskWhereInput
 	): TaskConnection!
-	programs: [Program!]
+	programs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Programs returned from the connection.
+		"""
+		orderBy: [ProgramOrder!]
+
+		"""
+		Filtering options for Programs returned from the connection.
+		"""
+		where: ProgramWhereInput
+	): ProgramConnection!
 	groupMemberships(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -48901,7 +50410,37 @@ type User implements Node {
 		"""
 		where: OrgMembershipWhereInput
 	): OrgMembershipConnection!
-	programMemberships: [ProgramMembership!]
+	programMemberships(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ProgramMemberships returned from the connection.
+		"""
+		orderBy: [ProgramMembershipOrder!]
+
+		"""
+		Filtering options for ProgramMemberships returned from the connection.
+		"""
+		where: ProgramMembershipWhereInput
+	): ProgramMembershipConnection!
 }
 """
 UserAuthProvider is enum for the field last_login_provider

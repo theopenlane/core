@@ -33,10 +33,6 @@ type GroupMembershipHistory struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// GroupID holds the value of the "group_id" field.
@@ -53,9 +49,9 @@ func (*GroupMembershipHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case groupmembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case groupmembershiphistory.FieldID, groupmembershiphistory.FieldRef, groupmembershiphistory.FieldCreatedBy, groupmembershiphistory.FieldUpdatedBy, groupmembershiphistory.FieldDeletedBy, groupmembershiphistory.FieldRole, groupmembershiphistory.FieldGroupID, groupmembershiphistory.FieldUserID:
+		case groupmembershiphistory.FieldID, groupmembershiphistory.FieldRef, groupmembershiphistory.FieldCreatedBy, groupmembershiphistory.FieldUpdatedBy, groupmembershiphistory.FieldRole, groupmembershiphistory.FieldGroupID, groupmembershiphistory.FieldUserID:
 			values[i] = new(sql.NullString)
-		case groupmembershiphistory.FieldHistoryTime, groupmembershiphistory.FieldCreatedAt, groupmembershiphistory.FieldUpdatedAt, groupmembershiphistory.FieldDeletedAt:
+		case groupmembershiphistory.FieldHistoryTime, groupmembershiphistory.FieldCreatedAt, groupmembershiphistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -119,18 +115,6 @@ func (gmh *GroupMembershipHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				gmh.UpdatedBy = value.String
-			}
-		case groupmembershiphistory.FieldDeletedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
-			} else if value.Valid {
-				gmh.DeletedAt = value.Time
-			}
-		case groupmembershiphistory.FieldDeletedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
-			} else if value.Valid {
-				gmh.DeletedBy = value.String
 			}
 		case groupmembershiphistory.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -206,12 +190,6 @@ func (gmh *GroupMembershipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(gmh.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(gmh.DeletedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(gmh.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", gmh.Role))

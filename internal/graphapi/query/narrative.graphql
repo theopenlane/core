@@ -54,16 +54,28 @@ mutation CreateNarrative($input: CreateNarrativeInput!) {
         }
       }
       editors {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
     }
   }
@@ -98,16 +110,28 @@ query GetAllNarratives {
           }
         }
         editors {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -135,16 +159,28 @@ query GetNarrativeByID($narrativeId: ID!) {
       }
     }
     editors {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     viewers {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
     blockedGroups {
-      id
-      name
+      edges {
+        node {
+          id
+          name
+        }
+      }
     }
   }
 }
@@ -172,16 +208,28 @@ query GetNarratives($where: NarrativeWhereInput) {
           }
         }
         editors {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         viewers {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
         blockedGroups {
-          id
-          name
+          edges {
+            node {
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -210,16 +258,28 @@ mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!)
         }
       }
       editors {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       viewers {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
       blockedGroups {
-        id
-        name
+        edges {
+          node {
+            id
+            name
+          }
+        }
       }
     }
   }

@@ -3,6 +3,10 @@
 package model
 
 import (
+	"bytes"
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -56,6 +60,12 @@ type ActionPlanDeletePayload struct {
 type ActionPlanUpdatePayload struct {
 	// Updated actionPlan
 	ActionPlan *generated.ActionPlan `json:"actionPlan"`
+}
+
+// AddProgramMembershipInput is used for create ProgramMembership object under an existing program
+type AddProgramMembershipInput struct {
+	Role   *enums.Role `json:"role,omitempty"`
+	UserID string      `json:"userID"`
 }
 
 type AuditLog struct {
@@ -473,15 +483,101 @@ type GroupMembershipUpdatePayload struct {
 	GroupMembership *generated.GroupMembership `json:"groupMembership"`
 }
 
-// GroupPermissions contains details for the related object and the permissions
+// GroupPermission contains details for the related object and the permissions
 // the group provides (or removes in the case of blocked) to the object within the
 // organization
-type GroupPermissions struct {
-	ObjectType  string           `json:"objectType"`
+type GroupPermission struct {
+	// the type of object the permissions are for, e.g. Program, Control, etc.
+	ObjectType string `json:"objectType"`
+	// the permissions the group has in relation to the object, e.g. EDITOR, VIEWER, BLOCKED
 	Permissions enums.Permission `json:"permissions"`
-	ID          *string          `json:"id,omitempty"`
-	DisplayID   *string          `json:"displayID,omitempty"`
-	Name        *string          `json:"name,omitempty"`
+	// the ID of the object the group was given permissions to
+	ID string `json:"id"`
+	// the displayID of the object the group was given permissions to
+	DisplayID *string `json:"displayID,omitempty"`
+	// the  name of the object the group was given permissions to
+	Name *string `json:"name,omitempty"`
+}
+
+func (GroupPermission) IsNode() {}
+
+// A connection to a list of items.
+type GroupPermissionConnection struct {
+	// A list of edges.
+	Edges []*GroupPermissionEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *entgql.PageInfo[string] `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int `json:"totalCount"`
+}
+
+// An edge in a connection.
+type GroupPermissionEdge struct {
+	// The item at the end of the edge.
+	Node *GroupPermission `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor entgql.Cursor[string] `json:"cursor"`
+}
+
+// Ordering options for GroupPermission connections
+type GroupPermissionOrder struct {
+	// The ordering direction.
+	Direction entgql.OrderDirection `json:"direction"`
+	// The field by which to order GroupPermission.
+	Field GroupPermissionOrderField `json:"field"`
+}
+
+// GroupPermissionWhereInput is used for filtering GroupPermission objects.
+type GroupPermissionWhereInput struct {
+	Not *GroupPermissionWhereInput   `json:"not,omitempty"`
+	And []*GroupPermissionWhereInput `json:"and,omitempty"`
+	Or  []*GroupPermissionWhereInput `json:"or,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// objectType field predicates
+	ObjectType             *string  `json:"objectType,omitempty"`
+	ObjectTypeNeq          *string  `json:"objectTypeNEQ,omitempty"`
+	ObjectTypeIn           []string `json:"objectTypeIn,omitempty"`
+	ObjectTypeNotIn        []string `json:"objectTypeNotIn,omitempty"`
+	ObjectTypeGt           *string  `json:"objectTypeGT,omitempty"`
+	ObjectTypeGte          *string  `json:"objectTypeGTE,omitempty"`
+	ObjectTypeLt           *string  `json:"objectTypeLT,omitempty"`
+	ObjectTypeLte          *string  `json:"objectTypeLTE,omitempty"`
+	ObjectTypeContains     *string  `json:"objectTypeContains,omitempty"`
+	ObjectTypeHasPrefix    *string  `json:"objectTypeHasPrefix,omitempty"`
+	ObjectTypeHasSuffix    *string  `json:"objectTypeHasSuffix,omitempty"`
+	ObjectTypeIsNil        *bool    `json:"objectTypeIsNil,omitempty"`
+	ObjectTypeNotNil       *bool    `json:"objectTypeNotNil,omitempty"`
+	ObjectTypeEqualFold    *string  `json:"objectTypeEqualFold,omitempty"`
+	ObjectTypeContainsFold *string  `json:"objectTypeContainsFold,omitempty"`
+	// permission field predicates
+	Permission             *string  `json:"permission,omitempty"`
+	PermissionNeq          *string  `json:"permissionNEQ,omitempty"`
+	PermissionIn           []string `json:"permissionIn,omitempty"`
+	PermissionNotIn        []string `json:"permissionNotIn,omitempty"`
+	PermissionGt           *string  `json:"permissionGT,omitempty"`
+	PermissionGte          *string  `json:"permissionGTE,omitempty"`
+	PermissionLt           *string  `json:"permissionLT,omitempty"`
+	PermissionLte          *string  `json:"permissionLTE,omitempty"`
+	PermissionContains     *string  `json:"permissionContains,omitempty"`
+	PermissionHasPrefix    *string  `json:"permissionHasPrefix,omitempty"`
+	PermissionHasSuffix    *string  `json:"permissionHasSuffix,omitempty"`
+	PermissionIsNil        *bool    `json:"permissionIsNil,omitempty"`
+	PermissionNotNil       *bool    `json:"permissionNotNil,omitempty"`
+	PermissionEqualFold    *string  `json:"permissionEqualFold,omitempty"`
+	PermissionContainsFold *string  `json:"permissionContainsFold,omitempty"`
 }
 
 // Return response for createBulkGroupSetting mutation
@@ -1189,4 +1285,62 @@ type UserUpdatePayload struct {
 type WebauthnDeletePayload struct {
 	// Deleted webauthn ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Properties by which GroupPermission connections can be ordered.
+type GroupPermissionOrderField string
+
+const (
+	GroupPermissionOrderFieldName       GroupPermissionOrderField = "name"
+	GroupPermissionOrderFieldPermission GroupPermissionOrderField = "permission"
+	GroupPermissionOrderFieldObjectType GroupPermissionOrderField = "objectType"
+)
+
+var AllGroupPermissionOrderField = []GroupPermissionOrderField{
+	GroupPermissionOrderFieldName,
+	GroupPermissionOrderFieldPermission,
+	GroupPermissionOrderFieldObjectType,
+}
+
+func (e GroupPermissionOrderField) IsValid() bool {
+	switch e {
+	case GroupPermissionOrderFieldName, GroupPermissionOrderFieldPermission, GroupPermissionOrderFieldObjectType:
+		return true
+	}
+	return false
+}
+
+func (e GroupPermissionOrderField) String() string {
+	return string(e)
+}
+
+func (e *GroupPermissionOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = GroupPermissionOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid GroupPermissionOrderField", str)
+	}
+	return nil
+}
+
+func (e GroupPermissionOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *GroupPermissionOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e GroupPermissionOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }

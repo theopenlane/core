@@ -131,6 +131,8 @@ func (o Organization) Edges() []ent.Edge {
 		edge.To("children", Organization.Type).
 			Annotations(
 				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entgql.MultiOrder(),
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			From("parent").

@@ -146,6 +146,13 @@ tasks:
     cmds:
       - gotestsum --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20
 
+  go:testsum:verbose:
+    silent: true
+    desc: runs tests using gotestsum
+    aliases: [testsum]
+    cmds:
+      - gotestsum --format standard-verbose --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20
+
   go:testsum:slow:
     silent: true
     desc: finds slow tests using gotestsum

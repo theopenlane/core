@@ -426,15 +426,15 @@ func OnboardingEdgeCleanup(ctx context.Context, id string) error {
 func OrgMembershipEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembership edge")), entfga.DeleteTuplesFirstKey{})
 
-	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasOrgmembershipWith(orgmembership.ID(id)))).Exist(ctx); err == nil && exists {
-		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasOrgmembershipWith(orgmembership.ID(id))).Exec(ctx); err != nil {
+	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", groupmembershipCount).Msg("deleting groupmembership")
 			return err
 		}
 	}
 
-	if exists, err := FromContext(ctx).ProgramMembership.Query().Where((programmembership.HasOrgmembershipWith(orgmembership.ID(id)))).Exist(ctx); err == nil && exists {
-		if programmembershipCount, err := FromContext(ctx).ProgramMembership.Delete().Where(programmembership.HasOrgmembershipWith(orgmembership.ID(id))).Exec(ctx); err != nil {
+	if exists, err := FromContext(ctx).ProgramMembership.Query().Where((programmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if programmembershipCount, err := FromContext(ctx).ProgramMembership.Delete().Where(programmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", programmembershipCount).Msg("deleting programmembership")
 			return err
 		}

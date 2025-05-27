@@ -80,34 +80,6 @@ func (omc *OrgMembershipCreate) SetNillableUpdatedBy(s *string) *OrgMembershipCr
 	return omc
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (omc *OrgMembershipCreate) SetDeletedAt(t time.Time) *OrgMembershipCreate {
-	omc.mutation.SetDeletedAt(t)
-	return omc
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (omc *OrgMembershipCreate) SetNillableDeletedAt(t *time.Time) *OrgMembershipCreate {
-	if t != nil {
-		omc.SetDeletedAt(*t)
-	}
-	return omc
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (omc *OrgMembershipCreate) SetDeletedBy(s string) *OrgMembershipCreate {
-	omc.mutation.SetDeletedBy(s)
-	return omc
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (omc *OrgMembershipCreate) SetNillableDeletedBy(s *string) *OrgMembershipCreate {
-	if s != nil {
-		omc.SetDeletedBy(*s)
-	}
-	return omc
-}
-
 // SetRole sets the "role" field.
 func (omc *OrgMembershipCreate) SetRole(e enums.Role) *OrgMembershipCreate {
 	omc.mutation.SetRole(e)
@@ -311,14 +283,6 @@ func (omc *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSp
 	if value, ok := omc.mutation.UpdatedBy(); ok {
 		_spec.SetField(orgmembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := omc.mutation.DeletedAt(); ok {
-		_spec.SetField(orgmembership.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
-	}
-	if value, ok := omc.mutation.DeletedBy(); ok {
-		_spec.SetField(orgmembership.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
 	}
 	if value, ok := omc.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)

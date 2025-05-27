@@ -641,7 +641,7 @@ func TestMutationCreateGroupByClone(t *testing.T) {
 				expectedLenPerms = 2
 			}
 
-			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Permissions, expectedLenPerms))
+			assert.Check(t, is.Len(resp.CreateGroupByClone.Group.Permissions.Edges, expectedLenPerms))
 
 			// delete group via the api
 			_, err = tc.client.DeleteGroup(tc.ctx, resp.CreateGroupByClone.Group.ID)
@@ -665,6 +665,10 @@ func TestMutationUpdateGroup(t *testing.T) {
 	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	gm := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(testUser1.UserCtx, t)
 
+	// create a second group member to test removing and re-adding
+	group2 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	gm2 := (&GroupMemberBuilder{client: suite.client, GroupID: group2.ID}).MustNew(testUser1.UserCtx, t)
+
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -681,12 +685,13 @@ func TestMutationUpdateGroup(t *testing.T) {
 
 	// ensure user cannot get access to the program
 	programResp, err := suite.client.api.GetProgramByID(gmCtx, program.ID)
+	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	assert.Assert(t, is.Nil(programResp))
 
 	// ensure user cannot get access to the control
 	controlResp, err := suite.client.api.GetControlByID(gmCtx, control.ID)
-
+	assert.ErrorContains(t, err, notFoundErrorMsg)
 	assert.Assert(t, is.Nil(controlResp))
 
 	// access to procedures is granted by default in the org
@@ -696,6 +701,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 
 	testCases := []struct {
 		name        string
+		groupID     string
 		updateInput openlaneclient.UpdateGroupInput
 		expectedRes openlaneclient.UpdateGroup_UpdateGroup_Group
 		client      *openlaneclient.OpenlaneClient
@@ -703,7 +709,8 @@ func TestMutationUpdateGroup(t *testing.T) {
 		errorMsg    string
 	}{
 		{
-			name: "add permissions to object, happy path",
+			name:    "add permissions to object, happy path",
+			groupID: group.ID,
 			updateInput: openlaneclient.UpdateGroupInput{
 				AddProgramViewerIDs:         []string{program.ID},
 				AddProcedureBlockedGroupIDs: []string{procedure.ID},
@@ -713,39 +720,49 @@ func TestMutationUpdateGroup(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
 				ID:          group.ID,
+				DisplayID:   group.DisplayID,
 				Name:        group.Name,
 				DisplayName: group.DisplayName,
 				Description: &group.Description,
 				Setting: &openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
 					JoinPolicy: enums.JoinPolicyOpen,
 				},
-				Permissions: []*openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions{
-					{
-						ObjectType:  "Program",
-						ID:          &program.ID,
-						Permissions: enums.Viewer,
-						DisplayID:   &program.DisplayID,
-						Name:        &program.Name,
-					},
-					{
-						ObjectType:  "Procedure",
-						ID:          &procedure.ID,
-						Permissions: enums.Blocked,
-						DisplayID:   &procedure.DisplayID,
-						Name:        &procedure.Name,
-					},
-					{
-						ObjectType:  "Control",
-						ID:          &control.ID,
-						Permissions: enums.Editor,
-						DisplayID:   &control.DisplayID,
-						Name:        &control.RefCode,
+				Permissions: openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions{
+					Edges: []*openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions_Edges{
+						{
+							Node: &openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions_Edges_Node{
+								ObjectType:  "Program",
+								ID:          program.ID,
+								Permissions: enums.Viewer,
+								DisplayID:   &program.DisplayID,
+								Name:        &program.Name,
+							},
+						},
+						{
+							Node: &openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions_Edges_Node{
+								ObjectType:  "Procedure",
+								ID:          procedure.ID,
+								Permissions: enums.Blocked,
+								DisplayID:   &procedure.DisplayID,
+								Name:        &procedure.Name,
+							},
+						},
+						{
+							Node: &openlaneclient.UpdateGroup_UpdateGroup_Group_Permissions_Edges_Node{
+								ObjectType:  "Control",
+								ID:          control.ID,
+								Permissions: enums.Editor,
+								DisplayID:   &control.DisplayID,
+								Name:        &control.RefCode,
+							},
+						},
 					},
 				},
 			},
 		},
 		{
-			name: "add permissions to object, no access to program",
+			name:    "add permissions to object, no access to program",
+			groupID: group.ID,
 			updateInput: openlaneclient.UpdateGroupInput{
 				AddProgramEditorIDs: []string{program.ID},
 			},
@@ -754,7 +771,8 @@ func TestMutationUpdateGroup(t *testing.T) {
 			errorMsg: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update name and clone permissions, happy path - this will add two permissions to the group",
+			name:    "update name and clone permissions, happy path - this will add two permissions to the group",
+			groupID: group.ID,
 			updateInput: openlaneclient.UpdateGroupInput{
 				Name:                    &nameUpdate,
 				DisplayName:             &displayNameUpdate,
@@ -765,13 +783,15 @@ func TestMutationUpdateGroup(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
 				ID:          group.ID,
+				DisplayID:   group.DisplayID,
 				Name:        nameUpdate,
 				DisplayName: displayNameUpdate,
 				Description: &descriptionUpdate,
 			},
 		},
 		{
-			name: "add user as admin using api token",
+			name:    "add user as admin using api token",
+			groupID: group.ID,
 			updateInput: openlaneclient.UpdateGroupInput{
 				AddGroupMembers: []*openlaneclient.CreateGroupMembershipInput{
 					{
@@ -784,6 +804,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 			ctx:    context.Background(),
 			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
 				ID:          group.ID,
+				DisplayID:   group.DisplayID,
 				Name:        nameUpdate,
 				DisplayName: displayNameUpdate,
 				Description: &descriptionUpdate,
@@ -802,7 +823,45 @@ func TestMutationUpdateGroup(t *testing.T) {
 			},
 		},
 		{
-			name: "update gravatar, happy path using personal access token",
+			name:    "remove group member",
+			groupID: group2.ID,
+			updateInput: openlaneclient.UpdateGroupInput{
+				RemoveGroupMembers: []string{gm2.ID},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
+				ID:          group2.ID,
+				DisplayID:   group2.DisplayID,
+				Name:        group2.Name,
+				DisplayName: group2.DisplayName,
+				Description: &group2.Description,
+			},
+		},
+		{
+			name:    "re-add group member",
+			groupID: group2.ID,
+			updateInput: openlaneclient.UpdateGroupInput{
+				AddGroupMembers: []*openlaneclient.CreateGroupMembershipInput{
+					{
+						UserID: gm2.UserID,
+						Role:   &gm2.Role,
+					},
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
+				ID:          group2.ID,
+				DisplayID:   group2.DisplayID,
+				Name:        group2.Name,
+				DisplayName: group2.DisplayName,
+				Description: &group2.Description,
+			},
+		},
+		{
+			name:    "update gravatar, happy path using personal access token",
+			groupID: group.ID,
 			updateInput: openlaneclient.UpdateGroupInput{
 				LogoURL: &gravatarURLUpdate,
 			},
@@ -810,6 +869,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 			ctx:    context.Background(),
 			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
 				ID:          group.ID,
+				DisplayID:   group.DisplayID,
 				Name:        nameUpdate,
 				DisplayName: displayNameUpdate,
 				Description: &descriptionUpdate,
@@ -817,7 +877,8 @@ func TestMutationUpdateGroup(t *testing.T) {
 			},
 		},
 		{
-			name: "update visibility",
+			name:    "update visibility",
+			groupID: group.ID,
 			updateInput: openlaneclient.UpdateGroupInput{
 				UpdateGroupSettings: &openlaneclient.UpdateGroupSettingInput{
 					Visibility: &enums.VisibilityPrivate,
@@ -827,26 +888,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
 				ID:          group.ID,
-				Name:        nameUpdate,
-				DisplayName: displayNameUpdate,
-				Description: &descriptionUpdate,
-				LogoURL:     &gravatarURLUpdate,
-				Setting: &openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
-					Visibility: enums.VisibilityPrivate,
-				},
-			},
-		},
-		{
-			name: "update visibility, same setting",
-			updateInput: openlaneclient.UpdateGroupInput{
-				UpdateGroupSettings: &openlaneclient.UpdateGroupSettingInput{
-					Visibility: &enums.VisibilityPrivate,
-				},
-			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
-				ID:          group.ID,
+				DisplayID:   group.DisplayID,
 				Name:        nameUpdate,
 				DisplayName: displayNameUpdate,
 				Description: &descriptionUpdate,
@@ -857,7 +899,8 @@ func TestMutationUpdateGroup(t *testing.T) {
 			},
 		},
 		{
-			name: "update visibility, back to public",
+			name:    "update visibility, same setting",
+			groupID: group.ID,
 			updateInput: openlaneclient.UpdateGroupInput{
 				UpdateGroupSettings: &openlaneclient.UpdateGroupSettingInput{
 					Visibility: &enums.VisibilityPrivate,
@@ -867,6 +910,29 @@ func TestMutationUpdateGroup(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
 				ID:          group.ID,
+				DisplayID:   group.DisplayID,
+				Name:        nameUpdate,
+				DisplayName: displayNameUpdate,
+				Description: &descriptionUpdate,
+				LogoURL:     &gravatarURLUpdate,
+				Setting: &openlaneclient.UpdateGroup_UpdateGroup_Group_Setting{
+					Visibility: enums.VisibilityPrivate,
+				},
+			},
+		},
+		{
+			name:    "update visibility, back to public",
+			groupID: group.ID,
+			updateInput: openlaneclient.UpdateGroupInput{
+				UpdateGroupSettings: &openlaneclient.UpdateGroupSettingInput{
+					Visibility: &enums.VisibilityPrivate,
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
+				ID:          group.ID,
+				DisplayID:   group.DisplayID,
 				Name:        nameUpdate,
 				DisplayName: displayNameUpdate,
 				Description: &descriptionUpdate,
@@ -877,7 +943,8 @@ func TestMutationUpdateGroup(t *testing.T) {
 			},
 		},
 		{
-			name: "update settings, happy path",
+			name:    "update settings, happy path",
+			groupID: group.ID,
 			updateInput: openlaneclient.UpdateGroupInput{
 				UpdateGroupSettings: &openlaneclient.UpdateGroupSettingInput{
 					JoinPolicy: &enums.JoinPolicyOpen,
@@ -887,6 +954,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 			expectedRes: openlaneclient.UpdateGroup_UpdateGroup_Group{
 				ID:          group.ID,
+				DisplayID:   group.DisplayID,
 				Name:        nameUpdate,
 				DisplayName: displayNameUpdate,
 				Description: &descriptionUpdate,
@@ -896,7 +964,8 @@ func TestMutationUpdateGroup(t *testing.T) {
 			},
 		},
 		{
-			name: "no access",
+			name:    "no access",
+			groupID: group.ID,
 			updateInput: openlaneclient.UpdateGroupInput{
 				Name:        &nameUpdate,
 				DisplayName: &displayNameUpdate,
@@ -910,7 +979,7 @@ func TestMutationUpdateGroup(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateGroup(tc.ctx, group.ID, tc.updateInput)
+			resp, err := tc.client.UpdateGroup(tc.ctx, tc.groupID, tc.updateInput)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -930,12 +999,12 @@ func TestMutationUpdateGroup(t *testing.T) {
 			assert.Check(t, is.DeepEqual(tc.expectedRes.Description, updatedGroup.Description))
 
 			// ensure the displayID is not updated
-			assert.Check(t, is.Equal(group.DisplayID, updatedGroup.DisplayID))
+			assert.Check(t, is.Equal(tc.expectedRes.DisplayID, updatedGroup.DisplayID))
 			if tc.updateInput.LogoURL != nil {
 				assert.Check(t, is.Equal(*tc.expectedRes.LogoURL, *updatedGroup.LogoURL))
 			}
 
-			if tc.updateInput.AddGroupMembers != nil {
+			if tc.updateInput.AddGroupMembers != nil && tc.groupID == group.ID {
 				// Adding a member to an group will make it 2 users, there is an admin
 				// assigned to the group automatically and a member added in the test case
 				assert.Check(t, is.Len(updatedGroup.Members.Edges, 3))
@@ -954,18 +1023,18 @@ func TestMutationUpdateGroup(t *testing.T) {
 			}
 
 			if tc.updateInput.AddProgramViewerIDs != nil || tc.updateInput.AddProcedureEditorIDs != nil || tc.updateInput.AddControlBlockedGroupIDs != nil {
-				assert.Check(t, is.Equal(len(tc.expectedRes.Permissions), len(updatedGroup.Permissions)))
+				assert.Check(t, is.Equal(len(tc.expectedRes.Permissions.Edges), len(updatedGroup.Permissions.Edges)))
 
-				for _, permission := range updatedGroup.Permissions {
+				for _, permission := range updatedGroup.Permissions.Edges {
 					found := false
-					for _, expectedPermission := range tc.expectedRes.Permissions {
-						if *permission.ID == *expectedPermission.ID {
+					for _, expectedPermission := range tc.expectedRes.Permissions.Edges {
+						if permission.Node.ID == expectedPermission.Node.ID {
 							found = true
 							assert.Check(t, is.DeepEqual(permission, expectedPermission))
 						}
 					}
 
-					assert.Check(t, found, "permission %s not found", permission.ObjectType)
+					assert.Check(t, found, "permission %s not found", permission.Node.ObjectType)
 				}
 
 				// ensure user can now get access to the program
@@ -984,20 +1053,20 @@ func TestMutationUpdateGroup(t *testing.T) {
 
 				// access to procedures is granted by default in the org, it should be blocked now
 				procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
-
+				assert.ErrorContains(t, err, notFoundErrorMsg)
 				assert.Assert(t, is.Nil(procedureResp))
 			}
 
 			if tc.updateInput.InheritGroupPermissions != nil {
 				// ensure the group has the additional permissions as the group we cloned, there is one overlap with the group we cloned
-				assert.Check(t, is.Len(updatedGroup.Permissions, 5))
+				assert.Check(t, is.Len(updatedGroup.Permissions.Edges, 5))
 			}
 		})
 	}
 
 	// cleanup
 	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{om.ID, gm.Edges.Orgmembership.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{group.ID, groupClone.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{group.ID, groupClone.ID, group2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program.ID, programClone.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID, controlClone.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(testUser1.UserCtx, t)
@@ -1126,7 +1195,7 @@ func TestManagedGroups(t *testing.T) {
 	assert.NilError(t, err)
 
 	perms := updateResp.UpdateGroup.Group.GetPermissions()
-	assert.Check(t, is.Len(perms, 3))
+	assert.Check(t, is.Len(perms.Edges, 3))
 
 	// make sure I can also remove them
 	input = openlaneclient.UpdateGroupInput{
@@ -1139,7 +1208,7 @@ func TestManagedGroups(t *testing.T) {
 	assert.NilError(t, err)
 
 	perms = updateResp.UpdateGroup.Group.GetPermissions()
-	assert.Check(t, is.Len(perms, 0))
+	assert.Check(t, is.Len(perms.Edges, 0))
 
 	// cleanup objects created
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)

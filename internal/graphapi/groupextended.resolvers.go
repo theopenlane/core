@@ -7,6 +7,7 @@ package graphapi
 import (
 	"context"
 
+	"entgo.io/contrib/entgql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -18,11 +19,12 @@ import (
 )
 
 // Permissions is the resolver for the permissions field.
-func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group) ([]*model.GroupPermissions, error) {
-	perms := make([]*model.GroupPermissions, 0)
+func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*model.GroupPermissionConnection, error) {
+	perms := make([]*model.GroupPermissionEdge, 0)
 
 	// TODO (sfunk): we should generate this code in the future
 	// based off the group permissions mixin
+
 	res, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(obj.ID)).
 		// Control permissions
 		WithControlEditors().
@@ -56,38 +58,49 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group) (
 		WithNarrativeViewers().
 		WithNarrativeEditors().
 		WithNarrativeBlockedGroups().
-		Only(ctx)
+		Paginate(ctx, after, first, before, last)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
 	}
 
-	perms = append(perms, getGroupPermissions(res.Edges.ControlViewers, generated.TypeControl, enums.Viewer)...)
-	perms = append(perms, getGroupPermissions(res.Edges.ControlEditors, generated.TypeControl, enums.Editor)...)
-	perms = append(perms, getGroupPermissions(res.Edges.ControlBlockedGroups, generated.TypeControl, enums.Blocked)...)
+	for _, r := range res.Edges {
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlViewers, generated.TypeControl, enums.Viewer)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlEditors, generated.TypeControl, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlBlockedGroups, generated.TypeControl, enums.Blocked)...)
 
-	perms = append(perms, getGroupPermissions(res.Edges.ControlObjectiveViewers, generated.TypeControlObjective, enums.Viewer)...)
-	perms = append(perms, getGroupPermissions(res.Edges.ControlObjectiveEditors, generated.TypeControlObjective, enums.Editor)...)
-	perms = append(perms, getGroupPermissions(res.Edges.ControlObjectiveBlockedGroups, generated.TypeControlObjective, enums.Blocked)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlObjectiveViewers, generated.TypeControlObjective, enums.Viewer)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlObjectiveEditors, generated.TypeControlObjective, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlObjectiveBlockedGroups, generated.TypeControlObjective, enums.Blocked)...)
 
-	perms = append(perms, getGroupPermissions(res.Edges.ProgramViewers, generated.TypeProgram, enums.Viewer)...)
-	perms = append(perms, getGroupPermissions(res.Edges.ProgramEditors, generated.TypeProgram, enums.Editor)...)
-	perms = append(perms, getGroupPermissions(res.Edges.ProgramBlockedGroups, generated.TypeProgram, enums.Blocked)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ProgramViewers, generated.TypeProgram, enums.Viewer)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ProgramEditors, generated.TypeProgram, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ProgramBlockedGroups, generated.TypeProgram, enums.Blocked)...)
 
-	perms = append(perms, getGroupPermissions(res.Edges.RiskViewers, generated.TypeRisk, enums.Viewer)...)
-	perms = append(perms, getGroupPermissions(res.Edges.RiskEditors, generated.TypeRisk, enums.Editor)...)
-	perms = append(perms, getGroupPermissions(res.Edges.RiskBlockedGroups, generated.TypeRisk, enums.Blocked)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.RiskViewers, generated.TypeRisk, enums.Viewer)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.RiskEditors, generated.TypeRisk, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.RiskBlockedGroups, generated.TypeRisk, enums.Blocked)...)
 
-	perms = append(perms, getGroupPermissions(res.Edges.InternalPolicyEditors, generated.TypeInternalPolicy, enums.Editor)...)
-	perms = append(perms, getGroupPermissions(res.Edges.InternalPolicyBlockedGroups, generated.TypeInternalPolicy, enums.Blocked)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.InternalPolicyEditors, generated.TypeInternalPolicy, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.InternalPolicyBlockedGroups, generated.TypeInternalPolicy, enums.Blocked)...)
 
-	perms = append(perms, getGroupPermissions(res.Edges.ProcedureEditors, generated.TypeProcedure, enums.Editor)...)
-	perms = append(perms, getGroupPermissions(res.Edges.ProcedureBlockedGroups, generated.TypeProcedure, enums.Blocked)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ProcedureEditors, generated.TypeProcedure, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ProcedureBlockedGroups, generated.TypeProcedure, enums.Blocked)...)
 
-	perms = append(perms, getGroupPermissions(res.Edges.NarrativeViewers, generated.TypeNarrative, enums.Viewer)...)
-	perms = append(perms, getGroupPermissions(res.Edges.NarrativeEditors, generated.TypeProcedure, enums.Editor)...)
-	perms = append(perms, getGroupPermissions(res.Edges.NarrativeBlockedGroups, generated.TypeProcedure, enums.Blocked)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.NarrativeViewers, generated.TypeNarrative, enums.Viewer)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.NarrativeEditors, generated.TypeProcedure, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.NarrativeBlockedGroups, generated.TypeProcedure, enums.Blocked)...)
+	}
 
-	return perms, nil
+	return &model.GroupPermissionConnection{
+		Edges: perms,
+		PageInfo: &entgql.PageInfo[string]{
+			HasNextPage:     res.PageInfo.HasNextPage,
+			HasPreviousPage: res.PageInfo.HasPreviousPage,
+			StartCursor:     res.PageInfo.StartCursor,
+			EndCursor:       res.PageInfo.EndCursor,
+		},
+		TotalCount: res.TotalCount,
+	}, nil
 }
 
 // CreateGroupWithMembers is the resolver for the createGroupWithMembers field.

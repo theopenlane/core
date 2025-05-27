@@ -80,34 +80,6 @@ func (pmc *ProgramMembershipCreate) SetNillableUpdatedBy(s *string) *ProgramMemb
 	return pmc
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (pmc *ProgramMembershipCreate) SetDeletedAt(t time.Time) *ProgramMembershipCreate {
-	pmc.mutation.SetDeletedAt(t)
-	return pmc
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableDeletedAt(t *time.Time) *ProgramMembershipCreate {
-	if t != nil {
-		pmc.SetDeletedAt(*t)
-	}
-	return pmc
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pmc *ProgramMembershipCreate) SetDeletedBy(s string) *ProgramMembershipCreate {
-	pmc.mutation.SetDeletedBy(s)
-	return pmc
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pmc *ProgramMembershipCreate) SetNillableDeletedBy(s *string) *ProgramMembershipCreate {
-	if s != nil {
-		pmc.SetDeletedBy(*s)
-	}
-	return pmc
-}
-
 // SetRole sets the "role" field.
 func (pmc *ProgramMembershipCreate) SetRole(e enums.Role) *ProgramMembershipCreate {
 	pmc.mutation.SetRole(e)
@@ -315,14 +287,6 @@ func (pmc *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.
 	if value, ok := pmc.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembership.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := pmc.mutation.DeletedAt(); ok {
-		_spec.SetField(programmembership.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
-	}
-	if value, ok := pmc.mutation.DeletedBy(); ok {
-		_spec.SetField(programmembership.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
 	}
 	if value, ok := pmc.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)

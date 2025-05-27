@@ -65,46 +65,6 @@ func (gmu *GroupMembershipUpdate) ClearUpdatedBy() *GroupMembershipUpdate {
 	return gmu
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (gmu *GroupMembershipUpdate) SetDeletedAt(t time.Time) *GroupMembershipUpdate {
-	gmu.mutation.SetDeletedAt(t)
-	return gmu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gmu *GroupMembershipUpdate) SetNillableDeletedAt(t *time.Time) *GroupMembershipUpdate {
-	if t != nil {
-		gmu.SetDeletedAt(*t)
-	}
-	return gmu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gmu *GroupMembershipUpdate) ClearDeletedAt() *GroupMembershipUpdate {
-	gmu.mutation.ClearDeletedAt()
-	return gmu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gmu *GroupMembershipUpdate) SetDeletedBy(s string) *GroupMembershipUpdate {
-	gmu.mutation.SetDeletedBy(s)
-	return gmu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmu *GroupMembershipUpdate) SetNillableDeletedBy(s *string) *GroupMembershipUpdate {
-	if s != nil {
-		gmu.SetDeletedBy(*s)
-	}
-	return gmu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gmu *GroupMembershipUpdate) ClearDeletedBy() *GroupMembershipUpdate {
-	gmu.mutation.ClearDeletedBy()
-	return gmu
-}
-
 // SetRole sets the "role" field.
 func (gmu *GroupMembershipUpdate) SetRole(e enums.Role) *GroupMembershipUpdate {
 	gmu.mutation.SetRole(e)
@@ -254,18 +214,6 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 	if gmu.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembership.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := gmu.mutation.DeletedAt(); ok {
-		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)
-	}
-	if gmu.mutation.DeletedAtCleared() {
-		_spec.ClearField(groupmembership.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := gmu.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if gmu.mutation.DeletedByCleared() {
-		_spec.ClearField(groupmembership.FieldDeletedBy, field.TypeString)
-	}
 	if value, ok := gmu.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)
 	}
@@ -370,46 +318,6 @@ func (gmuo *GroupMembershipUpdateOne) SetNillableUpdatedBy(s *string) *GroupMemb
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (gmuo *GroupMembershipUpdateOne) ClearUpdatedBy() *GroupMembershipUpdateOne {
 	gmuo.mutation.ClearUpdatedBy()
-	return gmuo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (gmuo *GroupMembershipUpdateOne) SetDeletedAt(t time.Time) *GroupMembershipUpdateOne {
-	gmuo.mutation.SetDeletedAt(t)
-	return gmuo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (gmuo *GroupMembershipUpdateOne) SetNillableDeletedAt(t *time.Time) *GroupMembershipUpdateOne {
-	if t != nil {
-		gmuo.SetDeletedAt(*t)
-	}
-	return gmuo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (gmuo *GroupMembershipUpdateOne) ClearDeletedAt() *GroupMembershipUpdateOne {
-	gmuo.mutation.ClearDeletedAt()
-	return gmuo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (gmuo *GroupMembershipUpdateOne) SetDeletedBy(s string) *GroupMembershipUpdateOne {
-	gmuo.mutation.SetDeletedBy(s)
-	return gmuo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (gmuo *GroupMembershipUpdateOne) SetNillableDeletedBy(s *string) *GroupMembershipUpdateOne {
-	if s != nil {
-		gmuo.SetDeletedBy(*s)
-	}
-	return gmuo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (gmuo *GroupMembershipUpdateOne) ClearDeletedBy() *GroupMembershipUpdateOne {
-	gmuo.mutation.ClearDeletedBy()
 	return gmuo
 }
 
@@ -591,18 +499,6 @@ func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Group
 	}
 	if gmuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembership.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := gmuo.mutation.DeletedAt(); ok {
-		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)
-	}
-	if gmuo.mutation.DeletedAtCleared() {
-		_spec.ClearField(groupmembership.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := gmuo.mutation.DeletedBy(); ok {
-		_spec.SetField(groupmembership.FieldDeletedBy, field.TypeString, value)
-	}
-	if gmuo.mutation.DeletedByCleared() {
-		_spec.ClearField(groupmembership.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := gmuo.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)

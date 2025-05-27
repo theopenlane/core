@@ -112,34 +112,6 @@ func (pmhc *ProgramMembershipHistoryCreate) SetNillableUpdatedBy(s *string) *Pro
 	return pmhc
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetDeletedAt(t time.Time) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetDeletedAt(t)
-	return pmhc
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableDeletedAt(t *time.Time) *ProgramMembershipHistoryCreate {
-	if t != nil {
-		pmhc.SetDeletedAt(*t)
-	}
-	return pmhc
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pmhc *ProgramMembershipHistoryCreate) SetDeletedBy(s string) *ProgramMembershipHistoryCreate {
-	pmhc.mutation.SetDeletedBy(s)
-	return pmhc
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pmhc *ProgramMembershipHistoryCreate) SetNillableDeletedBy(s *string) *ProgramMembershipHistoryCreate {
-	if s != nil {
-		pmhc.SetDeletedBy(*s)
-	}
-	return pmhc
-}
-
 // SetRole sets the "role" field.
 func (pmhc *ProgramMembershipHistoryCreate) SetRole(e enums.Role) *ProgramMembershipHistoryCreate {
 	pmhc.mutation.SetRole(e)
@@ -327,14 +299,6 @@ func (pmhc *ProgramMembershipHistoryCreate) createSpec() (*ProgramMembershipHist
 	if value, ok := pmhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(programmembershiphistory.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := pmhc.mutation.DeletedAt(); ok {
-		_spec.SetField(programmembershiphistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
-	}
-	if value, ok := pmhc.mutation.DeletedBy(); ok {
-		_spec.SetField(programmembershiphistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
 	}
 	if value, ok := pmhc.mutation.Role(); ok {
 		_spec.SetField(programmembershiphistory.FieldRole, field.TypeEnum, value)
