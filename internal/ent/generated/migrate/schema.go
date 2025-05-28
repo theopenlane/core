@@ -3348,10 +3348,10 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "ACQUIRED"}, Default: "PENDING"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "scheduled_job_id", Type: field.TypeString},
+		{Name: "job_runner_id", Type: field.TypeString},
 	}
 	// ScheduledJobRunsTable holds the schema information for the "scheduled_job_runs" table.
 	ScheduledJobRunsTable = &schema.Table{
@@ -3361,14 +3361,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_job_runs_organizations_scheduled_job_runs",
-				Columns:    []*schema.Column{ScheduledJobRunsColumns[9]},
+				Columns:    []*schema.Column{ScheduledJobRunsColumns[8]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scheduled_job_runs_control_scheduled_jobs_scheduled_job",
-				Columns:    []*schema.Column{ScheduledJobRunsColumns[10]},
+				Columns:    []*schema.Column{ScheduledJobRunsColumns[9]},
 				RefColumns: []*schema.Column{ControlScheduledJobsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "scheduled_job_runs_job_runners_job_runner",
+				Columns:    []*schema.Column{ScheduledJobRunsColumns[10]},
+				RefColumns: []*schema.Column{JobRunnersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
@@ -6767,6 +6773,7 @@ func init() {
 	}
 	ScheduledJobRunsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ScheduledJobRunsTable.ForeignKeys[1].RefTable = ControlScheduledJobsTable
+	ScheduledJobRunsTable.ForeignKeys[2].RefTable = JobRunnersTable
 	StandardsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	StandardHistoryTable.Annotation = &entsql.Annotation{
 		Table: "standard_history",

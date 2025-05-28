@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/pkg/enums"
@@ -53,11 +54,13 @@ type ScheduledJobRunEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// ScheduledJob holds the value of the scheduled_job edge.
 	ScheduledJob *ControlScheduledJob `json:"scheduled_job,omitempty"`
+	// JobRunner holds the value of the job_runner edge.
+	JobRunner *JobRunner `json:"job_runner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -80,6 +83,17 @@ func (e ScheduledJobRunEdges) ScheduledJobOrErr() (*ControlScheduledJob, error) 
 		return nil, &NotFoundError{label: controlscheduledjob.Label}
 	}
 	return nil, &NotLoadedError{edge: "scheduled_job"}
+}
+
+// JobRunnerOrErr returns the JobRunner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScheduledJobRunEdges) JobRunnerOrErr() (*JobRunner, error) {
+	if e.JobRunner != nil {
+		return e.JobRunner, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: jobrunner.Label}
+	}
+	return nil, &NotLoadedError{edge: "job_runner"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -193,6 +207,11 @@ func (sjr *ScheduledJobRun) QueryOwner() *OrganizationQuery {
 // QueryScheduledJob queries the "scheduled_job" edge of the ScheduledJobRun entity.
 func (sjr *ScheduledJobRun) QueryScheduledJob() *ControlScheduledJobQuery {
 	return NewScheduledJobRunClient(sjr.config).QueryScheduledJob(sjr)
+}
+
+// QueryJobRunner queries the "job_runner" edge of the ScheduledJobRun entity.
+func (sjr *ScheduledJobRun) QueryJobRunner() *JobRunnerQuery {
+	return NewScheduledJobRunClient(sjr.config).QueryJobRunner(sjr)
 }
 
 // Update returns a builder for updating this ScheduledJobRun.

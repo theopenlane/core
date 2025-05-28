@@ -8025,17 +8025,14 @@ func (c *ScheduledJobUpdateOne) SetInput(i UpdateScheduledJobInput) *ScheduledJo
 
 // CreateScheduledJobRunInput represents a mutation input for creating scheduledjobruns.
 type CreateScheduledJobRunInput struct {
-	JobRunnerID    *string
 	Status         *enums.ScheduledJobRunStatus
 	OwnerID        *string
 	ScheduledJobID string
+	JobRunnerID    string
 }
 
 // Mutate applies the CreateScheduledJobRunInput on the ScheduledJobRunMutation builder.
 func (i *CreateScheduledJobRunInput) Mutate(m *ScheduledJobRunMutation) {
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
-	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -8043,6 +8040,7 @@ func (i *CreateScheduledJobRunInput) Mutate(m *ScheduledJobRunMutation) {
 		m.SetOwnerID(*v)
 	}
 	m.SetScheduledJobID(i.ScheduledJobID)
+	m.SetJobRunnerID(i.JobRunnerID)
 }
 
 // SetInput applies the change-set in the CreateScheduledJobRunInput on the ScheduledJobRunCreate builder.
@@ -8053,22 +8051,15 @@ func (c *ScheduledJobRunCreate) SetInput(i CreateScheduledJobRunInput) *Schedule
 
 // UpdateScheduledJobRunInput represents a mutation input for updating scheduledjobruns.
 type UpdateScheduledJobRunInput struct {
-	ClearJobRunnerID bool
-	JobRunnerID      *string
-	Status           *enums.ScheduledJobRunStatus
-	ClearOwner       bool
-	OwnerID          *string
-	ScheduledJobID   *string
+	Status         *enums.ScheduledJobRunStatus
+	ClearOwner     bool
+	OwnerID        *string
+	ScheduledJobID *string
+	JobRunnerID    *string
 }
 
 // Mutate applies the UpdateScheduledJobRunInput on the ScheduledJobRunMutation builder.
 func (i *UpdateScheduledJobRunInput) Mutate(m *ScheduledJobRunMutation) {
-	if i.ClearJobRunnerID {
-		m.ClearJobRunnerID()
-	}
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
-	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -8080,6 +8071,9 @@ func (i *UpdateScheduledJobRunInput) Mutate(m *ScheduledJobRunMutation) {
 	}
 	if v := i.ScheduledJobID; v != nil {
 		m.SetScheduledJobID(*v)
+	}
+	if v := i.JobRunnerID; v != nil {
+		m.SetJobRunnerID(*v)
 	}
 }
 

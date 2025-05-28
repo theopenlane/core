@@ -32271,6 +32271,21 @@ func (sjr *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, scheduledjobrun.FieldScheduledJobID)
 				fieldSeen[scheduledjobrun.FieldScheduledJobID] = struct{}{}
 			}
+
+		case "jobRunner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerClient{config: sjr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerImplementors)...); err != nil {
+				return err
+			}
+			sjr.withJobRunner = query
+			if _, ok := fieldSeen[scheduledjobrun.FieldJobRunnerID]; !ok {
+				selectedFields = append(selectedFields, scheduledjobrun.FieldJobRunnerID)
+				fieldSeen[scheduledjobrun.FieldJobRunnerID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[scheduledjobrun.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, scheduledjobrun.FieldCreatedAt)

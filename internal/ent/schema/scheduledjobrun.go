@@ -41,7 +41,6 @@ func (ScheduledJobRun) PluralName() string {
 func (ScheduledJobRun) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("job_runner_id").
-			Optional().
 			Comment("The runner that this job will be executed on. Useful to know because of self hosted runners"),
 
 		field.Enum("status").
@@ -72,6 +71,13 @@ func (s ScheduledJobRun) Edges() []ent.Edge {
 			fromSchema: s,
 			edgeSchema: ControlScheduledJob{},
 			field:      "scheduled_job_id",
+			required:   true,
+		}),
+
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: JobRunner{},
+			field:      "job_runner_id",
 			required:   true,
 		}),
 	}

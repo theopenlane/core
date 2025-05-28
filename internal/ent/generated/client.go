@@ -17164,6 +17164,25 @@ func (c *ScheduledJobRunClient) QueryScheduledJob(sjr *ScheduledJobRun) *Control
 	return query
 }
 
+// QueryJobRunner queries the job_runner edge of a ScheduledJobRun.
+func (c *ScheduledJobRunClient) QueryJobRunner(sjr *ScheduledJobRun) *JobRunnerQuery {
+	query := (&JobRunnerClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := sjr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjobrun.Table, scheduledjobrun.FieldID, id),
+			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjobrun.JobRunnerTable, scheduledjobrun.JobRunnerColumn),
+		)
+		schemaConfig := sjr.schemaConfig
+		step.To.Schema = schemaConfig.JobRunner
+		step.Edge.Schema = schemaConfig.ScheduledJobRun
+		fromV = sqlgraph.Neighbors(sjr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ScheduledJobRunClient) Hooks() []Hook {
 	hooks := c.hooks.ScheduledJobRun

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/pkg/enums"
@@ -127,14 +128,6 @@ func (sjrc *ScheduledJobRunCreate) SetJobRunnerID(s string) *ScheduledJobRunCrea
 	return sjrc
 }
 
-// SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
-func (sjrc *ScheduledJobRunCreate) SetNillableJobRunnerID(s *string) *ScheduledJobRunCreate {
-	if s != nil {
-		sjrc.SetJobRunnerID(*s)
-	}
-	return sjrc
-}
-
 // SetStatus sets the "status" field.
 func (sjrc *ScheduledJobRunCreate) SetStatus(ejrs enums.ScheduledJobRunStatus) *ScheduledJobRunCreate {
 	sjrc.mutation.SetStatus(ejrs)
@@ -177,6 +170,11 @@ func (sjrc *ScheduledJobRunCreate) SetOwner(o *Organization) *ScheduledJobRunCre
 // SetScheduledJob sets the "scheduled_job" edge to the ControlScheduledJob entity.
 func (sjrc *ScheduledJobRunCreate) SetScheduledJob(c *ControlScheduledJob) *ScheduledJobRunCreate {
 	return sjrc.SetScheduledJobID(c.ID)
+}
+
+// SetJobRunner sets the "job_runner" edge to the JobRunner entity.
+func (sjrc *ScheduledJobRunCreate) SetJobRunner(j *JobRunner) *ScheduledJobRunCreate {
+	return sjrc.SetJobRunnerID(j.ID)
 }
 
 // Mutation returns the ScheduledJobRunMutation object of the builder.
@@ -251,6 +249,9 @@ func (sjrc *ScheduledJobRunCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobRun.owner_id": %w`, err)}
 		}
 	}
+	if _, ok := sjrc.mutation.JobRunnerID(); !ok {
+		return &ValidationError{Name: "job_runner_id", err: errors.New(`generated: missing required field "ScheduledJobRun.job_runner_id"`)}
+	}
 	if _, ok := sjrc.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "ScheduledJobRun.status"`)}
 	}
@@ -264,6 +265,9 @@ func (sjrc *ScheduledJobRunCreate) check() error {
 	}
 	if len(sjrc.mutation.ScheduledJobIDs()) == 0 {
 		return &ValidationError{Name: "scheduled_job", err: errors.New(`generated: missing required edge "ScheduledJobRun.scheduled_job"`)}
+	}
+	if len(sjrc.mutation.JobRunnerIDs()) == 0 {
+		return &ValidationError{Name: "job_runner", err: errors.New(`generated: missing required edge "ScheduledJobRun.job_runner"`)}
 	}
 	return nil
 }
@@ -325,10 +329,6 @@ func (sjrc *ScheduledJobRunCreate) createSpec() (*ScheduledJobRun, *sqlgraph.Cre
 		_spec.SetField(scheduledjobrun.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := sjrc.mutation.JobRunnerID(); ok {
-		_spec.SetField(scheduledjobrun.FieldJobRunnerID, field.TypeString, value)
-		_node.JobRunnerID = value
-	}
 	if value, ok := sjrc.mutation.Status(); ok {
 		_spec.SetField(scheduledjobrun.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
@@ -367,6 +367,24 @@ func (sjrc *ScheduledJobRunCreate) createSpec() (*ScheduledJobRun, *sqlgraph.Cre
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ScheduledJobID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sjrc.mutation.JobRunnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scheduledjobrun.JobRunnerTable,
+			Columns: []string{scheduledjobrun.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjrc.schemaConfig.ScheduledJobRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.JobRunnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

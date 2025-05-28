@@ -61038,8 +61038,6 @@ type ScheduledJobRunWhereInput struct {
 	JobRunnerIDContains     *string  `json:"jobRunnerIDContains,omitempty"`
 	JobRunnerIDHasPrefix    *string  `json:"jobRunnerIDHasPrefix,omitempty"`
 	JobRunnerIDHasSuffix    *string  `json:"jobRunnerIDHasSuffix,omitempty"`
-	JobRunnerIDIsNil        bool     `json:"jobRunnerIDIsNil,omitempty"`
-	JobRunnerIDNotNil       bool     `json:"jobRunnerIDNotNil,omitempty"`
 	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
 	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
 
@@ -61071,6 +61069,10 @@ type ScheduledJobRunWhereInput struct {
 	// "scheduled_job" edge predicates.
 	HasScheduledJob     *bool                            `json:"hasScheduledJob,omitempty"`
 	HasScheduledJobWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobWith,omitempty"`
+
+	// "job_runner" edge predicates.
+	HasJobRunner     *bool                  `json:"hasJobRunner,omitempty"`
+	HasJobRunnerWith []*JobRunnerWhereInput `json:"hasJobRunnerWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -61402,12 +61404,6 @@ func (i *ScheduledJobRunWhereInput) P() (predicate.ScheduledJobRun, error) {
 	if i.JobRunnerIDHasSuffix != nil {
 		predicates = append(predicates, scheduledjobrun.JobRunnerIDHasSuffix(*i.JobRunnerIDHasSuffix))
 	}
-	if i.JobRunnerIDIsNil {
-		predicates = append(predicates, scheduledjobrun.JobRunnerIDIsNil())
-	}
-	if i.JobRunnerIDNotNil {
-		predicates = append(predicates, scheduledjobrun.JobRunnerIDNotNil())
-	}
 	if i.JobRunnerIDEqualFold != nil {
 		predicates = append(predicates, scheduledjobrun.JobRunnerIDEqualFold(*i.JobRunnerIDEqualFold))
 	}
@@ -61501,6 +61497,24 @@ func (i *ScheduledJobRunWhereInput) P() (predicate.ScheduledJobRun, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, scheduledjobrun.HasScheduledJobWith(with...))
+	}
+	if i.HasJobRunner != nil {
+		p := scheduledjobrun.HasJobRunner()
+		if !*i.HasJobRunner {
+			p = scheduledjobrun.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasJobRunnerWith) > 0 {
+		with := make([]predicate.JobRunner, 0, len(i.HasJobRunnerWith))
+		for _, w := range i.HasJobRunnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasJobRunnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, scheduledjobrun.HasJobRunnerWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

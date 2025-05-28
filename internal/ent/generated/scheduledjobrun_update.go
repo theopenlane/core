@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
@@ -140,12 +141,6 @@ func (sjru *ScheduledJobRunUpdate) SetNillableJobRunnerID(s *string) *ScheduledJ
 	return sjru
 }
 
-// ClearJobRunnerID clears the value of the "job_runner_id" field.
-func (sjru *ScheduledJobRunUpdate) ClearJobRunnerID() *ScheduledJobRunUpdate {
-	sjru.mutation.ClearJobRunnerID()
-	return sjru
-}
-
 // SetStatus sets the "status" field.
 func (sjru *ScheduledJobRunUpdate) SetStatus(ejrs enums.ScheduledJobRunStatus) *ScheduledJobRunUpdate {
 	sjru.mutation.SetStatus(ejrs)
@@ -184,6 +179,11 @@ func (sjru *ScheduledJobRunUpdate) SetScheduledJob(c *ControlScheduledJob) *Sche
 	return sjru.SetScheduledJobID(c.ID)
 }
 
+// SetJobRunner sets the "job_runner" edge to the JobRunner entity.
+func (sjru *ScheduledJobRunUpdate) SetJobRunner(j *JobRunner) *ScheduledJobRunUpdate {
+	return sjru.SetJobRunnerID(j.ID)
+}
+
 // Mutation returns the ScheduledJobRunMutation object of the builder.
 func (sjru *ScheduledJobRunUpdate) Mutation() *ScheduledJobRunMutation {
 	return sjru.mutation
@@ -198,6 +198,12 @@ func (sjru *ScheduledJobRunUpdate) ClearOwner() *ScheduledJobRunUpdate {
 // ClearScheduledJob clears the "scheduled_job" edge to the ControlScheduledJob entity.
 func (sjru *ScheduledJobRunUpdate) ClearScheduledJob() *ScheduledJobRunUpdate {
 	sjru.mutation.ClearScheduledJob()
+	return sjru
+}
+
+// ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
+func (sjru *ScheduledJobRunUpdate) ClearJobRunner() *ScheduledJobRunUpdate {
+	sjru.mutation.ClearJobRunner()
 	return sjru
 }
 
@@ -258,6 +264,9 @@ func (sjru *ScheduledJobRunUpdate) check() error {
 	if sjru.mutation.ScheduledJobCleared() && len(sjru.mutation.ScheduledJobIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ScheduledJobRun.scheduled_job"`)
 	}
+	if sjru.mutation.JobRunnerCleared() && len(sjru.mutation.JobRunnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ScheduledJobRun.job_runner"`)
+	}
 	return nil
 }
 
@@ -308,12 +317,6 @@ func (sjru *ScheduledJobRunUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if sjru.mutation.DeletedByCleared() {
 		_spec.ClearField(scheduledjobrun.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := sjru.mutation.JobRunnerID(); ok {
-		_spec.SetField(scheduledjobrun.FieldJobRunnerID, field.TypeString, value)
-	}
-	if sjru.mutation.JobRunnerIDCleared() {
-		_spec.ClearField(scheduledjobrun.FieldJobRunnerID, field.TypeString)
 	}
 	if value, ok := sjru.mutation.Status(); ok {
 		_spec.SetField(scheduledjobrun.FieldStatus, field.TypeEnum, value)
@@ -372,6 +375,37 @@ func (sjru *ScheduledJobRunUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjru.schemaConfig.ScheduledJobRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if sjru.mutation.JobRunnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scheduledjobrun.JobRunnerTable,
+			Columns: []string{scheduledjobrun.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjru.schemaConfig.ScheduledJobRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := sjru.mutation.JobRunnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scheduledjobrun.JobRunnerTable,
+			Columns: []string{scheduledjobrun.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sjru.schemaConfig.ScheduledJobRun
@@ -510,12 +544,6 @@ func (sjruo *ScheduledJobRunUpdateOne) SetNillableJobRunnerID(s *string) *Schedu
 	return sjruo
 }
 
-// ClearJobRunnerID clears the value of the "job_runner_id" field.
-func (sjruo *ScheduledJobRunUpdateOne) ClearJobRunnerID() *ScheduledJobRunUpdateOne {
-	sjruo.mutation.ClearJobRunnerID()
-	return sjruo
-}
-
 // SetStatus sets the "status" field.
 func (sjruo *ScheduledJobRunUpdateOne) SetStatus(ejrs enums.ScheduledJobRunStatus) *ScheduledJobRunUpdateOne {
 	sjruo.mutation.SetStatus(ejrs)
@@ -554,6 +582,11 @@ func (sjruo *ScheduledJobRunUpdateOne) SetScheduledJob(c *ControlScheduledJob) *
 	return sjruo.SetScheduledJobID(c.ID)
 }
 
+// SetJobRunner sets the "job_runner" edge to the JobRunner entity.
+func (sjruo *ScheduledJobRunUpdateOne) SetJobRunner(j *JobRunner) *ScheduledJobRunUpdateOne {
+	return sjruo.SetJobRunnerID(j.ID)
+}
+
 // Mutation returns the ScheduledJobRunMutation object of the builder.
 func (sjruo *ScheduledJobRunUpdateOne) Mutation() *ScheduledJobRunMutation {
 	return sjruo.mutation
@@ -568,6 +601,12 @@ func (sjruo *ScheduledJobRunUpdateOne) ClearOwner() *ScheduledJobRunUpdateOne {
 // ClearScheduledJob clears the "scheduled_job" edge to the ControlScheduledJob entity.
 func (sjruo *ScheduledJobRunUpdateOne) ClearScheduledJob() *ScheduledJobRunUpdateOne {
 	sjruo.mutation.ClearScheduledJob()
+	return sjruo
+}
+
+// ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
+func (sjruo *ScheduledJobRunUpdateOne) ClearJobRunner() *ScheduledJobRunUpdateOne {
+	sjruo.mutation.ClearJobRunner()
 	return sjruo
 }
 
@@ -641,6 +680,9 @@ func (sjruo *ScheduledJobRunUpdateOne) check() error {
 	if sjruo.mutation.ScheduledJobCleared() && len(sjruo.mutation.ScheduledJobIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ScheduledJobRun.scheduled_job"`)
 	}
+	if sjruo.mutation.JobRunnerCleared() && len(sjruo.mutation.JobRunnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ScheduledJobRun.job_runner"`)
+	}
 	return nil
 }
 
@@ -709,12 +751,6 @@ func (sjruo *ScheduledJobRunUpdateOne) sqlSave(ctx context.Context) (_node *Sche
 	if sjruo.mutation.DeletedByCleared() {
 		_spec.ClearField(scheduledjobrun.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := sjruo.mutation.JobRunnerID(); ok {
-		_spec.SetField(scheduledjobrun.FieldJobRunnerID, field.TypeString, value)
-	}
-	if sjruo.mutation.JobRunnerIDCleared() {
-		_spec.ClearField(scheduledjobrun.FieldJobRunnerID, field.TypeString)
-	}
 	if value, ok := sjruo.mutation.Status(); ok {
 		_spec.SetField(scheduledjobrun.FieldStatus, field.TypeEnum, value)
 	}
@@ -772,6 +808,37 @@ func (sjruo *ScheduledJobRunUpdateOne) sqlSave(ctx context.Context) (_node *Sche
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjruo.schemaConfig.ScheduledJobRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if sjruo.mutation.JobRunnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scheduledjobrun.JobRunnerTable,
+			Columns: []string{scheduledjobrun.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjruo.schemaConfig.ScheduledJobRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := sjruo.mutation.JobRunnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scheduledjobrun.JobRunnerTable,
+			Columns: []string{scheduledjobrun.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = sjruo.schemaConfig.ScheduledJobRun
