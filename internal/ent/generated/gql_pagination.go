@@ -328,8 +328,11 @@ func (p *apitokenPager) applyCursors(query *APITokenQuery, after, before *Cursor
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -481,11 +484,24 @@ var (
 	// APITokenOrderFieldExpiresAt orders APIToken by expires_at.
 	APITokenOrderFieldExpiresAt = &APITokenOrderField{
 		Value: func(at *APIToken) (ent.Value, error) {
+			// allow for nil values for fields
+			if at.ExpiresAt == nil {
+				return nil, nil
+			}
 			return at.ExpiresAt, nil
 		},
 		column: apitoken.FieldExpiresAt,
-		toTerm: apitoken.ByExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) apitoken.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return apitoken.ByExpiresAt(opts...)
+		},
 		toCursor: func(at *APIToken) Cursor {
+			if at.ExpiresAt == nil {
+				return Cursor{
+					ID:    at.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    at.ID,
 				Value: at.ExpiresAt,
@@ -495,11 +511,24 @@ var (
 	// APITokenOrderFieldLastUsedAt orders APIToken by last_used_at.
 	APITokenOrderFieldLastUsedAt = &APITokenOrderField{
 		Value: func(at *APIToken) (ent.Value, error) {
+			// allow for nil values for fields
+			if at.LastUsedAt == nil {
+				return nil, nil
+			}
 			return at.LastUsedAt, nil
 		},
 		column: apitoken.FieldLastUsedAt,
-		toTerm: apitoken.ByLastUsedAt,
+		toTerm: func(opts ...sql.OrderTermOption) apitoken.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return apitoken.ByLastUsedAt(opts...)
+		},
 		toCursor: func(at *APIToken) Cursor {
+			if at.LastUsedAt == nil {
+				return Cursor{
+					ID:    at.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    at.ID,
 				Value: at.LastUsedAt,
@@ -750,8 +779,11 @@ func (p *actionplanPager) applyCursors(query *ActionPlanQuery, after, before *Cu
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -1702,8 +1734,11 @@ func (p *contactPager) applyCursors(query *ContactQuery, after, before *Cursor) 
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -2546,8 +2581,11 @@ func (p *controlPager) applyCursors(query *ControlQuery, after, before *Cursor) 
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -3426,8 +3464,11 @@ func (p *controlimplementationPager) applyCursors(query *ControlImplementationQu
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -4234,8 +4275,11 @@ func (p *controlobjectivePager) applyCursors(query *ControlObjectiveQuery, after
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -5150,8 +5194,11 @@ func (p *controlscheduledjobPager) applyCursors(query *ControlScheduledJobQuery,
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -5814,8 +5861,11 @@ func (p *customdomainPager) applyCursors(query *CustomDomainQuery, after, before
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -6514,8 +6564,11 @@ func (p *dnsverificationPager) applyCursors(query *DNSVerificationQuery, after, 
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -7178,8 +7231,11 @@ func (p *documentdataPager) applyCursors(query *DocumentDataQuery, after, before
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -7842,8 +7898,11 @@ func (p *entityPager) applyCursors(query *EntityQuery, after, before *Cursor) (*
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -8614,8 +8673,11 @@ func (p *entitytypePager) applyCursors(query *EntityTypeQuery, after, before *Cu
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -9314,8 +9376,11 @@ func (p *eventPager) applyCursors(query *EventQuery, after, before *Cursor) (*Ev
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -9978,8 +10043,11 @@ func (p *evidencePager) applyCursors(query *EvidenceQuery, after, before *Cursor
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -10786,8 +10854,11 @@ func (p *filePager) applyCursors(query *FileQuery, after, before *Cursor) (*File
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -11450,8 +11521,11 @@ func (p *groupPager) applyCursors(query *GroupQuery, after, before *Cursor) (*Gr
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -12186,8 +12260,11 @@ func (p *groupmembershipPager) applyCursors(query *GroupMembershipQuery, after, 
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -12886,8 +12963,11 @@ func (p *groupsettingPager) applyCursors(query *GroupSettingQuery, after, before
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -13550,8 +13630,11 @@ func (p *hushPager) applyCursors(query *HushQuery, after, before *Cursor) (*Hush
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -14286,8 +14369,11 @@ func (p *integrationPager) applyCursors(query *IntegrationQuery, after, before *
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -15022,8 +15108,11 @@ func (p *internalpolicyPager) applyCursors(query *InternalPolicyQuery, after, be
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -15866,8 +15955,11 @@ func (p *invitePager) applyCursors(query *InviteQuery, after, before *Cursor) (*
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -16270,8 +16362,11 @@ func (p *jobresultPager) applyCursors(query *JobResultQuery, after, before *Curs
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -16423,11 +16518,24 @@ var (
 	// JobResultOrderFieldExitCode orders JobResult by exit_code.
 	JobResultOrderFieldExitCode = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
+			// allow for nil values for fields
+			if jr.ExitCode == nil {
+				return nil, nil
+			}
 			return jr.ExitCode, nil
 		},
 		column: jobresult.FieldExitCode,
-		toTerm: jobresult.ByExitCode,
+		toTerm: func(opts ...sql.OrderTermOption) jobresult.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return jobresult.ByExitCode(opts...)
+		},
 		toCursor: func(jr *JobResult) Cursor {
+			if jr.ExitCode == nil {
+				return Cursor{
+					ID:    jr.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    jr.ID,
 				Value: jr.ExitCode,
@@ -16692,8 +16800,11 @@ func (p *jobrunnerPager) applyCursors(query *JobRunnerQuery, after, before *Curs
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -17392,8 +17503,11 @@ func (p *jobrunnerregistrationtokenPager) applyCursors(query *JobRunnerRegistrat
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -17531,11 +17645,24 @@ var (
 	// JobRunnerRegistrationTokenOrderFieldLastUsedAt orders JobRunnerRegistrationToken by last_used_at.
 	JobRunnerRegistrationTokenOrderFieldLastUsedAt = &JobRunnerRegistrationTokenOrderField{
 		Value: func(jrrt *JobRunnerRegistrationToken) (ent.Value, error) {
+			// allow for nil values for fields
+			if jrrt.LastUsedAt == nil {
+				return nil, nil
+			}
 			return jrrt.LastUsedAt, nil
 		},
 		column: jobrunnerregistrationtoken.FieldLastUsedAt,
-		toTerm: jobrunnerregistrationtoken.ByLastUsedAt,
+		toTerm: func(opts ...sql.OrderTermOption) jobrunnerregistrationtoken.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return jobrunnerregistrationtoken.ByLastUsedAt(opts...)
+		},
 		toCursor: func(jrrt *JobRunnerRegistrationToken) Cursor {
+			if jrrt.LastUsedAt == nil {
+				return Cursor{
+					ID:    jrrt.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    jrrt.ID,
 				Value: jrrt.LastUsedAt,
@@ -17760,8 +17887,11 @@ func (p *jobrunnertokenPager) applyCursors(query *JobRunnerTokenQuery, after, be
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -17899,11 +18029,24 @@ var (
 	// JobRunnerTokenOrderFieldExpiresAt orders JobRunnerToken by expires_at.
 	JobRunnerTokenOrderFieldExpiresAt = &JobRunnerTokenOrderField{
 		Value: func(jrt *JobRunnerToken) (ent.Value, error) {
+			// allow for nil values for fields
+			if jrt.ExpiresAt == nil {
+				return nil, nil
+			}
 			return jrt.ExpiresAt, nil
 		},
 		column: jobrunnertoken.FieldExpiresAt,
-		toTerm: jobrunnertoken.ByExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) jobrunnertoken.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return jobrunnertoken.ByExpiresAt(opts...)
+		},
 		toCursor: func(jrt *JobRunnerToken) Cursor {
+			if jrt.ExpiresAt == nil {
+				return Cursor{
+					ID:    jrt.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    jrt.ID,
 				Value: jrt.ExpiresAt,
@@ -17913,11 +18056,24 @@ var (
 	// JobRunnerTokenOrderFieldLastUsedAt orders JobRunnerToken by last_used_at.
 	JobRunnerTokenOrderFieldLastUsedAt = &JobRunnerTokenOrderField{
 		Value: func(jrt *JobRunnerToken) (ent.Value, error) {
+			// allow for nil values for fields
+			if jrt.LastUsedAt == nil {
+				return nil, nil
+			}
 			return jrt.LastUsedAt, nil
 		},
 		column: jobrunnertoken.FieldLastUsedAt,
-		toTerm: jobrunnertoken.ByLastUsedAt,
+		toTerm: func(opts ...sql.OrderTermOption) jobrunnertoken.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return jobrunnertoken.ByLastUsedAt(opts...)
+		},
 		toCursor: func(jrt *JobRunnerToken) Cursor {
+			if jrt.LastUsedAt == nil {
+				return Cursor{
+					ID:    jrt.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    jrt.ID,
 				Value: jrt.LastUsedAt,
@@ -18146,8 +18302,11 @@ func (p *mappabledomainPager) applyCursors(query *MappableDomainQuery, after, be
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -18846,8 +19005,11 @@ func (p *mappedcontrolPager) applyCursors(query *MappedControlQuery, after, befo
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -19546,8 +19708,11 @@ func (p *narrativePager) applyCursors(query *NarrativeQuery, after, before *Curs
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -20246,8 +20411,11 @@ func (p *notePager) applyCursors(query *NoteQuery, after, before *Cursor) (*Note
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -21159,8 +21327,11 @@ func (p *orgmembershipPager) applyCursors(query *OrgMembershipQuery, after, befo
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -22004,11 +22175,24 @@ var (
 	// OrgSubscriptionOrderFieldExpiresAt orders OrgSubscription by expires_at.
 	OrgSubscriptionOrderFieldExpiresAt = &OrgSubscriptionOrderField{
 		Value: func(os *OrgSubscription) (ent.Value, error) {
+			// allow for nil values for fields
+			if os.ExpiresAt == nil {
+				return nil, nil
+			}
 			return os.ExpiresAt, nil
 		},
 		column: orgsubscription.FieldExpiresAt,
-		toTerm: orgsubscription.ByExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) orgsubscription.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return orgsubscription.ByExpiresAt(opts...)
+		},
 		toCursor: func(os *OrgSubscription) Cursor {
+			if os.ExpiresAt == nil {
+				return Cursor{
+					ID:    os.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    os.ID,
 				Value: os.ExpiresAt,
@@ -22018,11 +22202,24 @@ var (
 	// OrgSubscriptionOrderFieldTrialExpiresAt orders OrgSubscription by trial_expires_at.
 	OrgSubscriptionOrderFieldTrialExpiresAt = &OrgSubscriptionOrderField{
 		Value: func(os *OrgSubscription) (ent.Value, error) {
+			// allow for nil values for fields
+			if os.TrialExpiresAt == nil {
+				return nil, nil
+			}
 			return os.TrialExpiresAt, nil
 		},
 		column: orgsubscription.FieldTrialExpiresAt,
-		toTerm: orgsubscription.ByTrialExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) orgsubscription.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return orgsubscription.ByTrialExpiresAt(opts...)
+		},
 		toCursor: func(os *OrgSubscription) Cursor {
+			if os.TrialExpiresAt == nil {
+				return Cursor{
+					ID:    os.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    os.ID,
 				Value: os.TrialExpiresAt,
@@ -22032,11 +22229,24 @@ var (
 	// OrgSubscriptionOrderFieldDaysUntilDue orders OrgSubscription by days_until_due.
 	OrgSubscriptionOrderFieldDaysUntilDue = &OrgSubscriptionOrderField{
 		Value: func(os *OrgSubscription) (ent.Value, error) {
+			// allow for nil values for fields
+			if os.DaysUntilDue == nil {
+				return nil, nil
+			}
 			return os.DaysUntilDue, nil
 		},
 		column: orgsubscription.FieldDaysUntilDue,
-		toTerm: orgsubscription.ByDaysUntilDue,
+		toTerm: func(opts ...sql.OrderTermOption) orgsubscription.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return orgsubscription.ByDaysUntilDue(opts...)
+		},
 		toCursor: func(os *OrgSubscription) Cursor {
+			if os.DaysUntilDue == nil {
+				return Cursor{
+					ID:    os.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    os.ID,
 				Value: os.DaysUntilDue,
@@ -22426,11 +22636,24 @@ var (
 	// OrgSubscriptionHistoryOrderFieldExpiresAt orders OrgSubscriptionHistory by expires_at.
 	OrgSubscriptionHistoryOrderFieldExpiresAt = &OrgSubscriptionHistoryOrderField{
 		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if osh.ExpiresAt == nil {
+				return nil, nil
+			}
 			return osh.ExpiresAt, nil
 		},
 		column: orgsubscriptionhistory.FieldExpiresAt,
-		toTerm: orgsubscriptionhistory.ByExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) orgsubscriptionhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return orgsubscriptionhistory.ByExpiresAt(opts...)
+		},
 		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			if osh.ExpiresAt == nil {
+				return Cursor{
+					ID:    osh.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    osh.ID,
 				Value: osh.ExpiresAt,
@@ -22440,11 +22663,24 @@ var (
 	// OrgSubscriptionHistoryOrderFieldTrialExpiresAt orders OrgSubscriptionHistory by trial_expires_at.
 	OrgSubscriptionHistoryOrderFieldTrialExpiresAt = &OrgSubscriptionHistoryOrderField{
 		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if osh.TrialExpiresAt == nil {
+				return nil, nil
+			}
 			return osh.TrialExpiresAt, nil
 		},
 		column: orgsubscriptionhistory.FieldTrialExpiresAt,
-		toTerm: orgsubscriptionhistory.ByTrialExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) orgsubscriptionhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return orgsubscriptionhistory.ByTrialExpiresAt(opts...)
+		},
 		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			if osh.TrialExpiresAt == nil {
+				return Cursor{
+					ID:    osh.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    osh.ID,
 				Value: osh.TrialExpiresAt,
@@ -22454,11 +22690,24 @@ var (
 	// OrgSubscriptionHistoryOrderFieldDaysUntilDue orders OrgSubscriptionHistory by days_until_due.
 	OrgSubscriptionHistoryOrderFieldDaysUntilDue = &OrgSubscriptionHistoryOrderField{
 		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if osh.DaysUntilDue == nil {
+				return nil, nil
+			}
 			return osh.DaysUntilDue, nil
 		},
 		column: orgsubscriptionhistory.FieldDaysUntilDue,
-		toTerm: orgsubscriptionhistory.ByDaysUntilDue,
+		toTerm: func(opts ...sql.OrderTermOption) orgsubscriptionhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return orgsubscriptionhistory.ByDaysUntilDue(opts...)
+		},
 		toCursor: func(osh *OrgSubscriptionHistory) Cursor {
+			if osh.DaysUntilDue == nil {
+				return Cursor{
+					ID:    osh.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    osh.ID,
 				Value: osh.DaysUntilDue,
@@ -22703,8 +22952,11 @@ func (p *organizationPager) applyCursors(query *OrganizationQuery, after, before
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -23439,8 +23691,11 @@ func (p *organizationsettingPager) applyCursors(query *OrganizationSettingQuery,
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -24103,8 +24358,11 @@ func (p *personalaccesstokenPager) applyCursors(query *PersonalAccessTokenQuery,
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -24256,11 +24514,24 @@ var (
 	// PersonalAccessTokenOrderFieldExpiresAt orders PersonalAccessToken by expires_at.
 	PersonalAccessTokenOrderFieldExpiresAt = &PersonalAccessTokenOrderField{
 		Value: func(pat *PersonalAccessToken) (ent.Value, error) {
+			// allow for nil values for fields
+			if pat.ExpiresAt == nil {
+				return nil, nil
+			}
 			return pat.ExpiresAt, nil
 		},
 		column: personalaccesstoken.FieldExpiresAt,
-		toTerm: personalaccesstoken.ByExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) personalaccesstoken.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return personalaccesstoken.ByExpiresAt(opts...)
+		},
 		toCursor: func(pat *PersonalAccessToken) Cursor {
+			if pat.ExpiresAt == nil {
+				return Cursor{
+					ID:    pat.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    pat.ID,
 				Value: pat.ExpiresAt,
@@ -24270,11 +24541,24 @@ var (
 	// PersonalAccessTokenOrderFieldLastUsedAt orders PersonalAccessToken by last_used_at.
 	PersonalAccessTokenOrderFieldLastUsedAt = &PersonalAccessTokenOrderField{
 		Value: func(pat *PersonalAccessToken) (ent.Value, error) {
+			// allow for nil values for fields
+			if pat.LastUsedAt == nil {
+				return nil, nil
+			}
 			return pat.LastUsedAt, nil
 		},
 		column: personalaccesstoken.FieldLastUsedAt,
-		toTerm: personalaccesstoken.ByLastUsedAt,
+		toTerm: func(opts ...sql.OrderTermOption) personalaccesstoken.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return personalaccesstoken.ByLastUsedAt(opts...)
+		},
 		toCursor: func(pat *PersonalAccessToken) Cursor {
+			if pat.LastUsedAt == nil {
+				return Cursor{
+					ID:    pat.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    pat.ID,
 				Value: pat.LastUsedAt,
@@ -24525,8 +24809,11 @@ func (p *procedurePager) applyCursors(query *ProcedureQuery, after, before *Curs
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -25369,8 +25656,11 @@ func (p *programPager) applyCursors(query *ProgramQuery, after, before *Cursor) 
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -26249,8 +26539,11 @@ func (p *programmembershipPager) applyCursors(query *ProgramMembershipQuery, aft
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -26949,8 +27242,11 @@ func (p *riskPager) applyCursors(query *RiskQuery, after, before *Cursor) (*Risk
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -27901,8 +28197,11 @@ func (p *scheduledjobPager) applyCursors(query *ScheduledJobQuery, after, before
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -28637,8 +28936,11 @@ func (p *scheduledjobrunPager) applyCursors(query *ScheduledJobRunQuery, after, 
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -28987,8 +29289,11 @@ func (p *standardPager) applyCursors(query *StandardQuery, after, before *Cursor
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -29903,8 +30208,11 @@ func (p *subcontrolPager) applyCursors(query *SubcontrolQuery, after, before *Cu
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -30783,8 +31091,11 @@ func (p *subscriberPager) applyCursors(query *SubscriberQuery, after, before *Cu
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -31205,8 +31516,11 @@ func (p *tfasettingPager) applyCursors(query *TFASettingQuery, after, before *Cu
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -31555,8 +31869,11 @@ func (p *taskPager) applyCursors(query *TaskQuery, after, before *Cursor) (*Task
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -31736,11 +32053,24 @@ var (
 	// TaskOrderFieldDue orders Task by due.
 	TaskOrderFieldDue = &TaskOrderField{
 		Value: func(t *Task) (ent.Value, error) {
+			// allow for nil values for fields
+			if t.Due == nil {
+				return nil, nil
+			}
 			return t.Due, nil
 		},
 		column: task.FieldDue,
-		toTerm: task.ByDue,
+		toTerm: func(opts ...sql.OrderTermOption) task.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return task.ByDue(opts...)
+		},
 		toCursor: func(t *Task) Cursor {
+			if t.Due == nil {
+				return Cursor{
+					ID:    t.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    t.ID,
 				Value: t.Due,
@@ -31750,11 +32080,24 @@ var (
 	// TaskOrderFieldCompleted orders Task by completed.
 	TaskOrderFieldCompleted = &TaskOrderField{
 		Value: func(t *Task) (ent.Value, error) {
+			// allow for nil values for fields
+			if t.Completed == nil {
+				return nil, nil
+			}
 			return t.Completed, nil
 		},
 		column: task.FieldCompleted,
-		toTerm: task.ByCompleted,
+		toTerm: func(opts ...sql.OrderTermOption) task.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return task.ByCompleted(opts...)
+		},
 		toCursor: func(t *Task) Cursor {
+			if t.Completed == nil {
+				return Cursor{
+					ID:    t.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    t.ID,
 				Value: t.Completed,
@@ -32140,11 +32483,24 @@ var (
 	// TaskHistoryOrderFieldDue orders TaskHistory by due.
 	TaskHistoryOrderFieldDue = &TaskHistoryOrderField{
 		Value: func(th *TaskHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if th.Due == nil {
+				return nil, nil
+			}
 			return th.Due, nil
 		},
 		column: taskhistory.FieldDue,
-		toTerm: taskhistory.ByDue,
+		toTerm: func(opts ...sql.OrderTermOption) taskhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return taskhistory.ByDue(opts...)
+		},
 		toCursor: func(th *TaskHistory) Cursor {
+			if th.Due == nil {
+				return Cursor{
+					ID:    th.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    th.ID,
 				Value: th.Due,
@@ -32154,11 +32510,24 @@ var (
 	// TaskHistoryOrderFieldCompleted orders TaskHistory by completed.
 	TaskHistoryOrderFieldCompleted = &TaskHistoryOrderField{
 		Value: func(th *TaskHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if th.Completed == nil {
+				return nil, nil
+			}
 			return th.Completed, nil
 		},
 		column: taskhistory.FieldCompleted,
-		toTerm: taskhistory.ByCompleted,
+		toTerm: func(opts ...sql.OrderTermOption) taskhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return taskhistory.ByCompleted(opts...)
+		},
 		toCursor: func(th *TaskHistory) Cursor {
+			if th.Completed == nil {
+				return Cursor{
+					ID:    th.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    th.ID,
 				Value: th.Completed,
@@ -32399,8 +32768,11 @@ func (p *templatePager) applyCursors(query *TemplateQuery, after, before *Cursor
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -33135,8 +33507,11 @@ func (p *userPager) applyCursors(query *UserQuery, after, before *Cursor) (*User
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -33907,8 +34282,11 @@ func (p *usersettingPager) applyCursors(query *UserSettingQuery, after, before *
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }

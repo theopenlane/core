@@ -64,7 +64,7 @@ func create(ctx context.Context) error {
 
 	cobra.CheckErr(createValidation())
 
-	mappableDomains, err := client.GetMappableDomains(ctx, nil, nil, &openlaneclient.MappableDomainWhereInput{
+	mappableDomains, err := client.GetMappableDomains(ctx, cmd.First, cmd.Last, &openlaneclient.MappableDomainWhereInput{
 		Name: &mappableDomainName,
 	})
 	cobra.CheckErr(err)

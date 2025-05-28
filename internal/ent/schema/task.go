@@ -76,6 +76,7 @@ func (Task) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("due"),
 			).
+			Nillable().
 			Optional(),
 		field.Time("completed").
 			GoType(models.DateTime{}).
@@ -83,6 +84,7 @@ func (Task) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("completed"),
 			).
+			Nillable().
 			Optional(),
 		field.String("assignee_id").
 			Comment("the id of the user who was assigned the task").

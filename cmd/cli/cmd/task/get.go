@@ -2,6 +2,7 @@ package task
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -23,6 +24,8 @@ func init() {
 
 	getCmd.Flags().StringP("id", "i", "", "task id to query")
 	getCmd.Flags().BoolP("include-completed", "c", false, "include completed tasks")
+	getCmd.Flags().String("order-by", "created_at", "order by field (due, created_at, updated_at)")
+	getCmd.Flags().String("order-direction", "DESC", "order direction (ASC, DESC)")
 }
 
 // get an existing task in the platform
@@ -56,9 +59,18 @@ func get(ctx context.Context) error {
 
 	}
 
-	o, err := client.GetTasks(ctx, nil, nil, &openlaneclient.TaskWhereInput{
+	orderBy := cmd.Config.String("order-by")
+	orderDirection := cmd.Config.String("order-direction")
+
+	order := &openlaneclient.TaskOrder{
+		Direction: openlaneclient.OrderDirection(strings.ToUpper(orderDirection)),
+		Field:     openlaneclient.TaskOrderField(orderBy),
+	}
+
+	o, err := client.GetTasks(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, &openlaneclient.TaskWhereInput{
 		CompletedIsNil: &includeCompleted,
-	})
+	}, []*openlaneclient.TaskOrder{order})
+	cobra.CheckErr(err)
 
 	return consoleOutput(o)
 }

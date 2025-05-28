@@ -255,8 +255,15 @@ query GetTaskByID($taskId: ID!) {
   }
 }
 
-query GetTasks($first: Int, $last: Int, $where: TaskWhereInput) {
-  tasks(first: $first, last: $last, where: $where) {
+query GetTasks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: TaskWhereInput, $orderBy: [TaskOrder!]) {
+  tasks(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+  ) {
     totalCount
     pageInfo {
       startCursor

@@ -59,7 +59,7 @@ func get(ctx context.Context) error {
 
 	// If any filters are set, use GetCustomDomains with filters
 	if where.CnameRecord != nil || where.OwnerID != nil {
-		o, err := client.GetCustomDomains(ctx, nil, nil, where)
+		o, err := client.GetCustomDomains(ctx, cmd.First, cmd.Last, where)
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)

@@ -399,7 +399,7 @@ type OpenlaneGraphClient interface {
 	DeleteTask(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTask, error)
 	GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
 	GetTaskByID(ctx context.Context, taskID string, interceptors ...clientv2.RequestInterceptor) (*GetTaskByID, error)
-	GetTasks(ctx context.Context, first *int64, last *int64, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error)
+	GetTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, where *TaskWhereInput, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error)
 	UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error)
 	UpdateTaskComment(ctx context.Context, updateTaskCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTaskComment, error)
 	GetAllTaskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTaskHistories, error)
@@ -104427,8 +104427,8 @@ func (c *Client) GetTaskByID(ctx context.Context, taskID string, interceptors ..
 	return &res, nil
 }
 
-const GetTasksDocument = `query GetTasks ($first: Int, $last: Int, $where: TaskWhereInput) {
-	tasks(first: $first, last: $last, where: $where) {
+const GetTasksDocument = `query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: TaskWhereInput, $orderBy: [TaskOrder!]) {
+	tasks(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
 		totalCount
 		pageInfo {
 			startCursor
@@ -104490,11 +104490,14 @@ const GetTasksDocument = `query GetTasks ($first: Int, $last: Int, $where: TaskW
 }
 `
 
-func (c *Client) GetTasks(ctx context.Context, first *int64, last *int64, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error) {
+func (c *Client) GetTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, where *TaskWhereInput, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error) {
 	vars := map[string]any{
-		"first": first,
-		"last":  last,
-		"where": where,
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
 	}
 
 	var res GetTasks
