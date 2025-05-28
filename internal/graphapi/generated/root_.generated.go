@@ -38130,7 +38130,7 @@ input CreateScheduledJobInput {
   """
   the script to run
   """
-  script: String!
+  script: String
   """
   the configuration to run this job
   """
@@ -65383,7 +65383,7 @@ type ScheduledJob implements Node {
   """
   the script to run
   """
-  script: String!
+  script: String
   """
   the configuration to run this job
   """
@@ -65468,7 +65468,7 @@ type ScheduledJobHistory implements Node {
   """
   the script to run
   """
-  script: String!
+  script: String
   """
   the configuration to run this job
   """
@@ -72936,6 +72936,7 @@ input UpdateScheduledJobInput {
   the script to run
   """
   script: String
+  clearScript: Boolean
   """
   the configuration to run this job
   """

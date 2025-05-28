@@ -62639,7 +62639,7 @@ type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs struct {
 	ID            string                  "json:\"id\" graphql:\"id\""
 	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        string                  "json:\"script\" graphql:\"script\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -62707,7 +62707,7 @@ func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetO
 	}
 	return t.OwnerID
 }
-func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetScript() string {
+func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetScript() *string {
 	if t == nil {
 		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
 	}
@@ -62766,7 +62766,7 @@ type CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs struct {
 	ID            string                  "json:\"id\" graphql:\"id\""
 	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        string                  "json:\"script\" graphql:\"script\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -62834,7 +62834,7 @@ func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetOwnerID
 	}
 	return t.OwnerID
 }
-func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetScript() string {
+func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetScript() *string {
 	if t == nil {
 		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
 	}
@@ -62893,7 +62893,7 @@ type CreateScheduledJob_CreateScheduledJob_ScheduledJob struct {
 	ID            string                  "json:\"id\" graphql:\"id\""
 	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        string                  "json:\"script\" graphql:\"script\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -62961,7 +62961,7 @@ func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetOwnerID() *strin
 	}
 	return t.OwnerID
 }
-func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetScript() string {
+func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetScript() *string {
 	if t == nil {
 		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
 	}
@@ -63063,7 +63063,7 @@ type GetAllScheduledJobs_ScheduledJobs_Edges_Node struct {
 	ID            string                  "json:\"id\" graphql:\"id\""
 	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        string                  "json:\"script\" graphql:\"script\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -63131,7 +63131,7 @@ func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetScript() string {
+func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetScript() *string {
 	if t == nil {
 		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
 	}
@@ -63215,7 +63215,7 @@ type GetScheduledJobByID_ScheduledJob struct {
 	ID            string                  "json:\"id\" graphql:\"id\""
 	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        string                  "json:\"script\" graphql:\"script\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -63283,7 +63283,7 @@ func (t *GetScheduledJobByID_ScheduledJob) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetScheduledJobByID_ScheduledJob) GetScript() string {
+func (t *GetScheduledJobByID_ScheduledJob) GetScript() *string {
 	if t == nil {
 		t = &GetScheduledJobByID_ScheduledJob{}
 	}
@@ -63363,7 +63363,7 @@ type GetScheduledJobs_ScheduledJobs_Edges_Node struct {
 	ID            string                  "json:\"id\" graphql:\"id\""
 	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        string                  "json:\"script\" graphql:\"script\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -63431,7 +63431,7 @@ func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetScript() string {
+func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetScript() *string {
 	if t == nil {
 		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
 	}
@@ -63515,7 +63515,7 @@ type UpdateScheduledJob_UpdateScheduledJob_ScheduledJob struct {
 	ID            string                  "json:\"id\" graphql:\"id\""
 	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        string                  "json:\"script\" graphql:\"script\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -63583,7 +63583,7 @@ func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetOwnerID() *strin
 	}
 	return t.OwnerID
 }
-func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetScript() string {
+func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetScript() *string {
 	if t == nil {
 		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
 	}
@@ -63677,7 +63677,7 @@ type GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
-	Script        string                  "json:\"script\" graphql:\"script\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -63763,7 +63763,7 @@ func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetRef() 
 	}
 	return t.Ref
 }
-func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetScript() string {
+func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetScript() *string {
 	if t == nil {
 		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
 	}
@@ -63882,7 +63882,7 @@ type GetScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
-	Script        string                  "json:\"script\" graphql:\"script\""
+	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -63968,7 +63968,7 @@ func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetRef() *st
 	}
 	return t.Ref
 }
-func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetScript() string {
+func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetScript() *string {
 	if t == nil {
 		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
 	}

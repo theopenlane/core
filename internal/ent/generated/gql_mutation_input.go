@@ -7905,7 +7905,7 @@ type CreateScheduledJobInput struct {
 	Title         string
 	Description   *string
 	JobType       *enums.JobType
-	Script        string
+	Script        *string
 	Configuration models.JobConfiguration
 	Cadence       *models.JobCadence
 	Cron          *models.Cron
@@ -7924,7 +7924,9 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	if v := i.JobType; v != nil {
 		m.SetJobType(*v)
 	}
-	m.SetScript(i.Script)
+	if v := i.Script; v != nil {
+		m.SetScript(*v)
+	}
 	m.SetConfiguration(i.Configuration)
 	if v := i.Cadence; v != nil {
 		m.SetCadence(*v)
@@ -7952,6 +7954,7 @@ type UpdateScheduledJobInput struct {
 	ClearDescription bool
 	Description      *string
 	JobType          *enums.JobType
+	ClearScript      bool
 	Script           *string
 	Configuration    *models.JobConfiguration
 	ClearCadence     bool
@@ -7984,6 +7987,9 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.JobType; v != nil {
 		m.SetJobType(*v)
+	}
+	if i.ClearScript {
+		m.ClearScript()
 	}
 	if v := i.Script; v != nil {
 		m.SetScript(*v)

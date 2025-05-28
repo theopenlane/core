@@ -1,4 +1,4 @@
-h1:BJetIgN3ADzVv3zro0rEWnOAmKrKFc5od40XfbDts3U=
+h1:KA7u++rVgcFpdEgq5XXv2eNKBcf6PaKwp/NwwrN9ny8=
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
@@ -16,4 +16,4 @@ h1:BJetIgN3ADzVv3zro0rEWnOAmKrKFc5od40XfbDts3U=
 20250525154205_custom_domain_verification_cloudflare.sql h1:DyYrOI6eDE+53dTyEpqSLFCG5XusUDa1JnytCEjLjMI=
 20250526190807_jobs.sql h1:Y+E7v1okrKzgF6GCO+v+SC3nON37P2NptkSO0dAzkF0=
 20250526222003_dns_ssl_verification_statuses.sql h1:USqHGiWC+we02ujd2FSALWuekwXyLRXfVn5jXzQgPsc=
-20250528013804_job_fixes.sql h1:TbQRq79USPW+38n1glHdE77nxeM/fydDQp2M97OQJT4=
+20250528204154_job_fixes.sql h1:diC1X5wRnvngEhcGeIZZjT8XsN5a3tDbvyoziGNs8rU=

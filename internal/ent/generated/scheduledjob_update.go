@@ -207,6 +207,12 @@ func (sju *ScheduledJobUpdate) SetNillableScript(s *string) *ScheduledJobUpdate 
 	return sju
 }
 
+// ClearScript clears the value of the "script" field.
+func (sju *ScheduledJobUpdate) ClearScript() *ScheduledJobUpdate {
+	sju.mutation.ClearScript()
+	return sju
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sju *ScheduledJobUpdate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobUpdate {
 	sju.mutation.SetConfiguration(mc)
@@ -420,6 +426,9 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := sju.mutation.Script(); ok {
 		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
+	}
+	if sju.mutation.ScriptCleared() {
+		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
 	}
 	if value, ok := sju.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
@@ -660,6 +669,12 @@ func (sjuo *ScheduledJobUpdateOne) SetNillableScript(s *string) *ScheduledJobUpd
 	if s != nil {
 		sjuo.SetScript(*s)
 	}
+	return sjuo
+}
+
+// ClearScript clears the value of the "script" field.
+func (sjuo *ScheduledJobUpdateOne) ClearScript() *ScheduledJobUpdateOne {
+	sjuo.mutation.ClearScript()
 	return sjuo
 }
 
@@ -906,6 +921,9 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	}
 	if value, ok := sjuo.mutation.Script(); ok {
 		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
+	}
+	if sjuo.mutation.ScriptCleared() {
+		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
 	}
 	if value, ok := sjuo.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
