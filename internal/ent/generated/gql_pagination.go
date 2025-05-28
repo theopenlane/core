@@ -442,7 +442,6 @@ var (
 	// APITokenOrderFieldCreatedAt orders APIToken by created_at.
 	APITokenOrderFieldCreatedAt = &APITokenOrderField{
 		Value: func(at *APIToken) (ent.Value, error) {
-
 			return at.CreatedAt, nil
 		},
 		column: apitoken.FieldCreatedAt,
@@ -457,7 +456,6 @@ var (
 	// APITokenOrderFieldUpdatedAt orders APIToken by updated_at.
 	APITokenOrderFieldUpdatedAt = &APITokenOrderField{
 		Value: func(at *APIToken) (ent.Value, error) {
-
 			return at.UpdatedAt, nil
 		},
 		column: apitoken.FieldUpdatedAt,
@@ -472,7 +470,6 @@ var (
 	// APITokenOrderFieldName orders APIToken by name.
 	APITokenOrderFieldName = &APITokenOrderField{
 		Value: func(at *APIToken) (ent.Value, error) {
-
 			return at.Name, nil
 		},
 		column: apitoken.FieldName,
@@ -491,7 +488,6 @@ var (
 			if at.ExpiresAt == nil {
 				return nil, nil
 			}
-
 			return at.ExpiresAt, nil
 		},
 		column: apitoken.FieldExpiresAt,
@@ -519,7 +515,6 @@ var (
 			if at.LastUsedAt == nil {
 				return nil, nil
 			}
-
 			return at.LastUsedAt, nil
 		},
 		column: apitoken.FieldLastUsedAt,
@@ -543,7 +538,6 @@ var (
 	// APITokenOrderFieldIsActive orders APIToken by is_active.
 	APITokenOrderFieldIsActive = &APITokenOrderField{
 		Value: func(at *APIToken) (ent.Value, error) {
-
 			return at.IsActive, nil
 		},
 		column: apitoken.FieldIsActive,
@@ -899,7 +893,6 @@ var (
 	// ActionPlanOrderFieldCreatedAt orders ActionPlan by created_at.
 	ActionPlanOrderFieldCreatedAt = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.CreatedAt, nil
 		},
 		column: actionplan.FieldCreatedAt,
@@ -914,7 +907,6 @@ var (
 	// ActionPlanOrderFieldUpdatedAt orders ActionPlan by updated_at.
 	ActionPlanOrderFieldUpdatedAt = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.UpdatedAt, nil
 		},
 		column: actionplan.FieldUpdatedAt,
@@ -929,7 +921,6 @@ var (
 	// ActionPlanOrderFieldRevision orders ActionPlan by revision.
 	ActionPlanOrderFieldRevision = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.Revision, nil
 		},
 		column: actionplan.FieldRevision,
@@ -944,7 +935,6 @@ var (
 	// ActionPlanOrderFieldName orders ActionPlan by name.
 	ActionPlanOrderFieldName = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.Name, nil
 		},
 		column: actionplan.FieldName,
@@ -959,7 +949,6 @@ var (
 	// ActionPlanOrderFieldStatus orders ActionPlan by status.
 	ActionPlanOrderFieldStatus = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.Status, nil
 		},
 		column: actionplan.FieldStatus,
@@ -974,7 +963,6 @@ var (
 	// ActionPlanOrderFieldReviewDue orders ActionPlan by review_due.
 	ActionPlanOrderFieldReviewDue = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.ReviewDue, nil
 		},
 		column: actionplan.FieldReviewDue,
@@ -989,7 +977,6 @@ var (
 	// ActionPlanOrderFieldReviewFrequency orders ActionPlan by review_frequency.
 	ActionPlanOrderFieldReviewFrequency = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.ReviewFrequency, nil
 		},
 		column: actionplan.FieldReviewFrequency,
@@ -1004,7 +991,6 @@ var (
 	// ActionPlanOrderFieldDueDate orders ActionPlan by due_date.
 	ActionPlanOrderFieldDueDate = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.DueDate, nil
 		},
 		column: actionplan.FieldDueDate,
@@ -1019,7 +1005,6 @@ var (
 	// ActionPlanOrderFieldPriority orders ActionPlan by priority.
 	ActionPlanOrderFieldPriority = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.Priority, nil
 		},
 		column: actionplan.FieldPriority,
@@ -1034,7 +1019,6 @@ var (
 	// ActionPlanOrderFieldSource orders ActionPlan by source.
 	ActionPlanOrderFieldSource = &ActionPlanOrderField{
 		Value: func(ap *ActionPlan) (ent.Value, error) {
-
 			return ap.Source, nil
 		},
 		column: actionplan.FieldSource,
@@ -1367,7 +1351,6 @@ var (
 	// ActionPlanHistoryOrderFieldCreatedAt orders ActionPlanHistory by created_at.
 	ActionPlanHistoryOrderFieldCreatedAt = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.CreatedAt, nil
 		},
 		column: actionplanhistory.FieldCreatedAt,
@@ -1382,7 +1365,6 @@ var (
 	// ActionPlanHistoryOrderFieldUpdatedAt orders ActionPlanHistory by updated_at.
 	ActionPlanHistoryOrderFieldUpdatedAt = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.UpdatedAt, nil
 		},
 		column: actionplanhistory.FieldUpdatedAt,
@@ -1397,7 +1379,6 @@ var (
 	// ActionPlanHistoryOrderFieldRevision orders ActionPlanHistory by revision.
 	ActionPlanHistoryOrderFieldRevision = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.Revision, nil
 		},
 		column: actionplanhistory.FieldRevision,
@@ -1412,7 +1393,6 @@ var (
 	// ActionPlanHistoryOrderFieldName orders ActionPlanHistory by name.
 	ActionPlanHistoryOrderFieldName = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.Name, nil
 		},
 		column: actionplanhistory.FieldName,
@@ -1427,7 +1407,6 @@ var (
 	// ActionPlanHistoryOrderFieldStatus orders ActionPlanHistory by status.
 	ActionPlanHistoryOrderFieldStatus = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.Status, nil
 		},
 		column: actionplanhistory.FieldStatus,
@@ -1442,7 +1421,6 @@ var (
 	// ActionPlanHistoryOrderFieldReviewDue orders ActionPlanHistory by review_due.
 	ActionPlanHistoryOrderFieldReviewDue = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.ReviewDue, nil
 		},
 		column: actionplanhistory.FieldReviewDue,
@@ -1457,7 +1435,6 @@ var (
 	// ActionPlanHistoryOrderFieldReviewFrequency orders ActionPlanHistory by review_frequency.
 	ActionPlanHistoryOrderFieldReviewFrequency = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.ReviewFrequency, nil
 		},
 		column: actionplanhistory.FieldReviewFrequency,
@@ -1472,7 +1449,6 @@ var (
 	// ActionPlanHistoryOrderFieldDueDate orders ActionPlanHistory by due_date.
 	ActionPlanHistoryOrderFieldDueDate = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.DueDate, nil
 		},
 		column: actionplanhistory.FieldDueDate,
@@ -1487,7 +1463,6 @@ var (
 	// ActionPlanHistoryOrderFieldPriority orders ActionPlanHistory by priority.
 	ActionPlanHistoryOrderFieldPriority = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.Priority, nil
 		},
 		column: actionplanhistory.FieldPriority,
@@ -1502,7 +1477,6 @@ var (
 	// ActionPlanHistoryOrderFieldSource orders ActionPlanHistory by source.
 	ActionPlanHistoryOrderFieldSource = &ActionPlanHistoryOrderField{
 		Value: func(aph *ActionPlanHistory) (ent.Value, error) {
-
 			return aph.Source, nil
 		},
 		column: actionplanhistory.FieldSource,
@@ -1874,7 +1848,6 @@ var (
 	// ContactOrderFieldCreatedAt orders Contact by created_at.
 	ContactOrderFieldCreatedAt = &ContactOrderField{
 		Value: func(c *Contact) (ent.Value, error) {
-
 			return c.CreatedAt, nil
 		},
 		column: contact.FieldCreatedAt,
@@ -1889,7 +1862,6 @@ var (
 	// ContactOrderFieldUpdatedAt orders Contact by updated_at.
 	ContactOrderFieldUpdatedAt = &ContactOrderField{
 		Value: func(c *Contact) (ent.Value, error) {
-
 			return c.UpdatedAt, nil
 		},
 		column: contact.FieldUpdatedAt,
@@ -1904,7 +1876,6 @@ var (
 	// ContactOrderFieldFullName orders Contact by full_name.
 	ContactOrderFieldFullName = &ContactOrderField{
 		Value: func(c *Contact) (ent.Value, error) {
-
 			return c.FullName, nil
 		},
 		column: contact.FieldFullName,
@@ -1919,7 +1890,6 @@ var (
 	// ContactOrderFieldTitle orders Contact by title.
 	ContactOrderFieldTitle = &ContactOrderField{
 		Value: func(c *Contact) (ent.Value, error) {
-
 			return c.Title, nil
 		},
 		column: contact.FieldTitle,
@@ -1934,7 +1904,6 @@ var (
 	// ContactOrderFieldCompany orders Contact by company.
 	ContactOrderFieldCompany = &ContactOrderField{
 		Value: func(c *Contact) (ent.Value, error) {
-
 			return c.Company, nil
 		},
 		column: contact.FieldCompany,
@@ -1949,7 +1918,6 @@ var (
 	// ContactOrderFieldEmail orders Contact by email.
 	ContactOrderFieldEmail = &ContactOrderField{
 		Value: func(c *Contact) (ent.Value, error) {
-
 			return c.Email, nil
 		},
 		column: contact.FieldEmail,
@@ -1964,7 +1932,6 @@ var (
 	// ContactOrderFieldStatus orders Contact by status.
 	ContactOrderFieldStatus = &ContactOrderField{
 		Value: func(c *Contact) (ent.Value, error) {
-
 			return c.Status, nil
 		},
 		column: contact.FieldStatus,
@@ -2285,7 +2252,6 @@ var (
 	// ContactHistoryOrderFieldCreatedAt orders ContactHistory by created_at.
 	ContactHistoryOrderFieldCreatedAt = &ContactHistoryOrderField{
 		Value: func(ch *ContactHistory) (ent.Value, error) {
-
 			return ch.CreatedAt, nil
 		},
 		column: contacthistory.FieldCreatedAt,
@@ -2300,7 +2266,6 @@ var (
 	// ContactHistoryOrderFieldUpdatedAt orders ContactHistory by updated_at.
 	ContactHistoryOrderFieldUpdatedAt = &ContactHistoryOrderField{
 		Value: func(ch *ContactHistory) (ent.Value, error) {
-
 			return ch.UpdatedAt, nil
 		},
 		column: contacthistory.FieldUpdatedAt,
@@ -2315,7 +2280,6 @@ var (
 	// ContactHistoryOrderFieldFullName orders ContactHistory by full_name.
 	ContactHistoryOrderFieldFullName = &ContactHistoryOrderField{
 		Value: func(ch *ContactHistory) (ent.Value, error) {
-
 			return ch.FullName, nil
 		},
 		column: contacthistory.FieldFullName,
@@ -2330,7 +2294,6 @@ var (
 	// ContactHistoryOrderFieldTitle orders ContactHistory by title.
 	ContactHistoryOrderFieldTitle = &ContactHistoryOrderField{
 		Value: func(ch *ContactHistory) (ent.Value, error) {
-
 			return ch.Title, nil
 		},
 		column: contacthistory.FieldTitle,
@@ -2345,7 +2308,6 @@ var (
 	// ContactHistoryOrderFieldCompany orders ContactHistory by company.
 	ContactHistoryOrderFieldCompany = &ContactHistoryOrderField{
 		Value: func(ch *ContactHistory) (ent.Value, error) {
-
 			return ch.Company, nil
 		},
 		column: contacthistory.FieldCompany,
@@ -2360,7 +2322,6 @@ var (
 	// ContactHistoryOrderFieldEmail orders ContactHistory by email.
 	ContactHistoryOrderFieldEmail = &ContactHistoryOrderField{
 		Value: func(ch *ContactHistory) (ent.Value, error) {
-
 			return ch.Email, nil
 		},
 		column: contacthistory.FieldEmail,
@@ -2375,7 +2336,6 @@ var (
 	// ContactHistoryOrderFieldStatus orders ContactHistory by status.
 	ContactHistoryOrderFieldStatus = &ContactHistoryOrderField{
 		Value: func(ch *ContactHistory) (ent.Value, error) {
-
 			return ch.Status, nil
 		},
 		column: contacthistory.FieldStatus,
@@ -2735,7 +2695,6 @@ var (
 	// ControlOrderFieldCreatedAt orders Control by created_at.
 	ControlOrderFieldCreatedAt = &ControlOrderField{
 		Value: func(c *Control) (ent.Value, error) {
-
 			return c.CreatedAt, nil
 		},
 		column: control.FieldCreatedAt,
@@ -2750,7 +2709,6 @@ var (
 	// ControlOrderFieldUpdatedAt orders Control by updated_at.
 	ControlOrderFieldUpdatedAt = &ControlOrderField{
 		Value: func(c *Control) (ent.Value, error) {
-
 			return c.UpdatedAt, nil
 		},
 		column: control.FieldUpdatedAt,
@@ -2765,7 +2723,6 @@ var (
 	// ControlOrderFieldStatus orders Control by status.
 	ControlOrderFieldStatus = &ControlOrderField{
 		Value: func(c *Control) (ent.Value, error) {
-
 			return c.Status, nil
 		},
 		column: control.FieldStatus,
@@ -2780,7 +2737,6 @@ var (
 	// ControlOrderFieldSource orders Control by source.
 	ControlOrderFieldSource = &ControlOrderField{
 		Value: func(c *Control) (ent.Value, error) {
-
 			return c.Source, nil
 		},
 		column: control.FieldSource,
@@ -2795,7 +2751,6 @@ var (
 	// ControlOrderFieldControlType orders Control by control_type.
 	ControlOrderFieldControlType = &ControlOrderField{
 		Value: func(c *Control) (ent.Value, error) {
-
 			return c.ControlType, nil
 		},
 		column: control.FieldControlType,
@@ -2810,7 +2765,6 @@ var (
 	// ControlOrderFieldCategory orders Control by category.
 	ControlOrderFieldCategory = &ControlOrderField{
 		Value: func(c *Control) (ent.Value, error) {
-
 			return c.Category, nil
 		},
 		column: control.FieldCategory,
@@ -2825,7 +2779,6 @@ var (
 	// ControlOrderFieldSubcategory orders Control by subcategory.
 	ControlOrderFieldSubcategory = &ControlOrderField{
 		Value: func(c *Control) (ent.Value, error) {
-
 			return c.Subcategory, nil
 		},
 		column: control.FieldSubcategory,
@@ -2840,7 +2793,6 @@ var (
 	// ControlOrderFieldRefCode orders Control by ref_code.
 	ControlOrderFieldRefCode = &ControlOrderField{
 		Value: func(c *Control) (ent.Value, error) {
-
 			return c.RefCode, nil
 		},
 		column: control.FieldRefCode,
@@ -3165,7 +3117,6 @@ var (
 	// ControlHistoryOrderFieldCreatedAt orders ControlHistory by created_at.
 	ControlHistoryOrderFieldCreatedAt = &ControlHistoryOrderField{
 		Value: func(ch *ControlHistory) (ent.Value, error) {
-
 			return ch.CreatedAt, nil
 		},
 		column: controlhistory.FieldCreatedAt,
@@ -3180,7 +3131,6 @@ var (
 	// ControlHistoryOrderFieldUpdatedAt orders ControlHistory by updated_at.
 	ControlHistoryOrderFieldUpdatedAt = &ControlHistoryOrderField{
 		Value: func(ch *ControlHistory) (ent.Value, error) {
-
 			return ch.UpdatedAt, nil
 		},
 		column: controlhistory.FieldUpdatedAt,
@@ -3195,7 +3145,6 @@ var (
 	// ControlHistoryOrderFieldStatus orders ControlHistory by status.
 	ControlHistoryOrderFieldStatus = &ControlHistoryOrderField{
 		Value: func(ch *ControlHistory) (ent.Value, error) {
-
 			return ch.Status, nil
 		},
 		column: controlhistory.FieldStatus,
@@ -3210,7 +3159,6 @@ var (
 	// ControlHistoryOrderFieldSource orders ControlHistory by source.
 	ControlHistoryOrderFieldSource = &ControlHistoryOrderField{
 		Value: func(ch *ControlHistory) (ent.Value, error) {
-
 			return ch.Source, nil
 		},
 		column: controlhistory.FieldSource,
@@ -3225,7 +3173,6 @@ var (
 	// ControlHistoryOrderFieldControlType orders ControlHistory by control_type.
 	ControlHistoryOrderFieldControlType = &ControlHistoryOrderField{
 		Value: func(ch *ControlHistory) (ent.Value, error) {
-
 			return ch.ControlType, nil
 		},
 		column: controlhistory.FieldControlType,
@@ -3240,7 +3187,6 @@ var (
 	// ControlHistoryOrderFieldCategory orders ControlHistory by category.
 	ControlHistoryOrderFieldCategory = &ControlHistoryOrderField{
 		Value: func(ch *ControlHistory) (ent.Value, error) {
-
 			return ch.Category, nil
 		},
 		column: controlhistory.FieldCategory,
@@ -3255,7 +3201,6 @@ var (
 	// ControlHistoryOrderFieldSubcategory orders ControlHistory by subcategory.
 	ControlHistoryOrderFieldSubcategory = &ControlHistoryOrderField{
 		Value: func(ch *ControlHistory) (ent.Value, error) {
-
 			return ch.Subcategory, nil
 		},
 		column: controlhistory.FieldSubcategory,
@@ -3270,7 +3215,6 @@ var (
 	// ControlHistoryOrderFieldRefCode orders ControlHistory by ref_code.
 	ControlHistoryOrderFieldRefCode = &ControlHistoryOrderField{
 		Value: func(ch *ControlHistory) (ent.Value, error) {
-
 			return ch.RefCode, nil
 		},
 		column: controlhistory.FieldRefCode,
@@ -3634,7 +3578,6 @@ var (
 	// ControlImplementationOrderFieldCreatedAt orders ControlImplementation by created_at.
 	ControlImplementationOrderFieldCreatedAt = &ControlImplementationOrderField{
 		Value: func(ci *ControlImplementation) (ent.Value, error) {
-
 			return ci.CreatedAt, nil
 		},
 		column: controlimplementation.FieldCreatedAt,
@@ -3649,7 +3592,6 @@ var (
 	// ControlImplementationOrderFieldUpdatedAt orders ControlImplementation by updated_at.
 	ControlImplementationOrderFieldUpdatedAt = &ControlImplementationOrderField{
 		Value: func(ci *ControlImplementation) (ent.Value, error) {
-
 			return ci.UpdatedAt, nil
 		},
 		column: controlimplementation.FieldUpdatedAt,
@@ -3664,7 +3606,6 @@ var (
 	// ControlImplementationOrderFieldStatus orders ControlImplementation by status.
 	ControlImplementationOrderFieldStatus = &ControlImplementationOrderField{
 		Value: func(ci *ControlImplementation) (ent.Value, error) {
-
 			return ci.Status, nil
 		},
 		column: controlimplementation.FieldStatus,
@@ -3679,7 +3620,6 @@ var (
 	// ControlImplementationOrderFieldImplementationDate orders ControlImplementation by implementation_date.
 	ControlImplementationOrderFieldImplementationDate = &ControlImplementationOrderField{
 		Value: func(ci *ControlImplementation) (ent.Value, error) {
-
 			return ci.ImplementationDate, nil
 		},
 		column: controlimplementation.FieldImplementationDate,
@@ -3694,7 +3634,6 @@ var (
 	// ControlImplementationOrderFieldVerified orders ControlImplementation by verified.
 	ControlImplementationOrderFieldVerified = &ControlImplementationOrderField{
 		Value: func(ci *ControlImplementation) (ent.Value, error) {
-
 			return ci.Verified, nil
 		},
 		column: controlimplementation.FieldVerified,
@@ -3709,7 +3648,6 @@ var (
 	// ControlImplementationOrderFieldVerificationDate orders ControlImplementation by verification_date.
 	ControlImplementationOrderFieldVerificationDate = &ControlImplementationOrderField{
 		Value: func(ci *ControlImplementation) (ent.Value, error) {
-
 			return ci.VerificationDate, nil
 		},
 		column: controlimplementation.FieldVerificationDate,
@@ -4026,7 +3964,6 @@ var (
 	// ControlImplementationHistoryOrderFieldCreatedAt orders ControlImplementationHistory by created_at.
 	ControlImplementationHistoryOrderFieldCreatedAt = &ControlImplementationHistoryOrderField{
 		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
-
 			return cih.CreatedAt, nil
 		},
 		column: controlimplementationhistory.FieldCreatedAt,
@@ -4041,7 +3978,6 @@ var (
 	// ControlImplementationHistoryOrderFieldUpdatedAt orders ControlImplementationHistory by updated_at.
 	ControlImplementationHistoryOrderFieldUpdatedAt = &ControlImplementationHistoryOrderField{
 		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
-
 			return cih.UpdatedAt, nil
 		},
 		column: controlimplementationhistory.FieldUpdatedAt,
@@ -4056,7 +3992,6 @@ var (
 	// ControlImplementationHistoryOrderFieldStatus orders ControlImplementationHistory by status.
 	ControlImplementationHistoryOrderFieldStatus = &ControlImplementationHistoryOrderField{
 		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
-
 			return cih.Status, nil
 		},
 		column: controlimplementationhistory.FieldStatus,
@@ -4071,7 +4006,6 @@ var (
 	// ControlImplementationHistoryOrderFieldImplementationDate orders ControlImplementationHistory by implementation_date.
 	ControlImplementationHistoryOrderFieldImplementationDate = &ControlImplementationHistoryOrderField{
 		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
-
 			return cih.ImplementationDate, nil
 		},
 		column: controlimplementationhistory.FieldImplementationDate,
@@ -4086,7 +4020,6 @@ var (
 	// ControlImplementationHistoryOrderFieldVerified orders ControlImplementationHistory by verified.
 	ControlImplementationHistoryOrderFieldVerified = &ControlImplementationHistoryOrderField{
 		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
-
 			return cih.Verified, nil
 		},
 		column: controlimplementationhistory.FieldVerified,
@@ -4101,7 +4034,6 @@ var (
 	// ControlImplementationHistoryOrderFieldVerificationDate orders ControlImplementationHistory by verification_date.
 	ControlImplementationHistoryOrderFieldVerificationDate = &ControlImplementationHistoryOrderField{
 		Value: func(cih *ControlImplementationHistory) (ent.Value, error) {
-
 			return cih.VerificationDate, nil
 		},
 		column: controlimplementationhistory.FieldVerificationDate,
@@ -4457,7 +4389,6 @@ var (
 	// ControlObjectiveOrderFieldCreatedAt orders ControlObjective by created_at.
 	ControlObjectiveOrderFieldCreatedAt = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
-
 			return co.CreatedAt, nil
 		},
 		column: controlobjective.FieldCreatedAt,
@@ -4472,7 +4403,6 @@ var (
 	// ControlObjectiveOrderFieldUpdatedAt orders ControlObjective by updated_at.
 	ControlObjectiveOrderFieldUpdatedAt = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
-
 			return co.UpdatedAt, nil
 		},
 		column: controlobjective.FieldUpdatedAt,
@@ -4487,7 +4417,6 @@ var (
 	// ControlObjectiveOrderFieldRevision orders ControlObjective by revision.
 	ControlObjectiveOrderFieldRevision = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
-
 			return co.Revision, nil
 		},
 		column: controlobjective.FieldRevision,
@@ -4502,7 +4431,6 @@ var (
 	// ControlObjectiveOrderFieldName orders ControlObjective by name.
 	ControlObjectiveOrderFieldName = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
-
 			return co.Name, nil
 		},
 		column: controlobjective.FieldName,
@@ -4517,7 +4445,6 @@ var (
 	// ControlObjectiveOrderFieldStatus orders ControlObjective by status.
 	ControlObjectiveOrderFieldStatus = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
-
 			return co.Status, nil
 		},
 		column: controlobjective.FieldStatus,
@@ -4532,7 +4459,6 @@ var (
 	// ControlObjectiveOrderFieldSource orders ControlObjective by source.
 	ControlObjectiveOrderFieldSource = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
-
 			return co.Source, nil
 		},
 		column: controlobjective.FieldSource,
@@ -4547,7 +4473,6 @@ var (
 	// ControlObjectiveOrderFieldControlObjectiveType orders ControlObjective by control_objective_type.
 	ControlObjectiveOrderFieldControlObjectiveType = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
-
 			return co.ControlObjectiveType, nil
 		},
 		column: controlobjective.FieldControlObjectiveType,
@@ -4562,7 +4487,6 @@ var (
 	// ControlObjectiveOrderFieldCategory orders ControlObjective by category.
 	ControlObjectiveOrderFieldCategory = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
-
 			return co.Category, nil
 		},
 		column: controlobjective.FieldCategory,
@@ -4577,7 +4501,6 @@ var (
 	// ControlObjectiveOrderFieldSubcategory orders ControlObjective by subcategory.
 	ControlObjectiveOrderFieldSubcategory = &ControlObjectiveOrderField{
 		Value: func(co *ControlObjective) (ent.Value, error) {
-
 			return co.Subcategory, nil
 		},
 		column: controlobjective.FieldSubcategory,
@@ -4906,7 +4829,6 @@ var (
 	// ControlObjectiveHistoryOrderFieldCreatedAt orders ControlObjectiveHistory by created_at.
 	ControlObjectiveHistoryOrderFieldCreatedAt = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
-
 			return coh.CreatedAt, nil
 		},
 		column: controlobjectivehistory.FieldCreatedAt,
@@ -4921,7 +4843,6 @@ var (
 	// ControlObjectiveHistoryOrderFieldUpdatedAt orders ControlObjectiveHistory by updated_at.
 	ControlObjectiveHistoryOrderFieldUpdatedAt = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
-
 			return coh.UpdatedAt, nil
 		},
 		column: controlobjectivehistory.FieldUpdatedAt,
@@ -4936,7 +4857,6 @@ var (
 	// ControlObjectiveHistoryOrderFieldRevision orders ControlObjectiveHistory by revision.
 	ControlObjectiveHistoryOrderFieldRevision = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
-
 			return coh.Revision, nil
 		},
 		column: controlobjectivehistory.FieldRevision,
@@ -4951,7 +4871,6 @@ var (
 	// ControlObjectiveHistoryOrderFieldName orders ControlObjectiveHistory by name.
 	ControlObjectiveHistoryOrderFieldName = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
-
 			return coh.Name, nil
 		},
 		column: controlobjectivehistory.FieldName,
@@ -4966,7 +4885,6 @@ var (
 	// ControlObjectiveHistoryOrderFieldStatus orders ControlObjectiveHistory by status.
 	ControlObjectiveHistoryOrderFieldStatus = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
-
 			return coh.Status, nil
 		},
 		column: controlobjectivehistory.FieldStatus,
@@ -4981,7 +4899,6 @@ var (
 	// ControlObjectiveHistoryOrderFieldSource orders ControlObjectiveHistory by source.
 	ControlObjectiveHistoryOrderFieldSource = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
-
 			return coh.Source, nil
 		},
 		column: controlobjectivehistory.FieldSource,
@@ -4996,7 +4913,6 @@ var (
 	// ControlObjectiveHistoryOrderFieldControlObjectiveType orders ControlObjectiveHistory by control_objective_type.
 	ControlObjectiveHistoryOrderFieldControlObjectiveType = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
-
 			return coh.ControlObjectiveType, nil
 		},
 		column: controlobjectivehistory.FieldControlObjectiveType,
@@ -5011,7 +4927,6 @@ var (
 	// ControlObjectiveHistoryOrderFieldCategory orders ControlObjectiveHistory by category.
 	ControlObjectiveHistoryOrderFieldCategory = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
-
 			return coh.Category, nil
 		},
 		column: controlobjectivehistory.FieldCategory,
@@ -5026,7 +4941,6 @@ var (
 	// ControlObjectiveHistoryOrderFieldSubcategory orders ControlObjectiveHistory by subcategory.
 	ControlObjectiveHistoryOrderFieldSubcategory = &ControlObjectiveHistoryOrderField{
 		Value: func(coh *ControlObjectiveHistory) (ent.Value, error) {
-
 			return coh.Subcategory, nil
 		},
 		column: controlobjectivehistory.FieldSubcategory,
@@ -5394,7 +5308,6 @@ var (
 	// ControlScheduledJobOrderFieldCreatedAt orders ControlScheduledJob by created_at.
 	ControlScheduledJobOrderFieldCreatedAt = &ControlScheduledJobOrderField{
 		Value: func(csj *ControlScheduledJob) (ent.Value, error) {
-
 			return csj.CreatedAt, nil
 		},
 		column: controlscheduledjob.FieldCreatedAt,
@@ -5409,7 +5322,6 @@ var (
 	// ControlScheduledJobOrderFieldUpdatedAt orders ControlScheduledJob by updated_at.
 	ControlScheduledJobOrderFieldUpdatedAt = &ControlScheduledJobOrderField{
 		Value: func(csj *ControlScheduledJob) (ent.Value, error) {
-
 			return csj.UpdatedAt, nil
 		},
 		column: controlscheduledjob.FieldUpdatedAt,
@@ -5710,7 +5622,6 @@ var (
 	// ControlScheduledJobHistoryOrderFieldCreatedAt orders ControlScheduledJobHistory by created_at.
 	ControlScheduledJobHistoryOrderFieldCreatedAt = &ControlScheduledJobHistoryOrderField{
 		Value: func(csjh *ControlScheduledJobHistory) (ent.Value, error) {
-
 			return csjh.CreatedAt, nil
 		},
 		column: controlscheduledjobhistory.FieldCreatedAt,
@@ -5725,7 +5636,6 @@ var (
 	// ControlScheduledJobHistoryOrderFieldUpdatedAt orders ControlScheduledJobHistory by updated_at.
 	ControlScheduledJobHistoryOrderFieldUpdatedAt = &ControlScheduledJobHistoryOrderField{
 		Value: func(csjh *ControlScheduledJobHistory) (ent.Value, error) {
-
 			return csjh.UpdatedAt, nil
 		},
 		column: controlscheduledjobhistory.FieldUpdatedAt,
@@ -6065,7 +5975,6 @@ var (
 	// CustomDomainOrderFieldCreatedAt orders CustomDomain by created_at.
 	CustomDomainOrderFieldCreatedAt = &CustomDomainOrderField{
 		Value: func(cd *CustomDomain) (ent.Value, error) {
-
 			return cd.CreatedAt, nil
 		},
 		column: customdomain.FieldCreatedAt,
@@ -6080,7 +5989,6 @@ var (
 	// CustomDomainOrderFieldUpdatedAt orders CustomDomain by updated_at.
 	CustomDomainOrderFieldUpdatedAt = &CustomDomainOrderField{
 		Value: func(cd *CustomDomain) (ent.Value, error) {
-
 			return cd.UpdatedAt, nil
 		},
 		column: customdomain.FieldUpdatedAt,
@@ -6095,7 +6003,6 @@ var (
 	// CustomDomainOrderFieldCnameRecord orders CustomDomain by cname_record.
 	CustomDomainOrderFieldCnameRecord = &CustomDomainOrderField{
 		Value: func(cd *CustomDomain) (ent.Value, error) {
-
 			return cd.CnameRecord, nil
 		},
 		column: customdomain.FieldCnameRecord,
@@ -6400,7 +6307,6 @@ var (
 	// CustomDomainHistoryOrderFieldCreatedAt orders CustomDomainHistory by created_at.
 	CustomDomainHistoryOrderFieldCreatedAt = &CustomDomainHistoryOrderField{
 		Value: func(cdh *CustomDomainHistory) (ent.Value, error) {
-
 			return cdh.CreatedAt, nil
 		},
 		column: customdomainhistory.FieldCreatedAt,
@@ -6415,7 +6321,6 @@ var (
 	// CustomDomainHistoryOrderFieldUpdatedAt orders CustomDomainHistory by updated_at.
 	CustomDomainHistoryOrderFieldUpdatedAt = &CustomDomainHistoryOrderField{
 		Value: func(cdh *CustomDomainHistory) (ent.Value, error) {
-
 			return cdh.UpdatedAt, nil
 		},
 		column: customdomainhistory.FieldUpdatedAt,
@@ -6430,7 +6335,6 @@ var (
 	// CustomDomainHistoryOrderFieldCnameRecord orders CustomDomainHistory by cname_record.
 	CustomDomainHistoryOrderFieldCnameRecord = &CustomDomainHistoryOrderField{
 		Value: func(cdh *CustomDomainHistory) (ent.Value, error) {
-
 			return cdh.CnameRecord, nil
 		},
 		column: customdomainhistory.FieldCnameRecord,
@@ -6774,7 +6678,6 @@ var (
 	// DNSVerificationOrderFieldCreatedAt orders DNSVerification by created_at.
 	DNSVerificationOrderFieldCreatedAt = &DNSVerificationOrderField{
 		Value: func(dv *DNSVerification) (ent.Value, error) {
-
 			return dv.CreatedAt, nil
 		},
 		column: dnsverification.FieldCreatedAt,
@@ -6789,7 +6692,6 @@ var (
 	// DNSVerificationOrderFieldUpdatedAt orders DNSVerification by updated_at.
 	DNSVerificationOrderFieldUpdatedAt = &DNSVerificationOrderField{
 		Value: func(dv *DNSVerification) (ent.Value, error) {
-
 			return dv.UpdatedAt, nil
 		},
 		column: dnsverification.FieldUpdatedAt,
@@ -7090,7 +6992,6 @@ var (
 	// DNSVerificationHistoryOrderFieldCreatedAt orders DNSVerificationHistory by created_at.
 	DNSVerificationHistoryOrderFieldCreatedAt = &DNSVerificationHistoryOrderField{
 		Value: func(dvh *DNSVerificationHistory) (ent.Value, error) {
-
 			return dvh.CreatedAt, nil
 		},
 		column: dnsverificationhistory.FieldCreatedAt,
@@ -7105,7 +7006,6 @@ var (
 	// DNSVerificationHistoryOrderFieldUpdatedAt orders DNSVerificationHistory by updated_at.
 	DNSVerificationHistoryOrderFieldUpdatedAt = &DNSVerificationHistoryOrderField{
 		Value: func(dvh *DNSVerificationHistory) (ent.Value, error) {
-
 			return dvh.UpdatedAt, nil
 		},
 		column: dnsverificationhistory.FieldUpdatedAt,
@@ -7445,7 +7345,6 @@ var (
 	// DocumentDataOrderFieldCreatedAt orders DocumentData by created_at.
 	DocumentDataOrderFieldCreatedAt = &DocumentDataOrderField{
 		Value: func(dd *DocumentData) (ent.Value, error) {
-
 			return dd.CreatedAt, nil
 		},
 		column: documentdata.FieldCreatedAt,
@@ -7460,7 +7359,6 @@ var (
 	// DocumentDataOrderFieldUpdatedAt orders DocumentData by updated_at.
 	DocumentDataOrderFieldUpdatedAt = &DocumentDataOrderField{
 		Value: func(dd *DocumentData) (ent.Value, error) {
-
 			return dd.UpdatedAt, nil
 		},
 		column: documentdata.FieldUpdatedAt,
@@ -7761,7 +7659,6 @@ var (
 	// DocumentDataHistoryOrderFieldCreatedAt orders DocumentDataHistory by created_at.
 	DocumentDataHistoryOrderFieldCreatedAt = &DocumentDataHistoryOrderField{
 		Value: func(ddh *DocumentDataHistory) (ent.Value, error) {
-
 			return ddh.CreatedAt, nil
 		},
 		column: documentdatahistory.FieldCreatedAt,
@@ -7776,7 +7673,6 @@ var (
 	// DocumentDataHistoryOrderFieldUpdatedAt orders DocumentDataHistory by updated_at.
 	DocumentDataHistoryOrderFieldUpdatedAt = &DocumentDataHistoryOrderField{
 		Value: func(ddh *DocumentDataHistory) (ent.Value, error) {
-
 			return ddh.UpdatedAt, nil
 		},
 		column: documentdatahistory.FieldUpdatedAt,
@@ -8116,7 +8012,6 @@ var (
 	// EntityOrderFieldCreatedAt orders Entity by created_at.
 	EntityOrderFieldCreatedAt = &EntityOrderField{
 		Value: func(e *Entity) (ent.Value, error) {
-
 			return e.CreatedAt, nil
 		},
 		column: entity.FieldCreatedAt,
@@ -8131,7 +8026,6 @@ var (
 	// EntityOrderFieldUpdatedAt orders Entity by updated_at.
 	EntityOrderFieldUpdatedAt = &EntityOrderField{
 		Value: func(e *Entity) (ent.Value, error) {
-
 			return e.UpdatedAt, nil
 		},
 		column: entity.FieldUpdatedAt,
@@ -8146,7 +8040,6 @@ var (
 	// EntityOrderFieldName orders Entity by name.
 	EntityOrderFieldName = &EntityOrderField{
 		Value: func(e *Entity) (ent.Value, error) {
-
 			return e.Name, nil
 		},
 		column: entity.FieldName,
@@ -8161,7 +8054,6 @@ var (
 	// EntityOrderFieldDisplayName orders Entity by display_name.
 	EntityOrderFieldDisplayName = &EntityOrderField{
 		Value: func(e *Entity) (ent.Value, error) {
-
 			return e.DisplayName, nil
 		},
 		column: entity.FieldDisplayName,
@@ -8176,7 +8068,6 @@ var (
 	// EntityOrderFieldStatus orders Entity by status.
 	EntityOrderFieldStatus = &EntityOrderField{
 		Value: func(e *Entity) (ent.Value, error) {
-
 			return e.Status, nil
 		},
 		column: entity.FieldStatus,
@@ -8489,7 +8380,6 @@ var (
 	// EntityHistoryOrderFieldCreatedAt orders EntityHistory by created_at.
 	EntityHistoryOrderFieldCreatedAt = &EntityHistoryOrderField{
 		Value: func(eh *EntityHistory) (ent.Value, error) {
-
 			return eh.CreatedAt, nil
 		},
 		column: entityhistory.FieldCreatedAt,
@@ -8504,7 +8394,6 @@ var (
 	// EntityHistoryOrderFieldUpdatedAt orders EntityHistory by updated_at.
 	EntityHistoryOrderFieldUpdatedAt = &EntityHistoryOrderField{
 		Value: func(eh *EntityHistory) (ent.Value, error) {
-
 			return eh.UpdatedAt, nil
 		},
 		column: entityhistory.FieldUpdatedAt,
@@ -8519,7 +8408,6 @@ var (
 	// EntityHistoryOrderFieldName orders EntityHistory by name.
 	EntityHistoryOrderFieldName = &EntityHistoryOrderField{
 		Value: func(eh *EntityHistory) (ent.Value, error) {
-
 			return eh.Name, nil
 		},
 		column: entityhistory.FieldName,
@@ -8534,7 +8422,6 @@ var (
 	// EntityHistoryOrderFieldDisplayName orders EntityHistory by display_name.
 	EntityHistoryOrderFieldDisplayName = &EntityHistoryOrderField{
 		Value: func(eh *EntityHistory) (ent.Value, error) {
-
 			return eh.DisplayName, nil
 		},
 		column: entityhistory.FieldDisplayName,
@@ -8549,7 +8436,6 @@ var (
 	// EntityHistoryOrderFieldStatus orders EntityHistory by status.
 	EntityHistoryOrderFieldStatus = &EntityHistoryOrderField{
 		Value: func(eh *EntityHistory) (ent.Value, error) {
-
 			return eh.Status, nil
 		},
 		column: entityhistory.FieldStatus,
@@ -8901,7 +8787,6 @@ var (
 	// EntityTypeOrderFieldCreatedAt orders EntityType by created_at.
 	EntityTypeOrderFieldCreatedAt = &EntityTypeOrderField{
 		Value: func(et *EntityType) (ent.Value, error) {
-
 			return et.CreatedAt, nil
 		},
 		column: entitytype.FieldCreatedAt,
@@ -8916,7 +8801,6 @@ var (
 	// EntityTypeOrderFieldUpdatedAt orders EntityType by updated_at.
 	EntityTypeOrderFieldUpdatedAt = &EntityTypeOrderField{
 		Value: func(et *EntityType) (ent.Value, error) {
-
 			return et.UpdatedAt, nil
 		},
 		column: entitytype.FieldUpdatedAt,
@@ -8931,7 +8815,6 @@ var (
 	// EntityTypeOrderFieldName orders EntityType by name.
 	EntityTypeOrderFieldName = &EntityTypeOrderField{
 		Value: func(et *EntityType) (ent.Value, error) {
-
 			return et.Name, nil
 		},
 		column: entitytype.FieldName,
@@ -9236,7 +9119,6 @@ var (
 	// EntityTypeHistoryOrderFieldCreatedAt orders EntityTypeHistory by created_at.
 	EntityTypeHistoryOrderFieldCreatedAt = &EntityTypeHistoryOrderField{
 		Value: func(eth *EntityTypeHistory) (ent.Value, error) {
-
 			return eth.CreatedAt, nil
 		},
 		column: entitytypehistory.FieldCreatedAt,
@@ -9251,7 +9133,6 @@ var (
 	// EntityTypeHistoryOrderFieldUpdatedAt orders EntityTypeHistory by updated_at.
 	EntityTypeHistoryOrderFieldUpdatedAt = &EntityTypeHistoryOrderField{
 		Value: func(eth *EntityTypeHistory) (ent.Value, error) {
-
 			return eth.UpdatedAt, nil
 		},
 		column: entitytypehistory.FieldUpdatedAt,
@@ -9266,7 +9147,6 @@ var (
 	// EntityTypeHistoryOrderFieldName orders EntityTypeHistory by name.
 	EntityTypeHistoryOrderFieldName = &EntityTypeHistoryOrderField{
 		Value: func(eth *EntityTypeHistory) (ent.Value, error) {
-
 			return eth.Name, nil
 		},
 		column: entitytypehistory.FieldName,
@@ -9610,7 +9490,6 @@ var (
 	// EventOrderFieldCreatedAt orders Event by created_at.
 	EventOrderFieldCreatedAt = &EventOrderField{
 		Value: func(e *Event) (ent.Value, error) {
-
 			return e.CreatedAt, nil
 		},
 		column: event.FieldCreatedAt,
@@ -9625,7 +9504,6 @@ var (
 	// EventOrderFieldUpdatedAt orders Event by updated_at.
 	EventOrderFieldUpdatedAt = &EventOrderField{
 		Value: func(e *Event) (ent.Value, error) {
-
 			return e.UpdatedAt, nil
 		},
 		column: event.FieldUpdatedAt,
@@ -9926,7 +9804,6 @@ var (
 	// EventHistoryOrderFieldCreatedAt orders EventHistory by created_at.
 	EventHistoryOrderFieldCreatedAt = &EventHistoryOrderField{
 		Value: func(eh *EventHistory) (ent.Value, error) {
-
 			return eh.CreatedAt, nil
 		},
 		column: eventhistory.FieldCreatedAt,
@@ -9941,7 +9818,6 @@ var (
 	// EventHistoryOrderFieldUpdatedAt orders EventHistory by updated_at.
 	EventHistoryOrderFieldUpdatedAt = &EventHistoryOrderField{
 		Value: func(eh *EventHistory) (ent.Value, error) {
-
 			return eh.UpdatedAt, nil
 		},
 		column: eventhistory.FieldUpdatedAt,
@@ -10281,7 +10157,6 @@ var (
 	// EvidenceOrderFieldCreatedAt orders Evidence by created_at.
 	EvidenceOrderFieldCreatedAt = &EvidenceOrderField{
 		Value: func(e *Evidence) (ent.Value, error) {
-
 			return e.CreatedAt, nil
 		},
 		column: evidence.FieldCreatedAt,
@@ -10296,7 +10171,6 @@ var (
 	// EvidenceOrderFieldUpdatedAt orders Evidence by updated_at.
 	EvidenceOrderFieldUpdatedAt = &EvidenceOrderField{
 		Value: func(e *Evidence) (ent.Value, error) {
-
 			return e.UpdatedAt, nil
 		},
 		column: evidence.FieldUpdatedAt,
@@ -10311,7 +10185,6 @@ var (
 	// EvidenceOrderFieldName orders Evidence by name.
 	EvidenceOrderFieldName = &EvidenceOrderField{
 		Value: func(e *Evidence) (ent.Value, error) {
-
 			return e.Name, nil
 		},
 		column: evidence.FieldName,
@@ -10326,7 +10199,6 @@ var (
 	// EvidenceOrderFieldCreationDate orders Evidence by creation_date.
 	EvidenceOrderFieldCreationDate = &EvidenceOrderField{
 		Value: func(e *Evidence) (ent.Value, error) {
-
 			return e.CreationDate, nil
 		},
 		column: evidence.FieldCreationDate,
@@ -10341,7 +10213,6 @@ var (
 	// EvidenceOrderFieldRenewalDate orders Evidence by renewal_date.
 	EvidenceOrderFieldRenewalDate = &EvidenceOrderField{
 		Value: func(e *Evidence) (ent.Value, error) {
-
 			return e.RenewalDate, nil
 		},
 		column: evidence.FieldRenewalDate,
@@ -10356,7 +10227,6 @@ var (
 	// EvidenceOrderFieldStatus orders Evidence by status.
 	EvidenceOrderFieldStatus = &EvidenceOrderField{
 		Value: func(e *Evidence) (ent.Value, error) {
-
 			return e.Status, nil
 		},
 		column: evidence.FieldStatus,
@@ -10673,7 +10543,6 @@ var (
 	// EvidenceHistoryOrderFieldCreatedAt orders EvidenceHistory by created_at.
 	EvidenceHistoryOrderFieldCreatedAt = &EvidenceHistoryOrderField{
 		Value: func(eh *EvidenceHistory) (ent.Value, error) {
-
 			return eh.CreatedAt, nil
 		},
 		column: evidencehistory.FieldCreatedAt,
@@ -10688,7 +10557,6 @@ var (
 	// EvidenceHistoryOrderFieldUpdatedAt orders EvidenceHistory by updated_at.
 	EvidenceHistoryOrderFieldUpdatedAt = &EvidenceHistoryOrderField{
 		Value: func(eh *EvidenceHistory) (ent.Value, error) {
-
 			return eh.UpdatedAt, nil
 		},
 		column: evidencehistory.FieldUpdatedAt,
@@ -10703,7 +10571,6 @@ var (
 	// EvidenceHistoryOrderFieldName orders EvidenceHistory by name.
 	EvidenceHistoryOrderFieldName = &EvidenceHistoryOrderField{
 		Value: func(eh *EvidenceHistory) (ent.Value, error) {
-
 			return eh.Name, nil
 		},
 		column: evidencehistory.FieldName,
@@ -10718,7 +10585,6 @@ var (
 	// EvidenceHistoryOrderFieldCreationDate orders EvidenceHistory by creation_date.
 	EvidenceHistoryOrderFieldCreationDate = &EvidenceHistoryOrderField{
 		Value: func(eh *EvidenceHistory) (ent.Value, error) {
-
 			return eh.CreationDate, nil
 		},
 		column: evidencehistory.FieldCreationDate,
@@ -10733,7 +10599,6 @@ var (
 	// EvidenceHistoryOrderFieldRenewalDate orders EvidenceHistory by renewal_date.
 	EvidenceHistoryOrderFieldRenewalDate = &EvidenceHistoryOrderField{
 		Value: func(eh *EvidenceHistory) (ent.Value, error) {
-
 			return eh.RenewalDate, nil
 		},
 		column: evidencehistory.FieldRenewalDate,
@@ -10748,7 +10613,6 @@ var (
 	// EvidenceHistoryOrderFieldStatus orders EvidenceHistory by status.
 	EvidenceHistoryOrderFieldStatus = &EvidenceHistoryOrderField{
 		Value: func(eh *EvidenceHistory) (ent.Value, error) {
-
 			return eh.Status, nil
 		},
 		column: evidencehistory.FieldStatus,
@@ -11104,7 +10968,6 @@ var (
 	// FileOrderFieldCreatedAt orders File by created_at.
 	FileOrderFieldCreatedAt = &FileOrderField{
 		Value: func(f *File) (ent.Value, error) {
-
 			return f.CreatedAt, nil
 		},
 		column: file.FieldCreatedAt,
@@ -11119,7 +10982,6 @@ var (
 	// FileOrderFieldUpdatedAt orders File by updated_at.
 	FileOrderFieldUpdatedAt = &FileOrderField{
 		Value: func(f *File) (ent.Value, error) {
-
 			return f.UpdatedAt, nil
 		},
 		column: file.FieldUpdatedAt,
@@ -11420,7 +11282,6 @@ var (
 	// FileHistoryOrderFieldCreatedAt orders FileHistory by created_at.
 	FileHistoryOrderFieldCreatedAt = &FileHistoryOrderField{
 		Value: func(fh *FileHistory) (ent.Value, error) {
-
 			return fh.CreatedAt, nil
 		},
 		column: filehistory.FieldCreatedAt,
@@ -11435,7 +11296,6 @@ var (
 	// FileHistoryOrderFieldUpdatedAt orders FileHistory by updated_at.
 	FileHistoryOrderFieldUpdatedAt = &FileHistoryOrderField{
 		Value: func(fh *FileHistory) (ent.Value, error) {
-
 			return fh.UpdatedAt, nil
 		},
 		column: filehistory.FieldUpdatedAt,
@@ -11775,7 +11635,6 @@ var (
 	// GroupOrderFieldCreatedAt orders Group by created_at.
 	GroupOrderFieldCreatedAt = &GroupOrderField{
 		Value: func(gr *Group) (ent.Value, error) {
-
 			return gr.CreatedAt, nil
 		},
 		column: group.FieldCreatedAt,
@@ -11790,7 +11649,6 @@ var (
 	// GroupOrderFieldUpdatedAt orders Group by updated_at.
 	GroupOrderFieldUpdatedAt = &GroupOrderField{
 		Value: func(gr *Group) (ent.Value, error) {
-
 			return gr.UpdatedAt, nil
 		},
 		column: group.FieldUpdatedAt,
@@ -11805,7 +11663,6 @@ var (
 	// GroupOrderFieldName orders Group by name.
 	GroupOrderFieldName = &GroupOrderField{
 		Value: func(gr *Group) (ent.Value, error) {
-
 			return gr.Name, nil
 		},
 		column: group.FieldName,
@@ -11820,7 +11677,6 @@ var (
 	// GroupOrderFieldDisplayName orders Group by display_name.
 	GroupOrderFieldDisplayName = &GroupOrderField{
 		Value: func(gr *Group) (ent.Value, error) {
-
 			return gr.DisplayName, nil
 		},
 		column: group.FieldDisplayName,
@@ -12129,7 +11985,6 @@ var (
 	// GroupHistoryOrderFieldCreatedAt orders GroupHistory by created_at.
 	GroupHistoryOrderFieldCreatedAt = &GroupHistoryOrderField{
 		Value: func(gh *GroupHistory) (ent.Value, error) {
-
 			return gh.CreatedAt, nil
 		},
 		column: grouphistory.FieldCreatedAt,
@@ -12144,7 +11999,6 @@ var (
 	// GroupHistoryOrderFieldUpdatedAt orders GroupHistory by updated_at.
 	GroupHistoryOrderFieldUpdatedAt = &GroupHistoryOrderField{
 		Value: func(gh *GroupHistory) (ent.Value, error) {
-
 			return gh.UpdatedAt, nil
 		},
 		column: grouphistory.FieldUpdatedAt,
@@ -12159,7 +12013,6 @@ var (
 	// GroupHistoryOrderFieldName orders GroupHistory by name.
 	GroupHistoryOrderFieldName = &GroupHistoryOrderField{
 		Value: func(gh *GroupHistory) (ent.Value, error) {
-
 			return gh.Name, nil
 		},
 		column: grouphistory.FieldName,
@@ -12174,7 +12027,6 @@ var (
 	// GroupHistoryOrderFieldDisplayName orders GroupHistory by display_name.
 	GroupHistoryOrderFieldDisplayName = &GroupHistoryOrderField{
 		Value: func(gh *GroupHistory) (ent.Value, error) {
-
 			return gh.DisplayName, nil
 		},
 		column: grouphistory.FieldDisplayName,
@@ -12522,7 +12374,6 @@ var (
 	// GroupMembershipOrderFieldCreatedAt orders GroupMembership by created_at.
 	GroupMembershipOrderFieldCreatedAt = &GroupMembershipOrderField{
 		Value: func(gm *GroupMembership) (ent.Value, error) {
-
 			return gm.CreatedAt, nil
 		},
 		column: groupmembership.FieldCreatedAt,
@@ -12537,7 +12388,6 @@ var (
 	// GroupMembershipOrderFieldUpdatedAt orders GroupMembership by updated_at.
 	GroupMembershipOrderFieldUpdatedAt = &GroupMembershipOrderField{
 		Value: func(gm *GroupMembership) (ent.Value, error) {
-
 			return gm.UpdatedAt, nil
 		},
 		column: groupmembership.FieldUpdatedAt,
@@ -12552,7 +12402,6 @@ var (
 	// GroupMembershipOrderFieldRole orders GroupMembership by role.
 	GroupMembershipOrderFieldRole = &GroupMembershipOrderField{
 		Value: func(gm *GroupMembership) (ent.Value, error) {
-
 			return gm.Role, nil
 		},
 		column: groupmembership.FieldRole,
@@ -12857,7 +12706,6 @@ var (
 	// GroupMembershipHistoryOrderFieldCreatedAt orders GroupMembershipHistory by created_at.
 	GroupMembershipHistoryOrderFieldCreatedAt = &GroupMembershipHistoryOrderField{
 		Value: func(gmh *GroupMembershipHistory) (ent.Value, error) {
-
 			return gmh.CreatedAt, nil
 		},
 		column: groupmembershiphistory.FieldCreatedAt,
@@ -12872,7 +12720,6 @@ var (
 	// GroupMembershipHistoryOrderFieldUpdatedAt orders GroupMembershipHistory by updated_at.
 	GroupMembershipHistoryOrderFieldUpdatedAt = &GroupMembershipHistoryOrderField{
 		Value: func(gmh *GroupMembershipHistory) (ent.Value, error) {
-
 			return gmh.UpdatedAt, nil
 		},
 		column: groupmembershiphistory.FieldUpdatedAt,
@@ -12887,7 +12734,6 @@ var (
 	// GroupMembershipHistoryOrderFieldRole orders GroupMembershipHistory by role.
 	GroupMembershipHistoryOrderFieldRole = &GroupMembershipHistoryOrderField{
 		Value: func(gmh *GroupMembershipHistory) (ent.Value, error) {
-
 			return gmh.Role, nil
 		},
 		column: groupmembershiphistory.FieldRole,
@@ -13231,7 +13077,6 @@ var (
 	// GroupSettingOrderFieldCreatedAt orders GroupSetting by created_at.
 	GroupSettingOrderFieldCreatedAt = &GroupSettingOrderField{
 		Value: func(gs *GroupSetting) (ent.Value, error) {
-
 			return gs.CreatedAt, nil
 		},
 		column: groupsetting.FieldCreatedAt,
@@ -13246,7 +13091,6 @@ var (
 	// GroupSettingOrderFieldUpdatedAt orders GroupSetting by updated_at.
 	GroupSettingOrderFieldUpdatedAt = &GroupSettingOrderField{
 		Value: func(gs *GroupSetting) (ent.Value, error) {
-
 			return gs.UpdatedAt, nil
 		},
 		column: groupsetting.FieldUpdatedAt,
@@ -13547,7 +13391,6 @@ var (
 	// GroupSettingHistoryOrderFieldCreatedAt orders GroupSettingHistory by created_at.
 	GroupSettingHistoryOrderFieldCreatedAt = &GroupSettingHistoryOrderField{
 		Value: func(gsh *GroupSettingHistory) (ent.Value, error) {
-
 			return gsh.CreatedAt, nil
 		},
 		column: groupsettinghistory.FieldCreatedAt,
@@ -13562,7 +13405,6 @@ var (
 	// GroupSettingHistoryOrderFieldUpdatedAt orders GroupSettingHistory by updated_at.
 	GroupSettingHistoryOrderFieldUpdatedAt = &GroupSettingHistoryOrderField{
 		Value: func(gsh *GroupSettingHistory) (ent.Value, error) {
-
 			return gsh.UpdatedAt, nil
 		},
 		column: groupsettinghistory.FieldUpdatedAt,
@@ -13902,7 +13744,6 @@ var (
 	// HushOrderFieldCreatedAt orders Hush by created_at.
 	HushOrderFieldCreatedAt = &HushOrderField{
 		Value: func(h *Hush) (ent.Value, error) {
-
 			return h.CreatedAt, nil
 		},
 		column: hush.FieldCreatedAt,
@@ -13917,7 +13758,6 @@ var (
 	// HushOrderFieldUpdatedAt orders Hush by updated_at.
 	HushOrderFieldUpdatedAt = &HushOrderField{
 		Value: func(h *Hush) (ent.Value, error) {
-
 			return h.UpdatedAt, nil
 		},
 		column: hush.FieldUpdatedAt,
@@ -13932,7 +13772,6 @@ var (
 	// HushOrderFieldName orders Hush by name.
 	HushOrderFieldName = &HushOrderField{
 		Value: func(h *Hush) (ent.Value, error) {
-
 			return h.Name, nil
 		},
 		column: hush.FieldName,
@@ -13947,7 +13786,6 @@ var (
 	// HushOrderFieldKind orders Hush by kind.
 	HushOrderFieldKind = &HushOrderField{
 		Value: func(h *Hush) (ent.Value, error) {
-
 			return h.Kind, nil
 		},
 		column: hush.FieldKind,
@@ -14256,7 +14094,6 @@ var (
 	// HushHistoryOrderFieldCreatedAt orders HushHistory by created_at.
 	HushHistoryOrderFieldCreatedAt = &HushHistoryOrderField{
 		Value: func(hh *HushHistory) (ent.Value, error) {
-
 			return hh.CreatedAt, nil
 		},
 		column: hushhistory.FieldCreatedAt,
@@ -14271,7 +14108,6 @@ var (
 	// HushHistoryOrderFieldUpdatedAt orders HushHistory by updated_at.
 	HushHistoryOrderFieldUpdatedAt = &HushHistoryOrderField{
 		Value: func(hh *HushHistory) (ent.Value, error) {
-
 			return hh.UpdatedAt, nil
 		},
 		column: hushhistory.FieldUpdatedAt,
@@ -14286,7 +14122,6 @@ var (
 	// HushHistoryOrderFieldName orders HushHistory by name.
 	HushHistoryOrderFieldName = &HushHistoryOrderField{
 		Value: func(hh *HushHistory) (ent.Value, error) {
-
 			return hh.Name, nil
 		},
 		column: hushhistory.FieldName,
@@ -14301,7 +14136,6 @@ var (
 	// HushHistoryOrderFieldKind orders HushHistory by kind.
 	HushHistoryOrderFieldKind = &HushHistoryOrderField{
 		Value: func(hh *HushHistory) (ent.Value, error) {
-
 			return hh.Kind, nil
 		},
 		column: hushhistory.FieldKind,
@@ -14649,7 +14483,6 @@ var (
 	// IntegrationOrderFieldCreatedAt orders Integration by created_at.
 	IntegrationOrderFieldCreatedAt = &IntegrationOrderField{
 		Value: func(i *Integration) (ent.Value, error) {
-
 			return i.CreatedAt, nil
 		},
 		column: integration.FieldCreatedAt,
@@ -14664,7 +14497,6 @@ var (
 	// IntegrationOrderFieldUpdatedAt orders Integration by updated_at.
 	IntegrationOrderFieldUpdatedAt = &IntegrationOrderField{
 		Value: func(i *Integration) (ent.Value, error) {
-
 			return i.UpdatedAt, nil
 		},
 		column: integration.FieldUpdatedAt,
@@ -14679,7 +14511,6 @@ var (
 	// IntegrationOrderFieldName orders Integration by name.
 	IntegrationOrderFieldName = &IntegrationOrderField{
 		Value: func(i *Integration) (ent.Value, error) {
-
 			return i.Name, nil
 		},
 		column: integration.FieldName,
@@ -14694,7 +14525,6 @@ var (
 	// IntegrationOrderFieldKind orders Integration by kind.
 	IntegrationOrderFieldKind = &IntegrationOrderField{
 		Value: func(i *Integration) (ent.Value, error) {
-
 			return i.Kind, nil
 		},
 		column: integration.FieldKind,
@@ -15003,7 +14833,6 @@ var (
 	// IntegrationHistoryOrderFieldCreatedAt orders IntegrationHistory by created_at.
 	IntegrationHistoryOrderFieldCreatedAt = &IntegrationHistoryOrderField{
 		Value: func(ih *IntegrationHistory) (ent.Value, error) {
-
 			return ih.CreatedAt, nil
 		},
 		column: integrationhistory.FieldCreatedAt,
@@ -15018,7 +14847,6 @@ var (
 	// IntegrationHistoryOrderFieldUpdatedAt orders IntegrationHistory by updated_at.
 	IntegrationHistoryOrderFieldUpdatedAt = &IntegrationHistoryOrderField{
 		Value: func(ih *IntegrationHistory) (ent.Value, error) {
-
 			return ih.UpdatedAt, nil
 		},
 		column: integrationhistory.FieldUpdatedAt,
@@ -15033,7 +14861,6 @@ var (
 	// IntegrationHistoryOrderFieldName orders IntegrationHistory by name.
 	IntegrationHistoryOrderFieldName = &IntegrationHistoryOrderField{
 		Value: func(ih *IntegrationHistory) (ent.Value, error) {
-
 			return ih.Name, nil
 		},
 		column: integrationhistory.FieldName,
@@ -15048,7 +14875,6 @@ var (
 	// IntegrationHistoryOrderFieldKind orders IntegrationHistory by kind.
 	IntegrationHistoryOrderFieldKind = &IntegrationHistoryOrderField{
 		Value: func(ih *IntegrationHistory) (ent.Value, error) {
-
 			return ih.Kind, nil
 		},
 		column: integrationhistory.FieldKind,
@@ -15396,7 +15222,6 @@ var (
 	// InternalPolicyOrderFieldCreatedAt orders InternalPolicy by created_at.
 	InternalPolicyOrderFieldCreatedAt = &InternalPolicyOrderField{
 		Value: func(ip *InternalPolicy) (ent.Value, error) {
-
 			return ip.CreatedAt, nil
 		},
 		column: internalpolicy.FieldCreatedAt,
@@ -15411,7 +15236,6 @@ var (
 	// InternalPolicyOrderFieldUpdatedAt orders InternalPolicy by updated_at.
 	InternalPolicyOrderFieldUpdatedAt = &InternalPolicyOrderField{
 		Value: func(ip *InternalPolicy) (ent.Value, error) {
-
 			return ip.UpdatedAt, nil
 		},
 		column: internalpolicy.FieldUpdatedAt,
@@ -15426,7 +15250,6 @@ var (
 	// InternalPolicyOrderFieldRevision orders InternalPolicy by revision.
 	InternalPolicyOrderFieldRevision = &InternalPolicyOrderField{
 		Value: func(ip *InternalPolicy) (ent.Value, error) {
-
 			return ip.Revision, nil
 		},
 		column: internalpolicy.FieldRevision,
@@ -15441,7 +15264,6 @@ var (
 	// InternalPolicyOrderFieldName orders InternalPolicy by name.
 	InternalPolicyOrderFieldName = &InternalPolicyOrderField{
 		Value: func(ip *InternalPolicy) (ent.Value, error) {
-
 			return ip.Name, nil
 		},
 		column: internalpolicy.FieldName,
@@ -15456,7 +15278,6 @@ var (
 	// InternalPolicyOrderFieldStatus orders InternalPolicy by status.
 	InternalPolicyOrderFieldStatus = &InternalPolicyOrderField{
 		Value: func(ip *InternalPolicy) (ent.Value, error) {
-
 			return ip.Status, nil
 		},
 		column: internalpolicy.FieldStatus,
@@ -15471,7 +15292,6 @@ var (
 	// InternalPolicyOrderFieldReviewDue orders InternalPolicy by review_due.
 	InternalPolicyOrderFieldReviewDue = &InternalPolicyOrderField{
 		Value: func(ip *InternalPolicy) (ent.Value, error) {
-
 			return ip.ReviewDue, nil
 		},
 		column: internalpolicy.FieldReviewDue,
@@ -15486,7 +15306,6 @@ var (
 	// InternalPolicyOrderFieldReviewFrequency orders InternalPolicy by review_frequency.
 	InternalPolicyOrderFieldReviewFrequency = &InternalPolicyOrderField{
 		Value: func(ip *InternalPolicy) (ent.Value, error) {
-
 			return ip.ReviewFrequency, nil
 		},
 		column: internalpolicy.FieldReviewFrequency,
@@ -15807,7 +15626,6 @@ var (
 	// InternalPolicyHistoryOrderFieldCreatedAt orders InternalPolicyHistory by created_at.
 	InternalPolicyHistoryOrderFieldCreatedAt = &InternalPolicyHistoryOrderField{
 		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
-
 			return iph.CreatedAt, nil
 		},
 		column: internalpolicyhistory.FieldCreatedAt,
@@ -15822,7 +15640,6 @@ var (
 	// InternalPolicyHistoryOrderFieldUpdatedAt orders InternalPolicyHistory by updated_at.
 	InternalPolicyHistoryOrderFieldUpdatedAt = &InternalPolicyHistoryOrderField{
 		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
-
 			return iph.UpdatedAt, nil
 		},
 		column: internalpolicyhistory.FieldUpdatedAt,
@@ -15837,7 +15654,6 @@ var (
 	// InternalPolicyHistoryOrderFieldRevision orders InternalPolicyHistory by revision.
 	InternalPolicyHistoryOrderFieldRevision = &InternalPolicyHistoryOrderField{
 		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
-
 			return iph.Revision, nil
 		},
 		column: internalpolicyhistory.FieldRevision,
@@ -15852,7 +15668,6 @@ var (
 	// InternalPolicyHistoryOrderFieldName orders InternalPolicyHistory by name.
 	InternalPolicyHistoryOrderFieldName = &InternalPolicyHistoryOrderField{
 		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
-
 			return iph.Name, nil
 		},
 		column: internalpolicyhistory.FieldName,
@@ -15867,7 +15682,6 @@ var (
 	// InternalPolicyHistoryOrderFieldStatus orders InternalPolicyHistory by status.
 	InternalPolicyHistoryOrderFieldStatus = &InternalPolicyHistoryOrderField{
 		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
-
 			return iph.Status, nil
 		},
 		column: internalpolicyhistory.FieldStatus,
@@ -15882,7 +15696,6 @@ var (
 	// InternalPolicyHistoryOrderFieldReviewDue orders InternalPolicyHistory by review_due.
 	InternalPolicyHistoryOrderFieldReviewDue = &InternalPolicyHistoryOrderField{
 		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
-
 			return iph.ReviewDue, nil
 		},
 		column: internalpolicyhistory.FieldReviewDue,
@@ -15897,7 +15710,6 @@ var (
 	// InternalPolicyHistoryOrderFieldReviewFrequency orders InternalPolicyHistory by review_frequency.
 	InternalPolicyHistoryOrderFieldReviewFrequency = &InternalPolicyHistoryOrderField{
 		Value: func(iph *InternalPolicyHistory) (ent.Value, error) {
-
 			return iph.ReviewFrequency, nil
 		},
 		column: internalpolicyhistory.FieldReviewFrequency,
@@ -16257,7 +16069,6 @@ var (
 	// InviteOrderFieldCreatedAt orders Invite by created_at.
 	InviteOrderFieldCreatedAt = &InviteOrderField{
 		Value: func(i *Invite) (ent.Value, error) {
-
 			return i.CreatedAt, nil
 		},
 		column: invite.FieldCreatedAt,
@@ -16272,7 +16083,6 @@ var (
 	// InviteOrderFieldUpdatedAt orders Invite by updated_at.
 	InviteOrderFieldUpdatedAt = &InviteOrderField{
 		Value: func(i *Invite) (ent.Value, error) {
-
 			return i.UpdatedAt, nil
 		},
 		column: invite.FieldUpdatedAt,
@@ -16287,7 +16097,6 @@ var (
 	// InviteOrderFieldExpires orders Invite by expires.
 	InviteOrderFieldExpires = &InviteOrderField{
 		Value: func(i *Invite) (ent.Value, error) {
-
 			return i.Expires, nil
 		},
 		column: invite.FieldExpires,
@@ -16302,7 +16111,6 @@ var (
 	// InviteOrderFieldStatus orders Invite by status.
 	InviteOrderFieldStatus = &InviteOrderField{
 		Value: func(i *Invite) (ent.Value, error) {
-
 			return i.Status, nil
 		},
 		column: invite.FieldStatus,
@@ -16317,7 +16125,6 @@ var (
 	// InviteOrderFieldSendAttempts orders Invite by send_attempts.
 	InviteOrderFieldSendAttempts = &InviteOrderField{
 		Value: func(i *Invite) (ent.Value, error) {
-
 			return i.SendAttempts, nil
 		},
 		column: invite.FieldSendAttempts,
@@ -16669,7 +16476,6 @@ var (
 	// JobResultOrderFieldCreatedAt orders JobResult by created_at.
 	JobResultOrderFieldCreatedAt = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
-
 			return jr.CreatedAt, nil
 		},
 		column: jobresult.FieldCreatedAt,
@@ -16684,7 +16490,6 @@ var (
 	// JobResultOrderFieldUpdatedAt orders JobResult by updated_at.
 	JobResultOrderFieldUpdatedAt = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
-
 			return jr.UpdatedAt, nil
 		},
 		column: jobresult.FieldUpdatedAt,
@@ -16699,7 +16504,6 @@ var (
 	// JobResultOrderFieldStatus orders JobResult by status.
 	JobResultOrderFieldStatus = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
-
 			return jr.Status, nil
 		},
 		column: jobresult.FieldStatus,
@@ -16718,7 +16522,6 @@ var (
 			if jr.ExitCode == nil {
 				return nil, nil
 			}
-
 			return jr.ExitCode, nil
 		},
 		column: jobresult.FieldExitCode,
@@ -16742,7 +16545,6 @@ var (
 	// JobResultOrderFieldFinishedAt orders JobResult by finished_at.
 	JobResultOrderFieldFinishedAt = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
-
 			return jr.FinishedAt, nil
 		},
 		column: jobresult.FieldFinishedAt,
@@ -16757,7 +16559,6 @@ var (
 	// JobResultOrderFieldStartedAt orders JobResult by started_at.
 	JobResultOrderFieldStartedAt = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
-
 			return jr.StartedAt, nil
 		},
 		column: jobresult.FieldStartedAt,
@@ -17113,7 +16914,6 @@ var (
 	// JobRunnerOrderFieldCreatedAt orders JobRunner by created_at.
 	JobRunnerOrderFieldCreatedAt = &JobRunnerOrderField{
 		Value: func(jr *JobRunner) (ent.Value, error) {
-
 			return jr.CreatedAt, nil
 		},
 		column: jobrunner.FieldCreatedAt,
@@ -17128,7 +16928,6 @@ var (
 	// JobRunnerOrderFieldUpdatedAt orders JobRunner by updated_at.
 	JobRunnerOrderFieldUpdatedAt = &JobRunnerOrderField{
 		Value: func(jr *JobRunner) (ent.Value, error) {
-
 			return jr.UpdatedAt, nil
 		},
 		column: jobrunner.FieldUpdatedAt,
@@ -17143,7 +16942,6 @@ var (
 	// JobRunnerOrderFieldName orders JobRunner by name.
 	JobRunnerOrderFieldName = &JobRunnerOrderField{
 		Value: func(jr *JobRunner) (ent.Value, error) {
-
 			return jr.Name, nil
 		},
 		column: jobrunner.FieldName,
@@ -17448,7 +17246,6 @@ var (
 	// JobRunnerHistoryOrderFieldCreatedAt orders JobRunnerHistory by created_at.
 	JobRunnerHistoryOrderFieldCreatedAt = &JobRunnerHistoryOrderField{
 		Value: func(jrh *JobRunnerHistory) (ent.Value, error) {
-
 			return jrh.CreatedAt, nil
 		},
 		column: jobrunnerhistory.FieldCreatedAt,
@@ -17463,7 +17260,6 @@ var (
 	// JobRunnerHistoryOrderFieldUpdatedAt orders JobRunnerHistory by updated_at.
 	JobRunnerHistoryOrderFieldUpdatedAt = &JobRunnerHistoryOrderField{
 		Value: func(jrh *JobRunnerHistory) (ent.Value, error) {
-
 			return jrh.UpdatedAt, nil
 		},
 		column: jobrunnerhistory.FieldUpdatedAt,
@@ -17478,7 +17274,6 @@ var (
 	// JobRunnerHistoryOrderFieldName orders JobRunnerHistory by name.
 	JobRunnerHistoryOrderFieldName = &JobRunnerHistoryOrderField{
 		Value: func(jrh *JobRunnerHistory) (ent.Value, error) {
-
 			return jrh.Name, nil
 		},
 		column: jobrunnerhistory.FieldName,
@@ -17822,7 +17617,6 @@ var (
 	// JobRunnerRegistrationTokenOrderFieldCreatedAt orders JobRunnerRegistrationToken by created_at.
 	JobRunnerRegistrationTokenOrderFieldCreatedAt = &JobRunnerRegistrationTokenOrderField{
 		Value: func(jrrt *JobRunnerRegistrationToken) (ent.Value, error) {
-
 			return jrrt.CreatedAt, nil
 		},
 		column: jobrunnerregistrationtoken.FieldCreatedAt,
@@ -17837,7 +17631,6 @@ var (
 	// JobRunnerRegistrationTokenOrderFieldUpdatedAt orders JobRunnerRegistrationToken by updated_at.
 	JobRunnerRegistrationTokenOrderFieldUpdatedAt = &JobRunnerRegistrationTokenOrderField{
 		Value: func(jrrt *JobRunnerRegistrationToken) (ent.Value, error) {
-
 			return jrrt.UpdatedAt, nil
 		},
 		column: jobrunnerregistrationtoken.FieldUpdatedAt,
@@ -17856,7 +17649,6 @@ var (
 			if jrrt.LastUsedAt == nil {
 				return nil, nil
 			}
-
 			return jrrt.LastUsedAt, nil
 		},
 		column: jobrunnerregistrationtoken.FieldLastUsedAt,
@@ -18209,7 +18001,6 @@ var (
 	// JobRunnerTokenOrderFieldCreatedAt orders JobRunnerToken by created_at.
 	JobRunnerTokenOrderFieldCreatedAt = &JobRunnerTokenOrderField{
 		Value: func(jrt *JobRunnerToken) (ent.Value, error) {
-
 			return jrt.CreatedAt, nil
 		},
 		column: jobrunnertoken.FieldCreatedAt,
@@ -18224,7 +18015,6 @@ var (
 	// JobRunnerTokenOrderFieldUpdatedAt orders JobRunnerToken by updated_at.
 	JobRunnerTokenOrderFieldUpdatedAt = &JobRunnerTokenOrderField{
 		Value: func(jrt *JobRunnerToken) (ent.Value, error) {
-
 			return jrt.UpdatedAt, nil
 		},
 		column: jobrunnertoken.FieldUpdatedAt,
@@ -18243,7 +18033,6 @@ var (
 			if jrt.ExpiresAt == nil {
 				return nil, nil
 			}
-
 			return jrt.ExpiresAt, nil
 		},
 		column: jobrunnertoken.FieldExpiresAt,
@@ -18271,7 +18060,6 @@ var (
 			if jrt.LastUsedAt == nil {
 				return nil, nil
 			}
-
 			return jrt.LastUsedAt, nil
 		},
 		column: jobrunnertoken.FieldLastUsedAt,
@@ -18628,7 +18416,6 @@ var (
 	// MappableDomainOrderFieldCreatedAt orders MappableDomain by created_at.
 	MappableDomainOrderFieldCreatedAt = &MappableDomainOrderField{
 		Value: func(md *MappableDomain) (ent.Value, error) {
-
 			return md.CreatedAt, nil
 		},
 		column: mappabledomain.FieldCreatedAt,
@@ -18643,7 +18430,6 @@ var (
 	// MappableDomainOrderFieldUpdatedAt orders MappableDomain by updated_at.
 	MappableDomainOrderFieldUpdatedAt = &MappableDomainOrderField{
 		Value: func(md *MappableDomain) (ent.Value, error) {
-
 			return md.UpdatedAt, nil
 		},
 		column: mappabledomain.FieldUpdatedAt,
@@ -18658,7 +18444,6 @@ var (
 	// MappableDomainOrderFieldName orders MappableDomain by name.
 	MappableDomainOrderFieldName = &MappableDomainOrderField{
 		Value: func(md *MappableDomain) (ent.Value, error) {
-
 			return md.Name, nil
 		},
 		column: mappabledomain.FieldName,
@@ -18963,7 +18748,6 @@ var (
 	// MappableDomainHistoryOrderFieldCreatedAt orders MappableDomainHistory by created_at.
 	MappableDomainHistoryOrderFieldCreatedAt = &MappableDomainHistoryOrderField{
 		Value: func(mdh *MappableDomainHistory) (ent.Value, error) {
-
 			return mdh.CreatedAt, nil
 		},
 		column: mappabledomainhistory.FieldCreatedAt,
@@ -18978,7 +18762,6 @@ var (
 	// MappableDomainHistoryOrderFieldUpdatedAt orders MappableDomainHistory by updated_at.
 	MappableDomainHistoryOrderFieldUpdatedAt = &MappableDomainHistoryOrderField{
 		Value: func(mdh *MappableDomainHistory) (ent.Value, error) {
-
 			return mdh.UpdatedAt, nil
 		},
 		column: mappabledomainhistory.FieldUpdatedAt,
@@ -18993,7 +18776,6 @@ var (
 	// MappableDomainHistoryOrderFieldName orders MappableDomainHistory by name.
 	MappableDomainHistoryOrderFieldName = &MappableDomainHistoryOrderField{
 		Value: func(mdh *MappableDomainHistory) (ent.Value, error) {
-
 			return mdh.Name, nil
 		},
 		column: mappabledomainhistory.FieldName,
@@ -19337,7 +19119,6 @@ var (
 	// MappedControlOrderFieldCreatedAt orders MappedControl by created_at.
 	MappedControlOrderFieldCreatedAt = &MappedControlOrderField{
 		Value: func(mc *MappedControl) (ent.Value, error) {
-
 			return mc.CreatedAt, nil
 		},
 		column: mappedcontrol.FieldCreatedAt,
@@ -19352,7 +19133,6 @@ var (
 	// MappedControlOrderFieldUpdatedAt orders MappedControl by updated_at.
 	MappedControlOrderFieldUpdatedAt = &MappedControlOrderField{
 		Value: func(mc *MappedControl) (ent.Value, error) {
-
 			return mc.UpdatedAt, nil
 		},
 		column: mappedcontrol.FieldUpdatedAt,
@@ -19367,7 +19147,6 @@ var (
 	// MappedControlOrderFieldMappingType orders MappedControl by mapping_type.
 	MappedControlOrderFieldMappingType = &MappedControlOrderField{
 		Value: func(mc *MappedControl) (ent.Value, error) {
-
 			return mc.MappingType, nil
 		},
 		column: mappedcontrol.FieldMappingType,
@@ -19672,7 +19451,6 @@ var (
 	// MappedControlHistoryOrderFieldCreatedAt orders MappedControlHistory by created_at.
 	MappedControlHistoryOrderFieldCreatedAt = &MappedControlHistoryOrderField{
 		Value: func(mch *MappedControlHistory) (ent.Value, error) {
-
 			return mch.CreatedAt, nil
 		},
 		column: mappedcontrolhistory.FieldCreatedAt,
@@ -19687,7 +19465,6 @@ var (
 	// MappedControlHistoryOrderFieldUpdatedAt orders MappedControlHistory by updated_at.
 	MappedControlHistoryOrderFieldUpdatedAt = &MappedControlHistoryOrderField{
 		Value: func(mch *MappedControlHistory) (ent.Value, error) {
-
 			return mch.UpdatedAt, nil
 		},
 		column: mappedcontrolhistory.FieldUpdatedAt,
@@ -19702,7 +19479,6 @@ var (
 	// MappedControlHistoryOrderFieldMappingType orders MappedControlHistory by mapping_type.
 	MappedControlHistoryOrderFieldMappingType = &MappedControlHistoryOrderField{
 		Value: func(mch *MappedControlHistory) (ent.Value, error) {
-
 			return mch.MappingType, nil
 		},
 		column: mappedcontrolhistory.FieldMappingType,
@@ -20046,7 +19822,6 @@ var (
 	// NarrativeOrderFieldCreatedAt orders Narrative by created_at.
 	NarrativeOrderFieldCreatedAt = &NarrativeOrderField{
 		Value: func(n *Narrative) (ent.Value, error) {
-
 			return n.CreatedAt, nil
 		},
 		column: narrative.FieldCreatedAt,
@@ -20061,7 +19836,6 @@ var (
 	// NarrativeOrderFieldUpdatedAt orders Narrative by updated_at.
 	NarrativeOrderFieldUpdatedAt = &NarrativeOrderField{
 		Value: func(n *Narrative) (ent.Value, error) {
-
 			return n.UpdatedAt, nil
 		},
 		column: narrative.FieldUpdatedAt,
@@ -20076,7 +19850,6 @@ var (
 	// NarrativeOrderFieldName orders Narrative by name.
 	NarrativeOrderFieldName = &NarrativeOrderField{
 		Value: func(n *Narrative) (ent.Value, error) {
-
 			return n.Name, nil
 		},
 		column: narrative.FieldName,
@@ -20381,7 +20154,6 @@ var (
 	// NarrativeHistoryOrderFieldCreatedAt orders NarrativeHistory by created_at.
 	NarrativeHistoryOrderFieldCreatedAt = &NarrativeHistoryOrderField{
 		Value: func(nh *NarrativeHistory) (ent.Value, error) {
-
 			return nh.CreatedAt, nil
 		},
 		column: narrativehistory.FieldCreatedAt,
@@ -20396,7 +20168,6 @@ var (
 	// NarrativeHistoryOrderFieldUpdatedAt orders NarrativeHistory by updated_at.
 	NarrativeHistoryOrderFieldUpdatedAt = &NarrativeHistoryOrderField{
 		Value: func(nh *NarrativeHistory) (ent.Value, error) {
-
 			return nh.UpdatedAt, nil
 		},
 		column: narrativehistory.FieldUpdatedAt,
@@ -20411,7 +20182,6 @@ var (
 	// NarrativeHistoryOrderFieldName orders NarrativeHistory by name.
 	NarrativeHistoryOrderFieldName = &NarrativeHistoryOrderField{
 		Value: func(nh *NarrativeHistory) (ent.Value, error) {
-
 			return nh.Name, nil
 		},
 		column: narrativehistory.FieldName,
@@ -20755,7 +20525,6 @@ var (
 	// NoteOrderFieldCreatedAt orders Note by created_at.
 	NoteOrderFieldCreatedAt = &NoteOrderField{
 		Value: func(n *Note) (ent.Value, error) {
-
 			return n.CreatedAt, nil
 		},
 		column: note.FieldCreatedAt,
@@ -20770,7 +20539,6 @@ var (
 	// NoteOrderFieldUpdatedAt orders Note by updated_at.
 	NoteOrderFieldUpdatedAt = &NoteOrderField{
 		Value: func(n *Note) (ent.Value, error) {
-
 			return n.UpdatedAt, nil
 		},
 		column: note.FieldUpdatedAt,
@@ -21071,7 +20839,6 @@ var (
 	// NoteHistoryOrderFieldCreatedAt orders NoteHistory by created_at.
 	NoteHistoryOrderFieldCreatedAt = &NoteHistoryOrderField{
 		Value: func(nh *NoteHistory) (ent.Value, error) {
-
 			return nh.CreatedAt, nil
 		},
 		column: notehistory.FieldCreatedAt,
@@ -21086,7 +20853,6 @@ var (
 	// NoteHistoryOrderFieldUpdatedAt orders NoteHistory by updated_at.
 	NoteHistoryOrderFieldUpdatedAt = &NoteHistoryOrderField{
 		Value: func(nh *NoteHistory) (ent.Value, error) {
-
 			return nh.UpdatedAt, nil
 		},
 		column: notehistory.FieldUpdatedAt,
@@ -21675,7 +21441,6 @@ var (
 	// OrgMembershipOrderFieldCreatedAt orders OrgMembership by created_at.
 	OrgMembershipOrderFieldCreatedAt = &OrgMembershipOrderField{
 		Value: func(om *OrgMembership) (ent.Value, error) {
-
 			return om.CreatedAt, nil
 		},
 		column: orgmembership.FieldCreatedAt,
@@ -21690,7 +21455,6 @@ var (
 	// OrgMembershipOrderFieldUpdatedAt orders OrgMembership by updated_at.
 	OrgMembershipOrderFieldUpdatedAt = &OrgMembershipOrderField{
 		Value: func(om *OrgMembership) (ent.Value, error) {
-
 			return om.UpdatedAt, nil
 		},
 		column: orgmembership.FieldUpdatedAt,
@@ -21705,7 +21469,6 @@ var (
 	// OrgMembershipOrderFieldRole orders OrgMembership by role.
 	OrgMembershipOrderFieldRole = &OrgMembershipOrderField{
 		Value: func(om *OrgMembership) (ent.Value, error) {
-
 			return om.Role, nil
 		},
 		column: orgmembership.FieldRole,
@@ -22010,7 +21773,6 @@ var (
 	// OrgMembershipHistoryOrderFieldCreatedAt orders OrgMembershipHistory by created_at.
 	OrgMembershipHistoryOrderFieldCreatedAt = &OrgMembershipHistoryOrderField{
 		Value: func(omh *OrgMembershipHistory) (ent.Value, error) {
-
 			return omh.CreatedAt, nil
 		},
 		column: orgmembershiphistory.FieldCreatedAt,
@@ -22025,7 +21787,6 @@ var (
 	// OrgMembershipHistoryOrderFieldUpdatedAt orders OrgMembershipHistory by updated_at.
 	OrgMembershipHistoryOrderFieldUpdatedAt = &OrgMembershipHistoryOrderField{
 		Value: func(omh *OrgMembershipHistory) (ent.Value, error) {
-
 			return omh.UpdatedAt, nil
 		},
 		column: orgmembershiphistory.FieldUpdatedAt,
@@ -22040,7 +21801,6 @@ var (
 	// OrgMembershipHistoryOrderFieldRole orders OrgMembershipHistory by role.
 	OrgMembershipHistoryOrderFieldRole = &OrgMembershipHistoryOrderField{
 		Value: func(omh *OrgMembershipHistory) (ent.Value, error) {
-
 			return omh.Role, nil
 		},
 		column: orgmembershiphistory.FieldRole,
@@ -22345,7 +22105,6 @@ var (
 	// OrgSubscriptionOrderFieldCreatedAt orders OrgSubscription by created_at.
 	OrgSubscriptionOrderFieldCreatedAt = &OrgSubscriptionOrderField{
 		Value: func(os *OrgSubscription) (ent.Value, error) {
-
 			return os.CreatedAt, nil
 		},
 		column: orgsubscription.FieldCreatedAt,
@@ -22360,7 +22119,6 @@ var (
 	// OrgSubscriptionOrderFieldUpdatedAt orders OrgSubscription by updated_at.
 	OrgSubscriptionOrderFieldUpdatedAt = &OrgSubscriptionOrderField{
 		Value: func(os *OrgSubscription) (ent.Value, error) {
-
 			return os.UpdatedAt, nil
 		},
 		column: orgsubscription.FieldUpdatedAt,
@@ -22375,7 +22133,6 @@ var (
 	// OrgSubscriptionOrderFieldProductTier orders OrgSubscription by product_tier.
 	OrgSubscriptionOrderFieldProductTier = &OrgSubscriptionOrderField{
 		Value: func(os *OrgSubscription) (ent.Value, error) {
-
 			return os.ProductTier, nil
 		},
 		column: orgsubscription.FieldProductTier,
@@ -22390,7 +22147,6 @@ var (
 	// OrgSubscriptionOrderFieldStripeSubscriptionStatus orders OrgSubscription by stripe_subscription_status.
 	OrgSubscriptionOrderFieldStripeSubscriptionStatus = &OrgSubscriptionOrderField{
 		Value: func(os *OrgSubscription) (ent.Value, error) {
-
 			return os.StripeSubscriptionStatus, nil
 		},
 		column: orgsubscription.FieldStripeSubscriptionStatus,
@@ -22405,7 +22161,6 @@ var (
 	// OrgSubscriptionOrderFieldActive orders OrgSubscription by active.
 	OrgSubscriptionOrderFieldActive = &OrgSubscriptionOrderField{
 		Value: func(os *OrgSubscription) (ent.Value, error) {
-
 			return os.Active, nil
 		},
 		column: orgsubscription.FieldActive,
@@ -22424,7 +22179,6 @@ var (
 			if os.ExpiresAt == nil {
 				return nil, nil
 			}
-
 			return os.ExpiresAt, nil
 		},
 		column: orgsubscription.FieldExpiresAt,
@@ -22452,7 +22206,6 @@ var (
 			if os.TrialExpiresAt == nil {
 				return nil, nil
 			}
-
 			return os.TrialExpiresAt, nil
 		},
 		column: orgsubscription.FieldTrialExpiresAt,
@@ -22480,7 +22233,6 @@ var (
 			if os.DaysUntilDue == nil {
 				return nil, nil
 			}
-
 			return os.DaysUntilDue, nil
 		},
 		column: orgsubscription.FieldDaysUntilDue,
@@ -22814,7 +22566,6 @@ var (
 	// OrgSubscriptionHistoryOrderFieldCreatedAt orders OrgSubscriptionHistory by created_at.
 	OrgSubscriptionHistoryOrderFieldCreatedAt = &OrgSubscriptionHistoryOrderField{
 		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
-
 			return osh.CreatedAt, nil
 		},
 		column: orgsubscriptionhistory.FieldCreatedAt,
@@ -22829,7 +22580,6 @@ var (
 	// OrgSubscriptionHistoryOrderFieldUpdatedAt orders OrgSubscriptionHistory by updated_at.
 	OrgSubscriptionHistoryOrderFieldUpdatedAt = &OrgSubscriptionHistoryOrderField{
 		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
-
 			return osh.UpdatedAt, nil
 		},
 		column: orgsubscriptionhistory.FieldUpdatedAt,
@@ -22844,7 +22594,6 @@ var (
 	// OrgSubscriptionHistoryOrderFieldProductTier orders OrgSubscriptionHistory by product_tier.
 	OrgSubscriptionHistoryOrderFieldProductTier = &OrgSubscriptionHistoryOrderField{
 		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
-
 			return osh.ProductTier, nil
 		},
 		column: orgsubscriptionhistory.FieldProductTier,
@@ -22859,7 +22608,6 @@ var (
 	// OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus orders OrgSubscriptionHistory by stripe_subscription_status.
 	OrgSubscriptionHistoryOrderFieldStripeSubscriptionStatus = &OrgSubscriptionHistoryOrderField{
 		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
-
 			return osh.StripeSubscriptionStatus, nil
 		},
 		column: orgsubscriptionhistory.FieldStripeSubscriptionStatus,
@@ -22874,7 +22622,6 @@ var (
 	// OrgSubscriptionHistoryOrderFieldActive orders OrgSubscriptionHistory by active.
 	OrgSubscriptionHistoryOrderFieldActive = &OrgSubscriptionHistoryOrderField{
 		Value: func(osh *OrgSubscriptionHistory) (ent.Value, error) {
-
 			return osh.Active, nil
 		},
 		column: orgsubscriptionhistory.FieldActive,
@@ -22893,7 +22640,6 @@ var (
 			if osh.ExpiresAt == nil {
 				return nil, nil
 			}
-
 			return osh.ExpiresAt, nil
 		},
 		column: orgsubscriptionhistory.FieldExpiresAt,
@@ -22921,7 +22667,6 @@ var (
 			if osh.TrialExpiresAt == nil {
 				return nil, nil
 			}
-
 			return osh.TrialExpiresAt, nil
 		},
 		column: orgsubscriptionhistory.FieldTrialExpiresAt,
@@ -22949,7 +22694,6 @@ var (
 			if osh.DaysUntilDue == nil {
 				return nil, nil
 			}
-
 			return osh.DaysUntilDue, nil
 		},
 		column: orgsubscriptionhistory.FieldDaysUntilDue,
@@ -23322,7 +23066,6 @@ var (
 	// OrganizationOrderFieldCreatedAt orders Organization by created_at.
 	OrganizationOrderFieldCreatedAt = &OrganizationOrderField{
 		Value: func(o *Organization) (ent.Value, error) {
-
 			return o.CreatedAt, nil
 		},
 		column: organization.FieldCreatedAt,
@@ -23337,7 +23080,6 @@ var (
 	// OrganizationOrderFieldUpdatedAt orders Organization by updated_at.
 	OrganizationOrderFieldUpdatedAt = &OrganizationOrderField{
 		Value: func(o *Organization) (ent.Value, error) {
-
 			return o.UpdatedAt, nil
 		},
 		column: organization.FieldUpdatedAt,
@@ -23352,7 +23094,6 @@ var (
 	// OrganizationOrderFieldName orders Organization by name.
 	OrganizationOrderFieldName = &OrganizationOrderField{
 		Value: func(o *Organization) (ent.Value, error) {
-
 			return o.Name, nil
 		},
 		column: organization.FieldName,
@@ -23367,7 +23108,6 @@ var (
 	// OrganizationOrderFieldDisplayName orders Organization by display_name.
 	OrganizationOrderFieldDisplayName = &OrganizationOrderField{
 		Value: func(o *Organization) (ent.Value, error) {
-
 			return o.DisplayName, nil
 		},
 		column: organization.FieldDisplayName,
@@ -23676,7 +23416,6 @@ var (
 	// OrganizationHistoryOrderFieldCreatedAt orders OrganizationHistory by created_at.
 	OrganizationHistoryOrderFieldCreatedAt = &OrganizationHistoryOrderField{
 		Value: func(oh *OrganizationHistory) (ent.Value, error) {
-
 			return oh.CreatedAt, nil
 		},
 		column: organizationhistory.FieldCreatedAt,
@@ -23691,7 +23430,6 @@ var (
 	// OrganizationHistoryOrderFieldUpdatedAt orders OrganizationHistory by updated_at.
 	OrganizationHistoryOrderFieldUpdatedAt = &OrganizationHistoryOrderField{
 		Value: func(oh *OrganizationHistory) (ent.Value, error) {
-
 			return oh.UpdatedAt, nil
 		},
 		column: organizationhistory.FieldUpdatedAt,
@@ -23706,7 +23444,6 @@ var (
 	// OrganizationHistoryOrderFieldName orders OrganizationHistory by name.
 	OrganizationHistoryOrderFieldName = &OrganizationHistoryOrderField{
 		Value: func(oh *OrganizationHistory) (ent.Value, error) {
-
 			return oh.Name, nil
 		},
 		column: organizationhistory.FieldName,
@@ -23721,7 +23458,6 @@ var (
 	// OrganizationHistoryOrderFieldDisplayName orders OrganizationHistory by display_name.
 	OrganizationHistoryOrderFieldDisplayName = &OrganizationHistoryOrderField{
 		Value: func(oh *OrganizationHistory) (ent.Value, error) {
-
 			return oh.DisplayName, nil
 		},
 		column: organizationhistory.FieldDisplayName,
@@ -24069,7 +23805,6 @@ var (
 	// OrganizationSettingOrderFieldCreatedAt orders OrganizationSetting by created_at.
 	OrganizationSettingOrderFieldCreatedAt = &OrganizationSettingOrderField{
 		Value: func(os *OrganizationSetting) (ent.Value, error) {
-
 			return os.CreatedAt, nil
 		},
 		column: organizationsetting.FieldCreatedAt,
@@ -24084,7 +23819,6 @@ var (
 	// OrganizationSettingOrderFieldUpdatedAt orders OrganizationSetting by updated_at.
 	OrganizationSettingOrderFieldUpdatedAt = &OrganizationSettingOrderField{
 		Value: func(os *OrganizationSetting) (ent.Value, error) {
-
 			return os.UpdatedAt, nil
 		},
 		column: organizationsetting.FieldUpdatedAt,
@@ -24385,7 +24119,6 @@ var (
 	// OrganizationSettingHistoryOrderFieldCreatedAt orders OrganizationSettingHistory by created_at.
 	OrganizationSettingHistoryOrderFieldCreatedAt = &OrganizationSettingHistoryOrderField{
 		Value: func(osh *OrganizationSettingHistory) (ent.Value, error) {
-
 			return osh.CreatedAt, nil
 		},
 		column: organizationsettinghistory.FieldCreatedAt,
@@ -24400,7 +24133,6 @@ var (
 	// OrganizationSettingHistoryOrderFieldUpdatedAt orders OrganizationSettingHistory by updated_at.
 	OrganizationSettingHistoryOrderFieldUpdatedAt = &OrganizationSettingHistoryOrderField{
 		Value: func(osh *OrganizationSettingHistory) (ent.Value, error) {
-
 			return osh.UpdatedAt, nil
 		},
 		column: organizationsettinghistory.FieldUpdatedAt,
@@ -24740,7 +24472,6 @@ var (
 	// PersonalAccessTokenOrderFieldCreatedAt orders PersonalAccessToken by created_at.
 	PersonalAccessTokenOrderFieldCreatedAt = &PersonalAccessTokenOrderField{
 		Value: func(pat *PersonalAccessToken) (ent.Value, error) {
-
 			return pat.CreatedAt, nil
 		},
 		column: personalaccesstoken.FieldCreatedAt,
@@ -24755,7 +24486,6 @@ var (
 	// PersonalAccessTokenOrderFieldUpdatedAt orders PersonalAccessToken by updated_at.
 	PersonalAccessTokenOrderFieldUpdatedAt = &PersonalAccessTokenOrderField{
 		Value: func(pat *PersonalAccessToken) (ent.Value, error) {
-
 			return pat.UpdatedAt, nil
 		},
 		column: personalaccesstoken.FieldUpdatedAt,
@@ -24770,7 +24500,6 @@ var (
 	// PersonalAccessTokenOrderFieldName orders PersonalAccessToken by name.
 	PersonalAccessTokenOrderFieldName = &PersonalAccessTokenOrderField{
 		Value: func(pat *PersonalAccessToken) (ent.Value, error) {
-
 			return pat.Name, nil
 		},
 		column: personalaccesstoken.FieldName,
@@ -24789,7 +24518,6 @@ var (
 			if pat.ExpiresAt == nil {
 				return nil, nil
 			}
-
 			return pat.ExpiresAt, nil
 		},
 		column: personalaccesstoken.FieldExpiresAt,
@@ -24817,7 +24545,6 @@ var (
 			if pat.LastUsedAt == nil {
 				return nil, nil
 			}
-
 			return pat.LastUsedAt, nil
 		},
 		column: personalaccesstoken.FieldLastUsedAt,
@@ -24841,7 +24568,6 @@ var (
 	// PersonalAccessTokenOrderFieldIsActive orders PersonalAccessToken by is_active.
 	PersonalAccessTokenOrderFieldIsActive = &PersonalAccessTokenOrderField{
 		Value: func(pat *PersonalAccessToken) (ent.Value, error) {
-
 			return pat.IsActive, nil
 		},
 		column: personalaccesstoken.FieldIsActive,
@@ -25197,7 +24923,6 @@ var (
 	// ProcedureOrderFieldCreatedAt orders Procedure by created_at.
 	ProcedureOrderFieldCreatedAt = &ProcedureOrderField{
 		Value: func(pr *Procedure) (ent.Value, error) {
-
 			return pr.CreatedAt, nil
 		},
 		column: procedure.FieldCreatedAt,
@@ -25212,7 +24937,6 @@ var (
 	// ProcedureOrderFieldUpdatedAt orders Procedure by updated_at.
 	ProcedureOrderFieldUpdatedAt = &ProcedureOrderField{
 		Value: func(pr *Procedure) (ent.Value, error) {
-
 			return pr.UpdatedAt, nil
 		},
 		column: procedure.FieldUpdatedAt,
@@ -25227,7 +24951,6 @@ var (
 	// ProcedureOrderFieldRevision orders Procedure by revision.
 	ProcedureOrderFieldRevision = &ProcedureOrderField{
 		Value: func(pr *Procedure) (ent.Value, error) {
-
 			return pr.Revision, nil
 		},
 		column: procedure.FieldRevision,
@@ -25242,7 +24965,6 @@ var (
 	// ProcedureOrderFieldName orders Procedure by name.
 	ProcedureOrderFieldName = &ProcedureOrderField{
 		Value: func(pr *Procedure) (ent.Value, error) {
-
 			return pr.Name, nil
 		},
 		column: procedure.FieldName,
@@ -25257,7 +24979,6 @@ var (
 	// ProcedureOrderFieldStatus orders Procedure by status.
 	ProcedureOrderFieldStatus = &ProcedureOrderField{
 		Value: func(pr *Procedure) (ent.Value, error) {
-
 			return pr.Status, nil
 		},
 		column: procedure.FieldStatus,
@@ -25272,7 +24993,6 @@ var (
 	// ProcedureOrderFieldReviewDue orders Procedure by review_due.
 	ProcedureOrderFieldReviewDue = &ProcedureOrderField{
 		Value: func(pr *Procedure) (ent.Value, error) {
-
 			return pr.ReviewDue, nil
 		},
 		column: procedure.FieldReviewDue,
@@ -25287,7 +25007,6 @@ var (
 	// ProcedureOrderFieldReviewFrequency orders Procedure by review_frequency.
 	ProcedureOrderFieldReviewFrequency = &ProcedureOrderField{
 		Value: func(pr *Procedure) (ent.Value, error) {
-
 			return pr.ReviewFrequency, nil
 		},
 		column: procedure.FieldReviewFrequency,
@@ -25608,7 +25327,6 @@ var (
 	// ProcedureHistoryOrderFieldCreatedAt orders ProcedureHistory by created_at.
 	ProcedureHistoryOrderFieldCreatedAt = &ProcedureHistoryOrderField{
 		Value: func(ph *ProcedureHistory) (ent.Value, error) {
-
 			return ph.CreatedAt, nil
 		},
 		column: procedurehistory.FieldCreatedAt,
@@ -25623,7 +25341,6 @@ var (
 	// ProcedureHistoryOrderFieldUpdatedAt orders ProcedureHistory by updated_at.
 	ProcedureHistoryOrderFieldUpdatedAt = &ProcedureHistoryOrderField{
 		Value: func(ph *ProcedureHistory) (ent.Value, error) {
-
 			return ph.UpdatedAt, nil
 		},
 		column: procedurehistory.FieldUpdatedAt,
@@ -25638,7 +25355,6 @@ var (
 	// ProcedureHistoryOrderFieldRevision orders ProcedureHistory by revision.
 	ProcedureHistoryOrderFieldRevision = &ProcedureHistoryOrderField{
 		Value: func(ph *ProcedureHistory) (ent.Value, error) {
-
 			return ph.Revision, nil
 		},
 		column: procedurehistory.FieldRevision,
@@ -25653,7 +25369,6 @@ var (
 	// ProcedureHistoryOrderFieldName orders ProcedureHistory by name.
 	ProcedureHistoryOrderFieldName = &ProcedureHistoryOrderField{
 		Value: func(ph *ProcedureHistory) (ent.Value, error) {
-
 			return ph.Name, nil
 		},
 		column: procedurehistory.FieldName,
@@ -25668,7 +25383,6 @@ var (
 	// ProcedureHistoryOrderFieldStatus orders ProcedureHistory by status.
 	ProcedureHistoryOrderFieldStatus = &ProcedureHistoryOrderField{
 		Value: func(ph *ProcedureHistory) (ent.Value, error) {
-
 			return ph.Status, nil
 		},
 		column: procedurehistory.FieldStatus,
@@ -25683,7 +25397,6 @@ var (
 	// ProcedureHistoryOrderFieldReviewDue orders ProcedureHistory by review_due.
 	ProcedureHistoryOrderFieldReviewDue = &ProcedureHistoryOrderField{
 		Value: func(ph *ProcedureHistory) (ent.Value, error) {
-
 			return ph.ReviewDue, nil
 		},
 		column: procedurehistory.FieldReviewDue,
@@ -25698,7 +25411,6 @@ var (
 	// ProcedureHistoryOrderFieldReviewFrequency orders ProcedureHistory by review_frequency.
 	ProcedureHistoryOrderFieldReviewFrequency = &ProcedureHistoryOrderField{
 		Value: func(ph *ProcedureHistory) (ent.Value, error) {
-
 			return ph.ReviewFrequency, nil
 		},
 		column: procedurehistory.FieldReviewFrequency,
@@ -26058,7 +25770,6 @@ var (
 	// ProgramOrderFieldCreatedAt orders Program by created_at.
 	ProgramOrderFieldCreatedAt = &ProgramOrderField{
 		Value: func(pr *Program) (ent.Value, error) {
-
 			return pr.CreatedAt, nil
 		},
 		column: program.FieldCreatedAt,
@@ -26073,7 +25784,6 @@ var (
 	// ProgramOrderFieldUpdatedAt orders Program by updated_at.
 	ProgramOrderFieldUpdatedAt = &ProgramOrderField{
 		Value: func(pr *Program) (ent.Value, error) {
-
 			return pr.UpdatedAt, nil
 		},
 		column: program.FieldUpdatedAt,
@@ -26088,7 +25798,6 @@ var (
 	// ProgramOrderFieldName orders Program by name.
 	ProgramOrderFieldName = &ProgramOrderField{
 		Value: func(pr *Program) (ent.Value, error) {
-
 			return pr.Name, nil
 		},
 		column: program.FieldName,
@@ -26103,7 +25812,6 @@ var (
 	// ProgramOrderFieldStatus orders Program by status.
 	ProgramOrderFieldStatus = &ProgramOrderField{
 		Value: func(pr *Program) (ent.Value, error) {
-
 			return pr.Status, nil
 		},
 		column: program.FieldStatus,
@@ -26118,7 +25826,6 @@ var (
 	// ProgramOrderFieldProgramType orders Program by program_type.
 	ProgramOrderFieldProgramType = &ProgramOrderField{
 		Value: func(pr *Program) (ent.Value, error) {
-
 			return pr.ProgramType, nil
 		},
 		column: program.FieldProgramType,
@@ -26133,7 +25840,6 @@ var (
 	// ProgramOrderFieldFrameworkName orders Program by framework_name.
 	ProgramOrderFieldFrameworkName = &ProgramOrderField{
 		Value: func(pr *Program) (ent.Value, error) {
-
 			return pr.FrameworkName, nil
 		},
 		column: program.FieldFrameworkName,
@@ -26148,7 +25854,6 @@ var (
 	// ProgramOrderFieldStartDate orders Program by start_date.
 	ProgramOrderFieldStartDate = &ProgramOrderField{
 		Value: func(pr *Program) (ent.Value, error) {
-
 			return pr.StartDate, nil
 		},
 		column: program.FieldStartDate,
@@ -26163,7 +25868,6 @@ var (
 	// ProgramOrderFieldEndDate orders Program by end_date.
 	ProgramOrderFieldEndDate = &ProgramOrderField{
 		Value: func(pr *Program) (ent.Value, error) {
-
 			return pr.EndDate, nil
 		},
 		column: program.FieldEndDate,
@@ -26488,7 +26192,6 @@ var (
 	// ProgramHistoryOrderFieldCreatedAt orders ProgramHistory by created_at.
 	ProgramHistoryOrderFieldCreatedAt = &ProgramHistoryOrderField{
 		Value: func(ph *ProgramHistory) (ent.Value, error) {
-
 			return ph.CreatedAt, nil
 		},
 		column: programhistory.FieldCreatedAt,
@@ -26503,7 +26206,6 @@ var (
 	// ProgramHistoryOrderFieldUpdatedAt orders ProgramHistory by updated_at.
 	ProgramHistoryOrderFieldUpdatedAt = &ProgramHistoryOrderField{
 		Value: func(ph *ProgramHistory) (ent.Value, error) {
-
 			return ph.UpdatedAt, nil
 		},
 		column: programhistory.FieldUpdatedAt,
@@ -26518,7 +26220,6 @@ var (
 	// ProgramHistoryOrderFieldName orders ProgramHistory by name.
 	ProgramHistoryOrderFieldName = &ProgramHistoryOrderField{
 		Value: func(ph *ProgramHistory) (ent.Value, error) {
-
 			return ph.Name, nil
 		},
 		column: programhistory.FieldName,
@@ -26533,7 +26234,6 @@ var (
 	// ProgramHistoryOrderFieldStatus orders ProgramHistory by status.
 	ProgramHistoryOrderFieldStatus = &ProgramHistoryOrderField{
 		Value: func(ph *ProgramHistory) (ent.Value, error) {
-
 			return ph.Status, nil
 		},
 		column: programhistory.FieldStatus,
@@ -26548,7 +26248,6 @@ var (
 	// ProgramHistoryOrderFieldProgramType orders ProgramHistory by program_type.
 	ProgramHistoryOrderFieldProgramType = &ProgramHistoryOrderField{
 		Value: func(ph *ProgramHistory) (ent.Value, error) {
-
 			return ph.ProgramType, nil
 		},
 		column: programhistory.FieldProgramType,
@@ -26563,7 +26262,6 @@ var (
 	// ProgramHistoryOrderFieldFrameworkName orders ProgramHistory by framework_name.
 	ProgramHistoryOrderFieldFrameworkName = &ProgramHistoryOrderField{
 		Value: func(ph *ProgramHistory) (ent.Value, error) {
-
 			return ph.FrameworkName, nil
 		},
 		column: programhistory.FieldFrameworkName,
@@ -26578,7 +26276,6 @@ var (
 	// ProgramHistoryOrderFieldStartDate orders ProgramHistory by start_date.
 	ProgramHistoryOrderFieldStartDate = &ProgramHistoryOrderField{
 		Value: func(ph *ProgramHistory) (ent.Value, error) {
-
 			return ph.StartDate, nil
 		},
 		column: programhistory.FieldStartDate,
@@ -26593,7 +26290,6 @@ var (
 	// ProgramHistoryOrderFieldEndDate orders ProgramHistory by end_date.
 	ProgramHistoryOrderFieldEndDate = &ProgramHistoryOrderField{
 		Value: func(ph *ProgramHistory) (ent.Value, error) {
-
 			return ph.EndDate, nil
 		},
 		column: programhistory.FieldEndDate,
@@ -26957,7 +26653,6 @@ var (
 	// ProgramMembershipOrderFieldCreatedAt orders ProgramMembership by created_at.
 	ProgramMembershipOrderFieldCreatedAt = &ProgramMembershipOrderField{
 		Value: func(pm *ProgramMembership) (ent.Value, error) {
-
 			return pm.CreatedAt, nil
 		},
 		column: programmembership.FieldCreatedAt,
@@ -26972,7 +26667,6 @@ var (
 	// ProgramMembershipOrderFieldUpdatedAt orders ProgramMembership by updated_at.
 	ProgramMembershipOrderFieldUpdatedAt = &ProgramMembershipOrderField{
 		Value: func(pm *ProgramMembership) (ent.Value, error) {
-
 			return pm.UpdatedAt, nil
 		},
 		column: programmembership.FieldUpdatedAt,
@@ -26987,7 +26681,6 @@ var (
 	// ProgramMembershipOrderFieldRole orders ProgramMembership by role.
 	ProgramMembershipOrderFieldRole = &ProgramMembershipOrderField{
 		Value: func(pm *ProgramMembership) (ent.Value, error) {
-
 			return pm.Role, nil
 		},
 		column: programmembership.FieldRole,
@@ -27292,7 +26985,6 @@ var (
 	// ProgramMembershipHistoryOrderFieldCreatedAt orders ProgramMembershipHistory by created_at.
 	ProgramMembershipHistoryOrderFieldCreatedAt = &ProgramMembershipHistoryOrderField{
 		Value: func(pmh *ProgramMembershipHistory) (ent.Value, error) {
-
 			return pmh.CreatedAt, nil
 		},
 		column: programmembershiphistory.FieldCreatedAt,
@@ -27307,7 +26999,6 @@ var (
 	// ProgramMembershipHistoryOrderFieldUpdatedAt orders ProgramMembershipHistory by updated_at.
 	ProgramMembershipHistoryOrderFieldUpdatedAt = &ProgramMembershipHistoryOrderField{
 		Value: func(pmh *ProgramMembershipHistory) (ent.Value, error) {
-
 			return pmh.UpdatedAt, nil
 		},
 		column: programmembershiphistory.FieldUpdatedAt,
@@ -27322,7 +27013,6 @@ var (
 	// ProgramMembershipHistoryOrderFieldRole orders ProgramMembershipHistory by role.
 	ProgramMembershipHistoryOrderFieldRole = &ProgramMembershipHistoryOrderField{
 		Value: func(pmh *ProgramMembershipHistory) (ent.Value, error) {
-
 			return pmh.Role, nil
 		},
 		column: programmembershiphistory.FieldRole,
@@ -27666,7 +27356,6 @@ var (
 	// RiskOrderFieldCreatedAt orders Risk by created_at.
 	RiskOrderFieldCreatedAt = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.CreatedAt, nil
 		},
 		column: risk.FieldCreatedAt,
@@ -27681,7 +27370,6 @@ var (
 	// RiskOrderFieldUpdatedAt orders Risk by updated_at.
 	RiskOrderFieldUpdatedAt = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.UpdatedAt, nil
 		},
 		column: risk.FieldUpdatedAt,
@@ -27696,7 +27384,6 @@ var (
 	// RiskOrderFieldName orders Risk by name.
 	RiskOrderFieldName = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.Name, nil
 		},
 		column: risk.FieldName,
@@ -27711,7 +27398,6 @@ var (
 	// RiskOrderFieldStatus orders Risk by status.
 	RiskOrderFieldStatus = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.Status, nil
 		},
 		column: risk.FieldStatus,
@@ -27726,7 +27412,6 @@ var (
 	// RiskOrderFieldRiskType orders Risk by risk_type.
 	RiskOrderFieldRiskType = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.RiskType, nil
 		},
 		column: risk.FieldRiskType,
@@ -27741,7 +27426,6 @@ var (
 	// RiskOrderFieldCategory orders Risk by category.
 	RiskOrderFieldCategory = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.Category, nil
 		},
 		column: risk.FieldCategory,
@@ -27756,7 +27440,6 @@ var (
 	// RiskOrderFieldImpact orders Risk by impact.
 	RiskOrderFieldImpact = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.Impact, nil
 		},
 		column: risk.FieldImpact,
@@ -27771,7 +27454,6 @@ var (
 	// RiskOrderFieldLikelihood orders Risk by likelihood.
 	RiskOrderFieldLikelihood = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.Likelihood, nil
 		},
 		column: risk.FieldLikelihood,
@@ -27786,7 +27468,6 @@ var (
 	// RiskOrderFieldScore orders Risk by score.
 	RiskOrderFieldScore = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.Score, nil
 		},
 		column: risk.FieldScore,
@@ -27801,7 +27482,6 @@ var (
 	// RiskOrderFieldBusinessCosts orders Risk by business_costs.
 	RiskOrderFieldBusinessCosts = &RiskOrderField{
 		Value: func(r *Risk) (ent.Value, error) {
-
 			return r.BusinessCosts, nil
 		},
 		column: risk.FieldBusinessCosts,
@@ -28134,7 +27814,6 @@ var (
 	// RiskHistoryOrderFieldCreatedAt orders RiskHistory by created_at.
 	RiskHistoryOrderFieldCreatedAt = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.CreatedAt, nil
 		},
 		column: riskhistory.FieldCreatedAt,
@@ -28149,7 +27828,6 @@ var (
 	// RiskHistoryOrderFieldUpdatedAt orders RiskHistory by updated_at.
 	RiskHistoryOrderFieldUpdatedAt = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.UpdatedAt, nil
 		},
 		column: riskhistory.FieldUpdatedAt,
@@ -28164,7 +27842,6 @@ var (
 	// RiskHistoryOrderFieldName orders RiskHistory by name.
 	RiskHistoryOrderFieldName = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.Name, nil
 		},
 		column: riskhistory.FieldName,
@@ -28179,7 +27856,6 @@ var (
 	// RiskHistoryOrderFieldStatus orders RiskHistory by status.
 	RiskHistoryOrderFieldStatus = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.Status, nil
 		},
 		column: riskhistory.FieldStatus,
@@ -28194,7 +27870,6 @@ var (
 	// RiskHistoryOrderFieldRiskType orders RiskHistory by risk_type.
 	RiskHistoryOrderFieldRiskType = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.RiskType, nil
 		},
 		column: riskhistory.FieldRiskType,
@@ -28209,7 +27884,6 @@ var (
 	// RiskHistoryOrderFieldCategory orders RiskHistory by category.
 	RiskHistoryOrderFieldCategory = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.Category, nil
 		},
 		column: riskhistory.FieldCategory,
@@ -28224,7 +27898,6 @@ var (
 	// RiskHistoryOrderFieldImpact orders RiskHistory by impact.
 	RiskHistoryOrderFieldImpact = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.Impact, nil
 		},
 		column: riskhistory.FieldImpact,
@@ -28239,7 +27912,6 @@ var (
 	// RiskHistoryOrderFieldLikelihood orders RiskHistory by likelihood.
 	RiskHistoryOrderFieldLikelihood = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.Likelihood, nil
 		},
 		column: riskhistory.FieldLikelihood,
@@ -28254,7 +27926,6 @@ var (
 	// RiskHistoryOrderFieldScore orders RiskHistory by score.
 	RiskHistoryOrderFieldScore = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.Score, nil
 		},
 		column: riskhistory.FieldScore,
@@ -28269,7 +27940,6 @@ var (
 	// RiskHistoryOrderFieldBusinessCosts orders RiskHistory by business_costs.
 	RiskHistoryOrderFieldBusinessCosts = &RiskHistoryOrderField{
 		Value: func(rh *RiskHistory) (ent.Value, error) {
-
 			return rh.BusinessCosts, nil
 		},
 		column: riskhistory.FieldBusinessCosts,
@@ -28641,7 +28311,6 @@ var (
 	// ScheduledJobOrderFieldCreatedAt orders ScheduledJob by created_at.
 	ScheduledJobOrderFieldCreatedAt = &ScheduledJobOrderField{
 		Value: func(sj *ScheduledJob) (ent.Value, error) {
-
 			return sj.CreatedAt, nil
 		},
 		column: scheduledjob.FieldCreatedAt,
@@ -28656,7 +28325,6 @@ var (
 	// ScheduledJobOrderFieldUpdatedAt orders ScheduledJob by updated_at.
 	ScheduledJobOrderFieldUpdatedAt = &ScheduledJobOrderField{
 		Value: func(sj *ScheduledJob) (ent.Value, error) {
-
 			return sj.UpdatedAt, nil
 		},
 		column: scheduledjob.FieldUpdatedAt,
@@ -28671,7 +28339,6 @@ var (
 	// ScheduledJobOrderFieldTitle orders ScheduledJob by title.
 	ScheduledJobOrderFieldTitle = &ScheduledJobOrderField{
 		Value: func(sj *ScheduledJob) (ent.Value, error) {
-
 			return sj.Title, nil
 		},
 		column: scheduledjob.FieldTitle,
@@ -28686,7 +28353,6 @@ var (
 	// ScheduledJobOrderFieldJobType orders ScheduledJob by job_type.
 	ScheduledJobOrderFieldJobType = &ScheduledJobOrderField{
 		Value: func(sj *ScheduledJob) (ent.Value, error) {
-
 			return sj.JobType, nil
 		},
 		column: scheduledjob.FieldJobType,
@@ -28995,7 +28661,6 @@ var (
 	// ScheduledJobHistoryOrderFieldCreatedAt orders ScheduledJobHistory by created_at.
 	ScheduledJobHistoryOrderFieldCreatedAt = &ScheduledJobHistoryOrderField{
 		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
-
 			return sjh.CreatedAt, nil
 		},
 		column: scheduledjobhistory.FieldCreatedAt,
@@ -29010,7 +28675,6 @@ var (
 	// ScheduledJobHistoryOrderFieldUpdatedAt orders ScheduledJobHistory by updated_at.
 	ScheduledJobHistoryOrderFieldUpdatedAt = &ScheduledJobHistoryOrderField{
 		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
-
 			return sjh.UpdatedAt, nil
 		},
 		column: scheduledjobhistory.FieldUpdatedAt,
@@ -29025,7 +28689,6 @@ var (
 	// ScheduledJobHistoryOrderFieldTitle orders ScheduledJobHistory by title.
 	ScheduledJobHistoryOrderFieldTitle = &ScheduledJobHistoryOrderField{
 		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
-
 			return sjh.Title, nil
 		},
 		column: scheduledjobhistory.FieldTitle,
@@ -29040,7 +28703,6 @@ var (
 	// ScheduledJobHistoryOrderFieldJobType orders ScheduledJobHistory by job_type.
 	ScheduledJobHistoryOrderFieldJobType = &ScheduledJobHistoryOrderField{
 		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
-
 			return sjh.JobType, nil
 		},
 		column: scheduledjobhistory.FieldJobType,
@@ -29388,7 +29050,6 @@ var (
 	// ScheduledJobRunOrderFieldCreatedAt orders ScheduledJobRun by created_at.
 	ScheduledJobRunOrderFieldCreatedAt = &ScheduledJobRunOrderField{
 		Value: func(sjr *ScheduledJobRun) (ent.Value, error) {
-
 			return sjr.CreatedAt, nil
 		},
 		column: scheduledjobrun.FieldCreatedAt,
@@ -29403,7 +29064,6 @@ var (
 	// ScheduledJobRunOrderFieldUpdatedAt orders ScheduledJobRun by updated_at.
 	ScheduledJobRunOrderFieldUpdatedAt = &ScheduledJobRunOrderField{
 		Value: func(sjr *ScheduledJobRun) (ent.Value, error) {
-
 			return sjr.UpdatedAt, nil
 		},
 		column: scheduledjobrun.FieldUpdatedAt,
@@ -29743,7 +29403,6 @@ var (
 	// StandardOrderFieldCreatedAt orders Standard by created_at.
 	StandardOrderFieldCreatedAt = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
-
 			return s.CreatedAt, nil
 		},
 		column: standard.FieldCreatedAt,
@@ -29758,7 +29417,6 @@ var (
 	// StandardOrderFieldUpdatedAt orders Standard by updated_at.
 	StandardOrderFieldUpdatedAt = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
-
 			return s.UpdatedAt, nil
 		},
 		column: standard.FieldUpdatedAt,
@@ -29773,7 +29431,6 @@ var (
 	// StandardOrderFieldRevision orders Standard by revision.
 	StandardOrderFieldRevision = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
-
 			return s.Revision, nil
 		},
 		column: standard.FieldRevision,
@@ -29788,7 +29445,6 @@ var (
 	// StandardOrderFieldName orders Standard by name.
 	StandardOrderFieldName = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
-
 			return s.Name, nil
 		},
 		column: standard.FieldName,
@@ -29803,7 +29459,6 @@ var (
 	// StandardOrderFieldShortName orders Standard by short_name.
 	StandardOrderFieldShortName = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
-
 			return s.ShortName, nil
 		},
 		column: standard.FieldShortName,
@@ -29818,7 +29473,6 @@ var (
 	// StandardOrderFieldFramework orders Standard by framework.
 	StandardOrderFieldFramework = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
-
 			return s.Framework, nil
 		},
 		column: standard.FieldFramework,
@@ -29833,7 +29487,6 @@ var (
 	// StandardOrderFieldGoverningBody orders Standard by governing_body.
 	StandardOrderFieldGoverningBody = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
-
 			return s.GoverningBody, nil
 		},
 		column: standard.FieldGoverningBody,
@@ -29848,7 +29501,6 @@ var (
 	// StandardOrderFieldStatus orders Standard by status.
 	StandardOrderFieldStatus = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
-
 			return s.Status, nil
 		},
 		column: standard.FieldStatus,
@@ -29863,7 +29515,6 @@ var (
 	// StandardOrderFieldStandardType orders Standard by standard_type.
 	StandardOrderFieldStandardType = &StandardOrderField{
 		Value: func(s *Standard) (ent.Value, error) {
-
 			return s.StandardType, nil
 		},
 		column: standard.FieldStandardType,
@@ -30192,7 +29843,6 @@ var (
 	// StandardHistoryOrderFieldCreatedAt orders StandardHistory by created_at.
 	StandardHistoryOrderFieldCreatedAt = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
-
 			return sh.CreatedAt, nil
 		},
 		column: standardhistory.FieldCreatedAt,
@@ -30207,7 +29857,6 @@ var (
 	// StandardHistoryOrderFieldUpdatedAt orders StandardHistory by updated_at.
 	StandardHistoryOrderFieldUpdatedAt = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
-
 			return sh.UpdatedAt, nil
 		},
 		column: standardhistory.FieldUpdatedAt,
@@ -30222,7 +29871,6 @@ var (
 	// StandardHistoryOrderFieldRevision orders StandardHistory by revision.
 	StandardHistoryOrderFieldRevision = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
-
 			return sh.Revision, nil
 		},
 		column: standardhistory.FieldRevision,
@@ -30237,7 +29885,6 @@ var (
 	// StandardHistoryOrderFieldName orders StandardHistory by name.
 	StandardHistoryOrderFieldName = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
-
 			return sh.Name, nil
 		},
 		column: standardhistory.FieldName,
@@ -30252,7 +29899,6 @@ var (
 	// StandardHistoryOrderFieldShortName orders StandardHistory by short_name.
 	StandardHistoryOrderFieldShortName = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
-
 			return sh.ShortName, nil
 		},
 		column: standardhistory.FieldShortName,
@@ -30267,7 +29913,6 @@ var (
 	// StandardHistoryOrderFieldFramework orders StandardHistory by framework.
 	StandardHistoryOrderFieldFramework = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
-
 			return sh.Framework, nil
 		},
 		column: standardhistory.FieldFramework,
@@ -30282,7 +29927,6 @@ var (
 	// StandardHistoryOrderFieldGoverningBody orders StandardHistory by governing_body.
 	StandardHistoryOrderFieldGoverningBody = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
-
 			return sh.GoverningBody, nil
 		},
 		column: standardhistory.FieldGoverningBody,
@@ -30297,7 +29941,6 @@ var (
 	// StandardHistoryOrderFieldStatus orders StandardHistory by status.
 	StandardHistoryOrderFieldStatus = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
-
 			return sh.Status, nil
 		},
 		column: standardhistory.FieldStatus,
@@ -30312,7 +29955,6 @@ var (
 	// StandardHistoryOrderFieldStandardType orders StandardHistory by standard_type.
 	StandardHistoryOrderFieldStandardType = &StandardHistoryOrderField{
 		Value: func(sh *StandardHistory) (ent.Value, error) {
-
 			return sh.StandardType, nil
 		},
 		column: standardhistory.FieldStandardType,
@@ -30680,7 +30322,6 @@ var (
 	// SubcontrolOrderFieldCreatedAt orders Subcontrol by created_at.
 	SubcontrolOrderFieldCreatedAt = &SubcontrolOrderField{
 		Value: func(s *Subcontrol) (ent.Value, error) {
-
 			return s.CreatedAt, nil
 		},
 		column: subcontrol.FieldCreatedAt,
@@ -30695,7 +30336,6 @@ var (
 	// SubcontrolOrderFieldUpdatedAt orders Subcontrol by updated_at.
 	SubcontrolOrderFieldUpdatedAt = &SubcontrolOrderField{
 		Value: func(s *Subcontrol) (ent.Value, error) {
-
 			return s.UpdatedAt, nil
 		},
 		column: subcontrol.FieldUpdatedAt,
@@ -30710,7 +30350,6 @@ var (
 	// SubcontrolOrderFieldStatus orders Subcontrol by status.
 	SubcontrolOrderFieldStatus = &SubcontrolOrderField{
 		Value: func(s *Subcontrol) (ent.Value, error) {
-
 			return s.Status, nil
 		},
 		column: subcontrol.FieldStatus,
@@ -30725,7 +30364,6 @@ var (
 	// SubcontrolOrderFieldSource orders Subcontrol by source.
 	SubcontrolOrderFieldSource = &SubcontrolOrderField{
 		Value: func(s *Subcontrol) (ent.Value, error) {
-
 			return s.Source, nil
 		},
 		column: subcontrol.FieldSource,
@@ -30740,7 +30378,6 @@ var (
 	// SubcontrolOrderFieldControlType orders Subcontrol by control_type.
 	SubcontrolOrderFieldControlType = &SubcontrolOrderField{
 		Value: func(s *Subcontrol) (ent.Value, error) {
-
 			return s.ControlType, nil
 		},
 		column: subcontrol.FieldControlType,
@@ -30755,7 +30392,6 @@ var (
 	// SubcontrolOrderFieldCategory orders Subcontrol by category.
 	SubcontrolOrderFieldCategory = &SubcontrolOrderField{
 		Value: func(s *Subcontrol) (ent.Value, error) {
-
 			return s.Category, nil
 		},
 		column: subcontrol.FieldCategory,
@@ -30770,7 +30406,6 @@ var (
 	// SubcontrolOrderFieldSubcategory orders Subcontrol by subcategory.
 	SubcontrolOrderFieldSubcategory = &SubcontrolOrderField{
 		Value: func(s *Subcontrol) (ent.Value, error) {
-
 			return s.Subcategory, nil
 		},
 		column: subcontrol.FieldSubcategory,
@@ -30785,7 +30420,6 @@ var (
 	// SubcontrolOrderFieldRefCode orders Subcontrol by ref_code.
 	SubcontrolOrderFieldRefCode = &SubcontrolOrderField{
 		Value: func(s *Subcontrol) (ent.Value, error) {
-
 			return s.RefCode, nil
 		},
 		column: subcontrol.FieldRefCode,
@@ -31110,7 +30744,6 @@ var (
 	// SubcontrolHistoryOrderFieldCreatedAt orders SubcontrolHistory by created_at.
 	SubcontrolHistoryOrderFieldCreatedAt = &SubcontrolHistoryOrderField{
 		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
-
 			return sh.CreatedAt, nil
 		},
 		column: subcontrolhistory.FieldCreatedAt,
@@ -31125,7 +30758,6 @@ var (
 	// SubcontrolHistoryOrderFieldUpdatedAt orders SubcontrolHistory by updated_at.
 	SubcontrolHistoryOrderFieldUpdatedAt = &SubcontrolHistoryOrderField{
 		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
-
 			return sh.UpdatedAt, nil
 		},
 		column: subcontrolhistory.FieldUpdatedAt,
@@ -31140,7 +30772,6 @@ var (
 	// SubcontrolHistoryOrderFieldStatus orders SubcontrolHistory by status.
 	SubcontrolHistoryOrderFieldStatus = &SubcontrolHistoryOrderField{
 		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
-
 			return sh.Status, nil
 		},
 		column: subcontrolhistory.FieldStatus,
@@ -31155,7 +30786,6 @@ var (
 	// SubcontrolHistoryOrderFieldSource orders SubcontrolHistory by source.
 	SubcontrolHistoryOrderFieldSource = &SubcontrolHistoryOrderField{
 		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
-
 			return sh.Source, nil
 		},
 		column: subcontrolhistory.FieldSource,
@@ -31170,7 +30800,6 @@ var (
 	// SubcontrolHistoryOrderFieldControlType orders SubcontrolHistory by control_type.
 	SubcontrolHistoryOrderFieldControlType = &SubcontrolHistoryOrderField{
 		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
-
 			return sh.ControlType, nil
 		},
 		column: subcontrolhistory.FieldControlType,
@@ -31185,7 +30814,6 @@ var (
 	// SubcontrolHistoryOrderFieldCategory orders SubcontrolHistory by category.
 	SubcontrolHistoryOrderFieldCategory = &SubcontrolHistoryOrderField{
 		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
-
 			return sh.Category, nil
 		},
 		column: subcontrolhistory.FieldCategory,
@@ -31200,7 +30828,6 @@ var (
 	// SubcontrolHistoryOrderFieldSubcategory orders SubcontrolHistory by subcategory.
 	SubcontrolHistoryOrderFieldSubcategory = &SubcontrolHistoryOrderField{
 		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
-
 			return sh.Subcategory, nil
 		},
 		column: subcontrolhistory.FieldSubcategory,
@@ -31215,7 +30842,6 @@ var (
 	// SubcontrolHistoryOrderFieldRefCode orders SubcontrolHistory by ref_code.
 	SubcontrolHistoryOrderFieldRefCode = &SubcontrolHistoryOrderField{
 		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
-
 			return sh.RefCode, nil
 		},
 		column: subcontrolhistory.FieldRefCode,
@@ -31579,7 +31205,6 @@ var (
 	// SubscriberOrderFieldCreatedAt orders Subscriber by created_at.
 	SubscriberOrderFieldCreatedAt = &SubscriberOrderField{
 		Value: func(s *Subscriber) (ent.Value, error) {
-
 			return s.CreatedAt, nil
 		},
 		column: subscriber.FieldCreatedAt,
@@ -31594,7 +31219,6 @@ var (
 	// SubscriberOrderFieldUpdatedAt orders Subscriber by updated_at.
 	SubscriberOrderFieldUpdatedAt = &SubscriberOrderField{
 		Value: func(s *Subscriber) (ent.Value, error) {
-
 			return s.UpdatedAt, nil
 		},
 		column: subscriber.FieldUpdatedAt,
@@ -31609,7 +31233,6 @@ var (
 	// SubscriberOrderFieldEmail orders Subscriber by email.
 	SubscriberOrderFieldEmail = &SubscriberOrderField{
 		Value: func(s *Subscriber) (ent.Value, error) {
-
 			return s.Email, nil
 		},
 		column: subscriber.FieldEmail,
@@ -31624,7 +31247,6 @@ var (
 	// SubscriberOrderFieldActive orders Subscriber by active.
 	SubscriberOrderFieldActive = &SubscriberOrderField{
 		Value: func(s *Subscriber) (ent.Value, error) {
-
 			return s.Active, nil
 		},
 		column: subscriber.FieldActive,
@@ -31639,7 +31261,6 @@ var (
 	// SubscriberOrderFieldUnsubscribed orders Subscriber by unsubscribed.
 	SubscriberOrderFieldUnsubscribed = &SubscriberOrderField{
 		Value: func(s *Subscriber) (ent.Value, error) {
-
 			return s.Unsubscribed, nil
 		},
 		column: subscriber.FieldUnsubscribed,
@@ -31654,7 +31275,6 @@ var (
 	// SubscriberOrderFieldSendAttempts orders Subscriber by send_attempts.
 	SubscriberOrderFieldSendAttempts = &SubscriberOrderField{
 		Value: func(s *Subscriber) (ent.Value, error) {
-
 			return s.SendAttempts, nil
 		},
 		column: subscriber.FieldSendAttempts,
@@ -32010,7 +31630,6 @@ var (
 	// TFASettingOrderFieldCreatedAt orders TFASetting by created_at.
 	TFASettingOrderFieldCreatedAt = &TFASettingOrderField{
 		Value: func(ts *TFASetting) (ent.Value, error) {
-
 			return ts.CreatedAt, nil
 		},
 		column: tfasetting.FieldCreatedAt,
@@ -32025,7 +31644,6 @@ var (
 	// TFASettingOrderFieldUpdatedAt orders TFASetting by updated_at.
 	TFASettingOrderFieldUpdatedAt = &TFASettingOrderField{
 		Value: func(ts *TFASetting) (ent.Value, error) {
-
 			return ts.UpdatedAt, nil
 		},
 		column: tfasetting.FieldUpdatedAt,
@@ -32365,7 +31983,6 @@ var (
 	// TaskOrderFieldCreatedAt orders Task by created_at.
 	TaskOrderFieldCreatedAt = &TaskOrderField{
 		Value: func(t *Task) (ent.Value, error) {
-
 			return t.CreatedAt, nil
 		},
 		column: task.FieldCreatedAt,
@@ -32380,7 +31997,6 @@ var (
 	// TaskOrderFieldUpdatedAt orders Task by updated_at.
 	TaskOrderFieldUpdatedAt = &TaskOrderField{
 		Value: func(t *Task) (ent.Value, error) {
-
 			return t.UpdatedAt, nil
 		},
 		column: task.FieldUpdatedAt,
@@ -32395,7 +32011,6 @@ var (
 	// TaskOrderFieldTitle orders Task by title.
 	TaskOrderFieldTitle = &TaskOrderField{
 		Value: func(t *Task) (ent.Value, error) {
-
 			return t.Title, nil
 		},
 		column: task.FieldTitle,
@@ -32410,7 +32025,6 @@ var (
 	// TaskOrderFieldStatus orders Task by status.
 	TaskOrderFieldStatus = &TaskOrderField{
 		Value: func(t *Task) (ent.Value, error) {
-
 			return t.Status, nil
 		},
 		column: task.FieldStatus,
@@ -32425,7 +32039,6 @@ var (
 	// TaskOrderFieldCategory orders Task by category.
 	TaskOrderFieldCategory = &TaskOrderField{
 		Value: func(t *Task) (ent.Value, error) {
-
 			return t.Category, nil
 		},
 		column: task.FieldCategory,
@@ -32444,7 +32057,6 @@ var (
 			if t.Due == nil {
 				return nil, nil
 			}
-
 			return t.Due, nil
 		},
 		column: task.FieldDue,
@@ -32472,7 +32084,6 @@ var (
 			if t.Completed == nil {
 				return nil, nil
 			}
-
 			return t.Completed, nil
 		},
 		column: task.FieldCompleted,
@@ -32802,7 +32413,6 @@ var (
 	// TaskHistoryOrderFieldCreatedAt orders TaskHistory by created_at.
 	TaskHistoryOrderFieldCreatedAt = &TaskHistoryOrderField{
 		Value: func(th *TaskHistory) (ent.Value, error) {
-
 			return th.CreatedAt, nil
 		},
 		column: taskhistory.FieldCreatedAt,
@@ -32817,7 +32427,6 @@ var (
 	// TaskHistoryOrderFieldUpdatedAt orders TaskHistory by updated_at.
 	TaskHistoryOrderFieldUpdatedAt = &TaskHistoryOrderField{
 		Value: func(th *TaskHistory) (ent.Value, error) {
-
 			return th.UpdatedAt, nil
 		},
 		column: taskhistory.FieldUpdatedAt,
@@ -32832,7 +32441,6 @@ var (
 	// TaskHistoryOrderFieldTitle orders TaskHistory by title.
 	TaskHistoryOrderFieldTitle = &TaskHistoryOrderField{
 		Value: func(th *TaskHistory) (ent.Value, error) {
-
 			return th.Title, nil
 		},
 		column: taskhistory.FieldTitle,
@@ -32847,7 +32455,6 @@ var (
 	// TaskHistoryOrderFieldStatus orders TaskHistory by status.
 	TaskHistoryOrderFieldStatus = &TaskHistoryOrderField{
 		Value: func(th *TaskHistory) (ent.Value, error) {
-
 			return th.Status, nil
 		},
 		column: taskhistory.FieldStatus,
@@ -32862,7 +32469,6 @@ var (
 	// TaskHistoryOrderFieldCategory orders TaskHistory by category.
 	TaskHistoryOrderFieldCategory = &TaskHistoryOrderField{
 		Value: func(th *TaskHistory) (ent.Value, error) {
-
 			return th.Category, nil
 		},
 		column: taskhistory.FieldCategory,
@@ -32881,7 +32487,6 @@ var (
 			if th.Due == nil {
 				return nil, nil
 			}
-
 			return th.Due, nil
 		},
 		column: taskhistory.FieldDue,
@@ -32909,7 +32514,6 @@ var (
 			if th.Completed == nil {
 				return nil, nil
 			}
-
 			return th.Completed, nil
 		},
 		column: taskhistory.FieldCompleted,
@@ -33278,7 +32882,6 @@ var (
 	// TemplateOrderFieldCreatedAt orders Template by created_at.
 	TemplateOrderFieldCreatedAt = &TemplateOrderField{
 		Value: func(t *Template) (ent.Value, error) {
-
 			return t.CreatedAt, nil
 		},
 		column: template.FieldCreatedAt,
@@ -33293,7 +32896,6 @@ var (
 	// TemplateOrderFieldUpdatedAt orders Template by updated_at.
 	TemplateOrderFieldUpdatedAt = &TemplateOrderField{
 		Value: func(t *Template) (ent.Value, error) {
-
 			return t.UpdatedAt, nil
 		},
 		column: template.FieldUpdatedAt,
@@ -33308,7 +32910,6 @@ var (
 	// TemplateOrderFieldName orders Template by name.
 	TemplateOrderFieldName = &TemplateOrderField{
 		Value: func(t *Template) (ent.Value, error) {
-
 			return t.Name, nil
 		},
 		column: template.FieldName,
@@ -33323,7 +32924,6 @@ var (
 	// TemplateOrderFieldTemplateType orders Template by template_type.
 	TemplateOrderFieldTemplateType = &TemplateOrderField{
 		Value: func(t *Template) (ent.Value, error) {
-
 			return t.TemplateType, nil
 		},
 		column: template.FieldTemplateType,
@@ -33632,7 +33232,6 @@ var (
 	// TemplateHistoryOrderFieldCreatedAt orders TemplateHistory by created_at.
 	TemplateHistoryOrderFieldCreatedAt = &TemplateHistoryOrderField{
 		Value: func(th *TemplateHistory) (ent.Value, error) {
-
 			return th.CreatedAt, nil
 		},
 		column: templatehistory.FieldCreatedAt,
@@ -33647,7 +33246,6 @@ var (
 	// TemplateHistoryOrderFieldUpdatedAt orders TemplateHistory by updated_at.
 	TemplateHistoryOrderFieldUpdatedAt = &TemplateHistoryOrderField{
 		Value: func(th *TemplateHistory) (ent.Value, error) {
-
 			return th.UpdatedAt, nil
 		},
 		column: templatehistory.FieldUpdatedAt,
@@ -33662,7 +33260,6 @@ var (
 	// TemplateHistoryOrderFieldName orders TemplateHistory by name.
 	TemplateHistoryOrderFieldName = &TemplateHistoryOrderField{
 		Value: func(th *TemplateHistory) (ent.Value, error) {
-
 			return th.Name, nil
 		},
 		column: templatehistory.FieldName,
@@ -33677,7 +33274,6 @@ var (
 	// TemplateHistoryOrderFieldTemplateType orders TemplateHistory by template_type.
 	TemplateHistoryOrderFieldTemplateType = &TemplateHistoryOrderField{
 		Value: func(th *TemplateHistory) (ent.Value, error) {
-
 			return th.TemplateType, nil
 		},
 		column: templatehistory.FieldTemplateType,
@@ -34025,7 +33621,6 @@ var (
 	// UserOrderFieldCreatedAt orders User by created_at.
 	UserOrderFieldCreatedAt = &UserOrderField{
 		Value: func(u *User) (ent.Value, error) {
-
 			return u.CreatedAt, nil
 		},
 		column: user.FieldCreatedAt,
@@ -34040,7 +33635,6 @@ var (
 	// UserOrderFieldUpdatedAt orders User by updated_at.
 	UserOrderFieldUpdatedAt = &UserOrderField{
 		Value: func(u *User) (ent.Value, error) {
-
 			return u.UpdatedAt, nil
 		},
 		column: user.FieldUpdatedAt,
@@ -34055,7 +33649,6 @@ var (
 	// UserOrderFieldFirstName orders User by first_name.
 	UserOrderFieldFirstName = &UserOrderField{
 		Value: func(u *User) (ent.Value, error) {
-
 			return u.FirstName, nil
 		},
 		column: user.FieldFirstName,
@@ -34070,7 +33663,6 @@ var (
 	// UserOrderFieldLastName orders User by last_name.
 	UserOrderFieldLastName = &UserOrderField{
 		Value: func(u *User) (ent.Value, error) {
-
 			return u.LastName, nil
 		},
 		column: user.FieldLastName,
@@ -34085,7 +33677,6 @@ var (
 	// UserOrderFieldDisplayName orders User by display_name.
 	UserOrderFieldDisplayName = &UserOrderField{
 		Value: func(u *User) (ent.Value, error) {
-
 			return u.DisplayName, nil
 		},
 		column: user.FieldDisplayName,
@@ -34398,7 +33989,6 @@ var (
 	// UserHistoryOrderFieldCreatedAt orders UserHistory by created_at.
 	UserHistoryOrderFieldCreatedAt = &UserHistoryOrderField{
 		Value: func(uh *UserHistory) (ent.Value, error) {
-
 			return uh.CreatedAt, nil
 		},
 		column: userhistory.FieldCreatedAt,
@@ -34413,7 +34003,6 @@ var (
 	// UserHistoryOrderFieldUpdatedAt orders UserHistory by updated_at.
 	UserHistoryOrderFieldUpdatedAt = &UserHistoryOrderField{
 		Value: func(uh *UserHistory) (ent.Value, error) {
-
 			return uh.UpdatedAt, nil
 		},
 		column: userhistory.FieldUpdatedAt,
@@ -34428,7 +34017,6 @@ var (
 	// UserHistoryOrderFieldFirstName orders UserHistory by first_name.
 	UserHistoryOrderFieldFirstName = &UserHistoryOrderField{
 		Value: func(uh *UserHistory) (ent.Value, error) {
-
 			return uh.FirstName, nil
 		},
 		column: userhistory.FieldFirstName,
@@ -34443,7 +34031,6 @@ var (
 	// UserHistoryOrderFieldLastName orders UserHistory by last_name.
 	UserHistoryOrderFieldLastName = &UserHistoryOrderField{
 		Value: func(uh *UserHistory) (ent.Value, error) {
-
 			return uh.LastName, nil
 		},
 		column: userhistory.FieldLastName,
@@ -34458,7 +34045,6 @@ var (
 	// UserHistoryOrderFieldDisplayName orders UserHistory by display_name.
 	UserHistoryOrderFieldDisplayName = &UserHistoryOrderField{
 		Value: func(uh *UserHistory) (ent.Value, error) {
-
 			return uh.DisplayName, nil
 		},
 		column: userhistory.FieldDisplayName,
@@ -34810,7 +34396,6 @@ var (
 	// UserSettingOrderFieldCreatedAt orders UserSetting by created_at.
 	UserSettingOrderFieldCreatedAt = &UserSettingOrderField{
 		Value: func(us *UserSetting) (ent.Value, error) {
-
 			return us.CreatedAt, nil
 		},
 		column: usersetting.FieldCreatedAt,
@@ -34825,7 +34410,6 @@ var (
 	// UserSettingOrderFieldUpdatedAt orders UserSetting by updated_at.
 	UserSettingOrderFieldUpdatedAt = &UserSettingOrderField{
 		Value: func(us *UserSetting) (ent.Value, error) {
-
 			return us.UpdatedAt, nil
 		},
 		column: usersetting.FieldUpdatedAt,
@@ -35126,7 +34710,6 @@ var (
 	// UserSettingHistoryOrderFieldCreatedAt orders UserSettingHistory by created_at.
 	UserSettingHistoryOrderFieldCreatedAt = &UserSettingHistoryOrderField{
 		Value: func(ush *UserSettingHistory) (ent.Value, error) {
-
 			return ush.CreatedAt, nil
 		},
 		column: usersettinghistory.FieldCreatedAt,
@@ -35141,7 +34724,6 @@ var (
 	// UserSettingHistoryOrderFieldUpdatedAt orders UserSettingHistory by updated_at.
 	UserSettingHistoryOrderFieldUpdatedAt = &UserSettingHistoryOrderField{
 		Value: func(ush *UserSettingHistory) (ent.Value, error) {
-
 			return ush.UpdatedAt, nil
 		},
 		column: usersettinghistory.FieldUpdatedAt,
@@ -35442,7 +35024,6 @@ var (
 	// WebauthnOrderFieldCreatedAt orders Webauthn by created_at.
 	WebauthnOrderFieldCreatedAt = &WebauthnOrderField{
 		Value: func(w *Webauthn) (ent.Value, error) {
-
 			return w.CreatedAt, nil
 		},
 		column: webauthn.FieldCreatedAt,
@@ -35457,7 +35038,6 @@ var (
 	// WebauthnOrderFieldUpdatedAt orders Webauthn by updated_at.
 	WebauthnOrderFieldUpdatedAt = &WebauthnOrderField{
 		Value: func(w *Webauthn) (ent.Value, error) {
-
 			return w.UpdatedAt, nil
 		},
 		column: webauthn.FieldUpdatedAt,
