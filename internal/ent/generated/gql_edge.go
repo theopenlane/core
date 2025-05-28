@@ -5078,6 +5078,14 @@ func (sjr *ScheduledJobRun) ScheduledJob(ctx context.Context) (*ControlScheduled
 	return result, err
 }
 
+func (sjr *ScheduledJobRun) JobRunner(ctx context.Context) (*JobRunner, error) {
+	result, err := sjr.Edges.JobRunnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = sjr.QueryJobRunner().Only(ctx)
+	}
+	return result, err
+}
+
 func (s *Standard) Owner(ctx context.Context) (*Organization, error) {
 	result, err := s.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

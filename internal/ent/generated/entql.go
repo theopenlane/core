@@ -2328,16 +2328,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ScheduledJobRun",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			scheduledjobrun.FieldCreatedAt:      {Type: field.TypeTime, Column: scheduledjobrun.FieldCreatedAt},
-			scheduledjobrun.FieldUpdatedAt:      {Type: field.TypeTime, Column: scheduledjobrun.FieldUpdatedAt},
-			scheduledjobrun.FieldCreatedBy:      {Type: field.TypeString, Column: scheduledjobrun.FieldCreatedBy},
-			scheduledjobrun.FieldUpdatedBy:      {Type: field.TypeString, Column: scheduledjobrun.FieldUpdatedBy},
-			scheduledjobrun.FieldDeletedAt:      {Type: field.TypeTime, Column: scheduledjobrun.FieldDeletedAt},
-			scheduledjobrun.FieldDeletedBy:      {Type: field.TypeString, Column: scheduledjobrun.FieldDeletedBy},
-			scheduledjobrun.FieldOwnerID:        {Type: field.TypeString, Column: scheduledjobrun.FieldOwnerID},
-			scheduledjobrun.FieldJobRunnerID:    {Type: field.TypeString, Column: scheduledjobrun.FieldJobRunnerID},
-			scheduledjobrun.FieldStatus:         {Type: field.TypeEnum, Column: scheduledjobrun.FieldStatus},
-			scheduledjobrun.FieldScheduledJobID: {Type: field.TypeString, Column: scheduledjobrun.FieldScheduledJobID},
+			scheduledjobrun.FieldCreatedAt:             {Type: field.TypeTime, Column: scheduledjobrun.FieldCreatedAt},
+			scheduledjobrun.FieldUpdatedAt:             {Type: field.TypeTime, Column: scheduledjobrun.FieldUpdatedAt},
+			scheduledjobrun.FieldCreatedBy:             {Type: field.TypeString, Column: scheduledjobrun.FieldCreatedBy},
+			scheduledjobrun.FieldUpdatedBy:             {Type: field.TypeString, Column: scheduledjobrun.FieldUpdatedBy},
+			scheduledjobrun.FieldDeletedAt:             {Type: field.TypeTime, Column: scheduledjobrun.FieldDeletedAt},
+			scheduledjobrun.FieldDeletedBy:             {Type: field.TypeString, Column: scheduledjobrun.FieldDeletedBy},
+			scheduledjobrun.FieldOwnerID:               {Type: field.TypeString, Column: scheduledjobrun.FieldOwnerID},
+			scheduledjobrun.FieldJobRunnerID:           {Type: field.TypeString, Column: scheduledjobrun.FieldJobRunnerID},
+			scheduledjobrun.FieldStatus:                {Type: field.TypeEnum, Column: scheduledjobrun.FieldStatus},
+			scheduledjobrun.FieldScheduledJobID:        {Type: field.TypeString, Column: scheduledjobrun.FieldScheduledJobID},
+			scheduledjobrun.FieldExpectedExecutionTime: {Type: field.TypeTime, Column: scheduledjobrun.FieldExpectedExecutionTime},
+			scheduledjobrun.FieldScript:                {Type: field.TypeString, Column: scheduledjobrun.FieldScript},
 		},
 	}
 	graph.Nodes[78] = &sqlgraph.Node{
@@ -6329,6 +6331,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ScheduledJobRun",
 		"ControlScheduledJob",
+	)
+	graph.MustAddE(
+		"job_runner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scheduledjobrun.JobRunnerTable,
+			Columns: []string{scheduledjobrun.JobRunnerColumn},
+			Bidi:    false,
+		},
+		"ScheduledJobRun",
+		"JobRunner",
 	)
 	graph.MustAddE(
 		"owner",
@@ -20308,6 +20322,16 @@ func (f *ScheduledJobRunFilter) WhereScheduledJobID(p entql.StringP) {
 	f.Where(p.Field(scheduledjobrun.FieldScheduledJobID))
 }
 
+// WhereExpectedExecutionTime applies the entql time.Time predicate on the expected_execution_time field.
+func (f *ScheduledJobRunFilter) WhereExpectedExecutionTime(p entql.TimeP) {
+	f.Where(p.Field(scheduledjobrun.FieldExpectedExecutionTime))
+}
+
+// WhereScript applies the entql string predicate on the script field.
+func (f *ScheduledJobRunFilter) WhereScript(p entql.StringP) {
+	f.Where(p.Field(scheduledjobrun.FieldScript))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ScheduledJobRunFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -20330,6 +20354,20 @@ func (f *ScheduledJobRunFilter) WhereHasScheduledJob() {
 // WhereHasScheduledJobWith applies a predicate to check if query has an edge scheduled_job with a given conditions (other predicates).
 func (f *ScheduledJobRunFilter) WhereHasScheduledJobWith(preds ...predicate.ControlScheduledJob) {
 	f.Where(entql.HasEdgeWith("scheduled_job", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasJobRunner applies a predicate to check if query has an edge job_runner.
+func (f *ScheduledJobRunFilter) WhereHasJobRunner() {
+	f.Where(entql.HasEdge("job_runner"))
+}
+
+// WhereHasJobRunnerWith applies a predicate to check if query has an edge job_runner with a given conditions (other predicates).
+func (f *ScheduledJobRunFilter) WhereHasJobRunnerWith(preds ...predicate.JobRunner) {
+	f.Where(entql.HasEdgeWith("job_runner", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

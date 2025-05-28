@@ -32271,6 +32271,21 @@ func (sjr *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, scheduledjobrun.FieldScheduledJobID)
 				fieldSeen[scheduledjobrun.FieldScheduledJobID] = struct{}{}
 			}
+
+		case "jobRunner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&JobRunnerClient{config: sjr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobrunnerImplementors)...); err != nil {
+				return err
+			}
+			sjr.withJobRunner = query
+			if _, ok := fieldSeen[scheduledjobrun.FieldJobRunnerID]; !ok {
+				selectedFields = append(selectedFields, scheduledjobrun.FieldJobRunnerID)
+				fieldSeen[scheduledjobrun.FieldJobRunnerID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[scheduledjobrun.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, scheduledjobrun.FieldCreatedAt)
@@ -32310,6 +32325,16 @@ func (sjr *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[scheduledjobrun.FieldScheduledJobID]; !ok {
 				selectedFields = append(selectedFields, scheduledjobrun.FieldScheduledJobID)
 				fieldSeen[scheduledjobrun.FieldScheduledJobID] = struct{}{}
+			}
+		case "expectedExecutionTime":
+			if _, ok := fieldSeen[scheduledjobrun.FieldExpectedExecutionTime]; !ok {
+				selectedFields = append(selectedFields, scheduledjobrun.FieldExpectedExecutionTime)
+				fieldSeen[scheduledjobrun.FieldExpectedExecutionTime] = struct{}{}
+			}
+		case "script":
+			if _, ok := fieldSeen[scheduledjobrun.FieldScript]; !ok {
+				selectedFields = append(selectedFields, scheduledjobrun.FieldScript)
+				fieldSeen[scheduledjobrun.FieldScript] = struct{}{}
 			}
 		case "id":
 		case "__typename":

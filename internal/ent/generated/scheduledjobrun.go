@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/pkg/enums"
@@ -41,6 +42,11 @@ type ScheduledJobRun struct {
 	Status enums.ScheduledJobRunStatus `json:"status,omitempty"`
 	// the parent job for this run
 	ScheduledJobID string `json:"scheduled_job_id,omitempty"`
+	// When should this job execute on the agent. Since we might potentially schedule a few minutes before
+	ExpectedExecutionTime time.Time `json:"expected_execution_time,omitempty"`
+	// the script that will be executed by the agent.
+	// This script will be templated with the values from the configuration on the job
+	Script string `json:"script,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduledJobRunQuery when eager-loading is set.
 	Edges        ScheduledJobRunEdges `json:"edges"`
@@ -53,11 +59,13 @@ type ScheduledJobRunEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// ScheduledJob holds the value of the scheduled_job edge.
 	ScheduledJob *ControlScheduledJob `json:"scheduled_job,omitempty"`
+	// JobRunner holds the value of the job_runner edge.
+	JobRunner *JobRunner `json:"job_runner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -82,14 +90,25 @@ func (e ScheduledJobRunEdges) ScheduledJobOrErr() (*ControlScheduledJob, error) 
 	return nil, &NotLoadedError{edge: "scheduled_job"}
 }
 
+// JobRunnerOrErr returns the JobRunner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScheduledJobRunEdges) JobRunnerOrErr() (*JobRunner, error) {
+	if e.JobRunner != nil {
+		return e.JobRunner, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: jobrunner.Label}
+	}
+	return nil, &NotLoadedError{edge: "job_runner"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ScheduledJobRun) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case scheduledjobrun.FieldID, scheduledjobrun.FieldCreatedBy, scheduledjobrun.FieldUpdatedBy, scheduledjobrun.FieldDeletedBy, scheduledjobrun.FieldOwnerID, scheduledjobrun.FieldJobRunnerID, scheduledjobrun.FieldStatus, scheduledjobrun.FieldScheduledJobID:
+		case scheduledjobrun.FieldID, scheduledjobrun.FieldCreatedBy, scheduledjobrun.FieldUpdatedBy, scheduledjobrun.FieldDeletedBy, scheduledjobrun.FieldOwnerID, scheduledjobrun.FieldJobRunnerID, scheduledjobrun.FieldStatus, scheduledjobrun.FieldScheduledJobID, scheduledjobrun.FieldScript:
 			values[i] = new(sql.NullString)
-		case scheduledjobrun.FieldCreatedAt, scheduledjobrun.FieldUpdatedAt, scheduledjobrun.FieldDeletedAt:
+		case scheduledjobrun.FieldCreatedAt, scheduledjobrun.FieldUpdatedAt, scheduledjobrun.FieldDeletedAt, scheduledjobrun.FieldExpectedExecutionTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -172,6 +191,18 @@ func (sjr *ScheduledJobRun) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sjr.ScheduledJobID = value.String
 			}
+		case scheduledjobrun.FieldExpectedExecutionTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expected_execution_time", values[i])
+			} else if value.Valid {
+				sjr.ExpectedExecutionTime = value.Time
+			}
+		case scheduledjobrun.FieldScript:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field script", values[i])
+			} else if value.Valid {
+				sjr.Script = value.String
+			}
 		default:
 			sjr.selectValues.Set(columns[i], values[i])
 		}
@@ -193,6 +224,11 @@ func (sjr *ScheduledJobRun) QueryOwner() *OrganizationQuery {
 // QueryScheduledJob queries the "scheduled_job" edge of the ScheduledJobRun entity.
 func (sjr *ScheduledJobRun) QueryScheduledJob() *ControlScheduledJobQuery {
 	return NewScheduledJobRunClient(sjr.config).QueryScheduledJob(sjr)
+}
+
+// QueryJobRunner queries the "job_runner" edge of the ScheduledJobRun entity.
+func (sjr *ScheduledJobRun) QueryJobRunner() *JobRunnerQuery {
+	return NewScheduledJobRunClient(sjr.config).QueryJobRunner(sjr)
 }
 
 // Update returns a builder for updating this ScheduledJobRun.
@@ -247,6 +283,12 @@ func (sjr *ScheduledJobRun) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scheduled_job_id=")
 	builder.WriteString(sjr.ScheduledJobID)
+	builder.WriteString(", ")
+	builder.WriteString("expected_execution_time=")
+	builder.WriteString(sjr.ExpectedExecutionTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("script=")
+	builder.WriteString(sjr.Script)
 	builder.WriteByte(')')
 	return builder.String()
 }

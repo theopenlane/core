@@ -6,7 +6,6 @@ import (
 	"io"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/gorhill/cronexpr"
 )
 
@@ -26,6 +25,10 @@ type Cron string
 // It also limits concurrent runs to 30 minutes interval of the last run
 // so it parses the cron - look at next few executions and check the elapsed time
 func (c Cron) Validate() error {
+	if c.String() == "" {
+		return nil
+	}
+
 	cron, err := cronexpr.Parse(c.String())
 	if err != nil {
 		return fmt.Errorf("invalid cron syntax: %w", err) // nolint:err113
@@ -70,9 +73,8 @@ func (c Cron) MarshalGQL(w io.Writer) {
 	_, _ = io.WriteString(w, fmt.Sprintf("%q", c.String()))
 }
 
-func (c Cron) Value() (driver.Value, error) {
-	return c, nil
-}
+// Value returns human readable cron from the database
+func (c Cron) Value() (driver.Value, error) { return string(c), nil }
 
 func (c *Cron) Scan(value interface{}) error {
 	if value == nil {
@@ -90,18 +92,4 @@ func (c *Cron) Scan(value interface{}) error {
 }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (c *Cron) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return ErrUnsupportedDataType
-	}
-
-	u, err := uuid.Parse(str)
-	if err != nil {
-		return ErrUnsupportedDataType
-	}
-
-	*c = Cron(u[:])
-
-	return nil
-}
+func (c *Cron) UnmarshalGQL(v any) error { return unmarshalGQLJSON(v, c) }

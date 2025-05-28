@@ -64,6 +64,10 @@ var validWeekdaysSet = func() map[string]struct{} {
 
 // Validate makes sure we have a usable job cadence setting
 func (c *JobCadence) Validate() error {
+	if c.IsZero() {
+		return nil
+	}
+
 	if val := enums.ToJobCadenceFrequency(c.Frequency.String()); *val == enums.JobCadenceFrequencyInvalid {
 		return errors.New("invalid frequency") // nolint:err113
 	}

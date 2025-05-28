@@ -38,10 +38,16 @@ const (
 	FieldStatus = "status"
 	// FieldScheduledJobID holds the string denoting the scheduled_job_id field in the database.
 	FieldScheduledJobID = "scheduled_job_id"
+	// FieldExpectedExecutionTime holds the string denoting the expected_execution_time field in the database.
+	FieldExpectedExecutionTime = "expected_execution_time"
+	// FieldScript holds the string denoting the script field in the database.
+	FieldScript = "script"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeScheduledJob holds the string denoting the scheduled_job edge name in mutations.
 	EdgeScheduledJob = "scheduled_job"
+	// EdgeJobRunner holds the string denoting the job_runner edge name in mutations.
+	EdgeJobRunner = "job_runner"
 	// Table holds the table name of the scheduledjobrun in the database.
 	Table = "scheduled_job_runs"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -58,6 +64,13 @@ const (
 	ScheduledJobInverseTable = "control_scheduled_jobs"
 	// ScheduledJobColumn is the table column denoting the scheduled_job relation/edge.
 	ScheduledJobColumn = "scheduled_job_id"
+	// JobRunnerTable is the table that holds the job_runner relation/edge.
+	JobRunnerTable = "scheduled_job_runs"
+	// JobRunnerInverseTable is the table name for the JobRunner entity.
+	// It exists in this package in order to avoid circular dependency with the "jobrunner" package.
+	JobRunnerInverseTable = "job_runners"
+	// JobRunnerColumn is the table column denoting the job_runner relation/edge.
+	JobRunnerColumn = "job_runner_id"
 )
 
 // Columns holds all SQL columns for scheduledjobrun fields.
@@ -73,6 +86,8 @@ var Columns = []string{
 	FieldJobRunnerID,
 	FieldStatus,
 	FieldScheduledJobID,
+	FieldExpectedExecutionTime,
+	FieldScript,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -176,6 +191,16 @@ func ByScheduledJobID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScheduledJobID, opts...).ToFunc()
 }
 
+// ByExpectedExecutionTime orders the results by the expected_execution_time field.
+func ByExpectedExecutionTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpectedExecutionTime, opts...).ToFunc()
+}
+
+// ByScript orders the results by the script field.
+func ByScript(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScript, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -187,6 +212,13 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByScheduledJobField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newScheduledJobStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByJobRunnerField orders the results by job_runner field.
+func ByJobRunnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobRunnerStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -201,6 +233,13 @@ func newScheduledJobStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScheduledJobInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ScheduledJobTable, ScheduledJobColumn),
+	)
+}
+func newJobRunnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(JobRunnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, JobRunnerTable, JobRunnerColumn),
 	)
 }
 

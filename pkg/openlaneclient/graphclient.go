@@ -64077,7 +64077,7 @@ type GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node struct {
 	CreatedAt      *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy      *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID             string                      "json:\"id\" graphql:\"id\""
-	JobRunnerID    *string                     "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	JobRunnerID    string                      "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
 	OwnerID        *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ScheduledJobID string                      "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
 	Status         enums.ScheduledJobRunStatus "json:\"status\" graphql:\"status\""
@@ -64103,7 +64103,7 @@ func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetJobRunnerID() *string {
+func (t *GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetJobRunnerID() string {
 	if t == nil {
 		t = &GetAllScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
 	}
@@ -64180,7 +64180,7 @@ type GetScheduledJobRunByID_ScheduledJobRun struct {
 	CreatedAt      *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy      *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID             string                      "json:\"id\" graphql:\"id\""
-	JobRunnerID    *string                     "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	JobRunnerID    string                      "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
 	OwnerID        *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ScheduledJobID string                      "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
 	Status         enums.ScheduledJobRunStatus "json:\"status\" graphql:\"status\""
@@ -64206,7 +64206,7 @@ func (t *GetScheduledJobRunByID_ScheduledJobRun) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetScheduledJobRunByID_ScheduledJobRun) GetJobRunnerID() *string {
+func (t *GetScheduledJobRunByID_ScheduledJobRun) GetJobRunnerID() string {
 	if t == nil {
 		t = &GetScheduledJobRunByID_ScheduledJobRun{}
 	}
@@ -64279,7 +64279,7 @@ type GetScheduledJobRuns_ScheduledJobRuns_Edges_Node struct {
 	CreatedAt      *time.Time                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy      *string                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID             string                      "json:\"id\" graphql:\"id\""
-	JobRunnerID    *string                     "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
+	JobRunnerID    string                      "json:\"jobRunnerID\" graphql:\"jobRunnerID\""
 	OwnerID        *string                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ScheduledJobID string                      "json:\"scheduledJobID\" graphql:\"scheduledJobID\""
 	Status         enums.ScheduledJobRunStatus "json:\"status\" graphql:\"status\""
@@ -64305,7 +64305,7 @@ func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetJobRunnerID() *string {
+func (t *GetScheduledJobRuns_ScheduledJobRuns_Edges_Node) GetJobRunnerID() string {
 	if t == nil {
 		t = &GetScheduledJobRuns_ScheduledJobRuns_Edges_Node{}
 	}

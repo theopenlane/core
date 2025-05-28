@@ -29,7 +29,7 @@ func (r *mutationResolver) CreateControlScheduledJob(ctx context.Context, input 
 		// by default copy the cadence or cron from the "scheduled job" template
 		// if this is not provided here
 		scheduledJob, err := withTransactionalMutation(ctx).ScheduledJob.Query().
-			Select("candence", "cron").
+			Select("cadence", "cron").
 			Where(scheduledjob.ID(input.JobID)).
 			Only(ctx)
 		if err != nil {
