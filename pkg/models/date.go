@@ -129,6 +129,7 @@ func (d *DateTime) UnmarshalText(b []byte) error {
 	}
 
 	s := string(b)
+
 	t, err := time.Parse(isoDateLayout, s)
 	if err == nil {
 		*d = DateTime(t)
