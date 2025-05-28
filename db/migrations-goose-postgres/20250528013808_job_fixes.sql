@@ -27,8 +27,12 @@ CREATE UNIQUE INDEX "programmembership_user_id_program_id" ON "program_membershi
 ALTER TABLE "scheduled_job_history" ALTER COLUMN "script" SET NOT NULL;
 -- modify "scheduled_jobs" table
 ALTER TABLE "scheduled_jobs" ALTER COLUMN "script" SET NOT NULL;
+-- modify "scheduled_job_runs" table
+ALTER TABLE "scheduled_job_runs" ALTER COLUMN "job_runner_id" SET NOT NULL, ADD COLUMN "expected_execution_time" timestamptz NOT NULL, ADD COLUMN "script" character varying NOT NULL, ADD CONSTRAINT "scheduled_job_runs_job_runners_job_runner" FOREIGN KEY ("job_runner_id") REFERENCES "job_runners" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 -- +goose Down
+-- reverse: modify "scheduled_job_runs" table
+ALTER TABLE "scheduled_job_runs" DROP CONSTRAINT "scheduled_job_runs_job_runners_job_runner", DROP COLUMN "script", DROP COLUMN "expected_execution_time", ALTER COLUMN "job_runner_id" DROP NOT NULL;
 -- reverse: modify "scheduled_jobs" table
 ALTER TABLE "scheduled_jobs" ALTER COLUMN "script" DROP NOT NULL;
 -- reverse: modify "scheduled_job_history" table
