@@ -90,11 +90,8 @@ func init() {
 
 	// Pagination flags
 	RootCmd.PersistentFlags().Int64Var(&first, "first", 0, "first number of items to return in a paginated response, max of 100")
-
 	RootCmd.PersistentFlags().Int64Var(&last, "last", 0, "last number of items to return in a paginated response, max of 100")
-
 	RootCmd.PersistentFlags().StringVar(&after, "after", "", "cursor to start after in a paginated response")
-
 	RootCmd.PersistentFlags().StringVar(&before, "before", "", "cursor to end before in a paginated response")
 }
 
