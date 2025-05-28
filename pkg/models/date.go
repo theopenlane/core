@@ -1,7 +1,10 @@
 package models
 
 import (
+	"database/sql"
 	"database/sql/driver"
+	"encoding"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -21,23 +24,41 @@ var (
 	ErrInvalidTimeType         = errors.New("invalid date format, expected YYYY-MM-DD or full ISO8601")
 )
 
-func (d *DateTime) Scan(value any) error {
+// Ensure DateTime implements the Valuer, Scanner, and Marshal interfaces
+var _ driver.Valuer = (*DateTime)(nil)
+var _ sql.Scanner = (*DateTime)(nil)
+var _ encoding.TextMarshaler = (*DateTime)(nil)
+var _ encoding.TextUnmarshaler = (*DateTime)(nil)
+var _ json.Marshaler = DateTime{}
+var _ json.Unmarshaler = (*DateTime)(nil)
+
+func (d *DateTime) Scan(value interface{}) error {
 	if value == nil {
-		return nil
+		value = time.Time{} // Handle nil value as zero time
 	}
 
-	t, ok := value.(time.Time)
-	if !ok {
+	switch v := value.(type) {
+	case time.Time:
+		*d = DateTime(v)
+		return nil
+	default:
 		return ErrUnsupportedDateTimeType
 	}
-
-	*d = DateTime(t)
-
-	return nil
 }
 
+// Value implements the driver.Valuer interface for DateTime
 func (d DateTime) Value() (driver.Value, error) {
+	if d.IsZero() {
+		return nil, nil
+	}
+
 	return time.Time(d), nil
+}
+
+func (d DateTime) IsZero() bool {
+	t := time.Time(d)
+
+	return t.IsZero()
 }
 
 func (d *DateTime) UnmarshalCSV(s string) error {
@@ -94,6 +115,69 @@ func (d DateTime) MarshalGQL(w io.Writer) {
 
 	formatted := fmt.Sprintf("%q", t.Format(isoDateLayout))
 	_, _ = io.WriteString(w, formatted)
+}
+
+// UnmarshalText parses the DateTime from a byte slice
+// this function is used by the cursor pagination to correctly parse the date from the cursor string
+func (d *DateTime) UnmarshalText(b []byte) error {
+	if len(b) == 0 {
+		*d = DateTime{}
+		return nil
+	}
+
+	s := string(b)
+	t, err := time.Parse(isoDateLayout, s)
+	if err == nil {
+		*d = DateTime(t)
+		return nil
+	}
+
+	return fmt.Errorf("invalid DateTime text %q: %w", s, err)
+}
+
+// MarshalText formats the DateTime as "YYYY-MM-DD" for text representation
+// this function is used by the cursor pagination to correctly format the date into the cursor string
+func (d DateTime) MarshalText() ([]byte, error) {
+	if d.IsZero() {
+		return nil, nil
+	}
+
+	t := time.Time(d)
+
+	formatted := t.Format(isoDateLayout)
+
+	return []byte(formatted), nil
+}
+
+func (d *DateTime) UnmarshalJSON(b []byte) error {
+	if string(b) == "" {
+		return nil
+	}
+
+	var s string
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
+
+	t, err := time.Parse(isoDateLayout, s)
+	if err != nil {
+		return err
+	}
+
+	*d = DateTime(t)
+
+	return nil
+}
+
+func (d DateTime) MarshalJSON() ([]byte, error) {
+	if d.IsZero() {
+		return []byte(""), nil
+	}
+
+	t := time.Time(d)
+	s := t.Format(isoDateLayout)
+
+	return json.Marshal(s)
 }
 
 // String formats the given datetime into a human readable version

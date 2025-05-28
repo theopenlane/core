@@ -49,9 +49,9 @@ type Task struct {
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
 	Category string `json:"category,omitempty"`
 	// the due date of the task
-	Due models.DateTime `json:"due,omitempty"`
+	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
-	Completed models.DateTime `json:"completed,omitempty"`
+	Completed *models.DateTime `json:"completed,omitempty"`
 	// the id of the user who was assigned the task
 	AssigneeID string `json:"assignee_id,omitempty"`
 	// the id of the user who assigned the task, can be left empty if created by the system or a service token
@@ -236,10 +236,10 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case task.FieldDue, task.FieldCompleted:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case task.FieldTags:
 			values[i] = new([]byte)
-		case task.FieldDue, task.FieldCompleted:
-			values[i] = new(models.DateTime)
 		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldCategory, task.FieldAssigneeID, task.FieldAssignerID:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt:
@@ -346,16 +346,18 @@ func (t *Task) assignValues(columns []string, values []any) error {
 				t.Category = value.String
 			}
 		case task.FieldDue:
-			if value, ok := values[i].(*models.DateTime); !ok {
+			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field due", values[i])
-			} else if value != nil {
-				t.Due = *value
+			} else if value.Valid {
+				t.Due = new(models.DateTime)
+				*t.Due = *value.S.(*models.DateTime)
 			}
 		case task.FieldCompleted:
-			if value, ok := values[i].(*models.DateTime); !ok {
+			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field completed", values[i])
-			} else if value != nil {
-				t.Completed = *value
+			} else if value.Valid {
+				t.Completed = new(models.DateTime)
+				*t.Completed = *value.S.(*models.DateTime)
 			}
 		case task.FieldAssigneeID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -509,11 +511,15 @@ func (t *Task) String() string {
 	builder.WriteString("category=")
 	builder.WriteString(t.Category)
 	builder.WriteString(", ")
-	builder.WriteString("due=")
-	builder.WriteString(fmt.Sprintf("%v", t.Due))
+	if v := t.Due; v != nil {
+		builder.WriteString("due=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("completed=")
-	builder.WriteString(fmt.Sprintf("%v", t.Completed))
+	if v := t.Completed; v != nil {
+		builder.WriteString("completed=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("assignee_id=")
 	builder.WriteString(t.AssigneeID)

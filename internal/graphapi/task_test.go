@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -17,7 +18,6 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/core/pkg/testutils"
 )
 
 func TestQueryTask(t *testing.T) {
@@ -83,12 +83,12 @@ func TestQueryTasks(t *testing.T) {
 	org1TaskIDs := []string{}
 	org2TaskIDs := []string{}
 	for range numTasks {
-		t1 := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-		t2 := (&TaskBuilder{client: suite.client}).MustNew(viewOnlyUser2.UserCtx, t)
-		t3 := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+		t1 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(testUser1.UserCtx, t)
+		t2 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(viewOnlyUser2.UserCtx, t)
+		t3 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(adminUser.UserCtx, t)
 		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
 
-		t4 := (&TaskBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+		t4 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(testUser2.UserCtx, t)
 		org2TaskIDs = append(org2TaskIDs, t4.ID)
 	}
 
@@ -103,59 +103,173 @@ func TestQueryTasks(t *testing.T) {
 
 	org1TaskIDs = append(org1TaskIDs, taskWithRisk.ID)
 
+	var (
+		startCursorDue     *string
+		startCursorCreated *string
+	)
+
+	first := 10
 	testCases := []struct {
 		name            string
+		orderBy         []*openlaneclient.TaskOrder
 		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
+		setCursor       bool
+		useCursor       bool
 		totalCount      int64
 	}{
 		{
 			name:            "happy path",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
-			expectedResults: testutils.MaxResultLimit,
+			expectedResults: first,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, with order by due date, page 1",
+			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldDue, Direction: openlaneclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 2",
+			useCursor:       true,
+			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldDue, Direction: openlaneclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 3",
+			useCursor:       true,
+			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldDue, Direction: openlaneclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, with order by due date and cursor, page 4",
+			useCursor:       true,
+			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldDue, Direction: openlaneclient.OrderDirectionDesc}},
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: 1,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, with order by created date, page 1",
+			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldCreatedAt, Direction: openlaneclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 2",
+			useCursor:       true,
+			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldCreatedAt, Direction: openlaneclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 3",
+			useCursor:       true,
+			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldCreatedAt, Direction: openlaneclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: first,
+			setCursor:       true,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, with order by created date and cursor, page 4",
+			useCursor:       true,
+			orderBy:         []*openlaneclient.TaskOrder{{Field: openlaneclient.TaskOrderFieldCreatedAt, Direction: openlaneclient.OrderDirectionAsc}},
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: 1,
 			totalCount:      31,
 		},
 		{
 			name:            "happy path, view only user",
 			client:          suite.client.api,
 			ctx:             viewOnlyUser2.UserCtx,
-			expectedResults: testutils.MaxResultLimit,
+			expectedResults: first,
 			totalCount:      10,
 		},
 		{
 			name:            "happy path, admin user",
 			client:          suite.client.api,
 			ctx:             adminUser.UserCtx,
-			expectedResults: testutils.MaxResultLimit,
+			expectedResults: first,
 			totalCount:      11,
 		},
 		{
 			name:            "happy path, using pat - which should have access to all tasks because its authorized to the personal org",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
-			expectedResults: testutils.MaxResultLimit,
+			expectedResults: first,
 			totalCount:      32,
 		},
 		{
 			name:            "another user, no entities should be returned",
 			client:          suite.client.api,
 			ctx:             testUser2.UserCtx,
-			expectedResults: testutils.MaxResultLimit,
+			expectedResults: first,
 			totalCount:      10,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			first := int64(10)
-			resp, err := tc.client.GetTasks(tc.ctx, &first, nil, nil)
+			firstInput := int64(first)
+
+			var after *string
+
+			if tc.useCursor {
+				if tc.orderBy[0].Field == openlaneclient.TaskOrderFieldDue {
+					after = startCursorDue
+				} else if tc.orderBy[0].Field == openlaneclient.TaskOrderFieldCreatedAt {
+					after = startCursorCreated
+				}
+			}
+
+			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, nil, tc.orderBy)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
 			assert.Check(t, is.Len(resp.Tasks.Edges, tc.expectedResults))
 			assert.Check(t, is.Equal(tc.totalCount, resp.Tasks.TotalCount))
+
+			if tc.setCursor {
+				// set the start cursor for the next test case
+				assert.Assert(t, resp.Tasks.PageInfo.HasNextPage)
+				assert.Assert(t, resp.Tasks.PageInfo.EndCursor != nil)
+
+				if tc.orderBy[0].Field == openlaneclient.TaskOrderFieldDue {
+					startCursorDue = resp.Tasks.PageInfo.EndCursor
+				} else if tc.orderBy[0].Field == openlaneclient.TaskOrderFieldCreatedAt {
+					startCursorCreated = resp.Tasks.PageInfo.EndCursor
+				}
+			} else if tc.useCursor {
+				// if we are using the cursor, but not setting it, we should not have a next page
+				assert.Check(t, !(resp.Tasks.PageInfo.HasNextPage))
+
+				// it should still have an end cursor
+				assert.Check(t, resp.Tasks.PageInfo.EndCursor != nil)
+			}
 		})
 	}
 
@@ -280,7 +394,7 @@ func TestMutationCreateTask(t *testing.T) {
 			}
 
 			if tc.request.Due == nil {
-				assert.Check(t, is.Equal(*resp.CreateTask.Task.Due, models.DateTime(time.Time{})))
+				assert.Check(t, resp.CreateTask.Task.Due == nil)
 			} else {
 				assert.Assert(t, resp.CreateTask.Task.Due != nil)
 				diff := time.Time(*resp.CreateTask.Task.Due).Sub(time.Time(*tc.request.Due))

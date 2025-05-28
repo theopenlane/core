@@ -475,11 +475,11 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 	}
 	if value, ok := thc.mutation.Due(); ok {
 		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)
-		_node.Due = value
+		_node.Due = &value
 	}
 	if value, ok := thc.mutation.Completed(); ok {
 		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)
-		_node.Completed = value
+		_node.Completed = &value
 	}
 	if value, ok := thc.mutation.AssigneeID(); ok {
 		_spec.SetField(taskhistory.FieldAssigneeID, field.TypeString, value)

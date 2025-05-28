@@ -304,8 +304,11 @@ func (p *{{ $pager }}) applyCursors(query *{{ $query }}, after, before *Cursor) 
 		if err != nil {
 			return nil, err
 		}
-		for _, predicate := range predicates {
-			query = query.Where(predicate)
+		for i, predicate := range predicates {
+			query = query.Where(func(s *sql.Selector) {
+				predicate(s)
+				s.Or().Where(sql.IsNull(fields[i]))
+		})
 		}
 	{{- else }}
 		direction := p.order.Direction
@@ -479,6 +482,13 @@ func ({{ $r }} *{{ $query }}) Paginate(
 			{{ $var }} = &{{ $orderField }}{
 				Value: func({{ $r }} *{{ $name }}) (ent.Value, error) {
 					{{- if $f.IsFieldTerm }}
+						{{- if $f.Field.Nillable }}
+						// allow for nil values for fields
+						if {{ $r }}.{{ $f.Field.StructField }} == nil {
+							return nil, nil
+						}
+						{{- end }}
+
 						return {{ $r }}.{{ $f.Field.StructField }}, nil
 					{{- else }}
 						return {{ $r }}.{{ $node.ValueName }}({{ $f.VarField }})
@@ -486,7 +496,14 @@ func ({{ $r }} *{{ $query }}) Paginate(
 				},
 				{{- if $f.IsFieldTerm }}
 					column: {{ $node.Package }}.{{ $f.Field.Constant }},
+					{{- if $f.Field.Nillable }}
+					toTerm: func(opts ...sql.OrderTermOption) {{ $node.Package }}.OrderOption {
+						opts = append(opts, sql.OrderNullsLast())
+						return {{ $node.Package }}.{{ $f.Field.OrderName }}(opts...)
+					},
+					{{- else }}
 					toTerm: {{ $node.Package }}.{{ $f.Field.OrderName }},
+					{{- end }}
 				{{- else if $f.IsEdgeFieldTerm }}
 					column: {{ $f.VarField }},
 					toTerm: func(opts ...sql.OrderTermOption) {{ $node.Package }}.OrderOption {
@@ -506,6 +523,14 @@ func ({{ $r }} *{{ $query }}) Paginate(
 				toCursor: func({{ $r }} *{{ $name }}) Cursor {
 					{{- $marshalID := and $idType.Mixed (gqlMarshaler $node.ID) }}
 					{{- if $f.IsFieldTerm }}
+						{{- if $f.Field.Nillable }}
+						if {{ $r }}.{{ $f.Field.StructField }} == nil {
+							return Cursor{
+								ID: {{ $r }}.{{ if $marshalID }}marshalID(){{ else }}ID{{ end }},
+								Value: nil, // handle nil values for fields
+							}
+						}
+						{{- end }}
 						return Cursor{
 							ID: {{ $r }}.{{ if $marshalID }}marshalID(){{ else }}ID{{ end }},
 							Value: {{ $r }}.{{ $f.Field.StructField }},

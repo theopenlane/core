@@ -48,7 +48,7 @@ func get(ctx context.Context) error {
 
 	// if a ref code is provided, filter on that control
 	if refCode != "" {
-		o, err := client.GetControls(ctx, nil, nil, &openlaneclient.ControlWhereInput{
+		o, err := client.GetControls(ctx, cmd.First, cmd.Last, &openlaneclient.ControlWhereInput{
 			RefCode: &refCode,
 		})
 		cobra.CheckErr(err)

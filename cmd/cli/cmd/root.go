@@ -30,6 +30,20 @@ var (
 	OutputFormat string
 	InputFile    string
 	Config       *koanf.Koanf
+
+	// Pagination options
+	// First is the first number of items to return in a paginated response, max of 100
+	First *int64
+	first int64
+	// Last is the last number of items to return in a paginated response, max of 100
+	Last *int64
+	last int64
+	// After is the cursor to start after in a paginated response
+	After *string
+	after string
+	// Before is the cursor to end before in a paginated response
+	Before *string
+	before string
 )
 
 var (
@@ -73,6 +87,15 @@ func init() {
 	// Output flags
 	RootCmd.PersistentFlags().StringVarP(&OutputFormat, "format", "z", TableOutput, "output format (json, table)")
 	RootCmd.PersistentFlags().StringVar(&InputFile, "csv", "", "csv input file instead of stdin")
+
+	// Pagination flags
+	RootCmd.PersistentFlags().Int64Var(&first, "first", 0, "first number of items to return in a paginated response, max of 100")
+
+	RootCmd.PersistentFlags().Int64Var(&last, "last", 0, "last number of items to return in a paginated response, max of 100")
+
+	RootCmd.PersistentFlags().StringVar(&after, "after", "", "cursor to start after in a paginated response")
+
+	RootCmd.PersistentFlags().StringVar(&before, "before", "", "cursor to end before in a paginated response")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -88,6 +111,21 @@ func initConfig() {
 
 	// set the host url
 	RootHost = Config.String("host")
+
+	// set the pagination options based on the flags
+	// if both first and last are set, we use first, otherwise we use last
+	// we don't need to set defaults as the API will handle this
+	if after != "" {
+		After = &after
+	} else if before != "" {
+		Before = &before
+	}
+
+	if first != 0 {
+		First = &first
+	} else if last != 0 {
+		Last = &last
+	}
 
 	// setup logging configuration
 	setupLogging()

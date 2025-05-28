@@ -613,11 +613,11 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := tc.mutation.Due(); ok {
 		_spec.SetField(task.FieldDue, field.TypeTime, value)
-		_node.Due = value
+		_node.Due = &value
 	}
 	if value, ok := tc.mutation.Completed(); ok {
 		_spec.SetField(task.FieldCompleted, field.TypeTime, value)
-		_node.Completed = value
+		_node.Completed = &value
 	}
 	if nodes := tc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

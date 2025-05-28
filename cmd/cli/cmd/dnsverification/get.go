@@ -59,7 +59,7 @@ func get(ctx context.Context) error {
 
 	// If any filters are set, use GetDNSVerifications with filters
 	if where.CloudflareHostnameID != nil || where.OwnerID != nil {
-		o, err := client.GetDNSVerifications(ctx, nil, nil, where)
+		o, err := client.GetDNSVerifications(ctx, cmd.First, cmd.Last, where)
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)

@@ -9189,11 +9189,11 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	}
 
 	if due, exists := m.Due(); exists {
-		create = create.SetDue(due)
+		create = create.SetNillableDue(&due)
 	}
 
 	if completed, exists := m.Completed(); exists {
-		create = create.SetCompleted(completed)
+		create = create.SetNillableCompleted(&completed)
 	}
 
 	if assigneeID, exists := m.AssigneeID(); exists {
@@ -9313,15 +9313,15 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		}
 
 		if due, exists := m.Due(); exists {
-			create = create.SetDue(due)
+			create = create.SetNillableDue(&due)
 		} else {
-			create = create.SetDue(task.Due)
+			create = create.SetNillableDue(task.Due)
 		}
 
 		if completed, exists := m.Completed(); exists {
-			create = create.SetCompleted(completed)
+			create = create.SetNillableCompleted(&completed)
 		} else {
-			create = create.SetCompleted(task.Completed)
+			create = create.SetNillableCompleted(task.Completed)
 		}
 
 		if assigneeID, exists := m.AssigneeID(); exists {
@@ -9381,8 +9381,8 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDetails(task.Details).
 			SetStatus(task.Status).
 			SetCategory(task.Category).
-			SetDue(task.Due).
-			SetCompleted(task.Completed).
+			SetNillableDue(task.Due).
+			SetNillableCompleted(task.Completed).
 			SetAssigneeID(task.AssigneeID).
 			SetAssignerID(task.AssignerID).
 			Save(ctx)

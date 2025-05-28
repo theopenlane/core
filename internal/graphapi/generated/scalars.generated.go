@@ -262,16 +262,6 @@ func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheope
 	return ret
 }
 
-func (ec *executionContext) unmarshalODateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, v any) (models.DateTime, error) {
-	var res models.DateTime
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalODateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v models.DateTime) graphql.Marshaler {
-	return v
-}
-
 func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTimeᚄ(ctx context.Context, v any) ([]models.DateTime, error) {
 	if v == nil {
 		return nil, nil
