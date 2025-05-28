@@ -32,6 +32,7 @@ var _ encoding.TextUnmarshaler = (*DateTime)(nil)
 var _ json.Marshaler = DateTime{}
 var _ json.Unmarshaler = (*DateTime)(nil)
 
+// Scan implements the sql.Scanner interface for DateTime
 func (d *DateTime) Scan(value interface{}) error {
 	if value == nil {
 		value = time.Time{} // Handle nil value as zero time
@@ -55,12 +56,14 @@ func (d DateTime) Value() (driver.Value, error) {
 	return time.Time(d), nil
 }
 
+// IsZero checks if the DateTime is zero (equivalent to time.Time.IsZero)
 func (d DateTime) IsZero() bool {
 	t := time.Time(d)
 
 	return t.IsZero()
 }
 
+// UnmarshalCSV allows the DateTime to accept both "YYYY-MM-DD" and "YYYY-MM-DDTHH:MM:SSZ"
 func (d *DateTime) UnmarshalCSV(s string) error {
 	if s == "" {
 		*d = DateTime{}
@@ -132,7 +135,13 @@ func (d *DateTime) UnmarshalText(b []byte) error {
 		return nil
 	}
 
-	return fmt.Errorf("invalid DateTime text %q: %w", s, err)
+	t, err = time.Parse(dateLayout, s)
+	if err == nil {
+		*d = DateTime(t)
+		return nil
+	}
+
+	return ErrUnsupportedDateTimeType
 }
 
 // MarshalText formats the DateTime as "YYYY-MM-DD" for text representation
@@ -144,11 +153,12 @@ func (d DateTime) MarshalText() ([]byte, error) {
 
 	t := time.Time(d)
 
-	formatted := t.Format(isoDateLayout)
-
-	return []byte(formatted), nil
+	return []byte(t.Format(isoDateLayout)), nil
 }
 
+// UnmarshalJSON parses the DateTime from a JSON string
+// it accepts both "YYYY-MM-DD" and "YYYY-MM-DDTHH:MM:SSZ" formats
+// and returns an error if the format is invalid
 func (d *DateTime) UnmarshalJSON(b []byte) error {
 	if string(b) == "" {
 		return nil
@@ -160,15 +170,21 @@ func (d *DateTime) UnmarshalJSON(b []byte) error {
 	}
 
 	t, err := time.Parse(isoDateLayout, s)
-	if err != nil {
-		return err
+	if err == nil {
+		*d = DateTime(t)
+		return nil
 	}
 
-	*d = DateTime(t)
+	t, err = time.Parse(dateLayout, s)
+	if err == nil {
+		*d = DateTime(t)
+		return nil
+	}
 
-	return nil
+	return ErrUnsupportedDateTimeType
 }
 
+// MarshalJSON formats the DateTime as a JSON string
 func (d DateTime) MarshalJSON() ([]byte, error) {
 	if d.IsZero() {
 		return []byte(""), nil
@@ -192,6 +208,9 @@ func (d DateTime) String() string {
 	return formatted
 }
 
+// ToDateTime converts a string to a DateTime pointer.
+// It accepts both "YYYY-MM-DD" and "YYYY-MM-DDTHH:MM:SSZ" formats.
+// Returns an error if the string is empty or in an invalid format.
 func ToDateTime(s string) (*DateTime, error) {
 	if s == "" {
 		return nil, ErrInvalidTimeType
