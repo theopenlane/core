@@ -2,49 +2,82 @@ package hooks
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/base64"
-	"io"
+	"fmt"
 
 	"entgo.io/ent"
-	"golang.org/x/crypto/bcrypt"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-)
-
-const (
-	domainValidationSecretLength = 16
+	"github.com/theopenlane/riverboat/pkg/jobs"
 )
 
 // HookCustomDomain runs on create mutations
-func HookCustomDomain() ent.Hook {
+func HookCreateCustomDomain() ent.Hook {
 	return hook.If(
 		func(next ent.Mutator) ent.Mutator {
 			return hook.CustomDomainFunc(func(ctx context.Context, m *generated.CustomDomainMutation) (generated.Value, error) {
-				// TODO(acookin): add cloudflare validation
-				return next.Mutate(ctx, m)
+				v, err := next.Mutate(ctx, m)
+				if err != nil {
+					return v, err
+				}
+
+				id, err := GetObjectIDFromEntValue(v)
+				if err != nil {
+					return v, err
+				}
+
+				_, err = m.Job.Insert(ctx, jobs.CreateCustomDomainArgs{
+					CustomDomainID: id,
+				}, nil)
+
+				return v, err
 			})
 		},
 		hook.HasOp(ent.OpCreate),
 	)
 }
 
-// GenerateDomainValidationSecret creates a random string of specified length
-func GenerateDomainValidationSecret() (string, error) {
-	bytes := make([]byte, domainValidationSecretLength)
+// HookCustomDomain runs on create mutations
+func HookDeleteCustomDomain() ent.Hook {
+	return hook.If(
+		func(next ent.Mutator) ent.Mutator {
+			return hook.CustomDomainFunc(func(ctx context.Context, m *generated.CustomDomainMutation) (generated.Value, error) {
+				if !isDeleteOp(ctx, m) {
+					return next.Mutate(ctx, m)
+				}
 
-	if _, err := io.ReadFull(rand.Reader, bytes); err != nil {
-		return "", err
-	}
+				id, ok := m.ID()
+				if !ok {
+					return nil, fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
+				}
 
-	encodedString := base64.URLEncoding.EncodeToString(bytes)[:domainValidationSecretLength]
+				cd, err := m.Client().CustomDomain.Get(ctx, id)
+				if err != nil || cd.DNSVerificationID == "" {
+					return next.Mutate(ctx, m)
+				}
 
-	return encodedString, nil
-}
+				mappableDomain, err := m.Client().MappableDomain.Get(ctx, cd.MappableDomainID)
+				if err != nil {
+					return nil, err
+				}
 
-// VerifyDomainValidationSecret verifies if the provided secretString matches the hashed value
-func VerifyDomainValidationSecret(hashedSecret, secretString string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedSecret), []byte(secretString))
-	return err == nil
+				dnsVerification, err := m.Client().DNSVerification.Get(ctx, cd.DNSVerificationID)
+				if err != nil {
+					return nil, err
+				}
+
+				_, err = m.Job.Insert(ctx, jobs.DeleteCustomDomainArgs{
+					DNSVerificationID:          cd.DNSVerificationID,
+					CloudflareCustomHostnameID: dnsVerification.CloudflareHostnameID,
+					CloudflareZoneID:           mappableDomain.ZoneID,
+				}, nil)
+				if err != nil {
+					return nil, err
+				}
+
+				return next.Mutate(ctx, m)
+			})
+		},
+		hook.HasOp(ent.OpDeleteOne|ent.OpDelete|ent.OpUpdate|ent.OpUpdateOne),
+	)
 }

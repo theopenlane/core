@@ -79,7 +79,7 @@ require (
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.12.5
 	github.com/theopenlane/newman v0.1.5
-	github.com/theopenlane/riverboat v0.0.11
+	github.com/theopenlane/riverboat v0.0.12
 	github.com/theopenlane/utils v0.4.5
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.27
@@ -185,6 +185,7 @@ require (
 	github.com/chigopher/pathlib v0.19.1 // indirect
 	github.com/ckaznocha/intrange v0.3.0 // indirect
 	github.com/cloudflare/circl v1.6.0 // indirect
+	github.com/cloudflare/cloudflare-go/v4 v4.4.0 // indirect
 	github.com/cnf/structhash v0.0.0-20201127153200-e1b16c1ebc08 // indirect
 	github.com/containerd/console v1.0.4 // indirect
 	github.com/containerd/log v0.1.0 // indirect

@@ -833,6 +833,8 @@ func init() {
 	customdomain.Hooks[3] = customdomainMixinHooks5[0]
 
 	customdomain.Hooks[4] = customdomainHooks[0]
+
+	customdomain.Hooks[5] = customdomainHooks[1]
 	customdomainMixinInters1 := customdomainMixin[1].Interceptors()
 	customdomainMixinInters5 := customdomainMixin[5].Interceptors()
 	customdomain.Interceptors[0] = customdomainMixinInters1[0]
