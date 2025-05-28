@@ -5280,8 +5280,11 @@ func (p *controlscheduledjobPager) applyCursors(query *ControlScheduledJobQuery,
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -5391,6 +5394,7 @@ var (
 	// ControlScheduledJobOrderFieldCreatedAt orders ControlScheduledJob by created_at.
 	ControlScheduledJobOrderFieldCreatedAt = &ControlScheduledJobOrderField{
 		Value: func(csj *ControlScheduledJob) (ent.Value, error) {
+
 			return csj.CreatedAt, nil
 		},
 		column: controlscheduledjob.FieldCreatedAt,
@@ -5405,6 +5409,7 @@ var (
 	// ControlScheduledJobOrderFieldUpdatedAt orders ControlScheduledJob by updated_at.
 	ControlScheduledJobOrderFieldUpdatedAt = &ControlScheduledJobOrderField{
 		Value: func(csj *ControlScheduledJob) (ent.Value, error) {
+
 			return csj.UpdatedAt, nil
 		},
 		column: controlscheduledjob.FieldUpdatedAt,
@@ -5705,6 +5710,7 @@ var (
 	// ControlScheduledJobHistoryOrderFieldCreatedAt orders ControlScheduledJobHistory by created_at.
 	ControlScheduledJobHistoryOrderFieldCreatedAt = &ControlScheduledJobHistoryOrderField{
 		Value: func(csjh *ControlScheduledJobHistory) (ent.Value, error) {
+
 			return csjh.CreatedAt, nil
 		},
 		column: controlscheduledjobhistory.FieldCreatedAt,
@@ -5719,6 +5725,7 @@ var (
 	// ControlScheduledJobHistoryOrderFieldUpdatedAt orders ControlScheduledJobHistory by updated_at.
 	ControlScheduledJobHistoryOrderFieldUpdatedAt = &ControlScheduledJobHistoryOrderField{
 		Value: func(csjh *ControlScheduledJobHistory) (ent.Value, error) {
+
 			return csjh.UpdatedAt, nil
 		},
 		column: controlscheduledjobhistory.FieldUpdatedAt,
@@ -16548,8 +16555,11 @@ func (p *jobresultPager) applyCursors(query *JobResultQuery, after, before *Curs
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -16659,6 +16669,7 @@ var (
 	// JobResultOrderFieldCreatedAt orders JobResult by created_at.
 	JobResultOrderFieldCreatedAt = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
+
 			return jr.CreatedAt, nil
 		},
 		column: jobresult.FieldCreatedAt,
@@ -16673,6 +16684,7 @@ var (
 	// JobResultOrderFieldUpdatedAt orders JobResult by updated_at.
 	JobResultOrderFieldUpdatedAt = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
+
 			return jr.UpdatedAt, nil
 		},
 		column: jobresult.FieldUpdatedAt,
@@ -16687,6 +16699,7 @@ var (
 	// JobResultOrderFieldStatus orders JobResult by status.
 	JobResultOrderFieldStatus = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
+
 			return jr.Status, nil
 		},
 		column: jobresult.FieldStatus,
@@ -16701,11 +16714,25 @@ var (
 	// JobResultOrderFieldExitCode orders JobResult by exit_code.
 	JobResultOrderFieldExitCode = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
+			// allow for nil values for fields
+			if jr.ExitCode == nil {
+				return nil, nil
+			}
+
 			return jr.ExitCode, nil
 		},
 		column: jobresult.FieldExitCode,
-		toTerm: jobresult.ByExitCode,
+		toTerm: func(opts ...sql.OrderTermOption) jobresult.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return jobresult.ByExitCode(opts...)
+		},
 		toCursor: func(jr *JobResult) Cursor {
+			if jr.ExitCode == nil {
+				return Cursor{
+					ID:    jr.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    jr.ID,
 				Value: jr.ExitCode,
@@ -16715,6 +16742,7 @@ var (
 	// JobResultOrderFieldFinishedAt orders JobResult by finished_at.
 	JobResultOrderFieldFinishedAt = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
+
 			return jr.FinishedAt, nil
 		},
 		column: jobresult.FieldFinishedAt,
@@ -16729,6 +16757,7 @@ var (
 	// JobResultOrderFieldStartedAt orders JobResult by started_at.
 	JobResultOrderFieldStartedAt = &JobResultOrderField{
 		Value: func(jr *JobResult) (ent.Value, error) {
+
 			return jr.StartedAt, nil
 		},
 		column: jobresult.FieldStartedAt,
@@ -28498,8 +28527,11 @@ func (p *scheduledjobPager) applyCursors(query *ScheduledJobQuery, after, before
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -28609,6 +28641,7 @@ var (
 	// ScheduledJobOrderFieldCreatedAt orders ScheduledJob by created_at.
 	ScheduledJobOrderFieldCreatedAt = &ScheduledJobOrderField{
 		Value: func(sj *ScheduledJob) (ent.Value, error) {
+
 			return sj.CreatedAt, nil
 		},
 		column: scheduledjob.FieldCreatedAt,
@@ -28623,6 +28656,7 @@ var (
 	// ScheduledJobOrderFieldUpdatedAt orders ScheduledJob by updated_at.
 	ScheduledJobOrderFieldUpdatedAt = &ScheduledJobOrderField{
 		Value: func(sj *ScheduledJob) (ent.Value, error) {
+
 			return sj.UpdatedAt, nil
 		},
 		column: scheduledjob.FieldUpdatedAt,
@@ -28637,6 +28671,7 @@ var (
 	// ScheduledJobOrderFieldTitle orders ScheduledJob by title.
 	ScheduledJobOrderFieldTitle = &ScheduledJobOrderField{
 		Value: func(sj *ScheduledJob) (ent.Value, error) {
+
 			return sj.Title, nil
 		},
 		column: scheduledjob.FieldTitle,
@@ -28651,6 +28686,7 @@ var (
 	// ScheduledJobOrderFieldJobType orders ScheduledJob by job_type.
 	ScheduledJobOrderFieldJobType = &ScheduledJobOrderField{
 		Value: func(sj *ScheduledJob) (ent.Value, error) {
+
 			return sj.JobType, nil
 		},
 		column: scheduledjob.FieldJobType,
@@ -28959,6 +28995,7 @@ var (
 	// ScheduledJobHistoryOrderFieldCreatedAt orders ScheduledJobHistory by created_at.
 	ScheduledJobHistoryOrderFieldCreatedAt = &ScheduledJobHistoryOrderField{
 		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+
 			return sjh.CreatedAt, nil
 		},
 		column: scheduledjobhistory.FieldCreatedAt,
@@ -28973,6 +29010,7 @@ var (
 	// ScheduledJobHistoryOrderFieldUpdatedAt orders ScheduledJobHistory by updated_at.
 	ScheduledJobHistoryOrderFieldUpdatedAt = &ScheduledJobHistoryOrderField{
 		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+
 			return sjh.UpdatedAt, nil
 		},
 		column: scheduledjobhistory.FieldUpdatedAt,
@@ -28987,6 +29025,7 @@ var (
 	// ScheduledJobHistoryOrderFieldTitle orders ScheduledJobHistory by title.
 	ScheduledJobHistoryOrderFieldTitle = &ScheduledJobHistoryOrderField{
 		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+
 			return sjh.Title, nil
 		},
 		column: scheduledjobhistory.FieldTitle,
@@ -29001,6 +29040,7 @@ var (
 	// ScheduledJobHistoryOrderFieldJobType orders ScheduledJobHistory by job_type.
 	ScheduledJobHistoryOrderFieldJobType = &ScheduledJobHistoryOrderField{
 		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+
 			return sjh.JobType, nil
 		},
 		column: scheduledjobhistory.FieldJobType,
@@ -29234,8 +29274,11 @@ func (p *scheduledjobrunPager) applyCursors(query *ScheduledJobRunQuery, after, 
 	if err != nil {
 		return nil, err
 	}
-	for _, predicate := range predicates {
-		query = query.Where(predicate)
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
 	}
 	return query, nil
 }
@@ -29345,6 +29388,7 @@ var (
 	// ScheduledJobRunOrderFieldCreatedAt orders ScheduledJobRun by created_at.
 	ScheduledJobRunOrderFieldCreatedAt = &ScheduledJobRunOrderField{
 		Value: func(sjr *ScheduledJobRun) (ent.Value, error) {
+
 			return sjr.CreatedAt, nil
 		},
 		column: scheduledjobrun.FieldCreatedAt,
@@ -29359,6 +29403,7 @@ var (
 	// ScheduledJobRunOrderFieldUpdatedAt orders ScheduledJobRun by updated_at.
 	ScheduledJobRunOrderFieldUpdatedAt = &ScheduledJobRunOrderField{
 		Value: func(sjr *ScheduledJobRun) (ent.Value, error) {
+
 			return sjr.UpdatedAt, nil
 		},
 		column: scheduledjobrun.FieldUpdatedAt,
