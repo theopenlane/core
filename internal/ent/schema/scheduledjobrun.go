@@ -51,6 +51,21 @@ func (ScheduledJobRun) Fields() []ent.Field {
 
 		field.String("scheduled_job_id").
 			Comment("the parent job for this run"),
+
+		field.Time("expected_execution_time").
+			Immutable().
+			Comment("When should this job execute on the agent. Since we might potentially schedule a few minutes before"),
+
+		field.String("script").
+			Immutable().
+			// The script in the job allows for templating so you
+			// can do something like {{ .URL }}
+			// Then when the job is being scheduled, it would replace with actual values
+			// using text/template .
+			//
+			// This complete value is what can be executed with all required inputs
+			Comment(`the script that will be executed by the agent.
+This script will be templated with the values from the configuration on the job`),
 	}
 }
 

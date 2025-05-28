@@ -61062,6 +61062,31 @@ type ScheduledJobRunWhereInput struct {
 	ScheduledJobIDEqualFold    *string  `json:"scheduledJobIDEqualFold,omitempty"`
 	ScheduledJobIDContainsFold *string  `json:"scheduledJobIDContainsFold,omitempty"`
 
+	// "expected_execution_time" field predicates.
+	ExpectedExecutionTime      *time.Time  `json:"expectedExecutionTime,omitempty"`
+	ExpectedExecutionTimeNEQ   *time.Time  `json:"expectedExecutionTimeNEQ,omitempty"`
+	ExpectedExecutionTimeIn    []time.Time `json:"expectedExecutionTimeIn,omitempty"`
+	ExpectedExecutionTimeNotIn []time.Time `json:"expectedExecutionTimeNotIn,omitempty"`
+	ExpectedExecutionTimeGT    *time.Time  `json:"expectedExecutionTimeGT,omitempty"`
+	ExpectedExecutionTimeGTE   *time.Time  `json:"expectedExecutionTimeGTE,omitempty"`
+	ExpectedExecutionTimeLT    *time.Time  `json:"expectedExecutionTimeLT,omitempty"`
+	ExpectedExecutionTimeLTE   *time.Time  `json:"expectedExecutionTimeLTE,omitempty"`
+
+	// "script" field predicates.
+	Script             *string  `json:"script,omitempty"`
+	ScriptNEQ          *string  `json:"scriptNEQ,omitempty"`
+	ScriptIn           []string `json:"scriptIn,omitempty"`
+	ScriptNotIn        []string `json:"scriptNotIn,omitempty"`
+	ScriptGT           *string  `json:"scriptGT,omitempty"`
+	ScriptGTE          *string  `json:"scriptGTE,omitempty"`
+	ScriptLT           *string  `json:"scriptLT,omitempty"`
+	ScriptLTE          *string  `json:"scriptLTE,omitempty"`
+	ScriptContains     *string  `json:"scriptContains,omitempty"`
+	ScriptHasPrefix    *string  `json:"scriptHasPrefix,omitempty"`
+	ScriptHasSuffix    *string  `json:"scriptHasSuffix,omitempty"`
+	ScriptEqualFold    *string  `json:"scriptEqualFold,omitempty"`
+	ScriptContainsFold *string  `json:"scriptContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -61460,6 +61485,69 @@ func (i *ScheduledJobRunWhereInput) P() (predicate.ScheduledJobRun, error) {
 	}
 	if i.ScheduledJobIDContainsFold != nil {
 		predicates = append(predicates, scheduledjobrun.ScheduledJobIDContainsFold(*i.ScheduledJobIDContainsFold))
+	}
+	if i.ExpectedExecutionTime != nil {
+		predicates = append(predicates, scheduledjobrun.ExpectedExecutionTimeEQ(*i.ExpectedExecutionTime))
+	}
+	if i.ExpectedExecutionTimeNEQ != nil {
+		predicates = append(predicates, scheduledjobrun.ExpectedExecutionTimeNEQ(*i.ExpectedExecutionTimeNEQ))
+	}
+	if len(i.ExpectedExecutionTimeIn) > 0 {
+		predicates = append(predicates, scheduledjobrun.ExpectedExecutionTimeIn(i.ExpectedExecutionTimeIn...))
+	}
+	if len(i.ExpectedExecutionTimeNotIn) > 0 {
+		predicates = append(predicates, scheduledjobrun.ExpectedExecutionTimeNotIn(i.ExpectedExecutionTimeNotIn...))
+	}
+	if i.ExpectedExecutionTimeGT != nil {
+		predicates = append(predicates, scheduledjobrun.ExpectedExecutionTimeGT(*i.ExpectedExecutionTimeGT))
+	}
+	if i.ExpectedExecutionTimeGTE != nil {
+		predicates = append(predicates, scheduledjobrun.ExpectedExecutionTimeGTE(*i.ExpectedExecutionTimeGTE))
+	}
+	if i.ExpectedExecutionTimeLT != nil {
+		predicates = append(predicates, scheduledjobrun.ExpectedExecutionTimeLT(*i.ExpectedExecutionTimeLT))
+	}
+	if i.ExpectedExecutionTimeLTE != nil {
+		predicates = append(predicates, scheduledjobrun.ExpectedExecutionTimeLTE(*i.ExpectedExecutionTimeLTE))
+	}
+	if i.Script != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptEQ(*i.Script))
+	}
+	if i.ScriptNEQ != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptNEQ(*i.ScriptNEQ))
+	}
+	if len(i.ScriptIn) > 0 {
+		predicates = append(predicates, scheduledjobrun.ScriptIn(i.ScriptIn...))
+	}
+	if len(i.ScriptNotIn) > 0 {
+		predicates = append(predicates, scheduledjobrun.ScriptNotIn(i.ScriptNotIn...))
+	}
+	if i.ScriptGT != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptGT(*i.ScriptGT))
+	}
+	if i.ScriptGTE != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptGTE(*i.ScriptGTE))
+	}
+	if i.ScriptLT != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptLT(*i.ScriptLT))
+	}
+	if i.ScriptLTE != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptLTE(*i.ScriptLTE))
+	}
+	if i.ScriptContains != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptContains(*i.ScriptContains))
+	}
+	if i.ScriptHasPrefix != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptHasPrefix(*i.ScriptHasPrefix))
+	}
+	if i.ScriptHasSuffix != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptHasSuffix(*i.ScriptHasSuffix))
+	}
+	if i.ScriptEqualFold != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptEqualFold(*i.ScriptEqualFold))
+	}
+	if i.ScriptContainsFold != nil {
+		predicates = append(predicates, scheduledjobrun.ScriptContainsFold(*i.ScriptContainsFold))
 	}
 
 	if i.HasOwner != nil {

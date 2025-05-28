@@ -113,6 +113,16 @@ func ScheduledJobID(v string) predicate.ScheduledJobRun {
 	return predicate.ScheduledJobRun(sql.FieldEQ(FieldScheduledJobID, v))
 }
 
+// ExpectedExecutionTime applies equality check predicate on the "expected_execution_time" field. It's identical to ExpectedExecutionTimeEQ.
+func ExpectedExecutionTime(v time.Time) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldEQ(FieldExpectedExecutionTime, v))
+}
+
+// Script applies equality check predicate on the "script" field. It's identical to ScriptEQ.
+func Script(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldEQ(FieldScript, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ScheduledJobRun {
 	return predicate.ScheduledJobRun(sql.FieldEQ(FieldCreatedAt, v))
@@ -721,6 +731,111 @@ func ScheduledJobIDEqualFold(v string) predicate.ScheduledJobRun {
 // ScheduledJobIDContainsFold applies the ContainsFold predicate on the "scheduled_job_id" field.
 func ScheduledJobIDContainsFold(v string) predicate.ScheduledJobRun {
 	return predicate.ScheduledJobRun(sql.FieldContainsFold(FieldScheduledJobID, v))
+}
+
+// ExpectedExecutionTimeEQ applies the EQ predicate on the "expected_execution_time" field.
+func ExpectedExecutionTimeEQ(v time.Time) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldEQ(FieldExpectedExecutionTime, v))
+}
+
+// ExpectedExecutionTimeNEQ applies the NEQ predicate on the "expected_execution_time" field.
+func ExpectedExecutionTimeNEQ(v time.Time) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldNEQ(FieldExpectedExecutionTime, v))
+}
+
+// ExpectedExecutionTimeIn applies the In predicate on the "expected_execution_time" field.
+func ExpectedExecutionTimeIn(vs ...time.Time) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldIn(FieldExpectedExecutionTime, vs...))
+}
+
+// ExpectedExecutionTimeNotIn applies the NotIn predicate on the "expected_execution_time" field.
+func ExpectedExecutionTimeNotIn(vs ...time.Time) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldNotIn(FieldExpectedExecutionTime, vs...))
+}
+
+// ExpectedExecutionTimeGT applies the GT predicate on the "expected_execution_time" field.
+func ExpectedExecutionTimeGT(v time.Time) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldGT(FieldExpectedExecutionTime, v))
+}
+
+// ExpectedExecutionTimeGTE applies the GTE predicate on the "expected_execution_time" field.
+func ExpectedExecutionTimeGTE(v time.Time) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldGTE(FieldExpectedExecutionTime, v))
+}
+
+// ExpectedExecutionTimeLT applies the LT predicate on the "expected_execution_time" field.
+func ExpectedExecutionTimeLT(v time.Time) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldLT(FieldExpectedExecutionTime, v))
+}
+
+// ExpectedExecutionTimeLTE applies the LTE predicate on the "expected_execution_time" field.
+func ExpectedExecutionTimeLTE(v time.Time) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldLTE(FieldExpectedExecutionTime, v))
+}
+
+// ScriptEQ applies the EQ predicate on the "script" field.
+func ScriptEQ(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldEQ(FieldScript, v))
+}
+
+// ScriptNEQ applies the NEQ predicate on the "script" field.
+func ScriptNEQ(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldNEQ(FieldScript, v))
+}
+
+// ScriptIn applies the In predicate on the "script" field.
+func ScriptIn(vs ...string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldIn(FieldScript, vs...))
+}
+
+// ScriptNotIn applies the NotIn predicate on the "script" field.
+func ScriptNotIn(vs ...string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldNotIn(FieldScript, vs...))
+}
+
+// ScriptGT applies the GT predicate on the "script" field.
+func ScriptGT(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldGT(FieldScript, v))
+}
+
+// ScriptGTE applies the GTE predicate on the "script" field.
+func ScriptGTE(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldGTE(FieldScript, v))
+}
+
+// ScriptLT applies the LT predicate on the "script" field.
+func ScriptLT(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldLT(FieldScript, v))
+}
+
+// ScriptLTE applies the LTE predicate on the "script" field.
+func ScriptLTE(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldLTE(FieldScript, v))
+}
+
+// ScriptContains applies the Contains predicate on the "script" field.
+func ScriptContains(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldContains(FieldScript, v))
+}
+
+// ScriptHasPrefix applies the HasPrefix predicate on the "script" field.
+func ScriptHasPrefix(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldHasPrefix(FieldScript, v))
+}
+
+// ScriptHasSuffix applies the HasSuffix predicate on the "script" field.
+func ScriptHasSuffix(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldHasSuffix(FieldScript, v))
+}
+
+// ScriptEqualFold applies the EqualFold predicate on the "script" field.
+func ScriptEqualFold(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldEqualFold(FieldScript, v))
+}
+
+// ScriptContainsFold applies the ContainsFold predicate on the "script" field.
+func ScriptContainsFold(v string) predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldContainsFold(FieldScript, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

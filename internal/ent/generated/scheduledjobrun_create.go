@@ -148,6 +148,18 @@ func (sjrc *ScheduledJobRunCreate) SetScheduledJobID(s string) *ScheduledJobRunC
 	return sjrc
 }
 
+// SetExpectedExecutionTime sets the "expected_execution_time" field.
+func (sjrc *ScheduledJobRunCreate) SetExpectedExecutionTime(t time.Time) *ScheduledJobRunCreate {
+	sjrc.mutation.SetExpectedExecutionTime(t)
+	return sjrc
+}
+
+// SetScript sets the "script" field.
+func (sjrc *ScheduledJobRunCreate) SetScript(s string) *ScheduledJobRunCreate {
+	sjrc.mutation.SetScript(s)
+	return sjrc
+}
+
 // SetID sets the "id" field.
 func (sjrc *ScheduledJobRunCreate) SetID(s string) *ScheduledJobRunCreate {
 	sjrc.mutation.SetID(s)
@@ -263,6 +275,12 @@ func (sjrc *ScheduledJobRunCreate) check() error {
 	if _, ok := sjrc.mutation.ScheduledJobID(); !ok {
 		return &ValidationError{Name: "scheduled_job_id", err: errors.New(`generated: missing required field "ScheduledJobRun.scheduled_job_id"`)}
 	}
+	if _, ok := sjrc.mutation.ExpectedExecutionTime(); !ok {
+		return &ValidationError{Name: "expected_execution_time", err: errors.New(`generated: missing required field "ScheduledJobRun.expected_execution_time"`)}
+	}
+	if _, ok := sjrc.mutation.Script(); !ok {
+		return &ValidationError{Name: "script", err: errors.New(`generated: missing required field "ScheduledJobRun.script"`)}
+	}
 	if len(sjrc.mutation.ScheduledJobIDs()) == 0 {
 		return &ValidationError{Name: "scheduled_job", err: errors.New(`generated: missing required edge "ScheduledJobRun.scheduled_job"`)}
 	}
@@ -332,6 +350,14 @@ func (sjrc *ScheduledJobRunCreate) createSpec() (*ScheduledJobRun, *sqlgraph.Cre
 	if value, ok := sjrc.mutation.Status(); ok {
 		_spec.SetField(scheduledjobrun.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := sjrc.mutation.ExpectedExecutionTime(); ok {
+		_spec.SetField(scheduledjobrun.FieldExpectedExecutionTime, field.TypeTime, value)
+		_node.ExpectedExecutionTime = value
+	}
+	if value, ok := sjrc.mutation.Script(); ok {
+		_spec.SetField(scheduledjobrun.FieldScript, field.TypeString, value)
+		_node.Script = value
 	}
 	if nodes := sjrc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

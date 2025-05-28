@@ -3557,18 +3557,20 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJobRun struct {
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		ID             func(childComplexity int) int
-		JobRunner      func(childComplexity int) int
-		JobRunnerID    func(childComplexity int) int
-		Owner          func(childComplexity int) int
-		OwnerID        func(childComplexity int) int
-		ScheduledJob   func(childComplexity int) int
-		ScheduledJobID func(childComplexity int) int
-		Status         func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		ExpectedExecutionTime func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		JobRunner             func(childComplexity int) int
+		JobRunnerID           func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		ScheduledJob          func(childComplexity int) int
+		ScheduledJobID        func(childComplexity int) int
+		Script                func(childComplexity int) int
+		Status                func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
 	}
 
 	ScheduledJobRunConnection struct {
@@ -24188,6 +24190,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobRun.CreatedBy(childComplexity), true
 
+	case "ScheduledJobRun.expectedExecutionTime":
+		if e.complexity.ScheduledJobRun.ExpectedExecutionTime == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobRun.ExpectedExecutionTime(childComplexity), true
+
 	case "ScheduledJobRun.id":
 		if e.complexity.ScheduledJobRun.ID == nil {
 			break
@@ -24236,6 +24245,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobRun.ScheduledJobID(childComplexity), true
+
+	case "ScheduledJobRun.script":
+		if e.complexity.ScheduledJobRun.Script == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobRun.Script(childComplexity), true
 
 	case "ScheduledJobRun.status":
 		if e.complexity.ScheduledJobRun.Status == nil {
@@ -38139,6 +38155,15 @@ input CreateScheduledJobRunInput {
   			scheduled on a runner, this will change to acquired.
   """
   status: ScheduledJobRunScheduledJobRunStatus
+  """
+  When should this job execute on the agent. Since we might potentially schedule a few minutes before
+  """
+  expectedExecutionTime: Time!
+  """
+  the script that will be executed by the agent.
+  This script will be templated with the values from the configuration on the job
+  """
+  script: String!
   ownerID: ID
   scheduledJobID: ID!
   jobRunnerID: ID!
@@ -65776,6 +65801,15 @@ type ScheduledJobRun implements Node {
   the parent job for this run
   """
   scheduledJobID: ID!
+  """
+  When should this job execute on the agent. Since we might potentially schedule a few minutes before
+  """
+  expectedExecutionTime: Time!
+  """
+  the script that will be executed by the agent.
+  This script will be templated with the values from the configuration on the job
+  """
+  script: String!
   owner: Organization
   scheduledJob: ControlScheduledJob!
   jobRunner: JobRunner!
@@ -65977,6 +66011,33 @@ input ScheduledJobRunWhereInput {
   scheduledJobIDHasSuffix: ID
   scheduledJobIDEqualFold: ID
   scheduledJobIDContainsFold: ID
+  """
+  expected_execution_time field predicates
+  """
+  expectedExecutionTime: Time
+  expectedExecutionTimeNEQ: Time
+  expectedExecutionTimeIn: [Time!]
+  expectedExecutionTimeNotIn: [Time!]
+  expectedExecutionTimeGT: Time
+  expectedExecutionTimeGTE: Time
+  expectedExecutionTimeLT: Time
+  expectedExecutionTimeLTE: Time
+  """
+  script field predicates
+  """
+  script: String
+  scriptNEQ: String
+  scriptIn: [String!]
+  scriptNotIn: [String!]
+  scriptGT: String
+  scriptGTE: String
+  scriptLT: String
+  scriptLTE: String
+  scriptContains: String
+  scriptHasPrefix: String
+  scriptHasSuffix: String
+  scriptEqualFold: String
+  scriptContainsFold: String
   """
   owner edge predicates
   """

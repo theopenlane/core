@@ -8025,10 +8025,12 @@ func (c *ScheduledJobUpdateOne) SetInput(i UpdateScheduledJobInput) *ScheduledJo
 
 // CreateScheduledJobRunInput represents a mutation input for creating scheduledjobruns.
 type CreateScheduledJobRunInput struct {
-	Status         *enums.ScheduledJobRunStatus
-	OwnerID        *string
-	ScheduledJobID string
-	JobRunnerID    string
+	Status                *enums.ScheduledJobRunStatus
+	ExpectedExecutionTime time.Time
+	Script                string
+	OwnerID               *string
+	ScheduledJobID        string
+	JobRunnerID           string
 }
 
 // Mutate applies the CreateScheduledJobRunInput on the ScheduledJobRunMutation builder.
@@ -8036,6 +8038,8 @@ func (i *CreateScheduledJobRunInput) Mutate(m *ScheduledJobRunMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
+	m.SetExpectedExecutionTime(i.ExpectedExecutionTime)
+	m.SetScript(i.Script)
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}

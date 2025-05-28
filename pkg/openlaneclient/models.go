@@ -4957,10 +4957,15 @@ type CreateScheduledJobInput struct {
 type CreateScheduledJobRunInput struct {
 	// The status of the job to be executed. By default will be pending but when
 	// 			scheduled on a runner, this will change to acquired.
-	Status         *enums.ScheduledJobRunStatus `json:"status,omitempty"`
-	OwnerID        *string                      `json:"ownerID,omitempty"`
-	ScheduledJobID string                       `json:"scheduledJobID"`
-	JobRunnerID    string                       `json:"jobRunnerID"`
+	Status *enums.ScheduledJobRunStatus `json:"status,omitempty"`
+	// When should this job execute on the agent. Since we might potentially schedule a few minutes before
+	ExpectedExecutionTime time.Time `json:"expectedExecutionTime"`
+	// the script that will be executed by the agent.
+	// This script will be templated with the values from the configuration on the job
+	Script         string  `json:"script"`
+	OwnerID        *string `json:"ownerID,omitempty"`
+	ScheduledJobID string  `json:"scheduledJobID"`
+	JobRunnerID    string  `json:"jobRunnerID"`
 }
 
 // CreateStandardInput is used for create Standard object.
@@ -20252,10 +20257,15 @@ type ScheduledJobRun struct {
 	// 			scheduled on a runner, this will change to acquired.
 	Status enums.ScheduledJobRunStatus `json:"status"`
 	// the parent job for this run
-	ScheduledJobID string               `json:"scheduledJobID"`
-	Owner          *Organization        `json:"owner,omitempty"`
-	ScheduledJob   *ControlScheduledJob `json:"scheduledJob"`
-	JobRunner      *JobRunner           `json:"jobRunner"`
+	ScheduledJobID string `json:"scheduledJobID"`
+	// When should this job execute on the agent. Since we might potentially schedule a few minutes before
+	ExpectedExecutionTime time.Time `json:"expectedExecutionTime"`
+	// the script that will be executed by the agent.
+	// This script will be templated with the values from the configuration on the job
+	Script       string               `json:"script"`
+	Owner        *Organization        `json:"owner,omitempty"`
+	ScheduledJob *ControlScheduledJob `json:"scheduledJob"`
+	JobRunner    *JobRunner           `json:"jobRunner"`
 }
 
 func (ScheduledJobRun) IsNode() {}
@@ -20406,6 +20416,29 @@ type ScheduledJobRunWhereInput struct {
 	ScheduledJobIDHasSuffix    *string  `json:"scheduledJobIDHasSuffix,omitempty"`
 	ScheduledJobIDEqualFold    *string  `json:"scheduledJobIDEqualFold,omitempty"`
 	ScheduledJobIDContainsFold *string  `json:"scheduledJobIDContainsFold,omitempty"`
+	// expected_execution_time field predicates
+	ExpectedExecutionTime      *time.Time   `json:"expectedExecutionTime,omitempty"`
+	ExpectedExecutionTimeNeq   *time.Time   `json:"expectedExecutionTimeNEQ,omitempty"`
+	ExpectedExecutionTimeIn    []*time.Time `json:"expectedExecutionTimeIn,omitempty"`
+	ExpectedExecutionTimeNotIn []*time.Time `json:"expectedExecutionTimeNotIn,omitempty"`
+	ExpectedExecutionTimeGt    *time.Time   `json:"expectedExecutionTimeGT,omitempty"`
+	ExpectedExecutionTimeGte   *time.Time   `json:"expectedExecutionTimeGTE,omitempty"`
+	ExpectedExecutionTimeLt    *time.Time   `json:"expectedExecutionTimeLT,omitempty"`
+	ExpectedExecutionTimeLte   *time.Time   `json:"expectedExecutionTimeLTE,omitempty"`
+	// script field predicates
+	Script             *string  `json:"script,omitempty"`
+	ScriptNeq          *string  `json:"scriptNEQ,omitempty"`
+	ScriptIn           []string `json:"scriptIn,omitempty"`
+	ScriptNotIn        []string `json:"scriptNotIn,omitempty"`
+	ScriptGt           *string  `json:"scriptGT,omitempty"`
+	ScriptGte          *string  `json:"scriptGTE,omitempty"`
+	ScriptLt           *string  `json:"scriptLT,omitempty"`
+	ScriptLte          *string  `json:"scriptLTE,omitempty"`
+	ScriptContains     *string  `json:"scriptContains,omitempty"`
+	ScriptHasPrefix    *string  `json:"scriptHasPrefix,omitempty"`
+	ScriptHasSuffix    *string  `json:"scriptHasSuffix,omitempty"`
+	ScriptEqualFold    *string  `json:"scriptEqualFold,omitempty"`
+	ScriptContainsFold *string  `json:"scriptContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`

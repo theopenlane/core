@@ -32326,6 +32326,16 @@ func (sjr *ScheduledJobRunQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, scheduledjobrun.FieldScheduledJobID)
 				fieldSeen[scheduledjobrun.FieldScheduledJobID] = struct{}{}
 			}
+		case "expectedExecutionTime":
+			if _, ok := fieldSeen[scheduledjobrun.FieldExpectedExecutionTime]; !ok {
+				selectedFields = append(selectedFields, scheduledjobrun.FieldExpectedExecutionTime)
+				fieldSeen[scheduledjobrun.FieldExpectedExecutionTime] = struct{}{}
+			}
+		case "script":
+			if _, ok := fieldSeen[scheduledjobrun.FieldScript]; !ok {
+				selectedFields = append(selectedFields, scheduledjobrun.FieldScript)
+				fieldSeen[scheduledjobrun.FieldScript] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

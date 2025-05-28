@@ -38,6 +38,10 @@ const (
 	FieldStatus = "status"
 	// FieldScheduledJobID holds the string denoting the scheduled_job_id field in the database.
 	FieldScheduledJobID = "scheduled_job_id"
+	// FieldExpectedExecutionTime holds the string denoting the expected_execution_time field in the database.
+	FieldExpectedExecutionTime = "expected_execution_time"
+	// FieldScript holds the string denoting the script field in the database.
+	FieldScript = "script"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeScheduledJob holds the string denoting the scheduled_job edge name in mutations.
@@ -82,6 +86,8 @@ var Columns = []string{
 	FieldJobRunnerID,
 	FieldStatus,
 	FieldScheduledJobID,
+	FieldExpectedExecutionTime,
+	FieldScript,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -183,6 +189,16 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByScheduledJobID orders the results by the scheduled_job_id field.
 func ByScheduledJobID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScheduledJobID, opts...).ToFunc()
+}
+
+// ByExpectedExecutionTime orders the results by the expected_execution_time field.
+func ByExpectedExecutionTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpectedExecutionTime, opts...).ToFunc()
+}
+
+// ByScript orders the results by the script field.
+func ByScript(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScript, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

@@ -1,4 +1,4 @@
-h1:UPnwSxigdLViRAFeCoqqtJXTyzNu7rjKlJ+U6UZkGlQ=
+h1:zoSoUtth/cnqpeLb8m0qNetYP/bnjJln/8PVDuSGOwQ=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -18,3 +18,4 @@ h1:UPnwSxigdLViRAFeCoqqtJXTyzNu7rjKlJ+U6UZkGlQ=
 20250526222006_dns_ssl_verification_statuses.sql h1:81J9YgX/aLscjIqHFuqDpVxgh2dZsphk17zNbuzMalI=
 20250527210009_make_script_required_for_jobs.sql h1:Z063Nw4mKTzNJM5LAlR2TMERETeR5StbSwgB2DxofuQ=
 20250527235831_make_job_runner_on_runs_required.sql h1:Y80LqDdO6rtzEhzbJetHdnm+sN8IXeqjtnPx+4i13pc=
+20250528003833_scheduled_runs_add_templated_scripts.sql h1:Axi/m1onwKSjlPSTUwYh/6OBNu79GiunVCGx+ibLNmw=

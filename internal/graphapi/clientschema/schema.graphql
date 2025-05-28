@@ -8110,6 +8110,15 @@ input CreateScheduledJobRunInput {
 				scheduled on a runner, this will change to acquired.
 	"""
 	status: ScheduledJobRunScheduledJobRunStatus
+	"""
+	When should this job execute on the agent. Since we might potentially schedule a few minutes before
+	"""
+	expectedExecutionTime: Time!
+	"""
+	the script that will be executed by the agent.
+	This script will be templated with the values from the configuration on the job
+	"""
+	script: String!
 	ownerID: ID
 	scheduledJobID: ID!
 	jobRunnerID: ID!
@@ -41954,6 +41963,15 @@ type ScheduledJobRun implements Node {
 	the parent job for this run
 	"""
 	scheduledJobID: ID!
+	"""
+	When should this job execute on the agent. Since we might potentially schedule a few minutes before
+	"""
+	expectedExecutionTime: Time!
+	"""
+	the script that will be executed by the agent.
+	This script will be templated with the values from the configuration on the job
+	"""
+	script: String!
 	owner: Organization
 	scheduledJob: ControlScheduledJob!
 	jobRunner: JobRunner!
@@ -42155,6 +42173,33 @@ input ScheduledJobRunWhereInput {
 	scheduledJobIDHasSuffix: ID
 	scheduledJobIDEqualFold: ID
 	scheduledJobIDContainsFold: ID
+	"""
+	expected_execution_time field predicates
+	"""
+	expectedExecutionTime: Time
+	expectedExecutionTimeNEQ: Time
+	expectedExecutionTimeIn: [Time!]
+	expectedExecutionTimeNotIn: [Time!]
+	expectedExecutionTimeGT: Time
+	expectedExecutionTimeGTE: Time
+	expectedExecutionTimeLT: Time
+	expectedExecutionTimeLTE: Time
+	"""
+	script field predicates
+	"""
+	script: String
+	scriptNEQ: String
+	scriptIn: [String!]
+	scriptNotIn: [String!]
+	scriptGT: String
+	scriptGTE: String
+	scriptLT: String
+	scriptLTE: String
+	scriptContains: String
+	scriptHasPrefix: String
+	scriptHasSuffix: String
+	scriptEqualFold: String
+	scriptContainsFold: String
 	"""
 	owner edge predicates
 	"""
