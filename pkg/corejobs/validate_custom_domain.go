@@ -70,12 +70,14 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 
 	// Determine which custom domains to process - either a specific one or all
 	var customDomains []*openlaneclient.CustomDomain
+
 	if job.Args.CustomDomainID != "" {
 		// If a specific custom domain ID is provided, fetch just that one
 		customDomain, err := w.olClient.GetCustomDomainByID(ctx, job.Args.CustomDomainID)
 		if err != nil {
 			return err
 		}
+
 		customDomains = append(customDomains, &openlaneclient.CustomDomain{
 			ID:                customDomain.GetCustomDomain().ID,
 			OwnerID:           customDomain.GetCustomDomain().OwnerID,
@@ -85,11 +87,13 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 		})
 	} else {
 		// Otherwise, fetch all custom domains
-		log.Info().Msg("No custom domain ID provided, would fetch all domains here")
+		log.Debug().Msg("No custom domain ID provided, would fetch all domains here")
+
 		cds, err := w.olClient.GetAllCustomDomains(ctx)
 		if err != nil {
 			return err
 		}
+
 		for _, cd := range cds.GetCustomDomains().Edges {
 			customDomains = append(customDomains, &openlaneclient.CustomDomain{
 				ID:                cd.Node.ID,
@@ -99,6 +103,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 				DNSVerificationID: cd.Node.DNSVerificationID,
 			})
 		}
+
 		return nil
 	}
 
@@ -106,11 +111,13 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 	for _, customDomain := range customDomains {
 		// Skip domains without verification IDs
 		if customDomain.DNSVerificationID == nil {
-			log.Info().
+			log.Debug().
 				Str("custom_domain_id", customDomain.ID).
 				Msg("No DNS verification ID found for custom domain")
+
 			continue
 		}
+
 		log.Info().
 			Str("custom_domain_id", customDomain.ID).
 			Str("cname_record", customDomain.CnameRecord).
@@ -120,6 +127,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 		mappableDomain, err := w.olClient.GetMappableDomainByID(ctx, customDomain.MappableDomainID)
 		if err != nil {
 			log.Error().Err(err).Msg("error getting mappable domain")
+
 			continue
 		}
 
@@ -127,8 +135,10 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 		dnsVerification, err := w.olClient.GetDNSVerificationByID(ctx, *customDomain.DNSVerificationID)
 		if err != nil {
 			log.Error().Err(err).Msg("error getting dns verification")
+
 			continue
 		}
+
 		zoneID := mappableDomain.MappableDomain.ZoneID
 		cloudflareHostnameID := dnsVerification.DNSVerification.CloudflareHostnameID
 
@@ -138,6 +148,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 		})
 		if err != nil {
 			log.Error().Err(err).Msg("error getting custom hostname ID")
+
 			continue
 		}
 
@@ -150,8 +161,10 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 			acmeChallengeURL, err := url.Parse(customHostname.SSL.ValidationRecords[0].HTTPURL)
 			if err != nil {
 				log.Error().Err(err).Msg("Unable to parse acme challenge url")
+
 				continue
 			}
+
 			spl := strings.Split(acmeChallengeURL.Path, "/")
 			dnsVerificationUpdate.AcmeChallengePath = &spl[len(spl)-1]
 			dnsVerificationUpdate.ExpectedAcmeChallengeValue = &customHostname.SSL.ValidationRecords[0].HTTPBody
@@ -173,6 +186,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 		// Update DNS verification error reasons if present
 		if len(customHostname.VerificationErrors) > 0 {
 			verifyErrors := strings.Join(customHostname.VerificationErrors, ", ")
+
 			if dnsVerification.DNSVerification.DNSVerificationStatusReason == nil || *dnsVerification.DNSVerification.DNSVerificationStatusReason != verifyErrors {
 				dnsVerificationUpdate.DNSVerificationStatusReason = &verifyErrors
 				hasUpdates = true
@@ -185,6 +199,7 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 			for _, validationErr := range customHostname.SSL.ValidationErrors {
 				verifyErrors = fmt.Sprintf("%s, %s", verifyErrors, validationErr.Message)
 			}
+
 			if dnsVerification.DNSVerification.AcmeChallengeStatusReason == nil || *dnsVerification.DNSVerification.AcmeChallengeStatusReason != verifyErrors {
 				dnsVerificationUpdate.AcmeChallengeStatusReason = &verifyErrors
 				hasUpdates = true
@@ -193,7 +208,8 @@ func (w *ValidateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Va
 
 		// Apply updates if any changes were detected
 		if hasUpdates {
-			log.Info().Str("custom_domain_id", customDomain.ID).Msg("Updating DNS verification")
+			log.Debug().Str("custom_domain_id", customDomain.ID).Msg("Updating DNS verification")
+
 			_, err := w.olClient.UpdateDNSVerification(ctx, *customDomain.DNSVerificationID, dnsVerificationUpdate)
 			if err != nil {
 				log.Error().Err(err).Msg("error updating dns verification")

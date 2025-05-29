@@ -16,7 +16,9 @@ func main() {
 	client := common.NewInsertOnlyRiverClient()
 
 	customDomainID := flag.String("custom-domain-id", "", "ID of the custom domain")
+
 	flag.Parse()
+
 	_, err := client.Insert(context.Background(), jobs.ValidateCustomDomainArgs{CustomDomainID: *customDomainID}, nil)
 	if err != nil {
 		log.Fatal().Err(err).Msg("error inserting validate_custom_domain job")

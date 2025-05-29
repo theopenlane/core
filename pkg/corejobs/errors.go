@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// MissingRequiredArg is returned when a required argument was not provided to a job
+// MissingRequiredArgError is returned when a required argument was not provided to a job
 type MissingRequiredArgError struct {
 	// Arg is the required argument that was not provided
 	Arg string `json:"arg"`
