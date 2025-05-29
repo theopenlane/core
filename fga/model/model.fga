@@ -295,9 +295,9 @@ type internal_policy
     # the parent of the policy will be the organization, not all permissions will be inherited
     define parent: [organization]
     # allow a user or service to be assigned to add edit permissions
-    define admin: [user,service]
+    define admin: [user,service] or can_delete from parent
     # allow a group to be assigned to add edit permissions for a set of users
-    define editor: [group#member] or can_delete from parent
+    define editor: [group#member]
     # allow for auditors assigned to the program to view the policy
     define viewer: [program#auditor, group#member] or editor or can_view from parent
     # allow users or groups to be blocked from view + edit access
@@ -318,9 +318,9 @@ type procedure
     # the parent of the procedure will be the organization, not all permissions will be inherited
     define parent: [organization]
     # allow a user or service to be assigned to add edit permissions
-    define admin: [user,service]
+    define admin: [user,service] or can_delete from parent
     # allow a group to be assigned to add edit permissions for a set of users
-    define editor: [group#member] or can_delete from parent
+    define editor: [group#member]
       # allow for auditors assigned to the program to view the procedure
     define viewer: [program#auditor, group#member] or editor or can_view from parent
     # allow users or groups to be blocked from view + edit access
