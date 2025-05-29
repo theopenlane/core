@@ -46,7 +46,7 @@ func (ScheduledJobRun) Fields() []ent.Field {
 		field.Enum("status").
 			GoType(enums.ScheduledJobRunStatus("")).
 			Default(enums.ScheduledJobRunStatusPending.String()).
-			Comment(`The status of the job to be executed. By default will be pending but when 
+			Comment(`The status of the job to be executed. By default will be pending but when
 			scheduled on a runner, this will change to acquired.`),
 
 		field.String("scheduled_job_id").
