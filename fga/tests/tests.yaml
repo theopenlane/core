@@ -500,6 +500,12 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+      - user: user:ulid-of-owner # owner of the internal_policy should have all permissions
+        object: procedure:procedure-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
       - user: user:ulid-group-editor # editor of the procedure should have edit permissions
         object: procedure:procedure-1
         assertions:
@@ -535,6 +541,12 @@ tests:
     tuple_file: tuples/policies.yaml
     check:
       - user: user:ulid-admin # admin of the internal_policy should have all permissions
+        object: internal_policy:internal_policy-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner # owner of the internal_policy should have all permissions
         object: internal_policy:internal_policy-1
         assertions:
           can_view: true

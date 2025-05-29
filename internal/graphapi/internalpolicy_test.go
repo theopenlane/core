@@ -427,6 +427,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 
 func TestMutationUpdateInternalPolicy(t *testing.T) {
 	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	internalPolicyAdminUser := (&InternalPolicyBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor permissions
@@ -454,13 +455,15 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 
 	testCases := []struct {
 		name        string
+		policyID    string
 		request     openlaneclient.UpdateInternalPolicyInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedErr string
 	}{
 		{
-			name: "happy path, update details field",
+			name:     "happy path, update details field",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr(gofakeit.Sentence(200)),
 			},
@@ -468,7 +471,17 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path, update name field",
+			name:     "happy path, update details field on policy created by another user",
+			policyID: internalPolicyAdminUser.ID,
+			request: openlaneclient.UpdateInternalPolicyInput{
+				Details: lo.ToPtr(gofakeit.Sentence(200)),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx, // org owner should always be able to update the policy
+		},
+		{
+			name:     "happy path, update name field",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Name:         lo.ToPtr("Updated InternalPolicy Name"),
 				AddEditorIDs: []string{testUser1.GroupID}, // add the group to the editor groups for subsequent tests
@@ -477,7 +490,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "happy path, update multiple fields",
+			name:     "happy path, update multiple fields",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Status:           &enums.DocumentPublished,
 				Details:          lo.ToPtr("Updated details"),
@@ -490,7 +504,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "update not allowed, not enough permissions",
+			name:     "update not allowed, not enough permissions",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated InternalPolicy Name"),
 			},
@@ -499,7 +514,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update allowed, user in editor group",
+			name:     "update allowed, user in editor group",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
@@ -507,7 +523,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions
 		},
 		{
-			name: "member update allowed, user in editor group",
+			name:     "member update allowed, user in editor group",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
@@ -515,7 +532,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			ctx:    anotherViewerUser.UserCtx, // user assigned to the group which has editor permissions
 		},
 		{
-			name: "happy path, block the group from editing",
+			name:     "happy path, block the group from editing",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				AddBlockedGroupIDs: []string{blockGroup.ID}, // block the group
 			},
@@ -523,7 +541,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "member update no longer allowed, user in blocked group",
+			name:     "member update no longer allowed, user in blocked group",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
@@ -532,7 +551,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			expectedErr: notFoundErrorMsg,
 		},
 		{
-			name: "happy path, remove the group",
+			name:     "happy path, remove the group",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				RemoveEditorIDs: []string{testUser1.GroupID}, // remove the group from the editor groups
 			},
@@ -540,7 +560,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "update not allowed, editor group was removed",
+			name:     "update not allowed, editor group was removed",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again Again"),
 			},
@@ -549,7 +570,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "update not allowed, no permissions",
+			name:     "update not allowed, no permissions",
+			policyID: internalPolicy.ID,
 			request: openlaneclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr("Updated details"),
 			},
@@ -561,7 +583,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateInternalPolicy(tc.ctx, internalPolicy.ID, tc.request)
+			resp, err := tc.client.UpdateInternalPolicy(tc.ctx, tc.policyID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
@@ -604,7 +626,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy.ID, internalPolicyAdminUser.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID, subcontrol.ControlID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID}}).MustDelete(testUser1.UserCtx, t)
