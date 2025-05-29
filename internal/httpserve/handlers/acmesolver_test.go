@@ -45,7 +45,7 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 		SetDNSVerificationStatus(enums.DNSVerificationStatusPending).
 		SetAcmeChallengePath(testPath).
 		SetExpectedAcmeChallengeValue(testValue).
-		SetAcmeChallengeStatus(enums.SSLVerificationStatusPendingValidation).
+		SetAcmeChallengeStatus(enums.SSLVerificationStatusInitializing).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(ctx)
 	require.NoError(t, err)
@@ -58,7 +58,7 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 		SetDNSVerificationStatus(enums.DNSVerificationStatusPending).
 		SetAcmeChallengePath("deleted-path").
 		SetExpectedAcmeChallengeValue("deleted-value").
-		SetAcmeChallengeStatus(enums.SSLVerificationStatusPendingValidation).
+		SetAcmeChallengeStatus(enums.SSLVerificationStatusInitializing).
 		SetOwnerID(testUser1.OrganizationID).
 		SetDeletedAt(time.Now()).
 		SetDeletedBy("test").
