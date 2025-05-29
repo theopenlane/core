@@ -133,12 +133,12 @@ func TestQueryInternalPolicies(t *testing.T) {
 		updateBlockedGroup bool
 		expectedResults    int
 	}{
-		// {
-		// 	name:            "happy path",
-		// 	client:          suite.client.api,
-		// 	ctx:             testUser1.UserCtx,
-		// 	expectedResults: 3,
-		// },
+		{
+			name:            "happy path",
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			expectedResults: 3,
+		},
 		{
 			name:               "happy path, using read only user of the same org, one policy blocked",
 			client:             suite.client.api,
