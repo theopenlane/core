@@ -5,6 +5,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
@@ -64,7 +65,9 @@ func InterceptorSubscriptionURL() ent.Interceptor {
 
 // setSubscriptionURL sets the subscription URL for the org subscription response
 func setSubscriptionURL(ctx context.Context, orgSub *generated.OrgSubscription, q *generated.OrgSubscriptionQuery) error {
-	if orgSub == nil {
+	if orgSub == nil || q.EntitlementManager == nil {
+		log.Debug().Ctx(ctx).Msg("organization does not have a subscription or entitlement manager is nil, skipping URL setting")
+
 		return nil
 	}
 
