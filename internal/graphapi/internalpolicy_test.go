@@ -21,13 +21,20 @@ func TestQueryInternalPolicy(t *testing.T) {
 	// create an InternalPolicy to be queried using testUser1
 	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// setup a blocked group with a view only user
+	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: blockedGroup.ID}).MustNew(testUser1.UserCtx, t)
+
+	internalPolicy2 := (&InternalPolicyBuilder{client: suite.client, BlockedGroupIDs: []string{blockedGroup.ID}}).MustNew(testUser1.UserCtx, t)
+
 	// add test cases for querying the internal policy
 	testCases := []struct {
-		name     string
-		queryID  string
-		client   *openlaneclient.OpenlaneClient
-		ctx      context.Context
-		errorMsg string
+		name               string
+		queryID            string
+		client             *openlaneclient.OpenlaneClient
+		ctx                context.Context
+		errorMsg           string
+		updateBlockedGroup bool
 	}{
 		{
 			name:    "happy path",
@@ -38,6 +45,20 @@ func TestQueryInternalPolicy(t *testing.T) {
 		{
 			name:    "happy path, read only user",
 			queryID: internalPolicy.ID,
+			client:  suite.client.api,
+			ctx:     viewOnlyUser.UserCtx,
+		},
+		{
+			name:               "happy path, read only user but blocked",
+			queryID:            internalPolicy2.ID,
+			client:             suite.client.api,
+			ctx:                viewOnlyUser.UserCtx,
+			errorMsg:           notFoundErrorMsg, // should not be able to access the policy due to blocked group
+			updateBlockedGroup: true,
+		},
+		{
+			name:    "happy path, read only user no longer blocked",
+			queryID: internalPolicy2.ID,
 			client:  suite.client.api,
 			ctx:     viewOnlyUser.UserCtx,
 		},
@@ -71,6 +92,14 @@ func TestQueryInternalPolicy(t *testing.T) {
 				assert.ErrorContains(t, err, tc.errorMsg)
 				assert.Check(t, is.Nil(resp))
 
+				if tc.updateBlockedGroup {
+					_, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, internalPolicy2.ID,
+						openlaneclient.UpdateInternalPolicyInput{
+							RemoveBlockedGroupIDs: []string{blockedGroup.ID},
+						})
+					assert.NilError(t, err)
+				}
+
 				return
 			}
 
@@ -83,7 +112,7 @@ func TestQueryInternalPolicy(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy.ID, internalPolicy2.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestQueryInternalPolicies(t *testing.T) {
@@ -91,35 +120,49 @@ func TestQueryInternalPolicies(t *testing.T) {
 	ip1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	ip2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// setup a blocked group with a view only user
+	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: blockedGroup.ID}).MustNew(testUser1.UserCtx, t)
+
+	ip3 := (&InternalPolicyBuilder{client: suite.client, BlockedGroupIDs: []string{blockedGroup.ID}}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
-		name            string
-		client          *openlaneclient.OpenlaneClient
-		ctx             context.Context
-		expectedResults int
+		name               string
+		client             *openlaneclient.OpenlaneClient
+		ctx                context.Context
+		updateBlockedGroup bool
+		expectedResults    int
 	}{
 		{
 			name:            "happy path",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
-			expectedResults: 2,
+			expectedResults: 3,
 		},
 		{
-			name:            "happy path, using read only user of the same org",
+			name:               "happy path, using read only user of the same org, one policy blocked",
+			client:             suite.client.api,
+			ctx:                viewOnlyUser.UserCtx,
+			expectedResults:    2,    // should not see the policy that is blocked for them
+			updateBlockedGroup: true, // update the blocked group to allow the view only user to see the policy
+		},
+		{
+			name:            "happy path, using read only user of the same org, no blocked group",
 			client:          suite.client.api,
 			ctx:             viewOnlyUser.UserCtx,
-			expectedResults: 2,
+			expectedResults: 3, // should now see all policies after removing the blocked group
 		},
 		{
 			name:            "happy path, using api token",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 2,
+			expectedResults: 3,
 		},
 		{
 			name:            "happy path, using pat",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
-			expectedResults: 2,
+			expectedResults: 3,
 		},
 		{
 			name:            "another user, no policies should be returned",
@@ -136,11 +179,22 @@ func TestQueryInternalPolicies(t *testing.T) {
 			assert.Assert(t, resp != nil)
 
 			assert.Check(t, is.Len(resp.InternalPolicies.Edges, tc.expectedResults))
+
+			if tc.updateBlockedGroup {
+				// do it the opposite, remove the policy from the group
+				_, err := suite.client.api.UpdateGroup(testUser1.UserCtx, blockedGroup.ID,
+					openlaneclient.UpdateGroupInput{
+						RemoveInternalPolicyBlockedGroupIDs: []string{ip3.ID},
+					},
+				)
+
+				assert.NilError(t, err)
+			}
 		})
 	}
 
 	// delete created policies
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{ip1.ID, ip2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{ip1.ID, ip2.ID, ip3.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateInternalPolicy(t *testing.T) {

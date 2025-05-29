@@ -200,8 +200,9 @@ type InternalPolicyBuilder struct {
 	client *client
 
 	// Fields
-	Name    string
-	GroupID string
+	Name            string
+	BlockedGroupIDs []string
+	EditorGroupIDs  []string
 }
 
 type RiskBuilder struct {
@@ -910,9 +911,18 @@ func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 		p.Name = gofakeit.AppName()
 	}
 
-	policy, err := p.client.db.InternalPolicy.Create().
-		SetName(p.Name).
-		Save(ctx)
+	mut := p.client.db.InternalPolicy.Create().
+		SetName(p.Name)
+
+	if len(p.BlockedGroupIDs) > 0 {
+		mut.AddBlockedGroupIDs(p.BlockedGroupIDs...)
+	}
+
+	if len(p.EditorGroupIDs) > 0 {
+		mut.AddEditorIDs(p.EditorGroupIDs...)
+	}
+
+	policy, err := mut.Save(ctx)
 	assert.NilError(t, err)
 
 	return policy
