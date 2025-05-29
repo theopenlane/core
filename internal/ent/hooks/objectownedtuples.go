@@ -210,16 +210,27 @@ func checkAccessForEdges(ctx context.Context, m ent.Mutation) error {
 	}
 
 	// check added edges
-	if err := checkEdgesEditAccess(ctx, m, addedEdges); err != nil {
+	if err := checkEdgesForAddedAccess(ctx, m, addedEdges); err != nil {
 		return err
 	}
 
 	// check removed edges
-	return checkEdgesEditAccess(ctx, m, removedEdges)
+	return checkEdgesForRemovedAccess(ctx, m, removedEdges)
+}
+
+// checkEdgesForAddedAccess checks if the user has access to the object they are trying to add permissions to
+// it will look at the AddedEdges and check if the user has access to the object
+func checkEdgesForAddedAccess(ctx context.Context, m ent.Mutation, edges []string) error {
+	return checkEdgesEditAccess(ctx, m, edges, true)
+}
+
+// checkEdgesForRemovedAccess checks if the user has access to the object they are trying to remove permissions from
+func checkEdgesForRemovedAccess(ctx context.Context, m ent.Mutation, edges []string) error {
+	return checkEdgesEditAccess(ctx, m, edges, false)
 }
 
 // checkEdgesEditAccess takes a list of edges and looks for the permissions edges to confirm the user has edit access
-func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) error {
+func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, added bool) error {
 	actor, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user id from context")
@@ -233,7 +244,12 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) e
 			continue
 		}
 
-		ids := m.AddedIDs(edge)
+		var ids []ent.Value
+		if added {
+			ids = m.AddedIDs(edge)
+		} else {
+			ids = m.RemovedIDs(edge)
+		}
 
 		for _, id := range ids {
 			idStr, ok := id.(string)
@@ -265,21 +281,33 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string) e
 func getTuplesForGroupEdgeChanges(m ent.Mutation, subjectID string) (addTuples []fgax.TupleKey, removeTuples []fgax.TupleKey, err error) {
 	// check edges for added edges
 	if m.AddedEdges() != nil {
-		addTuples = getTuplesForGroupEdge(m, m.AddedEdges(), subjectID)
+		addTuples = getAddedTuplesForGroupEdge(m, m.AddedEdges(), subjectID)
 	}
 
 	// check edges for added edges
 	if m.RemovedEdges() != nil {
-		removeTuples = getTuplesForGroupEdge(m, m.RemovedEdges(), subjectID)
+		removeTuples = getRemovedTuplesForGroupEdge(m, m.RemovedEdges(), subjectID)
 	}
 
 	return addTuples, removeTuples, nil
 }
 
+// getAddedTuplesForGroupEdge gets the tuples for edges that were added, it will take in the edges
+// that were added and the subject id of the group and return the tuples
+func getAddedTuplesForGroupEdge(m ent.Mutation, edges []string, subjectID string) (tuples []fgax.TupleKey) {
+	return getTuplesForGroupEdge(m, edges, subjectID, true)
+}
+
+// getRemovedTuplesForGroupEdge gets the tuples for edges that were removed, it will take in the edges
+// that were removed and the subject id of the group and return the tuples
+func getRemovedTuplesForGroupEdge(m ent.Mutation, edges []string, subjectID string) (tuples []fgax.TupleKey) {
+	return getTuplesForGroupEdge(m, edges, subjectID, false)
+}
+
 // getTuplesForGroupEdge gets the tuples for edges that were added or removed, it will take in the edges
 // that were changed and the subject id of the group and return the tuples
 // the subject id in this case should be the group id from the mutation
-func getTuplesForGroupEdge(m ent.Mutation, edges []string, subjectID string) (tuples []fgax.TupleKey) {
+func getTuplesForGroupEdge(m ent.Mutation, edges []string, subjectID string, added bool) (tuples []fgax.TupleKey) {
 	for _, edge := range edges {
 		// looking for edges like `program_editors` or `program_viewers`
 		objectType, relation, ok := isPermissionsEdge(edge)
@@ -287,7 +315,12 @@ func getTuplesForGroupEdge(m ent.Mutation, edges []string, subjectID string) (tu
 			continue
 		}
 
-		ids := m.AddedIDs(edge)
+		var ids []ent.Value
+		if added {
+			ids = m.AddedIDs(edge)
+		} else {
+			ids = m.RemovedIDs(edge)
+		}
 
 		for _, id := range ids {
 			idStr, ok := id.(string)

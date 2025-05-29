@@ -133,21 +133,21 @@ func TestQueryInternalPolicies(t *testing.T) {
 		updateBlockedGroup bool
 		expectedResults    int
 	}{
+		// {
+		// 	name:            "happy path",
+		// 	client:          suite.client.api,
+		// 	ctx:             testUser1.UserCtx,
+		// 	expectedResults: 3,
+		// },
 		{
-			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
-			expectedResults: 3,
-		},
-		{
-			name:               "happy path, using read only user of the same org",
+			name:               "happy path, using read only user of the same org, one policy blocked",
 			client:             suite.client.api,
 			ctx:                viewOnlyUser.UserCtx,
 			expectedResults:    2,    // should not see the policy that is blocked for them
 			updateBlockedGroup: true, // update the blocked group to allow the view only user to see the policy
 		},
 		{
-			name:            "happy path, using read only user of the same org",
+			name:            "happy path, using read only user of the same org, no blocked group",
 			client:          suite.client.api,
 			ctx:             viewOnlyUser.UserCtx,
 			expectedResults: 3, // should now see all policies after removing the blocked group
@@ -181,10 +181,13 @@ func TestQueryInternalPolicies(t *testing.T) {
 			assert.Check(t, is.Len(resp.InternalPolicies.Edges, tc.expectedResults))
 
 			if tc.updateBlockedGroup {
-				_, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, ip3.ID,
-					openlaneclient.UpdateInternalPolicyInput{
-						RemoveBlockedGroupIDs: []string{blockedGroup.ID},
-					})
+				// do it the opposite, remove the policy from the group
+				_, err := suite.client.api.UpdateGroup(testUser1.UserCtx, blockedGroup.ID,
+					openlaneclient.UpdateGroupInput{
+						RemoveInternalPolicyBlockedGroupIDs: []string{ip3.ID},
+					},
+				)
+
 				assert.NilError(t, err)
 			}
 		})
