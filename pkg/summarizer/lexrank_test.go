@@ -21,7 +21,7 @@ func TestNewLexRankSummarizer_Summarize(t *testing.T) {
 			hasError: true,
 		},
 		{
-			name:     "extremly short string",
+			name:     "extremely short string",
 			sentence: gofakeit.Sentence(2),
 		},
 		{

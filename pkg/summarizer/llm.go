@@ -19,7 +19,7 @@ import (
 
 // maybe make a config value too?
 const prompt = `
-	Summarize the following text in the line below. Be brief, concise and precise. 
+	Summarize the following text in the line below. Be brief, concise and precise.
 
 	%s
 	`

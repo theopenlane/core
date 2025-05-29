@@ -19,6 +19,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.79.4
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.2.1
+	github.com/cloudflare/cloudflare-go/v4 v4.4.0
 	github.com/danielgtaylor/huma/v2 v2.32.0
 	github.com/didasy/tldr v0.6.1-0.20240327032308-66fe9230b70e
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
@@ -185,7 +186,6 @@ require (
 	github.com/chigopher/pathlib v0.19.1 // indirect
 	github.com/ckaznocha/intrange v0.3.0 // indirect
 	github.com/cloudflare/circl v1.6.0 // indirect
-	github.com/cloudflare/cloudflare-go/v4 v4.4.0 // indirect
 	github.com/cnf/structhash v0.0.0-20201127153200-e1b16c1ebc08 // indirect
 	github.com/containerd/console v1.0.4 // indirect
 	github.com/containerd/log v0.1.0 // indirect
@@ -551,7 +551,7 @@ require (
 	github.com/resend/resend-go/v2 v2.19.0 // indirect
 	github.com/riverqueue/river/riverdriver v0.22.0 // indirect
 	github.com/riverqueue/river/rivershared v0.22.0 // indirect
-	github.com/riverqueue/river/rivertype v0.22.0 // indirect
+	github.com/riverqueue/river/rivertype v0.22.0
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect

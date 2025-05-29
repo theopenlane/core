@@ -5,11 +5,15 @@ import (
 	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
 )
 
+// ServerOptions defines the options for the server
 type ServerOptions struct {
+	// ConfigProvider is the provider for the server configuration
 	ConfigProvider serverconfig.Provider
-	Config         serverconfig.Config
+	// Config is the server configuration settings
+	Config serverconfig.Config
 }
 
+// NewServerOptions creates a new ServerOptions instance with the provided options and configuration location
 func NewServerOptions(opts []ServerOption, cfgLoc string) *ServerOptions {
 	// load koanf config
 	c, err := config.Load(&cfgLoc)
