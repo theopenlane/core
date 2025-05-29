@@ -8,7 +8,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/core/pkg/corejobs"
 )
 
 // HookCustomDomain runs on create mutations
@@ -26,7 +26,7 @@ func HookCreateCustomDomain() ent.Hook {
 					return v, err
 				}
 
-				_, err = m.Job.Insert(ctx, jobs.CreateCustomDomainArgs{
+				_, err = m.Job.Insert(ctx, corejobs.CreateCustomDomainArgs{
 					CustomDomainID: id,
 				}, nil)
 
@@ -66,7 +66,7 @@ func HookDeleteCustomDomain() ent.Hook {
 					return nil, err
 				}
 
-				_, err = m.Job.Insert(ctx, jobs.DeleteCustomDomainArgs{
+				_, err = m.Job.Insert(ctx, corejobs.DeleteCustomDomainArgs{
 					DNSVerificationID:          cd.DNSVerificationID,
 					CloudflareCustomHostnameID: dnsVerification.CloudflareHostnameID,
 					CloudflareZoneID:           mappableDomain.ZoneID,

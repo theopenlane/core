@@ -32,6 +32,8 @@ linters:
       - internal/ent/templates/*
       - jsonschema/templates/*
       - pkg/objects/mocks/*
+      - pkg/corejobs/internal/cloudflare/mocks/*
+      - pkg/corejobs/internal/olclient/mocks/*
       - internal/graphapi/generate/*
       - internal/graphapi/generated/*
       - pkg/entitlements/test/*
