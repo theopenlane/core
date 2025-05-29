@@ -42,10 +42,10 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 		SetCloudflareHostnameID(gofakeit.UUID()).
 		SetDNSTxtRecord("_acme-challenge.example.com").
 		SetDNSTxtValue(gofakeit.UUID()).
-		SetDNSVerificationStatus(enums.CustomDomainStatusPending).
+		SetDNSVerificationStatus(enums.DNSVerificationStatusPending).
 		SetAcmeChallengePath(testPath).
 		SetExpectedAcmeChallengeValue(testValue).
-		SetAcmeChallengeStatus(enums.CustomDomainStatusPending).
+		SetAcmeChallengeStatus(enums.SSLVerificationStatusPendingValidation).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(ctx)
 	require.NoError(t, err)
@@ -55,10 +55,10 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 		SetCloudflareHostnameID(gofakeit.UUID()).
 		SetDNSTxtRecord("_acme-challenge.deleted.com").
 		SetDNSTxtValue(gofakeit.UUID()).
-		SetDNSVerificationStatus(enums.CustomDomainStatusPending).
+		SetDNSVerificationStatus(enums.DNSVerificationStatusPending).
 		SetAcmeChallengePath("deleted-path").
 		SetExpectedAcmeChallengeValue("deleted-value").
-		SetAcmeChallengeStatus(enums.CustomDomainStatusPending).
+		SetAcmeChallengeStatus(enums.SSLVerificationStatusPendingValidation).
 		SetOwnerID(testUser1.OrganizationID).
 		SetDeletedAt(time.Now()).
 		SetDeletedBy("test").
