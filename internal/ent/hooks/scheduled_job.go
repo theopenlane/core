@@ -103,7 +103,6 @@ func HookControlScheduledJobCreate() ent.Hook {
 			}
 
 			return job, err
-
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpCreate)
 }

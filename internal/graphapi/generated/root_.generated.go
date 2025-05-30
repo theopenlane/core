@@ -65887,6 +65887,7 @@ Properties by which ScheduledJobRun connections can be ordered.
 enum ScheduledJobRunOrderField {
   created_at
   updated_at
+  expected_execution_time
 }
 """
 ScheduledJobRunScheduledJobRunStatus is enum for the field status

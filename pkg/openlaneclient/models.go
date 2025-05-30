@@ -31585,18 +31585,20 @@ func (e ScheduledJobOrderField) MarshalJSON() ([]byte, error) {
 type ScheduledJobRunOrderField string
 
 const (
-	ScheduledJobRunOrderFieldCreatedAt ScheduledJobRunOrderField = "created_at"
-	ScheduledJobRunOrderFieldUpdatedAt ScheduledJobRunOrderField = "updated_at"
+	ScheduledJobRunOrderFieldCreatedAt             ScheduledJobRunOrderField = "created_at"
+	ScheduledJobRunOrderFieldUpdatedAt             ScheduledJobRunOrderField = "updated_at"
+	ScheduledJobRunOrderFieldExpectedExecutionTime ScheduledJobRunOrderField = "expected_execution_time"
 )
 
 var AllScheduledJobRunOrderField = []ScheduledJobRunOrderField{
 	ScheduledJobRunOrderFieldCreatedAt,
 	ScheduledJobRunOrderFieldUpdatedAt,
+	ScheduledJobRunOrderFieldExpectedExecutionTime,
 }
 
 func (e ScheduledJobRunOrderField) IsValid() bool {
 	switch e {
-	case ScheduledJobRunOrderFieldCreatedAt, ScheduledJobRunOrderFieldUpdatedAt:
+	case ScheduledJobRunOrderFieldCreatedAt, ScheduledJobRunOrderFieldUpdatedAt, ScheduledJobRunOrderFieldExpectedExecutionTime:
 		return true
 	}
 	return false
