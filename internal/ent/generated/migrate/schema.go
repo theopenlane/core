@@ -541,7 +541,7 @@ var (
 		{Name: "configuration", Type: field.TypeJSON},
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
-		{Name: "job_handle", Type: field.TypeString},
+		{Name: "job_handle", Type: field.TypeInt, Nullable: true},
 		{Name: "job_id", Type: field.TypeString},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -597,7 +597,7 @@ var (
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
-		{Name: "job_handle", Type: field.TypeString},
+		{Name: "job_handle", Type: field.TypeInt, Nullable: true},
 	}
 	// ControlScheduledJobHistoryTable holds the schema information for the "control_scheduled_job_history" table.
 	ControlScheduledJobHistoryTable = &schema.Table{

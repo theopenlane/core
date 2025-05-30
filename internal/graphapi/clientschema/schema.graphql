@@ -5600,7 +5600,7 @@ type ControlScheduledJob implements Node {
 	"""
 	the identifier to this preriodic job in river
 	"""
-	jobHandle: String!
+	jobHandle: Int
 	owner: Organization
 	job: ScheduledJob!
 	controls(
@@ -5760,7 +5760,7 @@ type ControlScheduledJobHistory implements Node {
 	"""
 	the identifier to this preriodic job in river
 	"""
-	jobHandle: String!
+	jobHandle: Int
 }
 """
 A connection to a list of items.

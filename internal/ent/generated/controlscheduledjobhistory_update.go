@@ -212,6 +212,33 @@ func (csjhu *ControlScheduledJobHistoryUpdate) ClearJobRunnerID() *ControlSchedu
 	return csjhu
 }
 
+// SetJobHandle sets the "job_handle" field.
+func (csjhu *ControlScheduledJobHistoryUpdate) SetJobHandle(i int) *ControlScheduledJobHistoryUpdate {
+	csjhu.mutation.ResetJobHandle()
+	csjhu.mutation.SetJobHandle(i)
+	return csjhu
+}
+
+// SetNillableJobHandle sets the "job_handle" field if the given value is not nil.
+func (csjhu *ControlScheduledJobHistoryUpdate) SetNillableJobHandle(i *int) *ControlScheduledJobHistoryUpdate {
+	if i != nil {
+		csjhu.SetJobHandle(*i)
+	}
+	return csjhu
+}
+
+// AddJobHandle adds i to the "job_handle" field.
+func (csjhu *ControlScheduledJobHistoryUpdate) AddJobHandle(i int) *ControlScheduledJobHistoryUpdate {
+	csjhu.mutation.AddJobHandle(i)
+	return csjhu
+}
+
+// ClearJobHandle clears the value of the "job_handle" field.
+func (csjhu *ControlScheduledJobHistoryUpdate) ClearJobHandle() *ControlScheduledJobHistoryUpdate {
+	csjhu.mutation.ClearJobHandle()
+	return csjhu
+}
+
 // Mutation returns the ControlScheduledJobHistoryMutation object of the builder.
 func (csjhu *ControlScheduledJobHistoryUpdate) Mutation() *ControlScheduledJobHistoryMutation {
 	return csjhu.mutation
@@ -330,6 +357,15 @@ func (csjhu *ControlScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n i
 	}
 	if csjhu.mutation.JobRunnerIDCleared() {
 		_spec.ClearField(controlscheduledjobhistory.FieldJobRunnerID, field.TypeString)
+	}
+	if value, ok := csjhu.mutation.JobHandle(); ok {
+		_spec.SetField(controlscheduledjobhistory.FieldJobHandle, field.TypeInt, value)
+	}
+	if value, ok := csjhu.mutation.AddedJobHandle(); ok {
+		_spec.AddField(controlscheduledjobhistory.FieldJobHandle, field.TypeInt, value)
+	}
+	if csjhu.mutation.JobHandleCleared() {
+		_spec.ClearField(controlscheduledjobhistory.FieldJobHandle, field.TypeInt)
 	}
 	_spec.Node.Schema = csjhu.schemaConfig.ControlScheduledJobHistory
 	ctx = internal.NewSchemaConfigContext(ctx, csjhu.schemaConfig)
@@ -535,6 +571,33 @@ func (csjhuo *ControlScheduledJobHistoryUpdateOne) ClearJobRunnerID() *ControlSc
 	return csjhuo
 }
 
+// SetJobHandle sets the "job_handle" field.
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetJobHandle(i int) *ControlScheduledJobHistoryUpdateOne {
+	csjhuo.mutation.ResetJobHandle()
+	csjhuo.mutation.SetJobHandle(i)
+	return csjhuo
+}
+
+// SetNillableJobHandle sets the "job_handle" field if the given value is not nil.
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetNillableJobHandle(i *int) *ControlScheduledJobHistoryUpdateOne {
+	if i != nil {
+		csjhuo.SetJobHandle(*i)
+	}
+	return csjhuo
+}
+
+// AddJobHandle adds i to the "job_handle" field.
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) AddJobHandle(i int) *ControlScheduledJobHistoryUpdateOne {
+	csjhuo.mutation.AddJobHandle(i)
+	return csjhuo
+}
+
+// ClearJobHandle clears the value of the "job_handle" field.
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) ClearJobHandle() *ControlScheduledJobHistoryUpdateOne {
+	csjhuo.mutation.ClearJobHandle()
+	return csjhuo
+}
+
 // Mutation returns the ControlScheduledJobHistoryMutation object of the builder.
 func (csjhuo *ControlScheduledJobHistoryUpdateOne) Mutation() *ControlScheduledJobHistoryMutation {
 	return csjhuo.mutation
@@ -683,6 +746,15 @@ func (csjhuo *ControlScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) 
 	}
 	if csjhuo.mutation.JobRunnerIDCleared() {
 		_spec.ClearField(controlscheduledjobhistory.FieldJobRunnerID, field.TypeString)
+	}
+	if value, ok := csjhuo.mutation.JobHandle(); ok {
+		_spec.SetField(controlscheduledjobhistory.FieldJobHandle, field.TypeInt, value)
+	}
+	if value, ok := csjhuo.mutation.AddedJobHandle(); ok {
+		_spec.AddField(controlscheduledjobhistory.FieldJobHandle, field.TypeInt, value)
+	}
+	if csjhuo.mutation.JobHandleCleared() {
+		_spec.ClearField(controlscheduledjobhistory.FieldJobHandle, field.TypeInt)
 	}
 	_spec.Node.Schema = csjhuo.schemaConfig.ControlScheduledJobHistory
 	ctx = internal.NewSchemaConfigContext(ctx, csjhuo.schemaConfig)

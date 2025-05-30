@@ -4,10 +4,13 @@ import (
 	"context"
 
 	"github.com/riverqueue/river"
+	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 // ScheduledJobArgs represents the arguments for the scheduled job worker
-type ScheduledJobArgs struct{}
+type ScheduledJobArgs struct {
+	JobID string
+}
 
 func (ScheduledJobArgs) Kind() string { return "scheduled_jobs" }
 
@@ -20,6 +23,8 @@ type ScheduledJobWorker struct {
 	river.WorkerDefaults[ScheduledJobArgs]
 
 	Config ScheduledJobConfig `koanf:"config" json:"config" jsonschema:"description=the scheduled job worker configuration"`
+
+	client *generated.Client
 }
 
 // Work evaluates the available jobs and marks them as ready to be executed by agents if needed
@@ -29,3 +34,10 @@ func (s *ScheduledJobWorker) Work(ctx context.Context, _ *river.Job[ScheduledJob
 	// The results would be in the "job results". but the logs not needed here
 	return nil
 }
+
+// WithEntClient configures the worker with the configured db client
+func (s *ScheduledJobWorker) WithEntClient(client *generated.Client) { s.client = client }
+
+// func (s *ScheduledJobWorker) cleanupOldRuns(ctx context.Context) error {
+//
+// }

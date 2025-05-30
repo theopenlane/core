@@ -179,8 +179,16 @@ func (csjc *ControlScheduledJobCreate) SetNillableJobRunnerID(s *string) *Contro
 }
 
 // SetJobHandle sets the "job_handle" field.
-func (csjc *ControlScheduledJobCreate) SetJobHandle(s string) *ControlScheduledJobCreate {
-	csjc.mutation.SetJobHandle(s)
+func (csjc *ControlScheduledJobCreate) SetJobHandle(i int) *ControlScheduledJobCreate {
+	csjc.mutation.SetJobHandle(i)
+	return csjc
+}
+
+// SetNillableJobHandle sets the "job_handle" field if the given value is not nil.
+func (csjc *ControlScheduledJobCreate) SetNillableJobHandle(i *int) *ControlScheduledJobCreate {
+	if i != nil {
+		csjc.SetJobHandle(*i)
+	}
 	return csjc
 }
 
@@ -327,9 +335,6 @@ func (csjc *ControlScheduledJobCreate) check() error {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cron": %w`, err)}
 		}
 	}
-	if _, ok := csjc.mutation.JobHandle(); !ok {
-		return &ValidationError{Name: "job_handle", err: errors.New(`generated: missing required field "ControlScheduledJob.job_handle"`)}
-	}
 	if len(csjc.mutation.JobIDs()) == 0 {
 		return &ValidationError{Name: "job", err: errors.New(`generated: missing required edge "ControlScheduledJob.job"`)}
 	}
@@ -406,7 +411,7 @@ func (csjc *ControlScheduledJobCreate) createSpec() (*ControlScheduledJob, *sqlg
 		_node.Cron = &value
 	}
 	if value, ok := csjc.mutation.JobHandle(); ok {
-		_spec.SetField(controlscheduledjob.FieldJobHandle, field.TypeString, value)
+		_spec.SetField(controlscheduledjob.FieldJobHandle, field.TypeInt, value)
 		_node.JobHandle = value
 	}
 	if nodes := csjc.mutation.OwnerIDs(); len(nodes) > 0 {

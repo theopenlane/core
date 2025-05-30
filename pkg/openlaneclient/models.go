@@ -3224,7 +3224,7 @@ type ControlScheduledJob struct {
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID *string `json:"jobRunnerID,omitempty"`
 	// the identifier to this preriodic job in river
-	JobHandle   string                `json:"jobHandle"`
+	JobHandle   *int64                `json:"jobHandle,omitempty"`
 	Owner       *Organization         `json:"owner,omitempty"`
 	Job         *ScheduledJob         `json:"job"`
 	Controls    *ControlConnection    `json:"controls"`
@@ -3292,7 +3292,7 @@ type ControlScheduledJobHistory struct {
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID *string `json:"jobRunnerID,omitempty"`
 	// the identifier to this preriodic job in river
-	JobHandle string `json:"jobHandle"`
+	JobHandle *int64 `json:"jobHandle,omitempty"`
 }
 
 func (ControlScheduledJobHistory) IsNode() {}
@@ -3470,20 +3470,6 @@ type ControlScheduledJobHistoryWhereInput struct {
 	JobRunnerIDNotNil       *bool    `json:"jobRunnerIDNotNil,omitempty"`
 	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
 	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
-	// job_handle field predicates
-	JobHandle             *string  `json:"jobHandle,omitempty"`
-	JobHandleNeq          *string  `json:"jobHandleNEQ,omitempty"`
-	JobHandleIn           []string `json:"jobHandleIn,omitempty"`
-	JobHandleNotIn        []string `json:"jobHandleNotIn,omitempty"`
-	JobHandleGt           *string  `json:"jobHandleGT,omitempty"`
-	JobHandleGte          *string  `json:"jobHandleGTE,omitempty"`
-	JobHandleLt           *string  `json:"jobHandleLT,omitempty"`
-	JobHandleLte          *string  `json:"jobHandleLTE,omitempty"`
-	JobHandleContains     *string  `json:"jobHandleContains,omitempty"`
-	JobHandleHasPrefix    *string  `json:"jobHandleHasPrefix,omitempty"`
-	JobHandleHasSuffix    *string  `json:"jobHandleHasSuffix,omitempty"`
-	JobHandleEqualFold    *string  `json:"jobHandleEqualFold,omitempty"`
-	JobHandleContainsFold *string  `json:"jobHandleContainsFold,omitempty"`
 }
 
 // Ordering options for ControlScheduledJob connections
@@ -3617,20 +3603,6 @@ type ControlScheduledJobWhereInput struct {
 	JobRunnerIDNotNil       *bool    `json:"jobRunnerIDNotNil,omitempty"`
 	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
 	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
-	// job_handle field predicates
-	JobHandle             *string  `json:"jobHandle,omitempty"`
-	JobHandleNeq          *string  `json:"jobHandleNEQ,omitempty"`
-	JobHandleIn           []string `json:"jobHandleIn,omitempty"`
-	JobHandleNotIn        []string `json:"jobHandleNotIn,omitempty"`
-	JobHandleGt           *string  `json:"jobHandleGT,omitempty"`
-	JobHandleGte          *string  `json:"jobHandleGTE,omitempty"`
-	JobHandleLt           *string  `json:"jobHandleLT,omitempty"`
-	JobHandleLte          *string  `json:"jobHandleLTE,omitempty"`
-	JobHandleContains     *string  `json:"jobHandleContains,omitempty"`
-	JobHandleHasPrefix    *string  `json:"jobHandleHasPrefix,omitempty"`
-	JobHandleHasSuffix    *string  `json:"jobHandleHasSuffix,omitempty"`
-	JobHandleEqualFold    *string  `json:"jobHandleEqualFold,omitempty"`
-	JobHandleContainsFold *string  `json:"jobHandleContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -4205,9 +4177,7 @@ type CreateControlScheduledJobInput struct {
 	// the schedule to run this job. If not provided, it would inherit the cadence of the parent job
 	Cadence *models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax. If not provided, it would inherit the cron of the parent job
-	Cron *string `json:"cron,omitempty"`
-	// the identifier to this preriodic job in river
-	JobHandle     string   `json:"jobHandle"`
+	Cron          *string  `json:"cron,omitempty"`
 	OwnerID       *string  `json:"ownerID,omitempty"`
 	JobID         string   `json:"jobID"`
 	ControlIDs    []string `json:"controlIDs,omitempty"`

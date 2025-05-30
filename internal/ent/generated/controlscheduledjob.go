@@ -47,7 +47,7 @@ type ControlScheduledJob struct {
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID string `json:"job_runner_id,omitempty"`
 	// the identifier to this preriodic job in river
-	JobHandle string `json:"job_handle,omitempty"`
+	JobHandle int `json:"job_handle,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlScheduledJobQuery when eager-loading is set.
 	Edges        ControlScheduledJobEdges `json:"edges"`
@@ -136,7 +136,9 @@ func (*ControlScheduledJob) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
 		case controlscheduledjob.FieldConfiguration, controlscheduledjob.FieldCadence:
 			values[i] = new([]byte)
-		case controlscheduledjob.FieldID, controlscheduledjob.FieldCreatedBy, controlscheduledjob.FieldUpdatedBy, controlscheduledjob.FieldDeletedBy, controlscheduledjob.FieldOwnerID, controlscheduledjob.FieldJobID, controlscheduledjob.FieldJobRunnerID, controlscheduledjob.FieldJobHandle:
+		case controlscheduledjob.FieldJobHandle:
+			values[i] = new(sql.NullInt64)
+		case controlscheduledjob.FieldID, controlscheduledjob.FieldCreatedBy, controlscheduledjob.FieldUpdatedBy, controlscheduledjob.FieldDeletedBy, controlscheduledjob.FieldOwnerID, controlscheduledjob.FieldJobID, controlscheduledjob.FieldJobRunnerID:
 			values[i] = new(sql.NullString)
 		case controlscheduledjob.FieldCreatedAt, controlscheduledjob.FieldUpdatedAt, controlscheduledjob.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -239,10 +241,10 @@ func (csj *ControlScheduledJob) assignValues(columns []string, values []any) err
 				csj.JobRunnerID = value.String
 			}
 		case controlscheduledjob.FieldJobHandle:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field job_handle", values[i])
 			} else if value.Valid {
-				csj.JobHandle = value.String
+				csj.JobHandle = int(value.Int64)
 			}
 		default:
 			csj.selectValues.Set(columns[i], values[i])
@@ -344,7 +346,7 @@ func (csj *ControlScheduledJob) String() string {
 	builder.WriteString(csj.JobRunnerID)
 	builder.WriteString(", ")
 	builder.WriteString("job_handle=")
-	builder.WriteString(csj.JobHandle)
+	builder.WriteString(fmt.Sprintf("%v", csj.JobHandle))
 	builder.WriteByte(')')
 	return builder.String()
 }

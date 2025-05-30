@@ -51,7 +51,7 @@ type ControlScheduledJobHistory struct {
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID string `json:"job_runner_id,omitempty"`
 	// the identifier to this preriodic job in river
-	JobHandle    string `json:"job_handle,omitempty"`
+	JobHandle    int `json:"job_handle,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -66,7 +66,9 @@ func (*ControlScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlscheduledjobhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlscheduledjobhistory.FieldID, controlscheduledjobhistory.FieldRef, controlscheduledjobhistory.FieldCreatedBy, controlscheduledjobhistory.FieldUpdatedBy, controlscheduledjobhistory.FieldDeletedBy, controlscheduledjobhistory.FieldOwnerID, controlscheduledjobhistory.FieldJobID, controlscheduledjobhistory.FieldJobRunnerID, controlscheduledjobhistory.FieldJobHandle:
+		case controlscheduledjobhistory.FieldJobHandle:
+			values[i] = new(sql.NullInt64)
+		case controlscheduledjobhistory.FieldID, controlscheduledjobhistory.FieldRef, controlscheduledjobhistory.FieldCreatedBy, controlscheduledjobhistory.FieldUpdatedBy, controlscheduledjobhistory.FieldDeletedBy, controlscheduledjobhistory.FieldOwnerID, controlscheduledjobhistory.FieldJobID, controlscheduledjobhistory.FieldJobRunnerID:
 			values[i] = new(sql.NullString)
 		case controlscheduledjobhistory.FieldHistoryTime, controlscheduledjobhistory.FieldCreatedAt, controlscheduledjobhistory.FieldUpdatedAt, controlscheduledjobhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -187,10 +189,10 @@ func (csjh *ControlScheduledJobHistory) assignValues(columns []string, values []
 				csjh.JobRunnerID = value.String
 			}
 		case controlscheduledjobhistory.FieldJobHandle:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field job_handle", values[i])
 			} else if value.Valid {
-				csjh.JobHandle = value.String
+				csjh.JobHandle = int(value.Int64)
 			}
 		default:
 			csjh.selectValues.Set(columns[i], values[i])
@@ -276,7 +278,7 @@ func (csjh *ControlScheduledJobHistory) String() string {
 	builder.WriteString(csjh.JobRunnerID)
 	builder.WriteString(", ")
 	builder.WriteString("job_handle=")
-	builder.WriteString(csjh.JobHandle)
+	builder.WriteString(fmt.Sprintf("%v", csjh.JobHandle))
 	builder.WriteByte(')')
 	return builder.String()
 }

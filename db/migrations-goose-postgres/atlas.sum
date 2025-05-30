@@ -1,4 +1,4 @@
-h1:9v7TwvpQRJIDLJ8Dq1bKgOyxXoG+BplabPBJ+rNR9cQ=
+h1:plR25v6yMf9V3Ua90hEzGbTEA2UrTQ28WAYpFVju/os=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -17,4 +17,4 @@ h1:9v7TwvpQRJIDLJ8Dq1bKgOyxXoG+BplabPBJ+rNR9cQ=
 20250526190811_jobs.sql h1:015p17dsM0Fi4C5BERCwtDT8lqBkD6tLnmGc+m0/L+c=
 20250526222006_dns_ssl_verification_statuses.sql h1:81J9YgX/aLscjIqHFuqDpVxgh2dZsphk17zNbuzMalI=
 20250528204157_job_fixes.sql h1:wnKFxB2C35UojFvUkbrVXKRLvnjgIZputHKF62m0lQY=
-20250530001242_job_handle.sql h1:ckTt6H7hNBa38onycdtX4uE2odOotvmOhufV3DMpEQU=
+20250530121153_riverqueue_handle.sql h1:pSytbuqgkltJyqFYgCFYcbASj6xrzFmrjU2DXMN4gaA=

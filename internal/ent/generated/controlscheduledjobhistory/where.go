@@ -127,7 +127,7 @@ func JobRunnerID(v string) predicate.ControlScheduledJobHistory {
 }
 
 // JobHandle applies equality check predicate on the "job_handle" field. It's identical to JobHandleEQ.
-func JobHandle(v string) predicate.ControlScheduledJobHistory {
+func JobHandle(v int) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldEQ(FieldJobHandle, v))
 }
 
@@ -947,68 +947,53 @@ func JobRunnerIDContainsFold(v string) predicate.ControlScheduledJobHistory {
 }
 
 // JobHandleEQ applies the EQ predicate on the "job_handle" field.
-func JobHandleEQ(v string) predicate.ControlScheduledJobHistory {
+func JobHandleEQ(v int) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldEQ(FieldJobHandle, v))
 }
 
 // JobHandleNEQ applies the NEQ predicate on the "job_handle" field.
-func JobHandleNEQ(v string) predicate.ControlScheduledJobHistory {
+func JobHandleNEQ(v int) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldNEQ(FieldJobHandle, v))
 }
 
 // JobHandleIn applies the In predicate on the "job_handle" field.
-func JobHandleIn(vs ...string) predicate.ControlScheduledJobHistory {
+func JobHandleIn(vs ...int) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldIn(FieldJobHandle, vs...))
 }
 
 // JobHandleNotIn applies the NotIn predicate on the "job_handle" field.
-func JobHandleNotIn(vs ...string) predicate.ControlScheduledJobHistory {
+func JobHandleNotIn(vs ...int) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldNotIn(FieldJobHandle, vs...))
 }
 
 // JobHandleGT applies the GT predicate on the "job_handle" field.
-func JobHandleGT(v string) predicate.ControlScheduledJobHistory {
+func JobHandleGT(v int) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldGT(FieldJobHandle, v))
 }
 
 // JobHandleGTE applies the GTE predicate on the "job_handle" field.
-func JobHandleGTE(v string) predicate.ControlScheduledJobHistory {
+func JobHandleGTE(v int) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldGTE(FieldJobHandle, v))
 }
 
 // JobHandleLT applies the LT predicate on the "job_handle" field.
-func JobHandleLT(v string) predicate.ControlScheduledJobHistory {
+func JobHandleLT(v int) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldLT(FieldJobHandle, v))
 }
 
 // JobHandleLTE applies the LTE predicate on the "job_handle" field.
-func JobHandleLTE(v string) predicate.ControlScheduledJobHistory {
+func JobHandleLTE(v int) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldLTE(FieldJobHandle, v))
 }
 
-// JobHandleContains applies the Contains predicate on the "job_handle" field.
-func JobHandleContains(v string) predicate.ControlScheduledJobHistory {
-	return predicate.ControlScheduledJobHistory(sql.FieldContains(FieldJobHandle, v))
+// JobHandleIsNil applies the IsNil predicate on the "job_handle" field.
+func JobHandleIsNil() predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldIsNull(FieldJobHandle))
 }
 
-// JobHandleHasPrefix applies the HasPrefix predicate on the "job_handle" field.
-func JobHandleHasPrefix(v string) predicate.ControlScheduledJobHistory {
-	return predicate.ControlScheduledJobHistory(sql.FieldHasPrefix(FieldJobHandle, v))
-}
-
-// JobHandleHasSuffix applies the HasSuffix predicate on the "job_handle" field.
-func JobHandleHasSuffix(v string) predicate.ControlScheduledJobHistory {
-	return predicate.ControlScheduledJobHistory(sql.FieldHasSuffix(FieldJobHandle, v))
-}
-
-// JobHandleEqualFold applies the EqualFold predicate on the "job_handle" field.
-func JobHandleEqualFold(v string) predicate.ControlScheduledJobHistory {
-	return predicate.ControlScheduledJobHistory(sql.FieldEqualFold(FieldJobHandle, v))
-}
-
-// JobHandleContainsFold applies the ContainsFold predicate on the "job_handle" field.
-func JobHandleContainsFold(v string) predicate.ControlScheduledJobHistory {
-	return predicate.ControlScheduledJobHistory(sql.FieldContainsFold(FieldJobHandle, v))
+// JobHandleNotNil applies the NotNil predicate on the "job_handle" field.
+func JobHandleNotNil() predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldNotNull(FieldJobHandle))
 }
 
 // And groups predicates with the AND operator between them.
