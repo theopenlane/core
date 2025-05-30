@@ -118,6 +118,11 @@ func JobRunnerID(v string) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldEQ(FieldJobRunnerID, v))
 }
 
+// JobHandle applies equality check predicate on the "job_handle" field. It's identical to JobHandleEQ.
+func JobHandle(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldEQ(FieldJobHandle, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldEQ(FieldCreatedAt, v))
@@ -796,6 +801,71 @@ func JobRunnerIDEqualFold(v string) predicate.ControlScheduledJob {
 // JobRunnerIDContainsFold applies the ContainsFold predicate on the "job_runner_id" field.
 func JobRunnerIDContainsFold(v string) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldContainsFold(FieldJobRunnerID, v))
+}
+
+// JobHandleEQ applies the EQ predicate on the "job_handle" field.
+func JobHandleEQ(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldEQ(FieldJobHandle, v))
+}
+
+// JobHandleNEQ applies the NEQ predicate on the "job_handle" field.
+func JobHandleNEQ(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldNEQ(FieldJobHandle, v))
+}
+
+// JobHandleIn applies the In predicate on the "job_handle" field.
+func JobHandleIn(vs ...string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldIn(FieldJobHandle, vs...))
+}
+
+// JobHandleNotIn applies the NotIn predicate on the "job_handle" field.
+func JobHandleNotIn(vs ...string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldNotIn(FieldJobHandle, vs...))
+}
+
+// JobHandleGT applies the GT predicate on the "job_handle" field.
+func JobHandleGT(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldGT(FieldJobHandle, v))
+}
+
+// JobHandleGTE applies the GTE predicate on the "job_handle" field.
+func JobHandleGTE(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldGTE(FieldJobHandle, v))
+}
+
+// JobHandleLT applies the LT predicate on the "job_handle" field.
+func JobHandleLT(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldLT(FieldJobHandle, v))
+}
+
+// JobHandleLTE applies the LTE predicate on the "job_handle" field.
+func JobHandleLTE(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldLTE(FieldJobHandle, v))
+}
+
+// JobHandleContains applies the Contains predicate on the "job_handle" field.
+func JobHandleContains(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldContains(FieldJobHandle, v))
+}
+
+// JobHandleHasPrefix applies the HasPrefix predicate on the "job_handle" field.
+func JobHandleHasPrefix(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldHasPrefix(FieldJobHandle, v))
+}
+
+// JobHandleHasSuffix applies the HasSuffix predicate on the "job_handle" field.
+func JobHandleHasSuffix(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldHasSuffix(FieldJobHandle, v))
+}
+
+// JobHandleEqualFold applies the EqualFold predicate on the "job_handle" field.
+func JobHandleEqualFold(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldEqualFold(FieldJobHandle, v))
+}
+
+// JobHandleContainsFold applies the ContainsFold predicate on the "job_handle" field.
+func JobHandleContainsFold(v string) predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldContainsFold(FieldJobHandle, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

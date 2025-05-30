@@ -11,12 +11,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 )
 
-var (
-	// ErrComputeNextRunInvalid is used to define an error when a weekly run cannot be
-	// computed
-	ErrComputeNextRunInvalid = errors.New("could not compute next run time in weekly cadence")
-)
-
 // Days is used to provide a human readable version of weekdays
 type Days []enums.JobWeekday
 
@@ -125,12 +119,12 @@ func (c *JobCadence) Validate() error {
 }
 
 // Next calculates the next execution time for a JobCadence
-func (c JobCadence) Next(from time.Time) (time.Time, error) {
+func (c JobCadence) Next(from time.Time) time.Time {
 	// we do not call Validate again as the db hook
 	// already does that
 	expectedRunTime, err := time.Parse("15:04", c.Time)
 	if err != nil {
-		return time.Time{}, fmt.Errorf("invalid time format in cadence: %w", err)
+		return time.Time{}
 	}
 
 	expectedTargetHour := expectedRunTime.Hour()
@@ -147,7 +141,7 @@ func (c JobCadence) Next(from time.Time) (time.Time, error) {
 			expectedNextRun = expectedNextRun.Add(next24Hours)
 		}
 
-		return expectedNextRun, nil
+		return expectedNextRun
 
 	case enums.JobCadenceFrequencyWeekly:
 		targetWeekdays := make([]time.Weekday, 0, len(c.Days))
@@ -164,13 +158,13 @@ func (c JobCadence) Next(from time.Time) (time.Time, error) {
 						expectedTargetMinute, 0, 0, from.Location())
 
 					if currentCandidateCheck.After(from) {
-						return currentCandidateCheck, nil
+						return currentCandidateCheck
 					}
 				}
 			}
 		}
 
-		return time.Time{}, ErrComputeNextRunInvalid
+		return time.Time{}
 
 	case enums.JobCadenceFrequencyMonthly:
 		// initial run time should be set to the target time on the same day of the current month
@@ -182,9 +176,9 @@ func (c JobCadence) Next(from time.Time) (time.Time, error) {
 			expectedNextRun = expectedNextRun.AddDate(0, 1, 0)
 		}
 
-		return expectedNextRun, nil
+		return expectedNextRun
 
 	default:
-		return time.Time{}, fmt.Errorf("unsupported cadence frequency: %s", c.Frequency) // nolint:err113
+		return time.Time{}
 	}
 }

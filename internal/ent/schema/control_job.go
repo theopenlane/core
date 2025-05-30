@@ -68,6 +68,13 @@ func (ControlScheduledJob) Fields() []ent.Field {
 		field.String("job_runner_id").
 			Optional().
 			Comment("the runner that this job will run on. If not set, it will scheduled on a general runner instead"),
+
+		field.String("job_handle").
+			Immutable().
+			Annotations(
+				entgql.Skip(^entgql.SkipType),
+			).
+			Comment("the identifier to this preriodic job in river"),
 	}
 }
 

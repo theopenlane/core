@@ -5877,6 +5877,11 @@ func (csj *ControlScheduledJobQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, controlscheduledjob.FieldJobRunnerID)
 				fieldSeen[controlscheduledjob.FieldJobRunnerID] = struct{}{}
 			}
+		case "jobHandle":
+			if _, ok := fieldSeen[controlscheduledjob.FieldJobHandle]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjob.FieldJobHandle)
+				fieldSeen[controlscheduledjob.FieldJobHandle] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -6031,6 +6036,11 @@ func (csjh *ControlScheduledJobHistoryQuery) collectField(ctx context.Context, o
 			if _, ok := fieldSeen[controlscheduledjobhistory.FieldJobRunnerID]; !ok {
 				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldJobRunnerID)
 				fieldSeen[controlscheduledjobhistory.FieldJobRunnerID] = struct{}{}
+			}
+		case "jobHandle":
+			if _, ok := fieldSeen[controlscheduledjobhistory.FieldJobHandle]; !ok {
+				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldJobHandle)
+				fieldSeen[controlscheduledjobhistory.FieldJobHandle] = struct{}{}
 			}
 		case "id":
 		case "__typename":

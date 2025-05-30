@@ -1579,6 +1579,10 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetJobRunnerID(jobRunnerID)
 	}
 
+	if jobHandle, exists := m.JobHandle(); exists {
+		create = create.SetJobHandle(jobHandle)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -1681,6 +1685,12 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetJobRunnerID(controlscheduledjob.JobRunnerID)
 		}
 
+		if jobHandle, exists := m.JobHandle(); exists {
+			create = create.SetJobHandle(jobHandle)
+		} else {
+			create = create.SetJobHandle(controlscheduledjob.JobHandle)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1725,6 +1735,7 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetCadence(controlscheduledjob.Cadence).
 			SetNillableCron(controlscheduledjob.Cron).
 			SetJobRunnerID(controlscheduledjob.JobRunnerID).
+			SetJobHandle(controlscheduledjob.JobHandle).
 			Save(ctx)
 		if err != nil {
 			return err

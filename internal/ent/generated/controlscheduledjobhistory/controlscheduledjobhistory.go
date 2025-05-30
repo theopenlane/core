@@ -47,6 +47,8 @@ const (
 	FieldCron = "cron"
 	// FieldJobRunnerID holds the string denoting the job_runner_id field in the database.
 	FieldJobRunnerID = "job_runner_id"
+	// FieldJobHandle holds the string denoting the job_handle field in the database.
+	FieldJobHandle = "job_handle"
 	// Table holds the table name of the controlscheduledjobhistory in the database.
 	Table = "control_scheduled_job_history"
 )
@@ -69,6 +71,7 @@ var Columns = []string{
 	FieldCadence,
 	FieldCron,
 	FieldJobRunnerID,
+	FieldJobHandle,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -181,6 +184,11 @@ func ByCron(opts ...sql.OrderTermOption) OrderOption {
 // ByJobRunnerID orders the results by the job_runner_id field.
 func ByJobRunnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldJobRunnerID, opts...).ToFunc()
+}
+
+// ByJobHandle orders the results by the job_handle field.
+func ByJobHandle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldJobHandle, opts...).ToFunc()
 }
 
 var (

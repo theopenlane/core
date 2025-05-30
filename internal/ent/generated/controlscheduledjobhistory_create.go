@@ -208,6 +208,12 @@ func (csjhc *ControlScheduledJobHistoryCreate) SetNillableJobRunnerID(s *string)
 	return csjhc
 }
 
+// SetJobHandle sets the "job_handle" field.
+func (csjhc *ControlScheduledJobHistoryCreate) SetJobHandle(s string) *ControlScheduledJobHistoryCreate {
+	csjhc.mutation.SetJobHandle(s)
+	return csjhc
+}
+
 // SetID sets the "id" field.
 func (csjhc *ControlScheduledJobHistoryCreate) SetID(s string) *ControlScheduledJobHistoryCreate {
 	csjhc.mutation.SetID(s)
@@ -304,6 +310,9 @@ func (csjhc *ControlScheduledJobHistoryCreate) check() error {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJobHistory.cron": %w`, err)}
 		}
 	}
+	if _, ok := csjhc.mutation.JobHandle(); !ok {
+		return &ValidationError{Name: "job_handle", err: errors.New(`generated: missing required field "ControlScheduledJobHistory.job_handle"`)}
+	}
 	return nil
 }
 
@@ -399,6 +408,10 @@ func (csjhc *ControlScheduledJobHistoryCreate) createSpec() (*ControlScheduledJo
 	if value, ok := csjhc.mutation.JobRunnerID(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldJobRunnerID, field.TypeString, value)
 		_node.JobRunnerID = value
+	}
+	if value, ok := csjhc.mutation.JobHandle(); ok {
+		_spec.SetField(controlscheduledjobhistory.FieldJobHandle, field.TypeString, value)
+		_node.JobHandle = value
 	}
 	return _node, _spec
 }

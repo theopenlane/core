@@ -538,6 +538,9 @@ func (csjh *ControlScheduledJobHistory) changes(new *ControlScheduledJobHistory)
 	if !reflect.DeepEqual(csjh.JobRunnerID, new.JobRunnerID) {
 		changes = append(changes, NewChange(controlscheduledjobhistory.FieldJobRunnerID, csjh.JobRunnerID, new.JobRunnerID))
 	}
+	if !reflect.DeepEqual(csjh.JobHandle, new.JobHandle) {
+		changes = append(changes, NewChange(controlscheduledjobhistory.FieldJobHandle, csjh.JobHandle, new.JobHandle))
+	}
 	return changes
 }
 

@@ -5597,6 +5597,10 @@ type ControlScheduledJob implements Node {
 	the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	"""
 	jobRunnerID: ID
+	"""
+	the identifier to this preriodic job in river
+	"""
+	jobHandle: String!
 	owner: Organization
 	job: ScheduledJob!
 	controls(
@@ -5753,6 +5757,10 @@ type ControlScheduledJobHistory implements Node {
 	the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	"""
 	jobRunnerID: String
+	"""
+	the identifier to this preriodic job in river
+	"""
+	jobHandle: String!
 }
 """
 A connection to a list of items.

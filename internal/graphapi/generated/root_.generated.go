@@ -595,6 +595,7 @@ type ComplexityRoot struct {
 		Cron          func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Job           func(childComplexity int) int
+		JobHandle     func(childComplexity int) int
 		JobID         func(childComplexity int) int
 		JobRunner     func(childComplexity int) int
 		JobRunnerID   func(childComplexity int) int
@@ -636,6 +637,7 @@ type ComplexityRoot struct {
 		Cron          func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
+		JobHandle     func(childComplexity int) int
 		JobID         func(childComplexity int) int
 		JobRunnerID   func(childComplexity int) int
 		Operation     func(childComplexity int) int
@@ -7006,6 +7008,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlScheduledJob.Job(childComplexity), true
 
+	case "ControlScheduledJob.jobHandle":
+		if e.complexity.ControlScheduledJob.JobHandle == nil {
+			break
+		}
+
+		return e.complexity.ControlScheduledJob.JobHandle(childComplexity), true
+
 	case "ControlScheduledJob.jobID":
 		if e.complexity.ControlScheduledJob.JobID == nil {
 			break
@@ -7171,6 +7180,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlScheduledJobHistory.ID(childComplexity), true
+
+	case "ControlScheduledJobHistory.jobHandle":
+		if e.complexity.ControlScheduledJobHistory.JobHandle == nil {
+			break
+		}
+
+		return e.complexity.ControlScheduledJobHistory.JobHandle(childComplexity), true
 
 	case "ControlScheduledJobHistory.jobID":
 		if e.complexity.ControlScheduledJobHistory.JobID == nil {
@@ -35712,6 +35728,10 @@ type ControlScheduledJob implements Node {
   the runner that this job will run on. If not set, it will scheduled on a general runner instead
   """
   jobRunnerID: ID
+  """
+  the identifier to this preriodic job in river
+  """
+  jobHandle: String!
   owner: Organization
   job: ScheduledJob!
   controls(
@@ -35841,6 +35861,10 @@ type ControlScheduledJobHistory implements Node {
   the runner that this job will run on. If not set, it will scheduled on a general runner instead
   """
   jobRunnerID: String
+  """
+  the identifier to this preriodic job in river
+  """
+  jobHandle: String!
 }
 """
 A connection to a list of items.

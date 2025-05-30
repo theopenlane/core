@@ -541,6 +541,7 @@ var (
 		{Name: "configuration", Type: field.TypeJSON},
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
+		{Name: "job_handle", Type: field.TypeString},
 		{Name: "job_id", Type: field.TypeString},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -553,19 +554,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "control_scheduled_jobs_scheduled_jobs_job",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[10]},
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[11]},
 				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "control_scheduled_jobs_job_runners_job_runner",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[11]},
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[12]},
 				RefColumns: []*schema.Column{JobRunnersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "control_scheduled_jobs_organizations_scheduled_jobs",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[12]},
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -596,6 +597,7 @@ var (
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
+		{Name: "job_handle", Type: field.TypeString},
 	}
 	// ControlScheduledJobHistoryTable holds the schema information for the "control_scheduled_job_history" table.
 	ControlScheduledJobHistoryTable = &schema.Table{

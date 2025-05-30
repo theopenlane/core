@@ -6,8 +6,10 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
+	"github.com/riverqueue/river"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
@@ -62,7 +64,25 @@ func HookControlScheduledJobCreate() ent.Hook {
 				return nil, err
 			}
 
+			// no job handle here, create it
+			if mutation.Op() == ent.OpCreate {
+				var scheduler river.PeriodicSchedule
+				if hasCadence {
+					scheduler = cadence
+				} else if hasCron {
+					scheduler = cron
+				}
+
+				mutation.Job.GetRiverClient().PeriodicJobs().Add(
+					river.NewPeriodicJob(scheduler, func() (river.JobArgs, *river.InsertOpts) {
+						return corejobs.ScheduledJobArgs{}, nil
+					},
+						nil),
+				)
+			}
+
 			return next.Mutate(ctx, mutation)
+
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpCreate)
 }

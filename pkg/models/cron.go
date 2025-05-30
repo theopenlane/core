@@ -51,18 +51,18 @@ func (c Cron) Validate() error {
 }
 
 // Next returns the next scheduled time after `from` based on the cron expression.
-func (c Cron) Next(from time.Time) (time.Time, error) {
+func (c Cron) Next(from time.Time) time.Time {
 	cron, err := cronexpr.Parse(c.String())
 	if err != nil {
-		return time.Time{}, fmt.Errorf("invalid cron expression: %w", err) //nolint:err113
+		return time.Time{}
 	}
 
 	next := cron.Next(from)
 	if next.IsZero() {
-		return time.Time{}, fmt.Errorf("no valid next run time for cron: %s", c.String()) //nolint:err113
+		return time.Time{}
 	}
 
-	return next, nil
+	return next
 }
 
 // String returns a string representation of the cron

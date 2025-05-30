@@ -498,6 +498,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlscheduledjob.FieldCadence:       {Type: field.TypeJSON, Column: controlscheduledjob.FieldCadence},
 			controlscheduledjob.FieldCron:          {Type: field.TypeString, Column: controlscheduledjob.FieldCron},
 			controlscheduledjob.FieldJobRunnerID:   {Type: field.TypeString, Column: controlscheduledjob.FieldJobRunnerID},
+			controlscheduledjob.FieldJobHandle:     {Type: field.TypeString, Column: controlscheduledjob.FieldJobHandle},
 		},
 	}
 	graph.Nodes[12] = &sqlgraph.Node{
@@ -526,6 +527,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlscheduledjobhistory.FieldCadence:       {Type: field.TypeJSON, Column: controlscheduledjobhistory.FieldCadence},
 			controlscheduledjobhistory.FieldCron:          {Type: field.TypeString, Column: controlscheduledjobhistory.FieldCron},
 			controlscheduledjobhistory.FieldJobRunnerID:   {Type: field.TypeString, Column: controlscheduledjobhistory.FieldJobRunnerID},
+			controlscheduledjobhistory.FieldJobHandle:     {Type: field.TypeString, Column: controlscheduledjobhistory.FieldJobHandle},
 		},
 	}
 	graph.Nodes[13] = &sqlgraph.Node{
@@ -9384,6 +9386,11 @@ func (f *ControlScheduledJobFilter) WhereJobRunnerID(p entql.StringP) {
 	f.Where(p.Field(controlscheduledjob.FieldJobRunnerID))
 }
 
+// WhereJobHandle applies the entql string predicate on the job_handle field.
+func (f *ControlScheduledJobFilter) WhereJobHandle(p entql.StringP) {
+	f.Where(p.Field(controlscheduledjob.FieldJobHandle))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ControlScheduledJobFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -9567,6 +9574,11 @@ func (f *ControlScheduledJobHistoryFilter) WhereCron(p entql.StringP) {
 // WhereJobRunnerID applies the entql string predicate on the job_runner_id field.
 func (f *ControlScheduledJobHistoryFilter) WhereJobRunnerID(p entql.StringP) {
 	f.Where(p.Field(controlscheduledjobhistory.FieldJobRunnerID))
+}
+
+// WhereJobHandle applies the entql string predicate on the job_handle field.
+func (f *ControlScheduledJobHistoryFilter) WhereJobHandle(p entql.StringP) {
+	f.Where(p.Field(controlscheduledjobhistory.FieldJobHandle))
 }
 
 // addPredicate implements the predicateAdder interface.
