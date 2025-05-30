@@ -1845,35 +1845,6 @@ func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Contro
 	})
 }
 
-// HasMappedControls applies the HasEdge predicate on the "mapped_controls" edge.
-func HasMappedControls() predicate.Control {
-	return predicate.Control(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, MappedControlsTable, MappedControlsPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlControls
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasMappedControlsWith applies the HasEdge predicate on the "mapped_controls" edge with a given conditions (other predicates).
-func HasMappedControlsWith(preds ...predicate.MappedControl) predicate.Control {
-	return predicate.Control(func(s *sql.Selector) {
-		step := newMappedControlsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlControls
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasControlOwner applies the HasEdge predicate on the "control_owner" edge.
 func HasControlOwner() predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {

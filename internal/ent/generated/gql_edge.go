@@ -342,27 +342,6 @@ func (c *Control) InternalPolicies(
 	return c.QueryInternalPolicies().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (c *Control) MappedControls(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*MappedControlOrder, where *MappedControlWhereInput,
-) (*MappedControlConnection, error) {
-	opts := []MappedControlPaginateOption{
-		WithMappedControlOrder(orderBy),
-		WithMappedControlFilter(where.Filter),
-	}
-	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := c.Edges.totalCount[8][alias]
-	if nodes, err := c.NamedMappedControls(alias); err == nil || hasTotalCount {
-		pager, err := newMappedControlPager(opts, last != nil)
-		if err != nil {
-			return nil, err
-		}
-		conn := &MappedControlConnection{Edges: []*MappedControlEdge{}, TotalCount: totalCount}
-		conn.build(nodes, pager, after, first, before, last)
-		return conn, nil
-	}
-	return c.QueryMappedControls().Paginate(ctx, after, first, before, last, opts...)
-}
-
 func (c *Control) ControlOwner(ctx context.Context) (*Group, error) {
 	result, err := c.Edges.ControlOwnerOrErr()
 	if IsNotLoaded(err) {
@@ -395,7 +374,7 @@ func (c *Control) BlockedGroups(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := c.Edges.totalCount[12][alias]
+	totalCount, hasTotalCount := c.Edges.totalCount[11][alias]
 	if nodes, err := c.NamedBlockedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -416,7 +395,7 @@ func (c *Control) Editors(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := c.Edges.totalCount[13][alias]
+	totalCount, hasTotalCount := c.Edges.totalCount[12][alias]
 	if nodes, err := c.NamedEditors(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -437,7 +416,7 @@ func (c *Control) Viewers(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := c.Edges.totalCount[14][alias]
+	totalCount, hasTotalCount := c.Edges.totalCount[13][alias]
 	if nodes, err := c.NamedViewers(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -466,7 +445,7 @@ func (c *Control) Programs(
 		WithProgramFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := c.Edges.totalCount[16][alias]
+	totalCount, hasTotalCount := c.Edges.totalCount[15][alias]
 	if nodes, err := c.NamedPrograms(alias); err == nil || hasTotalCount {
 		pager, err := newProgramPager(opts, last != nil)
 		if err != nil {
@@ -487,7 +466,7 @@ func (c *Control) ControlImplementations(
 		WithControlImplementationFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := c.Edges.totalCount[17][alias]
+	totalCount, hasTotalCount := c.Edges.totalCount[16][alias]
 	if nodes, err := c.NamedControlImplementations(alias); err == nil || hasTotalCount {
 		pager, err := newControlImplementationPager(opts, last != nil)
 		if err != nil {
@@ -508,7 +487,7 @@ func (c *Control) Subcontrols(
 		WithSubcontrolFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := c.Edges.totalCount[18][alias]
+	totalCount, hasTotalCount := c.Edges.totalCount[17][alias]
 	if nodes, err := c.NamedSubcontrols(alias); err == nil || hasTotalCount {
 		pager, err := newSubcontrolPager(opts, last != nil)
 		if err != nil {
@@ -529,7 +508,7 @@ func (c *Control) ScheduledJobs(
 		WithControlScheduledJobFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := c.Edges.totalCount[19][alias]
+	totalCount, hasTotalCount := c.Edges.totalCount[18][alias]
 	if nodes, err := c.NamedScheduledJobs(alias); err == nil || hasTotalCount {
 		pager, err := newControlScheduledJobPager(opts, last != nil)
 		if err != nil {
@@ -2774,7 +2753,7 @@ func (md *MappableDomain) CustomDomains(
 	return md.QueryCustomDomains().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (mc *MappedControl) Controls(
+func (mc *MappedControl) FromControls(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
 ) (*ControlConnection, error) {
 	opts := []ControlPaginateOption{
@@ -2783,7 +2762,7 @@ func (mc *MappedControl) Controls(
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := mc.Edges.totalCount[0][alias]
-	if nodes, err := mc.NamedControls(alias); err == nil || hasTotalCount {
+	if nodes, err := mc.NamedFromControls(alias); err == nil || hasTotalCount {
 		pager, err := newControlPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -2792,10 +2771,31 @@ func (mc *MappedControl) Controls(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return mc.QueryControls().Paginate(ctx, after, first, before, last, opts...)
+	return mc.QueryFromControls().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (mc *MappedControl) Subcontrols(
+func (mc *MappedControl) ToControls(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
+) (*ControlConnection, error) {
+	opts := []ControlPaginateOption{
+		WithControlOrder(orderBy),
+		WithControlFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := mc.Edges.totalCount[1][alias]
+	if nodes, err := mc.NamedToControls(alias); err == nil || hasTotalCount {
+		pager, err := newControlPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ControlConnection{Edges: []*ControlEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return mc.QueryToControls().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (mc *MappedControl) FromSubcontrols(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput,
 ) (*SubcontrolConnection, error) {
 	opts := []SubcontrolPaginateOption{
@@ -2803,8 +2803,8 @@ func (mc *MappedControl) Subcontrols(
 		WithSubcontrolFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := mc.Edges.totalCount[1][alias]
-	if nodes, err := mc.NamedSubcontrols(alias); err == nil || hasTotalCount {
+	totalCount, hasTotalCount := mc.Edges.totalCount[2][alias]
+	if nodes, err := mc.NamedFromSubcontrols(alias); err == nil || hasTotalCount {
 		pager, err := newSubcontrolPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -2813,7 +2813,28 @@ func (mc *MappedControl) Subcontrols(
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return mc.QuerySubcontrols().Paginate(ctx, after, first, before, last, opts...)
+	return mc.QueryFromSubcontrols().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (mc *MappedControl) ToSubcontrols(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput,
+) (*SubcontrolConnection, error) {
+	opts := []SubcontrolPaginateOption{
+		WithSubcontrolOrder(orderBy),
+		WithSubcontrolFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := mc.Edges.totalCount[3][alias]
+	if nodes, err := mc.NamedToSubcontrols(alias); err == nil || hasTotalCount {
+		pager, err := newSubcontrolPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &SubcontrolConnection{Edges: []*SubcontrolEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return mc.QueryToSubcontrols().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (n *Narrative) Owner(ctx context.Context) (*Organization, error) {
@@ -5283,27 +5304,6 @@ func (s *Subcontrol) InternalPolicies(
 	return s.QueryInternalPolicies().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (s *Subcontrol) MappedControls(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*MappedControlOrder, where *MappedControlWhereInput,
-) (*MappedControlConnection, error) {
-	opts := []MappedControlPaginateOption{
-		WithMappedControlOrder(orderBy),
-		WithMappedControlFilter(where.Filter),
-	}
-	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := s.Edges.totalCount[8][alias]
-	if nodes, err := s.NamedMappedControls(alias); err == nil || hasTotalCount {
-		pager, err := newMappedControlPager(opts, last != nil)
-		if err != nil {
-			return nil, err
-		}
-		conn := &MappedControlConnection{Edges: []*MappedControlEdge{}, TotalCount: totalCount}
-		conn.build(nodes, pager, after, first, before, last)
-		return conn, nil
-	}
-	return s.QueryMappedControls().Paginate(ctx, after, first, before, last, opts...)
-}
-
 func (s *Subcontrol) ControlOwner(ctx context.Context) (*Group, error) {
 	result, err := s.Edges.ControlOwnerOrErr()
 	if IsNotLoaded(err) {
@@ -5344,7 +5344,7 @@ func (s *Subcontrol) ControlImplementations(
 		WithControlImplementationFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := s.Edges.totalCount[13][alias]
+	totalCount, hasTotalCount := s.Edges.totalCount[12][alias]
 	if nodes, err := s.NamedControlImplementations(alias); err == nil || hasTotalCount {
 		pager, err := newControlImplementationPager(opts, last != nil)
 		if err != nil {
@@ -5365,7 +5365,7 @@ func (s *Subcontrol) ScheduledJobs(
 		WithControlScheduledJobFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := s.Edges.totalCount[14][alias]
+	totalCount, hasTotalCount := s.Edges.totalCount[13][alias]
 	if nodes, err := s.NamedScheduledJobs(alias); err == nil || hasTotalCount {
 		pager, err := newControlScheduledJobPager(opts, last != nil)
 		if err != nil {

@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -50,7 +49,6 @@ type ControlQuery struct {
 	withActionPlans                 *ActionPlanQuery
 	withProcedures                  *ProcedureQuery
 	withInternalPolicies            *InternalPolicyQuery
-	withMappedControls              *MappedControlQuery
 	withControlOwner                *GroupQuery
 	withDelegate                    *GroupQuery
 	withOwner                       *OrganizationQuery
@@ -62,6 +60,7 @@ type ControlQuery struct {
 	withControlImplementations      *ControlImplementationQuery
 	withSubcontrols                 *SubcontrolQuery
 	withScheduledJobs               *ControlScheduledJobQuery
+	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Control) error
 	modifiers                       []func(*sql.Selector)
 	withNamedEvidence               map[string]*EvidenceQuery
@@ -72,7 +71,6 @@ type ControlQuery struct {
 	withNamedActionPlans            map[string]*ActionPlanQuery
 	withNamedProcedures             map[string]*ProcedureQuery
 	withNamedInternalPolicies       map[string]*InternalPolicyQuery
-	withNamedMappedControls         map[string]*MappedControlQuery
 	withNamedBlockedGroups          map[string]*GroupQuery
 	withNamedEditors                map[string]*GroupQuery
 	withNamedViewers                map[string]*GroupQuery
@@ -310,31 +308,6 @@ func (cq *ControlQuery) QueryInternalPolicies() *InternalPolicyQuery {
 		schemaConfig := cq.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyControls
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryMappedControls chains the current query on the "mapped_controls" edge.
-func (cq *ControlQuery) QueryMappedControls() *MappedControlQuery {
-	query := (&MappedControlClient{config: cq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := cq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, selector),
-			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedControlsTable, control.MappedControlsPrimaryKey...),
-		)
-		schemaConfig := cq.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlControls
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -816,7 +789,6 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 		withActionPlans:            cq.withActionPlans.Clone(),
 		withProcedures:             cq.withProcedures.Clone(),
 		withInternalPolicies:       cq.withInternalPolicies.Clone(),
-		withMappedControls:         cq.withMappedControls.Clone(),
 		withControlOwner:           cq.withControlOwner.Clone(),
 		withDelegate:               cq.withDelegate.Clone(),
 		withOwner:                  cq.withOwner.Clone(),
@@ -920,17 +892,6 @@ func (cq *ControlQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery))
 		opt(query)
 	}
 	cq.withInternalPolicies = query
-	return cq
-}
-
-// WithMappedControls tells the query-builder to eager-load the nodes that are connected to
-// the "mapped_controls" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ControlQuery) WithMappedControls(opts ...func(*MappedControlQuery)) *ControlQuery {
-	query := (&MappedControlClient{config: cq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	cq.withMappedControls = query
 	return cq
 }
 
@@ -1138,8 +1099,9 @@ func (cq *ControlQuery) prepareQuery(ctx context.Context) error {
 func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Control, error) {
 	var (
 		nodes       = []*Control{}
+		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [19]bool{
 			cq.withEvidence != nil,
 			cq.withControlObjectives != nil,
 			cq.withTasks != nil,
@@ -1148,7 +1110,6 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withActionPlans != nil,
 			cq.withProcedures != nil,
 			cq.withInternalPolicies != nil,
-			cq.withMappedControls != nil,
 			cq.withControlOwner != nil,
 			cq.withDelegate != nil,
 			cq.withOwner != nil,
@@ -1162,6 +1123,9 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withScheduledJobs != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, control.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Control).scanValues(nil, columns)
 	}
@@ -1240,13 +1204,6 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadInternalPolicies(ctx, query, nodes,
 			func(n *Control) { n.Edges.InternalPolicies = []*InternalPolicy{} },
 			func(n *Control, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := cq.withMappedControls; query != nil {
-		if err := cq.loadMappedControls(ctx, query, nodes,
-			func(n *Control) { n.Edges.MappedControls = []*MappedControl{} },
-			func(n *Control, e *MappedControl) { n.Edges.MappedControls = append(n.Edges.MappedControls, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1378,13 +1335,6 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadInternalPolicies(ctx, query, nodes,
 			func(n *Control) { n.appendNamedInternalPolicies(name) },
 			func(n *Control, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range cq.withNamedMappedControls {
-		if err := cq.loadMappedControls(ctx, query, nodes,
-			func(n *Control) { n.appendNamedMappedControls(name) },
-			func(n *Control, e *MappedControl) { n.appendNamedMappedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1934,68 +1884,6 @@ func (cq *ControlQuery) loadInternalPolicies(ctx context.Context, query *Interna
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (cq *ControlQuery) loadMappedControls(ctx context.Context, query *MappedControlQuery, nodes []*Control, init func(*Control), assign func(*Control, *MappedControl)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Control)
-	nids := make(map[string]map[*Control]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(control.MappedControlsTable)
-		joinT.Schema(cq.schemaConfig.MappedControlControls)
-		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(control.MappedControlsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(control.MappedControlsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(control.MappedControlsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*MappedControl](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "mapped_controls" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2742,20 +2630,6 @@ func (cq *ControlQuery) WithNamedInternalPolicies(name string, opts ...func(*Int
 		cq.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
 	}
 	cq.withNamedInternalPolicies[name] = query
-	return cq
-}
-
-// WithNamedMappedControls tells the query-builder to eager-load the nodes that are connected to the "mapped_controls"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (cq *ControlQuery) WithNamedMappedControls(name string, opts ...func(*MappedControlQuery)) *ControlQuery {
-	query := (&MappedControlClient{config: cq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if cq.withNamedMappedControls == nil {
-		cq.withNamedMappedControls = make(map[string]*MappedControlQuery)
-	}
-	cq.withNamedMappedControls[name] = query
 	return cq
 }
 

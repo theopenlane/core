@@ -252,10 +252,10 @@ type OpenlaneGraphClient interface {
 	DeleteMappedControl(ctx context.Context, deleteMappedControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteMappedControl, error)
 	GetAllMappedControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllMappedControls, error)
 	GetMappedControlByID(ctx context.Context, mappedControlID string, interceptors ...clientv2.RequestInterceptor) (*GetMappedControlByID, error)
-	GetMappedControls(ctx context.Context, where *MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappedControls, error)
+	GetMappedControls(ctx context.Context, first *int64, last *int64, where *MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappedControls, error)
 	UpdateMappedControl(ctx context.Context, updateMappedControlID string, input UpdateMappedControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateMappedControl, error)
 	GetAllMappedControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllMappedControlHistories, error)
-	GetMappedControlHistories(ctx context.Context, where *MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappedControlHistories, error)
+	GetMappedControlHistories(ctx context.Context, first *int64, last *int64, where *MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappedControlHistories, error)
 	CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVNarrative, error)
 	CreateBulkNarrative(ctx context.Context, input []*CreateNarrativeInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkNarrative, error)
 	CreateNarrative(ctx context.Context, input CreateNarrativeInput, interceptors ...clientv2.RequestInterceptor) (*CreateNarrative, error)
@@ -4521,23 +4521,23 @@ func (t *AdminSearch_AdminSearch_MappedControls_PageInfo) GetStartCursor() *stri
 }
 
 type AdminSearch_AdminSearch_MappedControls_Edges_Node struct {
-	ID          string   "json:\"id\" graphql:\"id\""
-	MappingType *string  "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Relation    *string  "json:\"relation,omitempty\" graphql:\"relation\""
-	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Confidence *string  "json:\"confidence,omitempty\" graphql:\"confidence\""
+	ID         string   "json:\"id\" graphql:\"id\""
+	Relation   *string  "json:\"relation,omitempty\" graphql:\"relation\""
+	Tags       []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetConfidence() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
+	}
+	return t.Confidence
+}
 func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetMappingType() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_MappedControls_Edges_Node{}
-	}
-	return t.MappingType
 }
 func (t *AdminSearch_AdminSearch_MappedControls_Edges_Node) GetRelation() *string {
 	if t == nil {
@@ -41487,118 +41487,24 @@ func (t *GetMappableDomainHistories_MappableDomainHistories) GetTotalCount() int
 	return t.TotalCount
 }
 
-type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges struct {
-	Node *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges) GetNode() *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls struct {
-	Edges []*CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls) GetEdges() []*CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls_Edges {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges struct {
-	Node *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges) GetNode() *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols struct {
-	Edges []*CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols) GetEdges() []*CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols_Edges {
-	if t == nil {
-		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols{}
-	}
-	return t.Edges
-}
-
 type CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls struct {
-	Controls    CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls    "json:\"controls\" graphql:\"controls\""
-	CreatedAt   *time.Time                                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID          string                                                                           "json:\"id\" graphql:\"id\""
-	MappingType *string                                                                          "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Relation    *string                                                                          "json:\"relation,omitempty\" graphql:\"relation\""
-	Subcontrols CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
-	Tags        []string                                                                         "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Confidence  *string              "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID          string               "json:\"id\" graphql:\"id\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetControls() *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Controls {
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetConfidence() *string {
 	if t == nil {
 		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
 	}
-	return &t.Controls
+	return t.Confidence
 }
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -41618,11 +41524,11 @@ func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) G
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetMappingType() *string {
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetMappingType() *enums.MappingType {
 	if t == nil {
 		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetRelation() *string {
 	if t == nil {
@@ -41630,11 +41536,11 @@ func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) G
 	}
 	return t.Relation
 }
-func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetSubcontrols() *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls_Subcontrols {
+func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetSource() *enums.MappingSource {
 	if t == nil {
 		t = &CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls{}
 	}
-	return &t.Subcontrols
+	return t.Source
 }
 func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl_MappedControls) GetTags() []string {
 	if t == nil {
@@ -41666,118 +41572,24 @@ func (t *CreateBulkCSVMappedControl_CreateBulkCSVMappedControl) GetMappedControl
 	return t.MappedControls
 }
 
-type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges struct {
-	Node *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges) GetNode() *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges_Node {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls struct {
-	Edges []*CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls) GetEdges() []*CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls_Edges {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls{}
-	}
-	return t.Edges
-}
-
-type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges struct {
-	Node *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges) GetNode() *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges_Node {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols struct {
-	Edges []*CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols) GetEdges() []*CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols_Edges {
-	if t == nil {
-		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols{}
-	}
-	return t.Edges
-}
-
 type CreateBulkMappedControl_CreateBulkMappedControl_MappedControls struct {
-	Controls    CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls    "json:\"controls\" graphql:\"controls\""
-	CreatedAt   *time.Time                                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID          string                                                                     "json:\"id\" graphql:\"id\""
-	MappingType *string                                                                    "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Relation    *string                                                                    "json:\"relation,omitempty\" graphql:\"relation\""
-	Subcontrols CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
-	Tags        []string                                                                   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Confidence  *string              "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID          string               "json:\"id\" graphql:\"id\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetControls() *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Controls {
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetConfidence() *string {
 	if t == nil {
 		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
 	}
-	return &t.Controls
+	return t.Confidence
 }
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -41797,11 +41609,11 @@ func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetID()
 	}
 	return t.ID
 }
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetMappingType() *string {
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetMappingType() *enums.MappingType {
 	if t == nil {
 		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetRelation() *string {
 	if t == nil {
@@ -41809,11 +41621,11 @@ func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetRela
 	}
 	return t.Relation
 }
-func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSubcontrols() *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls_Subcontrols {
+func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetSource() *enums.MappingSource {
 	if t == nil {
 		t = &CreateBulkMappedControl_CreateBulkMappedControl_MappedControls{}
 	}
-	return &t.Subcontrols
+	return t.Source
 }
 func (t *CreateBulkMappedControl_CreateBulkMappedControl_MappedControls) GetTags() []string {
 	if t == nil {
@@ -41845,118 +41657,24 @@ func (t *CreateBulkMappedControl_CreateBulkMappedControl) GetMappedControls() []
 	return t.MappedControls
 }
 
-type CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges struct {
-	Node *CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges) GetNode() *CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges_Node {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges{}
-	}
-	return t.Node
-}
-
-type CreateMappedControl_CreateMappedControl_MappedControl_Controls struct {
-	Edges []*CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Controls) GetEdges() []*CreateMappedControl_CreateMappedControl_MappedControl_Controls_Edges {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Controls{}
-	}
-	return t.Edges
-}
-
-type CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges struct {
-	Node *CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges) GetNode() *CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges_Node {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges{}
-	}
-	return t.Node
-}
-
-type CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols struct {
-	Edges []*CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols) GetEdges() []*CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols_Edges {
-	if t == nil {
-		t = &CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols{}
-	}
-	return t.Edges
-}
-
 type CreateMappedControl_CreateMappedControl_MappedControl struct {
-	Controls    CreateMappedControl_CreateMappedControl_MappedControl_Controls    "json:\"controls\" graphql:\"controls\""
-	CreatedAt   *time.Time                                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID          string                                                            "json:\"id\" graphql:\"id\""
-	MappingType *string                                                           "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Relation    *string                                                           "json:\"relation,omitempty\" graphql:\"relation\""
-	Subcontrols CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
-	Tags        []string                                                          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Confidence  *string              "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID          string               "json:\"id\" graphql:\"id\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetControls() *CreateMappedControl_CreateMappedControl_MappedControl_Controls {
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetConfidence() *string {
 	if t == nil {
 		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
 	}
-	return &t.Controls
+	return t.Confidence
 }
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -41976,11 +41694,11 @@ func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetMappingType() *string {
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetMappingType() *enums.MappingType {
 	if t == nil {
 		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetRelation() *string {
 	if t == nil {
@@ -41988,11 +41706,11 @@ func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetRelation() *s
 	}
 	return t.Relation
 }
-func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSubcontrols() *CreateMappedControl_CreateMappedControl_MappedControl_Subcontrols {
+func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetSource() *enums.MappingSource {
 	if t == nil {
 		t = &CreateMappedControl_CreateMappedControl_MappedControl{}
 	}
-	return &t.Subcontrols
+	return t.Source
 }
 func (t *CreateMappedControl_CreateMappedControl_MappedControl) GetTags() []string {
 	if t == nil {
@@ -42035,118 +41753,56 @@ func (t *DeleteMappedControl_DeleteMappedControl) GetDeletedID() string {
 	return t.DeletedID
 }
 
-type GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
+type GetAllMappedControls_MappedControls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
 }
 
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges_Node) GetDescription() *string {
+func (t *GetAllMappedControls_MappedControls_PageInfo) GetEndCursor() *string {
 	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges_Node{}
+		t = &GetAllMappedControls_MappedControls_PageInfo{}
 	}
-	return t.Description
+	return t.EndCursor
 }
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges_Node) GetID() string {
+func (t *GetAllMappedControls_MappedControls_PageInfo) GetHasNextPage() bool {
 	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges_Node{}
+		t = &GetAllMappedControls_MappedControls_PageInfo{}
 	}
-	return t.ID
+	return t.HasNextPage
 }
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges_Node) GetRefCode() string {
+func (t *GetAllMappedControls_MappedControls_PageInfo) GetHasPreviousPage() bool {
 	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges_Node{}
+		t = &GetAllMappedControls_MappedControls_PageInfo{}
 	}
-	return t.RefCode
+	return t.HasPreviousPage
 }
-
-type GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges struct {
-	Node *GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges) GetNode() *GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges_Node {
+func (t *GetAllMappedControls_MappedControls_PageInfo) GetStartCursor() *string {
 	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges{}
+		t = &GetAllMappedControls_MappedControls_PageInfo{}
 	}
-	return t.Node
-}
-
-type GetAllMappedControls_MappedControls_Edges_Node_Controls struct {
-	Edges []*GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Controls) GetEdges() []*GetAllMappedControls_MappedControls_Edges_Node_Controls_Edges {
-	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Controls{}
-	}
-	return t.Edges
-}
-
-type GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges struct {
-	Node *GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges) GetNode() *GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node {
-	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllMappedControls_MappedControls_Edges_Node_Subcontrols struct {
-	Edges []*GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllMappedControls_MappedControls_Edges_Node_Subcontrols) GetEdges() []*GetAllMappedControls_MappedControls_Edges_Node_Subcontrols_Edges {
-	if t == nil {
-		t = &GetAllMappedControls_MappedControls_Edges_Node_Subcontrols{}
-	}
-	return t.Edges
+	return t.StartCursor
 }
 
 type GetAllMappedControls_MappedControls_Edges_Node struct {
-	Controls    GetAllMappedControls_MappedControls_Edges_Node_Controls    "json:\"controls\" graphql:\"controls\""
-	CreatedAt   *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID          string                                                     "json:\"id\" graphql:\"id\""
-	MappingType *string                                                    "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Relation    *string                                                    "json:\"relation,omitempty\" graphql:\"relation\""
-	Subcontrols GetAllMappedControls_MappedControls_Edges_Node_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
-	Tags        []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Confidence  *string              "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID          string               "json:\"id\" graphql:\"id\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllMappedControls_MappedControls_Edges_Node) GetControls() *GetAllMappedControls_MappedControls_Edges_Node_Controls {
+func (t *GetAllMappedControls_MappedControls_Edges_Node) GetConfidence() *string {
 	if t == nil {
 		t = &GetAllMappedControls_MappedControls_Edges_Node{}
 	}
-	return &t.Controls
+	return t.Confidence
 }
 func (t *GetAllMappedControls_MappedControls_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -42166,11 +41822,11 @@ func (t *GetAllMappedControls_MappedControls_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllMappedControls_MappedControls_Edges_Node) GetMappingType() *string {
+func (t *GetAllMappedControls_MappedControls_Edges_Node) GetMappingType() *enums.MappingType {
 	if t == nil {
 		t = &GetAllMappedControls_MappedControls_Edges_Node{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetAllMappedControls_MappedControls_Edges_Node) GetRelation() *string {
 	if t == nil {
@@ -42178,11 +41834,11 @@ func (t *GetAllMappedControls_MappedControls_Edges_Node) GetRelation() *string {
 	}
 	return t.Relation
 }
-func (t *GetAllMappedControls_MappedControls_Edges_Node) GetSubcontrols() *GetAllMappedControls_MappedControls_Edges_Node_Subcontrols {
+func (t *GetAllMappedControls_MappedControls_Edges_Node) GetSource() *enums.MappingSource {
 	if t == nil {
 		t = &GetAllMappedControls_MappedControls_Edges_Node{}
 	}
-	return &t.Subcontrols
+	return t.Source
 }
 func (t *GetAllMappedControls_MappedControls_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -42215,7 +41871,9 @@ func (t *GetAllMappedControls_MappedControls_Edges) GetNode() *GetAllMappedContr
 }
 
 type GetAllMappedControls_MappedControls struct {
-	Edges []*GetAllMappedControls_MappedControls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllMappedControls_MappedControls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllMappedControls_MappedControls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllMappedControls_MappedControls) GetEdges() []*GetAllMappedControls_MappedControls_Edges {
@@ -42224,119 +41882,37 @@ func (t *GetAllMappedControls_MappedControls) GetEdges() []*GetAllMappedControls
 	}
 	return t.Edges
 }
-
-type GetMappedControlByID_MappedControl_Controls_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *GetMappedControlByID_MappedControl_Controls_Edges_Node) GetDescription() *string {
+func (t *GetAllMappedControls_MappedControls) GetPageInfo() *GetAllMappedControls_MappedControls_PageInfo {
 	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Controls_Edges_Node{}
+		t = &GetAllMappedControls_MappedControls{}
 	}
-	return t.Description
+	return &t.PageInfo
 }
-func (t *GetMappedControlByID_MappedControl_Controls_Edges_Node) GetID() string {
+func (t *GetAllMappedControls_MappedControls) GetTotalCount() int64 {
 	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Controls_Edges_Node{}
+		t = &GetAllMappedControls_MappedControls{}
 	}
-	return t.ID
-}
-func (t *GetMappedControlByID_MappedControl_Controls_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Controls_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type GetMappedControlByID_MappedControl_Controls_Edges struct {
-	Node *GetMappedControlByID_MappedControl_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetMappedControlByID_MappedControl_Controls_Edges) GetNode() *GetMappedControlByID_MappedControl_Controls_Edges_Node {
-	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Controls_Edges{}
-	}
-	return t.Node
-}
-
-type GetMappedControlByID_MappedControl_Controls struct {
-	Edges []*GetMappedControlByID_MappedControl_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetMappedControlByID_MappedControl_Controls) GetEdges() []*GetMappedControlByID_MappedControl_Controls_Edges {
-	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Controls{}
-	}
-	return t.Edges
-}
-
-type GetMappedControlByID_MappedControl_Subcontrols_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *GetMappedControlByID_MappedControl_Subcontrols_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Subcontrols_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetMappedControlByID_MappedControl_Subcontrols_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Subcontrols_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetMappedControlByID_MappedControl_Subcontrols_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Subcontrols_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type GetMappedControlByID_MappedControl_Subcontrols_Edges struct {
-	Node *GetMappedControlByID_MappedControl_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetMappedControlByID_MappedControl_Subcontrols_Edges) GetNode() *GetMappedControlByID_MappedControl_Subcontrols_Edges_Node {
-	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Subcontrols_Edges{}
-	}
-	return t.Node
-}
-
-type GetMappedControlByID_MappedControl_Subcontrols struct {
-	Edges []*GetMappedControlByID_MappedControl_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetMappedControlByID_MappedControl_Subcontrols) GetEdges() []*GetMappedControlByID_MappedControl_Subcontrols_Edges {
-	if t == nil {
-		t = &GetMappedControlByID_MappedControl_Subcontrols{}
-	}
-	return t.Edges
+	return t.TotalCount
 }
 
 type GetMappedControlByID_MappedControl struct {
-	Controls    GetMappedControlByID_MappedControl_Controls    "json:\"controls\" graphql:\"controls\""
-	CreatedAt   *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID          string                                         "json:\"id\" graphql:\"id\""
-	MappingType *string                                        "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Relation    *string                                        "json:\"relation,omitempty\" graphql:\"relation\""
-	Subcontrols GetMappedControlByID_MappedControl_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
-	Tags        []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Confidence  *string              "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID          string               "json:\"id\" graphql:\"id\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetMappedControlByID_MappedControl) GetControls() *GetMappedControlByID_MappedControl_Controls {
+func (t *GetMappedControlByID_MappedControl) GetConfidence() *string {
 	if t == nil {
 		t = &GetMappedControlByID_MappedControl{}
 	}
-	return &t.Controls
+	return t.Confidence
 }
 func (t *GetMappedControlByID_MappedControl) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -42356,11 +41932,11 @@ func (t *GetMappedControlByID_MappedControl) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetMappedControlByID_MappedControl) GetMappingType() *string {
+func (t *GetMappedControlByID_MappedControl) GetMappingType() *enums.MappingType {
 	if t == nil {
 		t = &GetMappedControlByID_MappedControl{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetMappedControlByID_MappedControl) GetRelation() *string {
 	if t == nil {
@@ -42368,11 +41944,11 @@ func (t *GetMappedControlByID_MappedControl) GetRelation() *string {
 	}
 	return t.Relation
 }
-func (t *GetMappedControlByID_MappedControl) GetSubcontrols() *GetMappedControlByID_MappedControl_Subcontrols {
+func (t *GetMappedControlByID_MappedControl) GetSource() *enums.MappingSource {
 	if t == nil {
 		t = &GetMappedControlByID_MappedControl{}
 	}
-	return &t.Subcontrols
+	return t.Source
 }
 func (t *GetMappedControlByID_MappedControl) GetTags() []string {
 	if t == nil {
@@ -42393,118 +41969,56 @@ func (t *GetMappedControlByID_MappedControl) GetUpdatedBy() *string {
 	return t.UpdatedBy
 }
 
-type GetMappedControls_MappedControls_Edges_Node_Controls_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
+type GetMappedControls_MappedControls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
 }
 
-func (t *GetMappedControls_MappedControls_Edges_Node_Controls_Edges_Node) GetDescription() *string {
+func (t *GetMappedControls_MappedControls_PageInfo) GetEndCursor() *string {
 	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Controls_Edges_Node{}
+		t = &GetMappedControls_MappedControls_PageInfo{}
 	}
-	return t.Description
+	return t.EndCursor
 }
-func (t *GetMappedControls_MappedControls_Edges_Node_Controls_Edges_Node) GetID() string {
+func (t *GetMappedControls_MappedControls_PageInfo) GetHasNextPage() bool {
 	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Controls_Edges_Node{}
+		t = &GetMappedControls_MappedControls_PageInfo{}
 	}
-	return t.ID
+	return t.HasNextPage
 }
-func (t *GetMappedControls_MappedControls_Edges_Node_Controls_Edges_Node) GetRefCode() string {
+func (t *GetMappedControls_MappedControls_PageInfo) GetHasPreviousPage() bool {
 	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Controls_Edges_Node{}
+		t = &GetMappedControls_MappedControls_PageInfo{}
 	}
-	return t.RefCode
+	return t.HasPreviousPage
 }
-
-type GetMappedControls_MappedControls_Edges_Node_Controls_Edges struct {
-	Node *GetMappedControls_MappedControls_Edges_Node_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetMappedControls_MappedControls_Edges_Node_Controls_Edges) GetNode() *GetMappedControls_MappedControls_Edges_Node_Controls_Edges_Node {
+func (t *GetMappedControls_MappedControls_PageInfo) GetStartCursor() *string {
 	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Controls_Edges{}
+		t = &GetMappedControls_MappedControls_PageInfo{}
 	}
-	return t.Node
-}
-
-type GetMappedControls_MappedControls_Edges_Node_Controls struct {
-	Edges []*GetMappedControls_MappedControls_Edges_Node_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetMappedControls_MappedControls_Edges_Node_Controls) GetEdges() []*GetMappedControls_MappedControls_Edges_Node_Controls_Edges {
-	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Controls{}
-	}
-	return t.Edges
-}
-
-type GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges struct {
-	Node *GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges) GetNode() *GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges_Node {
-	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges{}
-	}
-	return t.Node
-}
-
-type GetMappedControls_MappedControls_Edges_Node_Subcontrols struct {
-	Edges []*GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetMappedControls_MappedControls_Edges_Node_Subcontrols) GetEdges() []*GetMappedControls_MappedControls_Edges_Node_Subcontrols_Edges {
-	if t == nil {
-		t = &GetMappedControls_MappedControls_Edges_Node_Subcontrols{}
-	}
-	return t.Edges
+	return t.StartCursor
 }
 
 type GetMappedControls_MappedControls_Edges_Node struct {
-	Controls    GetMappedControls_MappedControls_Edges_Node_Controls    "json:\"controls\" graphql:\"controls\""
-	CreatedAt   *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID          string                                                  "json:\"id\" graphql:\"id\""
-	MappingType *string                                                 "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Relation    *string                                                 "json:\"relation,omitempty\" graphql:\"relation\""
-	Subcontrols GetMappedControls_MappedControls_Edges_Node_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
-	Tags        []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Confidence  *string              "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID          string               "json:\"id\" graphql:\"id\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetMappedControls_MappedControls_Edges_Node) GetControls() *GetMappedControls_MappedControls_Edges_Node_Controls {
+func (t *GetMappedControls_MappedControls_Edges_Node) GetConfidence() *string {
 	if t == nil {
 		t = &GetMappedControls_MappedControls_Edges_Node{}
 	}
-	return &t.Controls
+	return t.Confidence
 }
 func (t *GetMappedControls_MappedControls_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -42524,11 +42038,11 @@ func (t *GetMappedControls_MappedControls_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetMappedControls_MappedControls_Edges_Node) GetMappingType() *string {
+func (t *GetMappedControls_MappedControls_Edges_Node) GetMappingType() *enums.MappingType {
 	if t == nil {
 		t = &GetMappedControls_MappedControls_Edges_Node{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetMappedControls_MappedControls_Edges_Node) GetRelation() *string {
 	if t == nil {
@@ -42536,11 +42050,11 @@ func (t *GetMappedControls_MappedControls_Edges_Node) GetRelation() *string {
 	}
 	return t.Relation
 }
-func (t *GetMappedControls_MappedControls_Edges_Node) GetSubcontrols() *GetMappedControls_MappedControls_Edges_Node_Subcontrols {
+func (t *GetMappedControls_MappedControls_Edges_Node) GetSource() *enums.MappingSource {
 	if t == nil {
 		t = &GetMappedControls_MappedControls_Edges_Node{}
 	}
-	return &t.Subcontrols
+	return t.Source
 }
 func (t *GetMappedControls_MappedControls_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -42573,7 +42087,9 @@ func (t *GetMappedControls_MappedControls_Edges) GetNode() *GetMappedControls_Ma
 }
 
 type GetMappedControls_MappedControls struct {
-	Edges []*GetMappedControls_MappedControls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetMappedControls_MappedControls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetMappedControls_MappedControls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetMappedControls_MappedControls) GetEdges() []*GetMappedControls_MappedControls_Edges {
@@ -42582,119 +42098,37 @@ func (t *GetMappedControls_MappedControls) GetEdges() []*GetMappedControls_Mappe
 	}
 	return t.Edges
 }
-
-type UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges_Node) GetDescription() *string {
+func (t *GetMappedControls_MappedControls) GetPageInfo() *GetMappedControls_MappedControls_PageInfo {
 	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges_Node{}
+		t = &GetMappedControls_MappedControls{}
 	}
-	return t.Description
+	return &t.PageInfo
 }
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges_Node) GetID() string {
+func (t *GetMappedControls_MappedControls) GetTotalCount() int64 {
 	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges_Node{}
+		t = &GetMappedControls_MappedControls{}
 	}
-	return t.ID
-}
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges struct {
-	Node *UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges) GetNode() *UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges_Node {
-	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateMappedControl_UpdateMappedControl_MappedControl_Controls struct {
-	Edges []*UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Controls) GetEdges() []*UpdateMappedControl_UpdateMappedControl_MappedControl_Controls_Edges {
-	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Controls{}
-	}
-	return t.Edges
-}
-
-type UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges_Node struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	RefCode     string  "json:\"refCode\" graphql:\"refCode\""
-}
-
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges_Node) GetDescription() *string {
-	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges_Node{}
-	}
-	return t.Description
-}
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges_Node) GetRefCode() string {
-	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges_Node{}
-	}
-	return t.RefCode
-}
-
-type UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges struct {
-	Node *UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges) GetNode() *UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges_Node {
-	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols struct {
-	Edges []*UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols) GetEdges() []*UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols_Edges {
-	if t == nil {
-		t = &UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols{}
-	}
-	return t.Edges
+	return t.TotalCount
 }
 
 type UpdateMappedControl_UpdateMappedControl_MappedControl struct {
-	Controls    UpdateMappedControl_UpdateMappedControl_MappedControl_Controls    "json:\"controls\" graphql:\"controls\""
-	CreatedAt   *time.Time                                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID          string                                                            "json:\"id\" graphql:\"id\""
-	MappingType *string                                                           "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Relation    *string                                                           "json:\"relation,omitempty\" graphql:\"relation\""
-	Subcontrols UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols "json:\"subcontrols\" graphql:\"subcontrols\""
-	Tags        []string                                                          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time                                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Confidence  *string              "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID          string               "json:\"id\" graphql:\"id\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetControls() *UpdateMappedControl_UpdateMappedControl_MappedControl_Controls {
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetConfidence() *string {
 	if t == nil {
 		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
 	}
-	return &t.Controls
+	return t.Confidence
 }
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -42714,11 +42148,11 @@ func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetMappingType() *string {
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetMappingType() *enums.MappingType {
 	if t == nil {
 		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetRelation() *string {
 	if t == nil {
@@ -42726,11 +42160,11 @@ func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetRelation() *s
 	}
 	return t.Relation
 }
-func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSubcontrols() *UpdateMappedControl_UpdateMappedControl_MappedControl_Subcontrols {
+func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetSource() *enums.MappingSource {
 	if t == nil {
 		t = &UpdateMappedControl_UpdateMappedControl_MappedControl{}
 	}
-	return &t.Subcontrols
+	return t.Source
 }
 func (t *UpdateMappedControl_UpdateMappedControl_MappedControl) GetTags() []string {
 	if t == nil {
@@ -42762,20 +42196,60 @@ func (t *UpdateMappedControl_UpdateMappedControl) GetMappedControl() *UpdateMapp
 	return &t.MappedControl
 }
 
-type GetAllMappedControlHistories_MappedControlHistories_Edges_Node struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	MappingType *string        "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
-	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Relation    *string        "json:\"relation,omitempty\" graphql:\"relation\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetAllMappedControlHistories_MappedControlHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
 }
 
+func (t *GetAllMappedControlHistories_MappedControlHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllMappedControlHistories_MappedControlHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllMappedControlHistories_MappedControlHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllMappedControlHistories_MappedControlHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllMappedControlHistories_MappedControlHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllMappedControlHistories_MappedControlHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllMappedControlHistories_MappedControlHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllMappedControlHistories_MappedControlHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllMappedControlHistories_MappedControlHistories_Edges_Node struct {
+	Confidence  *string              "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time            "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string               "json:\"id\" graphql:\"id\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	Operation   history.OpType       "json:\"operation\" graphql:\"operation\""
+	Ref         *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetConfidence() *string {
+	if t == nil {
+		t = &GetAllMappedControlHistories_MappedControlHistories_Edges_Node{}
+	}
+	return t.Confidence
+}
 func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllMappedControlHistories_MappedControlHistories_Edges_Node{}
@@ -42800,11 +42274,11 @@ func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetID()
 	}
 	return t.ID
 }
-func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetMappingType() *string {
+func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetMappingType() *enums.MappingType {
 	if t == nil {
 		t = &GetAllMappedControlHistories_MappedControlHistories_Edges_Node{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
@@ -42823,6 +42297,12 @@ func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetRela
 		t = &GetAllMappedControlHistories_MappedControlHistories_Edges_Node{}
 	}
 	return t.Relation
+}
+func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetSource() *enums.MappingSource {
+	if t == nil {
+		t = &GetAllMappedControlHistories_MappedControlHistories_Edges_Node{}
+	}
+	return t.Source
 }
 func (t *GetAllMappedControlHistories_MappedControlHistories_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -42855,7 +42335,9 @@ func (t *GetAllMappedControlHistories_MappedControlHistories_Edges) GetNode() *G
 }
 
 type GetAllMappedControlHistories_MappedControlHistories struct {
-	Edges []*GetAllMappedControlHistories_MappedControlHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllMappedControlHistories_MappedControlHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllMappedControlHistories_MappedControlHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                        "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllMappedControlHistories_MappedControlHistories) GetEdges() []*GetAllMappedControlHistories_MappedControlHistories_Edges {
@@ -42864,21 +42346,73 @@ func (t *GetAllMappedControlHistories_MappedControlHistories) GetEdges() []*GetA
 	}
 	return t.Edges
 }
-
-type GetMappedControlHistories_MappedControlHistories_Edges_Node struct {
-	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string         "json:\"id\" graphql:\"id\""
-	MappingType *string        "json:\"mappingType,omitempty\" graphql:\"mappingType\""
-	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
-	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Relation    *string        "json:\"relation,omitempty\" graphql:\"relation\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+func (t *GetAllMappedControlHistories_MappedControlHistories) GetPageInfo() *GetAllMappedControlHistories_MappedControlHistories_PageInfo {
+	if t == nil {
+		t = &GetAllMappedControlHistories_MappedControlHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllMappedControlHistories_MappedControlHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllMappedControlHistories_MappedControlHistories{}
+	}
+	return t.TotalCount
 }
 
+type GetMappedControlHistories_MappedControlHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetMappedControlHistories_MappedControlHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetMappedControlHistories_MappedControlHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetMappedControlHistories_MappedControlHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetMappedControlHistories_MappedControlHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetMappedControlHistories_MappedControlHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetMappedControlHistories_MappedControlHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetMappedControlHistories_MappedControlHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetMappedControlHistories_MappedControlHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetMappedControlHistories_MappedControlHistories_Edges_Node struct {
+	Confidence  *string              "json:\"confidence,omitempty\" graphql:\"confidence\""
+	CreatedAt   *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time            "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string               "json:\"id\" graphql:\"id\""
+	MappingType enums.MappingType    "json:\"mappingType\" graphql:\"mappingType\""
+	Operation   history.OpType       "json:\"operation\" graphql:\"operation\""
+	Ref         *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Relation    *string              "json:\"relation,omitempty\" graphql:\"relation\""
+	Source      *enums.MappingSource "json:\"source,omitempty\" graphql:\"source\""
+	Tags        []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetConfidence() *string {
+	if t == nil {
+		t = &GetMappedControlHistories_MappedControlHistories_Edges_Node{}
+	}
+	return t.Confidence
+}
 func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetMappedControlHistories_MappedControlHistories_Edges_Node{}
@@ -42903,11 +42437,11 @@ func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetID() st
 	}
 	return t.ID
 }
-func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetMappingType() *string {
+func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetMappingType() *enums.MappingType {
 	if t == nil {
 		t = &GetMappedControlHistories_MappedControlHistories_Edges_Node{}
 	}
-	return t.MappingType
+	return &t.MappingType
 }
 func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
@@ -42926,6 +42460,12 @@ func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetRelatio
 		t = &GetMappedControlHistories_MappedControlHistories_Edges_Node{}
 	}
 	return t.Relation
+}
+func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetSource() *enums.MappingSource {
+	if t == nil {
+		t = &GetMappedControlHistories_MappedControlHistories_Edges_Node{}
+	}
+	return t.Source
 }
 func (t *GetMappedControlHistories_MappedControlHistories_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -42958,7 +42498,9 @@ func (t *GetMappedControlHistories_MappedControlHistories_Edges) GetNode() *GetM
 }
 
 type GetMappedControlHistories_MappedControlHistories struct {
-	Edges []*GetMappedControlHistories_MappedControlHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetMappedControlHistories_MappedControlHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetMappedControlHistories_MappedControlHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                     "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetMappedControlHistories_MappedControlHistories) GetEdges() []*GetMappedControlHistories_MappedControlHistories_Edges {
@@ -42966,6 +42508,18 @@ func (t *GetMappedControlHistories_MappedControlHistories) GetEdges() []*GetMapp
 		t = &GetMappedControlHistories_MappedControlHistories{}
 	}
 	return t.Edges
+}
+func (t *GetMappedControlHistories_MappedControlHistories) GetPageInfo() *GetMappedControlHistories_MappedControlHistories_PageInfo {
+	if t == nil {
+		t = &GetMappedControlHistories_MappedControlHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetMappedControlHistories_MappedControlHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetMappedControlHistories_MappedControlHistories{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives struct {
@@ -85262,8 +84816,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				node {
 					id
 					tags
-					mappingType
 					relation
+					confidence
 				}
 			}
 		}
@@ -95897,29 +95451,13 @@ func (c *Client) GetMappableDomainHistories(ctx context.Context, first *int64, l
 const CreateBulkCSVMappedControlDocument = `mutation CreateBulkCSVMappedControl ($input: Upload!) {
 	createBulkCSVMappedControl(input: $input) {
 		mappedControls {
+			confidence
 			createdAt
 			createdBy
 			id
 			mappingType
 			relation
-			controls {
-				edges {
-					node {
-						id
-						refCode
-						description
-					}
-				}
-			}
-			subcontrols {
-				edges {
-					node {
-						id
-						refCode
-						description
-					}
-				}
-			}
+			source
 			tags
 			updatedAt
 			updatedBy
@@ -95948,30 +95486,14 @@ func (c *Client) CreateBulkCSVMappedControl(ctx context.Context, input graphql.U
 const CreateBulkMappedControlDocument = `mutation CreateBulkMappedControl ($input: [CreateMappedControlInput!]) {
 	createBulkMappedControl(input: $input) {
 		mappedControls {
+			confidence
 			createdAt
 			createdBy
 			id
 			mappingType
 			relation
+			source
 			tags
-			controls {
-				edges {
-					node {
-						id
-						refCode
-						description
-					}
-				}
-			}
-			subcontrols {
-				edges {
-					node {
-						id
-						refCode
-						description
-					}
-				}
-			}
 			updatedAt
 			updatedBy
 		}
@@ -95999,29 +95521,13 @@ func (c *Client) CreateBulkMappedControl(ctx context.Context, input []*CreateMap
 const CreateMappedControlDocument = `mutation CreateMappedControl ($input: CreateMappedControlInput!) {
 	createMappedControl(input: $input) {
 		mappedControl {
+			confidence
 			createdAt
 			createdBy
 			id
 			mappingType
 			relation
-			controls {
-				edges {
-					node {
-						id
-						refCode
-						description
-					}
-				}
-			}
-			subcontrols {
-				edges {
-					node {
-						id
-						refCode
-						description
-					}
-				}
-			}
+			source
 			tags
 			updatedAt
 			updatedBy
@@ -96073,31 +95579,22 @@ func (c *Client) DeleteMappedControl(ctx context.Context, deleteMappedControlID 
 
 const GetAllMappedControlsDocument = `query GetAllMappedControls {
 	mappedControls {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
+				confidence
 				createdAt
 				createdBy
 				id
 				mappingType
 				relation
-				controls {
-					edges {
-						node {
-							id
-							refCode
-							description
-						}
-					}
-				}
-				subcontrols {
-					edges {
-						node {
-							id
-							refCode
-							description
-						}
-					}
-				}
+				source
 				tags
 				updatedAt
 				updatedBy
@@ -96124,29 +95621,13 @@ func (c *Client) GetAllMappedControls(ctx context.Context, interceptors ...clien
 
 const GetMappedControlByIDDocument = `query GetMappedControlByID ($mappedControlId: ID!) {
 	mappedControl(id: $mappedControlId) {
+		confidence
 		createdAt
 		createdBy
 		id
 		mappingType
 		relation
-		controls {
-			edges {
-				node {
-					id
-					refCode
-					description
-				}
-			}
-		}
-		subcontrols {
-			edges {
-				node {
-					id
-					refCode
-					description
-				}
-			}
-		}
+		source
 		tags
 		updatedAt
 		updatedBy
@@ -96171,33 +95652,24 @@ func (c *Client) GetMappedControlByID(ctx context.Context, mappedControlID strin
 	return &res, nil
 }
 
-const GetMappedControlsDocument = `query GetMappedControls ($where: MappedControlWhereInput) {
-	mappedControls(where: $where) {
+const GetMappedControlsDocument = `query GetMappedControls ($first: Int, $last: Int, $where: MappedControlWhereInput) {
+	mappedControls(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
+				confidence
 				createdAt
 				createdBy
 				id
 				mappingType
 				relation
-				controls {
-					edges {
-						node {
-							id
-							refCode
-							description
-						}
-					}
-				}
-				subcontrols {
-					edges {
-						node {
-							id
-							refCode
-							description
-						}
-					}
-				}
+				source
 				tags
 				updatedAt
 				updatedBy
@@ -96207,8 +95679,10 @@ const GetMappedControlsDocument = `query GetMappedControls ($where: MappedContro
 }
 `
 
-func (c *Client) GetMappedControls(ctx context.Context, where *MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappedControls, error) {
+func (c *Client) GetMappedControls(ctx context.Context, first *int64, last *int64, where *MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappedControls, error) {
 	vars := map[string]any{
+		"first": first,
+		"last":  last,
 		"where": where,
 	}
 
@@ -96227,29 +95701,13 @@ func (c *Client) GetMappedControls(ctx context.Context, where *MappedControlWher
 const UpdateMappedControlDocument = `mutation UpdateMappedControl ($updateMappedControlId: ID!, $input: UpdateMappedControlInput!) {
 	updateMappedControl(id: $updateMappedControlId, input: $input) {
 		mappedControl {
+			confidence
 			createdAt
 			createdBy
 			id
 			mappingType
 			relation
-			controls {
-				edges {
-					node {
-						id
-						refCode
-						description
-					}
-				}
-			}
-			subcontrols {
-				edges {
-					node {
-						id
-						refCode
-						description
-					}
-				}
-			}
+			source
 			tags
 			updatedAt
 			updatedBy
@@ -96278,8 +95736,16 @@ func (c *Client) UpdateMappedControl(ctx context.Context, updateMappedControlID 
 
 const GetAllMappedControlHistoriesDocument = `query GetAllMappedControlHistories {
 	mappedControlHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
+				confidence
 				createdAt
 				createdBy
 				historyTime
@@ -96288,6 +95754,7 @@ const GetAllMappedControlHistoriesDocument = `query GetAllMappedControlHistories
 				operation
 				ref
 				relation
+				source
 				tags
 				updatedAt
 				updatedBy
@@ -96312,10 +95779,18 @@ func (c *Client) GetAllMappedControlHistories(ctx context.Context, interceptors 
 	return &res, nil
 }
 
-const GetMappedControlHistoriesDocument = `query GetMappedControlHistories ($where: MappedControlHistoryWhereInput) {
-	mappedControlHistories(where: $where) {
+const GetMappedControlHistoriesDocument = `query GetMappedControlHistories ($first: Int, $last: Int, $where: MappedControlHistoryWhereInput) {
+	mappedControlHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
+				confidence
 				createdAt
 				createdBy
 				historyTime
@@ -96324,6 +95799,7 @@ const GetMappedControlHistoriesDocument = `query GetMappedControlHistories ($whe
 				operation
 				ref
 				relation
+				source
 				tags
 				updatedAt
 				updatedBy
@@ -96333,8 +95809,10 @@ const GetMappedControlHistoriesDocument = `query GetMappedControlHistories ($whe
 }
 `
 
-func (c *Client) GetMappedControlHistories(ctx context.Context, where *MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappedControlHistories, error) {
+func (c *Client) GetMappedControlHistories(ctx context.Context, first *int64, last *int64, where *MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetMappedControlHistories, error) {
 	vars := map[string]any{
+		"first": first,
+		"last":  last,
 		"where": where,
 	}
 

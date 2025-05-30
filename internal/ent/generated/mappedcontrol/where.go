@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -97,14 +98,14 @@ func DeletedBy(v string) predicate.MappedControl {
 	return predicate.MappedControl(sql.FieldEQ(FieldDeletedBy, v))
 }
 
-// MappingType applies equality check predicate on the "mapping_type" field. It's identical to MappingTypeEQ.
-func MappingType(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldEQ(FieldMappingType, v))
-}
-
 // Relation applies equality check predicate on the "relation" field. It's identical to RelationEQ.
 func Relation(v string) predicate.MappedControl {
 	return predicate.MappedControl(sql.FieldEQ(FieldRelation, v))
+}
+
+// Confidence applies equality check predicate on the "confidence" field. It's identical to ConfidenceEQ.
+func Confidence(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldEQ(FieldConfidence, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -493,78 +494,33 @@ func TagsNotNil() predicate.MappedControl {
 }
 
 // MappingTypeEQ applies the EQ predicate on the "mapping_type" field.
-func MappingTypeEQ(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldEQ(FieldMappingType, v))
+func MappingTypeEQ(v enums.MappingType) predicate.MappedControl {
+	vc := v
+	return predicate.MappedControl(sql.FieldEQ(FieldMappingType, vc))
 }
 
 // MappingTypeNEQ applies the NEQ predicate on the "mapping_type" field.
-func MappingTypeNEQ(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldNEQ(FieldMappingType, v))
+func MappingTypeNEQ(v enums.MappingType) predicate.MappedControl {
+	vc := v
+	return predicate.MappedControl(sql.FieldNEQ(FieldMappingType, vc))
 }
 
 // MappingTypeIn applies the In predicate on the "mapping_type" field.
-func MappingTypeIn(vs ...string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldIn(FieldMappingType, vs...))
+func MappingTypeIn(vs ...enums.MappingType) predicate.MappedControl {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.MappedControl(sql.FieldIn(FieldMappingType, v...))
 }
 
 // MappingTypeNotIn applies the NotIn predicate on the "mapping_type" field.
-func MappingTypeNotIn(vs ...string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldNotIn(FieldMappingType, vs...))
-}
-
-// MappingTypeGT applies the GT predicate on the "mapping_type" field.
-func MappingTypeGT(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldGT(FieldMappingType, v))
-}
-
-// MappingTypeGTE applies the GTE predicate on the "mapping_type" field.
-func MappingTypeGTE(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldGTE(FieldMappingType, v))
-}
-
-// MappingTypeLT applies the LT predicate on the "mapping_type" field.
-func MappingTypeLT(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldLT(FieldMappingType, v))
-}
-
-// MappingTypeLTE applies the LTE predicate on the "mapping_type" field.
-func MappingTypeLTE(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldLTE(FieldMappingType, v))
-}
-
-// MappingTypeContains applies the Contains predicate on the "mapping_type" field.
-func MappingTypeContains(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldContains(FieldMappingType, v))
-}
-
-// MappingTypeHasPrefix applies the HasPrefix predicate on the "mapping_type" field.
-func MappingTypeHasPrefix(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldHasPrefix(FieldMappingType, v))
-}
-
-// MappingTypeHasSuffix applies the HasSuffix predicate on the "mapping_type" field.
-func MappingTypeHasSuffix(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldHasSuffix(FieldMappingType, v))
-}
-
-// MappingTypeIsNil applies the IsNil predicate on the "mapping_type" field.
-func MappingTypeIsNil() predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldIsNull(FieldMappingType))
-}
-
-// MappingTypeNotNil applies the NotNil predicate on the "mapping_type" field.
-func MappingTypeNotNil() predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldNotNull(FieldMappingType))
-}
-
-// MappingTypeEqualFold applies the EqualFold predicate on the "mapping_type" field.
-func MappingTypeEqualFold(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldEqualFold(FieldMappingType, v))
-}
-
-// MappingTypeContainsFold applies the ContainsFold predicate on the "mapping_type" field.
-func MappingTypeContainsFold(v string) predicate.MappedControl {
-	return predicate.MappedControl(sql.FieldContainsFold(FieldMappingType, v))
+func MappingTypeNotIn(vs ...enums.MappingType) predicate.MappedControl {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.MappedControl(sql.FieldNotIn(FieldMappingType, v...))
 }
 
 // RelationEQ applies the EQ predicate on the "relation" field.
@@ -642,27 +598,142 @@ func RelationContainsFold(v string) predicate.MappedControl {
 	return predicate.MappedControl(sql.FieldContainsFold(FieldRelation, v))
 }
 
-// HasControls applies the HasEdge predicate on the "controls" edge.
-func HasControls() predicate.MappedControl {
+// ConfidenceEQ applies the EQ predicate on the "confidence" field.
+func ConfidenceEQ(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldEQ(FieldConfidence, v))
+}
+
+// ConfidenceNEQ applies the NEQ predicate on the "confidence" field.
+func ConfidenceNEQ(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNEQ(FieldConfidence, v))
+}
+
+// ConfidenceIn applies the In predicate on the "confidence" field.
+func ConfidenceIn(vs ...string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldIn(FieldConfidence, vs...))
+}
+
+// ConfidenceNotIn applies the NotIn predicate on the "confidence" field.
+func ConfidenceNotIn(vs ...string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNotIn(FieldConfidence, vs...))
+}
+
+// ConfidenceGT applies the GT predicate on the "confidence" field.
+func ConfidenceGT(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldGT(FieldConfidence, v))
+}
+
+// ConfidenceGTE applies the GTE predicate on the "confidence" field.
+func ConfidenceGTE(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldGTE(FieldConfidence, v))
+}
+
+// ConfidenceLT applies the LT predicate on the "confidence" field.
+func ConfidenceLT(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldLT(FieldConfidence, v))
+}
+
+// ConfidenceLTE applies the LTE predicate on the "confidence" field.
+func ConfidenceLTE(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldLTE(FieldConfidence, v))
+}
+
+// ConfidenceContains applies the Contains predicate on the "confidence" field.
+func ConfidenceContains(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldContains(FieldConfidence, v))
+}
+
+// ConfidenceHasPrefix applies the HasPrefix predicate on the "confidence" field.
+func ConfidenceHasPrefix(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldHasPrefix(FieldConfidence, v))
+}
+
+// ConfidenceHasSuffix applies the HasSuffix predicate on the "confidence" field.
+func ConfidenceHasSuffix(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldHasSuffix(FieldConfidence, v))
+}
+
+// ConfidenceIsNil applies the IsNil predicate on the "confidence" field.
+func ConfidenceIsNil() predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldIsNull(FieldConfidence))
+}
+
+// ConfidenceNotNil applies the NotNil predicate on the "confidence" field.
+func ConfidenceNotNil() predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNotNull(FieldConfidence))
+}
+
+// ConfidenceEqualFold applies the EqualFold predicate on the "confidence" field.
+func ConfidenceEqualFold(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldEqualFold(FieldConfidence, v))
+}
+
+// ConfidenceContainsFold applies the ContainsFold predicate on the "confidence" field.
+func ConfidenceContainsFold(v string) predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldContainsFold(FieldConfidence, v))
+}
+
+// SourceEQ applies the EQ predicate on the "source" field.
+func SourceEQ(v enums.MappingSource) predicate.MappedControl {
+	vc := v
+	return predicate.MappedControl(sql.FieldEQ(FieldSource, vc))
+}
+
+// SourceNEQ applies the NEQ predicate on the "source" field.
+func SourceNEQ(v enums.MappingSource) predicate.MappedControl {
+	vc := v
+	return predicate.MappedControl(sql.FieldNEQ(FieldSource, vc))
+}
+
+// SourceIn applies the In predicate on the "source" field.
+func SourceIn(vs ...enums.MappingSource) predicate.MappedControl {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.MappedControl(sql.FieldIn(FieldSource, v...))
+}
+
+// SourceNotIn applies the NotIn predicate on the "source" field.
+func SourceNotIn(vs ...enums.MappingSource) predicate.MappedControl {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.MappedControl(sql.FieldNotIn(FieldSource, v...))
+}
+
+// SourceIsNil applies the IsNil predicate on the "source" field.
+func SourceIsNil() predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldIsNull(FieldSource))
+}
+
+// SourceNotNil applies the NotNil predicate on the "source" field.
+func SourceNotNil() predicate.MappedControl {
+	return predicate.MappedControl(sql.FieldNotNull(FieldSource))
+}
+
+// HasFromControls applies the HasEdge predicate on the "from_controls" edge.
+func HasFromControls() predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, ControlsTable, ControlsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, FromControlsTable, FromControlsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.MappedControlControls
+		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
-func HasControlsWith(preds ...predicate.Control) predicate.MappedControl {
+// HasFromControlsWith applies the HasEdge predicate on the "from_controls" edge with a given conditions (other predicates).
+func HasFromControlsWith(preds ...predicate.Control) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
-		step := newControlsStep()
+		step := newFromControlsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.MappedControlControls
+		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -671,27 +742,85 @@ func HasControlsWith(preds ...predicate.Control) predicate.MappedControl {
 	})
 }
 
-// HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
-func HasSubcontrols() predicate.MappedControl {
+// HasToControls applies the HasEdge predicate on the "to_controls" edge.
+func HasToControls() predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, ToControlsTable, ToControlsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.MappedControlSubcontrols
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasSubcontrolsWith applies the HasEdge predicate on the "subcontrols" edge with a given conditions (other predicates).
-func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.MappedControl {
+// HasToControlsWith applies the HasEdge predicate on the "to_controls" edge with a given conditions (other predicates).
+func HasToControlsWith(preds ...predicate.Control) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
-		step := newSubcontrolsStep()
+		step := newToControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFromSubcontrols applies the HasEdge predicate on the "from_subcontrols" edge.
+func HasFromSubcontrols() predicate.MappedControl {
+	return predicate.MappedControl(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, FromSubcontrolsTable, FromSubcontrolsColumn),
+		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.MappedControlSubcontrols
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFromSubcontrolsWith applies the HasEdge predicate on the "from_subcontrols" edge with a given conditions (other predicates).
+func HasFromSubcontrolsWith(preds ...predicate.Subcontrol) predicate.MappedControl {
+	return predicate.MappedControl(func(s *sql.Selector) {
+		step := newFromSubcontrolsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasToSubcontrols applies the HasEdge predicate on the "to_subcontrols" edge.
+func HasToSubcontrols() predicate.MappedControl {
+	return predicate.MappedControl(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ToSubcontrolsTable, ToSubcontrolsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasToSubcontrolsWith applies the HasEdge predicate on the "to_subcontrols" edge with a given conditions (other predicates).
+func HasToSubcontrolsWith(preds ...predicate.Subcontrol) predicate.MappedControl {
+	return predicate.MappedControl(func(s *sql.Selector) {
+		step := newToSubcontrolsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // MappedControl is the model entity for the MappedControl schema.
@@ -33,9 +34,13 @@ type MappedControl struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
-	MappingType string `json:"mapping_type,omitempty"`
+	MappingType enums.MappingType `json:"mapping_type,omitempty"`
 	// description of how the two controls are related
 	Relation string `json:"relation,omitempty"`
+	// percentage of confidence in the mapping
+	Confidence string `json:"confidence,omitempty"`
+	// source of the mapping, e.g. manual, suggested, etc.
+	Source enums.MappingSource `json:"source,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the MappedControlQuery when eager-loading is set.
 	Edges        MappedControlEdges `json:"edges"`
@@ -44,36 +49,60 @@ type MappedControl struct {
 
 // MappedControlEdges holds the relations/edges for other nodes in the graph.
 type MappedControlEdges struct {
-	// mapped controls that have a relation to each other
-	Controls []*Control `json:"controls,omitempty"`
-	// mapped subcontrols that have a relation to each other
-	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// controls that map to another control
+	FromControls []*Control `json:"from_controls,omitempty"`
+	// controls that are being mapped from another control
+	ToControls []*Control `json:"to_controls,omitempty"`
+	// subcontrols map to another control
+	FromSubcontrols []*Subcontrol `json:"from_subcontrols,omitempty"`
+	// subcontrols are being mapped from another control
+	ToSubcontrols []*Subcontrol `json:"to_subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [4]map[string]int
 
-	namedControls    map[string][]*Control
-	namedSubcontrols map[string][]*Subcontrol
+	namedFromControls    map[string][]*Control
+	namedToControls      map[string][]*Control
+	namedFromSubcontrols map[string][]*Subcontrol
+	namedToSubcontrols   map[string][]*Subcontrol
 }
 
-// ControlsOrErr returns the Controls value or an error if the edge
+// FromControlsOrErr returns the FromControls value or an error if the edge
 // was not loaded in eager-loading.
-func (e MappedControlEdges) ControlsOrErr() ([]*Control, error) {
+func (e MappedControlEdges) FromControlsOrErr() ([]*Control, error) {
 	if e.loadedTypes[0] {
-		return e.Controls, nil
+		return e.FromControls, nil
 	}
-	return nil, &NotLoadedError{edge: "controls"}
+	return nil, &NotLoadedError{edge: "from_controls"}
 }
 
-// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// ToControlsOrErr returns the ToControls value or an error if the edge
 // was not loaded in eager-loading.
-func (e MappedControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+func (e MappedControlEdges) ToControlsOrErr() ([]*Control, error) {
 	if e.loadedTypes[1] {
-		return e.Subcontrols, nil
+		return e.ToControls, nil
 	}
-	return nil, &NotLoadedError{edge: "subcontrols"}
+	return nil, &NotLoadedError{edge: "to_controls"}
+}
+
+// FromSubcontrolsOrErr returns the FromSubcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e MappedControlEdges) FromSubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[2] {
+		return e.FromSubcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "from_subcontrols"}
+}
+
+// ToSubcontrolsOrErr returns the ToSubcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e MappedControlEdges) ToSubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[3] {
+		return e.ToSubcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "to_subcontrols"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -83,7 +112,7 @@ func (*MappedControl) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case mappedcontrol.FieldTags:
 			values[i] = new([]byte)
-		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation:
+		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation, mappedcontrol.FieldConfidence, mappedcontrol.FieldSource:
 			values[i] = new(sql.NullString)
 		case mappedcontrol.FieldCreatedAt, mappedcontrol.FieldUpdatedAt, mappedcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -156,13 +185,25 @@ func (mc *MappedControl) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mapping_type", values[i])
 			} else if value.Valid {
-				mc.MappingType = value.String
+				mc.MappingType = enums.MappingType(value.String)
 			}
 		case mappedcontrol.FieldRelation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field relation", values[i])
 			} else if value.Valid {
 				mc.Relation = value.String
+			}
+		case mappedcontrol.FieldConfidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field confidence", values[i])
+			} else if value.Valid {
+				mc.Confidence = value.String
+			}
+		case mappedcontrol.FieldSource:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value.Valid {
+				mc.Source = enums.MappingSource(value.String)
 			}
 		default:
 			mc.selectValues.Set(columns[i], values[i])
@@ -177,14 +218,24 @@ func (mc *MappedControl) Value(name string) (ent.Value, error) {
 	return mc.selectValues.Get(name)
 }
 
-// QueryControls queries the "controls" edge of the MappedControl entity.
-func (mc *MappedControl) QueryControls() *ControlQuery {
-	return NewMappedControlClient(mc.config).QueryControls(mc)
+// QueryFromControls queries the "from_controls" edge of the MappedControl entity.
+func (mc *MappedControl) QueryFromControls() *ControlQuery {
+	return NewMappedControlClient(mc.config).QueryFromControls(mc)
 }
 
-// QuerySubcontrols queries the "subcontrols" edge of the MappedControl entity.
-func (mc *MappedControl) QuerySubcontrols() *SubcontrolQuery {
-	return NewMappedControlClient(mc.config).QuerySubcontrols(mc)
+// QueryToControls queries the "to_controls" edge of the MappedControl entity.
+func (mc *MappedControl) QueryToControls() *ControlQuery {
+	return NewMappedControlClient(mc.config).QueryToControls(mc)
+}
+
+// QueryFromSubcontrols queries the "from_subcontrols" edge of the MappedControl entity.
+func (mc *MappedControl) QueryFromSubcontrols() *SubcontrolQuery {
+	return NewMappedControlClient(mc.config).QueryFromSubcontrols(mc)
+}
+
+// QueryToSubcontrols queries the "to_subcontrols" edge of the MappedControl entity.
+func (mc *MappedControl) QueryToSubcontrols() *SubcontrolQuery {
+	return NewMappedControlClient(mc.config).QueryToSubcontrols(mc)
 }
 
 // Update returns a builder for updating this MappedControl.
@@ -232,59 +283,113 @@ func (mc *MappedControl) String() string {
 	builder.WriteString(fmt.Sprintf("%v", mc.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("mapping_type=")
-	builder.WriteString(mc.MappingType)
+	builder.WriteString(fmt.Sprintf("%v", mc.MappingType))
 	builder.WriteString(", ")
 	builder.WriteString("relation=")
 	builder.WriteString(mc.Relation)
+	builder.WriteString(", ")
+	builder.WriteString("confidence=")
+	builder.WriteString(mc.Confidence)
+	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(fmt.Sprintf("%v", mc.Source))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// NamedControls returns the Controls named value or an error if the edge was not
+// NamedFromControls returns the FromControls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (mc *MappedControl) NamedControls(name string) ([]*Control, error) {
-	if mc.Edges.namedControls == nil {
+func (mc *MappedControl) NamedFromControls(name string) ([]*Control, error) {
+	if mc.Edges.namedFromControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := mc.Edges.namedControls[name]
+	nodes, ok := mc.Edges.namedFromControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (mc *MappedControl) appendNamedControls(name string, edges ...*Control) {
-	if mc.Edges.namedControls == nil {
-		mc.Edges.namedControls = make(map[string][]*Control)
+func (mc *MappedControl) appendNamedFromControls(name string, edges ...*Control) {
+	if mc.Edges.namedFromControls == nil {
+		mc.Edges.namedFromControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		mc.Edges.namedControls[name] = []*Control{}
+		mc.Edges.namedFromControls[name] = []*Control{}
 	} else {
-		mc.Edges.namedControls[name] = append(mc.Edges.namedControls[name], edges...)
+		mc.Edges.namedFromControls[name] = append(mc.Edges.namedFromControls[name], edges...)
 	}
 }
 
-// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// NamedToControls returns the ToControls named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (mc *MappedControl) NamedSubcontrols(name string) ([]*Subcontrol, error) {
-	if mc.Edges.namedSubcontrols == nil {
+func (mc *MappedControl) NamedToControls(name string) ([]*Control, error) {
+	if mc.Edges.namedToControls == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := mc.Edges.namedSubcontrols[name]
+	nodes, ok := mc.Edges.namedToControls[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (mc *MappedControl) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
-	if mc.Edges.namedSubcontrols == nil {
-		mc.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+func (mc *MappedControl) appendNamedToControls(name string, edges ...*Control) {
+	if mc.Edges.namedToControls == nil {
+		mc.Edges.namedToControls = make(map[string][]*Control)
 	}
 	if len(edges) == 0 {
-		mc.Edges.namedSubcontrols[name] = []*Subcontrol{}
+		mc.Edges.namedToControls[name] = []*Control{}
 	} else {
-		mc.Edges.namedSubcontrols[name] = append(mc.Edges.namedSubcontrols[name], edges...)
+		mc.Edges.namedToControls[name] = append(mc.Edges.namedToControls[name], edges...)
+	}
+}
+
+// NamedFromSubcontrols returns the FromSubcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (mc *MappedControl) NamedFromSubcontrols(name string) ([]*Subcontrol, error) {
+	if mc.Edges.namedFromSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := mc.Edges.namedFromSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (mc *MappedControl) appendNamedFromSubcontrols(name string, edges ...*Subcontrol) {
+	if mc.Edges.namedFromSubcontrols == nil {
+		mc.Edges.namedFromSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		mc.Edges.namedFromSubcontrols[name] = []*Subcontrol{}
+	} else {
+		mc.Edges.namedFromSubcontrols[name] = append(mc.Edges.namedFromSubcontrols[name], edges...)
+	}
+}
+
+// NamedToSubcontrols returns the ToSubcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (mc *MappedControl) NamedToSubcontrols(name string) ([]*Subcontrol, error) {
+	if mc.Edges.namedToSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := mc.Edges.namedToSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (mc *MappedControl) appendNamedToSubcontrols(name string, edges ...*Subcontrol) {
+	if mc.Edges.namedToSubcontrols == nil {
+		mc.Edges.namedToSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		mc.Edges.namedToSubcontrols[name] = []*Subcontrol{}
+	} else {
+		mc.Edges.namedToSubcontrols[name] = append(mc.Edges.namedToSubcontrols[name], edges...)
 	}
 }
 

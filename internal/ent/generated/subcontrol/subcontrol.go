@@ -92,8 +92,6 @@ const (
 	EdgeProcedures = "procedures"
 	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
 	EdgeInternalPolicies = "internal_policies"
-	// EdgeMappedControls holds the string denoting the mapped_controls edge name in mutations.
-	EdgeMappedControls = "mapped_controls"
 	// EdgeControlOwner holds the string denoting the control_owner edge name in mutations.
 	EdgeControlOwner = "control_owner"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
@@ -152,11 +150,6 @@ const (
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
 	InternalPoliciesInverseTable = "internal_policies"
-	// MappedControlsTable is the table that holds the mapped_controls relation/edge. The primary key declared below.
-	MappedControlsTable = "mapped_control_subcontrols"
-	// MappedControlsInverseTable is the table name for the MappedControl entity.
-	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
-	MappedControlsInverseTable = "mapped_controls"
 	// ControlOwnerTable is the table that holds the control_owner relation/edge.
 	ControlOwnerTable = "subcontrols"
 	// ControlOwnerInverseTable is the table name for the Group entity.
@@ -234,6 +227,8 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "subcontrols"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"mapped_control_from_subcontrols",
+	"mapped_control_to_subcontrols",
 	"program_subcontrols",
 	"user_subcontrols",
 }
@@ -257,9 +252,6 @@ var (
 	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
 	// primary key for the internal_policies relation (M2M).
 	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "subcontrol_id"}
-	// MappedControlsPrimaryKey and MappedControlsColumn2 are the table columns denoting the
-	// primary key for the mapped_controls relation (M2M).
-	MappedControlsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
 	// ControlImplementationsPrimaryKey and ControlImplementationsColumn2 are the table columns denoting the
 	// primary key for the control_implementations relation (M2M).
 	ControlImplementationsPrimaryKey = []string{"subcontrol_id", "control_implementation_id"}
@@ -573,20 +565,6 @@ func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
-// ByMappedControlsCount orders the results by mapped_controls count.
-func ByMappedControlsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newMappedControlsStep(), opts...)
-	}
-}
-
-// ByMappedControls orders the results by mapped_controls terms.
-func ByMappedControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newMappedControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByControlOwnerField orders the results by control_owner field.
 func ByControlOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -696,13 +674,6 @@ func newInternalPoliciesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
-	)
-}
-func newMappedControlsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(MappedControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, MappedControlsTable, MappedControlsPrimaryKey...),
 	)
 }
 func newControlOwnerStep() *sqlgraph.Step {

@@ -20582,12 +20582,12 @@ func (_c *MockOpenlaneGraphClient_GetMappedControlByID_Call) RunAndReturn(run fu
 }
 
 // GetMappedControlHistories provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetMappedControlHistories(ctx context.Context, where *openlaneclient.MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControlHistories, error) {
+func (_mock *MockOpenlaneGraphClient) GetMappedControlHistories(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControlHistories, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, where, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, where)
+		tmpRet = _mock.Called(ctx, first, last, where)
 	}
 	ret := tmpRet
 
@@ -20597,18 +20597,18 @@ func (_mock *MockOpenlaneGraphClient) GetMappedControlHistories(ctx context.Cont
 
 	var r0 *openlaneclient.GetMappedControlHistories
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.MappedControlHistoryWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControlHistories, error)); ok {
-		return returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.MappedControlHistoryWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControlHistories, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.MappedControlHistoryWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetMappedControlHistories); ok {
-		r0 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.MappedControlHistoryWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetMappedControlHistories); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetMappedControlHistories)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *openlaneclient.MappedControlHistoryWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.MappedControlHistoryWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -20622,17 +20622,19 @@ type MockOpenlaneGraphClient_GetMappedControlHistories_Call struct {
 
 // GetMappedControlHistories is a helper method to define mock.On call
 //   - ctx
+//   - first
+//   - last
 //   - where
 //   - interceptors
-func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControlHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappedControlHistories_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControlHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappedControlHistories_Call {
 	return &MockOpenlaneGraphClient_GetMappedControlHistories_Call{Call: _e.mock.On("GetMappedControlHistories",
-		append([]interface{}{ctx, where}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetMappedControlHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappedControlHistories_Call {
+func (_c *MockOpenlaneGraphClient_GetMappedControlHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappedControlHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.MappedControlHistoryWhereInput), variadicArgs...)
+		variadicArgs := args[4].([]clientv2.RequestInterceptor)
+		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.MappedControlHistoryWhereInput), variadicArgs...)
 	})
 	return _c
 }
@@ -20642,18 +20644,18 @@ func (_c *MockOpenlaneGraphClient_GetMappedControlHistories_Call) Return(getMapp
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetMappedControlHistories_Call) RunAndReturn(run func(ctx context.Context, where *openlaneclient.MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControlHistories, error)) *MockOpenlaneGraphClient_GetMappedControlHistories_Call {
+func (_c *MockOpenlaneGraphClient_GetMappedControlHistories_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControlHistories, error)) *MockOpenlaneGraphClient_GetMappedControlHistories_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetMappedControls provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetMappedControls(ctx context.Context, where *openlaneclient.MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControls, error) {
+func (_mock *MockOpenlaneGraphClient) GetMappedControls(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControls, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, where, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, where)
+		tmpRet = _mock.Called(ctx, first, last, where)
 	}
 	ret := tmpRet
 
@@ -20663,18 +20665,18 @@ func (_mock *MockOpenlaneGraphClient) GetMappedControls(ctx context.Context, whe
 
 	var r0 *openlaneclient.GetMappedControls
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.MappedControlWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControls, error)); ok {
-		return returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.MappedControlWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControls, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.MappedControlWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetMappedControls); ok {
-		r0 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.MappedControlWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetMappedControls); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetMappedControls)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *openlaneclient.MappedControlWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.MappedControlWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -20688,17 +20690,19 @@ type MockOpenlaneGraphClient_GetMappedControls_Call struct {
 
 // GetMappedControls is a helper method to define mock.On call
 //   - ctx
+//   - first
+//   - last
 //   - where
 //   - interceptors
-func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControls(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappedControls_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControls(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappedControls_Call {
 	return &MockOpenlaneGraphClient_GetMappedControls_Call{Call: _e.mock.On("GetMappedControls",
-		append([]interface{}{ctx, where}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetMappedControls_Call) Run(run func(ctx context.Context, where *openlaneclient.MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappedControls_Call {
+func (_c *MockOpenlaneGraphClient_GetMappedControls_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappedControls_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.MappedControlWhereInput), variadicArgs...)
+		variadicArgs := args[4].([]clientv2.RequestInterceptor)
+		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.MappedControlWhereInput), variadicArgs...)
 	})
 	return _c
 }
@@ -20708,7 +20712,7 @@ func (_c *MockOpenlaneGraphClient_GetMappedControls_Call) Return(getMappedContro
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetMappedControls_Call) RunAndReturn(run func(ctx context.Context, where *openlaneclient.MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControls, error)) *MockOpenlaneGraphClient_GetMappedControls_Call {
+func (_c *MockOpenlaneGraphClient_GetMappedControls_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetMappedControls, error)) *MockOpenlaneGraphClient_GetMappedControls_Call {
 	_c.Call.Return(run)
 	return _c
 }
