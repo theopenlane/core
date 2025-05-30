@@ -1,30 +1,13 @@
-
 mutation CreateBulkCSVMappedControl($input: Upload!) {
   createBulkCSVMappedControl(input: $input) {
     mappedControls {
+      confidence
       createdAt
       createdBy
       id
       mappingType
       relation
-      controls {
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
-      subcontrols {
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
+      source
       tags
       updatedAt
       updatedBy
@@ -35,30 +18,14 @@ mutation CreateBulkCSVMappedControl($input: Upload!) {
 mutation CreateBulkMappedControl($input: [CreateMappedControlInput!]) {
   createBulkMappedControl(input: $input) {
     mappedControls {
+      confidence
       createdAt
       createdBy
       id
       mappingType
       relation
+      source
       tags
-      controls {
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
-      subcontrols {
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
       updatedAt
       updatedBy
     }
@@ -68,29 +35,13 @@ mutation CreateBulkMappedControl($input: [CreateMappedControlInput!]) {
 mutation CreateMappedControl($input: CreateMappedControlInput!) {
   createMappedControl(input: $input) {
     mappedControl {
+      confidence
       createdAt
       createdBy
       id
       mappingType
       relation
-      controls {
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
-      subcontrols {
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
+      source
       tags
       updatedAt
       updatedBy
@@ -106,31 +57,22 @@ mutation DeleteMappedControl($deleteMappedControlId: ID!) {
 
 query GetAllMappedControls {
   mappedControls {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
+        confidence
         createdAt
         createdBy
         id
         mappingType
         relation
-        controls {
-          edges {
-            node {
-              id
-              refCode
-              description
-            }
-          }
-        }
-        subcontrols {
-          edges {
-            node {
-              id
-              refCode
-              description
-            }
-          }
-        }
+        source
         tags
         updatedAt
         updatedBy
@@ -138,64 +80,40 @@ query GetAllMappedControls {
     }
   }
 }
+
 query GetMappedControlByID($mappedControlId: ID!) {
   mappedControl(id: $mappedControlId) {
+    confidence
     createdAt
     createdBy
     id
     mappingType
     relation
-    controls {
-      edges {
-        node {
-          id
-          refCode
-          description
-        }
-      }
-    }
-    subcontrols {
-      edges {
-        node {
-          id
-          refCode
-          description
-        }
-      }
-    }
+    source
     tags
     updatedAt
     updatedBy
   }
 }
 
-query GetMappedControls($where: MappedControlWhereInput) {
-  mappedControls(where: $where) {
+query GetMappedControls($first: Int, $last: Int, $where: MappedControlWhereInput) {
+  mappedControls(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
+        confidence
         createdAt
         createdBy
         id
         mappingType
         relation
-        controls {
-          edges {
-            node {
-              id
-              refCode
-              description
-            }
-          }
-        }
-        subcontrols {
-          edges {
-            node {
-              id
-              refCode
-              description
-            }
-          }
-        }
+        source
         tags
         updatedAt
         updatedBy
@@ -203,32 +121,17 @@ query GetMappedControls($where: MappedControlWhereInput) {
     }
   }
 }
+
 mutation UpdateMappedControl($updateMappedControlId: ID!, $input: UpdateMappedControlInput!) {
   updateMappedControl(id: $updateMappedControlId, input: $input) {
     mappedControl {
+      confidence
       createdAt
       createdBy
       id
       mappingType
       relation
-      controls {
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
-      subcontrols {
-        edges {
-          node {
-            id
-            refCode
-            description
-          }
-        }
-      }
+      source
       tags
       updatedAt
       updatedBy
