@@ -21,7 +21,7 @@ COPY --from=ghcr.io/theopenlane/dbx:145-c77867be /bin/dbx /bin/dbx
 COPY --from=ghcr.io/theopenlane/riverboat:amd64-86-3eaa899d /bin/riverboat /bin/riverboat
 
 # Copy redis binary
-COPY --from=redis:7.4.3 /usr/local/bin/redis-server /bin/redis-server
+COPY --from=redis:7.4.4 /usr/local/bin/redis-server /bin/redis-server
 
 # Copy FGA binary
 COPY --from=openfga/openfga:v1.8.13 /openfga /bin/openfga
