@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -105,14 +106,14 @@ func DeletedBy(v string) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
-// MappingType applies equality check predicate on the "mapping_type" field. It's identical to MappingTypeEQ.
-func MappingType(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldEQ(FieldMappingType, v))
-}
-
 // Relation applies equality check predicate on the "relation" field. It's identical to RelationEQ.
 func Relation(v string) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldEQ(FieldRelation, v))
+}
+
+// Confidence applies equality check predicate on the "confidence" field. It's identical to ConfidenceEQ.
+func Confidence(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldConfidence, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -636,78 +637,33 @@ func TagsNotNil() predicate.MappedControlHistory {
 }
 
 // MappingTypeEQ applies the EQ predicate on the "mapping_type" field.
-func MappingTypeEQ(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldEQ(FieldMappingType, v))
+func MappingTypeEQ(v enums.MappingType) predicate.MappedControlHistory {
+	vc := v
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldMappingType, vc))
 }
 
 // MappingTypeNEQ applies the NEQ predicate on the "mapping_type" field.
-func MappingTypeNEQ(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldNEQ(FieldMappingType, v))
+func MappingTypeNEQ(v enums.MappingType) predicate.MappedControlHistory {
+	vc := v
+	return predicate.MappedControlHistory(sql.FieldNEQ(FieldMappingType, vc))
 }
 
 // MappingTypeIn applies the In predicate on the "mapping_type" field.
-func MappingTypeIn(vs ...string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldIn(FieldMappingType, vs...))
+func MappingTypeIn(vs ...enums.MappingType) predicate.MappedControlHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.MappedControlHistory(sql.FieldIn(FieldMappingType, v...))
 }
 
 // MappingTypeNotIn applies the NotIn predicate on the "mapping_type" field.
-func MappingTypeNotIn(vs ...string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldNotIn(FieldMappingType, vs...))
-}
-
-// MappingTypeGT applies the GT predicate on the "mapping_type" field.
-func MappingTypeGT(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldGT(FieldMappingType, v))
-}
-
-// MappingTypeGTE applies the GTE predicate on the "mapping_type" field.
-func MappingTypeGTE(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldGTE(FieldMappingType, v))
-}
-
-// MappingTypeLT applies the LT predicate on the "mapping_type" field.
-func MappingTypeLT(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldLT(FieldMappingType, v))
-}
-
-// MappingTypeLTE applies the LTE predicate on the "mapping_type" field.
-func MappingTypeLTE(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldLTE(FieldMappingType, v))
-}
-
-// MappingTypeContains applies the Contains predicate on the "mapping_type" field.
-func MappingTypeContains(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldContains(FieldMappingType, v))
-}
-
-// MappingTypeHasPrefix applies the HasPrefix predicate on the "mapping_type" field.
-func MappingTypeHasPrefix(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldHasPrefix(FieldMappingType, v))
-}
-
-// MappingTypeHasSuffix applies the HasSuffix predicate on the "mapping_type" field.
-func MappingTypeHasSuffix(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldHasSuffix(FieldMappingType, v))
-}
-
-// MappingTypeIsNil applies the IsNil predicate on the "mapping_type" field.
-func MappingTypeIsNil() predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldIsNull(FieldMappingType))
-}
-
-// MappingTypeNotNil applies the NotNil predicate on the "mapping_type" field.
-func MappingTypeNotNil() predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldNotNull(FieldMappingType))
-}
-
-// MappingTypeEqualFold applies the EqualFold predicate on the "mapping_type" field.
-func MappingTypeEqualFold(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldEqualFold(FieldMappingType, v))
-}
-
-// MappingTypeContainsFold applies the ContainsFold predicate on the "mapping_type" field.
-func MappingTypeContainsFold(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldContainsFold(FieldMappingType, v))
+func MappingTypeNotIn(vs ...enums.MappingType) predicate.MappedControlHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.MappedControlHistory(sql.FieldNotIn(FieldMappingType, v...))
 }
 
 // RelationEQ applies the EQ predicate on the "relation" field.
@@ -783,6 +739,121 @@ func RelationEqualFold(v string) predicate.MappedControlHistory {
 // RelationContainsFold applies the ContainsFold predicate on the "relation" field.
 func RelationContainsFold(v string) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldContainsFold(FieldRelation, v))
+}
+
+// ConfidenceEQ applies the EQ predicate on the "confidence" field.
+func ConfidenceEQ(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldConfidence, v))
+}
+
+// ConfidenceNEQ applies the NEQ predicate on the "confidence" field.
+func ConfidenceNEQ(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNEQ(FieldConfidence, v))
+}
+
+// ConfidenceIn applies the In predicate on the "confidence" field.
+func ConfidenceIn(vs ...string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldIn(FieldConfidence, vs...))
+}
+
+// ConfidenceNotIn applies the NotIn predicate on the "confidence" field.
+func ConfidenceNotIn(vs ...string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNotIn(FieldConfidence, vs...))
+}
+
+// ConfidenceGT applies the GT predicate on the "confidence" field.
+func ConfidenceGT(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldGT(FieldConfidence, v))
+}
+
+// ConfidenceGTE applies the GTE predicate on the "confidence" field.
+func ConfidenceGTE(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldGTE(FieldConfidence, v))
+}
+
+// ConfidenceLT applies the LT predicate on the "confidence" field.
+func ConfidenceLT(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldLT(FieldConfidence, v))
+}
+
+// ConfidenceLTE applies the LTE predicate on the "confidence" field.
+func ConfidenceLTE(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldLTE(FieldConfidence, v))
+}
+
+// ConfidenceContains applies the Contains predicate on the "confidence" field.
+func ConfidenceContains(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldContains(FieldConfidence, v))
+}
+
+// ConfidenceHasPrefix applies the HasPrefix predicate on the "confidence" field.
+func ConfidenceHasPrefix(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldHasPrefix(FieldConfidence, v))
+}
+
+// ConfidenceHasSuffix applies the HasSuffix predicate on the "confidence" field.
+func ConfidenceHasSuffix(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldHasSuffix(FieldConfidence, v))
+}
+
+// ConfidenceIsNil applies the IsNil predicate on the "confidence" field.
+func ConfidenceIsNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldIsNull(FieldConfidence))
+}
+
+// ConfidenceNotNil applies the NotNil predicate on the "confidence" field.
+func ConfidenceNotNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNotNull(FieldConfidence))
+}
+
+// ConfidenceEqualFold applies the EqualFold predicate on the "confidence" field.
+func ConfidenceEqualFold(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEqualFold(FieldConfidence, v))
+}
+
+// ConfidenceContainsFold applies the ContainsFold predicate on the "confidence" field.
+func ConfidenceContainsFold(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldContainsFold(FieldConfidence, v))
+}
+
+// SourceEQ applies the EQ predicate on the "source" field.
+func SourceEQ(v enums.MappingSource) predicate.MappedControlHistory {
+	vc := v
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldSource, vc))
+}
+
+// SourceNEQ applies the NEQ predicate on the "source" field.
+func SourceNEQ(v enums.MappingSource) predicate.MappedControlHistory {
+	vc := v
+	return predicate.MappedControlHistory(sql.FieldNEQ(FieldSource, vc))
+}
+
+// SourceIn applies the In predicate on the "source" field.
+func SourceIn(vs ...enums.MappingSource) predicate.MappedControlHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.MappedControlHistory(sql.FieldIn(FieldSource, v...))
+}
+
+// SourceNotIn applies the NotIn predicate on the "source" field.
+func SourceNotIn(vs ...enums.MappingSource) predicate.MappedControlHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.MappedControlHistory(sql.FieldNotIn(FieldSource, v...))
+}
+
+// SourceIsNil applies the IsNil predicate on the "source" field.
+func SourceIsNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldIsNull(FieldSource))
+}
+
+// SourceNotNil applies the NotNil predicate on the "source" field.
+func SourceNotNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNotNull(FieldSource))
 }
 
 // And groups predicates with the AND operator between them.
