@@ -6,7 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/riverboat/test/common"
 )
 
@@ -22,7 +22,7 @@ func main() {
 	cfZoneID := flag.String("cf-zone-id", "", "ID of the Cloudflare zone")
 	flag.Parse()
 
-	_, err := client.Insert(context.Background(), jobs.DeleteCustomDomainArgs{
+	_, err := client.Insert(context.Background(), corejobs.DeleteCustomDomainArgs{
 		CustomDomainID:             *customDomainID,
 		DNSVerificationID:          *dnsVerificationID,
 		CloudflareCustomHostnameID: *cfCustomHostnameID,
