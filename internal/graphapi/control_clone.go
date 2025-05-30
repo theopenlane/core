@@ -46,13 +46,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, existingControls [
 	createdControlIDs := make([]string, len(existingControls))
 
 	for _, control := range existingControls {
-		mappedControlIDs := []string{}
-		mappedControls := control.Edges.MappedControls
-
-		for _, mc := range mappedControls {
-			mappedControlIDs = append(mappedControlIDs, mc.ID)
-		}
-
 		controlInput := generated.CreateControlInput{
 			Tags:                   control.Tags,
 			RefCode:                control.RefCode,
@@ -68,7 +61,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, existingControls [
 			ImplementationGuidance: control.ImplementationGuidance,
 			ExampleEvidence:        control.ExampleEvidence,
 			References:             control.References,
-			MappedControlIDs:       mappedControlIDs,
 			Status:                 &enums.ControlStatusNotImplemented,
 		}
 
@@ -108,14 +100,8 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, control *genera
 		return nil
 	}
 
-	mappedControlIDs := []string{}
-	mappedControls := control.Edges.MappedControls
-
-	for _, mc := range mappedControls {
-		mappedControlIDs = append(mappedControlIDs, mc.ID)
-	}
-
 	subcontrols := make([]*generated.CreateSubcontrolInput, len(control.Edges.Subcontrols))
+
 	for j, subcontrol := range control.Edges.Subcontrols {
 		subcontrols[j] = &generated.CreateSubcontrolInput{
 			Tags:                   subcontrol.Tags,
@@ -133,7 +119,6 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, control *genera
 			ImplementationGuidance: subcontrol.ImplementationGuidance,
 			ExampleEvidence:        subcontrol.ExampleEvidence,
 			References:             subcontrol.References,
-			MappedControlIDs:       mappedControlIDs,
 			Status:                 &enums.ControlStatusNotImplemented,
 		}
 	}

@@ -2,8 +2,16 @@
 
 query GetAllMappedControlHistories {
   mappedControlHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
+        confidence
         createdAt
         createdBy
         historyTime
@@ -12,6 +20,7 @@ query GetAllMappedControlHistories {
         operation
         ref
         relation
+        source
         tags
         updatedAt
         updatedBy
@@ -20,10 +29,18 @@ query GetAllMappedControlHistories {
   }
 }
 
-query GetMappedControlHistories($where: MappedControlHistoryWhereInput) {
-  mappedControlHistories(where: $where) {
+query GetMappedControlHistories($first: Int, $last: Int, $where: MappedControlHistoryWhereInput) {
+  mappedControlHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
+        confidence
         createdAt
         createdBy
         historyTime
@@ -32,6 +49,7 @@ query GetMappedControlHistories($where: MappedControlHistoryWhereInput) {
         operation
         ref
         relation
+        source
         tags
         updatedAt
         updatedBy
