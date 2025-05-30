@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -40,9 +41,13 @@ type MappedControlHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
-	MappingType string `json:"mapping_type,omitempty"`
+	MappingType enums.MappingType `json:"mapping_type,omitempty"`
 	// description of how the two controls are related
-	Relation     string `json:"relation,omitempty"`
+	Relation string `json:"relation,omitempty"`
+	// percentage of confidence in the mapping
+	Confidence string `json:"confidence,omitempty"`
+	// source of the mapping, e.g. manual, suggested, etc.
+	Source       enums.MappingSource `json:"source,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -55,7 +60,7 @@ func (*MappedControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case mappedcontrolhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation:
+		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation, mappedcontrolhistory.FieldConfidence, mappedcontrolhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case mappedcontrolhistory.FieldHistoryTime, mappedcontrolhistory.FieldCreatedAt, mappedcontrolhistory.FieldUpdatedAt, mappedcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -146,13 +151,25 @@ func (mch *MappedControlHistory) assignValues(columns []string, values []any) er
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mapping_type", values[i])
 			} else if value.Valid {
-				mch.MappingType = value.String
+				mch.MappingType = enums.MappingType(value.String)
 			}
 		case mappedcontrolhistory.FieldRelation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field relation", values[i])
 			} else if value.Valid {
 				mch.Relation = value.String
+			}
+		case mappedcontrolhistory.FieldConfidence:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field confidence", values[i])
+			} else if value.Valid {
+				mch.Confidence = value.String
+			}
+		case mappedcontrolhistory.FieldSource:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value.Valid {
+				mch.Source = enums.MappingSource(value.String)
 			}
 		default:
 			mch.selectValues.Set(columns[i], values[i])
@@ -221,10 +238,16 @@ func (mch *MappedControlHistory) String() string {
 	builder.WriteString(fmt.Sprintf("%v", mch.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("mapping_type=")
-	builder.WriteString(mch.MappingType)
+	builder.WriteString(fmt.Sprintf("%v", mch.MappingType))
 	builder.WriteString(", ")
 	builder.WriteString("relation=")
 	builder.WriteString(mch.Relation)
+	builder.WriteString(", ")
+	builder.WriteString("confidence=")
+	builder.WriteString(mch.Confidence)
+	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(fmt.Sprintf("%v", mch.Source))
 	builder.WriteByte(')')
 	return builder.String()
 }

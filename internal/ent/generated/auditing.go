@@ -1645,6 +1645,12 @@ func (mch *MappedControlHistory) changes(new *MappedControlHistory) []Change {
 	if !reflect.DeepEqual(mch.Relation, new.Relation) {
 		changes = append(changes, NewChange(mappedcontrolhistory.FieldRelation, mch.Relation, new.Relation))
 	}
+	if !reflect.DeepEqual(mch.Confidence, new.Confidence) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldConfidence, mch.Confidence, new.Confidence))
+	}
+	if !reflect.DeepEqual(mch.Source, new.Source) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldSource, mch.Source, new.Source))
+	}
 	return changes
 }
 

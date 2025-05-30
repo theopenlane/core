@@ -5438,6 +5438,14 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetRelation(relation)
 	}
 
+	if confidence, exists := m.Confidence(); exists {
+		create = create.SetConfidence(confidence)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -5522,6 +5530,18 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetRelation(mappedcontrol.Relation)
 		}
 
+		if confidence, exists := m.Confidence(); exists {
+			create = create.SetConfidence(confidence)
+		} else {
+			create = create.SetConfidence(mappedcontrol.Confidence)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(mappedcontrol.Source)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5563,6 +5583,8 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetTags(mappedcontrol.Tags).
 			SetMappingType(mappedcontrol.MappingType).
 			SetRelation(mappedcontrol.Relation).
+			SetConfidence(mappedcontrol.Confidence).
+			SetSource(mappedcontrol.Source).
 			Save(ctx)
 		if err != nil {
 			return err

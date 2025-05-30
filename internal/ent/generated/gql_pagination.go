@@ -19158,6 +19158,20 @@ var (
 			}
 		},
 	}
+	// MappedControlOrderFieldSource orders MappedControl by source.
+	MappedControlOrderFieldSource = &MappedControlOrderField{
+		Value: func(mc *MappedControl) (ent.Value, error) {
+			return mc.Source, nil
+		},
+		column: mappedcontrol.FieldSource,
+		toTerm: mappedcontrol.BySource,
+		toCursor: func(mc *MappedControl) Cursor {
+			return Cursor{
+				ID:    mc.ID,
+				Value: mc.Source,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -19169,7 +19183,9 @@ func (f MappedControlOrderField) String() string {
 	case MappedControlOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case MappedControlOrderFieldMappingType.column:
-		str = "mapping_type"
+		str = "MAPPING_TYPE"
+	case MappedControlOrderFieldSource.column:
+		str = "SOURCE"
 	}
 	return str
 }
@@ -19190,8 +19206,10 @@ func (f *MappedControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *MappedControlOrderFieldCreatedAt
 	case "updated_at":
 		*f = *MappedControlOrderFieldUpdatedAt
-	case "mapping_type":
+	case "MAPPING_TYPE":
 		*f = *MappedControlOrderFieldMappingType
+	case "SOURCE":
+		*f = *MappedControlOrderFieldSource
 	default:
 		return fmt.Errorf("%s is not a valid MappedControlOrderField", str)
 	}
@@ -19490,6 +19508,20 @@ var (
 			}
 		},
 	}
+	// MappedControlHistoryOrderFieldSource orders MappedControlHistory by source.
+	MappedControlHistoryOrderFieldSource = &MappedControlHistoryOrderField{
+		Value: func(mch *MappedControlHistory) (ent.Value, error) {
+			return mch.Source, nil
+		},
+		column: mappedcontrolhistory.FieldSource,
+		toTerm: mappedcontrolhistory.BySource,
+		toCursor: func(mch *MappedControlHistory) Cursor {
+			return Cursor{
+				ID:    mch.ID,
+				Value: mch.Source,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -19501,7 +19533,9 @@ func (f MappedControlHistoryOrderField) String() string {
 	case MappedControlHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
 	case MappedControlHistoryOrderFieldMappingType.column:
-		str = "mapping_type"
+		str = "MAPPING_TYPE"
+	case MappedControlHistoryOrderFieldSource.column:
+		str = "SOURCE"
 	}
 	return str
 }
@@ -19522,8 +19556,10 @@ func (f *MappedControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *MappedControlHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *MappedControlHistoryOrderFieldUpdatedAt
-	case "mapping_type":
+	case "MAPPING_TYPE":
 		*f = *MappedControlHistoryOrderFieldMappingType
+	case "SOURCE":
+		*f = *MappedControlHistoryOrderFieldSource
 	default:
 		return fmt.Errorf("%s is not a valid MappedControlHistoryOrderField", str)
 	}

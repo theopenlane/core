@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -496,21 +495,6 @@ func (cc *ControlCreate) AddInternalPolicies(i ...*InternalPolicy) *ControlCreat
 		ids[j] = i[j].ID
 	}
 	return cc.AddInternalPolicyIDs(ids...)
-}
-
-// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
-func (cc *ControlCreate) AddMappedControlIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddMappedControlIDs(ids...)
-	return cc
-}
-
-// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
-func (cc *ControlCreate) AddMappedControls(m ...*MappedControl) *ControlCreate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
-	}
-	return cc.AddMappedControlIDs(ids...)
 }
 
 // SetControlOwner sets the "control_owner" edge to the Group entity.
@@ -1020,23 +1004,6 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = cc.schemaConfig.InternalPolicyControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.MappedControlsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.MappedControlsTable,
-			Columns: control.MappedControlsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.MappedControlControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
