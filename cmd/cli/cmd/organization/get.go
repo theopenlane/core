@@ -3,10 +3,12 @@ package org
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/tokens"
 )
 
 var getCmd = &cobra.Command{
@@ -23,6 +25,7 @@ func init() {
 
 	getCmd.Flags().StringP("id", "i", "", "get a specific organization by ID")
 	getCmd.Flags().BoolP("include-personal-orgs", "p", false, "include personal organizations in the output")
+	getCmd.Flags().BoolP("current-only", "c", false, "get the current authorized organization only")
 }
 
 // get an organization in the platform
@@ -34,6 +37,25 @@ func get(ctx context.Context) error {
 		client, err = cmd.SetupClientWithAuth(ctx)
 		cobra.CheckErr(err)
 		defer cmd.StoreSessionCookies(client)
+	}
+
+	// get the current organization based on the access token in the client
+	if cmd.Config.Bool("current-only") {
+		// if the current only flag is set, we only want the current organization
+		token, err := client.Config().Credentials.AccessToken()
+		cobra.CheckErr(err)
+
+		jwt, err := tokens.ParseUnverifiedTokenClaims(token)
+		cobra.CheckErr(err)
+
+		if jwt.OrgID == "" {
+			log.Error().Err(err).Msg("no organization ID found in the token claims, cannot get current organization")
+		}
+
+		o, err := client.GetOrganizationByID(ctx, jwt.OrgID)
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
 	}
 
 	// filter options
