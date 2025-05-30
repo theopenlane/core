@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
@@ -54,6 +55,9 @@ func (ScheduledJobRun) Fields() []ent.Field {
 
 		field.Time("expected_execution_time").
 			Immutable().
+			Annotations(
+				entgql.OrderField("expected_execution_time"),
+			).
 			Comment("When should this job execute on the agent. Since we might potentially schedule a few minutes before"),
 
 		field.String("script").

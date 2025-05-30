@@ -126,6 +126,11 @@ func JobRunnerID(v string) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldEQ(FieldJobRunnerID, v))
 }
 
+// JobHandle applies equality check predicate on the "job_handle" field. It's identical to JobHandleEQ.
+func JobHandle(v int) predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldEQ(FieldJobHandle, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -939,6 +944,56 @@ func JobRunnerIDEqualFold(v string) predicate.ControlScheduledJobHistory {
 // JobRunnerIDContainsFold applies the ContainsFold predicate on the "job_runner_id" field.
 func JobRunnerIDContainsFold(v string) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldContainsFold(FieldJobRunnerID, v))
+}
+
+// JobHandleEQ applies the EQ predicate on the "job_handle" field.
+func JobHandleEQ(v int) predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldEQ(FieldJobHandle, v))
+}
+
+// JobHandleNEQ applies the NEQ predicate on the "job_handle" field.
+func JobHandleNEQ(v int) predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldNEQ(FieldJobHandle, v))
+}
+
+// JobHandleIn applies the In predicate on the "job_handle" field.
+func JobHandleIn(vs ...int) predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldIn(FieldJobHandle, vs...))
+}
+
+// JobHandleNotIn applies the NotIn predicate on the "job_handle" field.
+func JobHandleNotIn(vs ...int) predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldNotIn(FieldJobHandle, vs...))
+}
+
+// JobHandleGT applies the GT predicate on the "job_handle" field.
+func JobHandleGT(v int) predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldGT(FieldJobHandle, v))
+}
+
+// JobHandleGTE applies the GTE predicate on the "job_handle" field.
+func JobHandleGTE(v int) predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldGTE(FieldJobHandle, v))
+}
+
+// JobHandleLT applies the LT predicate on the "job_handle" field.
+func JobHandleLT(v int) predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldLT(FieldJobHandle, v))
+}
+
+// JobHandleLTE applies the LTE predicate on the "job_handle" field.
+func JobHandleLTE(v int) predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldLTE(FieldJobHandle, v))
+}
+
+// JobHandleIsNil applies the IsNil predicate on the "job_handle" field.
+func JobHandleIsNil() predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldIsNull(FieldJobHandle))
+}
+
+// JobHandleNotNil applies the NotNil predicate on the "job_handle" field.
+func JobHandleNotNil() predicate.ControlScheduledJobHistory {
+	return predicate.ControlScheduledJobHistory(sql.FieldNotNull(FieldJobHandle))
 }
 
 // And groups predicates with the AND operator between them.

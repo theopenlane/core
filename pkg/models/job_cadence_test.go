@@ -114,12 +114,10 @@ func TestJobCadence_Next(t *testing.T) {
 	baseTime := time.Date(2025, 5, 27, 14, 30, 0, 0, location) // May 27, 2025 14:30 UTC
 
 	tests := []struct {
-		name        string
-		cadence     models.JobCadence
-		from        time.Time
-		want        time.Time
-		wantErr     bool
-		errContains string
+		name    string
+		cadence models.JobCadence
+		from    time.Time
+		want    time.Time
 	}{
 		{
 			name: "daily - next run is today",
@@ -244,9 +242,8 @@ func TestJobCadence_Next(t *testing.T) {
 				Frequency: "INVALID",
 				Time:      "15:00",
 			},
-			from:        baseTime,
-			wantErr:     true,
-			errContains: "unsupported cadence frequency",
+			from: baseTime,
+			want: time.Time{},
 		},
 		{
 			name: "invalid time format",
@@ -254,21 +251,14 @@ func TestJobCadence_Next(t *testing.T) {
 				Frequency: enums.JobCadenceFrequencyDaily,
 				Time:      "25:00",
 			},
-			from:        baseTime,
-			wantErr:     true,
-			errContains: "invalid time format",
+			from: baseTime,
+			want: time.Time{},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.cadence.Next(tt.from)
-			if tt.wantErr {
-				assert.Assert(t, err != nil)
-				assert.ErrorContains(t, err, tt.errContains)
-				return
-			}
-			assert.NilError(t, err)
+			got := tt.cadence.Next(tt.from)
 			assert.DeepEqual(t, tt.want, got)
 		})
 	}

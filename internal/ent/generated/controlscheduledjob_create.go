@@ -178,6 +178,20 @@ func (csjc *ControlScheduledJobCreate) SetNillableJobRunnerID(s *string) *Contro
 	return csjc
 }
 
+// SetJobHandle sets the "job_handle" field.
+func (csjc *ControlScheduledJobCreate) SetJobHandle(i int) *ControlScheduledJobCreate {
+	csjc.mutation.SetJobHandle(i)
+	return csjc
+}
+
+// SetNillableJobHandle sets the "job_handle" field if the given value is not nil.
+func (csjc *ControlScheduledJobCreate) SetNillableJobHandle(i *int) *ControlScheduledJobCreate {
+	if i != nil {
+		csjc.SetJobHandle(*i)
+	}
+	return csjc
+}
+
 // SetID sets the "id" field.
 func (csjc *ControlScheduledJobCreate) SetID(s string) *ControlScheduledJobCreate {
 	csjc.mutation.SetID(s)
@@ -395,6 +409,10 @@ func (csjc *ControlScheduledJobCreate) createSpec() (*ControlScheduledJob, *sqlg
 	if value, ok := csjc.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjob.FieldCron, field.TypeString, value)
 		_node.Cron = &value
+	}
+	if value, ok := csjc.mutation.JobHandle(); ok {
+		_spec.SetField(controlscheduledjob.FieldJobHandle, field.TypeInt, value)
+		_node.JobHandle = value
 	}
 	if nodes := csjc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -3222,7 +3222,9 @@ type ControlScheduledJob struct {
 	// cron syntax. If not provided, it would inherit the cron of the parent job
 	Cron *string `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
-	JobRunnerID *string               `json:"jobRunnerID,omitempty"`
+	JobRunnerID *string `json:"jobRunnerID,omitempty"`
+	// the identifier to this preriodic job in river
+	JobHandle   *int64                `json:"jobHandle,omitempty"`
 	Owner       *Organization         `json:"owner,omitempty"`
 	Job         *ScheduledJob         `json:"job"`
 	Controls    *ControlConnection    `json:"controls"`
@@ -3289,6 +3291,8 @@ type ControlScheduledJobHistory struct {
 	Cron *string `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID *string `json:"jobRunnerID,omitempty"`
+	// the identifier to this preriodic job in river
+	JobHandle *int64 `json:"jobHandle,omitempty"`
 }
 
 func (ControlScheduledJobHistory) IsNode() {}
@@ -31581,18 +31585,20 @@ func (e ScheduledJobOrderField) MarshalJSON() ([]byte, error) {
 type ScheduledJobRunOrderField string
 
 const (
-	ScheduledJobRunOrderFieldCreatedAt ScheduledJobRunOrderField = "created_at"
-	ScheduledJobRunOrderFieldUpdatedAt ScheduledJobRunOrderField = "updated_at"
+	ScheduledJobRunOrderFieldCreatedAt             ScheduledJobRunOrderField = "created_at"
+	ScheduledJobRunOrderFieldUpdatedAt             ScheduledJobRunOrderField = "updated_at"
+	ScheduledJobRunOrderFieldExpectedExecutionTime ScheduledJobRunOrderField = "expected_execution_time"
 )
 
 var AllScheduledJobRunOrderField = []ScheduledJobRunOrderField{
 	ScheduledJobRunOrderFieldCreatedAt,
 	ScheduledJobRunOrderFieldUpdatedAt,
+	ScheduledJobRunOrderFieldExpectedExecutionTime,
 }
 
 func (e ScheduledJobRunOrderField) IsValid() bool {
 	switch e {
-	case ScheduledJobRunOrderFieldCreatedAt, ScheduledJobRunOrderFieldUpdatedAt:
+	case ScheduledJobRunOrderFieldCreatedAt, ScheduledJobRunOrderFieldUpdatedAt, ScheduledJobRunOrderFieldExpectedExecutionTime:
 		return true
 	}
 	return false

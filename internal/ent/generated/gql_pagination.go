@@ -29075,6 +29075,20 @@ var (
 			}
 		},
 	}
+	// ScheduledJobRunOrderFieldExpectedExecutionTime orders ScheduledJobRun by expected_execution_time.
+	ScheduledJobRunOrderFieldExpectedExecutionTime = &ScheduledJobRunOrderField{
+		Value: func(sjr *ScheduledJobRun) (ent.Value, error) {
+			return sjr.ExpectedExecutionTime, nil
+		},
+		column: scheduledjobrun.FieldExpectedExecutionTime,
+		toTerm: scheduledjobrun.ByExpectedExecutionTime,
+		toCursor: func(sjr *ScheduledJobRun) Cursor {
+			return Cursor{
+				ID:    sjr.ID,
+				Value: sjr.ExpectedExecutionTime,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -29085,6 +29099,8 @@ func (f ScheduledJobRunOrderField) String() string {
 		str = "created_at"
 	case ScheduledJobRunOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ScheduledJobRunOrderFieldExpectedExecutionTime.column:
+		str = "expected_execution_time"
 	}
 	return str
 }
@@ -29105,6 +29121,8 @@ func (f *ScheduledJobRunOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ScheduledJobRunOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ScheduledJobRunOrderFieldUpdatedAt
+	case "expected_execution_time":
+		*f = *ScheduledJobRunOrderFieldExpectedExecutionTime
 	default:
 		return fmt.Errorf("%s is not a valid ScheduledJobRunOrderField", str)
 	}

@@ -217,6 +217,33 @@ func (csju *ControlScheduledJobUpdate) ClearJobRunnerID() *ControlScheduledJobUp
 	return csju
 }
 
+// SetJobHandle sets the "job_handle" field.
+func (csju *ControlScheduledJobUpdate) SetJobHandle(i int) *ControlScheduledJobUpdate {
+	csju.mutation.ResetJobHandle()
+	csju.mutation.SetJobHandle(i)
+	return csju
+}
+
+// SetNillableJobHandle sets the "job_handle" field if the given value is not nil.
+func (csju *ControlScheduledJobUpdate) SetNillableJobHandle(i *int) *ControlScheduledJobUpdate {
+	if i != nil {
+		csju.SetJobHandle(*i)
+	}
+	return csju
+}
+
+// AddJobHandle adds i to the "job_handle" field.
+func (csju *ControlScheduledJobUpdate) AddJobHandle(i int) *ControlScheduledJobUpdate {
+	csju.mutation.AddJobHandle(i)
+	return csju
+}
+
+// ClearJobHandle clears the value of the "job_handle" field.
+func (csju *ControlScheduledJobUpdate) ClearJobHandle() *ControlScheduledJobUpdate {
+	csju.mutation.ClearJobHandle()
+	return csju
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (csju *ControlScheduledJobUpdate) SetOwner(o *Organization) *ControlScheduledJobUpdate {
 	return csju.SetOwnerID(o.ID)
@@ -454,6 +481,15 @@ func (csju *ControlScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if csju.mutation.CronCleared() {
 		_spec.ClearField(controlscheduledjob.FieldCron, field.TypeString)
+	}
+	if value, ok := csju.mutation.JobHandle(); ok {
+		_spec.SetField(controlscheduledjob.FieldJobHandle, field.TypeInt, value)
+	}
+	if value, ok := csju.mutation.AddedJobHandle(); ok {
+		_spec.AddField(controlscheduledjob.FieldJobHandle, field.TypeInt, value)
+	}
+	if csju.mutation.JobHandleCleared() {
+		_spec.ClearField(controlscheduledjob.FieldJobHandle, field.TypeInt)
 	}
 	if csju.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -848,6 +884,33 @@ func (csjuo *ControlScheduledJobUpdateOne) ClearJobRunnerID() *ControlScheduledJ
 	return csjuo
 }
 
+// SetJobHandle sets the "job_handle" field.
+func (csjuo *ControlScheduledJobUpdateOne) SetJobHandle(i int) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.ResetJobHandle()
+	csjuo.mutation.SetJobHandle(i)
+	return csjuo
+}
+
+// SetNillableJobHandle sets the "job_handle" field if the given value is not nil.
+func (csjuo *ControlScheduledJobUpdateOne) SetNillableJobHandle(i *int) *ControlScheduledJobUpdateOne {
+	if i != nil {
+		csjuo.SetJobHandle(*i)
+	}
+	return csjuo
+}
+
+// AddJobHandle adds i to the "job_handle" field.
+func (csjuo *ControlScheduledJobUpdateOne) AddJobHandle(i int) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.AddJobHandle(i)
+	return csjuo
+}
+
+// ClearJobHandle clears the value of the "job_handle" field.
+func (csjuo *ControlScheduledJobUpdateOne) ClearJobHandle() *ControlScheduledJobUpdateOne {
+	csjuo.mutation.ClearJobHandle()
+	return csjuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (csjuo *ControlScheduledJobUpdateOne) SetOwner(o *Organization) *ControlScheduledJobUpdateOne {
 	return csjuo.SetOwnerID(o.ID)
@@ -1115,6 +1178,15 @@ func (csjuo *ControlScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if csjuo.mutation.CronCleared() {
 		_spec.ClearField(controlscheduledjob.FieldCron, field.TypeString)
+	}
+	if value, ok := csjuo.mutation.JobHandle(); ok {
+		_spec.SetField(controlscheduledjob.FieldJobHandle, field.TypeInt, value)
+	}
+	if value, ok := csjuo.mutation.AddedJobHandle(); ok {
+		_spec.AddField(controlscheduledjob.FieldJobHandle, field.TypeInt, value)
+	}
+	if csjuo.mutation.JobHandleCleared() {
+		_spec.ClearField(controlscheduledjob.FieldJobHandle, field.TypeInt)
 	}
 	if csjuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

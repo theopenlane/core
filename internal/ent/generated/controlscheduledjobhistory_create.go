@@ -208,6 +208,20 @@ func (csjhc *ControlScheduledJobHistoryCreate) SetNillableJobRunnerID(s *string)
 	return csjhc
 }
 
+// SetJobHandle sets the "job_handle" field.
+func (csjhc *ControlScheduledJobHistoryCreate) SetJobHandle(i int) *ControlScheduledJobHistoryCreate {
+	csjhc.mutation.SetJobHandle(i)
+	return csjhc
+}
+
+// SetNillableJobHandle sets the "job_handle" field if the given value is not nil.
+func (csjhc *ControlScheduledJobHistoryCreate) SetNillableJobHandle(i *int) *ControlScheduledJobHistoryCreate {
+	if i != nil {
+		csjhc.SetJobHandle(*i)
+	}
+	return csjhc
+}
+
 // SetID sets the "id" field.
 func (csjhc *ControlScheduledJobHistoryCreate) SetID(s string) *ControlScheduledJobHistoryCreate {
 	csjhc.mutation.SetID(s)
@@ -399,6 +413,10 @@ func (csjhc *ControlScheduledJobHistoryCreate) createSpec() (*ControlScheduledJo
 	if value, ok := csjhc.mutation.JobRunnerID(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldJobRunnerID, field.TypeString, value)
 		_node.JobRunnerID = value
+	}
+	if value, ok := csjhc.mutation.JobHandle(); ok {
+		_spec.SetField(controlscheduledjobhistory.FieldJobHandle, field.TypeInt, value)
+		_node.JobHandle = value
 	}
 	return _node, _spec
 }

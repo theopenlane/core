@@ -55,52 +55,40 @@ func TestCron_Next(t *testing.T) {
 	baseTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 
 	tt := []struct {
-		name    string
-		cron    string
-		from    time.Time
-		want    time.Time
-		wantErr bool
+		name string
+		cron string
+		from time.Time
+		want time.Time
 	}{
 		{
-			name:    "hourly at minute zero",
-			cron:    "0 * * * *",
-			from:    baseTime,
-			want:    time.Date(2025, 1, 1, 1, 0, 0, 0, time.UTC),
-			wantErr: false,
+			name: "hourly at minute zero",
+			cron: "0 * * * *",
+			from: baseTime,
+			want: time.Date(2025, 1, 1, 1, 0, 0, 0, time.UTC),
 		},
 		{
-			name:    "every 30 minutes",
-			cron:    "0,30 * * * *",
-			from:    baseTime,
-			want:    time.Date(2025, 1, 1, 0, 30, 0, 0, time.UTC),
-			wantErr: false,
+			name: "every 30 minutes",
+			cron: "0,30 * * * *",
+			from: baseTime,
+			want: time.Date(2025, 1, 1, 0, 30, 0, 0, time.UTC),
 		},
 		{
-			name:    "daily at midnight",
-			cron:    "0 0 * * *",
-			from:    baseTime,
-			want:    time.Date(2025, 1, 2, 0, 0, 0, 0, time.UTC),
-			wantErr: false,
+			name: "daily at midnight",
+			cron: "0 0 * * *",
+			from: baseTime,
+			want: time.Date(2025, 1, 2, 0, 0, 0, 0, time.UTC),
 		},
 		{
-			name:    "invalid syntax",
-			cron:    "invalid",
-			from:    baseTime,
-			want:    time.Time{},
-			wantErr: true,
+			name: "invalid syntax",
+			cron: "invalid",
+			from: baseTime,
+			want: time.Time{},
 		},
 	}
 
 	for _, tt := range tt {
 		t.Run(tt.name, func(t *testing.T) {
-			next, err := models.Cron(tt.cron).Next(tt.from)
-
-			if tt.wantErr {
-				assert.Assert(t, err != nil)
-				return
-			}
-
-			assert.NilError(t, err)
+			next := models.Cron(tt.cron).Next(tt.from)
 			assert.DeepEqual(t, next, tt.want)
 		})
 	}

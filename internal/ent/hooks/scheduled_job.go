@@ -6,8 +6,11 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
+	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/rivertype"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
@@ -55,6 +58,11 @@ func HookControlScheduledJobCreate() ent.Hook {
 			cron, hasCron := mutation.Cron()
 
 			if entx.CheckIsSoftDelete(ctx) {
+				handle, ok := mutation.JobHandle()
+				if ok {
+					mutation.Job.GetRiverClient().PeriodicJobs().Remove(rivertype.PeriodicJobHandle(handle))
+				}
+
 				return next.Mutate(ctx, mutation)
 			}
 
@@ -62,7 +70,39 @@ func HookControlScheduledJobCreate() ent.Hook {
 				return nil, err
 			}
 
-			return next.Mutate(ctx, mutation)
+			v, err := next.Mutate(ctx, mutation)
+			if err != nil {
+				return nil, err
+			}
+
+			job := v.(*generated.ControlScheduledJob)
+
+			if mutation.Op() == ent.OpCreate && (hasCadence || hasCron) {
+				var scheduler river.PeriodicSchedule
+
+				if hasCadence {
+					scheduler = cadence
+				} else {
+					scheduler = cron
+				}
+
+				handle := mutation.Job.GetRiverClient().PeriodicJobs().Add(
+					river.NewPeriodicJob(scheduler, func() (river.JobArgs, *river.InsertOpts) {
+						return corejobs.ScheduledJobArgs{
+							JobID: job.ID,
+						}, nil
+					}, nil))
+
+				err := mutation.Client().ControlScheduledJob.
+					UpdateOne(job).
+					SetJobHandle(int(handle)).
+					Exec(ctx)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			return job, err
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpCreate)
 }
