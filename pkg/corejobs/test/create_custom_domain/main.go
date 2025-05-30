@@ -6,7 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/riverboat/test/common"
 )
 
@@ -21,7 +21,7 @@ func main() {
 
 	_, err := client.Insert(
 		context.Background(),
-		jobs.CreateCustomDomainArgs{
+		corejobs.CreateCustomDomainArgs{
 			CustomDomainID: *customDomainID,
 		},
 		nil,

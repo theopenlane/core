@@ -6,7 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/riverboat/test/common"
 )
 
@@ -19,7 +19,7 @@ func main() {
 
 	flag.Parse()
 
-	_, err := client.Insert(context.Background(), jobs.ValidateCustomDomainArgs{CustomDomainID: *customDomainID}, nil)
+	_, err := client.Insert(context.Background(), corejobs.ValidateCustomDomainArgs{CustomDomainID: *customDomainID}, nil)
 	if err != nil {
 		log.Fatal().Err(err).Msg("error inserting validate_custom_domain job")
 	}
