@@ -1101,6 +1101,7 @@ func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 	}
 
 	mutation := c.client.db.Evidence.Create().
+		SetCreationDate(time.Now().Add(-time.Minute)).
 		SetName(c.Name)
 
 	if c.ProgramID != "" {

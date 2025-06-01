@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"time"
 
 	"entgo.io/ent"
 
@@ -14,6 +15,24 @@ import (
 func HookEvidenceFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.EvidenceFunc(func(ctx context.Context, m *generated.EvidenceMutation) (generated.Value, error) {
+			if !isDeleteOp(ctx, m) {
+				// validate creation date if only
+				// - it is a create operation
+				// - it was provided in an update operation
+				creationDate, ok := m.CreationDate()
+				op := m.Op()
+
+				if op == ent.OpCreate && !ok {
+					return nil, ErrZeroTimeNotAllowed
+				}
+
+				if ok || op == ent.OpCreate {
+					if creationDate.After(time.Now()) {
+						return nil, ErrFutureTimeNotAllowed
+					}
+				}
+			}
+
 			// check for uploaded files (e.g. avatar image)
 			fileIDs := objects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
