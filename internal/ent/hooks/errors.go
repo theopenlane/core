@@ -66,6 +66,11 @@ var (
 	ErrCadenceOrCronRequired = errors.New("either cadence or cron must be specified")
 	// ErrEitherCadenceOrCron is returned when both a cadence and cron is specified
 	ErrEitherCadenceOrCron = errors.New("only one of cadence or cron must be specified")
+	// ErrZeroTimeNotAllowed is returned when you try to set a non usable time value
+	ErrZeroTimeNotAllowed = errors.New("time cannot be empty. Provide a valid time/date")
+	// ErrFutureTimeNotAllowed is returned when you try to set a time into the future.
+	// future being any second/minute past the current time of validation
+	ErrFutureTimeNotAllowed = errors.New("time cannot be in the future")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

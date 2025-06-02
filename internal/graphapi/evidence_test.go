@@ -338,6 +338,16 @@ func TestMutationCreateEvidence(t *testing.T) {
 			ctx:         testUser1.UserCtx,
 			expectedErr: "invalid or unparsable field",
 		},
+		{
+			name: "creation date in the future",
+			request: openlaneclient.CreateEvidenceInput{
+				Name:         "Test Evidence",
+				CreationDate: lo.ToPtr(time.Now().Add(time.Hour)),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "time cannot be in the future",
+		},
 	}
 
 	for _, tc := range testCases {
@@ -510,6 +520,15 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name: "update not allowed, creation date is in the future",
+			request: openlaneclient.UpdateEvidenceInput{
+				CreationDate: lo.ToPtr(time.Now().Add(time.Minute)),
+			},
+			client:      suite.client.api,
+			ctx:         adminUser.UserCtx,
+			expectedErr: "time cannot be in the future",
 		},
 	}
 
