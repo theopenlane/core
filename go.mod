@@ -9,7 +9,7 @@ require (
 	dario.cat/mergo v1.0.2
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.4
-	github.com/99designs/gqlgen v0.17.73
+	github.com/99designs/gqlgen v0.17.74
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.32.1
 	github.com/alicebob/miniredis/v2 v2.34.0
@@ -79,8 +79,8 @@ require (
 	github.com/theopenlane/gqlgen-plugins v0.6.1
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.12.6
-	github.com/theopenlane/newman v0.1.5
-	github.com/theopenlane/riverboat v0.1.0
+	github.com/theopenlane/newman v0.1.6
+	github.com/theopenlane/riverboat v0.1.1
 	github.com/theopenlane/utils v0.4.5
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.27
@@ -548,7 +548,7 @@ require (
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/pterm/pterm v0.12.80
-	github.com/resend/resend-go/v2 v2.19.0 // indirect
+	github.com/resend/resend-go/v2 v2.20.0 // indirect
 	github.com/riverqueue/river/riverdriver v0.22.0 // indirect
 	github.com/riverqueue/river/rivershared v0.22.0 // indirect
 	github.com/riverqueue/river/rivertype v0.22.0
@@ -603,7 +603,7 @@ require (
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/api v0.234.0 // indirect
+	google.golang.org/api v0.235.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250505200425-f936aa4a68b2 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250512202823-5a2f75b736a9 // indirect
 	google.golang.org/grpc v1.72.1 // indirect
