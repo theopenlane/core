@@ -78,6 +78,15 @@ func getGroupByIDWithPermissionsEdges(ctx context.Context, groupID *string) (*ge
 		WithControlEditors().
 		WithControlBlockedGroups().
 
+		// Control Mapped permissions
+		WithMappedControlEditors().
+		WithMappedControlBlockedGroups().
+
+		// Control Implementation permissions
+		WithControlImplementationViewers().
+		WithControlImplementationEditors().
+		WithControlImplementationBlockedGroups().
+
 		// Control Objective permissions
 		WithControlObjectiveEditors().
 		WithControlObjectiveViewers().
