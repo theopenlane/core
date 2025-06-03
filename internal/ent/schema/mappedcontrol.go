@@ -54,7 +54,7 @@ func (MappedControl) Fields() []ent.Field {
 		field.Int("confidence").
 			Comment("percentage (0-100) of confidence in the mapping").
 			Min(0).
-			Max(100). // nolint:mnd - this is a percentage
+			Max(100). //nolint:mnd
 			Nillable().
 			Optional(),
 		field.Enum("source").

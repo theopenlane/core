@@ -210,6 +210,20 @@ func TestMutationCreateMappedControl(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
+			name: "using pat, missing owner ID",
+			request: openlaneclient.CreateMappedControlInput{
+				MappingType:       &enums.MappingTypeSubset,
+				ToControlIDs:      []string{toControl.ID},
+				FromSubcontrolIDs: []string{fromSubcontrol.ID},
+				Relation:          lo.ToPtr("Controls are a subset"),
+				Confidence:        lo.ToPtr(int64(21)),
+				Tags:              []string{"tag1", "tag2"},
+			},
+			client:      suite.client.apiWithPAT,
+			ctx:         context.Background(),
+			expectedErr: "owner_id is required",
+		},
+		{
 			name: "happy path, using api token",
 			request: openlaneclient.CreateMappedControlInput{
 				MappingType:       &enums.MappingTypeSubset,
