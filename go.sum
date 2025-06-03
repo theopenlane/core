@@ -788,8 +788,8 @@ github.com/lestrrat-go/httpcc v1.0.1 h1:ydWCStUeJLkpYyjLDHihupbn2tYmZ7m22BGkcvZZ
 github.com/lestrrat-go/httpcc v1.0.1/go.mod h1:qiltp3Mt56+55GPVCbTdM9MlqhvzyuL6W/NMDA8vA5E=
 github.com/lestrrat-go/httprc/v3 v3.0.0-beta2 h1:SDxjGoH7qj0nBXVrcrxX8eD94wEnjR+EEuqqmeqQYlY=
 github.com/lestrrat-go/httprc/v3 v3.0.0-beta2/go.mod h1:Nwo81sMxE0DcvTB+rJyynNhv/DUu2yZErV7sscw9pHE=
-github.com/lestrrat-go/jwx/v3 v3.0.1 h1:fH3T748FCMbXoF9UXXNS9i0q6PpYyJZK/rKSbkt2guY=
-github.com/lestrrat-go/jwx/v3 v3.0.1/go.mod h1:XP2WqxMOSzHSyf3pfibCcfsLqbomxakAnNqiuaH8nwo=
+github.com/lestrrat-go/jwx/v3 v3.0.2 h1:N+XLjTJEzDZRP3S0SezclXFAfopwL+o5vaL+qg6rX1I=
+github.com/lestrrat-go/jwx/v3 v3.0.2/go.mod h1:qO9w1qkQH77a0r9OXNM33YQPnV/evetKYRg58h1rBNE=
 github.com/lestrrat-go/option v1.0.1 h1:oAzP2fvZGQKWkvHa1/SAcFolBEca1oN+mQ7eooNBEYU=
 github.com/lestrrat-go/option v1.0.1/go.mod h1:5ZHFbivi4xwXxhxY9XHDe2FHo6/Z7WWmtT7T5nBBp3I=
 github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
@@ -1232,8 +1232,8 @@ github.com/theopenlane/iam v0.12.6 h1:bqXLitdrLAPtviFE3giBo16D8x8Y9BZjpt/4/y9tEu
 github.com/theopenlane/iam v0.12.6/go.mod h1:c0UnTtfQHgS/A3AwP4KOBQMh5+PQFWJi+KAfxgVomSM=
 github.com/theopenlane/newman v0.1.6 h1:WJ8wM8oBNRfdOfB9JexpJzMQYc9ySMyeK4pghNy1Eio=
 github.com/theopenlane/newman v0.1.6/go.mod h1:XPmBWMcjTsCqy+bDr67D1wfkraoExpVuS/vA3Pt+JZI=
-github.com/theopenlane/riverboat v0.1.1 h1:qI4IHG9Hug+5EAbdErFYQ9Rt6uEOstUl/m2jPnTJM80=
-github.com/theopenlane/riverboat v0.1.1/go.mod h1:CNQTlOVO6RN772gtVZmfBhsoSBATCagTiO2RH+DYTfU=
+github.com/theopenlane/riverboat v0.1.2 h1:o65fyrIsGRH1TCMwmEe06j+WFgFh+TvKTq5UAeVATbc=
+github.com/theopenlane/riverboat v0.1.2/go.mod h1:5YqRzDUQURLoqXVRCaSjnOw2Fj2PT63rDqySZGNGfMs=
 github.com/theopenlane/utils v0.4.5 h1:afS6VqnaNGHHZZ08b9roSEkfJls7fqx8QbJFi6B3f4w=
 github.com/theopenlane/utils v0.4.5/go.mod h1:aX2LvjiXj++v15Kigsqngx5I4cJLXT+Hb86F/4LJfb4=
 github.com/therootcompany/xz v1.0.1 h1:CmOtsn1CbtmyYiusbfmhmkpAAETj0wBIH6kCYaX+xzw=
