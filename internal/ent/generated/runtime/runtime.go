@@ -454,8 +454,6 @@ func init() {
 	control.Hooks[9] = controlMixinHooks7[0]
 
 	control.Hooks[10] = controlMixinHooks7[1]
-
-	control.Hooks[11] = controlMixinHooks7[2]
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters6 := controlMixin[6].Interceptors()
 	control.Interceptors[0] = controlMixinInters1[0]
@@ -542,6 +540,7 @@ func init() {
 	controlimplementationMixinHooks0 := controlimplementationMixin[0].Hooks()
 	controlimplementationMixinHooks1 := controlimplementationMixin[1].Hooks()
 	controlimplementationMixinHooks5 := controlimplementationMixin[5].Hooks()
+	controlimplementationMixinHooks6 := controlimplementationMixin[6].Hooks()
 	controlimplementationHooks := schema.ControlImplementation{}.Hooks()
 
 	controlimplementation.Hooks[1] = controlimplementationMixinHooks0[0]
@@ -554,7 +553,13 @@ func init() {
 
 	controlimplementation.Hooks[5] = controlimplementationMixinHooks5[2]
 
-	controlimplementation.Hooks[6] = controlimplementationHooks[0]
+	controlimplementation.Hooks[6] = controlimplementationMixinHooks6[0]
+
+	controlimplementation.Hooks[7] = controlimplementationMixinHooks6[1]
+
+	controlimplementation.Hooks[8] = controlimplementationMixinHooks6[2]
+
+	controlimplementation.Hooks[9] = controlimplementationHooks[0]
 	controlimplementationMixinInters1 := controlimplementationMixin[1].Interceptors()
 	controlimplementationMixinInters5 := controlimplementationMixin[5].Interceptors()
 	controlimplementation.Interceptors[0] = controlimplementationMixinInters1[0]
@@ -3286,11 +3291,21 @@ func init() {
 
 	organization.Hooks[11] = organizationMixinHooks5[8]
 
-	organization.Hooks[12] = organizationHooks[0]
+	organization.Hooks[12] = organizationMixinHooks5[9]
 
-	organization.Hooks[13] = organizationHooks[1]
+	organization.Hooks[13] = organizationMixinHooks5[10]
 
-	organization.Hooks[14] = organizationHooks[2]
+	organization.Hooks[14] = organizationMixinHooks5[11]
+
+	organization.Hooks[15] = organizationMixinHooks5[12]
+
+	organization.Hooks[16] = organizationMixinHooks5[13]
+
+	organization.Hooks[17] = organizationHooks[0]
+
+	organization.Hooks[18] = organizationHooks[1]
+
+	organization.Hooks[19] = organizationHooks[2]
 	organizationMixinInters1 := organizationMixin[1].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters1[0]

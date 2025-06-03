@@ -643,30 +643,30 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mcu.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.BlockedGroupsTable,
-			Columns: []string{mappedcontrol.BlockedGroupsColumn},
+			Columns: mappedcontrol.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.Group
+		edge.Schema = mcu.schemaConfig.MappedControlBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !mcu.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.BlockedGroupsTable,
-			Columns: []string{mappedcontrol.BlockedGroupsColumn},
+			Columns: mappedcontrol.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.Group
+		edge.Schema = mcu.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -674,16 +674,16 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if nodes := mcu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.BlockedGroupsTable,
-			Columns: []string{mappedcontrol.BlockedGroupsColumn},
+			Columns: mappedcontrol.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.Group
+		edge.Schema = mcu.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -691,30 +691,30 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if mcu.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.EditorsTable,
-			Columns: []string{mappedcontrol.EditorsColumn},
+			Columns: mappedcontrol.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.Group
+		edge.Schema = mcu.schemaConfig.MappedControlEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !mcu.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.EditorsTable,
-			Columns: []string{mappedcontrol.EditorsColumn},
+			Columns: mappedcontrol.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.Group
+		edge.Schema = mcu.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -722,16 +722,16 @@ func (mcu *MappedControlUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if nodes := mcu.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.EditorsTable,
-			Columns: []string{mappedcontrol.EditorsColumn},
+			Columns: mappedcontrol.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcu.schemaConfig.Group
+		edge.Schema = mcu.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1589,30 +1589,30 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 	}
 	if mcuo.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.BlockedGroupsTable,
-			Columns: []string{mappedcontrol.BlockedGroupsColumn},
+			Columns: mappedcontrol.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.Group
+		edge.Schema = mcuo.schemaConfig.MappedControlBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcuo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !mcuo.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.BlockedGroupsTable,
-			Columns: []string{mappedcontrol.BlockedGroupsColumn},
+			Columns: mappedcontrol.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.Group
+		edge.Schema = mcuo.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1620,16 +1620,16 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 	}
 	if nodes := mcuo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.BlockedGroupsTable,
-			Columns: []string{mappedcontrol.BlockedGroupsColumn},
+			Columns: mappedcontrol.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.Group
+		edge.Schema = mcuo.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1637,30 +1637,30 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 	}
 	if mcuo.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.EditorsTable,
-			Columns: []string{mappedcontrol.EditorsColumn},
+			Columns: mappedcontrol.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.Group
+		edge.Schema = mcuo.schemaConfig.MappedControlEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := mcuo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !mcuo.mutation.EditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.EditorsTable,
-			Columns: []string{mappedcontrol.EditorsColumn},
+			Columns: mappedcontrol.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.Group
+		edge.Schema = mcuo.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1668,16 +1668,16 @@ func (mcuo *MappedControlUpdateOne) sqlSave(ctx context.Context) (_node *MappedC
 	}
 	if nodes := mcuo.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.EditorsTable,
-			Columns: []string{mappedcontrol.EditorsColumn},
+			Columns: mappedcontrol.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcuo.schemaConfig.Group
+		edge.Schema = mcuo.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -73,18 +73,20 @@ type organization
 
     define control_creator: [group#member]
     define can_create_control: can_edit or control_creator
-    # subcontrols and control_implementations inherit access from their parent control
+    # subcontrols, control_implementations and control_objectives can inherit access from their parent control
     define can_create_subcontrol: can_edit or control_creator
-    define can_create_control_implementation: can_edit or control_creator
+
+    # control implementation and objectives can also be created by users outside the control creator access
+    define control_implementation_creator: [group#member]
+    define can_create_control_implementation: can_edit or control_creator or control_implementation_creator
+    define control_objective_creator: [group#member]
+    define can_create_control_objective: can_edit or control_creator or control_objective_creator
 
     # mapped controls are used to map controls from one standard to another
     # they can be created by any user with edit access to the organization
     # or by a user with the mapped_control_creator or control_creator role
     define can_create_mapped_control: can_edit or control_creator or mapped_control_creator
     define mapped_control_creator: [group#member]
-
-    define control_objective_creator: [group#member]
-    define can_create_control_objective: can_edit or control_objective_creator
 
     define group_creator: [group#member]
     define can_create_group: can_edit or group_creator
@@ -200,8 +202,9 @@ type control
     define can_delete: [user, service] or owner or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, organization, program, standard]
+    # do not include group#member here as controls automatically inherit access from the parent organization
     # member covers organizations whereas can_view covers other others
-    define viewer: [group#member] or member from parent or can_view from parent
+    define viewer: member from parent or can_view from parent
     # admin covers organizations whereas can_edit covers others
     define editor: [group#member, organization#owner] or admin from parent or can_edit from parent
     define blocked: [user, group#member]
@@ -218,7 +221,9 @@ type subcontrol
     define can_delete: [user, service] or owner or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, control]
-    define viewer: [group#member] or can_view from parent
+    # do not include group#member here as subcontrols automatically inherit access from the parent control which
+    # are accessible to all members of the organization
+    define viewer: can_view from parent
     define editor: [group#member, organization#owner] or can_edit from parent
     define blocked: [user, group#member]
     # owner is the group of users that are responsible for the subcontrol, they will have full access to the subcontrol
@@ -258,7 +263,8 @@ type mapped_control
     define can_delete: [user, service] or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [organization]
-    define viewer: [group#member] or editor or member from parent or can_view from parent
+    # no group#member relation here as mapped controls automatically inherit access from the parent organization
+    define viewer: editor or member from parent or can_view from parent
     define editor: [group#member] or admin from parent or owner from parent
     define blocked: [user, group#member]
 # risks are associated with an organization but do not inherit access from the organization
@@ -398,15 +404,16 @@ type contact
 # tasks can also be associated with a parent object (like a control or a procedure) and inherit access from that object
 type task
   relations
-    define can_view: [user, service] or assignee or assigner or can_delete or can_edit or can_view from parent
-    define can_edit: [user, service] or assignee or assigner or editor or can_delete or can_edit from parent
+    define can_view: [user, service] or assignee or assigner or can_delete or can_edit or viewer
+    define can_edit: [user, service] or assignee or assigner or editor or can_delete
     # assignee cannot delete the task, only the original creator (can_delete from parent) or the assigner
     define can_delete: [user, service] or assigner or can_delete from parent
     define assignee: [user]
     define assigner: [user]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, program, control, procedure, internal_policy, subcontrol, control_objective, risk]
-    define editor: [organization#owner]
+    define viewer: can_view from parent
+    define editor: [organization#owner] or can_edit from parent
 # notes are associated with a parent object and inherit view access from that object, e.g. task, policy, procedure, etc.
 # do not inherit edit permissions from parent here like we do on other objects, only the original user (and org owner) can edit
 type note

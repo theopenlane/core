@@ -1181,8 +1181,8 @@ func TestManagedGroups(t *testing.T) {
 	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	input = openlaneclient.UpdateGroupInput{
-		AddProgramEditorIDs:              []string{program.ID},
-		AddControlViewerIDs:              []string{control.ID},
+		AddProgramViewerIDs:              []string{program.ID},
+		AddControlEditorIDs:              []string{control.ID},
 		AddInternalPolicyBlockedGroupIDs: []string{policy.ID},
 	}
 
@@ -1194,8 +1194,8 @@ func TestManagedGroups(t *testing.T) {
 
 	// make sure I can also remove them
 	input = openlaneclient.UpdateGroupInput{
-		RemoveProgramEditorIDs:              []string{program.ID},
-		RemoveControlViewerIDs:              []string{control.ID},
+		RemoveProgramViewerIDs:              []string{program.ID},
+		RemoveControlEditorIDs:              []string{control.ID},
 		RemoveInternalPolicyBlockedGroupIDs: []string{policy.ID},
 	}
 

@@ -104,8 +104,6 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
-	// EdgeViewers holds the string denoting the viewers edge name in mutations.
-	EdgeViewers = "viewers"
 	// EdgeStandard holds the string denoting the standard edge name in mutations.
 	EdgeStandard = "standard"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
@@ -193,11 +191,6 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
-	// ViewersTable is the table that holds the viewers relation/edge. The primary key declared below.
-	ViewersTable = "control_viewers"
-	// ViewersInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	ViewersInverseTable = "groups"
 	// StandardTable is the table that holds the standard relation/edge.
 	StandardTable = "controls"
 	// StandardInverseTable is the table name for the Standard entity.
@@ -305,9 +298,6 @@ var (
 	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
 	// primary key for the editors relation (M2M).
 	EditorsPrimaryKey = []string{"control_id", "group_id"}
-	// ViewersPrimaryKey and ViewersColumn2 are the table columns denoting the
-	// primary key for the viewers relation (M2M).
-	ViewersPrimaryKey = []string{"control_id", "group_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "control_id"}
@@ -341,7 +331,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [11]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -677,20 +667,6 @@ func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByViewersCount orders the results by viewers count.
-func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newViewersStep(), opts...)
-	}
-}
-
-// ByViewers orders the results by viewers terms.
-func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByStandardField orders the results by standard field.
 func ByStandardField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -870,13 +846,6 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EditorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
-	)
-}
-func newViewersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ViewersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 	)
 }
 func newStandardStep() *sqlgraph.Step {

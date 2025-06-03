@@ -264,7 +264,6 @@ func TestMutationCreateControl(t *testing.T) {
 
 	// create groups to be associated with the control
 	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// create control implementation to be associated with the control
 	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -347,7 +346,6 @@ func TestMutationCreateControl(t *testing.T) {
 				RefCode:         "A-3",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
-				ViewerIDs:       []string{viewerGroup.ID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -576,13 +574,6 @@ func TestMutationCreateControl(t *testing.T) {
 				}
 			}
 
-			if len(tc.request.ViewerIDs) > 0 {
-				assert.Check(t, is.Len(resp.CreateControl.Control.Viewers.Edges, 1))
-				for _, edge := range resp.CreateControl.Control.Viewers.Edges {
-					assert.Equal(t, viewerGroup.ID, edge.Node.ID)
-				}
-			}
-
 			if tc.request.ControlImplementationIDs != nil {
 				assert.Assert(t, is.Len(resp.CreateControl.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs)))
 			}
@@ -610,7 +601,7 @@ func TestMutationCreateControl(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, blockedGroup.ID, viewerGroup.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, blockedGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateControlsByClone(t *testing.T) {

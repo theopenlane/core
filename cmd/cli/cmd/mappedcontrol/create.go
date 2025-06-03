@@ -12,7 +12,7 @@ import (
 
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "create a new mappedControl",
+	Short: "create a new mapped control",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := create(cmd.Context())
 		cobra.CheckErr(err)

@@ -557,21 +557,6 @@ func (cc *ControlCreate) AddEditors(g ...*Group) *ControlCreate {
 	return cc.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (cc *ControlCreate) AddViewerIDs(ids ...string) *ControlCreate {
-	cc.mutation.AddViewerIDs(ids...)
-	return cc
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (cc *ControlCreate) AddViewers(g ...*Group) *ControlCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return cc.AddViewerIDs(ids...)
-}
-
 // SetStandard sets the "standard" edge to the Standard entity.
 func (cc *ControlCreate) SetStandard(s *Standard) *ControlCreate {
 	return cc.SetStandardID(s.ID)
@@ -1141,23 +1126,6 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = cc.schemaConfig.ControlEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := cc.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ViewersTable,
-			Columns: control.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cc.schemaConfig.ControlViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

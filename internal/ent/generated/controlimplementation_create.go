@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/enums"
@@ -214,6 +215,51 @@ func (cic *ControlImplementationCreate) SetNillableID(s *string) *ControlImpleme
 // SetOwner sets the "owner" edge to the Organization entity.
 func (cic *ControlImplementationCreate) SetOwner(o *Organization) *ControlImplementationCreate {
 	return cic.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (cic *ControlImplementationCreate) AddBlockedGroupIDs(ids ...string) *ControlImplementationCreate {
+	cic.mutation.AddBlockedGroupIDs(ids...)
+	return cic
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (cic *ControlImplementationCreate) AddBlockedGroups(g ...*Group) *ControlImplementationCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cic.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (cic *ControlImplementationCreate) AddEditorIDs(ids ...string) *ControlImplementationCreate {
+	cic.mutation.AddEditorIDs(ids...)
+	return cic
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (cic *ControlImplementationCreate) AddEditors(g ...*Group) *ControlImplementationCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cic.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (cic *ControlImplementationCreate) AddViewerIDs(ids ...string) *ControlImplementationCreate {
+	cic.mutation.AddViewerIDs(ids...)
+	return cic
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (cic *ControlImplementationCreate) AddViewers(g ...*Group) *ControlImplementationCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cic.AddViewerIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -427,6 +473,57 @@ func (cic *ControlImplementationCreate) createSpec() (*ControlImplementation, *s
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cic.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.BlockedGroupsTable,
+			Columns: controlimplementation.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cic.schemaConfig.ControlImplementationBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cic.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.EditorsTable,
+			Columns: controlimplementation.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cic.schemaConfig.ControlImplementationEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cic.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.ViewersTable,
+			Columns: controlimplementation.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cic.schemaConfig.ControlImplementationViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cic.mutation.ControlsIDs(); len(nodes) > 0 {

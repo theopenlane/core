@@ -52,6 +52,13 @@
 - user: user:ulid-of-member-2
   relation: member
   object: organization:openlane
+# setup another org member
+- user: user:ulid-of-member-3
+  relation: _self
+  object: user:ulid-of-member-3
+- user: user:ulid-of-member-3
+  relation: member
+  object: organization:openlane
 # setup audit log viewer
 - user: user:ulid-of-audit-log-viewer
   relation: _self

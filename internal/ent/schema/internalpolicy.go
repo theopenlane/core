@@ -97,7 +97,7 @@ func (InternalPolicy) Hooks() []ent.Hook {
 // Interceptors of the InternalPolicy
 func (InternalPolicy) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		// procedures are org owned, but we need to ensure the groups are filtered as well
+		// policies are org owned, but we need to ensure the groups are filtered as well
 		interceptors.FilterQueryResults[generated.InternalPolicy](),
 	}
 }

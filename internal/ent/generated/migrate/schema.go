@@ -1334,16 +1334,19 @@ var (
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
-		{Name: "mapped_control_blocked_groups", Type: field.TypeString, Nullable: true},
-		{Name: "mapped_control_editors", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_control_implementation_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_objective_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_evidence_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_group_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_internal_policy_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_mapped_control_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_narrative_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_procedure_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_program_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_risk_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_scheduled_job_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_standard_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_template_creators", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -1354,25 +1357,25 @@ var (
 		PrimaryKey: []*schema.Column{GroupsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "groups_mapped_controls_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[15]},
-				RefColumns: []*schema.Column{MappedControlsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_mapped_controls_editors",
-				Columns:    []*schema.Column{GroupsColumns[16]},
-				RefColumns: []*schema.Column{MappedControlsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "groups_organizations_control_creators",
-				Columns:    []*schema.Column{GroupsColumns[17]},
+				Columns:    []*schema.Column{GroupsColumns[15]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_control_implementation_creators",
+				Columns:    []*schema.Column{GroupsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_organizations_control_objective_creators",
+				Columns:    []*schema.Column{GroupsColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_evidence_creators",
 				Columns:    []*schema.Column{GroupsColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
@@ -1390,38 +1393,56 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_narrative_creators",
+				Symbol:     "groups_organizations_mapped_control_creators",
 				Columns:    []*schema.Column{GroupsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_procedure_creators",
+				Symbol:     "groups_organizations_narrative_creators",
 				Columns:    []*schema.Column{GroupsColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_program_creators",
+				Symbol:     "groups_organizations_procedure_creators",
 				Columns:    []*schema.Column{GroupsColumns[23]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_risk_creators",
+				Symbol:     "groups_organizations_program_creators",
 				Columns:    []*schema.Column{GroupsColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_template_creators",
+				Symbol:     "groups_organizations_risk_creators",
 				Columns:    []*schema.Column{GroupsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_groups",
+				Symbol:     "groups_organizations_scheduled_job_creators",
 				Columns:    []*schema.Column{GroupsColumns[26]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_standard_creators",
+				Columns:    []*schema.Column{GroupsColumns[27]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_template_creators",
+				Columns:    []*schema.Column{GroupsColumns[28]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_groups",
+				Columns:    []*schema.Column{GroupsColumns[29]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1435,12 +1456,12 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[26]},
+				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[29]},
 			},
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[26]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[29]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4376,31 +4397,6 @@ var (
 			},
 		},
 	}
-	// ControlViewersColumns holds the columns for the "control_viewers" table.
-	ControlViewersColumns = []*schema.Column{
-		{Name: "control_id", Type: field.TypeString},
-		{Name: "group_id", Type: field.TypeString},
-	}
-	// ControlViewersTable holds the schema information for the "control_viewers" table.
-	ControlViewersTable = &schema.Table{
-		Name:       "control_viewers",
-		Columns:    ControlViewersColumns,
-		PrimaryKey: []*schema.Column{ControlViewersColumns[0], ControlViewersColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "control_viewers_control_id",
-				Columns:    []*schema.Column{ControlViewersColumns[0]},
-				RefColumns: []*schema.Column{ControlsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "control_viewers_group_id",
-				Columns:    []*schema.Column{ControlViewersColumns[1]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// ControlControlImplementationsColumns holds the columns for the "control_control_implementations" table.
 	ControlControlImplementationsColumns = []*schema.Column{
 		{Name: "control_id", Type: field.TypeString},
@@ -4422,6 +4418,81 @@ var (
 				Symbol:     "control_control_implementations_control_implementation_id",
 				Columns:    []*schema.Column{ControlControlImplementationsColumns[1]},
 				RefColumns: []*schema.Column{ControlImplementationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlImplementationBlockedGroupsColumns holds the columns for the "control_implementation_blocked_groups" table.
+	ControlImplementationBlockedGroupsColumns = []*schema.Column{
+		{Name: "control_implementation_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ControlImplementationBlockedGroupsTable holds the schema information for the "control_implementation_blocked_groups" table.
+	ControlImplementationBlockedGroupsTable = &schema.Table{
+		Name:       "control_implementation_blocked_groups",
+		Columns:    ControlImplementationBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{ControlImplementationBlockedGroupsColumns[0], ControlImplementationBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_implementation_blocked_groups_control_implementation_id",
+				Columns:    []*schema.Column{ControlImplementationBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{ControlImplementationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_implementation_blocked_groups_group_id",
+				Columns:    []*schema.Column{ControlImplementationBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlImplementationEditorsColumns holds the columns for the "control_implementation_editors" table.
+	ControlImplementationEditorsColumns = []*schema.Column{
+		{Name: "control_implementation_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ControlImplementationEditorsTable holds the schema information for the "control_implementation_editors" table.
+	ControlImplementationEditorsTable = &schema.Table{
+		Name:       "control_implementation_editors",
+		Columns:    ControlImplementationEditorsColumns,
+		PrimaryKey: []*schema.Column{ControlImplementationEditorsColumns[0], ControlImplementationEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_implementation_editors_control_implementation_id",
+				Columns:    []*schema.Column{ControlImplementationEditorsColumns[0]},
+				RefColumns: []*schema.Column{ControlImplementationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_implementation_editors_group_id",
+				Columns:    []*schema.Column{ControlImplementationEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlImplementationViewersColumns holds the columns for the "control_implementation_viewers" table.
+	ControlImplementationViewersColumns = []*schema.Column{
+		{Name: "control_implementation_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ControlImplementationViewersTable holds the schema information for the "control_implementation_viewers" table.
+	ControlImplementationViewersTable = &schema.Table{
+		Name:       "control_implementation_viewers",
+		Columns:    ControlImplementationViewersColumns,
+		PrimaryKey: []*schema.Column{ControlImplementationViewersColumns[0], ControlImplementationViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_implementation_viewers_control_implementation_id",
+				Columns:    []*schema.Column{ControlImplementationViewersColumns[0]},
+				RefColumns: []*schema.Column{ControlImplementationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_implementation_viewers_group_id",
+				Columns:    []*schema.Column{ControlImplementationViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -5247,6 +5318,56 @@ var (
 				Symbol:     "job_runner_job_runner_tokens_job_runner_token_id",
 				Columns:    []*schema.Column{JobRunnerJobRunnerTokensColumns[1]},
 				RefColumns: []*schema.Column{JobRunnerTokensColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// MappedControlBlockedGroupsColumns holds the columns for the "mapped_control_blocked_groups" table.
+	MappedControlBlockedGroupsColumns = []*schema.Column{
+		{Name: "mapped_control_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// MappedControlBlockedGroupsTable holds the schema information for the "mapped_control_blocked_groups" table.
+	MappedControlBlockedGroupsTable = &schema.Table{
+		Name:       "mapped_control_blocked_groups",
+		Columns:    MappedControlBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{MappedControlBlockedGroupsColumns[0], MappedControlBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "mapped_control_blocked_groups_mapped_control_id",
+				Columns:    []*schema.Column{MappedControlBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{MappedControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "mapped_control_blocked_groups_group_id",
+				Columns:    []*schema.Column{MappedControlBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// MappedControlEditorsColumns holds the columns for the "mapped_control_editors" table.
+	MappedControlEditorsColumns = []*schema.Column{
+		{Name: "mapped_control_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// MappedControlEditorsTable holds the schema information for the "mapped_control_editors" table.
+	MappedControlEditorsTable = &schema.Table{
+		Name:       "mapped_control_editors",
+		Columns:    MappedControlEditorsColumns,
+		PrimaryKey: []*schema.Column{MappedControlEditorsColumns[0], MappedControlEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "mapped_control_editors_mapped_control_id",
+				Columns:    []*schema.Column{MappedControlEditorsColumns[0]},
+				RefColumns: []*schema.Column{MappedControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "mapped_control_editors_group_id",
+				Columns:    []*schema.Column{MappedControlEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -6580,8 +6701,10 @@ var (
 		ControlProceduresTable,
 		ControlBlockedGroupsTable,
 		ControlEditorsTable,
-		ControlViewersTable,
 		ControlControlImplementationsTable,
+		ControlImplementationBlockedGroupsTable,
+		ControlImplementationEditorsTable,
+		ControlImplementationViewersTable,
 		ControlObjectiveBlockedGroupsTable,
 		ControlObjectiveEditorsTable,
 		ControlObjectiveViewersTable,
@@ -6615,6 +6738,8 @@ var (
 		InternalPolicyRisksTable,
 		InviteEventsTable,
 		JobRunnerJobRunnerTokensTable,
+		MappedControlBlockedGroupsTable,
+		MappedControlEditorsTable,
 		MappedControlFromControlsTable,
 		MappedControlToControlsTable,
 		MappedControlFromSubcontrolsTable,
@@ -6740,8 +6865,8 @@ func init() {
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
-	GroupsTable.ForeignKeys[0].RefTable = MappedControlsTable
-	GroupsTable.ForeignKeys[1].RefTable = MappedControlsTable
+	GroupsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[3].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[4].RefTable = OrganizationsTable
@@ -6752,6 +6877,9 @@ func init() {
 	GroupsTable.ForeignKeys[9].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[10].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[11].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[12].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[13].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[14].RefTable = OrganizationsTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}
@@ -6916,10 +7044,14 @@ func init() {
 	ControlBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlEditorsTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlEditorsTable.ForeignKeys[1].RefTable = GroupsTable
-	ControlViewersTable.ForeignKeys[0].RefTable = ControlsTable
-	ControlViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlControlImplementationsTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
+	ControlImplementationBlockedGroupsTable.ForeignKeys[0].RefTable = ControlImplementationsTable
+	ControlImplementationBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	ControlImplementationEditorsTable.ForeignKeys[0].RefTable = ControlImplementationsTable
+	ControlImplementationEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	ControlImplementationViewersTable.ForeignKeys[0].RefTable = ControlImplementationsTable
+	ControlImplementationViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlObjectiveBlockedGroupsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ControlObjectiveBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlObjectiveEditorsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
@@ -6986,6 +7118,10 @@ func init() {
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
 	JobRunnerJobRunnerTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
 	JobRunnerJobRunnerTokensTable.ForeignKeys[1].RefTable = JobRunnerTokensTable
+	MappedControlBlockedGroupsTable.ForeignKeys[0].RefTable = MappedControlsTable
+	MappedControlBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	MappedControlEditorsTable.ForeignKeys[0].RefTable = MappedControlsTable
+	MappedControlEditorsTable.ForeignKeys[1].RefTable = GroupsTable
 	MappedControlFromControlsTable.ForeignKeys[0].RefTable = MappedControlsTable
 	MappedControlFromControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	MappedControlToControlsTable.ForeignKeys[0].RefTable = MappedControlsTable

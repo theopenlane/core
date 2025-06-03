@@ -65,20 +65,16 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
-	BlockedGroupsTable = "groups"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge. The primary key declared below.
+	BlockedGroupsTable = "mapped_control_blocked_groups"
 	// BlockedGroupsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	BlockedGroupsInverseTable = "groups"
-	// BlockedGroupsColumn is the table column denoting the blocked_groups relation/edge.
-	BlockedGroupsColumn = "mapped_control_blocked_groups"
-	// EditorsTable is the table that holds the editors relation/edge.
-	EditorsTable = "groups"
+	// EditorsTable is the table that holds the editors relation/edge. The primary key declared below.
+	EditorsTable = "mapped_control_editors"
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
-	// EditorsColumn is the table column denoting the editors relation/edge.
-	EditorsColumn = "mapped_control_editors"
 	// FromControlsTable is the table that holds the from_controls relation/edge. The primary key declared below.
 	FromControlsTable = "mapped_control_from_controls"
 	// FromControlsInverseTable is the table name for the Control entity.
@@ -119,6 +115,12 @@ var Columns = []string{
 }
 
 var (
+	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the blocked_groups relation (M2M).
+	BlockedGroupsPrimaryKey = []string{"mapped_control_id", "group_id"}
+	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
+	// primary key for the editors relation (M2M).
+	EditorsPrimaryKey = []string{"mapped_control_id", "group_id"}
 	// FromControlsPrimaryKey and FromControlsColumn2 are the table columns denoting the
 	// primary key for the from_controls relation (M2M).
 	FromControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
@@ -356,14 +358,14 @@ func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
 	)
 }
 func newEditorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EditorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 	)
 }
 func newFromControlsStep() *sqlgraph.Step {

@@ -14,7 +14,7 @@ import (
 // command represents the base mappedControlHistory command when called without any subcommands
 var command = &cobra.Command{
 	Use:   "mapped-control-history",
-	Short: "the subcommands for working with mappedControlHistories",
+	Short: "the subcommands for working with mapped control histories",
 }
 
 func init() {

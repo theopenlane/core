@@ -10,7 +10,7 @@ import (
 
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "get an existing mappedControl",
+	Short: "get an existing mapped control",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := get(cmd.Context())
 		cobra.CheckErr(err)
@@ -19,7 +19,7 @@ var getCmd = &cobra.Command{
 
 func init() {
 	command.AddCommand(getCmd)
-	getCmd.Flags().StringP("id", "i", "", "mappedControl id to query")
+	getCmd.Flags().StringP("id", "i", "", "mapped control id to query")
 
 }
 

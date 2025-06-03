@@ -30,12 +30,8 @@ func TestQueryControlImplementation(t *testing.T) {
 	subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(testUser1.UserCtx, t)
 	controlImplementation3 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control2.ID}, SubcontrolIDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustNew(testUser1.UserCtx, t)
 
-	// give viewOnlyUser access to the parent control via a group
-	// this will give the user access to the controlImplementation as well
-	groupViewer := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, GroupID: groupViewer.ID, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
-
-	control3 := (&ControlBuilder{client: suite.client, ControlViewerGroupID: groupViewer.ID}).MustNew(testUser1.UserCtx, t)
+	// ensure viewonly user can access controlImplementation with associated controls
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	controlImplementation4 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control3.ID}}).MustNew(testUser1.UserCtx, t)
 
 	// add test cases for querying the controlImplementation
@@ -165,7 +161,6 @@ func TestQueryControlImplementation(t *testing.T) {
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation1.ID, controlImplementation3.ID, controlImplementation4.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation2.ID}}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupViewer.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID}}).MustDelete(testUser1.UserCtx, t)
 
 }
@@ -177,15 +172,11 @@ func TestQueryControlImplementations(t *testing.T) {
 		(&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	}
 
-	// give viewOnlyUser access to the parent control via a group
-	// this will give the user access to the controlImplementation as well
-	groupViewer := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, GroupID: groupViewer.ID, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
-
-	numCIsWithGroupViewer := 2
+	// view only users should be able to see these because they are associated with a control
+	numCIsWithAssociatedControls := 2
 	controlIDs := []string{}
-	for range numCIsWithGroupViewer {
-		control1 := (&ControlBuilder{client: suite.client, ControlViewerGroupID: groupViewer.ID}).MustNew(testUser1.UserCtx, t)
+	for range numCIsWithAssociatedControls {
+		control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 		(&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser1.UserCtx, t)
 
 		controlIDs = append(controlIDs, control1.ID)
@@ -201,25 +192,25 @@ func TestQueryControlImplementations(t *testing.T) {
 			name:            "happy path",
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
-			expectedResults: numCIs + numCIsWithGroupViewer,
+			expectedResults: numCIs + numCIsWithAssociatedControls,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
 			ctx:             viewOnlyUser.UserCtx,
-			expectedResults: numCIsWithGroupViewer,
+			expectedResults: numCIsWithAssociatedControls,
 		},
 		{
 			name:            "happy path, using api token",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: numCIsWithGroupViewer, // only the ones with linked controls will be returned
+			expectedResults: numCIsWithAssociatedControls, // only the ones with linked controls will be returned
 		},
 		{
 			name:            "happy path, using pat",
 			client:          suite.client.apiWithPAT,
 			ctx:             context.Background(),
-			expectedResults: numCIs + numCIsWithGroupViewer,
+			expectedResults: numCIs + numCIsWithAssociatedControls,
 		},
 		{
 			name:            "another user, no controlImplementations should be returned",
@@ -241,7 +232,6 @@ func TestQueryControlImplementations(t *testing.T) {
 
 	// cleanup
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupViewer.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
 }
 

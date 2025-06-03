@@ -120,11 +120,11 @@ func (mcq *MappedControlQuery) QueryBlockedGroups() *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.BlockedGroupsTable, mappedcontrol.BlockedGroupsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.BlockedGroupsTable, mappedcontrol.BlockedGroupsPrimaryKey...),
 		)
 		schemaConfig := mcq.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.MappedControlBlockedGroups
 		fromU = sqlgraph.SetNeighbors(mcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -145,11 +145,11 @@ func (mcq *MappedControlQuery) QueryEditors() *GroupQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.EditorsTable, mappedcontrol.EditorsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.EditorsTable, mappedcontrol.EditorsPrimaryKey...),
 		)
 		schemaConfig := mcq.schemaConfig
 		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.MappedControlEditors
 		fromU = sqlgraph.SetNeighbors(mcq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -784,64 +784,126 @@ func (mcq *MappedControlQuery) loadOwner(ctx context.Context, query *Organizatio
 	return nil
 }
 func (mcq *MappedControlQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*MappedControl)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*MappedControl)
+	nids := make(map[string]map[*MappedControl]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(mappedcontrol.BlockedGroupsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(mappedcontrol.BlockedGroupsTable)
+		joinT.Schema(mcq.schemaConfig.MappedControlBlockedGroups)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(mappedcontrol.BlockedGroupsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(mappedcontrol.BlockedGroupsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(mappedcontrol.BlockedGroupsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*MappedControl]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.mapped_control_blocked_groups
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "mapped_control_blocked_groups" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_blocked_groups" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (mcq *MappedControlQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*MappedControl)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*MappedControl)
+	nids := make(map[string]map[*MappedControl]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(mappedcontrol.EditorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(mappedcontrol.EditorsTable)
+		joinT.Schema(mcq.schemaConfig.MappedControlEditors)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(mappedcontrol.EditorsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(mappedcontrol.EditorsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(mappedcontrol.EditorsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*MappedControl]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.mapped_control_editors
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "mapped_control_editors" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_editors" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

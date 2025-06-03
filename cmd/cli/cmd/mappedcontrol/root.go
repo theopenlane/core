@@ -15,7 +15,7 @@ import (
 // command represents the base mappedControl command when called without any subcommands
 var command = &cobra.Command{
 	Use:   "mapped-control",
-	Short: "the subcommands for working with mappedControls",
+	Short: "the subcommands for working with mapped controls",
 }
 
 func init() {

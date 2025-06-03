@@ -149,8 +149,6 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Control_viewers(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
@@ -291,8 +289,6 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Control_viewers(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
@@ -477,8 +473,6 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Control_viewers(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":

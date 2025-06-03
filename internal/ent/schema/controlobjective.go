@@ -141,7 +141,9 @@ func (ControlObjective) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
-			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ProgramParent), // if mutation contains program_id, check access
+			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ProgramParent),     // if mutation contains program_id, check access
+			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ControlsParent),    // if mutation contains control_id, check access
+			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlObjectiveMutation](),
 		),

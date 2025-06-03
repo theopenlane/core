@@ -56,18 +56,27 @@ type ControlImplementation struct {
 type ControlImplementationEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [6]map[string]int
 
-	namedControls    map[string][]*Control
-	namedSubcontrols map[string][]*Subcontrol
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+	namedViewers       map[string][]*Group
+	namedControls      map[string][]*Control
+	namedSubcontrols   map[string][]*Subcontrol
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -81,10 +90,37 @@ func (e ControlImplementationEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlImplementationEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlImplementationEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlImplementationEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[4] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -93,7 +129,7 @@ func (e ControlImplementationEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[5] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -231,6 +267,21 @@ func (ci *ControlImplementation) QueryOwner() *OrganizationQuery {
 	return NewControlImplementationClient(ci.config).QueryOwner(ci)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the ControlImplementation entity.
+func (ci *ControlImplementation) QueryBlockedGroups() *GroupQuery {
+	return NewControlImplementationClient(ci.config).QueryBlockedGroups(ci)
+}
+
+// QueryEditors queries the "editors" edge of the ControlImplementation entity.
+func (ci *ControlImplementation) QueryEditors() *GroupQuery {
+	return NewControlImplementationClient(ci.config).QueryEditors(ci)
+}
+
+// QueryViewers queries the "viewers" edge of the ControlImplementation entity.
+func (ci *ControlImplementation) QueryViewers() *GroupQuery {
+	return NewControlImplementationClient(ci.config).QueryViewers(ci)
+}
+
 // QueryControls queries the "controls" edge of the ControlImplementation entity.
 func (ci *ControlImplementation) QueryControls() *ControlQuery {
 	return NewControlImplementationClient(ci.config).QueryControls(ci)
@@ -304,6 +355,78 @@ func (ci *ControlImplementation) String() string {
 	builder.WriteString(ci.Details)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ci *ControlImplementation) NamedBlockedGroups(name string) ([]*Group, error) {
+	if ci.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ci.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ci *ControlImplementation) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if ci.Edges.namedBlockedGroups == nil {
+		ci.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		ci.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		ci.Edges.namedBlockedGroups[name] = append(ci.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ci *ControlImplementation) NamedEditors(name string) ([]*Group, error) {
+	if ci.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ci.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ci *ControlImplementation) appendNamedEditors(name string, edges ...*Group) {
+	if ci.Edges.namedEditors == nil {
+		ci.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		ci.Edges.namedEditors[name] = []*Group{}
+	} else {
+		ci.Edges.namedEditors[name] = append(ci.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ci *ControlImplementation) NamedViewers(name string) ([]*Group, error) {
+	if ci.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ci.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ci *ControlImplementation) appendNamedViewers(name string, edges ...*Group) {
+	if ci.Edges.namedViewers == nil {
+		ci.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		ci.Edges.namedViewers[name] = []*Group{}
+	} else {
+		ci.Edges.namedViewers[name] = append(ci.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not

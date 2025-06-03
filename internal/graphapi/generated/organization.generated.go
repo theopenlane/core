@@ -95,12 +95,18 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
+			case "controlImplementationCreators":
+				return ec.fieldContext_Organization_controlImplementationCreators(ctx, field)
 			case "controlObjectiveCreators":
 				return ec.fieldContext_Organization_controlObjectiveCreators(ctx, field)
+			case "evidenceCreators":
+				return ec.fieldContext_Organization_evidenceCreators(ctx, field)
 			case "groupCreators":
 				return ec.fieldContext_Organization_groupCreators(ctx, field)
 			case "internalPolicyCreators":
 				return ec.fieldContext_Organization_internalPolicyCreators(ctx, field)
+			case "mappedControlCreators":
+				return ec.fieldContext_Organization_mappedControlCreators(ctx, field)
 			case "narrativeCreators":
 				return ec.fieldContext_Organization_narrativeCreators(ctx, field)
 			case "procedureCreators":
@@ -109,6 +115,10 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_programCreators(ctx, field)
 			case "riskCreators":
 				return ec.fieldContext_Organization_riskCreators(ctx, field)
+			case "scheduledJobCreators":
+				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
+			case "standardCreators":
+				return ec.fieldContext_Organization_standardCreators(ctx, field)
 			case "templateCreators":
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
 			case "parent":
@@ -277,12 +287,18 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
+			case "controlImplementationCreators":
+				return ec.fieldContext_Organization_controlImplementationCreators(ctx, field)
 			case "controlObjectiveCreators":
 				return ec.fieldContext_Organization_controlObjectiveCreators(ctx, field)
+			case "evidenceCreators":
+				return ec.fieldContext_Organization_evidenceCreators(ctx, field)
 			case "groupCreators":
 				return ec.fieldContext_Organization_groupCreators(ctx, field)
 			case "internalPolicyCreators":
 				return ec.fieldContext_Organization_internalPolicyCreators(ctx, field)
+			case "mappedControlCreators":
+				return ec.fieldContext_Organization_mappedControlCreators(ctx, field)
 			case "narrativeCreators":
 				return ec.fieldContext_Organization_narrativeCreators(ctx, field)
 			case "procedureCreators":
@@ -291,6 +307,10 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_programCreators(ctx, field)
 			case "riskCreators":
 				return ec.fieldContext_Organization_riskCreators(ctx, field)
+			case "scheduledJobCreators":
+				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
+			case "standardCreators":
+				return ec.fieldContext_Organization_standardCreators(ctx, field)
 			case "templateCreators":
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
 			case "parent":
@@ -503,12 +523,18 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
+			case "controlImplementationCreators":
+				return ec.fieldContext_Organization_controlImplementationCreators(ctx, field)
 			case "controlObjectiveCreators":
 				return ec.fieldContext_Organization_controlObjectiveCreators(ctx, field)
+			case "evidenceCreators":
+				return ec.fieldContext_Organization_evidenceCreators(ctx, field)
 			case "groupCreators":
 				return ec.fieldContext_Organization_groupCreators(ctx, field)
 			case "internalPolicyCreators":
 				return ec.fieldContext_Organization_internalPolicyCreators(ctx, field)
+			case "mappedControlCreators":
+				return ec.fieldContext_Organization_mappedControlCreators(ctx, field)
 			case "narrativeCreators":
 				return ec.fieldContext_Organization_narrativeCreators(ctx, field)
 			case "procedureCreators":
@@ -517,6 +543,10 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_programCreators(ctx, field)
 			case "riskCreators":
 				return ec.fieldContext_Organization_riskCreators(ctx, field)
+			case "scheduledJobCreators":
+				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
+			case "standardCreators":
+				return ec.fieldContext_Organization_standardCreators(ctx, field)
 			case "templateCreators":
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
 			case "parent":

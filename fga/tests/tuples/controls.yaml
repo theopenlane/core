@@ -23,12 +23,6 @@
 - user: user:ulid-group-control-1-editor
   relation: member
   object: group:group-control-1-editor
-- user: group:group-control-1-viewer#member
-  relation: viewer
-  object: control:control-1
-- user: user:ulid-group-control-1-viewer
-  relation: member
-  object: group:group-control-1-viewer
 - user: group:group-control-1-blocked#member
   relation: blocked
   object: control:control-1
@@ -59,4 +53,13 @@
 ## mapped controls
 - user: organization:openlane
   relation: parent
+  object: mapped_control:mapped_control-1
+- user: organization:another-org
+  relation: parent
+  object: mapped_control:mapped_control-2
+- user: user:ulid-group-mapped-control-1-editor
+  relation: member
+  object: group:group-mapped-control-1-editor
+- user: group:group-mapped-control-1-editor#member
+  relation: editor
   object: mapped_control:mapped_control-1

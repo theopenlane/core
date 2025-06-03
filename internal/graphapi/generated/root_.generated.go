@@ -349,7 +349,6 @@ type ComplexityRoot struct {
 		Tasks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
-		Viewers                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	ControlBulkCreatePayload struct {
@@ -422,10 +421,12 @@ type ComplexityRoot struct {
 	}
 
 	ControlImplementation struct {
+		BlockedGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Controls           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Details            func(childComplexity int) int
+		Editors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
 		Owner              func(childComplexity int) int
@@ -437,6 +438,7 @@ type ComplexityRoot struct {
 		UpdatedBy          func(childComplexity int) int
 		VerificationDate   func(childComplexity int) int
 		Verified           func(childComplexity int) int
+		Viewers            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	ControlImplementationBulkCreatePayload struct {
@@ -1283,48 +1285,52 @@ type ComplexityRoot struct {
 	}
 
 	Group struct {
-		ControlBlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		ControlEditors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		ControlObjectiveBlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		ControlObjectiveEditors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		ControlObjectiveViewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		ControlViewers                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt                     func(childComplexity int) int
-		CreatedBy                     func(childComplexity int) int
-		Description                   func(childComplexity int) int
-		DisplayID                     func(childComplexity int) int
-		DisplayName                   func(childComplexity int) int
-		Events                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Files                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		GravatarLogoURL               func(childComplexity int) int
-		ID                            func(childComplexity int) int
-		Integrations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalPolicyBlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		InternalPolicyEditors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		IsManaged                     func(childComplexity int) int
-		LogoURL                       func(childComplexity int) int
-		Members                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
-		Name                          func(childComplexity int) int
-		NarrativeBlockedGroups        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		NarrativeEditors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		NarrativeViewers              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Owner                         func(childComplexity int) int
-		OwnerID                       func(childComplexity int) int
-		Permissions                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ProcedureBlockedGroups        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		ProcedureEditors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		ProgramBlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		ProgramEditors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		ProgramViewers                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RiskBlockedGroups             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		RiskEditors                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		RiskViewers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Setting                       func(childComplexity int) int
-		Tags                          func(childComplexity int) int
-		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt                     func(childComplexity int) int
-		UpdatedBy                     func(childComplexity int) int
-		Users                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		ControlBlockedGroups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ControlEditors                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ControlImplementationBlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlImplementationEditors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlImplementationViewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjectiveBlockedGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlObjectiveEditors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlObjectiveViewers            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		CreatedAt                          func(childComplexity int) int
+		CreatedBy                          func(childComplexity int) int
+		Description                        func(childComplexity int) int
+		DisplayID                          func(childComplexity int) int
+		DisplayName                        func(childComplexity int) int
+		Events                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Files                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		GravatarLogoURL                    func(childComplexity int) int
+		ID                                 func(childComplexity int) int
+		Integrations                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalPolicyBlockedGroups        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		InternalPolicyEditors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		IsManaged                          func(childComplexity int) int
+		LogoURL                            func(childComplexity int) int
+		MappedControlBlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
+		MappedControlEditors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
+		Members                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
+		Name                               func(childComplexity int) int
+		NarrativeBlockedGroups             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		NarrativeEditors                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		NarrativeViewers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Owner                              func(childComplexity int) int
+		OwnerID                            func(childComplexity int) int
+		Permissions                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ProcedureBlockedGroups             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProcedureEditors                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProgramBlockedGroups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ProgramEditors                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ProgramViewers                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RiskBlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		RiskEditors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		RiskViewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Setting                            func(childComplexity int) int
+		Tags                               func(childComplexity int) int
+		Tasks                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt                          func(childComplexity int) int
+		UpdatedBy                          func(childComplexity int) int
+		Users                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	GroupBulkCreatePayload struct {
@@ -2631,74 +2637,79 @@ type ComplexityRoot struct {
 	}
 
 	Organization struct {
-		APITokens                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
-		ActionPlans                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		AvatarFile                  func(childComplexity int) int
-		AvatarLocalFileID           func(childComplexity int) int
-		AvatarRemoteURL             func(childComplexity int) int
-		AvatarUpdatedAt             func(childComplexity int) int
-		Children                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		Contacts                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		ControlCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ControlImplementations      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjectiveCreators    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ControlObjectives           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		Controls                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt                   func(childComplexity int) int
-		CreatedBy                   func(childComplexity int) int
-		CustomDomains               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
-		DNSVerifications            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
-		DedicatedDb                 func(childComplexity int) int
-		Description                 func(childComplexity int) int
-		DisplayName                 func(childComplexity int) int
-		Documents                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Entities                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		EntityTypes                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
-		Events                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Evidence                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
-		Files                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		GroupCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Groups                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID                          func(childComplexity int) int
-		Integrations                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalPolicies            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		InternalPolicyCreators      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Invites                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
-		JobResults                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
-		JobRunnerRegistrationTokens func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
-		JobRunnerTokens             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
-		JobRunners                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
-		Jobs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
-		MappedControls              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
-		Members                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
-		Name                        func(childComplexity int) int
-		NarrativeCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Narratives                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Notes                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		OrgSubscriptions            func(childComplexity int) int
-		Parent                      func(childComplexity int) int
-		PersonalAccessTokens        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
-		PersonalOrg                 func(childComplexity int) int
-		ProcedureCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Procedures                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		ProgramCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Programs                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RiskCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Risks                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		ScheduledJobRuns            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
-		ScheduledJobs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
-		Secrets                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		Setting                     func(childComplexity int) int
-		Standards                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
-		Subcontrols                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Subscribers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
-		Tags                        func(childComplexity int) int
-		Tasks                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		TemplateCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Templates                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
-		UpdatedAt                   func(childComplexity int) int
-		UpdatedBy                   func(childComplexity int) int
-		Users                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		APITokens                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
+		ActionPlans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AvatarFile                    func(childComplexity int) int
+		AvatarLocalFileID             func(childComplexity int) int
+		AvatarRemoteURL               func(childComplexity int) int
+		AvatarUpdatedAt               func(childComplexity int) int
+		Children                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		Contacts                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		ControlCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ControlImplementationCreators func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ControlImplementations        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjectiveCreators      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ControlObjectives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		Controls                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                     func(childComplexity int) int
+		CreatedBy                     func(childComplexity int) int
+		CustomDomains                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		DNSVerifications              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
+		DedicatedDb                   func(childComplexity int) int
+		Description                   func(childComplexity int) int
+		DisplayName                   func(childComplexity int) int
+		Documents                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Entities                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityTypes                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
+		Events                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Evidence                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		EvidenceCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Files                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		GroupCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Groups                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                            func(childComplexity int) int
+		Integrations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalPolicies              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		InternalPolicyCreators        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Invites                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
+		JobResults                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
+		JobRunnerRegistrationTokens   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
+		JobRunnerTokens               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		JobRunners                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
+		Jobs                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		MappedControlCreators         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		MappedControls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
+		Members                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
+		Name                          func(childComplexity int) int
+		NarrativeCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Narratives                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Notes                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		OrgSubscriptions              func(childComplexity int) int
+		Parent                        func(childComplexity int) int
+		PersonalAccessTokens          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
+		PersonalOrg                   func(childComplexity int) int
+		ProcedureCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Procedures                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProgramCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Programs                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RiskCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Risks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		ScheduledJobCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ScheduledJobRuns              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
+		ScheduledJobs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
+		Secrets                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		Setting                       func(childComplexity int) int
+		StandardCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Standards                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Subscribers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
+		Tags                          func(childComplexity int) int
+		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Templates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		UpdatedAt                     func(childComplexity int) int
+		UpdatedBy                     func(childComplexity int) int
+		Users                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	OrganizationBulkCreatePayload struct {
@@ -5822,18 +5833,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.UpdatedBy(childComplexity), true
 
-	case "Control.viewers":
-		if e.complexity.Control.Viewers == nil {
-			break
-		}
-
-		args, err := ec.field_Control_viewers_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Control.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-
 	case "ControlBulkCreatePayload.controls":
 		if e.complexity.ControlBulkCreatePayload.Controls == nil {
 			break
@@ -6149,6 +6148,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlHistoryEdge.Node(childComplexity), true
 
+	case "ControlImplementation.blockedGroups":
+		if e.complexity.ControlImplementation.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_ControlImplementation_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlImplementation.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "ControlImplementation.controls":
 		if e.complexity.ControlImplementation.Controls == nil {
 			break
@@ -6181,6 +6192,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlImplementation.Details(childComplexity), true
+
+	case "ControlImplementation.editors":
+		if e.complexity.ControlImplementation.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_ControlImplementation_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlImplementation.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "ControlImplementation.id":
 		if e.complexity.ControlImplementation.ID == nil {
@@ -6263,6 +6286,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlImplementation.Verified(childComplexity), true
+
+	case "ControlImplementation.viewers":
+		if e.complexity.ControlImplementation.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_ControlImplementation_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ControlImplementation.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "ControlImplementationBulkCreatePayload.controlImplementations":
 		if e.complexity.ControlImplementationBulkCreatePayload.ControlImplementations == nil {
@@ -10152,6 +10187,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Group.ControlEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
+	case "Group.controlImplementationBlockedGroups":
+		if e.complexity.Group.ControlImplementationBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_controlImplementationBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ControlImplementationBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
+
+	case "Group.controlImplementationEditors":
+		if e.complexity.Group.ControlImplementationEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_controlImplementationEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ControlImplementationEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
+
+	case "Group.controlImplementationViewers":
+		if e.complexity.Group.ControlImplementationViewers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_controlImplementationViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ControlImplementationViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlImplementationOrder), args["where"].(*generated.ControlImplementationWhereInput)), true
+
 	case "Group.controlObjectiveBlockedGroups":
 		if e.complexity.Group.ControlObjectiveBlockedGroups == nil {
 			break
@@ -10187,18 +10258,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Group.ControlObjectiveViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
-
-	case "Group.controlViewers":
-		if e.complexity.Group.ControlViewers == nil {
-			break
-		}
-
-		args, err := ec.field_Group_controlViewers_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Group.ControlViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Group.createdAt":
 		if e.complexity.Group.CreatedAt == nil {
@@ -10322,6 +10381,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Group.LogoURL(childComplexity), true
+
+	case "Group.mappedControlBlockedGroups":
+		if e.complexity.Group.MappedControlBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_mappedControlBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.MappedControlBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.MappedControlOrder), args["where"].(*generated.MappedControlWhereInput)), true
+
+	case "Group.mappedControlEditors":
+		if e.complexity.Group.MappedControlEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_mappedControlEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.MappedControlEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.MappedControlOrder), args["where"].(*generated.MappedControlWhereInput)), true
 
 	case "Group.members":
 		if e.complexity.Group.Members == nil {
@@ -17889,6 +17972,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.ControlCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Organization.controlImplementationCreators":
+		if e.complexity.Organization.ControlImplementationCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_controlImplementationCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ControlImplementationCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Organization.controlImplementations":
 		if e.complexity.Organization.ControlImplementations == nil {
 			break
@@ -18056,6 +18151,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
+	case "Organization.evidenceCreators":
+		if e.complexity.Organization.EvidenceCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_evidenceCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.EvidenceCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Organization.files":
 		if e.complexity.Organization.Files == nil {
 			break
@@ -18206,6 +18313,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Jobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
+
+	case "Organization.mappedControlCreators":
+		if e.complexity.Organization.MappedControlCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_mappedControlCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.MappedControlCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.mappedControls":
 		if e.complexity.Organization.MappedControls == nil {
@@ -18379,6 +18498,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "Organization.scheduledJobCreators":
+		if e.complexity.Organization.ScheduledJobCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_scheduledJobCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.ScheduledJobCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Organization.scheduledJobRuns":
 		if e.complexity.Organization.ScheduledJobRuns == nil {
 			break
@@ -18421,6 +18552,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Setting(childComplexity), true
+
+	case "Organization.standardCreators":
+		if e.complexity.Organization.StandardCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_standardCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.StandardCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.standards":
 		if e.complexity.Organization.Standards == nil {
@@ -33120,37 +33263,6 @@ type Control implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  viewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
   standard: Standard
   programs(
     """
@@ -33947,6 +34059,99 @@ type ControlImplementation implements Node {
   """
   details: String
   owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -34548,6 +34753,21 @@ input ControlImplementationWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   controls edge predicates
   """
@@ -36781,11 +37001,6 @@ input ControlWhereInput {
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
   """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
   standard edge predicates
   """
   hasStandard: Boolean
@@ -36984,6 +37199,9 @@ input CreateControlImplementationInput {
   """
   details: String
   ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
 }
@@ -37081,7 +37299,6 @@ input CreateControlInput {
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
-  viewerIDs: [ID!]
   standardID: ID
   programIDs: [ID!]
   controlImplementationIDs: [ID!]
@@ -37480,16 +37697,20 @@ input CreateGroupInput {
   controlObjectiveEditorIDs: [ID!]
   controlObjectiveBlockedGroupIDs: [ID!]
   controlObjectiveViewerIDs: [ID!]
-  controlEditorIDs: [ID!]
-  controlBlockedGroupIDs: [ID!]
-  controlViewerIDs: [ID!]
   narrativeEditorIDs: [ID!]
   narrativeBlockedGroupIDs: [ID!]
   narrativeViewerIDs: [ID!]
+  controlImplementationEditorIDs: [ID!]
+  controlImplementationBlockedGroupIDs: [ID!]
+  controlImplementationViewerIDs: [ID!]
   procedureEditorIDs: [ID!]
   procedureBlockedGroupIDs: [ID!]
   internalPolicyEditorIDs: [ID!]
   internalPolicyBlockedGroupIDs: [ID!]
+  controlEditorIDs: [ID!]
+  controlBlockedGroupIDs: [ID!]
+  mappedControlEditorIDs: [ID!]
+  mappedControlBlockedGroupIDs: [ID!]
   settingID: ID
   eventIDs: [ID!]
   integrationIDs: [ID!]
@@ -37925,13 +38146,18 @@ input CreateOrganizationInput {
   """
   dedicatedDb: Boolean
   controlCreatorIDs: [ID!]
+  controlImplementationCreatorIDs: [ID!]
   controlObjectiveCreatorIDs: [ID!]
+  evidenceCreatorIDs: [ID!]
   groupCreatorIDs: [ID!]
   internalPolicyCreatorIDs: [ID!]
+  mappedControlCreatorIDs: [ID!]
   narrativeCreatorIDs: [ID!]
   procedureCreatorIDs: [ID!]
   programCreatorIDs: [ID!]
   riskCreatorIDs: [ID!]
+  scheduledJobCreatorIDs: [ID!]
+  standardCreatorIDs: [ID!]
   templateCreatorIDs: [ID!]
   parentID: ID
   settingID: ID
@@ -45001,99 +45227,6 @@ type Group implements Node {
     """
     where: ControlObjectiveWhereInput
   ): ControlObjectiveConnection!
-  controlEditors(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Controls returned from the connection.
-    """
-    orderBy: [ControlOrder!]
-
-    """
-    Filtering options for Controls returned from the connection.
-    """
-    where: ControlWhereInput
-  ): ControlConnection!
-  controlBlockedGroups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Controls returned from the connection.
-    """
-    orderBy: [ControlOrder!]
-
-    """
-    Filtering options for Controls returned from the connection.
-    """
-    where: ControlWhereInput
-  ): ControlConnection!
-  controlViewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Controls returned from the connection.
-    """
-    orderBy: [ControlOrder!]
-
-    """
-    Filtering options for Controls returned from the connection.
-    """
-    where: ControlWhereInput
-  ): ControlConnection!
   narrativeEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -45187,6 +45320,99 @@ type Group implements Node {
     """
     where: NarrativeWhereInput
   ): NarrativeConnection!
+  controlImplementationEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  controlImplementationBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
+  controlImplementationViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ControlImplementations returned from the connection.
+    """
+    orderBy: [ControlImplementationOrder!]
+
+    """
+    Filtering options for ControlImplementations returned from the connection.
+    """
+    where: ControlImplementationWhereInput
+  ): ControlImplementationConnection!
   procedureEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -45311,6 +45537,130 @@ type Group implements Node {
     """
     where: InternalPolicyWhereInput
   ): InternalPolicyConnection!
+  controlEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  controlBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  mappedControlEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: [MappedControlOrder!]
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
+  mappedControlBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: [MappedControlOrder!]
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
   setting: GroupSetting
   users(
     """
@@ -46986,21 +47336,6 @@ input GroupWhereInput {
   hasControlObjectiveViewers: Boolean
   hasControlObjectiveViewersWith: [ControlObjectiveWhereInput!]
   """
-  control_editors edge predicates
-  """
-  hasControlEditors: Boolean
-  hasControlEditorsWith: [ControlWhereInput!]
-  """
-  control_blocked_groups edge predicates
-  """
-  hasControlBlockedGroups: Boolean
-  hasControlBlockedGroupsWith: [ControlWhereInput!]
-  """
-  control_viewers edge predicates
-  """
-  hasControlViewers: Boolean
-  hasControlViewersWith: [ControlWhereInput!]
-  """
   narrative_editors edge predicates
   """
   hasNarrativeEditors: Boolean
@@ -47015,6 +47350,21 @@ input GroupWhereInput {
   """
   hasNarrativeViewers: Boolean
   hasNarrativeViewersWith: [NarrativeWhereInput!]
+  """
+  control_implementation_editors edge predicates
+  """
+  hasControlImplementationEditors: Boolean
+  hasControlImplementationEditorsWith: [ControlImplementationWhereInput!]
+  """
+  control_implementation_blocked_groups edge predicates
+  """
+  hasControlImplementationBlockedGroups: Boolean
+  hasControlImplementationBlockedGroupsWith: [ControlImplementationWhereInput!]
+  """
+  control_implementation_viewers edge predicates
+  """
+  hasControlImplementationViewers: Boolean
+  hasControlImplementationViewersWith: [ControlImplementationWhereInput!]
   """
   procedure_editors edge predicates
   """
@@ -47035,6 +47385,26 @@ input GroupWhereInput {
   """
   hasInternalPolicyBlockedGroups: Boolean
   hasInternalPolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
+  """
+  control_editors edge predicates
+  """
+  hasControlEditors: Boolean
+  hasControlEditorsWith: [ControlWhereInput!]
+  """
+  control_blocked_groups edge predicates
+  """
+  hasControlBlockedGroups: Boolean
+  hasControlBlockedGroupsWith: [ControlWhereInput!]
+  """
+  mapped_control_editors edge predicates
+  """
+  hasMappedControlEditors: Boolean
+  hasMappedControlEditorsWith: [MappedControlWhereInput!]
+  """
+  mapped_control_blocked_groups edge predicates
+  """
+  hasMappedControlBlockedGroups: Boolean
+  hasMappedControlBlockedGroupsWith: [MappedControlWhereInput!]
   """
   setting edge predicates
   """
@@ -55164,7 +55534,69 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  controlImplementationCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   controlObjectiveCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  evidenceCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -55227,6 +55659,37 @@ type Organization implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   internalPolicyCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  mappedControlCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -55351,6 +55814,68 @@ type Organization implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   riskCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  scheduledJobCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  standardCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -57918,10 +58443,20 @@ input OrganizationWhereInput {
   hasControlCreators: Boolean
   hasControlCreatorsWith: [GroupWhereInput!]
   """
+  control_implementation_creators edge predicates
+  """
+  hasControlImplementationCreators: Boolean
+  hasControlImplementationCreatorsWith: [GroupWhereInput!]
+  """
   control_objective_creators edge predicates
   """
   hasControlObjectiveCreators: Boolean
   hasControlObjectiveCreatorsWith: [GroupWhereInput!]
+  """
+  evidence_creators edge predicates
+  """
+  hasEvidenceCreators: Boolean
+  hasEvidenceCreatorsWith: [GroupWhereInput!]
   """
   group_creators edge predicates
   """
@@ -57932,6 +58467,11 @@ input OrganizationWhereInput {
   """
   hasInternalPolicyCreators: Boolean
   hasInternalPolicyCreatorsWith: [GroupWhereInput!]
+  """
+  mapped_control_creators edge predicates
+  """
+  hasMappedControlCreators: Boolean
+  hasMappedControlCreatorsWith: [GroupWhereInput!]
   """
   narrative_creators edge predicates
   """
@@ -57952,6 +58492,16 @@ input OrganizationWhereInput {
   """
   hasRiskCreators: Boolean
   hasRiskCreatorsWith: [GroupWhereInput!]
+  """
+  scheduled_job_creators edge predicates
+  """
+  hasScheduledJobCreators: Boolean
+  hasScheduledJobCreatorsWith: [GroupWhereInput!]
+  """
+  standard_creators edge predicates
+  """
+  hasStandardCreators: Boolean
+  hasStandardCreatorsWith: [GroupWhereInput!]
   """
   template_creators edge predicates
   """
@@ -71598,6 +72148,15 @@ input UpdateControlImplementationInput {
   """
   details: String
   clearDetails: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -71746,9 +72305,6 @@ input UpdateControlInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
   standardID: ID
   clearStandard: Boolean
   addProgramIDs: [ID!]
@@ -72336,15 +72892,6 @@ input UpdateGroupInput {
   addControlObjectiveViewerIDs: [ID!]
   removeControlObjectiveViewerIDs: [ID!]
   clearControlObjectiveViewers: Boolean
-  addControlEditorIDs: [ID!]
-  removeControlEditorIDs: [ID!]
-  clearControlEditors: Boolean
-  addControlBlockedGroupIDs: [ID!]
-  removeControlBlockedGroupIDs: [ID!]
-  clearControlBlockedGroups: Boolean
-  addControlViewerIDs: [ID!]
-  removeControlViewerIDs: [ID!]
-  clearControlViewers: Boolean
   addNarrativeEditorIDs: [ID!]
   removeNarrativeEditorIDs: [ID!]
   clearNarrativeEditors: Boolean
@@ -72354,6 +72901,15 @@ input UpdateGroupInput {
   addNarrativeViewerIDs: [ID!]
   removeNarrativeViewerIDs: [ID!]
   clearNarrativeViewers: Boolean
+  addControlImplementationEditorIDs: [ID!]
+  removeControlImplementationEditorIDs: [ID!]
+  clearControlImplementationEditors: Boolean
+  addControlImplementationBlockedGroupIDs: [ID!]
+  removeControlImplementationBlockedGroupIDs: [ID!]
+  clearControlImplementationBlockedGroups: Boolean
+  addControlImplementationViewerIDs: [ID!]
+  removeControlImplementationViewerIDs: [ID!]
+  clearControlImplementationViewers: Boolean
   addProcedureEditorIDs: [ID!]
   removeProcedureEditorIDs: [ID!]
   clearProcedureEditors: Boolean
@@ -72366,6 +72922,18 @@ input UpdateGroupInput {
   addInternalPolicyBlockedGroupIDs: [ID!]
   removeInternalPolicyBlockedGroupIDs: [ID!]
   clearInternalPolicyBlockedGroups: Boolean
+  addControlEditorIDs: [ID!]
+  removeControlEditorIDs: [ID!]
+  clearControlEditors: Boolean
+  addControlBlockedGroupIDs: [ID!]
+  removeControlBlockedGroupIDs: [ID!]
+  clearControlBlockedGroups: Boolean
+  addMappedControlEditorIDs: [ID!]
+  removeMappedControlEditorIDs: [ID!]
+  clearMappedControlEditors: Boolean
+  addMappedControlBlockedGroupIDs: [ID!]
+  removeMappedControlBlockedGroupIDs: [ID!]
+  clearMappedControlBlockedGroups: Boolean
   settingID: ID
   clearSetting: Boolean
   addEventIDs: [ID!]
@@ -72855,15 +73423,24 @@ input UpdateOrganizationInput {
   addControlCreatorIDs: [ID!]
   removeControlCreatorIDs: [ID!]
   clearControlCreators: Boolean
+  addControlImplementationCreatorIDs: [ID!]
+  removeControlImplementationCreatorIDs: [ID!]
+  clearControlImplementationCreators: Boolean
   addControlObjectiveCreatorIDs: [ID!]
   removeControlObjectiveCreatorIDs: [ID!]
   clearControlObjectiveCreators: Boolean
+  addEvidenceCreatorIDs: [ID!]
+  removeEvidenceCreatorIDs: [ID!]
+  clearEvidenceCreators: Boolean
   addGroupCreatorIDs: [ID!]
   removeGroupCreatorIDs: [ID!]
   clearGroupCreators: Boolean
   addInternalPolicyCreatorIDs: [ID!]
   removeInternalPolicyCreatorIDs: [ID!]
   clearInternalPolicyCreators: Boolean
+  addMappedControlCreatorIDs: [ID!]
+  removeMappedControlCreatorIDs: [ID!]
+  clearMappedControlCreators: Boolean
   addNarrativeCreatorIDs: [ID!]
   removeNarrativeCreatorIDs: [ID!]
   clearNarrativeCreators: Boolean
@@ -72876,6 +73453,12 @@ input UpdateOrganizationInput {
   addRiskCreatorIDs: [ID!]
   removeRiskCreatorIDs: [ID!]
   clearRiskCreators: Boolean
+  addScheduledJobCreatorIDs: [ID!]
+  removeScheduledJobCreatorIDs: [ID!]
+  clearScheduledJobCreators: Boolean
+  addStandardCreatorIDs: [ID!]
+  removeStandardCreatorIDs: [ID!]
+  clearStandardCreators: Boolean
   addTemplateCreatorIDs: [ID!]
   removeTemplateCreatorIDs: [ID!]
   clearTemplateCreators: Boolean

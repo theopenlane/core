@@ -19,13 +19,18 @@ import (
 // TODO (sfunk): see if we can pull the annotations from the other schemas to make this dynamic
 var createObjectTypes = []string{
 	"control",
+	"control_implementation",
 	"control_objective",
+	"evidence",
 	"group",
 	"internal_policy",
+	"mapped_control",
 	"narrative",
 	"procedure",
 	"program",
 	"risk",
+	"scheduled_job",
+	"standard",
 	"template",
 }
 

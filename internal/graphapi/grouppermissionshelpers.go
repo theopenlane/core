@@ -76,7 +76,6 @@ func getGroupByIDWithPermissionsEdges(ctx context.Context, groupID *string) (*ge
 		Where(group.IDEQ(*groupID)).
 		// Control permissions
 		WithControlEditors().
-		WithControlViewers().
 		WithControlBlockedGroups().
 
 		// Control Objective permissions

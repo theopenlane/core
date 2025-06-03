@@ -129,7 +129,7 @@ func (MappedControl) Hooks() []ent.Hook {
 // Interceptors of the MappedControl
 func (MappedControl) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		// procedures are org owned, but we need to ensure the groups are filtered as well
+		// mapped controls are org owned, but we need to ensure the groups are filtered as well
 		interceptors.FilterQueryResults[generated.MappedControl](),
 	}
 }

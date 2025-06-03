@@ -11,7 +11,7 @@ import (
 
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "get an existing mappedControlHistory",
+	Short: "get an existing mapped control history",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := get(cmd.Context())
 		cobra.CheckErr(err)

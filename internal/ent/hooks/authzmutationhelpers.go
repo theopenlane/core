@@ -18,6 +18,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
+const (
+	ownerFieldName = "owner_id"
+)
+
 // GetObjectTypeFromEntMutation gets the object type from the ent mutation
 func GetObjectTypeFromEntMutation(m ent.Mutation) string {
 	return strcase.SnakeCase(m.Type())
@@ -31,7 +35,7 @@ func getTuplesToAdd(ctx context.Context, m ent.Mutation, tr fgax.TupleRequest, e
 	var addTuples []fgax.TupleKey
 
 	if strings.EqualFold(edgeField, "organization_id") {
-		edgeField = "owner_id"
+		edgeField = ownerFieldName
 	}
 
 	subjectIDs, err := getAddedParentIDsFromEntMutation(ctx, m, edgeField)
@@ -95,7 +99,7 @@ func createOrgOwnerParentTuple(ctx context.Context, m ent.Mutation, objectID str
 		Relation:    fgax.ParentRelation,
 	}
 
-	t, err := getTuplesToAdd(ctx, m, tr, "owner_id")
+	t, err := getTuplesToAdd(ctx, m, tr, ownerFieldName)
 	if err != nil {
 		return nil, err
 	}

@@ -238,7 +238,6 @@ type ControlBuilder struct {
 	ProgramID               string
 	StandardID              string
 	ControlOwnerID          string
-	ControlViewerGroupID    string
 	ControlEditorGroupID    string
 	ControlImplementationID string
 	// AllFields will set all direct fields on the control with random data
@@ -484,6 +483,7 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 // MustNew JobRunner settings builder is used to create runners
 func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRunner {
 	ctx = setContext(ctx, w.client.db)
+
 	wn, err := w.client.db.JobRunner.Create().
 		SetName(randomName(t)).
 		SetIPAddress(gofakeit.IPv4Address()).
@@ -1029,10 +1029,6 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	if c.ControlOwnerID != "" {
 		mutation.SetControlOwnerID(c.ControlOwnerID)
-	}
-
-	if c.ControlViewerGroupID != "" {
-		mutation.AddViewerIDs(c.ControlViewerGroupID)
 	}
 
 	if c.ControlEditorGroupID != "" {

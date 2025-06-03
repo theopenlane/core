@@ -61,7 +61,7 @@ func HookTaskPermissions() ent.Hook {
 
 			orgID, ownerOk := m.OwnerID()
 			if !ownerOk {
-				task, err := m.Client().Task.Query().Where(task.ID(taskID)).Select("owner_id").Only(ctx)
+				task, err := m.Client().Task.Query().Where(task.ID(taskID)).Select(ownerFieldName).Only(ctx)
 				if err != nil {
 					return nil, err
 				}

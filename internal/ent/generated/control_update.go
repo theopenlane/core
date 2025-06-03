@@ -699,21 +699,6 @@ func (cu *ControlUpdate) AddEditors(g ...*Group) *ControlUpdate {
 	return cu.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (cu *ControlUpdate) AddViewerIDs(ids ...string) *ControlUpdate {
-	cu.mutation.AddViewerIDs(ids...)
-	return cu
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (cu *ControlUpdate) AddViewers(g ...*Group) *ControlUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return cu.AddViewerIDs(ids...)
-}
-
 // SetStandard sets the "standard" edge to the Standard entity.
 func (cu *ControlUpdate) SetStandard(s *Standard) *ControlUpdate {
 	return cu.SetStandardID(s.ID)
@@ -1034,27 +1019,6 @@ func (cu *ControlUpdate) RemoveEditors(g ...*Group) *ControlUpdate {
 		ids[i] = g[i].ID
 	}
 	return cu.RemoveEditorIDs(ids...)
-}
-
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (cu *ControlUpdate) ClearViewers() *ControlUpdate {
-	cu.mutation.ClearViewers()
-	return cu
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (cu *ControlUpdate) RemoveViewerIDs(ids ...string) *ControlUpdate {
-	cu.mutation.RemoveViewerIDs(ids...)
-	return cu
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (cu *ControlUpdate) RemoveViewers(g ...*Group) *ControlUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return cu.RemoveViewerIDs(ids...)
 }
 
 // ClearStandard clears the "standard" edge to the Standard entity.
@@ -1992,54 +1956,6 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = cu.schemaConfig.ControlEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if cu.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ViewersTable,
-			Columns: control.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cu.schemaConfig.ControlViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.RemovedViewersIDs(); len(nodes) > 0 && !cu.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ViewersTable,
-			Columns: control.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cu.schemaConfig.ControlViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ViewersTable,
-			Columns: control.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cu.schemaConfig.ControlViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3038,21 +2954,6 @@ func (cuo *ControlUpdateOne) AddEditors(g ...*Group) *ControlUpdateOne {
 	return cuo.AddEditorIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (cuo *ControlUpdateOne) AddViewerIDs(ids ...string) *ControlUpdateOne {
-	cuo.mutation.AddViewerIDs(ids...)
-	return cuo
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (cuo *ControlUpdateOne) AddViewers(g ...*Group) *ControlUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return cuo.AddViewerIDs(ids...)
-}
-
 // SetStandard sets the "standard" edge to the Standard entity.
 func (cuo *ControlUpdateOne) SetStandard(s *Standard) *ControlUpdateOne {
 	return cuo.SetStandardID(s.ID)
@@ -3373,27 +3274,6 @@ func (cuo *ControlUpdateOne) RemoveEditors(g ...*Group) *ControlUpdateOne {
 		ids[i] = g[i].ID
 	}
 	return cuo.RemoveEditorIDs(ids...)
-}
-
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (cuo *ControlUpdateOne) ClearViewers() *ControlUpdateOne {
-	cuo.mutation.ClearViewers()
-	return cuo
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (cuo *ControlUpdateOne) RemoveViewerIDs(ids ...string) *ControlUpdateOne {
-	cuo.mutation.RemoveViewerIDs(ids...)
-	return cuo
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (cuo *ControlUpdateOne) RemoveViewers(g ...*Group) *ControlUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return cuo.RemoveViewerIDs(ids...)
 }
 
 // ClearStandard clears the "standard" edge to the Standard entity.
@@ -4361,54 +4241,6 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			},
 		}
 		edge.Schema = cuo.schemaConfig.ControlEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if cuo.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ViewersTable,
-			Columns: control.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cuo.schemaConfig.ControlViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !cuo.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ViewersTable,
-			Columns: control.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cuo.schemaConfig.ControlViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ViewersTable,
-			Columns: control.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = cuo.schemaConfig.ControlViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

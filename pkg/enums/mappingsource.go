@@ -10,11 +10,11 @@ import (
 type MappingSource string
 
 var (
-	// MappingSourceManual indicates the manual.
+	// MappingSourceManual indicates the mapping is manual
 	MappingSourceManual MappingSource = "MANUAL"
-	// MappingSourceSuggested indicates the suggested.
+	// MappingSourceSuggested indicates the mapping was suggested
 	MappingSourceSuggested MappingSource = "SUGGESTED"
-	// MappingSourceImported indicates the imported.
+	// MappingSourceImported indicates the  mapping was imported
 	MappingSourceImported MappingSource = "IMPORTED"
 	// MappingSourceInvalid is used when an unknown or unsupported value is provided.
 	MappingSourceInvalid MappingSource = "MAPPINGSOURCE_INVALID"

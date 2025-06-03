@@ -492,16 +492,16 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 	}
 	if nodes := mcc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.BlockedGroupsTable,
-			Columns: []string{mappedcontrol.BlockedGroupsColumn},
+			Columns: mappedcontrol.BlockedGroupsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.Group
+		edge.Schema = mcc.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -509,16 +509,16 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 	}
 	if nodes := mcc.mutation.EditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.EditorsTable,
-			Columns: []string{mappedcontrol.EditorsColumn},
+			Columns: mappedcontrol.EditorsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.Group
+		edge.Schema = mcc.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

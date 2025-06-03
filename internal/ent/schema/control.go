@@ -132,8 +132,9 @@ func (c Control) Mixin() []ent.Mixin {
 				withParents(Organization{}, Program{}, Standard{}),
 				withOrganizationOwner(true),
 			),
-			// add groups permissions with viewer, editor, and blocked groups
-			newGroupPermissionsMixin(),
+			// add groups permissions with editor, and blocked groups
+			// skip view because controls are automatically viewable by all users in the organization
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins()
 }

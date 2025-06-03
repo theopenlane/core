@@ -117,8 +117,6 @@ type ControlEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers []*Group `json:"viewers,omitempty"`
 	// Standard holds the value of the standard edge.
 	Standard *Standard `json:"standard,omitempty"`
 	// Programs holds the value of the programs edge.
@@ -135,9 +133,9 @@ type ControlEdges struct {
 	MappedFromControls []*MappedControl `json:"mapped_from_controls,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [18]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -149,7 +147,6 @@ type ControlEdges struct {
 	namedInternalPolicies       map[string][]*InternalPolicy
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
-	namedViewers                map[string][]*Group
 	namedPrograms               map[string][]*Program
 	namedControlImplementations map[string][]*ControlImplementation
 	namedSubcontrols            map[string][]*Subcontrol
@@ -281,21 +278,12 @@ func (e ControlEdges) EditorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "editors"}
 }
 
-// ViewersOrErr returns the Viewers value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[13] {
-		return e.Viewers, nil
-	}
-	return nil, &NotLoadedError{edge: "viewers"}
-}
-
 // StandardOrErr returns the Standard value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ControlEdges) StandardOrErr() (*Standard, error) {
 	if e.Standard != nil {
 		return e.Standard, nil
-	} else if e.loadedTypes[14] {
+	} else if e.loadedTypes[13] {
 		return nil, &NotFoundError{label: standard.Label}
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -304,7 +292,7 @@ func (e ControlEdges) StandardOrErr() (*Standard, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[14] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -313,7 +301,7 @@ func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[15] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -322,7 +310,7 @@ func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, e
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[16] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -331,7 +319,7 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[17] {
 		return e.ScheduledJobs, nil
 	}
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
@@ -340,7 +328,7 @@ func (e ControlEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
 // MappedToControlsOrErr returns the MappedToControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[18] {
 		return e.MappedToControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_controls"}
@@ -349,7 +337,7 @@ func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
 // MappedFromControlsOrErr returns the MappedFromControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[19] {
 		return e.MappedFromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_controls"}
@@ -659,11 +647,6 @@ func (c *Control) QueryBlockedGroups() *GroupQuery {
 // QueryEditors queries the "editors" edge of the Control entity.
 func (c *Control) QueryEditors() *GroupQuery {
 	return NewControlClient(c.config).QueryEditors(c)
-}
-
-// QueryViewers queries the "viewers" edge of the Control entity.
-func (c *Control) QueryViewers() *GroupQuery {
-	return NewControlClient(c.config).QueryViewers(c)
 }
 
 // QueryStandard queries the "standard" edge of the Control entity.
@@ -1054,30 +1037,6 @@ func (c *Control) appendNamedEditors(name string, edges ...*Group) {
 		c.Edges.namedEditors[name] = []*Group{}
 	} else {
 		c.Edges.namedEditors[name] = append(c.Edges.namedEditors[name], edges...)
-	}
-}
-
-// NamedViewers returns the Viewers named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (c *Control) NamedViewers(name string) ([]*Group, error) {
-	if c.Edges.namedViewers == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := c.Edges.namedViewers[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (c *Control) appendNamedViewers(name string, edges ...*Group) {
-	if c.Edges.namedViewers == nil {
-		c.Edges.namedViewers = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		c.Edges.namedViewers[name] = []*Group{}
-	} else {
-		c.Edges.namedViewers[name] = append(c.Edges.namedViewers[name], edges...)
 	}
 }
 

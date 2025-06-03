@@ -28,7 +28,6 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 	res, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(obj.ID)).
 		// Control permissions
 		WithControlEditors().
-		WithControlViewers().
 		WithControlBlockedGroups().
 
 		// Control Objective permissions
@@ -64,7 +63,6 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 	}
 
 	for _, r := range res.Edges {
-		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlViewers, generated.TypeControl, enums.Viewer)...)
 		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlEditors, generated.TypeControl, enums.Editor)...)
 		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlBlockedGroups, generated.TypeControl, enums.Blocked)...)
 
@@ -169,10 +167,6 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 
 		for _, controlEditor := range groupWithPermissions.Edges.ControlEditors {
 			groupInput.ControlEditorIDs = append(groupInput.ControlEditorIDs, controlEditor.ID)
-		}
-
-		for _, controlViewer := range groupWithPermissions.Edges.ControlViewers {
-			groupInput.ControlViewerIDs = append(groupInput.ControlViewerIDs, controlViewer.ID)
 		}
 
 		for _, controlBlockedGroup := range groupWithPermissions.Edges.ControlBlockedGroups {
@@ -396,10 +390,6 @@ func (r *updateGroupInputResolver) InheritGroupPermissions(ctx context.Context, 
 
 	for _, controlEditor := range groupWithPermissions.Edges.ControlEditors {
 		obj.AddControlEditorIDs = append(obj.AddControlEditorIDs, controlEditor.ID)
-	}
-
-	for _, controlViewer := range groupWithPermissions.Edges.ControlViewers {
-		obj.AddControlViewerIDs = append(obj.AddControlViewerIDs, controlViewer.ID)
 	}
 
 	for _, controlBlockedGroup := range groupWithPermissions.Edges.ControlBlockedGroups {

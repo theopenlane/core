@@ -9598,46 +9598,6 @@ func (t *CreateControl_CreateControl_Control_Editors) GetEdges() []*CreateContro
 	return t.Edges
 }
 
-type CreateControl_CreateControl_Control_Viewers_Edges_Node struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateControl_CreateControl_Control_Viewers_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateControl_CreateControl_Control_Viewers_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *CreateControl_CreateControl_Control_Viewers_Edges_Node) GetName() string {
-	if t == nil {
-		t = &CreateControl_CreateControl_Control_Viewers_Edges_Node{}
-	}
-	return t.Name
-}
-
-type CreateControl_CreateControl_Control_Viewers_Edges struct {
-	Node *CreateControl_CreateControl_Control_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateControl_CreateControl_Control_Viewers_Edges) GetNode() *CreateControl_CreateControl_Control_Viewers_Edges_Node {
-	if t == nil {
-		t = &CreateControl_CreateControl_Control_Viewers_Edges{}
-	}
-	return t.Node
-}
-
-type CreateControl_CreateControl_Control_Viewers struct {
-	Edges []*CreateControl_CreateControl_Control_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateControl_CreateControl_Control_Viewers) GetEdges() []*CreateControl_CreateControl_Control_Viewers_Edges {
-	if t == nil {
-		t = &CreateControl_CreateControl_Control_Viewers{}
-	}
-	return t.Edges
-}
-
 type CreateControl_CreateControl_Control_BlockedGroups_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -9709,7 +9669,6 @@ type CreateControl_CreateControl_Control struct {
 	Tags                   []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                CreateControl_CreateControl_Control_Viewers                "json:\"viewers\" graphql:\"viewers\""
 }
 
 func (t *CreateControl_CreateControl_Control) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -9891,12 +9850,6 @@ func (t *CreateControl_CreateControl_Control) GetUpdatedBy() *string {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.UpdatedBy
-}
-func (t *CreateControl_CreateControl_Control) GetViewers() *CreateControl_CreateControl_Control_Viewers {
-	if t == nil {
-		t = &CreateControl_CreateControl_Control{}
-	}
-	return &t.Viewers
 }
 
 type CreateControl_CreateControl struct {
@@ -10155,46 +10108,6 @@ func (t *GetAllControls_Controls_Edges_Node_Editors) GetEdges() []*GetAllControl
 	return t.Edges
 }
 
-type GetAllControls_Controls_Edges_Node_Viewers_Edges_Node struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetAllControls_Controls_Edges_Node_Viewers_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllControls_Controls_Edges_Node_Viewers_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetAllControls_Controls_Edges_Node_Viewers_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetAllControls_Controls_Edges_Node_Viewers_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetAllControls_Controls_Edges_Node_Viewers_Edges struct {
-	Node *GetAllControls_Controls_Edges_Node_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllControls_Controls_Edges_Node_Viewers_Edges) GetNode() *GetAllControls_Controls_Edges_Node_Viewers_Edges_Node {
-	if t == nil {
-		t = &GetAllControls_Controls_Edges_Node_Viewers_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllControls_Controls_Edges_Node_Viewers struct {
-	Edges []*GetAllControls_Controls_Edges_Node_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllControls_Controls_Edges_Node_Viewers) GetEdges() []*GetAllControls_Controls_Edges_Node_Viewers_Edges {
-	if t == nil {
-		t = &GetAllControls_Controls_Edges_Node_Viewers{}
-	}
-	return t.Edges
-}
-
 type GetAllControls_Controls_Edges_Node_BlockedGroups_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -10267,7 +10180,6 @@ type GetAllControls_Controls_Edges_Node struct {
 	Tags                   []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                GetAllControls_Controls_Edges_Node_Viewers                "json:\"viewers\" graphql:\"viewers\""
 }
 
 func (t *GetAllControls_Controls_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -10455,12 +10367,6 @@ func (t *GetAllControls_Controls_Edges_Node) GetUpdatedBy() *string {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetAllControls_Controls_Edges_Node) GetViewers() *GetAllControls_Controls_Edges_Node_Viewers {
-	if t == nil {
-		t = &GetAllControls_Controls_Edges_Node{}
-	}
-	return &t.Viewers
 }
 
 type GetAllControls_Controls_Edges struct {
@@ -10701,46 +10607,6 @@ func (t *GetControlByID_Control_Editors) GetEdges() []*GetControlByID_Control_Ed
 	return t.Edges
 }
 
-type GetControlByID_Control_Viewers_Edges_Node struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetControlByID_Control_Viewers_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetControlByID_Control_Viewers_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetControlByID_Control_Viewers_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetControlByID_Control_Viewers_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetControlByID_Control_Viewers_Edges struct {
-	Node *GetControlByID_Control_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetControlByID_Control_Viewers_Edges) GetNode() *GetControlByID_Control_Viewers_Edges_Node {
-	if t == nil {
-		t = &GetControlByID_Control_Viewers_Edges{}
-	}
-	return t.Node
-}
-
-type GetControlByID_Control_Viewers struct {
-	Edges []*GetControlByID_Control_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetControlByID_Control_Viewers) GetEdges() []*GetControlByID_Control_Viewers_Edges {
-	if t == nil {
-		t = &GetControlByID_Control_Viewers{}
-	}
-	return t.Edges
-}
-
 type GetControlByID_Control_BlockedGroups_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -10813,7 +10679,6 @@ type GetControlByID_Control struct {
 	Tags                   []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                GetControlByID_Control_Viewers                "json:\"viewers\" graphql:\"viewers\""
 }
 
 func (t *GetControlByID_Control) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -11001,12 +10866,6 @@ func (t *GetControlByID_Control) GetUpdatedBy() *string {
 		t = &GetControlByID_Control{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetControlByID_Control) GetViewers() *GetControlByID_Control_Viewers {
-	if t == nil {
-		t = &GetControlByID_Control{}
-	}
-	return &t.Viewers
 }
 
 type GetControls_Controls_PageInfo struct {
@@ -11243,46 +11102,6 @@ func (t *GetControls_Controls_Edges_Node_Editors) GetEdges() []*GetControls_Cont
 	return t.Edges
 }
 
-type GetControls_Controls_Edges_Node_Viewers_Edges_Node struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetControls_Controls_Edges_Node_Viewers_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetControls_Controls_Edges_Node_Viewers_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetControls_Controls_Edges_Node_Viewers_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetControls_Controls_Edges_Node_Viewers_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetControls_Controls_Edges_Node_Viewers_Edges struct {
-	Node *GetControls_Controls_Edges_Node_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetControls_Controls_Edges_Node_Viewers_Edges) GetNode() *GetControls_Controls_Edges_Node_Viewers_Edges_Node {
-	if t == nil {
-		t = &GetControls_Controls_Edges_Node_Viewers_Edges{}
-	}
-	return t.Node
-}
-
-type GetControls_Controls_Edges_Node_Viewers struct {
-	Edges []*GetControls_Controls_Edges_Node_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetControls_Controls_Edges_Node_Viewers) GetEdges() []*GetControls_Controls_Edges_Node_Viewers_Edges {
-	if t == nil {
-		t = &GetControls_Controls_Edges_Node_Viewers{}
-	}
-	return t.Edges
-}
-
 type GetControls_Controls_Edges_Node_BlockedGroups_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -11355,7 +11174,6 @@ type GetControls_Controls_Edges_Node struct {
 	Tags                   []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                GetControls_Controls_Edges_Node_Viewers                "json:\"viewers\" graphql:\"viewers\""
 }
 
 func (t *GetControls_Controls_Edges_Node) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -11543,12 +11361,6 @@ func (t *GetControls_Controls_Edges_Node) GetUpdatedBy() *string {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetControls_Controls_Edges_Node) GetViewers() *GetControls_Controls_Edges_Node_Viewers {
-	if t == nil {
-		t = &GetControls_Controls_Edges_Node{}
-	}
-	return &t.Viewers
 }
 
 type GetControls_Controls_Edges struct {
@@ -11789,46 +11601,6 @@ func (t *UpdateControl_UpdateControl_Control_Editors) GetEdges() []*UpdateContro
 	return t.Edges
 }
 
-type UpdateControl_UpdateControl_Control_Viewers_Edges_Node struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateControl_UpdateControl_Control_Viewers_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateControl_UpdateControl_Control_Viewers_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateControl_UpdateControl_Control_Viewers_Edges_Node) GetName() string {
-	if t == nil {
-		t = &UpdateControl_UpdateControl_Control_Viewers_Edges_Node{}
-	}
-	return t.Name
-}
-
-type UpdateControl_UpdateControl_Control_Viewers_Edges struct {
-	Node *UpdateControl_UpdateControl_Control_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateControl_UpdateControl_Control_Viewers_Edges) GetNode() *UpdateControl_UpdateControl_Control_Viewers_Edges_Node {
-	if t == nil {
-		t = &UpdateControl_UpdateControl_Control_Viewers_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateControl_UpdateControl_Control_Viewers struct {
-	Edges []*UpdateControl_UpdateControl_Control_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateControl_UpdateControl_Control_Viewers) GetEdges() []*UpdateControl_UpdateControl_Control_Viewers_Edges {
-	if t == nil {
-		t = &UpdateControl_UpdateControl_Control_Viewers{}
-	}
-	return t.Edges
-}
-
 type UpdateControl_UpdateControl_Control_BlockedGroups_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -11901,7 +11673,6 @@ type UpdateControl_UpdateControl_Control struct {
 	Tags                   []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Viewers                UpdateControl_UpdateControl_Control_Viewers                "json:\"viewers\" graphql:\"viewers\""
 }
 
 func (t *UpdateControl_UpdateControl_Control) GetAssessmentMethods() []*models.AssessmentMethod {
@@ -12089,12 +11860,6 @@ func (t *UpdateControl_UpdateControl_Control) GetUpdatedBy() *string {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.UpdatedBy
-}
-func (t *UpdateControl_UpdateControl_Control) GetViewers() *UpdateControl_UpdateControl_Control_Viewers {
-	if t == nil {
-		t = &UpdateControl_UpdateControl_Control{}
-	}
-	return &t.Viewers
 }
 
 type UpdateControl_UpdateControl struct {
@@ -87171,14 +86936,6 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 					}
 				}
 			}
-			viewers {
-				edges {
-					node {
-						id
-						name
-					}
-				}
-			}
 			blockedGroups {
 				edges {
 					node {
@@ -87308,14 +87065,6 @@ const GetAllControlsDocument = `query GetAllControls {
 						}
 					}
 				}
-				viewers {
-					edges {
-						node {
-							id
-							name
-						}
-					}
-				}
 				blockedGroups {
 					edges {
 						node {
@@ -87404,14 +87153,6 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 			}
 		}
 		editors {
-			edges {
-				node {
-					id
-					name
-				}
-			}
-		}
-		viewers {
 			edges {
 				node {
 					id
@@ -87523,14 +87264,6 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where:
 						}
 					}
 				}
-				viewers {
-					edges {
-						node {
-							id
-							name
-						}
-					}
-				}
 				blockedGroups {
 					edges {
 						node {
@@ -87624,14 +87357,6 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 				}
 			}
 			editors {
-				edges {
-					node {
-						id
-						name
-					}
-				}
-			}
-			viewers {
 				edges {
 					node {
 						id

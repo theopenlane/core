@@ -12,7 +12,7 @@ import (
 
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update an existing mappedControl",
+	Short: "update an existing mapped control",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := update(cmd.Context())
 		cobra.CheckErr(err)
@@ -22,11 +22,11 @@ var updateCmd = &cobra.Command{
 func init() {
 	command.AddCommand(updateCmd)
 
-	updateCmd.Flags().StringP("id", "i", "", "mappedControl id to update")
+	updateCmd.Flags().StringP("id", "i", "", "mapped control id to update")
 
 	updateCmd.Flags().StringP("relation", "r", "", "description of how the two controls are related")
 	updateCmd.Flags().Int64P("confidence", "c", 0, "percentage (0-100) of confidence in the mapping")
-	updateCmd.Flags().StringP("mapping-type", "m", "equal", "the type of mapping between the two controls, e.g. subset, intersect, equal, superset")
+	updateCmd.Flags().StringP("mapping-type", "m", "", "the type of mapping between the two controls, e.g. subset, intersect, equal, superset")
 	updateCmd.Flags().StringP("source", "s", "", "the source of the mapping, e.g. manual, suggested, imported")
 
 	updateCmd.Flags().StringSlice("add-from-control-ids", nil, "the ids of the controls to map from")
@@ -44,7 +44,7 @@ func init() {
 func updateValidation() (id string, input openlaneclient.UpdateMappedControlInput, err error) {
 	id = cmd.Config.String("id")
 	if id == "" {
-		return id, input, cmd.NewRequiredFieldMissingError("mappedControl id")
+		return id, input, cmd.NewRequiredFieldMissingError("mapped control id")
 	}
 
 	confidence := cmd.Config.Int64("confidence")

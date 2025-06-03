@@ -86,6 +86,7 @@ func (c ControlImplementation) Mixin() []ent.Mixin {
 				withParents(Control{}, Subcontrol{}),
 				withOrganizationOwner(true),
 			),
+			newGroupPermissionsMixin(),
 		},
 	}.getMixins()
 }
