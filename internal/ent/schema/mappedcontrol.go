@@ -7,9 +7,14 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // MappedControl holds the schema definition for the MappedControl entity
@@ -46,8 +51,11 @@ func (MappedControl) Fields() []ent.Field {
 		field.String("relation").
 			Comment("description of how the two controls are related").
 			Optional(),
-		field.String("confidence").
-			Comment("percentage of confidence in the mapping").
+		field.Int("confidence").
+			Comment("percentage (0-100) of confidence in the mapping").
+			Min(0).
+			Max(100).
+			Nillable().
 			Optional(),
 		field.Enum("source").
 			GoType(enums.MappingSource("")).
@@ -91,33 +99,50 @@ func (m MappedControl) Edges() []ent.Edge {
 }
 
 // Mixin of the MappedControl
-func (MappedControl) Mixin() []ent.Mixin {
-	return getDefaultMixins()
+func (c MappedControl) Mixin() []ent.Mixin {
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			newOrgOwnedMixin(c),
+			// add group edit permissions to the mapped control
+			newGroupPermissionsMixin(withSkipViewPermissions()),
+		},
+	}.getMixins()
 }
 
 // Annotations of the MappedControl
 func (MappedControl) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
 }
 
 // Hooks of the MappedControl
 func (MappedControl) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hook.On(
+			hooks.OrgOwnedTuplesHook(),
+			ent.OpCreate,
+		),
+	}
 }
 
 // Interceptors of the MappedControl
 func (MappedControl) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+	return []ent.Interceptor{
+		// procedures are org owned, but we need to ensure the groups are filtered as well
+		interceptors.FilterQueryResults[generated.MappedControl](),
+	}
 }
 
 // Policy of the MappedControl
 func (MappedControl) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), // TODO(sfunk): - add query rules
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
-			privacy.AlwaysAllowRule(), // TODO(sfunk): - add query rules
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.MappedControlMutation](),
 		),
 	)
 }

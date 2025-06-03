@@ -246,7 +246,7 @@ func TestMutationCreateOBJECT(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateOBJECT(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.errorMsg)
+				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
 				return
@@ -316,7 +316,7 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateOBJECT(tc.ctx, OBJECT.ID, tc.request)
 			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.errorMsg)
+				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
 				return
@@ -382,7 +382,7 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.DeleteOBJECT(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
-				assert.ErrorContains(t, err, tc.errorMsg)
+				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))
 
 				return
@@ -390,7 +390,7 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-			assert.Check(t, is.Equal(tc.tokenID, resp.DeleteOBJECTDeletedID))
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteOBJECTDeletedID))
 		})
 	}
 }

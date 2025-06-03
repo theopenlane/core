@@ -1612,6 +1612,8 @@ type Control struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -1728,6 +1730,8 @@ type ControlHistory struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -1967,6 +1971,22 @@ type ControlHistoryWhereInput struct {
 	SourceNotIn  []enums.ControlSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
 	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
+	// reference_framework field predicates
+	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
+	ReferenceFrameworkNeq          *string  `json:"referenceFrameworkNEQ,omitempty"`
+	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
+	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
+	ReferenceFrameworkGt           *string  `json:"referenceFrameworkGT,omitempty"`
+	ReferenceFrameworkGte          *string  `json:"referenceFrameworkGTE,omitempty"`
+	ReferenceFrameworkLt           *string  `json:"referenceFrameworkLT,omitempty"`
+	ReferenceFrameworkLte          *string  `json:"referenceFrameworkLTE,omitempty"`
+	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
+	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
+	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
+	ReferenceFrameworkIsNil        *bool    `json:"referenceFrameworkIsNil,omitempty"`
+	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
+	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
+	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -3768,6 +3788,22 @@ type ControlWhereInput struct {
 	SourceNotIn  []enums.ControlSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
 	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
+	// reference_framework field predicates
+	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
+	ReferenceFrameworkNeq          *string  `json:"referenceFrameworkNEQ,omitempty"`
+	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
+	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
+	ReferenceFrameworkGt           *string  `json:"referenceFrameworkGT,omitempty"`
+	ReferenceFrameworkGte          *string  `json:"referenceFrameworkGTE,omitempty"`
+	ReferenceFrameworkLt           *string  `json:"referenceFrameworkLT,omitempty"`
+	ReferenceFrameworkLte          *string  `json:"referenceFrameworkLTE,omitempty"`
+	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
+	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
+	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
+	ReferenceFrameworkIsNil        *bool    `json:"referenceFrameworkIsNil,omitempty"`
+	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
+	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
+	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -4079,6 +4115,8 @@ type CreateControlInput struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -4604,10 +4642,13 @@ type CreateMappedControlInput struct {
 	MappingType *enums.MappingType `json:"mappingType,omitempty"`
 	// description of how the two controls are related
 	Relation *string `json:"relation,omitempty"`
-	// percentage of confidence in the mapping
-	Confidence *string `json:"confidence,omitempty"`
+	// percentage (0-100) of confidence in the mapping
+	Confidence *int64 `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
 	Source            *enums.MappingSource `json:"source,omitempty"`
+	OwnerID           *string              `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string             `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string             `json:"editorIDs,omitempty"`
 	FromControlIDs    []string             `json:"fromControlIDs,omitempty"`
 	ToControlIDs      []string             `json:"toControlIDs,omitempty"`
 	FromSubcontrolIDs []string             `json:"fromSubcontrolIDs,omitempty"`
@@ -4732,6 +4773,7 @@ type CreateOrganizationInput struct {
 	ControlIDs                    []string                        `json:"controlIDs,omitempty"`
 	SubcontrolIDs                 []string                        `json:"subcontrolIDs,omitempty"`
 	ControlImplementationIDs      []string                        `json:"controlImplementationIDs,omitempty"`
+	MappedControlIDs              []string                        `json:"mappedControlIDs,omitempty"`
 	EvidenceIDs                   []string                        `json:"evidenceIDs,omitempty"`
 	StandardIDs                   []string                        `json:"standardIDs,omitempty"`
 	ActionPlanIDs                 []string                        `json:"actionPlanIDs,omitempty"`
@@ -5021,6 +5063,8 @@ type CreateSubcontrolInput struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -13752,14 +13796,19 @@ type MappedControl struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType enums.MappingType `json:"mappingType"`
 	// description of how the two controls are related
 	Relation *string `json:"relation,omitempty"`
-	// percentage of confidence in the mapping
-	Confidence *string `json:"confidence,omitempty"`
+	// percentage (0-100) of confidence in the mapping
+	Confidence *int64 `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
 	Source          *enums.MappingSource  `json:"source,omitempty"`
+	Owner           *Organization         `json:"owner,omitempty"`
+	BlockedGroups   *GroupConnection      `json:"blockedGroups"`
+	Editors         *GroupConnection      `json:"editors"`
 	FromControls    *ControlConnection    `json:"fromControls"`
 	ToControls      *ControlConnection    `json:"toControls"`
 	FromSubcontrols *SubcontrolConnection `json:"fromSubcontrols"`
@@ -13815,12 +13864,14 @@ type MappedControlHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType enums.MappingType `json:"mappingType"`
 	// description of how the two controls are related
 	Relation *string `json:"relation,omitempty"`
-	// percentage of confidence in the mapping
-	Confidence *string `json:"confidence,omitempty"`
+	// percentage (0-100) of confidence in the mapping
+	Confidence *int64 `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
 	Source *enums.MappingSource `json:"source,omitempty"`
 }
@@ -13954,6 +14005,22 @@ type MappedControlHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// mapping_type field predicates
 	MappingType      *enums.MappingType  `json:"mappingType,omitempty"`
 	MappingTypeNeq   *enums.MappingType  `json:"mappingTypeNEQ,omitempty"`
@@ -13976,21 +14043,16 @@ type MappedControlHistoryWhereInput struct {
 	RelationEqualFold    *string  `json:"relationEqualFold,omitempty"`
 	RelationContainsFold *string  `json:"relationContainsFold,omitempty"`
 	// confidence field predicates
-	Confidence             *string  `json:"confidence,omitempty"`
-	ConfidenceNeq          *string  `json:"confidenceNEQ,omitempty"`
-	ConfidenceIn           []string `json:"confidenceIn,omitempty"`
-	ConfidenceNotIn        []string `json:"confidenceNotIn,omitempty"`
-	ConfidenceGt           *string  `json:"confidenceGT,omitempty"`
-	ConfidenceGte          *string  `json:"confidenceGTE,omitempty"`
-	ConfidenceLt           *string  `json:"confidenceLT,omitempty"`
-	ConfidenceLte          *string  `json:"confidenceLTE,omitempty"`
-	ConfidenceContains     *string  `json:"confidenceContains,omitempty"`
-	ConfidenceHasPrefix    *string  `json:"confidenceHasPrefix,omitempty"`
-	ConfidenceHasSuffix    *string  `json:"confidenceHasSuffix,omitempty"`
-	ConfidenceIsNil        *bool    `json:"confidenceIsNil,omitempty"`
-	ConfidenceNotNil       *bool    `json:"confidenceNotNil,omitempty"`
-	ConfidenceEqualFold    *string  `json:"confidenceEqualFold,omitempty"`
-	ConfidenceContainsFold *string  `json:"confidenceContainsFold,omitempty"`
+	Confidence       *int64  `json:"confidence,omitempty"`
+	ConfidenceNeq    *int64  `json:"confidenceNEQ,omitempty"`
+	ConfidenceIn     []int64 `json:"confidenceIn,omitempty"`
+	ConfidenceNotIn  []int64 `json:"confidenceNotIn,omitempty"`
+	ConfidenceGt     *int64  `json:"confidenceGT,omitempty"`
+	ConfidenceGte    *int64  `json:"confidenceGTE,omitempty"`
+	ConfidenceLt     *int64  `json:"confidenceLT,omitempty"`
+	ConfidenceLte    *int64  `json:"confidenceLTE,omitempty"`
+	ConfidenceIsNil  *bool   `json:"confidenceIsNil,omitempty"`
+	ConfidenceNotNil *bool   `json:"confidenceNotNil,omitempty"`
 	// source field predicates
 	Source       *enums.MappingSource  `json:"source,omitempty"`
 	SourceNeq    *enums.MappingSource  `json:"sourceNEQ,omitempty"`
@@ -14085,6 +14147,22 @@ type MappedControlWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// mapping_type field predicates
 	MappingType      *enums.MappingType  `json:"mappingType,omitempty"`
 	MappingTypeNeq   *enums.MappingType  `json:"mappingTypeNEQ,omitempty"`
@@ -14107,21 +14185,16 @@ type MappedControlWhereInput struct {
 	RelationEqualFold    *string  `json:"relationEqualFold,omitempty"`
 	RelationContainsFold *string  `json:"relationContainsFold,omitempty"`
 	// confidence field predicates
-	Confidence             *string  `json:"confidence,omitempty"`
-	ConfidenceNeq          *string  `json:"confidenceNEQ,omitempty"`
-	ConfidenceIn           []string `json:"confidenceIn,omitempty"`
-	ConfidenceNotIn        []string `json:"confidenceNotIn,omitempty"`
-	ConfidenceGt           *string  `json:"confidenceGT,omitempty"`
-	ConfidenceGte          *string  `json:"confidenceGTE,omitempty"`
-	ConfidenceLt           *string  `json:"confidenceLT,omitempty"`
-	ConfidenceLte          *string  `json:"confidenceLTE,omitempty"`
-	ConfidenceContains     *string  `json:"confidenceContains,omitempty"`
-	ConfidenceHasPrefix    *string  `json:"confidenceHasPrefix,omitempty"`
-	ConfidenceHasSuffix    *string  `json:"confidenceHasSuffix,omitempty"`
-	ConfidenceIsNil        *bool    `json:"confidenceIsNil,omitempty"`
-	ConfidenceNotNil       *bool    `json:"confidenceNotNil,omitempty"`
-	ConfidenceEqualFold    *string  `json:"confidenceEqualFold,omitempty"`
-	ConfidenceContainsFold *string  `json:"confidenceContainsFold,omitempty"`
+	Confidence       *int64  `json:"confidence,omitempty"`
+	ConfidenceNeq    *int64  `json:"confidenceNEQ,omitempty"`
+	ConfidenceIn     []int64 `json:"confidenceIn,omitempty"`
+	ConfidenceNotIn  []int64 `json:"confidenceNotIn,omitempty"`
+	ConfidenceGt     *int64  `json:"confidenceGT,omitempty"`
+	ConfidenceGte    *int64  `json:"confidenceGTE,omitempty"`
+	ConfidenceLt     *int64  `json:"confidenceLT,omitempty"`
+	ConfidenceLte    *int64  `json:"confidenceLTE,omitempty"`
+	ConfidenceIsNil  *bool   `json:"confidenceIsNil,omitempty"`
+	ConfidenceNotNil *bool   `json:"confidenceNotNil,omitempty"`
 	// source field predicates
 	Source       *enums.MappingSource  `json:"source,omitempty"`
 	SourceNeq    *enums.MappingSource  `json:"sourceNEQ,omitempty"`
@@ -14129,6 +14202,15 @@ type MappedControlWhereInput struct {
 	SourceNotIn  []enums.MappingSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
 	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 	// from_controls edge predicates
 	HasFromControls     *bool                `json:"hasFromControls,omitempty"`
 	HasFromControlsWith []*ControlWhereInput `json:"hasFromControlsWith,omitempty"`
@@ -16070,6 +16152,7 @@ type Organization struct {
 	Controls                    *ControlConnection                    `json:"controls"`
 	Subcontrols                 *SubcontrolConnection                 `json:"subcontrols"`
 	ControlImplementations      *ControlImplementationConnection      `json:"controlImplementations"`
+	MappedControls              *MappedControlConnection              `json:"mappedControls"`
 	Evidence                    *EvidenceConnection                   `json:"evidence"`
 	Standards                   *StandardConnection                   `json:"standards"`
 	ActionPlans                 *ActionPlanConnection                 `json:"actionPlans"`
@@ -17151,6 +17234,9 @@ type OrganizationWhereInput struct {
 	// control_implementations edge predicates
 	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
 	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+	// mapped_controls edge predicates
+	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
+	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
@@ -21452,6 +21538,8 @@ type Subcontrol struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -21563,6 +21651,8 @@ type SubcontrolHistory struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -21802,6 +21892,22 @@ type SubcontrolHistoryWhereInput struct {
 	SourceNotIn  []enums.ControlSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
 	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
+	// reference_framework field predicates
+	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
+	ReferenceFrameworkNeq          *string  `json:"referenceFrameworkNEQ,omitempty"`
+	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
+	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
+	ReferenceFrameworkGt           *string  `json:"referenceFrameworkGT,omitempty"`
+	ReferenceFrameworkGte          *string  `json:"referenceFrameworkGTE,omitempty"`
+	ReferenceFrameworkLt           *string  `json:"referenceFrameworkLT,omitempty"`
+	ReferenceFrameworkLte          *string  `json:"referenceFrameworkLTE,omitempty"`
+	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
+	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
+	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
+	ReferenceFrameworkIsNil        *bool    `json:"referenceFrameworkIsNil,omitempty"`
+	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
+	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
+	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -22096,6 +22202,22 @@ type SubcontrolWhereInput struct {
 	SourceNotIn  []enums.ControlSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  *bool                 `json:"sourceIsNil,omitempty"`
 	SourceNotNil *bool                 `json:"sourceNotNil,omitempty"`
+	// reference_framework field predicates
+	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
+	ReferenceFrameworkNeq          *string  `json:"referenceFrameworkNEQ,omitempty"`
+	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
+	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
+	ReferenceFrameworkGt           *string  `json:"referenceFrameworkGT,omitempty"`
+	ReferenceFrameworkGte          *string  `json:"referenceFrameworkGTE,omitempty"`
+	ReferenceFrameworkLt           *string  `json:"referenceFrameworkLT,omitempty"`
+	ReferenceFrameworkLte          *string  `json:"referenceFrameworkLTE,omitempty"`
+	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
+	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
+	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
+	ReferenceFrameworkIsNil        *bool    `json:"referenceFrameworkIsNil,omitempty"`
+	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
+	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
+	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 	// control_type field predicates
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -23878,6 +24000,9 @@ type UpdateControlInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework      *string `json:"referenceFramework,omitempty"`
+	ClearReferenceFramework *bool   `json:"clearReferenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType      *enums.ControlType `json:"controlType,omitempty"`
 	ClearControlType *bool              `json:"clearControlType,omitempty"`
@@ -24717,12 +24842,20 @@ type UpdateMappedControlInput struct {
 	// description of how the two controls are related
 	Relation      *string `json:"relation,omitempty"`
 	ClearRelation *bool   `json:"clearRelation,omitempty"`
-	// percentage of confidence in the mapping
-	Confidence      *string `json:"confidence,omitempty"`
-	ClearConfidence *bool   `json:"clearConfidence,omitempty"`
+	// percentage (0-100) of confidence in the mapping
+	Confidence      *int64 `json:"confidence,omitempty"`
+	ClearConfidence *bool  `json:"clearConfidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
 	Source                  *enums.MappingSource `json:"source,omitempty"`
 	ClearSource             *bool                `json:"clearSource,omitempty"`
+	OwnerID                 *string              `json:"ownerID,omitempty"`
+	ClearOwner              *bool                `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs      []string             `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string             `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool                `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string             `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string             `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool                `json:"clearEditors,omitempty"`
 	AddFromControlIDs       []string             `json:"addFromControlIDs,omitempty"`
 	RemoveFromControlIDs    []string             `json:"removeFromControlIDs,omitempty"`
 	ClearFromControls       *bool                `json:"clearFromControls,omitempty"`
@@ -24925,6 +25058,9 @@ type UpdateOrganizationInput struct {
 	AddControlImplementationIDs         []string                        `json:"addControlImplementationIDs,omitempty"`
 	RemoveControlImplementationIDs      []string                        `json:"removeControlImplementationIDs,omitempty"`
 	ClearControlImplementations         *bool                           `json:"clearControlImplementations,omitempty"`
+	AddMappedControlIDs                 []string                        `json:"addMappedControlIDs,omitempty"`
+	RemoveMappedControlIDs              []string                        `json:"removeMappedControlIDs,omitempty"`
+	ClearMappedControls                 *bool                           `json:"clearMappedControls,omitempty"`
 	AddEvidenceIDs                      []string                        `json:"addEvidenceIDs,omitempty"`
 	RemoveEvidenceIDs                   []string                        `json:"removeEvidenceIDs,omitempty"`
 	ClearEvidence                       *bool                           `json:"clearEvidence,omitempty"`
@@ -25391,6 +25527,9 @@ type UpdateSubcontrolInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework      *string `json:"referenceFramework,omitempty"`
+	ClearReferenceFramework *bool   `json:"clearReferenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType      *enums.ControlType `json:"controlType,omitempty"`
 	ClearControlType *bool              `json:"clearControlType,omitempty"`

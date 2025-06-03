@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -250,6 +251,20 @@ type SubcontrolBuilder struct {
 	// Fields
 	Name      string
 	ControlID string
+}
+
+type MappedControlBuilder struct {
+	client *client
+
+	// Fields
+	FromControlIDs    []string
+	ToControlIDs      []string
+	FromSubcontrolIDs []string
+	ToSubcontrolIDs   []string
+	MappingType       enums.MappingType
+	Relation          string
+	Confidence        int
+	Source            enums.MappingSource
 }
 
 type EvidenceBuilder struct {
@@ -1009,6 +1024,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	if c.StandardID != "" {
 		mutation.SetStandardID(c.StandardID)
+		mutation.SetSource(enums.ControlSourceFramework)
 	}
 
 	if c.ControlOwnerID != "" {
@@ -1050,7 +1066,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			}).
 			SetMappedCategories([]string{"Governance", "Risk Management"}).
 			SetTags([]string{"tag1", "tag2"}).
-			SetSource(enums.ControlSourceFramework).
+			SetSource(enums.ControlSourceUserDefined).
 			SetReferences([]models.Reference{
 				{
 					Name: gofakeit.HipsterSentence(5),
@@ -1195,6 +1211,61 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 	assert.NilError(t, err)
 
 	return controlImplementation
+}
+
+// MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database
+func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.MappedControl {
+	ctx = setContext(ctx, e.client.db)
+
+	if len(e.FromControlIDs) == 0 && len(e.FromSubcontrolIDs) == 0 {
+		fromControl := (&ControlBuilder{client: e.client}).MustNew(ctx, t)
+		e.FromControlIDs = []string{fromControl.ID}
+	}
+
+	if len(e.ToControlIDs) == 0 && len(e.ToSubcontrolIDs) == 0 {
+		toControl := (&ControlBuilder{client: e.client}).MustNew(ctx, t)
+		e.ToControlIDs = []string{toControl.ID}
+	}
+
+	mutation := e.client.db.MappedControl.Create().
+		AddFromControlIDs(e.FromControlIDs...).
+		AddToControlIDs(e.ToControlIDs...)
+
+	if len(e.FromSubcontrolIDs) > 0 {
+		mutation.AddFromSubcontrolIDs(e.FromSubcontrolIDs...)
+	}
+
+	if len(e.ToSubcontrolIDs) > 0 {
+		mutation.AddToSubcontrolIDs(e.ToSubcontrolIDs...)
+	}
+
+	if e.MappingType != "" {
+		mutation.SetMappingType(e.MappingType)
+	}
+
+	if e.Relation != "" {
+		mutation.SetRelation(e.Relation)
+	}
+
+	if e.Confidence != 0 {
+		mutation.SetConfidence(e.Confidence)
+	}
+
+	if e.Source != "" {
+		mutation.SetSource(e.Source)
+	}
+
+	mappedControl, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	res, err := e.client.db.MappedControl.Query().
+		WithFromControls().
+		WithFromSubcontrols().
+		WithToControls().
+		WithToSubcontrols().
+		Where(mappedcontrol.ID(mappedControl.ID)).Only(ctx)
+
+	return res
 }
 
 // MustNew mappable domain builder is used to create, without authz checks, mappable domains in the database

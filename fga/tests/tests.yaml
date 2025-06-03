@@ -570,6 +570,14 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
+      - user: user:ulid-of-member
+        object: internal_policy:internal_policy-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
       - user: user:user-in-group-approver # approver of the internal_policy should have full permissions
         object: internal_policy:internal_policy-1
         assertions:
@@ -674,6 +682,12 @@ tests:
         object: control:control-1
         assertions:
           can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member-2 # member of the parent organization that has access to the control
+        object: control:control-1
+        assertions:
+          can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-group-control-1-editor
@@ -862,6 +876,24 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+      - user: user:ulid-of-owner
+        object: mapped_control:mapped_control-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-member
+        object: mapped_control:mapped_control-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org should have no access
+        object: mapped_control:mapped_control-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
   - name: standard
     description: standards can be made public with system-owned standards, or organizations can create their own custom standards
     tuple_file: tuples/standards.yaml

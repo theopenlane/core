@@ -6,16 +6,31 @@ vars:
   SYSTEM_OBJECT: "system:openlane_core"
   SYSTEM_ADMIN_RELATION: "system_admin"
 
+
 tasks:
   create:
     desc: creates a new fga store with the testdata model
     cmds:
-      - fga store create --name "core dev" --model model/model.fga
+      - fga store create --name "core dev" --model model/model.fga --api-token={{ .FGA_API_TOKEN }}
 
   test:
     desc: runs the fga model tests
     cmds:
       - fga model test --tests tests/tests.yaml
+
+  tuple:write:
+    desc: writes test tuples to the fga store
+    dir:
+    vars:
+      TUPLES:
+        sh: find tests/tuples -type f -name '*.yaml' -print
+      STORE_ID:
+        sh: fga store list --api-token={{ .FGA_API_TOKEN }} |jq -r '.stores.[0].id'
+    cmds:
+      - for: {var: TUPLES, as: TUPLE}
+        cmd: |
+          fga tuple write --file "{{.TUPLE}}" --api-token="{{.FGA_API_TOKEN}}" --store-id="{{.STORE_ID}}"
+
 
   add:admin:
     desc: Add a user to the system:openlane admin group, if no USER_ID is provided, the logged in user will be used

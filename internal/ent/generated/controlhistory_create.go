@@ -223,6 +223,20 @@ func (chc *ControlHistoryCreate) SetNillableSource(es *enums.ControlSource) *Con
 	return chc
 }
 
+// SetReferenceFramework sets the "reference_framework" field.
+func (chc *ControlHistoryCreate) SetReferenceFramework(s string) *ControlHistoryCreate {
+	chc.mutation.SetReferenceFramework(s)
+	return chc
+}
+
+// SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableReferenceFramework(s *string) *ControlHistoryCreate {
+	if s != nil {
+		chc.SetReferenceFramework(*s)
+	}
+	return chc
+}
+
 // SetControlType sets the "control_type" field.
 func (chc *ControlHistoryCreate) SetControlType(et enums.ControlType) *ControlHistoryCreate {
 	chc.mutation.SetControlType(et)
@@ -599,6 +613,10 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 	if value, ok := chc.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
 		_node.Source = value
+	}
+	if value, ok := chc.mutation.ReferenceFramework(); ok {
+		_spec.SetField(controlhistory.FieldReferenceFramework, field.TypeString, value)
+		_node.ReferenceFramework = value
 	}
 	if value, ok := chc.mutation.ControlType(); ok {
 		_spec.SetField(controlhistory.FieldControlType, field.TypeEnum, value)

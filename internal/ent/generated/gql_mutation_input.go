@@ -621,6 +621,7 @@ type CreateControlInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -673,6 +674,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)
@@ -788,6 +792,8 @@ type UpdateControlInput struct {
 	Status                         *enums.ControlStatus
 	ClearSource                    bool
 	Source                         *enums.ControlSource
+	ClearReferenceFramework        bool
+	ReferenceFramework             *string
 	ClearControlType               bool
 	ControlType                    *enums.ControlType
 	ClearCategory                  bool
@@ -911,6 +917,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearReferenceFramework {
+		m.ClearReferenceFramework()
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if i.ClearControlType {
 		m.ClearControlType()
@@ -5044,8 +5056,11 @@ type CreateMappedControlInput struct {
 	Tags              []string
 	MappingType       *enums.MappingType
 	Relation          *string
-	Confidence        *string
+	Confidence        *int
 	Source            *enums.MappingSource
+	OwnerID           *string
+	BlockedGroupIDs   []string
+	EditorIDs         []string
 	FromControlIDs    []string
 	ToControlIDs      []string
 	FromSubcontrolIDs []string
@@ -5068,6 +5083,15 @@ func (i *CreateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
 	}
 	if v := i.FromControlIDs; len(v) > 0 {
 		m.AddFromControlIDs(v...)
@@ -5098,9 +5122,17 @@ type UpdateMappedControlInput struct {
 	ClearRelation           bool
 	Relation                *string
 	ClearConfidence         bool
-	Confidence              *string
+	Confidence              *int
 	ClearSource             bool
 	Source                  *enums.MappingSource
+	ClearOwner              bool
+	OwnerID                 *string
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
 	ClearFromControls       bool
 	AddFromControlIDs       []string
 	RemoveFromControlIDs    []string
@@ -5146,6 +5178,30 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
 	}
 	if i.ClearFromControls {
 		m.ClearFromControls()
@@ -5611,6 +5667,7 @@ type CreateOrganizationInput struct {
 	ControlIDs                    []string
 	SubcontrolIDs                 []string
 	ControlImplementationIDs      []string
+	MappedControlIDs              []string
 	EvidenceIDs                   []string
 	StandardIDs                   []string
 	ActionPlanIDs                 []string
@@ -5762,6 +5819,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.ControlImplementationIDs; len(v) > 0 {
 		m.AddControlImplementationIDs(v...)
+	}
+	if v := i.MappedControlIDs; len(v) > 0 {
+		m.AddMappedControlIDs(v...)
 	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
@@ -5929,6 +5989,9 @@ type UpdateOrganizationInput struct {
 	ClearControlImplementations         bool
 	AddControlImplementationIDs         []string
 	RemoveControlImplementationIDs      []string
+	ClearMappedControls                 bool
+	AddMappedControlIDs                 []string
+	RemoveMappedControlIDs              []string
 	ClearEvidence                       bool
 	AddEvidenceIDs                      []string
 	RemoveEvidenceIDs                   []string
@@ -6328,6 +6391,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
 		m.RemoveControlImplementationIDs(v...)
+	}
+	if i.ClearMappedControls {
+		m.ClearMappedControls()
+	}
+	if v := i.AddMappedControlIDs; len(v) > 0 {
+		m.AddMappedControlIDs(v...)
+	}
+	if v := i.RemoveMappedControlIDs; len(v) > 0 {
+		m.RemoveMappedControlIDs(v...)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()
@@ -8387,6 +8459,7 @@ type CreateSubcontrolInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -8434,6 +8507,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)
@@ -8532,6 +8608,8 @@ type UpdateSubcontrolInput struct {
 	Status                         *enums.ControlStatus
 	ClearSource                    bool
 	Source                         *enums.ControlSource
+	ClearReferenceFramework        bool
+	ReferenceFramework             *string
 	ClearControlType               bool
 	ControlType                    *enums.ControlType
 	ClearCategory                  bool
@@ -8639,6 +8717,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearReferenceFramework {
+		m.ClearReferenceFramework()
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if i.ClearControlType {
 		m.ClearControlType()

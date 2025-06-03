@@ -63,11 +63,17 @@ func TestQueryEvidence(t *testing.T) {
 			ctx:     viewOnlyUser.UserCtx,
 		},
 		{
-			name:     "read only user in organization, not authorized",
-			queryID:  evidenceControl.ID,
+			name:     "read only user in organization, no access",
+			queryID:  evidence.ID,
 			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
+			ctx:      viewOnlyUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:    "read only user in organization, has access via control",
+			queryID: evidenceControl.ID,
+			client:  suite.client.api,
+			ctx:     viewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",

@@ -102,6 +102,10 @@ type SchemaConfig struct {
 	MappableDomain                   string // MappableDomain table.
 	MappableDomainHistory            string // MappableDomainHistory table.
 	MappedControl                    string // MappedControl table.
+	MappedControlFromControls        string // MappedControl-from_controls->Control table.
+	MappedControlToControls          string // MappedControl-to_controls->Control table.
+	MappedControlFromSubcontrols     string // MappedControl-from_subcontrols->Subcontrol table.
+	MappedControlToSubcontrols       string // MappedControl-to_subcontrols->Subcontrol table.
 	MappedControlHistory             string // MappedControlHistory table.
 	Narrative                        string // Narrative table.
 	NarrativeBlockedGroups           string // Narrative-blocked_groups->Group table.

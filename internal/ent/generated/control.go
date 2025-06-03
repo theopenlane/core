@@ -49,6 +49,8 @@ type Control struct {
 	Status enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework string `json:"reference_framework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType enums.ControlType `json:"control_type,omitempty"`
 	// category of the control
@@ -83,10 +85,8 @@ type Control struct {
 	StandardID string `json:"standard_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlQuery when eager-loading is set.
-	Edges                        ControlEdges `json:"edges"`
-	mapped_control_from_controls *string
-	mapped_control_to_controls   *string
-	selectValues                 sql.SelectValues
+	Edges        ControlEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // ControlEdges holds the relations/edges for other nodes in the graph.
@@ -129,9 +129,13 @@ type ControlEdges struct {
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// ScheduledJobs holds the value of the scheduled_jobs edge.
 	ScheduledJobs []*ControlScheduledJob `json:"scheduled_jobs,omitempty"`
+	// MappedToControls holds the value of the mapped_to_controls edge.
+	MappedToControls []*MappedControl `json:"mapped_to_controls,omitempty"`
+	// MappedFromControls holds the value of the mapped_from_controls edge.
+	MappedFromControls []*MappedControl `json:"mapped_from_controls,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
 	totalCount [19]map[string]int
 
@@ -150,6 +154,8 @@ type ControlEdges struct {
 	namedControlImplementations map[string][]*ControlImplementation
 	namedSubcontrols            map[string][]*Subcontrol
 	namedScheduledJobs          map[string][]*ControlScheduledJob
+	namedMappedToControls       map[string][]*MappedControl
+	namedMappedFromControls     map[string][]*MappedControl
 }
 
 // EvidenceOrErr returns the Evidence value or an error if the edge
@@ -331,6 +337,24 @@ func (e ControlEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
 }
 
+// MappedToControlsOrErr returns the MappedToControls value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
+	if e.loadedTypes[19] {
+		return e.MappedToControls, nil
+	}
+	return nil, &NotLoadedError{edge: "mapped_to_controls"}
+}
+
+// MappedFromControlsOrErr returns the MappedFromControls value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
+	if e.loadedTypes[20] {
+		return e.MappedFromControls, nil
+	}
+	return nil, &NotLoadedError{edge: "mapped_from_controls"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Control) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -338,14 +362,10 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case control.FieldTags, control.FieldMappedCategories, control.FieldAssessmentObjectives, control.FieldAssessmentMethods, control.FieldControlQuestions, control.FieldImplementationGuidance, control.FieldExampleEvidence, control.FieldReferences:
 			values[i] = new([]byte)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldStatus, control.FieldSource, control.FieldControlType, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldRefCode, control.FieldStandardID:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldControlType, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldRefCode, control.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case control.ForeignKeys[0]: // mapped_control_from_controls
-			values[i] = new(sql.NullString)
-		case control.ForeignKeys[1]: // mapped_control_to_controls
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -446,6 +466,12 @@ func (c *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
 				c.Source = enums.ControlSource(value.String)
+			}
+		case control.FieldReferenceFramework:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reference_framework", values[i])
+			} else if value.Valid {
+				c.ReferenceFramework = value.String
 			}
 		case control.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -557,20 +583,6 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.StandardID = value.String
 			}
-		case control.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_control_from_controls", values[i])
-			} else if value.Valid {
-				c.mapped_control_from_controls = new(string)
-				*c.mapped_control_from_controls = value.String
-			}
-		case control.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_control_to_controls", values[i])
-			} else if value.Valid {
-				c.mapped_control_to_controls = new(string)
-				*c.mapped_control_to_controls = value.String
-			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -679,6 +691,16 @@ func (c *Control) QueryScheduledJobs() *ControlScheduledJobQuery {
 	return NewControlClient(c.config).QueryScheduledJobs(c)
 }
 
+// QueryMappedToControls queries the "mapped_to_controls" edge of the Control entity.
+func (c *Control) QueryMappedToControls() *MappedControlQuery {
+	return NewControlClient(c.config).QueryMappedToControls(c)
+}
+
+// QueryMappedFromControls queries the "mapped_from_controls" edge of the Control entity.
+func (c *Control) QueryMappedFromControls() *MappedControlQuery {
+	return NewControlClient(c.config).QueryMappedFromControls(c)
+}
+
 // Update returns a builder for updating this Control.
 // Note that you need to call Control.Unwrap() before calling this method if this Control
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -740,6 +762,9 @@ func (c *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", c.Source))
+	builder.WriteString(", ")
+	builder.WriteString("reference_framework=")
+	builder.WriteString(c.ReferenceFramework)
 	builder.WriteString(", ")
 	builder.WriteString("control_type=")
 	builder.WriteString(fmt.Sprintf("%v", c.ControlType))
@@ -1149,6 +1174,54 @@ func (c *Control) appendNamedScheduledJobs(name string, edges ...*ControlSchedul
 		c.Edges.namedScheduledJobs[name] = []*ControlScheduledJob{}
 	} else {
 		c.Edges.namedScheduledJobs[name] = append(c.Edges.namedScheduledJobs[name], edges...)
+	}
+}
+
+// NamedMappedToControls returns the MappedToControls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Control) NamedMappedToControls(name string) ([]*MappedControl, error) {
+	if c.Edges.namedMappedToControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedMappedToControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Control) appendNamedMappedToControls(name string, edges ...*MappedControl) {
+	if c.Edges.namedMappedToControls == nil {
+		c.Edges.namedMappedToControls = make(map[string][]*MappedControl)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedMappedToControls[name] = []*MappedControl{}
+	} else {
+		c.Edges.namedMappedToControls[name] = append(c.Edges.namedMappedToControls[name], edges...)
+	}
+}
+
+// NamedMappedFromControls returns the MappedFromControls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Control) NamedMappedFromControls(name string) ([]*MappedControl, error) {
+	if c.Edges.namedMappedFromControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedMappedFromControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Control) appendNamedMappedFromControls(name string, edges ...*MappedControl) {
+	if c.Edges.namedMappedFromControls == nil {
+		c.Edges.namedMappedFromControls = make(map[string][]*MappedControl)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedMappedFromControls[name] = []*MappedControl{}
+	} else {
+		c.Edges.namedMappedFromControls[name] = append(c.Edges.namedMappedFromControls[name], edges...)
 	}
 }
 

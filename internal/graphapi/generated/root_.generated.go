@@ -334,6 +334,7 @@ type ComplexityRoot struct {
 		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RefCode                func(childComplexity int) int
+		ReferenceFramework     func(childComplexity int) int
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
@@ -397,6 +398,7 @@ type ComplexityRoot struct {
 		OwnerID                func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		RefCode                func(childComplexity int) int
+		ReferenceFramework     func(childComplexity int) int
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Source                 func(childComplexity int) int
@@ -2058,13 +2060,17 @@ type ComplexityRoot struct {
 	}
 
 	MappedControl struct {
+		BlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Confidence      func(childComplexity int) int
 		CreatedAt       func(childComplexity int) int
 		CreatedBy       func(childComplexity int) int
+		Editors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		FromControls    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		FromSubcontrols func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		ID              func(childComplexity int) int
 		MappingType     func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
 		Relation        func(childComplexity int) int
 		Source          func(childComplexity int) int
 		Tags            func(childComplexity int) int
@@ -2105,6 +2111,7 @@ type ComplexityRoot struct {
 		ID          func(childComplexity int) int
 		MappingType func(childComplexity int) int
 		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
 		Ref         func(childComplexity int) int
 		Relation    func(childComplexity int) int
 		Source      func(childComplexity int) int
@@ -2662,6 +2669,7 @@ type ComplexityRoot struct {
 		JobRunnerTokens             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
 		JobRunners                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
 		Jobs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		MappedControls              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		Members                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		Name                        func(childComplexity int) int
 		NarrativeCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -3763,6 +3771,7 @@ type ComplexityRoot struct {
 		OwnerID                func(childComplexity int) int
 		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		RefCode                func(childComplexity int) int
+		ReferenceFramework     func(childComplexity int) int
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
@@ -3823,6 +3832,7 @@ type ComplexityRoot struct {
 		OwnerID                func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		RefCode                func(childComplexity int) int
+		ReferenceFramework     func(childComplexity int) int
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Source                 func(childComplexity int) int
@@ -5687,6 +5697,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.RefCode(childComplexity), true
 
+	case "Control.referenceFramework":
+		if e.complexity.Control.ReferenceFramework == nil {
+			break
+		}
+
+		return e.complexity.Control.ReferenceFramework(childComplexity), true
+
 	case "Control.referenceID":
 		if e.complexity.Control.ReferenceID == nil {
 			break
@@ -6026,6 +6043,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.RefCode(childComplexity), true
+
+	case "ControlHistory.referenceFramework":
+		if e.complexity.ControlHistory.ReferenceFramework == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ReferenceFramework(childComplexity), true
 
 	case "ControlHistory.referenceID":
 		if e.complexity.ControlHistory.ReferenceID == nil {
@@ -13605,6 +13629,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappableDomainUpdatePayload.MappableDomain(childComplexity), true
 
+	case "MappedControl.blockedGroups":
+		if e.complexity.MappedControl.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_MappedControl_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.MappedControl.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "MappedControl.confidence":
 		if e.complexity.MappedControl.Confidence == nil {
 			break
@@ -13625,6 +13661,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControl.CreatedBy(childComplexity), true
+
+	case "MappedControl.editors":
+		if e.complexity.MappedControl.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_MappedControl_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.MappedControl.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "MappedControl.fromControls":
 		if e.complexity.MappedControl.FromControls == nil {
@@ -13663,6 +13711,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControl.MappingType(childComplexity), true
+
+	case "MappedControl.owner":
+		if e.complexity.MappedControl.Owner == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.Owner(childComplexity), true
+
+	case "MappedControl.ownerID":
+		if e.complexity.MappedControl.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.MappedControl.OwnerID(childComplexity), true
 
 	case "MappedControl.relation":
 		if e.complexity.MappedControl.Relation == nil {
@@ -13827,6 +13889,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlHistory.Operation(childComplexity), true
+
+	case "MappedControlHistory.ownerID":
+		if e.complexity.MappedControlHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.MappedControlHistory.OwnerID(childComplexity), true
 
 	case "MappedControlHistory.ref":
 		if e.complexity.MappedControlHistory.Ref == nil {
@@ -18137,6 +18206,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Jobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
+
+	case "Organization.mappedControls":
+		if e.complexity.Organization.MappedControls == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_mappedControls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.MappedControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.MappedControlOrder), args["where"].(*generated.MappedControlWhereInput)), true
 
 	case "Organization.members":
 		if e.complexity.Organization.Members == nil {
@@ -25352,6 +25433,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.RefCode(childComplexity), true
 
+	case "Subcontrol.referenceFramework":
+		if e.complexity.Subcontrol.ReferenceFramework == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ReferenceFramework(childComplexity), true
+
 	case "Subcontrol.referenceID":
 		if e.complexity.Subcontrol.ReferenceID == nil {
 			break
@@ -25660,6 +25748,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolHistory.RefCode(childComplexity), true
+
+	case "SubcontrolHistory.referenceFramework":
+		if e.complexity.SubcontrolHistory.ReferenceFramework == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.ReferenceFramework(childComplexity), true
 
 	case "SubcontrolHistory.referenceID":
 		if e.complexity.SubcontrolHistory.ReferenceID == nil {
@@ -32639,6 +32734,10 @@ type Control implements Node {
   """
   source: ControlControlSource
   """
+  the reference framework for the control if it came from a standard
+  """
+  referenceFramework: String
+  """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
   controlType: ControlControlType
@@ -33275,6 +33374,10 @@ type ControlHistory implements Node {
   """
   source: ControlHistoryControlSource
   """
+  the reference framework for the control if it came from a standard
+  """
+  referenceFramework: String
+  """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
   controlType: ControlHistoryControlType
@@ -33639,6 +33742,24 @@ input ControlHistoryWhereInput {
   sourceNotIn: [ControlHistoryControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  reference_framework field predicates
+  """
+  referenceFramework: String
+  referenceFrameworkNEQ: String
+  referenceFrameworkIn: [String!]
+  referenceFrameworkNotIn: [String!]
+  referenceFrameworkGT: String
+  referenceFrameworkGTE: String
+  referenceFrameworkLT: String
+  referenceFrameworkLTE: String
+  referenceFrameworkContains: String
+  referenceFrameworkHasPrefix: String
+  referenceFrameworkHasSuffix: String
+  referenceFrameworkIsNil: Boolean
+  referenceFrameworkNotNil: Boolean
+  referenceFrameworkEqualFold: String
+  referenceFrameworkContainsFold: String
   """
   control_type field predicates
   """
@@ -36426,6 +36547,24 @@ input ControlWhereInput {
   sourceIsNil: Boolean
   sourceNotNil: Boolean
   """
+  reference_framework field predicates
+  """
+  referenceFramework: String
+  referenceFrameworkNEQ: String
+  referenceFrameworkIn: [String!]
+  referenceFrameworkNotIn: [String!]
+  referenceFrameworkGT: String
+  referenceFrameworkGTE: String
+  referenceFrameworkLT: String
+  referenceFrameworkLTE: String
+  referenceFrameworkContains: String
+  referenceFrameworkHasPrefix: String
+  referenceFrameworkHasSuffix: String
+  referenceFrameworkIsNil: Boolean
+  referenceFrameworkNotNil: Boolean
+  referenceFrameworkEqualFold: String
+  referenceFrameworkContainsFold: String
+  """
   control_type field predicates
   """
   controlType: ControlControlType
@@ -36877,6 +37016,10 @@ input CreateControlInput {
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource
+  """
+  the reference framework for the control if it came from a standard
+  """
+  referenceFramework: String
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -37649,13 +37792,16 @@ input CreateMappedControlInput {
   """
   relation: String
   """
-  percentage of confidence in the mapping
+  percentage (0-100) of confidence in the mapping
   """
-  confidence: String
+  confidence: Int
   """
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlMappingSource
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
   fromControlIDs: [ID!]
   toControlIDs: [ID!]
   fromSubcontrolIDs: [ID!]
@@ -37816,6 +37962,7 @@ input CreateOrganizationInput {
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   controlImplementationIDs: [ID!]
+  mappedControlIDs: [ID!]
   evidenceIDs: [ID!]
   standardIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -38270,6 +38417,10 @@ input CreateSubcontrolInput {
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource
+  """
+  the reference framework for the control if it came from a standard
+  """
+  referenceFramework: String
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -51500,6 +51651,10 @@ type MappedControl implements Node {
   """
   tags: [String!]
   """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
   mappingType: MappedControlMappingType!
@@ -51508,13 +51663,76 @@ type MappedControl implements Node {
   """
   relation: String
   """
-  percentage of confidence in the mapping
+  percentage (0-100) of confidence in the mapping
   """
-  confidence: String
+  confidence: Int
   """
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlMappingSource
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   fromControls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -51684,6 +51902,10 @@ type MappedControlHistory implements Node {
   """
   tags: [String!]
   """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
   the type of mapping between the two controls, e.g. subset, intersect, equal, superset
   """
   mappingType: MappedControlHistoryMappingType!
@@ -51692,9 +51914,9 @@ type MappedControlHistory implements Node {
   """
   relation: String
   """
-  percentage of confidence in the mapping
+  percentage (0-100) of confidence in the mapping
   """
-  confidence: String
+  confidence: Int
   """
   source of the mapping, e.g. manual, suggested, etc.
   """
@@ -51898,6 +52120,24 @@ input MappedControlHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   mapping_type field predicates
   """
   mappingType: MappedControlHistoryMappingType
@@ -51925,21 +52165,16 @@ input MappedControlHistoryWhereInput {
   """
   confidence field predicates
   """
-  confidence: String
-  confidenceNEQ: String
-  confidenceIn: [String!]
-  confidenceNotIn: [String!]
-  confidenceGT: String
-  confidenceGTE: String
-  confidenceLT: String
-  confidenceLTE: String
-  confidenceContains: String
-  confidenceHasPrefix: String
-  confidenceHasSuffix: String
+  confidence: Int
+  confidenceNEQ: Int
+  confidenceIn: [Int!]
+  confidenceNotIn: [Int!]
+  confidenceGT: Int
+  confidenceGTE: Int
+  confidenceLT: Int
+  confidenceLTE: Int
   confidenceIsNil: Boolean
   confidenceNotNil: Boolean
-  confidenceEqualFold: String
-  confidenceContainsFold: String
   """
   source field predicates
   """
@@ -52074,6 +52309,24 @@ input MappedControlWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   mapping_type field predicates
   """
   mappingType: MappedControlMappingType
@@ -52101,21 +52354,16 @@ input MappedControlWhereInput {
   """
   confidence field predicates
   """
-  confidence: String
-  confidenceNEQ: String
-  confidenceIn: [String!]
-  confidenceNotIn: [String!]
-  confidenceGT: String
-  confidenceGTE: String
-  confidenceLT: String
-  confidenceLTE: String
-  confidenceContains: String
-  confidenceHasPrefix: String
-  confidenceHasSuffix: String
+  confidence: Int
+  confidenceNEQ: Int
+  confidenceIn: [Int!]
+  confidenceNotIn: [Int!]
+  confidenceGT: Int
+  confidenceGTE: Int
+  confidenceLT: Int
+  confidenceLTE: Int
   confidenceIsNil: Boolean
   confidenceNotNil: Boolean
-  confidenceEqualFold: String
-  confidenceContainsFold: String
   """
   source field predicates
   """
@@ -52125,6 +52373,21 @@ input MappedControlWhereInput {
   sourceNotIn: [MappedControlMappingSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
   """
   from_controls edge predicates
   """
@@ -55990,6 +56253,37 @@ type Organization implements Node {
     """
     where: ControlImplementationWhereInput
   ): ControlImplementationConnection!
+  mappedControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: [MappedControlOrder!]
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
   evidence(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -57818,6 +58112,11 @@ input OrganizationWhereInput {
   """
   hasControlImplementations: Boolean
   hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  mapped_controls edge predicates
+  """
+  hasMappedControls: Boolean
+  hasMappedControlsWith: [MappedControlWhereInput!]
   """
   evidence edge predicates
   """
@@ -67411,6 +67710,10 @@ type Subcontrol implements Node {
   """
   source: SubcontrolControlSource
   """
+  the reference framework for the control if it came from a standard
+  """
+  referenceFramework: String
+  """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
   controlType: SubcontrolControlType
@@ -67892,6 +68195,10 @@ type SubcontrolHistory implements Node {
   """
   source: SubcontrolHistoryControlSource
   """
+  the reference framework for the control if it came from a standard
+  """
+  referenceFramework: String
+  """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
   controlType: SubcontrolHistoryControlType
@@ -68257,6 +68564,24 @@ input SubcontrolHistoryWhereInput {
   sourceIsNil: Boolean
   sourceNotNil: Boolean
   """
+  reference_framework field predicates
+  """
+  referenceFramework: String
+  referenceFrameworkNEQ: String
+  referenceFrameworkIn: [String!]
+  referenceFrameworkNotIn: [String!]
+  referenceFrameworkGT: String
+  referenceFrameworkGTE: String
+  referenceFrameworkLT: String
+  referenceFrameworkLTE: String
+  referenceFrameworkContains: String
+  referenceFrameworkHasPrefix: String
+  referenceFrameworkHasSuffix: String
+  referenceFrameworkIsNil: Boolean
+  referenceFrameworkNotNil: Boolean
+  referenceFrameworkEqualFold: String
+  referenceFrameworkContainsFold: String
+  """
   control_type field predicates
   """
   controlType: SubcontrolHistoryControlType
@@ -68603,6 +68928,24 @@ input SubcontrolWhereInput {
   sourceNotIn: [SubcontrolControlSource!]
   sourceIsNil: Boolean
   sourceNotNil: Boolean
+  """
+  reference_framework field predicates
+  """
+  referenceFramework: String
+  referenceFrameworkNEQ: String
+  referenceFrameworkIn: [String!]
+  referenceFrameworkNotIn: [String!]
+  referenceFrameworkGT: String
+  referenceFrameworkGTE: String
+  referenceFrameworkLT: String
+  referenceFrameworkLTE: String
+  referenceFrameworkContains: String
+  referenceFrameworkHasPrefix: String
+  referenceFrameworkHasSuffix: String
+  referenceFrameworkIsNil: Boolean
+  referenceFrameworkNotNil: Boolean
+  referenceFrameworkEqualFold: String
+  referenceFrameworkContainsFold: String
   """
   control_type field predicates
   """
@@ -71299,6 +71642,11 @@ input UpdateControlInput {
   source: ControlControlSource
   clearSource: Boolean
   """
+  the reference framework for the control if it came from a standard
+  """
+  referenceFramework: String
+  clearReferenceFramework: Boolean
+  """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
   controlType: ControlControlType
@@ -72368,15 +72716,23 @@ input UpdateMappedControlInput {
   relation: String
   clearRelation: Boolean
   """
-  percentage of confidence in the mapping
+  percentage (0-100) of confidence in the mapping
   """
-  confidence: String
+  confidence: Int
   clearConfidence: Boolean
   """
   source of the mapping, e.g. manual, suggested, etc.
   """
   source: MappedControlMappingSource
   clearSource: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
   addFromControlIDs: [ID!]
   removeFromControlIDs: [ID!]
   clearFromControls: Boolean
@@ -72605,6 +72961,9 @@ input UpdateOrganizationInput {
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
   clearControlImplementations: Boolean
+  addMappedControlIDs: [ID!]
+  removeMappedControlIDs: [ID!]
+  clearMappedControls: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
@@ -73230,6 +73589,11 @@ input UpdateSubcontrolInput {
   """
   source: SubcontrolControlSource
   clearSource: Boolean
+  """
+  the reference framework for the control if it came from a standard
+  """
+  referenceFramework: String
+  clearReferenceFramework: Boolean
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """

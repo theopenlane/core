@@ -49,6 +49,8 @@ type Subcontrol struct {
 	Status enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework string `json:"reference_framework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType enums.ControlType `json:"control_type,omitempty"`
 	// category of the control
@@ -83,12 +85,10 @@ type Subcontrol struct {
 	ControlID string `json:"control_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
-	Edges                           SubcontrolEdges `json:"edges"`
-	mapped_control_from_subcontrols *string
-	mapped_control_to_subcontrols   *string
-	program_subcontrols             *string
-	user_subcontrols                *string
-	selectValues                    sql.SelectValues
+	Edges               SubcontrolEdges `json:"edges"`
+	program_subcontrols *string
+	user_subcontrols    *string
+	selectValues        sql.SelectValues
 }
 
 // SubcontrolEdges holds the relations/edges for other nodes in the graph.
@@ -121,9 +121,13 @@ type SubcontrolEdges struct {
 	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// ScheduledJobs holds the value of the scheduled_jobs edge.
 	ScheduledJobs []*ControlScheduledJob `json:"scheduled_jobs,omitempty"`
+	// MappedToSubcontrols holds the value of the mapped_to_subcontrols edge.
+	MappedToSubcontrols []*MappedControl `json:"mapped_to_subcontrols,omitempty"`
+	// MappedFromSubcontrols holds the value of the mapped_from_subcontrols edge.
+	MappedFromSubcontrols []*MappedControl `json:"mapped_from_subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
 	totalCount [14]map[string]int
 
@@ -137,6 +141,8 @@ type SubcontrolEdges struct {
 	namedInternalPolicies       map[string][]*InternalPolicy
 	namedControlImplementations map[string][]*ControlImplementation
 	namedScheduledJobs          map[string][]*ControlScheduledJob
+	namedMappedToSubcontrols    map[string][]*MappedControl
+	namedMappedFromSubcontrols  map[string][]*MappedControl
 }
 
 // EvidenceOrErr returns the Evidence value or an error if the edge
@@ -273,6 +279,24 @@ func (e SubcontrolEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
 }
 
+// MappedToSubcontrolsOrErr returns the MappedToSubcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) MappedToSubcontrolsOrErr() ([]*MappedControl, error) {
+	if e.loadedTypes[14] {
+		return e.MappedToSubcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "mapped_to_subcontrols"}
+}
+
+// MappedFromSubcontrolsOrErr returns the MappedFromSubcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) MappedFromSubcontrolsOrErr() ([]*MappedControl, error) {
+	if e.loadedTypes[15] {
+		return e.MappedFromSubcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "mapped_from_subcontrols"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -280,17 +304,13 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case subcontrol.FieldTags, subcontrol.FieldMappedCategories, subcontrol.FieldAssessmentObjectives, subcontrol.FieldAssessmentMethods, subcontrol.FieldControlQuestions, subcontrol.FieldImplementationGuidance, subcontrol.FieldExampleEvidence, subcontrol.FieldReferences:
 			values[i] = new([]byte)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldDescription, subcontrol.FieldReferenceID, subcontrol.FieldAuditorReferenceID, subcontrol.FieldStatus, subcontrol.FieldSource, subcontrol.FieldControlType, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlOwnerID, subcontrol.FieldDelegateID, subcontrol.FieldOwnerID, subcontrol.FieldRefCode, subcontrol.FieldControlID:
+		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldDescription, subcontrol.FieldReferenceID, subcontrol.FieldAuditorReferenceID, subcontrol.FieldStatus, subcontrol.FieldSource, subcontrol.FieldReferenceFramework, subcontrol.FieldControlType, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlOwnerID, subcontrol.FieldDelegateID, subcontrol.FieldOwnerID, subcontrol.FieldRefCode, subcontrol.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case subcontrol.ForeignKeys[0]: // mapped_control_from_subcontrols
+		case subcontrol.ForeignKeys[0]: // program_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[1]: // mapped_control_to_subcontrols
-			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[2]: // program_subcontrols
-			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[3]: // user_subcontrols
+		case subcontrol.ForeignKeys[1]: // user_subcontrols
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -392,6 +412,12 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
 				s.Source = enums.ControlSource(value.String)
+			}
+		case subcontrol.FieldReferenceFramework:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reference_framework", values[i])
+			} else if value.Valid {
+				s.ReferenceFramework = value.String
 			}
 		case subcontrol.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -505,26 +531,12 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			}
 		case subcontrol.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_control_from_subcontrols", values[i])
-			} else if value.Valid {
-				s.mapped_control_from_subcontrols = new(string)
-				*s.mapped_control_from_subcontrols = value.String
-			}
-		case subcontrol.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapped_control_to_subcontrols", values[i])
-			} else if value.Valid {
-				s.mapped_control_to_subcontrols = new(string)
-				*s.mapped_control_to_subcontrols = value.String
-			}
-		case subcontrol.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_subcontrols", values[i])
 			} else if value.Valid {
 				s.program_subcontrols = new(string)
 				*s.program_subcontrols = value.String
 			}
-		case subcontrol.ForeignKeys[3]:
+		case subcontrol.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_subcontrols", values[i])
 			} else if value.Valid {
@@ -614,6 +626,16 @@ func (s *Subcontrol) QueryScheduledJobs() *ControlScheduledJobQuery {
 	return NewSubcontrolClient(s.config).QueryScheduledJobs(s)
 }
 
+// QueryMappedToSubcontrols queries the "mapped_to_subcontrols" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryMappedToSubcontrols() *MappedControlQuery {
+	return NewSubcontrolClient(s.config).QueryMappedToSubcontrols(s)
+}
+
+// QueryMappedFromSubcontrols queries the "mapped_from_subcontrols" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryMappedFromSubcontrols() *MappedControlQuery {
+	return NewSubcontrolClient(s.config).QueryMappedFromSubcontrols(s)
+}
+
 // Update returns a builder for updating this Subcontrol.
 // Note that you need to call Subcontrol.Unwrap() before calling this method if this Subcontrol
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -675,6 +697,9 @@ func (s *Subcontrol) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", s.Source))
+	builder.WriteString(", ")
+	builder.WriteString("reference_framework=")
+	builder.WriteString(s.ReferenceFramework)
 	builder.WriteString(", ")
 	builder.WriteString("control_type=")
 	builder.WriteString(fmt.Sprintf("%v", s.ControlType))
@@ -964,6 +989,54 @@ func (s *Subcontrol) appendNamedScheduledJobs(name string, edges ...*ControlSche
 		s.Edges.namedScheduledJobs[name] = []*ControlScheduledJob{}
 	} else {
 		s.Edges.namedScheduledJobs[name] = append(s.Edges.namedScheduledJobs[name], edges...)
+	}
+}
+
+// NamedMappedToSubcontrols returns the MappedToSubcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedMappedToSubcontrols(name string) ([]*MappedControl, error) {
+	if s.Edges.namedMappedToSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedMappedToSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedMappedToSubcontrols(name string, edges ...*MappedControl) {
+	if s.Edges.namedMappedToSubcontrols == nil {
+		s.Edges.namedMappedToSubcontrols = make(map[string][]*MappedControl)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedMappedToSubcontrols[name] = []*MappedControl{}
+	} else {
+		s.Edges.namedMappedToSubcontrols[name] = append(s.Edges.namedMappedToSubcontrols[name], edges...)
+	}
+}
+
+// NamedMappedFromSubcontrols returns the MappedFromSubcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedMappedFromSubcontrols(name string) ([]*MappedControl, error) {
+	if s.Edges.namedMappedFromSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedMappedFromSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedMappedFromSubcontrols(name string, edges ...*MappedControl) {
+	if s.Edges.namedMappedFromSubcontrols == nil {
+		s.Edges.namedMappedFromSubcontrols = make(map[string][]*MappedControl)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedMappedFromSubcontrols[name] = []*MappedControl{}
+	} else {
+		s.Edges.namedMappedFromSubcontrols[name] = append(s.Edges.namedMappedFromSubcontrols[name], edges...)
 	}
 }
 

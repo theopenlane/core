@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -107,6 +108,7 @@ type OrganizationQuery struct {
 	withControls                         *ControlQuery
 	withSubcontrols                      *SubcontrolQuery
 	withControlImplementations           *ControlImplementationQuery
+	withMappedControls                   *MappedControlQuery
 	withEvidence                         *EvidenceQuery
 	withStandards                        *StandardQuery
 	withActionPlans                      *ActionPlanQuery
@@ -159,6 +161,7 @@ type OrganizationQuery struct {
 	withNamedControls                    map[string]*ControlQuery
 	withNamedSubcontrols                 map[string]*SubcontrolQuery
 	withNamedControlImplementations      map[string]*ControlImplementationQuery
+	withNamedMappedControls              map[string]*MappedControlQuery
 	withNamedEvidence                    map[string]*EvidenceQuery
 	withNamedStandards                   map[string]*StandardQuery
 	withNamedActionPlans                 map[string]*ActionPlanQuery
@@ -1208,6 +1211,31 @@ func (oq *OrganizationQuery) QueryControlImplementations() *ControlImplementatio
 	return query
 }
 
+// QueryMappedControls chains the current query on the "mapped_controls" edge.
+func (oq *OrganizationQuery) QueryMappedControls() *MappedControlQuery {
+	query := (&MappedControlClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.MappedControlsTable, organization.MappedControlsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControl
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryEvidence chains the current query on the "evidence" edge.
 func (oq *OrganizationQuery) QueryEvidence() *EvidenceQuery {
 	query := (&EvidenceClient{config: oq.config}).Query()
@@ -1765,6 +1793,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withControls:                    oq.withControls.Clone(),
 		withSubcontrols:                 oq.withSubcontrols.Clone(),
 		withControlImplementations:      oq.withControlImplementations.Clone(),
+		withMappedControls:              oq.withMappedControls.Clone(),
 		withEvidence:                    oq.withEvidence.Clone(),
 		withStandards:                   oq.withStandards.Clone(),
 		withActionPlans:                 oq.withActionPlans.Clone(),
@@ -2225,6 +2254,17 @@ func (oq *OrganizationQuery) WithControlImplementations(opts ...func(*ControlImp
 	return oq
 }
 
+// WithMappedControls tells the query-builder to eager-load the nodes that are connected to
+// the "mapped_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithMappedControls(opts ...func(*MappedControlQuery)) *OrganizationQuery {
+	query := (&MappedControlClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withMappedControls = query
+	return oq
+}
+
 // WithEvidence tells the query-builder to eager-load the nodes that are connected to
 // the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithEvidence(opts ...func(*EvidenceQuery)) *OrganizationQuery {
@@ -2452,7 +2492,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [53]bool{
+		loadedTypes = [54]bool{
 			oq.withControlCreators != nil,
 			oq.withControlObjectiveCreators != nil,
 			oq.withGroupCreators != nil,
@@ -2493,6 +2533,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withControls != nil,
 			oq.withSubcontrols != nil,
 			oq.withControlImplementations != nil,
+			oq.withMappedControls != nil,
 			oq.withEvidence != nil,
 			oq.withStandards != nil,
 			oq.withActionPlans != nil,
@@ -2819,6 +2860,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization, e *ControlImplementation) {
 				n.Edges.ControlImplementations = append(n.Edges.ControlImplementations, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withMappedControls; query != nil {
+		if err := oq.loadMappedControls(ctx, query, nodes,
+			func(n *Organization) { n.Edges.MappedControls = []*MappedControl{} },
+			func(n *Organization, e *MappedControl) { n.Edges.MappedControls = append(n.Edges.MappedControls, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3177,6 +3225,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadControlImplementations(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedControlImplementations(name) },
 			func(n *Organization, e *ControlImplementation) { n.appendNamedControlImplementations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedMappedControls {
+		if err := oq.loadMappedControls(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedMappedControls(name) },
+			func(n *Organization, e *MappedControl) { n.appendNamedMappedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4543,7 +4598,6 @@ func (oq *OrganizationQuery) loadControls(ctx context.Context, query *ControlQue
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(control.FieldOwnerID)
 	}
@@ -4610,6 +4664,36 @@ func (oq *OrganizationQuery) loadControlImplementations(ctx context.Context, que
 	}
 	query.Where(predicate.ControlImplementation(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.ControlImplementationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadMappedControls(ctx context.Context, query *MappedControlQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *MappedControl)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(mappedcontrol.FieldOwnerID)
+	}
+	query.Where(predicate.MappedControl(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.MappedControlsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -5637,6 +5721,20 @@ func (oq *OrganizationQuery) WithNamedControlImplementations(name string, opts .
 		oq.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
 	}
 	oq.withNamedControlImplementations[name] = query
+	return oq
+}
+
+// WithNamedMappedControls tells the query-builder to eager-load the nodes that are connected to the "mapped_controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedMappedControls(name string, opts ...func(*MappedControlQuery)) *OrganizationQuery {
+	query := (&MappedControlClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedMappedControls == nil {
+		oq.withNamedMappedControls = make(map[string]*MappedControlQuery)
+	}
+	oq.withNamedMappedControls[name] = query
 	return oq
 }
 

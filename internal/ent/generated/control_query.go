@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -60,7 +61,8 @@ type ControlQuery struct {
 	withControlImplementations      *ControlImplementationQuery
 	withSubcontrols                 *SubcontrolQuery
 	withScheduledJobs               *ControlScheduledJobQuery
-	withFKs                         bool
+	withMappedToControls            *MappedControlQuery
+	withMappedFromControls          *MappedControlQuery
 	loadTotal                       []func(context.Context, []*Control) error
 	modifiers                       []func(*sql.Selector)
 	withNamedEvidence               map[string]*EvidenceQuery
@@ -78,6 +80,8 @@ type ControlQuery struct {
 	withNamedControlImplementations map[string]*ControlImplementationQuery
 	withNamedSubcontrols            map[string]*SubcontrolQuery
 	withNamedScheduledJobs          map[string]*ControlScheduledJobQuery
+	withNamedMappedToControls       map[string]*MappedControlQuery
+	withNamedMappedFromControls     map[string]*MappedControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -589,6 +593,56 @@ func (cq *ControlQuery) QueryScheduledJobs() *ControlScheduledJobQuery {
 	return query
 }
 
+// QueryMappedToControls chains the current query on the "mapped_to_controls" edge.
+func (cq *ControlQuery) QueryMappedToControls() *MappedControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedToControlsTable, control.MappedToControlsPrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlToControls
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMappedFromControls chains the current query on the "mapped_from_controls" edge.
+func (cq *ControlQuery) QueryMappedFromControls() *MappedControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedFromControlsTable, control.MappedFromControlsPrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlFromControls
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Control entity from the query.
 // Returns a *NotFoundError when no Control was found.
 func (cq *ControlQuery) First(ctx context.Context) (*Control, error) {
@@ -800,6 +854,8 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 		withControlImplementations: cq.withControlImplementations.Clone(),
 		withSubcontrols:            cq.withSubcontrols.Clone(),
 		withScheduledJobs:          cq.withScheduledJobs.Clone(),
+		withMappedToControls:       cq.withMappedToControls.Clone(),
+		withMappedFromControls:     cq.withMappedFromControls.Clone(),
 		// clone intermediate query.
 		sql:       cq.sql.Clone(),
 		path:      cq.path,
@@ -1016,6 +1072,28 @@ func (cq *ControlQuery) WithScheduledJobs(opts ...func(*ControlScheduledJobQuery
 	return cq
 }
 
+// WithMappedToControls tells the query-builder to eager-load the nodes that are connected to
+// the "mapped_to_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithMappedToControls(opts ...func(*MappedControlQuery)) *ControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withMappedToControls = query
+	return cq
+}
+
+// WithMappedFromControls tells the query-builder to eager-load the nodes that are connected to
+// the "mapped_from_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithMappedFromControls(opts ...func(*MappedControlQuery)) *ControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withMappedFromControls = query
+	return cq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1099,9 +1177,8 @@ func (cq *ControlQuery) prepareQuery(ctx context.Context) error {
 func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Control, error) {
 	var (
 		nodes       = []*Control{}
-		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [19]bool{
+		loadedTypes = [21]bool{
 			cq.withEvidence != nil,
 			cq.withControlObjectives != nil,
 			cq.withTasks != nil,
@@ -1121,11 +1198,10 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withControlImplementations != nil,
 			cq.withSubcontrols != nil,
 			cq.withScheduledJobs != nil,
+			cq.withMappedToControls != nil,
+			cq.withMappedFromControls != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, control.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Control).scanValues(nil, columns)
 	}
@@ -1282,6 +1358,20 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := cq.withMappedToControls; query != nil {
+		if err := cq.loadMappedToControls(ctx, query, nodes,
+			func(n *Control) { n.Edges.MappedToControls = []*MappedControl{} },
+			func(n *Control, e *MappedControl) { n.Edges.MappedToControls = append(n.Edges.MappedToControls, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withMappedFromControls; query != nil {
+		if err := cq.loadMappedFromControls(ctx, query, nodes,
+			func(n *Control) { n.Edges.MappedFromControls = []*MappedControl{} },
+			func(n *Control, e *MappedControl) { n.Edges.MappedFromControls = append(n.Edges.MappedFromControls, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range cq.withNamedEvidence {
 		if err := cq.loadEvidence(ctx, query, nodes,
 			func(n *Control) { n.appendNamedEvidence(name) },
@@ -1384,6 +1474,20 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadScheduledJobs(ctx, query, nodes,
 			func(n *Control) { n.appendNamedScheduledJobs(name) },
 			func(n *Control, e *ControlScheduledJob) { n.appendNamedScheduledJobs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedMappedToControls {
+		if err := cq.loadMappedToControls(ctx, query, nodes,
+			func(n *Control) { n.appendNamedMappedToControls(name) },
+			func(n *Control, e *MappedControl) { n.appendNamedMappedToControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedMappedFromControls {
+		if err := cq.loadMappedFromControls(ctx, query, nodes,
+			func(n *Control) { n.appendNamedMappedFromControls(name) },
+			func(n *Control, e *MappedControl) { n.appendNamedMappedFromControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2410,6 +2514,130 @@ func (cq *ControlQuery) loadScheduledJobs(ctx context.Context, query *ControlSch
 	}
 	return nil
 }
+func (cq *ControlQuery) loadMappedToControls(ctx context.Context, query *MappedControlQuery, nodes []*Control, init func(*Control), assign func(*Control, *MappedControl)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.MappedToControlsTable)
+		joinT.Schema(cq.schemaConfig.MappedControlToControls)
+		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(control.MappedToControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.MappedToControlsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.MappedToControlsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*MappedControl](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "mapped_to_controls" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (cq *ControlQuery) loadMappedFromControls(ctx context.Context, query *MappedControlQuery, nodes []*Control, init func(*Control), assign func(*Control, *MappedControl)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.MappedFromControlsTable)
+		joinT.Schema(cq.schemaConfig.MappedControlFromControls)
+		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(control.MappedFromControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.MappedFromControlsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.MappedFromControlsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*MappedControl](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "mapped_from_controls" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (cq *ControlQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
@@ -2728,6 +2956,34 @@ func (cq *ControlQuery) WithNamedScheduledJobs(name string, opts ...func(*Contro
 		cq.withNamedScheduledJobs = make(map[string]*ControlScheduledJobQuery)
 	}
 	cq.withNamedScheduledJobs[name] = query
+	return cq
+}
+
+// WithNamedMappedToControls tells the query-builder to eager-load the nodes that are connected to the "mapped_to_controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedMappedToControls(name string, opts ...func(*MappedControlQuery)) *ControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedMappedToControls == nil {
+		cq.withNamedMappedToControls = make(map[string]*MappedControlQuery)
+	}
+	cq.withNamedMappedToControls[name] = query
+	return cq
+}
+
+// WithNamedMappedFromControls tells the query-builder to eager-load the nodes that are connected to the "mapped_from_controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedMappedFromControls(name string, opts ...func(*MappedControlQuery)) *ControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedMappedFromControls == nil {
+		cq.withNamedMappedFromControls = make(map[string]*MappedControlQuery)
+	}
+	cq.withNamedMappedFromControls[name] = query
 	return cq
 }
 

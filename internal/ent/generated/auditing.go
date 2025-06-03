@@ -283,6 +283,9 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(ch.Source, new.Source) {
 		changes = append(changes, NewChange(controlhistory.FieldSource, ch.Source, new.Source))
 	}
+	if !reflect.DeepEqual(ch.ReferenceFramework, new.ReferenceFramework) {
+		changes = append(changes, NewChange(controlhistory.FieldReferenceFramework, ch.ReferenceFramework, new.ReferenceFramework))
+	}
 	if !reflect.DeepEqual(ch.ControlType, new.ControlType) {
 		changes = append(changes, NewChange(controlhistory.FieldControlType, ch.ControlType, new.ControlType))
 	}
@@ -1639,6 +1642,9 @@ func (mch *MappedControlHistory) changes(new *MappedControlHistory) []Change {
 	if !reflect.DeepEqual(mch.Tags, new.Tags) {
 		changes = append(changes, NewChange(mappedcontrolhistory.FieldTags, mch.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(mch.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(mappedcontrolhistory.FieldOwnerID, mch.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(mch.MappingType, new.MappingType) {
 		changes = append(changes, NewChange(mappedcontrolhistory.FieldMappingType, mch.MappingType, new.MappingType))
 	}
@@ -2616,6 +2622,9 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	}
 	if !reflect.DeepEqual(sh.Source, new.Source) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldSource, sh.Source, new.Source))
+	}
+	if !reflect.DeepEqual(sh.ReferenceFramework, new.ReferenceFramework) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldReferenceFramework, sh.ReferenceFramework, new.ReferenceFramework))
 	}
 	if !reflect.DeepEqual(sh.ControlType, new.ControlType) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldControlType, sh.ControlType, new.ControlType))

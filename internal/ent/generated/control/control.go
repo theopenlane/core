@@ -44,6 +44,8 @@ const (
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
+	// FieldReferenceFramework holds the string denoting the reference_framework field in the database.
+	FieldReferenceFramework = "reference_framework"
 	// FieldControlType holds the string denoting the control_type field in the database.
 	FieldControlType = "control_type"
 	// FieldCategory holds the string denoting the category field in the database.
@@ -114,6 +116,10 @@ const (
 	EdgeSubcontrols = "subcontrols"
 	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
 	EdgeScheduledJobs = "scheduled_jobs"
+	// EdgeMappedToControls holds the string denoting the mapped_to_controls edge name in mutations.
+	EdgeMappedToControls = "mapped_to_controls"
+	// EdgeMappedFromControls holds the string denoting the mapped_from_controls edge name in mutations.
+	EdgeMappedFromControls = "mapped_from_controls"
 	// Table holds the table name of the control in the database.
 	Table = "controls"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
@@ -221,6 +227,16 @@ const (
 	// ScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
 	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
 	ScheduledJobsInverseTable = "control_scheduled_jobs"
+	// MappedToControlsTable is the table that holds the mapped_to_controls relation/edge. The primary key declared below.
+	MappedToControlsTable = "mapped_control_to_controls"
+	// MappedToControlsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedToControlsInverseTable = "mapped_controls"
+	// MappedFromControlsTable is the table that holds the mapped_from_controls relation/edge. The primary key declared below.
+	MappedFromControlsTable = "mapped_control_from_controls"
+	// MappedFromControlsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedFromControlsInverseTable = "mapped_controls"
 )
 
 // Columns holds all SQL columns for control fields.
@@ -239,6 +255,7 @@ var Columns = []string{
 	FieldAuditorReferenceID,
 	FieldStatus,
 	FieldSource,
+	FieldReferenceFramework,
 	FieldControlType,
 	FieldCategory,
 	FieldCategoryID,
@@ -255,13 +272,6 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldRefCode,
 	FieldStandardID,
-}
-
-// ForeignKeys holds the SQL foreign-keys that are owned by the "controls"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"mapped_control_from_controls",
-	"mapped_control_to_controls",
 }
 
 var (
@@ -307,17 +317,18 @@ var (
 	// ScheduledJobsPrimaryKey and ScheduledJobsColumn2 are the table columns denoting the
 	// primary key for the scheduled_jobs relation (M2M).
 	ScheduledJobsPrimaryKey = []string{"control_scheduled_job_id", "control_id"}
+	// MappedToControlsPrimaryKey and MappedToControlsColumn2 are the table columns denoting the
+	// primary key for the mapped_to_controls relation (M2M).
+	MappedToControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
+	// MappedFromControlsPrimaryKey and MappedFromControlsColumn2 are the table columns denoting the
+	// primary key for the mapped_from_controls relation (M2M).
+	MappedFromControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -453,6 +464,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByReferenceFramework orders the results by the reference_framework field.
+func ByReferenceFramework(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReferenceFramework, opts...).ToFunc()
 }
 
 // ByControlType orders the results by the control_type field.
@@ -737,6 +753,34 @@ func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMappedToControlsCount orders the results by mapped_to_controls count.
+func ByMappedToControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMappedToControlsStep(), opts...)
+	}
+}
+
+// ByMappedToControls orders the results by mapped_to_controls terms.
+func ByMappedToControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedToControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMappedFromControlsCount orders the results by mapped_from_controls count.
+func ByMappedFromControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMappedFromControlsStep(), opts...)
+	}
+}
+
+// ByMappedFromControls orders the results by mapped_from_controls terms.
+func ByMappedFromControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedFromControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newEvidenceStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -868,6 +912,20 @@ func newScheduledJobsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ScheduledJobsTable, ScheduledJobsPrimaryKey...),
+	)
+}
+func newMappedToControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MappedToControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MappedToControlsTable, MappedToControlsPrimaryKey...),
+	)
+}
+func newMappedFromControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MappedFromControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MappedFromControlsTable, MappedFromControlsPrimaryKey...),
 	)
 }
 

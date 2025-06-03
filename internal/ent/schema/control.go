@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
@@ -70,7 +71,6 @@ func (c Control) Edges() []ent.Edge {
 			field:      "standard_id",
 		}),
 		defaultEdgeFromWithPagination(c, Program{}),
-
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: c,
 			edgeSchema: ControlImplementation{},
@@ -82,10 +82,27 @@ func (c Control) Edges() []ent.Edge {
 			edgeSchema:    Subcontrol{},
 			cascadeDelete: "Control",
 		}),
-
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,
 			edgeSchema: ControlScheduledJob{},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			ref:        "to_controls",
+			name:       "mapped_to_controls",
+			t:          MappedControl.Type,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			ref:        "from_controls",
+			name:       "mapped_from_controls",
+			t:          MappedControl.Type,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
 		}),
 	}
 }
@@ -112,7 +129,7 @@ func (c Control) Mixin() []ent.Mixin {
 			// controls must be associated with an organization but do not inherit permissions from the organization
 			// controls can inherit permissions from the associated programs
 			newObjectOwnedMixin[generated.Control](c,
-				withParents(Program{}, Standard{}),
+				withParents(Organization{}, Program{}, Standard{}),
 				withOrganizationOwner(true),
 			),
 			// add groups permissions with viewer, editor, and blocked groups

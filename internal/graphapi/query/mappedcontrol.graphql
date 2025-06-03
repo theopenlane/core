@@ -28,6 +28,38 @@ mutation CreateBulkMappedControl($input: [CreateMappedControlInput!]) {
       tags
       updatedAt
       updatedBy
+      fromControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      fromSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -45,6 +77,38 @@ mutation CreateMappedControl($input: CreateMappedControlInput!) {
       tags
       updatedAt
       updatedBy
+      fromControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      fromSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }
@@ -76,6 +140,38 @@ query GetAllMappedControls {
         tags
         updatedAt
         updatedBy
+        fromControls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        toControls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        fromSubcontrols {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        toSubcontrols {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
@@ -93,6 +189,38 @@ query GetMappedControlByID($mappedControlId: ID!) {
     tags
     updatedAt
     updatedBy
+    fromControls {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
+    toControls {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
+    fromSubcontrols {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
+    toSubcontrols {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
   }
 }
 
@@ -117,6 +245,38 @@ query GetMappedControls($first: Int, $last: Int, $where: MappedControlWhereInput
         tags
         updatedAt
         updatedBy
+        fromControls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        toControls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        fromSubcontrols {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+        toSubcontrols {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
       }
     }
   }
@@ -135,6 +295,38 @@ mutation UpdateMappedControl($updateMappedControlId: ID!, $input: UpdateMappedCo
       tags
       updatedAt
       updatedBy
+      fromControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toControls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      fromSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+      toSubcontrols {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
     }
   }
 }

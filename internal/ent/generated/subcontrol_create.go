@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -197,6 +198,20 @@ func (sc *SubcontrolCreate) SetSource(es enums.ControlSource) *SubcontrolCreate 
 func (sc *SubcontrolCreate) SetNillableSource(es *enums.ControlSource) *SubcontrolCreate {
 	if es != nil {
 		sc.SetSource(*es)
+	}
+	return sc
+}
+
+// SetReferenceFramework sets the "reference_framework" field.
+func (sc *SubcontrolCreate) SetReferenceFramework(s string) *SubcontrolCreate {
+	sc.mutation.SetReferenceFramework(s)
+	return sc
+}
+
+// SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableReferenceFramework(s *string) *SubcontrolCreate {
+	if s != nil {
+		sc.SetReferenceFramework(*s)
 	}
 	return sc
 }
@@ -537,6 +552,36 @@ func (sc *SubcontrolCreate) AddScheduledJobs(c ...*ControlScheduledJob) *Subcont
 	return sc.AddScheduledJobIDs(ids...)
 }
 
+// AddMappedToSubcontrolIDs adds the "mapped_to_subcontrols" edge to the MappedControl entity by IDs.
+func (sc *SubcontrolCreate) AddMappedToSubcontrolIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddMappedToSubcontrolIDs(ids...)
+	return sc
+}
+
+// AddMappedToSubcontrols adds the "mapped_to_subcontrols" edges to the MappedControl entity.
+func (sc *SubcontrolCreate) AddMappedToSubcontrols(m ...*MappedControl) *SubcontrolCreate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return sc.AddMappedToSubcontrolIDs(ids...)
+}
+
+// AddMappedFromSubcontrolIDs adds the "mapped_from_subcontrols" edge to the MappedControl entity by IDs.
+func (sc *SubcontrolCreate) AddMappedFromSubcontrolIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddMappedFromSubcontrolIDs(ids...)
+	return sc
+}
+
+// AddMappedFromSubcontrols adds the "mapped_from_subcontrols" edges to the MappedControl entity.
+func (sc *SubcontrolCreate) AddMappedFromSubcontrols(m ...*MappedControl) *SubcontrolCreate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return sc.AddMappedFromSubcontrolIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (sc *SubcontrolCreate) Mutation() *SubcontrolMutation {
 	return sc.mutation
@@ -750,6 +795,10 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)
 		_node.Source = value
+	}
+	if value, ok := sc.mutation.ReferenceFramework(); ok {
+		_spec.SetField(subcontrol.FieldReferenceFramework, field.TypeString, value)
+		_node.ReferenceFramework = value
 	}
 	if value, ok := sc.mutation.ControlType(); ok {
 		_spec.SetField(subcontrol.FieldControlType, field.TypeEnum, value)
@@ -1036,6 +1085,40 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = sc.schemaConfig.ControlScheduledJobSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.MappedToSubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedToSubcontrolsTable,
+			Columns: subcontrol.MappedToSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.MappedControlToSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.MappedFromSubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedFromSubcontrolsTable,
+			Columns: subcontrol.MappedFromSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

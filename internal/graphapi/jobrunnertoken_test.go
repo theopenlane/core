@@ -4,15 +4,16 @@ import (
 	"context"
 	"testing"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestQueryJobRunnerTokens(t *testing.T) {
-	_ = (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	_ = (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	_ = (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	token1 := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	token2 := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	token3 := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -65,6 +66,9 @@ func TestQueryJobRunnerTokens(t *testing.T) {
 			assert.Check(t, is.Len(resp.JobRunnerTokens.Edges, tc.expectedCount))
 		})
 	}
+
+	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, IDs: []string{token1.ID, token2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerTokenDeleteOne]{client: suite.client.db.JobRunnerToken, IDs: []string{token3.ID}}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestMutationDeleteJobRunnerToken(t *testing.T) {
@@ -72,14 +76,20 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 	secondToken := (&JobRunnerTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name          string
-		userID        string
-		client        *openlaneclient.OpenlaneClient
-		ctx           context.Context
-		errorMsg      string
-		tokenID       string
-		expectedCount int
+		name     string
+		userID   string
+		client   *openlaneclient.OpenlaneClient
+		ctx      context.Context
+		errorMsg string
+		tokenID  string
 	}{
+		{
+			name:     "not enough permissions",
+			client:   suite.client.api,
+			ctx:      viewOnlyUser.UserCtx,
+			tokenID:  firstToken.ID,
+			errorMsg: notAuthorizedErrorMsg,
+		},
 		{
 			name:    "happy path user",
 			client:  suite.client.api,
@@ -92,6 +102,13 @@ func TestMutationDeleteJobRunnerToken(t *testing.T) {
 			client:   suite.client.apiWithPAT,
 			ctx:      context.Background(),
 			tokenID:  firstToken.ID,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "not found, not in the correct org",
+			client:   suite.client.api,
+			ctx:      testUser2.UserCtx,
+			tokenID:  secondToken.ID,
 			errorMsg: notFoundErrorMsg,
 		},
 		{

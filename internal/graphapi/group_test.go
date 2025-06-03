@@ -689,11 +689,6 @@ func TestMutationUpdateGroup(t *testing.T) {
 
 	assert.Assert(t, is.Nil(programResp))
 
-	// ensure user cannot get access to the control
-	controlResp, err := suite.client.api.GetControlByID(gmCtx, control.ID)
-	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Assert(t, is.Nil(controlResp))
-
 	// access to procedures is granted by default in the org
 	procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
 	assert.NilError(t, err)

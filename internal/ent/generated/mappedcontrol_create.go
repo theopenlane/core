@@ -11,7 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -113,6 +115,20 @@ func (mcc *MappedControlCreate) SetTags(s []string) *MappedControlCreate {
 	return mcc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (mcc *MappedControlCreate) SetOwnerID(s string) *MappedControlCreate {
+	mcc.mutation.SetOwnerID(s)
+	return mcc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (mcc *MappedControlCreate) SetNillableOwnerID(s *string) *MappedControlCreate {
+	if s != nil {
+		mcc.SetOwnerID(*s)
+	}
+	return mcc
+}
+
 // SetMappingType sets the "mapping_type" field.
 func (mcc *MappedControlCreate) SetMappingType(et enums.MappingType) *MappedControlCreate {
 	mcc.mutation.SetMappingType(et)
@@ -142,15 +158,15 @@ func (mcc *MappedControlCreate) SetNillableRelation(s *string) *MappedControlCre
 }
 
 // SetConfidence sets the "confidence" field.
-func (mcc *MappedControlCreate) SetConfidence(s string) *MappedControlCreate {
-	mcc.mutation.SetConfidence(s)
+func (mcc *MappedControlCreate) SetConfidence(i int) *MappedControlCreate {
+	mcc.mutation.SetConfidence(i)
 	return mcc
 }
 
 // SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (mcc *MappedControlCreate) SetNillableConfidence(s *string) *MappedControlCreate {
-	if s != nil {
-		mcc.SetConfidence(*s)
+func (mcc *MappedControlCreate) SetNillableConfidence(i *int) *MappedControlCreate {
+	if i != nil {
+		mcc.SetConfidence(*i)
 	}
 	return mcc
 }
@@ -181,6 +197,41 @@ func (mcc *MappedControlCreate) SetNillableID(s *string) *MappedControlCreate {
 		mcc.SetID(*s)
 	}
 	return mcc
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (mcc *MappedControlCreate) SetOwner(o *Organization) *MappedControlCreate {
+	return mcc.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (mcc *MappedControlCreate) AddBlockedGroupIDs(ids ...string) *MappedControlCreate {
+	mcc.mutation.AddBlockedGroupIDs(ids...)
+	return mcc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (mcc *MappedControlCreate) AddBlockedGroups(g ...*Group) *MappedControlCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return mcc.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (mcc *MappedControlCreate) AddEditorIDs(ids ...string) *MappedControlCreate {
+	mcc.mutation.AddEditorIDs(ids...)
+	return mcc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (mcc *MappedControlCreate) AddEditors(g ...*Group) *MappedControlCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return mcc.AddEditorIDs(ids...)
 }
 
 // AddFromControlIDs adds the "from_controls" edge to the Control entity by IDs.
@@ -318,12 +369,22 @@ func (mcc *MappedControlCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (mcc *MappedControlCreate) check() error {
+	if v, ok := mcc.mutation.OwnerID(); ok {
+		if err := mappedcontrol.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "MappedControl.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := mcc.mutation.MappingType(); !ok {
 		return &ValidationError{Name: "mapping_type", err: errors.New(`generated: missing required field "MappedControl.mapping_type"`)}
 	}
 	if v, ok := mcc.mutation.MappingType(); ok {
 		if err := mappedcontrol.MappingTypeValidator(v); err != nil {
 			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControl.mapping_type": %w`, err)}
+		}
+	}
+	if v, ok := mcc.mutation.Confidence(); ok {
+		if err := mappedcontrol.ConfidenceValidator(v); err != nil {
+			return &ValidationError{Name: "confidence", err: fmt.Errorf(`generated: validator failed for field "MappedControl.confidence": %w`, err)}
 		}
 	}
 	if v, ok := mcc.mutation.Source(); ok {
@@ -404,25 +465,77 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 		_node.Relation = value
 	}
 	if value, ok := mcc.mutation.Confidence(); ok {
-		_spec.SetField(mappedcontrol.FieldConfidence, field.TypeString, value)
-		_node.Confidence = value
+		_spec.SetField(mappedcontrol.FieldConfidence, field.TypeInt, value)
+		_node.Confidence = &value
 	}
 	if value, ok := mcc.mutation.Source(); ok {
 		_spec.SetField(mappedcontrol.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
-	if nodes := mcc.mutation.FromControlsIDs(); len(nodes) > 0 {
+	if nodes := mcc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   mappedcontrol.OwnerTable,
+			Columns: []string{mappedcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = mcc.schemaConfig.MappedControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mcc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
+			Table:   mappedcontrol.BlockedGroupsTable,
+			Columns: []string{mappedcontrol.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = mcc.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mcc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   mappedcontrol.EditorsTable,
+			Columns: []string{mappedcontrol.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = mcc.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mcc.mutation.FromControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
 			Table:   mappedcontrol.FromControlsTable,
-			Columns: []string{mappedcontrol.FromControlsColumn},
+			Columns: mappedcontrol.FromControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.Control
+		edge.Schema = mcc.schemaConfig.MappedControlFromControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -430,16 +543,16 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 	}
 	if nodes := mcc.mutation.ToControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.ToControlsTable,
-			Columns: []string{mappedcontrol.ToControlsColumn},
+			Columns: mappedcontrol.ToControlsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.Control
+		edge.Schema = mcc.schemaConfig.MappedControlToControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -447,16 +560,16 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 	}
 	if nodes := mcc.mutation.FromSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.FromSubcontrolsTable,
-			Columns: []string{mappedcontrol.FromSubcontrolsColumn},
+			Columns: mappedcontrol.FromSubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.Subcontrol
+		edge.Schema = mcc.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -464,16 +577,16 @@ func (mcc *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSp
 	}
 	if nodes := mcc.mutation.ToSubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   mappedcontrol.ToSubcontrolsTable,
-			Columns: []string{mappedcontrol.ToSubcontrolsColumn},
+			Columns: mappedcontrol.ToSubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = mcc.schemaConfig.Subcontrol
+		edge.Schema = mcc.schemaConfig.MappedControlToSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

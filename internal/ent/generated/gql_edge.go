@@ -2753,6 +2753,56 @@ func (md *MappableDomain) CustomDomains(
 	return md.QueryCustomDomains().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (mc *MappedControl) Owner(ctx context.Context) (*Organization, error) {
+	result, err := mc.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = mc.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (mc *MappedControl) BlockedGroups(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
+) (*GroupConnection, error) {
+	opts := []GroupPaginateOption{
+		WithGroupOrder(orderBy),
+		WithGroupFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := mc.Edges.totalCount[1][alias]
+	if nodes, err := mc.NamedBlockedGroups(alias); err == nil || hasTotalCount {
+		pager, err := newGroupPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &GroupConnection{Edges: []*GroupEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return mc.QueryBlockedGroups().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (mc *MappedControl) Editors(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
+) (*GroupConnection, error) {
+	opts := []GroupPaginateOption{
+		WithGroupOrder(orderBy),
+		WithGroupFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := mc.Edges.totalCount[2][alias]
+	if nodes, err := mc.NamedEditors(alias); err == nil || hasTotalCount {
+		pager, err := newGroupPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &GroupConnection{Edges: []*GroupEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return mc.QueryEditors().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (mc *MappedControl) FromControls(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
 ) (*ControlConnection, error) {
@@ -2761,7 +2811,7 @@ func (mc *MappedControl) FromControls(
 		WithControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := mc.Edges.totalCount[0][alias]
+	totalCount, hasTotalCount := mc.Edges.totalCount[3][alias]
 	if nodes, err := mc.NamedFromControls(alias); err == nil || hasTotalCount {
 		pager, err := newControlPager(opts, last != nil)
 		if err != nil {
@@ -2782,7 +2832,7 @@ func (mc *MappedControl) ToControls(
 		WithControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := mc.Edges.totalCount[1][alias]
+	totalCount, hasTotalCount := mc.Edges.totalCount[4][alias]
 	if nodes, err := mc.NamedToControls(alias); err == nil || hasTotalCount {
 		pager, err := newControlPager(opts, last != nil)
 		if err != nil {
@@ -2803,7 +2853,7 @@ func (mc *MappedControl) FromSubcontrols(
 		WithSubcontrolFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := mc.Edges.totalCount[2][alias]
+	totalCount, hasTotalCount := mc.Edges.totalCount[5][alias]
 	if nodes, err := mc.NamedFromSubcontrols(alias); err == nil || hasTotalCount {
 		pager, err := newSubcontrolPager(opts, last != nil)
 		if err != nil {
@@ -2824,7 +2874,7 @@ func (mc *MappedControl) ToSubcontrols(
 		WithSubcontrolFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := mc.Edges.totalCount[3][alias]
+	totalCount, hasTotalCount := mc.Edges.totalCount[6][alias]
 	if nodes, err := mc.NamedToSubcontrols(alias); err == nil || hasTotalCount {
 		pager, err := newSubcontrolPager(opts, last != nil)
 		if err != nil {
@@ -3895,6 +3945,27 @@ func (o *Organization) ControlImplementations(
 	return o.QueryControlImplementations().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) MappedControls(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*MappedControlOrder, where *MappedControlWhereInput,
+) (*MappedControlConnection, error) {
+	opts := []MappedControlPaginateOption{
+		WithMappedControlOrder(orderBy),
+		WithMappedControlFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[40][alias]
+	if nodes, err := o.NamedMappedControls(alias); err == nil || hasTotalCount {
+		pager, err := newMappedControlPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &MappedControlConnection{Edges: []*MappedControlEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryMappedControls().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Evidence(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EvidenceOrder, where *EvidenceWhereInput,
 ) (*EvidenceConnection, error) {
@@ -3903,7 +3974,7 @@ func (o *Organization) Evidence(
 		WithEvidenceFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[40][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[41][alias]
 	if nodes, err := o.NamedEvidence(alias); err == nil || hasTotalCount {
 		pager, err := newEvidencePager(opts, last != nil)
 		if err != nil {
@@ -3924,7 +3995,7 @@ func (o *Organization) Standards(
 		WithStandardFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[41][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[42][alias]
 	if nodes, err := o.NamedStandards(alias); err == nil || hasTotalCount {
 		pager, err := newStandardPager(opts, last != nil)
 		if err != nil {
@@ -3945,7 +4016,7 @@ func (o *Organization) ActionPlans(
 		WithActionPlanFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[42][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[43][alias]
 	if nodes, err := o.NamedActionPlans(alias); err == nil || hasTotalCount {
 		pager, err := newActionPlanPager(opts, last != nil)
 		if err != nil {
@@ -3966,7 +4037,7 @@ func (o *Organization) CustomDomains(
 		WithCustomDomainFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[43][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[44][alias]
 	if nodes, err := o.NamedCustomDomains(alias); err == nil || hasTotalCount {
 		pager, err := newCustomDomainPager(opts, last != nil)
 		if err != nil {
@@ -3987,7 +4058,7 @@ func (o *Organization) JobRunners(
 		WithJobRunnerFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[44][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[45][alias]
 	if nodes, err := o.NamedJobRunners(alias); err == nil || hasTotalCount {
 		pager, err := newJobRunnerPager(opts, last != nil)
 		if err != nil {
@@ -4008,7 +4079,7 @@ func (o *Organization) JobRunnerTokens(
 		WithJobRunnerTokenFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[45][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[46][alias]
 	if nodes, err := o.NamedJobRunnerTokens(alias); err == nil || hasTotalCount {
 		pager, err := newJobRunnerTokenPager(opts, last != nil)
 		if err != nil {
@@ -4029,7 +4100,7 @@ func (o *Organization) JobRunnerRegistrationTokens(
 		WithJobRunnerRegistrationTokenFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[46][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[47][alias]
 	if nodes, err := o.NamedJobRunnerRegistrationTokens(alias); err == nil || hasTotalCount {
 		pager, err := newJobRunnerRegistrationTokenPager(opts, last != nil)
 		if err != nil {
@@ -4050,7 +4121,7 @@ func (o *Organization) DNSVerifications(
 		WithDNSVerificationFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[47][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[48][alias]
 	if nodes, err := o.NamedDNSVerifications(alias); err == nil || hasTotalCount {
 		pager, err := newDNSVerificationPager(opts, last != nil)
 		if err != nil {
@@ -4071,7 +4142,7 @@ func (o *Organization) Jobs(
 		WithScheduledJobFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[48][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[49][alias]
 	if nodes, err := o.NamedJobs(alias); err == nil || hasTotalCount {
 		pager, err := newScheduledJobPager(opts, last != nil)
 		if err != nil {
@@ -4092,7 +4163,7 @@ func (o *Organization) ScheduledJobs(
 		WithControlScheduledJobFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[49][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[50][alias]
 	if nodes, err := o.NamedScheduledJobs(alias); err == nil || hasTotalCount {
 		pager, err := newControlScheduledJobPager(opts, last != nil)
 		if err != nil {
@@ -4113,7 +4184,7 @@ func (o *Organization) JobResults(
 		WithJobResultFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[50][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[51][alias]
 	if nodes, err := o.NamedJobResults(alias); err == nil || hasTotalCount {
 		pager, err := newJobResultPager(opts, last != nil)
 		if err != nil {
@@ -4134,7 +4205,7 @@ func (o *Organization) ScheduledJobRuns(
 		WithScheduledJobRunFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[51][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[52][alias]
 	if nodes, err := o.NamedScheduledJobRuns(alias); err == nil || hasTotalCount {
 		pager, err := newScheduledJobRunPager(opts, last != nil)
 		if err != nil {
@@ -4155,7 +4226,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[52][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[53][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {

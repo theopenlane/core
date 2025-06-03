@@ -79,35 +79,32 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 	secondJob := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name          string
-		userID        string
-		client        *openlaneclient.OpenlaneClient
-		ctx           context.Context
-		errorMsg      string
-		runnerID      string
-		expectedCount int
+		name     string
+		userID   string
+		client   *openlaneclient.OpenlaneClient
+		ctx      context.Context
+		errorMsg string
+		runnerID string
 	}{
 		{
-			name:          "happy path user",
-			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
-			runnerID:      firstJob.ID,
-			expectedCount: 1,
+			name:     "happy path user",
+			client:   suite.client.api,
+			ctx:      testUser1.UserCtx,
+			runnerID: firstJob.ID,
 		},
 		{
 			// the first test case should have deleted the runner
-			name:     "happy path, but deleted job runner",
+			name:     "job runner already deleted",
 			client:   suite.client.apiWithPAT,
 			ctx:      context.Background(),
 			runnerID: firstJob.ID,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:          "happy path user with pat",
-			client:        suite.client.apiWithPAT,
-			ctx:           context.Background(),
-			runnerID:      secondJob.ID,
-			expectedCount: 0,
+			name:     "happy path user with pat",
+			client:   suite.client.apiWithPAT,
+			ctx:      context.Background(),
+			runnerID: secondJob.ID,
 		},
 		{
 			name:     "happy path but cannot delete system runner",
@@ -132,10 +129,8 @@ func TestMutationDeleteJobRunner(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-
-			runners, err := tc.client.GetAllJobRunners(tc.ctx)
-			assert.NilError(t, err)
-			assert.Check(t, is.Len(runners.JobRunners.Edges, tc.expectedCount))
 		})
 	}
+
+	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: systemJob.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }

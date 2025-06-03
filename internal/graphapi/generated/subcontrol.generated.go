@@ -89,6 +89,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Subcontrol_referenceFramework(ctx, field)
 			case "controlType":
 				return ec.fieldContext_Subcontrol_controlType(ctx, field)
 			case "category":
@@ -219,6 +221,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Subcontrol_referenceFramework(ctx, field)
 			case "controlType":
 				return ec.fieldContext_Subcontrol_controlType(ctx, field)
 			case "category":
@@ -393,6 +397,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_status(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Subcontrol_referenceFramework(ctx, field)
 			case "controlType":
 				return ec.fieldContext_Subcontrol_controlType(ctx, field)
 			case "category":

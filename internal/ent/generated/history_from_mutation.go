@@ -676,6 +676,10 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetSource(source)
 	}
 
+	if referenceFramework, exists := m.ReferenceFramework(); exists {
+		create = create.SetReferenceFramework(referenceFramework)
+	}
+
 	if controlType, exists := m.ControlType(); exists {
 		create = create.SetControlType(controlType)
 	}
@@ -848,6 +852,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSource(control.Source)
 		}
 
+		if referenceFramework, exists := m.ReferenceFramework(); exists {
+			create = create.SetReferenceFramework(referenceFramework)
+		} else {
+			create = create.SetReferenceFramework(control.ReferenceFramework)
+		}
+
 		if controlType, exists := m.ControlType(); exists {
 			create = create.SetControlType(controlType)
 		} else {
@@ -989,6 +999,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAuditorReferenceID(control.AuditorReferenceID).
 			SetStatus(control.Status).
 			SetSource(control.Source).
+			SetReferenceFramework(control.ReferenceFramework).
 			SetControlType(control.ControlType).
 			SetCategory(control.Category).
 			SetCategoryID(control.CategoryID).
@@ -5430,6 +5441,10 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if mappingType, exists := m.MappingType(); exists {
 		create = create.SetMappingType(mappingType)
 	}
@@ -5439,7 +5454,7 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 	}
 
 	if confidence, exists := m.Confidence(); exists {
-		create = create.SetConfidence(confidence)
+		create = create.SetNillableConfidence(&confidence)
 	}
 
 	if source, exists := m.Source(); exists {
@@ -5518,6 +5533,12 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetTags(mappedcontrol.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(mappedcontrol.OwnerID)
+		}
+
 		if mappingType, exists := m.MappingType(); exists {
 			create = create.SetMappingType(mappingType)
 		} else {
@@ -5531,9 +5552,9 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 		}
 
 		if confidence, exists := m.Confidence(); exists {
-			create = create.SetConfidence(confidence)
+			create = create.SetNillableConfidence(&confidence)
 		} else {
-			create = create.SetConfidence(mappedcontrol.Confidence)
+			create = create.SetNillableConfidence(mappedcontrol.Confidence)
 		}
 
 		if source, exists := m.Source(); exists {
@@ -5581,9 +5602,10 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetDeletedAt(mappedcontrol.DeletedAt).
 			SetDeletedBy(mappedcontrol.DeletedBy).
 			SetTags(mappedcontrol.Tags).
+			SetOwnerID(mappedcontrol.OwnerID).
 			SetMappingType(mappedcontrol.MappingType).
 			SetRelation(mappedcontrol.Relation).
-			SetConfidence(mappedcontrol.Confidence).
+			SetNillableConfidence(mappedcontrol.Confidence).
 			SetSource(mappedcontrol.Source).
 			Save(ctx)
 		if err != nil {
@@ -8805,6 +8827,10 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetSource(source)
 	}
 
+	if referenceFramework, exists := m.ReferenceFramework(); exists {
+		create = create.SetReferenceFramework(referenceFramework)
+	}
+
 	if controlType, exists := m.ControlType(); exists {
 		create = create.SetControlType(controlType)
 	}
@@ -8977,6 +9003,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetSource(subcontrol.Source)
 		}
 
+		if referenceFramework, exists := m.ReferenceFramework(); exists {
+			create = create.SetReferenceFramework(referenceFramework)
+		} else {
+			create = create.SetReferenceFramework(subcontrol.ReferenceFramework)
+		}
+
 		if controlType, exists := m.ControlType(); exists {
 			create = create.SetControlType(controlType)
 		} else {
@@ -9118,6 +9150,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetAuditorReferenceID(subcontrol.AuditorReferenceID).
 			SetStatus(subcontrol.Status).
 			SetSource(subcontrol.Source).
+			SetReferenceFramework(subcontrol.ReferenceFramework).
 			SetControlType(subcontrol.ControlType).
 			SetCategory(subcontrol.Category).
 			SetCategoryID(subcontrol.CategoryID).

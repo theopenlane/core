@@ -173,6 +173,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Organization_controlImplementations(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Organization_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Organization_evidence(ctx, field)
 			case "standards":
@@ -353,6 +355,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Organization_controlImplementations(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Organization_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Organization_evidence(ctx, field)
 			case "standards":
@@ -577,6 +581,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_subcontrols(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Organization_controlImplementations(ctx, field)
+			case "mappedControls":
+				return ec.fieldContext_Organization_mappedControls(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Organization_evidence(ctx, field)
 			case "standards":

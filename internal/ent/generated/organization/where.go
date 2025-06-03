@@ -2197,6 +2197,35 @@ func HasControlImplementationsWith(preds ...predicate.ControlImplementation) pre
 	})
 }
 
+// HasMappedControls applies the HasEdge predicate on the "mapped_controls" edge.
+func HasMappedControls() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, MappedControlsTable, MappedControlsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControl
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMappedControlsWith applies the HasEdge predicate on the "mapped_controls" edge with a given conditions (other predicates).
+func HasMappedControlsWith(preds ...predicate.MappedControl) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newMappedControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControl
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEvidence applies the HasEdge predicate on the "evidence" edge.
 func HasEvidence() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

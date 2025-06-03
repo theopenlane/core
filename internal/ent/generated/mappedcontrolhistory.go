@@ -40,12 +40,14 @@ type MappedControlHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType enums.MappingType `json:"mapping_type,omitempty"`
 	// description of how the two controls are related
 	Relation string `json:"relation,omitempty"`
-	// percentage of confidence in the mapping
-	Confidence string `json:"confidence,omitempty"`
+	// percentage (0-100) of confidence in the mapping
+	Confidence *int `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
 	Source       enums.MappingSource `json:"source,omitempty"`
 	selectValues sql.SelectValues
@@ -60,7 +62,9 @@ func (*MappedControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case mappedcontrolhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation, mappedcontrolhistory.FieldConfidence, mappedcontrolhistory.FieldSource:
+		case mappedcontrolhistory.FieldConfidence:
+			values[i] = new(sql.NullInt64)
+		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldOwnerID, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation, mappedcontrolhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case mappedcontrolhistory.FieldHistoryTime, mappedcontrolhistory.FieldCreatedAt, mappedcontrolhistory.FieldUpdatedAt, mappedcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -147,6 +151,12 @@ func (mch *MappedControlHistory) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case mappedcontrolhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				mch.OwnerID = value.String
+			}
 		case mappedcontrolhistory.FieldMappingType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mapping_type", values[i])
@@ -160,10 +170,11 @@ func (mch *MappedControlHistory) assignValues(columns []string, values []any) er
 				mch.Relation = value.String
 			}
 		case mappedcontrolhistory.FieldConfidence:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field confidence", values[i])
 			} else if value.Valid {
-				mch.Confidence = value.String
+				mch.Confidence = new(int)
+				*mch.Confidence = int(value.Int64)
 			}
 		case mappedcontrolhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -237,14 +248,19 @@ func (mch *MappedControlHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", mch.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(mch.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("mapping_type=")
 	builder.WriteString(fmt.Sprintf("%v", mch.MappingType))
 	builder.WriteString(", ")
 	builder.WriteString("relation=")
 	builder.WriteString(mch.Relation)
 	builder.WriteString(", ")
-	builder.WriteString("confidence=")
-	builder.WriteString(mch.Confidence)
+	if v := mch.Confidence; v != nil {
+		builder.WriteString("confidence=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", mch.Source))

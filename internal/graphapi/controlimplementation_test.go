@@ -213,7 +213,7 @@ func TestQueryControlImplementations(t *testing.T) {
 			name:            "happy path, using api token",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 0, // api token should not return any results because they have no access to the controls linked
+			expectedResults: numCIsWithGroupViewer, // only the ones with linked controls will be returned
 		},
 		{
 			name:            "happy path, using pat",
@@ -561,14 +561,14 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "update still not allowed, not enough permissions, not permissions to control either",
+			name: "update still not allowed, not enough permissions, no edit permissions to control either",
 			request: openlaneclient.UpdateControlImplementationInput{
 				Status: &enums.DocumentPublished,
 			},
 			id:          controlImplementation2.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, no permissions",

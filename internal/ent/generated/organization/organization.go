@@ -127,6 +127,8 @@ const (
 	EdgeSubcontrols = "subcontrols"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
 	EdgeControlImplementations = "control_implementations"
+	// EdgeMappedControls holds the string denoting the mapped_controls edge name in mutations.
+	EdgeMappedControls = "mapped_controls"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// EdgeStandards holds the string denoting the standards edge name in mutations.
@@ -421,6 +423,13 @@ const (
 	ControlImplementationsInverseTable = "control_implementations"
 	// ControlImplementationsColumn is the table column denoting the control_implementations relation/edge.
 	ControlImplementationsColumn = "owner_id"
+	// MappedControlsTable is the table that holds the mapped_controls relation/edge.
+	MappedControlsTable = "mapped_controls"
+	// MappedControlsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedControlsInverseTable = "mapped_controls"
+	// MappedControlsColumn is the table column denoting the mapped_controls relation/edge.
+	MappedControlsColumn = "owner_id"
 	// EvidenceTable is the table that holds the evidence relation/edge.
 	EvidenceTable = "evidences"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -1219,6 +1228,20 @@ func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 	}
 }
 
+// ByMappedControlsCount orders the results by mapped_controls count.
+func ByMappedControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMappedControlsStep(), opts...)
+	}
+}
+
+// ByMappedControls orders the results by mapped_controls terms.
+func ByMappedControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEvidenceCount orders the results by evidence count.
 func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1678,6 +1701,13 @@ func newControlImplementationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ControlImplementationsTable, ControlImplementationsColumn),
+	)
+}
+func newMappedControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MappedControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MappedControlsTable, MappedControlsColumn),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {

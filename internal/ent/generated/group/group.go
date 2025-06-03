@@ -269,6 +269,8 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "groups"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"mapped_control_blocked_groups",
+	"mapped_control_editors",
 	"organization_control_creators",
 	"organization_control_objective_creators",
 	"organization_group_creators",

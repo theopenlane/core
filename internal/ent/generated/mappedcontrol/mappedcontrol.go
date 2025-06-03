@@ -32,6 +32,8 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldMappingType holds the string denoting the mapping_type field in the database.
 	FieldMappingType = "mapping_type"
 	// FieldRelation holds the string denoting the relation field in the database.
@@ -40,6 +42,12 @@ const (
 	FieldConfidence = "confidence"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
+	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
+	EdgeBlockedGroups = "blocked_groups"
+	// EdgeEditors holds the string denoting the editors edge name in mutations.
+	EdgeEditors = "editors"
 	// EdgeFromControls holds the string denoting the from_controls edge name in mutations.
 	EdgeFromControls = "from_controls"
 	// EdgeToControls holds the string denoting the to_controls edge name in mutations.
@@ -50,34 +58,47 @@ const (
 	EdgeToSubcontrols = "to_subcontrols"
 	// Table holds the table name of the mappedcontrol in the database.
 	Table = "mapped_controls"
-	// FromControlsTable is the table that holds the from_controls relation/edge.
-	FromControlsTable = "controls"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "mapped_controls"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
+	BlockedGroupsTable = "groups"
+	// BlockedGroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	BlockedGroupsInverseTable = "groups"
+	// BlockedGroupsColumn is the table column denoting the blocked_groups relation/edge.
+	BlockedGroupsColumn = "mapped_control_blocked_groups"
+	// EditorsTable is the table that holds the editors relation/edge.
+	EditorsTable = "groups"
+	// EditorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EditorsInverseTable = "groups"
+	// EditorsColumn is the table column denoting the editors relation/edge.
+	EditorsColumn = "mapped_control_editors"
+	// FromControlsTable is the table that holds the from_controls relation/edge. The primary key declared below.
+	FromControlsTable = "mapped_control_from_controls"
 	// FromControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	FromControlsInverseTable = "controls"
-	// FromControlsColumn is the table column denoting the from_controls relation/edge.
-	FromControlsColumn = "mapped_control_from_controls"
-	// ToControlsTable is the table that holds the to_controls relation/edge.
-	ToControlsTable = "controls"
+	// ToControlsTable is the table that holds the to_controls relation/edge. The primary key declared below.
+	ToControlsTable = "mapped_control_to_controls"
 	// ToControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ToControlsInverseTable = "controls"
-	// ToControlsColumn is the table column denoting the to_controls relation/edge.
-	ToControlsColumn = "mapped_control_to_controls"
-	// FromSubcontrolsTable is the table that holds the from_subcontrols relation/edge.
-	FromSubcontrolsTable = "subcontrols"
+	// FromSubcontrolsTable is the table that holds the from_subcontrols relation/edge. The primary key declared below.
+	FromSubcontrolsTable = "mapped_control_from_subcontrols"
 	// FromSubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	FromSubcontrolsInverseTable = "subcontrols"
-	// FromSubcontrolsColumn is the table column denoting the from_subcontrols relation/edge.
-	FromSubcontrolsColumn = "mapped_control_from_subcontrols"
-	// ToSubcontrolsTable is the table that holds the to_subcontrols relation/edge.
-	ToSubcontrolsTable = "subcontrols"
+	// ToSubcontrolsTable is the table that holds the to_subcontrols relation/edge. The primary key declared below.
+	ToSubcontrolsTable = "mapped_control_to_subcontrols"
 	// ToSubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	ToSubcontrolsInverseTable = "subcontrols"
-	// ToSubcontrolsColumn is the table column denoting the to_subcontrols relation/edge.
-	ToSubcontrolsColumn = "mapped_control_to_subcontrols"
 )
 
 // Columns holds all SQL columns for mappedcontrol fields.
@@ -90,11 +111,27 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldOwnerID,
 	FieldMappingType,
 	FieldRelation,
 	FieldConfidence,
 	FieldSource,
 }
+
+var (
+	// FromControlsPrimaryKey and FromControlsColumn2 are the table columns denoting the
+	// primary key for the from_controls relation (M2M).
+	FromControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
+	// ToControlsPrimaryKey and ToControlsColumn2 are the table columns denoting the
+	// primary key for the to_controls relation (M2M).
+	ToControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
+	// FromSubcontrolsPrimaryKey and FromSubcontrolsColumn2 are the table columns denoting the
+	// primary key for the from_subcontrols relation (M2M).
+	FromSubcontrolsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
+	// ToSubcontrolsPrimaryKey and ToSubcontrolsColumn2 are the table columns denoting the
+	// primary key for the to_subcontrols relation (M2M).
+	ToSubcontrolsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -112,8 +149,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [3]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Hooks        [7]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -123,6 +160,10 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
+	// ConfidenceValidator is a validator for the "confidence" field. It is called by the builders before save.
+	ConfidenceValidator func(int) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -189,6 +230,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByMappingType orders the results by the mapping_type field.
 func ByMappingType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappingType, opts...).ToFunc()
@@ -207,6 +253,41 @@ func ByConfidence(opts ...sql.OrderTermOption) OrderOption {
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByBlockedGroupsCount orders the results by blocked_groups count.
+func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByBlockedGroups orders the results by blocked_groups terms.
+func ByBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEditorsCount orders the results by editors count.
+func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEditorsStep(), opts...)
+	}
+}
+
+// ByEditors orders the results by editors terms.
+func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
 }
 
 // ByFromControlsCount orders the results by from_controls count.
@@ -264,32 +345,53 @@ func ByToSubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newToSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+	)
+}
+func newEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+	)
+}
 func newFromControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FromControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, FromControlsTable, FromControlsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, FromControlsTable, FromControlsPrimaryKey...),
 	)
 }
 func newToControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ToControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ToControlsTable, ToControlsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ToControlsTable, ToControlsPrimaryKey...),
 	)
 }
 func newFromSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FromSubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, FromSubcontrolsTable, FromSubcontrolsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, FromSubcontrolsTable, FromSubcontrolsPrimaryKey...),
 	)
 }
 func newToSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ToSubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ToSubcontrolsTable, ToSubcontrolsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ToSubcontrolsTable, ToSubcontrolsPrimaryKey...),
 	)
 }
 

@@ -106,13 +106,18 @@ func DeletedBy(v string) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
 // Relation applies equality check predicate on the "relation" field. It's identical to RelationEQ.
 func Relation(v string) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldEQ(FieldRelation, v))
 }
 
 // Confidence applies equality check predicate on the "confidence" field. It's identical to ConfidenceEQ.
-func Confidence(v string) predicate.MappedControlHistory {
+func Confidence(v int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldEQ(FieldConfidence, v))
 }
 
@@ -636,6 +641,81 @@ func TagsNotNil() predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldNotNull(FieldTags))
 }
 
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.MappedControlHistory {
+	return predicate.MappedControlHistory(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
 // MappingTypeEQ applies the EQ predicate on the "mapping_type" field.
 func MappingTypeEQ(v enums.MappingType) predicate.MappedControlHistory {
 	vc := v
@@ -742,58 +822,43 @@ func RelationContainsFold(v string) predicate.MappedControlHistory {
 }
 
 // ConfidenceEQ applies the EQ predicate on the "confidence" field.
-func ConfidenceEQ(v string) predicate.MappedControlHistory {
+func ConfidenceEQ(v int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldEQ(FieldConfidence, v))
 }
 
 // ConfidenceNEQ applies the NEQ predicate on the "confidence" field.
-func ConfidenceNEQ(v string) predicate.MappedControlHistory {
+func ConfidenceNEQ(v int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldNEQ(FieldConfidence, v))
 }
 
 // ConfidenceIn applies the In predicate on the "confidence" field.
-func ConfidenceIn(vs ...string) predicate.MappedControlHistory {
+func ConfidenceIn(vs ...int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldIn(FieldConfidence, vs...))
 }
 
 // ConfidenceNotIn applies the NotIn predicate on the "confidence" field.
-func ConfidenceNotIn(vs ...string) predicate.MappedControlHistory {
+func ConfidenceNotIn(vs ...int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldNotIn(FieldConfidence, vs...))
 }
 
 // ConfidenceGT applies the GT predicate on the "confidence" field.
-func ConfidenceGT(v string) predicate.MappedControlHistory {
+func ConfidenceGT(v int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldGT(FieldConfidence, v))
 }
 
 // ConfidenceGTE applies the GTE predicate on the "confidence" field.
-func ConfidenceGTE(v string) predicate.MappedControlHistory {
+func ConfidenceGTE(v int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldGTE(FieldConfidence, v))
 }
 
 // ConfidenceLT applies the LT predicate on the "confidence" field.
-func ConfidenceLT(v string) predicate.MappedControlHistory {
+func ConfidenceLT(v int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldLT(FieldConfidence, v))
 }
 
 // ConfidenceLTE applies the LTE predicate on the "confidence" field.
-func ConfidenceLTE(v string) predicate.MappedControlHistory {
+func ConfidenceLTE(v int) predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldLTE(FieldConfidence, v))
-}
-
-// ConfidenceContains applies the Contains predicate on the "confidence" field.
-func ConfidenceContains(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldContains(FieldConfidence, v))
-}
-
-// ConfidenceHasPrefix applies the HasPrefix predicate on the "confidence" field.
-func ConfidenceHasPrefix(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldHasPrefix(FieldConfidence, v))
-}
-
-// ConfidenceHasSuffix applies the HasSuffix predicate on the "confidence" field.
-func ConfidenceHasSuffix(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldHasSuffix(FieldConfidence, v))
 }
 
 // ConfidenceIsNil applies the IsNil predicate on the "confidence" field.
@@ -804,16 +869,6 @@ func ConfidenceIsNil() predicate.MappedControlHistory {
 // ConfidenceNotNil applies the NotNil predicate on the "confidence" field.
 func ConfidenceNotNil() predicate.MappedControlHistory {
 	return predicate.MappedControlHistory(sql.FieldNotNull(FieldConfidence))
-}
-
-// ConfidenceEqualFold applies the EqualFold predicate on the "confidence" field.
-func ConfidenceEqualFold(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldEqualFold(FieldConfidence, v))
-}
-
-// ConfidenceContainsFold applies the ContainsFold predicate on the "confidence" field.
-func ConfidenceContainsFold(v string) predicate.MappedControlHistory {
-	return predicate.MappedControlHistory(sql.FieldContainsFold(FieldConfidence, v))
 }
 
 // SourceEQ applies the EQ predicate on the "source" field.

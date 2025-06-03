@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -642,6 +643,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).ControlImplementation.Query().Where((controlimplementation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if controlimplementationCount, err := FromContext(ctx).ControlImplementation.Delete().Where(controlimplementation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", controlimplementationCount).Msg("deleting controlimplementation")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).MappedControl.Query().Where((mappedcontrol.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if mappedcontrolCount, err := FromContext(ctx).MappedControl.Delete().Where(mappedcontrol.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", mappedcontrolCount).Msg("deleting mappedcontrol")
 			return err
 		}
 	}

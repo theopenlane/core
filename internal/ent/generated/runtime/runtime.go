@@ -2786,18 +2786,35 @@ func init() {
 	}
 	mappedcontrolMixinHooks0 := mappedcontrolMixin[0].Hooks()
 	mappedcontrolMixinHooks1 := mappedcontrolMixin[1].Hooks()
+	mappedcontrolMixinHooks5 := mappedcontrolMixin[5].Hooks()
+	mappedcontrolMixinHooks6 := mappedcontrolMixin[6].Hooks()
+	mappedcontrolHooks := schema.MappedControl{}.Hooks()
 
 	mappedcontrol.Hooks[1] = mappedcontrolMixinHooks0[0]
 
 	mappedcontrol.Hooks[2] = mappedcontrolMixinHooks1[0]
+
+	mappedcontrol.Hooks[3] = mappedcontrolMixinHooks5[0]
+
+	mappedcontrol.Hooks[4] = mappedcontrolMixinHooks6[0]
+
+	mappedcontrol.Hooks[5] = mappedcontrolMixinHooks6[1]
+
+	mappedcontrol.Hooks[6] = mappedcontrolHooks[0]
 	mappedcontrolMixinInters1 := mappedcontrolMixin[1].Interceptors()
+	mappedcontrolMixinInters5 := mappedcontrolMixin[5].Interceptors()
+	mappedcontrolInters := schema.MappedControl{}.Interceptors()
 	mappedcontrol.Interceptors[0] = mappedcontrolMixinInters1[0]
+	mappedcontrol.Interceptors[1] = mappedcontrolMixinInters5[0]
+	mappedcontrol.Interceptors[2] = mappedcontrolInters[0]
 	mappedcontrolMixinFields0 := mappedcontrolMixin[0].Fields()
 	_ = mappedcontrolMixinFields0
 	mappedcontrolMixinFields2 := mappedcontrolMixin[2].Fields()
 	_ = mappedcontrolMixinFields2
 	mappedcontrolMixinFields3 := mappedcontrolMixin[3].Fields()
 	_ = mappedcontrolMixinFields3
+	mappedcontrolMixinFields5 := mappedcontrolMixin[5].Fields()
+	_ = mappedcontrolMixinFields5
 	mappedcontrolFields := schema.MappedControl{}.Fields()
 	_ = mappedcontrolFields
 	// mappedcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -2814,6 +2831,28 @@ func init() {
 	mappedcontrolDescTags := mappedcontrolMixinFields3[0].Descriptor()
 	// mappedcontrol.DefaultTags holds the default value on creation for the tags field.
 	mappedcontrol.DefaultTags = mappedcontrolDescTags.Default.([]string)
+	// mappedcontrolDescOwnerID is the schema descriptor for owner_id field.
+	mappedcontrolDescOwnerID := mappedcontrolMixinFields5[0].Descriptor()
+	// mappedcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	mappedcontrol.OwnerIDValidator = mappedcontrolDescOwnerID.Validators[0].(func(string) error)
+	// mappedcontrolDescConfidence is the schema descriptor for confidence field.
+	mappedcontrolDescConfidence := mappedcontrolFields[2].Descriptor()
+	// mappedcontrol.ConfidenceValidator is a validator for the "confidence" field. It is called by the builders before save.
+	mappedcontrol.ConfidenceValidator = func() func(int) error {
+		validators := mappedcontrolDescConfidence.Validators
+		fns := [...]func(int) error{
+			validators[0].(func(int) error),
+			validators[1].(func(int) error),
+		}
+		return func(confidence int) error {
+			for _, fn := range fns {
+				if err := fn(confidence); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// mappedcontrolDescID is the schema descriptor for id field.
 	mappedcontrolDescID := mappedcontrolMixinFields2[0].Descriptor()
 	// mappedcontrol.DefaultID holds the default value on creation for the id field.

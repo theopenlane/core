@@ -1,8 +1,0 @@
--- Modify "mapped_control_history" table
-ALTER TABLE "mapped_control_history" ALTER COLUMN "mapping_type" SET NOT NULL, ALTER COLUMN "mapping_type" SET DEFAULT 'EQUAL', ADD COLUMN "confidence" character varying NULL, ADD COLUMN "source" character varying NULL DEFAULT 'MANUAL';
--- Modify "mapped_controls" table
-ALTER TABLE "mapped_controls" ALTER COLUMN "mapping_type" SET NOT NULL, ALTER COLUMN "mapping_type" SET DEFAULT 'EQUAL', ADD COLUMN "confidence" character varying NULL, ADD COLUMN "source" character varying NULL DEFAULT 'MANUAL';
--- Modify "controls" table
-ALTER TABLE "controls" ADD COLUMN "mapped_control_from_controls" character varying NULL, ADD COLUMN "mapped_control_to_controls" character varying NULL, ADD CONSTRAINT "controls_mapped_controls_from_controls" FOREIGN KEY ("mapped_control_from_controls") REFERENCES "mapped_controls" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "controls_mapped_controls_to_controls" FOREIGN KEY ("mapped_control_to_controls") REFERENCES "mapped_controls" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
--- Modify "subcontrols" table
-ALTER TABLE "subcontrols" ADD COLUMN "mapped_control_from_subcontrols" character varying NULL, ADD COLUMN "mapped_control_to_subcontrols" character varying NULL, ADD CONSTRAINT "subcontrols_mapped_controls_from_subcontrols" FOREIGN KEY ("mapped_control_from_subcontrols") REFERENCES "mapped_controls" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "subcontrols_mapped_controls_to_subcontrols" FOREIGN KEY ("mapped_control_to_subcontrols") REFERENCES "mapped_controls" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;

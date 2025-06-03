@@ -146,6 +146,20 @@ func (mchc *MappedControlHistoryCreate) SetTags(s []string) *MappedControlHistor
 	return mchc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (mchc *MappedControlHistoryCreate) SetOwnerID(s string) *MappedControlHistoryCreate {
+	mchc.mutation.SetOwnerID(s)
+	return mchc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (mchc *MappedControlHistoryCreate) SetNillableOwnerID(s *string) *MappedControlHistoryCreate {
+	if s != nil {
+		mchc.SetOwnerID(*s)
+	}
+	return mchc
+}
+
 // SetMappingType sets the "mapping_type" field.
 func (mchc *MappedControlHistoryCreate) SetMappingType(et enums.MappingType) *MappedControlHistoryCreate {
 	mchc.mutation.SetMappingType(et)
@@ -175,15 +189,15 @@ func (mchc *MappedControlHistoryCreate) SetNillableRelation(s *string) *MappedCo
 }
 
 // SetConfidence sets the "confidence" field.
-func (mchc *MappedControlHistoryCreate) SetConfidence(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetConfidence(s)
+func (mchc *MappedControlHistoryCreate) SetConfidence(i int) *MappedControlHistoryCreate {
+	mchc.mutation.SetConfidence(i)
 	return mchc
 }
 
 // SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableConfidence(s *string) *MappedControlHistoryCreate {
-	if s != nil {
-		mchc.SetConfidence(*s)
+func (mchc *MappedControlHistoryCreate) SetNillableConfidence(i *int) *MappedControlHistoryCreate {
+	if i != nil {
+		mchc.SetConfidence(*i)
 	}
 	return mchc
 }
@@ -383,6 +397,10 @@ func (mchc *MappedControlHistoryCreate) createSpec() (*MappedControlHistory, *sq
 		_spec.SetField(mappedcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := mchc.mutation.OwnerID(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
+	}
 	if value, ok := mchc.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
 		_node.MappingType = value
@@ -392,8 +410,8 @@ func (mchc *MappedControlHistoryCreate) createSpec() (*MappedControlHistory, *sq
 		_node.Relation = value
 	}
 	if value, ok := mchc.mutation.Confidence(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeString, value)
-		_node.Confidence = value
+		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
+		_node.Confidence = &value
 	}
 	if value, ok := mchc.mutation.Source(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)

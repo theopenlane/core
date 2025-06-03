@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -893,6 +894,21 @@ func (oc *OrganizationCreate) AddControlImplementations(c ...*ControlImplementat
 		ids[i] = c[i].ID
 	}
 	return oc.AddControlImplementationIDs(ids...)
+}
+
+// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
+func (oc *OrganizationCreate) AddMappedControlIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddMappedControlIDs(ids...)
+	return oc
+}
+
+// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
+func (oc *OrganizationCreate) AddMappedControls(m ...*MappedControl) *OrganizationCreate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return oc.AddMappedControlIDs(ids...)
 }
 
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
@@ -1976,6 +1992,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.MappedControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.MappedControlsTable,
+			Columns: []string{organization.MappedControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

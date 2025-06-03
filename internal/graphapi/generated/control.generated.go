@@ -89,6 +89,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "controlType":
 				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":
@@ -229,6 +231,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "controlType":
 				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":
@@ -413,6 +417,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "controlType":
 				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":

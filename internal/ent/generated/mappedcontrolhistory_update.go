@@ -123,6 +123,26 @@ func (mchu *MappedControlHistoryUpdate) ClearTags() *MappedControlHistoryUpdate 
 	return mchu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (mchu *MappedControlHistoryUpdate) SetOwnerID(s string) *MappedControlHistoryUpdate {
+	mchu.mutation.SetOwnerID(s)
+	return mchu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (mchu *MappedControlHistoryUpdate) SetNillableOwnerID(s *string) *MappedControlHistoryUpdate {
+	if s != nil {
+		mchu.SetOwnerID(*s)
+	}
+	return mchu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (mchu *MappedControlHistoryUpdate) ClearOwnerID() *MappedControlHistoryUpdate {
+	mchu.mutation.ClearOwnerID()
+	return mchu
+}
+
 // SetMappingType sets the "mapping_type" field.
 func (mchu *MappedControlHistoryUpdate) SetMappingType(et enums.MappingType) *MappedControlHistoryUpdate {
 	mchu.mutation.SetMappingType(et)
@@ -158,16 +178,23 @@ func (mchu *MappedControlHistoryUpdate) ClearRelation() *MappedControlHistoryUpd
 }
 
 // SetConfidence sets the "confidence" field.
-func (mchu *MappedControlHistoryUpdate) SetConfidence(s string) *MappedControlHistoryUpdate {
-	mchu.mutation.SetConfidence(s)
+func (mchu *MappedControlHistoryUpdate) SetConfidence(i int) *MappedControlHistoryUpdate {
+	mchu.mutation.ResetConfidence()
+	mchu.mutation.SetConfidence(i)
 	return mchu
 }
 
 // SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (mchu *MappedControlHistoryUpdate) SetNillableConfidence(s *string) *MappedControlHistoryUpdate {
-	if s != nil {
-		mchu.SetConfidence(*s)
+func (mchu *MappedControlHistoryUpdate) SetNillableConfidence(i *int) *MappedControlHistoryUpdate {
+	if i != nil {
+		mchu.SetConfidence(*i)
 	}
+	return mchu
+}
+
+// AddConfidence adds i to the "confidence" field.
+func (mchu *MappedControlHistoryUpdate) AddConfidence(i int) *MappedControlHistoryUpdate {
+	mchu.mutation.AddConfidence(i)
 	return mchu
 }
 
@@ -315,6 +342,12 @@ func (mchu *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 	if mchu.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := mchu.mutation.OwnerID(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if mchu.mutation.OwnerIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldOwnerID, field.TypeString)
+	}
 	if value, ok := mchu.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
 	}
@@ -325,10 +358,13 @@ func (mchu *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 		_spec.ClearField(mappedcontrolhistory.FieldRelation, field.TypeString)
 	}
 	if value, ok := mchu.mutation.Confidence(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeString, value)
+		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
+	}
+	if value, ok := mchu.mutation.AddedConfidence(); ok {
+		_spec.AddField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
 	}
 	if mchu.mutation.ConfidenceCleared() {
-		_spec.ClearField(mappedcontrolhistory.FieldConfidence, field.TypeString)
+		_spec.ClearField(mappedcontrolhistory.FieldConfidence, field.TypeInt)
 	}
 	if value, ok := mchu.mutation.Source(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)
@@ -450,6 +486,26 @@ func (mchuo *MappedControlHistoryUpdateOne) ClearTags() *MappedControlHistoryUpd
 	return mchuo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (mchuo *MappedControlHistoryUpdateOne) SetOwnerID(s string) *MappedControlHistoryUpdateOne {
+	mchuo.mutation.SetOwnerID(s)
+	return mchuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (mchuo *MappedControlHistoryUpdateOne) SetNillableOwnerID(s *string) *MappedControlHistoryUpdateOne {
+	if s != nil {
+		mchuo.SetOwnerID(*s)
+	}
+	return mchuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (mchuo *MappedControlHistoryUpdateOne) ClearOwnerID() *MappedControlHistoryUpdateOne {
+	mchuo.mutation.ClearOwnerID()
+	return mchuo
+}
+
 // SetMappingType sets the "mapping_type" field.
 func (mchuo *MappedControlHistoryUpdateOne) SetMappingType(et enums.MappingType) *MappedControlHistoryUpdateOne {
 	mchuo.mutation.SetMappingType(et)
@@ -485,16 +541,23 @@ func (mchuo *MappedControlHistoryUpdateOne) ClearRelation() *MappedControlHistor
 }
 
 // SetConfidence sets the "confidence" field.
-func (mchuo *MappedControlHistoryUpdateOne) SetConfidence(s string) *MappedControlHistoryUpdateOne {
-	mchuo.mutation.SetConfidence(s)
+func (mchuo *MappedControlHistoryUpdateOne) SetConfidence(i int) *MappedControlHistoryUpdateOne {
+	mchuo.mutation.ResetConfidence()
+	mchuo.mutation.SetConfidence(i)
 	return mchuo
 }
 
 // SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (mchuo *MappedControlHistoryUpdateOne) SetNillableConfidence(s *string) *MappedControlHistoryUpdateOne {
-	if s != nil {
-		mchuo.SetConfidence(*s)
+func (mchuo *MappedControlHistoryUpdateOne) SetNillableConfidence(i *int) *MappedControlHistoryUpdateOne {
+	if i != nil {
+		mchuo.SetConfidence(*i)
 	}
+	return mchuo
+}
+
+// AddConfidence adds i to the "confidence" field.
+func (mchuo *MappedControlHistoryUpdateOne) AddConfidence(i int) *MappedControlHistoryUpdateOne {
+	mchuo.mutation.AddConfidence(i)
 	return mchuo
 }
 
@@ -672,6 +735,12 @@ func (mchuo *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	if mchuo.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := mchuo.mutation.OwnerID(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if mchuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(mappedcontrolhistory.FieldOwnerID, field.TypeString)
+	}
 	if value, ok := mchuo.mutation.MappingType(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
 	}
@@ -682,10 +751,13 @@ func (mchuo *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 		_spec.ClearField(mappedcontrolhistory.FieldRelation, field.TypeString)
 	}
 	if value, ok := mchuo.mutation.Confidence(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeString, value)
+		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
+	}
+	if value, ok := mchuo.mutation.AddedConfidence(); ok {
+		_spec.AddField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
 	}
 	if mchuo.mutation.ConfidenceCleared() {
-		_spec.ClearField(mappedcontrolhistory.FieldConfidence, field.TypeString)
+		_spec.ClearField(mappedcontrolhistory.FieldConfidence, field.TypeInt)
 	}
 	if value, ok := mchuo.mutation.Source(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)

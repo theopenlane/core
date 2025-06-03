@@ -30,6 +30,10 @@ func GetObjectTypeFromEntMutation(m ent.Mutation) string {
 func getTuplesToAdd(ctx context.Context, m ent.Mutation, tr fgax.TupleRequest, edgeField string) ([]fgax.TupleKey, error) {
 	var addTuples []fgax.TupleKey
 
+	if strings.EqualFold(edgeField, "organization_id") {
+		edgeField = "owner_id"
+	}
+
 	subjectIDs, err := getAddedParentIDsFromEntMutation(ctx, m, edgeField)
 	if err != nil {
 		return nil, err

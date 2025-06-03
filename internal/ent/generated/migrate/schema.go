@@ -256,6 +256,7 @@ var (
 		{Name: "auditor_reference_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED"}, Default: "NOT_IMPLEMENTED"},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
+		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT"}, Default: "PREVENTATIVE"},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "category_id", Type: field.TypeString, Nullable: true},
@@ -270,8 +271,6 @@ var (
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
-		{Name: "mapped_control_from_controls", Type: field.TypeString, Nullable: true},
-		{Name: "mapped_control_to_controls", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
 	}
@@ -283,37 +282,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "controls_groups_control_owner",
-				Columns:    []*schema.Column{ControlsColumns[26]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "controls_groups_delegate",
 				Columns:    []*schema.Column{ControlsColumns[27]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_mapped_controls_from_controls",
+				Symbol:     "controls_groups_delegate",
 				Columns:    []*schema.Column{ControlsColumns[28]},
-				RefColumns: []*schema.Column{MappedControlsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "controls_mapped_controls_to_controls",
-				Columns:    []*schema.Column{ControlsColumns[29]},
-				RefColumns: []*schema.Column{MappedControlsColumns[0]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_organizations_controls",
-				Columns:    []*schema.Column{ControlsColumns[30]},
+				Columns:    []*schema.Column{ControlsColumns[29]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_standards_controls",
-				Columns:    []*schema.Column{ControlsColumns[31]},
+				Columns:    []*schema.Column{ControlsColumns[30]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -327,12 +314,12 @@ var (
 			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[30]},
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[29]},
 			},
 			{
 				Name:    "control_standard_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[31], ControlsColumns[25]},
+				Columns: []*schema.Column{ControlsColumns[30], ControlsColumns[26]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is NULL",
 				},
@@ -358,6 +345,7 @@ var (
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED"}, Default: "NOT_IMPLEMENTED"},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
+		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT"}, Default: "PREVENTATIVE"},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "category_id", Type: field.TypeString, Nullable: true},
@@ -1346,6 +1334,8 @@ var (
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
+		{Name: "mapped_control_blocked_groups", Type: field.TypeString, Nullable: true},
+		{Name: "mapped_control_editors", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_objective_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_group_creators", Type: field.TypeString, Nullable: true},
@@ -1364,62 +1354,74 @@ var (
 		PrimaryKey: []*schema.Column{GroupsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "groups_organizations_control_creators",
+				Symbol:     "groups_mapped_controls_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[15]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				RefColumns: []*schema.Column{MappedControlsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_control_objective_creators",
+				Symbol:     "groups_mapped_controls_editors",
 				Columns:    []*schema.Column{GroupsColumns[16]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				RefColumns: []*schema.Column{MappedControlsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_group_creators",
+				Symbol:     "groups_organizations_control_creators",
 				Columns:    []*schema.Column{GroupsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_internal_policy_creators",
+				Symbol:     "groups_organizations_control_objective_creators",
 				Columns:    []*schema.Column{GroupsColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_narrative_creators",
+				Symbol:     "groups_organizations_group_creators",
 				Columns:    []*schema.Column{GroupsColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_procedure_creators",
+				Symbol:     "groups_organizations_internal_policy_creators",
 				Columns:    []*schema.Column{GroupsColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_program_creators",
+				Symbol:     "groups_organizations_narrative_creators",
 				Columns:    []*schema.Column{GroupsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_risk_creators",
+				Symbol:     "groups_organizations_procedure_creators",
 				Columns:    []*schema.Column{GroupsColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_template_creators",
+				Symbol:     "groups_organizations_program_creators",
 				Columns:    []*schema.Column{GroupsColumns[23]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_groups",
+				Symbol:     "groups_organizations_risk_creators",
 				Columns:    []*schema.Column{GroupsColumns[24]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_template_creators",
+				Columns:    []*schema.Column{GroupsColumns[25]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_groups",
+				Columns:    []*schema.Column{GroupsColumns[26]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1433,12 +1435,12 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[24]},
+				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[26]},
 			},
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[24]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[26]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2206,14 +2208,23 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "mapping_type", Type: field.TypeEnum, Enums: []string{"EQUAL", "SUPERSET", "SUBSET", "INTERSECT", "PARTIAL"}, Default: "EQUAL"},
 		{Name: "relation", Type: field.TypeString, Nullable: true},
-		{Name: "confidence", Type: field.TypeString, Nullable: true},
+		{Name: "confidence", Type: field.TypeInt, Nullable: true},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL", "SUGGESTED", "IMPORTED"}, Default: "MANUAL"},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// MappedControlsTable holds the schema information for the "mapped_controls" table.
 	MappedControlsTable = &schema.Table{
 		Name:       "mapped_controls",
 		Columns:    MappedControlsColumns,
 		PrimaryKey: []*schema.Column{MappedControlsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "mapped_controls_organizations_mapped_controls",
+				Columns:    []*schema.Column{MappedControlsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "mappedcontrol_id",
@@ -2235,9 +2246,10 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_type", Type: field.TypeEnum, Enums: []string{"EQUAL", "SUPERSET", "SUBSET", "INTERSECT", "PARTIAL"}, Default: "EQUAL"},
 		{Name: "relation", Type: field.TypeString, Nullable: true},
-		{Name: "confidence", Type: field.TypeString, Nullable: true},
+		{Name: "confidence", Type: field.TypeInt, Nullable: true},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL", "SUGGESTED", "IMPORTED"}, Default: "MANUAL"},
 	}
 	// MappedControlHistoryTable holds the schema information for the "mapped_control_history" table.
@@ -3513,6 +3525,7 @@ var (
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED"}, Default: "NOT_IMPLEMENTED"},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
+		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT"}, Default: "PREVENTATIVE"},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "category_id", Type: field.TypeString, Nullable: true},
@@ -3526,8 +3539,6 @@ var (
 		{Name: "references", Type: field.TypeJSON, Nullable: true},
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "control_id", Type: field.TypeString},
-		{Name: "mapped_control_from_subcontrols", Type: field.TypeString, Nullable: true},
-		{Name: "mapped_control_to_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "program_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
@@ -3542,49 +3553,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subcontrols_controls_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[26]},
+				Columns:    []*schema.Column{SubcontrolsColumns[27]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "subcontrols_mapped_controls_from_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[27]},
-				RefColumns: []*schema.Column{MappedControlsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "subcontrols_mapped_controls_to_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[28]},
-				RefColumns: []*schema.Column{MappedControlsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "subcontrols_organizations_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[29]},
+				Columns:    []*schema.Column{SubcontrolsColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_programs_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[30]},
+				Columns:    []*schema.Column{SubcontrolsColumns[29]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_groups_control_owner",
-				Columns:    []*schema.Column{SubcontrolsColumns[31]},
+				Columns:    []*schema.Column{SubcontrolsColumns[30]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_groups_delegate",
-				Columns:    []*schema.Column{SubcontrolsColumns[32]},
+				Columns:    []*schema.Column{SubcontrolsColumns[31]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_users_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[33]},
+				Columns:    []*schema.Column{SubcontrolsColumns[32]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3598,12 +3597,12 @@ var (
 			{
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[29]},
+				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[28]},
 			},
 			{
 				Name:    "subcontrol_control_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[26], SubcontrolsColumns[25]},
+				Columns: []*schema.Column{SubcontrolsColumns[27], SubcontrolsColumns[26]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3629,6 +3628,7 @@ var (
 		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED"}, Default: "NOT_IMPLEMENTED"},
 		{Name: "source", Type: field.TypeEnum, Nullable: true, Enums: []string{"FRAMEWORK", "TEMPLATE", "USER_DEFINED", "IMPORTED"}, Default: "USER_DEFINED"},
+		{Name: "reference_framework", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT"}, Default: "PREVENTATIVE"},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "category_id", Type: field.TypeString, Nullable: true},
@@ -5251,6 +5251,106 @@ var (
 			},
 		},
 	}
+	// MappedControlFromControlsColumns holds the columns for the "mapped_control_from_controls" table.
+	MappedControlFromControlsColumns = []*schema.Column{
+		{Name: "mapped_control_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString},
+	}
+	// MappedControlFromControlsTable holds the schema information for the "mapped_control_from_controls" table.
+	MappedControlFromControlsTable = &schema.Table{
+		Name:       "mapped_control_from_controls",
+		Columns:    MappedControlFromControlsColumns,
+		PrimaryKey: []*schema.Column{MappedControlFromControlsColumns[0], MappedControlFromControlsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "mapped_control_from_controls_mapped_control_id",
+				Columns:    []*schema.Column{MappedControlFromControlsColumns[0]},
+				RefColumns: []*schema.Column{MappedControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "mapped_control_from_controls_control_id",
+				Columns:    []*schema.Column{MappedControlFromControlsColumns[1]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// MappedControlToControlsColumns holds the columns for the "mapped_control_to_controls" table.
+	MappedControlToControlsColumns = []*schema.Column{
+		{Name: "mapped_control_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString},
+	}
+	// MappedControlToControlsTable holds the schema information for the "mapped_control_to_controls" table.
+	MappedControlToControlsTable = &schema.Table{
+		Name:       "mapped_control_to_controls",
+		Columns:    MappedControlToControlsColumns,
+		PrimaryKey: []*schema.Column{MappedControlToControlsColumns[0], MappedControlToControlsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "mapped_control_to_controls_mapped_control_id",
+				Columns:    []*schema.Column{MappedControlToControlsColumns[0]},
+				RefColumns: []*schema.Column{MappedControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "mapped_control_to_controls_control_id",
+				Columns:    []*schema.Column{MappedControlToControlsColumns[1]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// MappedControlFromSubcontrolsColumns holds the columns for the "mapped_control_from_subcontrols" table.
+	MappedControlFromSubcontrolsColumns = []*schema.Column{
+		{Name: "mapped_control_id", Type: field.TypeString},
+		{Name: "subcontrol_id", Type: field.TypeString},
+	}
+	// MappedControlFromSubcontrolsTable holds the schema information for the "mapped_control_from_subcontrols" table.
+	MappedControlFromSubcontrolsTable = &schema.Table{
+		Name:       "mapped_control_from_subcontrols",
+		Columns:    MappedControlFromSubcontrolsColumns,
+		PrimaryKey: []*schema.Column{MappedControlFromSubcontrolsColumns[0], MappedControlFromSubcontrolsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "mapped_control_from_subcontrols_mapped_control_id",
+				Columns:    []*schema.Column{MappedControlFromSubcontrolsColumns[0]},
+				RefColumns: []*schema.Column{MappedControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "mapped_control_from_subcontrols_subcontrol_id",
+				Columns:    []*schema.Column{MappedControlFromSubcontrolsColumns[1]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// MappedControlToSubcontrolsColumns holds the columns for the "mapped_control_to_subcontrols" table.
+	MappedControlToSubcontrolsColumns = []*schema.Column{
+		{Name: "mapped_control_id", Type: field.TypeString},
+		{Name: "subcontrol_id", Type: field.TypeString},
+	}
+	// MappedControlToSubcontrolsTable holds the schema information for the "mapped_control_to_subcontrols" table.
+	MappedControlToSubcontrolsTable = &schema.Table{
+		Name:       "mapped_control_to_subcontrols",
+		Columns:    MappedControlToSubcontrolsColumns,
+		PrimaryKey: []*schema.Column{MappedControlToSubcontrolsColumns[0], MappedControlToSubcontrolsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "mapped_control_to_subcontrols_mapped_control_id",
+				Columns:    []*schema.Column{MappedControlToSubcontrolsColumns[0]},
+				RefColumns: []*schema.Column{MappedControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "mapped_control_to_subcontrols_subcontrol_id",
+				Columns:    []*schema.Column{MappedControlToSubcontrolsColumns[1]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// NarrativeBlockedGroupsColumns holds the columns for the "narrative_blocked_groups" table.
 	NarrativeBlockedGroupsColumns = []*schema.Column{
 		{Name: "narrative_id", Type: field.TypeString},
@@ -6515,6 +6615,10 @@ var (
 		InternalPolicyRisksTable,
 		InviteEventsTable,
 		JobRunnerJobRunnerTokensTable,
+		MappedControlFromControlsTable,
+		MappedControlToControlsTable,
+		MappedControlFromSubcontrolsTable,
+		MappedControlToSubcontrolsTable,
 		NarrativeBlockedGroupsTable,
 		NarrativeEditorsTable,
 		NarrativeViewersTable,
@@ -6578,10 +6682,8 @@ func init() {
 	}
 	ControlsTable.ForeignKeys[0].RefTable = GroupsTable
 	ControlsTable.ForeignKeys[1].RefTable = GroupsTable
-	ControlsTable.ForeignKeys[2].RefTable = MappedControlsTable
-	ControlsTable.ForeignKeys[3].RefTable = MappedControlsTable
-	ControlsTable.ForeignKeys[4].RefTable = OrganizationsTable
-	ControlsTable.ForeignKeys[5].RefTable = StandardsTable
+	ControlsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ControlsTable.ForeignKeys[3].RefTable = StandardsTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
@@ -6638,8 +6740,8 @@ func init() {
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
-	GroupsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[0].RefTable = MappedControlsTable
+	GroupsTable.ForeignKeys[1].RefTable = MappedControlsTable
 	GroupsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[3].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[4].RefTable = OrganizationsTable
@@ -6648,6 +6750,8 @@ func init() {
 	GroupsTable.ForeignKeys[7].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[8].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[9].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[10].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[11].RefTable = OrganizationsTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}
@@ -6690,6 +6794,7 @@ func init() {
 	MappableDomainHistoryTable.Annotation = &entsql.Annotation{
 		Table: "mappable_domain_history",
 	}
+	MappedControlsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	MappedControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "mapped_control_history",
 	}
@@ -6763,13 +6868,11 @@ func init() {
 		Table: "standard_history",
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlsTable
-	SubcontrolsTable.ForeignKeys[1].RefTable = MappedControlsTable
-	SubcontrolsTable.ForeignKeys[2].RefTable = MappedControlsTable
-	SubcontrolsTable.ForeignKeys[3].RefTable = OrganizationsTable
-	SubcontrolsTable.ForeignKeys[4].RefTable = ProgramsTable
-	SubcontrolsTable.ForeignKeys[5].RefTable = GroupsTable
-	SubcontrolsTable.ForeignKeys[6].RefTable = GroupsTable
-	SubcontrolsTable.ForeignKeys[7].RefTable = UsersTable
+	SubcontrolsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	SubcontrolsTable.ForeignKeys[2].RefTable = ProgramsTable
+	SubcontrolsTable.ForeignKeys[3].RefTable = GroupsTable
+	SubcontrolsTable.ForeignKeys[4].RefTable = GroupsTable
+	SubcontrolsTable.ForeignKeys[5].RefTable = UsersTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
@@ -6883,6 +6986,14 @@ func init() {
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
 	JobRunnerJobRunnerTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
 	JobRunnerJobRunnerTokensTable.ForeignKeys[1].RefTable = JobRunnerTokensTable
+	MappedControlFromControlsTable.ForeignKeys[0].RefTable = MappedControlsTable
+	MappedControlFromControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	MappedControlToControlsTable.ForeignKeys[0].RefTable = MappedControlsTable
+	MappedControlToControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	MappedControlFromSubcontrolsTable.ForeignKeys[0].RefTable = MappedControlsTable
+	MappedControlFromSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
+	MappedControlToSubcontrolsTable.ForeignKeys[0].RefTable = MappedControlsTable
+	MappedControlToSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	NarrativeBlockedGroupsTable.ForeignKeys[0].RefTable = NarrativesTable
 	NarrativeBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	NarrativeEditorsTable.ForeignKeys[0].RefTable = NarrativesTable

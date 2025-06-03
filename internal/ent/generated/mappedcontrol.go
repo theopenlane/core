@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -33,12 +34,14 @@ type MappedControl struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	MappingType enums.MappingType `json:"mapping_type,omitempty"`
 	// description of how the two controls are related
 	Relation string `json:"relation,omitempty"`
-	// percentage of confidence in the mapping
-	Confidence string `json:"confidence,omitempty"`
+	// percentage (0-100) of confidence in the mapping
+	Confidence *int `json:"confidence,omitempty"`
 	// source of the mapping, e.g. manual, suggested, etc.
 	Source enums.MappingSource `json:"source,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -49,6 +52,12 @@ type MappedControl struct {
 
 // MappedControlEdges holds the relations/edges for other nodes in the graph.
 type MappedControlEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// controls that map to another control
 	FromControls []*Control `json:"from_controls,omitempty"`
 	// controls that are being mapped from another control
@@ -59,20 +68,51 @@ type MappedControlEdges struct {
 	ToSubcontrols []*Subcontrol `json:"to_subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [7]map[string]int
 
+	namedBlockedGroups   map[string][]*Group
+	namedEditors         map[string][]*Group
 	namedFromControls    map[string][]*Control
 	namedToControls      map[string][]*Control
 	namedFromSubcontrols map[string][]*Subcontrol
 	namedToSubcontrols   map[string][]*Subcontrol
 }
 
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e MappedControlEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e MappedControlEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e MappedControlEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
 // FromControlsOrErr returns the FromControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) FromControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[3] {
 		return e.FromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "from_controls"}
@@ -81,7 +121,7 @@ func (e MappedControlEdges) FromControlsOrErr() ([]*Control, error) {
 // ToControlsOrErr returns the ToControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) ToControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[4] {
 		return e.ToControls, nil
 	}
 	return nil, &NotLoadedError{edge: "to_controls"}
@@ -90,7 +130,7 @@ func (e MappedControlEdges) ToControlsOrErr() ([]*Control, error) {
 // FromSubcontrolsOrErr returns the FromSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) FromSubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[5] {
 		return e.FromSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "from_subcontrols"}
@@ -99,7 +139,7 @@ func (e MappedControlEdges) FromSubcontrolsOrErr() ([]*Subcontrol, error) {
 // ToSubcontrolsOrErr returns the ToSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e MappedControlEdges) ToSubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[6] {
 		return e.ToSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "to_subcontrols"}
@@ -112,7 +152,9 @@ func (*MappedControl) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case mappedcontrol.FieldTags:
 			values[i] = new([]byte)
-		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation, mappedcontrol.FieldConfidence, mappedcontrol.FieldSource:
+		case mappedcontrol.FieldConfidence:
+			values[i] = new(sql.NullInt64)
+		case mappedcontrol.FieldID, mappedcontrol.FieldCreatedBy, mappedcontrol.FieldUpdatedBy, mappedcontrol.FieldDeletedBy, mappedcontrol.FieldOwnerID, mappedcontrol.FieldMappingType, mappedcontrol.FieldRelation, mappedcontrol.FieldSource:
 			values[i] = new(sql.NullString)
 		case mappedcontrol.FieldCreatedAt, mappedcontrol.FieldUpdatedAt, mappedcontrol.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -181,6 +223,12 @@ func (mc *MappedControl) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case mappedcontrol.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				mc.OwnerID = value.String
+			}
 		case mappedcontrol.FieldMappingType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mapping_type", values[i])
@@ -194,10 +242,11 @@ func (mc *MappedControl) assignValues(columns []string, values []any) error {
 				mc.Relation = value.String
 			}
 		case mappedcontrol.FieldConfidence:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field confidence", values[i])
 			} else if value.Valid {
-				mc.Confidence = value.String
+				mc.Confidence = new(int)
+				*mc.Confidence = int(value.Int64)
 			}
 		case mappedcontrol.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -216,6 +265,21 @@ func (mc *MappedControl) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (mc *MappedControl) Value(name string) (ent.Value, error) {
 	return mc.selectValues.Get(name)
+}
+
+// QueryOwner queries the "owner" edge of the MappedControl entity.
+func (mc *MappedControl) QueryOwner() *OrganizationQuery {
+	return NewMappedControlClient(mc.config).QueryOwner(mc)
+}
+
+// QueryBlockedGroups queries the "blocked_groups" edge of the MappedControl entity.
+func (mc *MappedControl) QueryBlockedGroups() *GroupQuery {
+	return NewMappedControlClient(mc.config).QueryBlockedGroups(mc)
+}
+
+// QueryEditors queries the "editors" edge of the MappedControl entity.
+func (mc *MappedControl) QueryEditors() *GroupQuery {
+	return NewMappedControlClient(mc.config).QueryEditors(mc)
 }
 
 // QueryFromControls queries the "from_controls" edge of the MappedControl entity.
@@ -282,19 +346,72 @@ func (mc *MappedControl) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", mc.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(mc.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("mapping_type=")
 	builder.WriteString(fmt.Sprintf("%v", mc.MappingType))
 	builder.WriteString(", ")
 	builder.WriteString("relation=")
 	builder.WriteString(mc.Relation)
 	builder.WriteString(", ")
-	builder.WriteString("confidence=")
-	builder.WriteString(mc.Confidence)
+	if v := mc.Confidence; v != nil {
+		builder.WriteString("confidence=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", mc.Source))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (mc *MappedControl) NamedBlockedGroups(name string) ([]*Group, error) {
+	if mc.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := mc.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (mc *MappedControl) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if mc.Edges.namedBlockedGroups == nil {
+		mc.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		mc.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		mc.Edges.namedBlockedGroups[name] = append(mc.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (mc *MappedControl) NamedEditors(name string) ([]*Group, error) {
+	if mc.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := mc.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (mc *MappedControl) appendNamedEditors(name string, edges ...*Group) {
+	if mc.Edges.namedEditors == nil {
+		mc.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		mc.Edges.namedEditors[name] = []*Group{}
+	} else {
+		mc.Edges.namedEditors[name] = append(mc.Edges.namedEditors[name], edges...)
+	}
 }
 
 // NamedFromControls returns the FromControls named value or an error if the edge was not

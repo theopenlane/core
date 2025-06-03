@@ -2,6 +2,9 @@
 # Tuples for testing the FGA implementation
 # This file is specific to controls
 ############################################
+- user: organization:openlane
+  relation: parent
+  object: control:control-1
 - user: program:program-1
   relation: parent
   object: control:control-1
@@ -53,3 +56,7 @@
 - user: user:ulid-group-control-owner-1
   relation: member
   object: group:control-owner-1
+## mapped controls
+- user: organization:openlane
+  relation: parent
+  object: mapped_control:mapped_control-1

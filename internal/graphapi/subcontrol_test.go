@@ -39,10 +39,9 @@ func TestQuerySubcontrol(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name:     "read only user, same org, no access to the parent control",
-			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			name:   "read only user, same org, access to the parent control via organization",
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
 		},
 		{
 			name:   "admin user, access to the parent control via the program",
@@ -146,16 +145,16 @@ func TestQuerySubcontrols(t *testing.T) {
 			expectedResults: 2,
 		},
 		{
-			name:            "happy path, using read only user of the same org, no programs or groups associated",
+			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
 			ctx:             viewOnlyUser.UserCtx,
-			expectedResults: 0,
+			expectedResults: 2,
 		},
 		{
-			name:            "happy path, no access to the program or group",
+			name:            "happy path, api token with org access",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 0,
+			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",
@@ -194,7 +193,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 	anotherOwnerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	// add adminUser to the program so that they can create a subcontrol
+	// add adminUser to the program
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
@@ -346,13 +345,13 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 			ctx:                 adminUser.UserCtx,
 		},
 		{
-			name: "user not authorized to one of the controls",
+			name: "user not authorized to edit one of the controls",
 			request: openlaneclient.CreateSubcontrolInput{
 				RefCode:   "SC-1",
 				ControlID: control2.ID,
 			},
 			client:      suite.client.api,
-			ctx:         adminUser.UserCtx,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -503,13 +502,13 @@ func TestMutationUpdateSubcontrol(t *testing.T) {
 			expectedErr: "value is less than the required length",
 		},
 		{
-			name: "update not allowed, not permissions in same org",
+			name: "update not allowed, no permissions in same org",
 			request: openlaneclient.UpdateSubcontrolInput{
 				MappedCategories: []string{"Category1", "Category2"},
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, no permissions",

@@ -224,6 +224,26 @@ func (shu *SubcontrolHistoryUpdate) ClearSource() *SubcontrolHistoryUpdate {
 	return shu
 }
 
+// SetReferenceFramework sets the "reference_framework" field.
+func (shu *SubcontrolHistoryUpdate) SetReferenceFramework(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetReferenceFramework(s)
+	return shu
+}
+
+// SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableReferenceFramework(s *string) *SubcontrolHistoryUpdate {
+	if s != nil {
+		shu.SetReferenceFramework(*s)
+	}
+	return shu
+}
+
+// ClearReferenceFramework clears the value of the "reference_framework" field.
+func (shu *SubcontrolHistoryUpdate) ClearReferenceFramework() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearReferenceFramework()
+	return shu
+}
+
 // SetControlType sets the "control_type" field.
 func (shu *SubcontrolHistoryUpdate) SetControlType(et enums.ControlType) *SubcontrolHistoryUpdate {
 	shu.mutation.SetControlType(et)
@@ -651,6 +671,12 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if shu.mutation.SourceCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSource, field.TypeEnum)
 	}
+	if value, ok := shu.mutation.ReferenceFramework(); ok {
+		_spec.SetField(subcontrolhistory.FieldReferenceFramework, field.TypeString, value)
+	}
+	if shu.mutation.ReferenceFrameworkCleared() {
+		_spec.ClearField(subcontrolhistory.FieldReferenceFramework, field.TypeString)
+	}
 	if value, ok := shu.mutation.ControlType(); ok {
 		_spec.SetField(subcontrolhistory.FieldControlType, field.TypeEnum, value)
 	}
@@ -984,6 +1010,26 @@ func (shuo *SubcontrolHistoryUpdateOne) SetNillableSource(es *enums.ControlSourc
 // ClearSource clears the value of the "source" field.
 func (shuo *SubcontrolHistoryUpdateOne) ClearSource() *SubcontrolHistoryUpdateOne {
 	shuo.mutation.ClearSource()
+	return shuo
+}
+
+// SetReferenceFramework sets the "reference_framework" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetReferenceFramework(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetReferenceFramework(s)
+	return shuo
+}
+
+// SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableReferenceFramework(s *string) *SubcontrolHistoryUpdateOne {
+	if s != nil {
+		shuo.SetReferenceFramework(*s)
+	}
+	return shuo
+}
+
+// ClearReferenceFramework clears the value of the "reference_framework" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearReferenceFramework() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearReferenceFramework()
 	return shuo
 }
 
@@ -1443,6 +1489,12 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	}
 	if shuo.mutation.SourceCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSource, field.TypeEnum)
+	}
+	if value, ok := shuo.mutation.ReferenceFramework(); ok {
+		_spec.SetField(subcontrolhistory.FieldReferenceFramework, field.TypeString, value)
+	}
+	if shuo.mutation.ReferenceFrameworkCleared() {
+		_spec.ClearField(subcontrolhistory.FieldReferenceFramework, field.TypeString)
 	}
 	if value, ok := shuo.mutation.ControlType(); ok {
 		_spec.SetField(subcontrolhistory.FieldControlType, field.TypeEnum, value)
