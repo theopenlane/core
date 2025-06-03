@@ -130,20 +130,6 @@ func withParents(schemas ...any) objectOwnedOption {
 	}
 }
 
-// withFieldNames allows to set field names for the parent object that owns the object
-// this is used when the field is not the same name as the the schema name, e.g. ToControl vs Control
-func withFieldNames(fieldNames ...string) objectOwnedOption {
-	return func(o *ObjectOwnedMixin) {
-		if fieldNames == nil {
-			o.FieldNames = []string{}
-
-			return
-		}
-
-		o.FieldNames = fieldNames
-	}
-}
-
 // withOrganizationOwner adds the organization owner_id field and hooks to the schema
 // and optionally allows system admins to have empty owner_id
 func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {

@@ -11,10 +11,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
+// OrgOwnedTuplesHookWithAdmin is a hook that adds organization owned tuples for the object being created
+// it will add the user and parent (organization owner_id) permissions to the object
+// on creation, and will also add an admin user permission to the object
 func OrgOwnedTuplesHookWithAdmin() ent.Hook {
 	return hookOrgOwnedTuples(true)
 }
 
+// OrgOwnedTuplesHook is a hook that adds organization owned tuples for the object being created
+// it will only add the parent organization permissions, and no specific user permissions
 func OrgOwnedTuplesHook() ent.Hook {
 	return hookOrgOwnedTuples(false)
 }

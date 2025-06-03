@@ -54,7 +54,7 @@ func (MappedControl) Fields() []ent.Field {
 		field.Int("confidence").
 			Comment("percentage (0-100) of confidence in the mapping").
 			Min(0).
-			Max(100).
+			Max(100). // nolint:mnd - this is a percentage
 			Nillable().
 			Optional(),
 		field.Enum("source").
@@ -99,10 +99,10 @@ func (m MappedControl) Edges() []ent.Edge {
 }
 
 // Mixin of the MappedControl
-func (c MappedControl) Mixin() []ent.Mixin {
+func (m MappedControl) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(c),
+			newOrgOwnedMixin(m),
 			// add group edit permissions to the mapped control
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
