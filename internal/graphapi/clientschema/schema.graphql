@@ -2393,6 +2393,10 @@ type Control implements Node {
 	"""
 	source: ControlControlSource
 	"""
+	the reference framework for the control if it came from a standard
+	"""
+	referenceFramework: String
+	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
 	controlType: ControlControlType
@@ -2704,37 +2708,6 @@ type Control implements Node {
 		"""
 		where: InternalPolicyWhereInput
 	): InternalPolicyConnection!
-	mappedControls(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for MappedControls returned from the connection.
-		"""
-		orderBy: [MappedControlOrder!]
-
-		"""
-		Filtering options for MappedControls returned from the connection.
-		"""
-		where: MappedControlWhereInput
-	): MappedControlConnection!
 	"""
 	the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	"""
@@ -2776,37 +2749,6 @@ type Control implements Node {
 		where: GroupWhereInput
 	): GroupConnection!
 	editors(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Groups returned from the connection.
-		"""
-		orderBy: [GroupOrder!]
-
-		"""
-		Filtering options for Groups returned from the connection.
-		"""
-		where: GroupWhereInput
-	): GroupConnection!
-	viewers(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -3086,6 +3028,10 @@ type ControlHistory implements Node {
 	source of the control, e.g. framework, template, custom, etc.
 	"""
 	source: ControlHistoryControlSource
+	"""
+	the reference framework for the control if it came from a standard
+	"""
+	referenceFramework: String
 	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
@@ -3452,6 +3398,24 @@ input ControlHistoryWhereInput {
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
 	"""
+	reference_framework field predicates
+	"""
+	referenceFramework: String
+	referenceFrameworkNEQ: String
+	referenceFrameworkIn: [String!]
+	referenceFrameworkNotIn: [String!]
+	referenceFrameworkGT: String
+	referenceFrameworkGTE: String
+	referenceFrameworkLT: String
+	referenceFrameworkLTE: String
+	referenceFrameworkContains: String
+	referenceFrameworkHasPrefix: String
+	referenceFrameworkHasSuffix: String
+	referenceFrameworkIsNil: Boolean
+	referenceFrameworkNotNil: Boolean
+	referenceFrameworkEqualFold: String
+	referenceFrameworkContainsFold: String
+	"""
 	control_type field predicates
 	"""
 	controlType: ControlHistoryControlType
@@ -3638,6 +3602,99 @@ type ControlImplementation implements Node {
 	"""
 	details: String
 	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -4275,6 +4332,21 @@ input ControlImplementationWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -6355,6 +6427,24 @@ input ControlWhereInput {
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
 	"""
+	reference_framework field predicates
+	"""
+	referenceFramework: String
+	referenceFrameworkNEQ: String
+	referenceFrameworkIn: [String!]
+	referenceFrameworkNotIn: [String!]
+	referenceFrameworkGT: String
+	referenceFrameworkGTE: String
+	referenceFrameworkLT: String
+	referenceFrameworkLTE: String
+	referenceFrameworkContains: String
+	referenceFrameworkHasPrefix: String
+	referenceFrameworkHasSuffix: String
+	referenceFrameworkIsNil: Boolean
+	referenceFrameworkNotNil: Boolean
+	referenceFrameworkEqualFold: String
+	referenceFrameworkContainsFold: String
+	"""
 	control_type field predicates
 	"""
 	controlType: ControlControlType
@@ -6546,11 +6636,6 @@ input ControlWhereInput {
 	hasInternalPolicies: Boolean
 	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
-	mapped_controls edge predicates
-	"""
-	hasMappedControls: Boolean
-	hasMappedControlsWith: [MappedControlWhereInput!]
-	"""
 	control_owner edge predicates
 	"""
 	hasControlOwner: Boolean
@@ -6575,11 +6660,6 @@ input ControlWhereInput {
 	"""
 	hasEditors: Boolean
 	hasEditorsWith: [GroupWhereInput!]
-	"""
-	viewers edge predicates
-	"""
-	hasViewers: Boolean
-	hasViewersWith: [GroupWhereInput!]
 	"""
 	standard edge predicates
 	"""
@@ -6779,6 +6859,9 @@ input CreateControlImplementationInput {
 	"""
 	details: String
 	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 }
@@ -6811,6 +6894,10 @@ input CreateControlInput {
 	source of the control, e.g. framework, template, custom, etc.
 	"""
 	source: ControlControlSource
+	"""
+	the reference framework for the control if it came from a standard
+	"""
+	referenceFramework: String
 	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
@@ -6867,13 +6954,11 @@ input CreateControlInput {
 	actionPlanIDs: [ID!]
 	procedureIDs: [ID!]
 	internalPolicyIDs: [ID!]
-	mappedControlIDs: [ID!]
 	controlOwnerID: ID
 	delegateID: ID
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
-	viewerIDs: [ID!]
 	standardID: ID
 	programIDs: [ID!]
 	controlImplementationIDs: [ID!]
@@ -7286,16 +7371,20 @@ input CreateGroupInput {
 	controlObjectiveEditorIDs: [ID!]
 	controlObjectiveBlockedGroupIDs: [ID!]
 	controlObjectiveViewerIDs: [ID!]
-	controlEditorIDs: [ID!]
-	controlBlockedGroupIDs: [ID!]
-	controlViewerIDs: [ID!]
 	narrativeEditorIDs: [ID!]
 	narrativeBlockedGroupIDs: [ID!]
 	narrativeViewerIDs: [ID!]
+	controlImplementationEditorIDs: [ID!]
+	controlImplementationBlockedGroupIDs: [ID!]
+	controlImplementationViewerIDs: [ID!]
 	procedureEditorIDs: [ID!]
 	procedureBlockedGroupIDs: [ID!]
 	internalPolicyEditorIDs: [ID!]
 	internalPolicyBlockedGroupIDs: [ID!]
+	controlEditorIDs: [ID!]
+	controlBlockedGroupIDs: [ID!]
+	mappedControlEditorIDs: [ID!]
+	mappedControlBlockedGroupIDs: [ID!]
 	settingID: ID
 	eventIDs: [ID!]
 	integrationIDs: [ID!]
@@ -7593,13 +7682,26 @@ input CreateMappedControlInput {
 	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
-	mappingType: String
+	mappingType: MappedControlMappingType
 	"""
 	description of how the two controls are related
 	"""
 	relation: String
-	controlIDs: [ID!]
-	subcontrolIDs: [ID!]
+	"""
+	percentage (0-100) of confidence in the mapping
+	"""
+	confidence: Int
+	"""
+	source of the mapping, e.g. manual, suggested, etc.
+	"""
+	source: MappedControlMappingSource
+	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	fromControlIDs: [ID!]
+	toControlIDs: [ID!]
+	fromSubcontrolIDs: [ID!]
+	toSubcontrolIDs: [ID!]
 }
 input CreateMemberWithProgramInput {
 	role: ProgramMembershipRole
@@ -7723,13 +7825,18 @@ input CreateOrganizationInput {
 	"""
 	dedicatedDb: Boolean
 	controlCreatorIDs: [ID!]
+	controlImplementationCreatorIDs: [ID!]
 	controlObjectiveCreatorIDs: [ID!]
+	evidenceCreatorIDs: [ID!]
 	groupCreatorIDs: [ID!]
 	internalPolicyCreatorIDs: [ID!]
+	mappedControlCreatorIDs: [ID!]
 	narrativeCreatorIDs: [ID!]
 	procedureCreatorIDs: [ID!]
 	programCreatorIDs: [ID!]
 	riskCreatorIDs: [ID!]
+	scheduledJobCreatorIDs: [ID!]
+	standardCreatorIDs: [ID!]
 	templateCreatorIDs: [ID!]
 	parentID: ID
 	settingID: ID
@@ -7760,6 +7867,7 @@ input CreateOrganizationInput {
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	controlImplementationIDs: [ID!]
+	mappedControlIDs: [ID!]
 	evidenceIDs: [ID!]
 	standardIDs: [ID!]
 	actionPlanIDs: [ID!]
@@ -8221,6 +8329,10 @@ input CreateSubcontrolInput {
 	"""
 	source: SubcontrolControlSource
 	"""
+	the reference framework for the control if it came from a standard
+	"""
+	referenceFramework: String
+	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
 	controlType: SubcontrolControlType
@@ -8276,7 +8388,6 @@ input CreateSubcontrolInput {
 	actionPlanIDs: [ID!]
 	procedureIDs: [ID!]
 	internalPolicyIDs: [ID!]
-	mappedControlIDs: [ID!]
 	controlOwnerID: ID
 	delegateID: ID
 	ownerID: ID
@@ -15071,99 +15182,6 @@ type Group implements Node {
 		"""
 		where: ControlObjectiveWhereInput
 	): ControlObjectiveConnection!
-	controlEditors(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Controls returned from the connection.
-		"""
-		orderBy: [ControlOrder!]
-
-		"""
-		Filtering options for Controls returned from the connection.
-		"""
-		where: ControlWhereInput
-	): ControlConnection!
-	controlBlockedGroups(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Controls returned from the connection.
-		"""
-		orderBy: [ControlOrder!]
-
-		"""
-		Filtering options for Controls returned from the connection.
-		"""
-		where: ControlWhereInput
-	): ControlConnection!
-	controlViewers(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Controls returned from the connection.
-		"""
-		orderBy: [ControlOrder!]
-
-		"""
-		Filtering options for Controls returned from the connection.
-		"""
-		where: ControlWhereInput
-	): ControlConnection!
 	narrativeEditors(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -15257,6 +15275,99 @@ type Group implements Node {
 		"""
 		where: NarrativeWhereInput
 	): NarrativeConnection!
+	controlImplementationEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlImplementations returned from the connection.
+		"""
+		orderBy: [ControlImplementationOrder!]
+
+		"""
+		Filtering options for ControlImplementations returned from the connection.
+		"""
+		where: ControlImplementationWhereInput
+	): ControlImplementationConnection!
+	controlImplementationBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlImplementations returned from the connection.
+		"""
+		orderBy: [ControlImplementationOrder!]
+
+		"""
+		Filtering options for ControlImplementations returned from the connection.
+		"""
+		where: ControlImplementationWhereInput
+	): ControlImplementationConnection!
+	controlImplementationViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ControlImplementations returned from the connection.
+		"""
+		orderBy: [ControlImplementationOrder!]
+
+		"""
+		Filtering options for ControlImplementations returned from the connection.
+		"""
+		where: ControlImplementationWhereInput
+	): ControlImplementationConnection!
 	procedureEditors(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -15381,6 +15492,130 @@ type Group implements Node {
 		"""
 		where: InternalPolicyWhereInput
 	): InternalPolicyConnection!
+	controlEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	controlBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	mappedControlEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for MappedControls returned from the connection.
+		"""
+		orderBy: [MappedControlOrder!]
+
+		"""
+		Filtering options for MappedControls returned from the connection.
+		"""
+		where: MappedControlWhereInput
+	): MappedControlConnection!
+	mappedControlBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for MappedControls returned from the connection.
+		"""
+		orderBy: [MappedControlOrder!]
+
+		"""
+		Filtering options for MappedControls returned from the connection.
+		"""
+		where: MappedControlWhereInput
+	): MappedControlConnection!
 	setting: GroupSetting
 	users(
 		"""
@@ -17336,21 +17571,6 @@ input GroupWhereInput {
 	hasControlObjectiveViewers: Boolean
 	hasControlObjectiveViewersWith: [ControlObjectiveWhereInput!]
 	"""
-	control_editors edge predicates
-	"""
-	hasControlEditors: Boolean
-	hasControlEditorsWith: [ControlWhereInput!]
-	"""
-	control_blocked_groups edge predicates
-	"""
-	hasControlBlockedGroups: Boolean
-	hasControlBlockedGroupsWith: [ControlWhereInput!]
-	"""
-	control_viewers edge predicates
-	"""
-	hasControlViewers: Boolean
-	hasControlViewersWith: [ControlWhereInput!]
-	"""
 	narrative_editors edge predicates
 	"""
 	hasNarrativeEditors: Boolean
@@ -17365,6 +17585,21 @@ input GroupWhereInput {
 	"""
 	hasNarrativeViewers: Boolean
 	hasNarrativeViewersWith: [NarrativeWhereInput!]
+	"""
+	control_implementation_editors edge predicates
+	"""
+	hasControlImplementationEditors: Boolean
+	hasControlImplementationEditorsWith: [ControlImplementationWhereInput!]
+	"""
+	control_implementation_blocked_groups edge predicates
+	"""
+	hasControlImplementationBlockedGroups: Boolean
+	hasControlImplementationBlockedGroupsWith: [ControlImplementationWhereInput!]
+	"""
+	control_implementation_viewers edge predicates
+	"""
+	hasControlImplementationViewers: Boolean
+	hasControlImplementationViewersWith: [ControlImplementationWhereInput!]
 	"""
 	procedure_editors edge predicates
 	"""
@@ -17385,6 +17620,26 @@ input GroupWhereInput {
 	"""
 	hasInternalPolicyBlockedGroups: Boolean
 	hasInternalPolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
+	"""
+	control_editors edge predicates
+	"""
+	hasControlEditors: Boolean
+	hasControlEditorsWith: [ControlWhereInput!]
+	"""
+	control_blocked_groups edge predicates
+	"""
+	hasControlBlockedGroups: Boolean
+	hasControlBlockedGroupsWith: [ControlWhereInput!]
+	"""
+	mapped_control_editors edge predicates
+	"""
+	hasMappedControlEditors: Boolean
+	hasMappedControlEditorsWith: [MappedControlWhereInput!]
+	"""
+	mapped_control_blocked_groups edge predicates
+	"""
+	hasMappedControlBlockedGroups: Boolean
+	hasMappedControlBlockedGroupsWith: [MappedControlWhereInput!]
 	"""
 	setting edge predicates
 	"""
@@ -22259,14 +22514,89 @@ type MappedControl implements Node {
 	"""
 	tags: [String!]
 	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
-	mappingType: String
+	mappingType: MappedControlMappingType!
 	"""
 	description of how the two controls are related
 	"""
 	relation: String
-	controls(
+	"""
+	percentage (0-100) of confidence in the mapping
+	"""
+	confidence: Int
+	"""
+	source of the mapping, e.g. manual, suggested, etc.
+	"""
+	source: MappedControlMappingSource
+	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	fromControls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -22297,7 +22627,69 @@ type MappedControl implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
-	subcontrols(
+	toControls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	fromSubcontrols(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Subcontrols returned from the connection.
+		"""
+		orderBy: [SubcontrolOrder!]
+
+		"""
+		Filtering options for Subcontrols returned from the connection.
+		"""
+		where: SubcontrolWhereInput
+	): SubcontrolConnection!
+	toSubcontrols(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -22400,13 +22792,25 @@ type MappedControlHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
+	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
-	mappingType: String
+	mappingType: MappedControlHistoryMappingType!
 	"""
 	description of how the two controls are related
 	"""
 	relation: String
+	"""
+	percentage (0-100) of confidence in the mapping
+	"""
+	confidence: Int
+	"""
+	source of the mapping, e.g. manual, suggested, etc.
+	"""
+	source: MappedControlHistoryMappingSource
 }
 """
 A connection to a list of items.
@@ -22439,6 +22843,24 @@ type MappedControlHistoryEdge {
 	cursor: Cursor!
 }
 """
+MappedControlHistoryMappingSource is enum for the field source
+"""
+enum MappedControlHistoryMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+	MANUAL
+	SUGGESTED
+	IMPORTED
+}
+"""
+MappedControlHistoryMappingType is enum for the field mapping_type
+"""
+enum MappedControlHistoryMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+	EQUAL
+	SUPERSET
+	SUBSET
+	INTERSECT
+	PARTIAL
+}
+"""
 MappedControlHistoryOpType is enum for the field operation
 """
 enum MappedControlHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -22465,7 +22887,8 @@ Properties by which MappedControlHistory connections can be ordered.
 enum MappedControlHistoryOrderField {
 	created_at
 	updated_at
-	mapping_type
+	MAPPING_TYPE
+	SOURCE
 }
 """
 MappedControlHistoryWhereInput is used for filtering MappedControlHistory objects.
@@ -22587,23 +23010,30 @@ input MappedControlHistoryWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
 	mapping_type field predicates
 	"""
-	mappingType: String
-	mappingTypeNEQ: String
-	mappingTypeIn: [String!]
-	mappingTypeNotIn: [String!]
-	mappingTypeGT: String
-	mappingTypeGTE: String
-	mappingTypeLT: String
-	mappingTypeLTE: String
-	mappingTypeContains: String
-	mappingTypeHasPrefix: String
-	mappingTypeHasSuffix: String
-	mappingTypeIsNil: Boolean
-	mappingTypeNotNil: Boolean
-	mappingTypeEqualFold: String
-	mappingTypeContainsFold: String
+	mappingType: MappedControlHistoryMappingType
+	mappingTypeNEQ: MappedControlHistoryMappingType
+	mappingTypeIn: [MappedControlHistoryMappingType!]
+	mappingTypeNotIn: [MappedControlHistoryMappingType!]
 	"""
 	relation field predicates
 	"""
@@ -22622,6 +23052,46 @@ input MappedControlHistoryWhereInput {
 	relationNotNil: Boolean
 	relationEqualFold: String
 	relationContainsFold: String
+	"""
+	confidence field predicates
+	"""
+	confidence: Int
+	confidenceNEQ: Int
+	confidenceIn: [Int!]
+	confidenceNotIn: [Int!]
+	confidenceGT: Int
+	confidenceGTE: Int
+	confidenceLT: Int
+	confidenceLTE: Int
+	confidenceIsNil: Boolean
+	confidenceNotNil: Boolean
+	"""
+	source field predicates
+	"""
+	source: MappedControlHistoryMappingSource
+	sourceNEQ: MappedControlHistoryMappingSource
+	sourceIn: [MappedControlHistoryMappingSource!]
+	sourceNotIn: [MappedControlHistoryMappingSource!]
+	sourceIsNil: Boolean
+	sourceNotNil: Boolean
+}
+"""
+MappedControlMappingSource is enum for the field source
+"""
+enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+	MANUAL
+	SUGGESTED
+	IMPORTED
+}
+"""
+MappedControlMappingType is enum for the field mapping_type
+"""
+enum MappedControlMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+	EQUAL
+	SUPERSET
+	SUBSET
+	INTERSECT
+	PARTIAL
 }
 """
 Ordering options for MappedControl connections
@@ -22642,7 +23112,8 @@ Properties by which MappedControl connections can be ordered.
 enum MappedControlOrderField {
 	created_at
 	updated_at
-	mapping_type
+	MAPPING_TYPE
+	SOURCE
 }
 """
 Return response for updateMappedControl mutation
@@ -22737,23 +23208,30 @@ input MappedControlWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
 	mapping_type field predicates
 	"""
-	mappingType: String
-	mappingTypeNEQ: String
-	mappingTypeIn: [String!]
-	mappingTypeNotIn: [String!]
-	mappingTypeGT: String
-	mappingTypeGTE: String
-	mappingTypeLT: String
-	mappingTypeLTE: String
-	mappingTypeContains: String
-	mappingTypeHasPrefix: String
-	mappingTypeHasSuffix: String
-	mappingTypeIsNil: Boolean
-	mappingTypeNotNil: Boolean
-	mappingTypeEqualFold: String
-	mappingTypeContainsFold: String
+	mappingType: MappedControlMappingType
+	mappingTypeNEQ: MappedControlMappingType
+	mappingTypeIn: [MappedControlMappingType!]
+	mappingTypeNotIn: [MappedControlMappingType!]
 	"""
 	relation field predicates
 	"""
@@ -22773,15 +23251,62 @@ input MappedControlWhereInput {
 	relationEqualFold: String
 	relationContainsFold: String
 	"""
-	controls edge predicates
+	confidence field predicates
 	"""
-	hasControls: Boolean
-	hasControlsWith: [ControlWhereInput!]
+	confidence: Int
+	confidenceNEQ: Int
+	confidenceIn: [Int!]
+	confidenceNotIn: [Int!]
+	confidenceGT: Int
+	confidenceGTE: Int
+	confidenceLT: Int
+	confidenceLTE: Int
+	confidenceIsNil: Boolean
+	confidenceNotNil: Boolean
 	"""
-	subcontrols edge predicates
+	source field predicates
 	"""
-	hasSubcontrols: Boolean
-	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	source: MappedControlMappingSource
+	sourceNEQ: MappedControlMappingSource
+	sourceIn: [MappedControlMappingSource!]
+	sourceNotIn: [MappedControlMappingSource!]
+	sourceIsNil: Boolean
+	sourceNotNil: Boolean
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	from_controls edge predicates
+	"""
+	hasFromControls: Boolean
+	hasFromControlsWith: [ControlWhereInput!]
+	"""
+	to_controls edge predicates
+	"""
+	hasToControls: Boolean
+	hasToControlsWith: [ControlWhereInput!]
+	"""
+	from_subcontrols edge predicates
+	"""
+	hasFromSubcontrols: Boolean
+	hasFromSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	to_subcontrols edge predicates
+	"""
+	hasToSubcontrols: Boolean
+	hasToSubcontrolsWith: [SubcontrolWhereInput!]
 }
 type Mutation {
 	"""
@@ -27754,7 +28279,69 @@ type Organization implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	controlImplementationCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	controlObjectiveCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	evidenceCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -27817,6 +28404,37 @@ type Organization implements Node {
 		where: GroupWhereInput
 	): GroupConnection!
 	internalPolicyCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	mappedControlCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -27941,6 +28559,68 @@ type Organization implements Node {
 		where: GroupWhereInput
 	): GroupConnection!
 	riskCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	scheduledJobCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	standardCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -28843,6 +29523,37 @@ type Organization implements Node {
 		"""
 		where: ControlImplementationWhereInput
 	): ControlImplementationConnection!
+	mappedControls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for MappedControls returned from the connection.
+		"""
+		orderBy: [MappedControlOrder!]
+
+		"""
+		Filtering options for MappedControls returned from the connection.
+		"""
+		where: MappedControlWhereInput
+	): MappedControlConnection!
 	evidence(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -30549,10 +31260,20 @@ input OrganizationWhereInput {
 	hasControlCreators: Boolean
 	hasControlCreatorsWith: [GroupWhereInput!]
 	"""
+	control_implementation_creators edge predicates
+	"""
+	hasControlImplementationCreators: Boolean
+	hasControlImplementationCreatorsWith: [GroupWhereInput!]
+	"""
 	control_objective_creators edge predicates
 	"""
 	hasControlObjectiveCreators: Boolean
 	hasControlObjectiveCreatorsWith: [GroupWhereInput!]
+	"""
+	evidence_creators edge predicates
+	"""
+	hasEvidenceCreators: Boolean
+	hasEvidenceCreatorsWith: [GroupWhereInput!]
 	"""
 	group_creators edge predicates
 	"""
@@ -30563,6 +31284,11 @@ input OrganizationWhereInput {
 	"""
 	hasInternalPolicyCreators: Boolean
 	hasInternalPolicyCreatorsWith: [GroupWhereInput!]
+	"""
+	mapped_control_creators edge predicates
+	"""
+	hasMappedControlCreators: Boolean
+	hasMappedControlCreatorsWith: [GroupWhereInput!]
 	"""
 	narrative_creators edge predicates
 	"""
@@ -30583,6 +31309,16 @@ input OrganizationWhereInput {
 	"""
 	hasRiskCreators: Boolean
 	hasRiskCreatorsWith: [GroupWhereInput!]
+	"""
+	scheduled_job_creators edge predicates
+	"""
+	hasScheduledJobCreators: Boolean
+	hasScheduledJobCreatorsWith: [GroupWhereInput!]
+	"""
+	standard_creators edge predicates
+	"""
+	hasStandardCreators: Boolean
+	hasStandardCreatorsWith: [GroupWhereInput!]
 	"""
 	template_creators edge predicates
 	"""
@@ -30743,6 +31479,11 @@ input OrganizationWhereInput {
 	"""
 	hasControlImplementations: Boolean
 	hasControlImplementationsWith: [ControlImplementationWhereInput!]
+	"""
+	mapped_controls edge predicates
+	"""
+	hasMappedControls: Boolean
+	hasMappedControlsWith: [MappedControlWhereInput!]
 	"""
 	evidence edge predicates
 	"""
@@ -43506,6 +44247,10 @@ type Subcontrol implements Node {
 	"""
 	source: SubcontrolControlSource
 	"""
+	the reference framework for the control if it came from a standard
+	"""
+	referenceFramework: String
+	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
 	controlType: SubcontrolControlType
@@ -43817,37 +44562,6 @@ type Subcontrol implements Node {
 		"""
 		where: InternalPolicyWhereInput
 	): InternalPolicyConnection!
-	mappedControls(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for MappedControls returned from the connection.
-		"""
-		orderBy: [MappedControlOrder!]
-
-		"""
-		Filtering options for MappedControls returned from the connection.
-		"""
-		where: MappedControlWhereInput
-	): MappedControlConnection!
 	"""
 	the group of users who are responsible for the control, will be assigned tasks, approval, etc.
 	"""
@@ -44044,6 +44758,10 @@ type SubcontrolHistory implements Node {
 	source of the control, e.g. framework, template, custom, etc.
 	"""
 	source: SubcontrolHistoryControlSource
+	"""
+	the reference framework for the control if it came from a standard
+	"""
+	referenceFramework: String
 	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
@@ -44410,6 +45128,24 @@ input SubcontrolHistoryWhereInput {
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
 	"""
+	reference_framework field predicates
+	"""
+	referenceFramework: String
+	referenceFrameworkNEQ: String
+	referenceFrameworkIn: [String!]
+	referenceFrameworkNotIn: [String!]
+	referenceFrameworkGT: String
+	referenceFrameworkGTE: String
+	referenceFrameworkLT: String
+	referenceFrameworkLTE: String
+	referenceFrameworkContains: String
+	referenceFrameworkHasPrefix: String
+	referenceFrameworkHasSuffix: String
+	referenceFrameworkIsNil: Boolean
+	referenceFrameworkNotNil: Boolean
+	referenceFrameworkEqualFold: String
+	referenceFrameworkContainsFold: String
+	"""
 	control_type field predicates
 	"""
 	controlType: SubcontrolHistoryControlType
@@ -44766,6 +45502,24 @@ input SubcontrolWhereInput {
 	sourceIsNil: Boolean
 	sourceNotNil: Boolean
 	"""
+	reference_framework field predicates
+	"""
+	referenceFramework: String
+	referenceFrameworkNEQ: String
+	referenceFrameworkIn: [String!]
+	referenceFrameworkNotIn: [String!]
+	referenceFrameworkGT: String
+	referenceFrameworkGTE: String
+	referenceFrameworkLT: String
+	referenceFrameworkLTE: String
+	referenceFrameworkContains: String
+	referenceFrameworkHasPrefix: String
+	referenceFrameworkHasSuffix: String
+	referenceFrameworkIsNil: Boolean
+	referenceFrameworkNotNil: Boolean
+	referenceFrameworkEqualFold: String
+	referenceFrameworkContainsFold: String
+	"""
 	control_type field predicates
 	"""
 	controlType: SubcontrolControlType
@@ -44954,11 +45708,6 @@ input SubcontrolWhereInput {
 	"""
 	hasInternalPolicies: Boolean
 	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
-	"""
-	mapped_controls edge predicates
-	"""
-	hasMappedControls: Boolean
-	hasMappedControlsWith: [MappedControlWhereInput!]
 	"""
 	control_owner edge predicates
 	"""
@@ -47554,6 +48303,15 @@ input UpdateControlImplementationInput {
 	"""
 	details: String
 	clearDetails: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
@@ -47597,6 +48355,11 @@ input UpdateControlInput {
 	"""
 	source: ControlControlSource
 	clearSource: Boolean
+	"""
+	the reference framework for the control if it came from a standard
+	"""
+	referenceFramework: String
+	clearReferenceFramework: Boolean
 	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
@@ -47687,9 +48450,6 @@ input UpdateControlInput {
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
-	addMappedControlIDs: [ID!]
-	removeMappedControlIDs: [ID!]
-	clearMappedControls: Boolean
 	controlOwnerID: ID
 	clearControlOwner: Boolean
 	delegateID: ID
@@ -47700,9 +48460,6 @@ input UpdateControlInput {
 	addEditorIDs: [ID!]
 	removeEditorIDs: [ID!]
 	clearEditors: Boolean
-	addViewerIDs: [ID!]
-	removeViewerIDs: [ID!]
-	clearViewers: Boolean
 	standardID: ID
 	clearStandard: Boolean
 	addProgramIDs: [ID!]
@@ -48292,15 +49049,6 @@ input UpdateGroupInput {
 	addControlObjectiveViewerIDs: [ID!]
 	removeControlObjectiveViewerIDs: [ID!]
 	clearControlObjectiveViewers: Boolean
-	addControlEditorIDs: [ID!]
-	removeControlEditorIDs: [ID!]
-	clearControlEditors: Boolean
-	addControlBlockedGroupIDs: [ID!]
-	removeControlBlockedGroupIDs: [ID!]
-	clearControlBlockedGroups: Boolean
-	addControlViewerIDs: [ID!]
-	removeControlViewerIDs: [ID!]
-	clearControlViewers: Boolean
 	addNarrativeEditorIDs: [ID!]
 	removeNarrativeEditorIDs: [ID!]
 	clearNarrativeEditors: Boolean
@@ -48310,6 +49058,15 @@ input UpdateGroupInput {
 	addNarrativeViewerIDs: [ID!]
 	removeNarrativeViewerIDs: [ID!]
 	clearNarrativeViewers: Boolean
+	addControlImplementationEditorIDs: [ID!]
+	removeControlImplementationEditorIDs: [ID!]
+	clearControlImplementationEditors: Boolean
+	addControlImplementationBlockedGroupIDs: [ID!]
+	removeControlImplementationBlockedGroupIDs: [ID!]
+	clearControlImplementationBlockedGroups: Boolean
+	addControlImplementationViewerIDs: [ID!]
+	removeControlImplementationViewerIDs: [ID!]
+	clearControlImplementationViewers: Boolean
 	addProcedureEditorIDs: [ID!]
 	removeProcedureEditorIDs: [ID!]
 	clearProcedureEditors: Boolean
@@ -48322,6 +49079,18 @@ input UpdateGroupInput {
 	addInternalPolicyBlockedGroupIDs: [ID!]
 	removeInternalPolicyBlockedGroupIDs: [ID!]
 	clearInternalPolicyBlockedGroups: Boolean
+	addControlEditorIDs: [ID!]
+	removeControlEditorIDs: [ID!]
+	clearControlEditors: Boolean
+	addControlBlockedGroupIDs: [ID!]
+	removeControlBlockedGroupIDs: [ID!]
+	clearControlBlockedGroups: Boolean
+	addMappedControlEditorIDs: [ID!]
+	removeMappedControlEditorIDs: [ID!]
+	clearMappedControlEditors: Boolean
+	addMappedControlBlockedGroupIDs: [ID!]
+	removeMappedControlBlockedGroupIDs: [ID!]
+	clearMappedControlBlockedGroups: Boolean
 	settingID: ID
 	clearSetting: Boolean
 	addEventIDs: [ID!]
@@ -48674,19 +49443,42 @@ input UpdateMappedControlInput {
 	"""
 	the type of mapping between the two controls, e.g. subset, intersect, equal, superset
 	"""
-	mappingType: String
-	clearMappingType: Boolean
+	mappingType: MappedControlMappingType
 	"""
 	description of how the two controls are related
 	"""
 	relation: String
 	clearRelation: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControls: Boolean
-	addSubcontrolIDs: [ID!]
-	removeSubcontrolIDs: [ID!]
-	clearSubcontrols: Boolean
+	"""
+	percentage (0-100) of confidence in the mapping
+	"""
+	confidence: Int
+	clearConfidence: Boolean
+	"""
+	source of the mapping, e.g. manual, suggested, etc.
+	"""
+	source: MappedControlMappingSource
+	clearSource: Boolean
+	ownerID: ID
+	clearOwner: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addFromControlIDs: [ID!]
+	removeFromControlIDs: [ID!]
+	clearFromControls: Boolean
+	addToControlIDs: [ID!]
+	removeToControlIDs: [ID!]
+	clearToControls: Boolean
+	addFromSubcontrolIDs: [ID!]
+	removeFromSubcontrolIDs: [ID!]
+	clearFromSubcontrols: Boolean
+	addToSubcontrolIDs: [ID!]
+	removeToSubcontrolIDs: [ID!]
+	clearToSubcontrols: Boolean
 }
 """
 UpdateNarrativeInput is used for update Narrative object.
@@ -48797,15 +49589,24 @@ input UpdateOrganizationInput {
 	addControlCreatorIDs: [ID!]
 	removeControlCreatorIDs: [ID!]
 	clearControlCreators: Boolean
+	addControlImplementationCreatorIDs: [ID!]
+	removeControlImplementationCreatorIDs: [ID!]
+	clearControlImplementationCreators: Boolean
 	addControlObjectiveCreatorIDs: [ID!]
 	removeControlObjectiveCreatorIDs: [ID!]
 	clearControlObjectiveCreators: Boolean
+	addEvidenceCreatorIDs: [ID!]
+	removeEvidenceCreatorIDs: [ID!]
+	clearEvidenceCreators: Boolean
 	addGroupCreatorIDs: [ID!]
 	removeGroupCreatorIDs: [ID!]
 	clearGroupCreators: Boolean
 	addInternalPolicyCreatorIDs: [ID!]
 	removeInternalPolicyCreatorIDs: [ID!]
 	clearInternalPolicyCreators: Boolean
+	addMappedControlCreatorIDs: [ID!]
+	removeMappedControlCreatorIDs: [ID!]
+	clearMappedControlCreators: Boolean
 	addNarrativeCreatorIDs: [ID!]
 	removeNarrativeCreatorIDs: [ID!]
 	clearNarrativeCreators: Boolean
@@ -48818,6 +49619,12 @@ input UpdateOrganizationInput {
 	addRiskCreatorIDs: [ID!]
 	removeRiskCreatorIDs: [ID!]
 	clearRiskCreators: Boolean
+	addScheduledJobCreatorIDs: [ID!]
+	removeScheduledJobCreatorIDs: [ID!]
+	clearScheduledJobCreators: Boolean
+	addStandardCreatorIDs: [ID!]
+	removeStandardCreatorIDs: [ID!]
+	clearStandardCreators: Boolean
 	addTemplateCreatorIDs: [ID!]
 	removeTemplateCreatorIDs: [ID!]
 	clearTemplateCreators: Boolean
@@ -48903,6 +49710,9 @@ input UpdateOrganizationInput {
 	addControlImplementationIDs: [ID!]
 	removeControlImplementationIDs: [ID!]
 	clearControlImplementations: Boolean
+	addMappedControlIDs: [ID!]
+	removeMappedControlIDs: [ID!]
+	clearMappedControls: Boolean
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
@@ -49536,6 +50346,11 @@ input UpdateSubcontrolInput {
 	source: SubcontrolControlSource
 	clearSource: Boolean
 	"""
+	the reference framework for the control if it came from a standard
+	"""
+	referenceFramework: String
+	clearReferenceFramework: Boolean
+	"""
 	type of the control e.g. preventive, detective, corrective, or deterrent.
 	"""
 	controlType: SubcontrolControlType
@@ -49625,9 +50440,6 @@ input UpdateSubcontrolInput {
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
-	addMappedControlIDs: [ID!]
-	removeMappedControlIDs: [ID!]
-	clearMappedControls: Boolean
 	controlOwnerID: ID
 	clearControlOwner: Boolean
 	delegateID: ID

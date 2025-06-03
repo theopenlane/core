@@ -118,6 +118,11 @@ func AuditorReferenceID(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldAuditorReferenceID, v))
 }
 
+// ReferenceFramework applies equality check predicate on the "reference_framework" field. It's identical to ReferenceFrameworkEQ.
+func ReferenceFramework(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldReferenceFramework, v))
+}
+
 // Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
 func Category(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldCategory, v))
@@ -911,6 +916,81 @@ func SourceIsNil() predicate.Subcontrol {
 // SourceNotNil applies the NotNil predicate on the "source" field.
 func SourceNotNil() predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldNotNull(FieldSource))
+}
+
+// ReferenceFrameworkEQ applies the EQ predicate on the "reference_framework" field.
+func ReferenceFrameworkEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEQ(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkNEQ applies the NEQ predicate on the "reference_framework" field.
+func ReferenceFrameworkNEQ(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNEQ(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkIn applies the In predicate on the "reference_framework" field.
+func ReferenceFrameworkIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIn(FieldReferenceFramework, vs...))
+}
+
+// ReferenceFrameworkNotIn applies the NotIn predicate on the "reference_framework" field.
+func ReferenceFrameworkNotIn(vs ...string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotIn(FieldReferenceFramework, vs...))
+}
+
+// ReferenceFrameworkGT applies the GT predicate on the "reference_framework" field.
+func ReferenceFrameworkGT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGT(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkGTE applies the GTE predicate on the "reference_framework" field.
+func ReferenceFrameworkGTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldGTE(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkLT applies the LT predicate on the "reference_framework" field.
+func ReferenceFrameworkLT(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLT(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkLTE applies the LTE predicate on the "reference_framework" field.
+func ReferenceFrameworkLTE(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldLTE(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkContains applies the Contains predicate on the "reference_framework" field.
+func ReferenceFrameworkContains(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContains(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkHasPrefix applies the HasPrefix predicate on the "reference_framework" field.
+func ReferenceFrameworkHasPrefix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasPrefix(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkHasSuffix applies the HasSuffix predicate on the "reference_framework" field.
+func ReferenceFrameworkHasSuffix(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldHasSuffix(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkIsNil applies the IsNil predicate on the "reference_framework" field.
+func ReferenceFrameworkIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldReferenceFramework))
+}
+
+// ReferenceFrameworkNotNil applies the NotNil predicate on the "reference_framework" field.
+func ReferenceFrameworkNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldReferenceFramework))
+}
+
+// ReferenceFrameworkEqualFold applies the EqualFold predicate on the "reference_framework" field.
+func ReferenceFrameworkEqualFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldEqualFold(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkContainsFold applies the ContainsFold predicate on the "reference_framework" field.
+func ReferenceFrameworkContainsFold(v string) predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldContainsFold(FieldReferenceFramework, v))
 }
 
 // ControlTypeEQ applies the EQ predicate on the "control_type" field.
@@ -1835,35 +1915,6 @@ func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Subcon
 	})
 }
 
-// HasMappedControls applies the HasEdge predicate on the "mapped_controls" edge.
-func HasMappedControls() predicate.Subcontrol {
-	return predicate.Subcontrol(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, MappedControlsTable, MappedControlsPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlSubcontrols
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasMappedControlsWith applies the HasEdge predicate on the "mapped_controls" edge with a given conditions (other predicates).
-func HasMappedControlsWith(preds ...predicate.MappedControl) predicate.Subcontrol {
-	return predicate.Subcontrol(func(s *sql.Selector) {
-		step := newMappedControlsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlSubcontrols
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasControlOwner applies the HasEdge predicate on the "control_owner" edge.
 func HasControlOwner() predicate.Subcontrol {
 	return predicate.Subcontrol(func(s *sql.Selector) {
@@ -2030,6 +2081,64 @@ func HasScheduledJobsWith(preds ...predicate.ControlScheduledJob) predicate.Subc
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ControlScheduledJob
 		step.Edge.Schema = schemaConfig.ControlScheduledJobSubcontrols
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMappedToSubcontrols applies the HasEdge predicate on the "mapped_to_subcontrols" edge.
+func HasMappedToSubcontrols() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, MappedToSubcontrolsTable, MappedToSubcontrolsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlToSubcontrols
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMappedToSubcontrolsWith applies the HasEdge predicate on the "mapped_to_subcontrols" edge with a given conditions (other predicates).
+func HasMappedToSubcontrolsWith(preds ...predicate.MappedControl) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newMappedToSubcontrolsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlToSubcontrols
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMappedFromSubcontrols applies the HasEdge predicate on the "mapped_from_subcontrols" edge.
+func HasMappedFromSubcontrols() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, MappedFromSubcontrolsTable, MappedFromSubcontrolsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlFromSubcontrols
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMappedFromSubcontrolsWith applies the HasEdge predicate on the "mapped_from_subcontrols" edge with a given conditions (other predicates).
+func HasMappedFromSubcontrolsWith(preds ...predicate.MappedControl) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newMappedFromSubcontrolsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlFromSubcontrols
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

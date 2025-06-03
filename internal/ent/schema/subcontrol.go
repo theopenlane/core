@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
@@ -77,10 +78,27 @@ func (s Subcontrol) Edges() []ent.Edge {
 			edgeSchema: ControlImplementation{},
 			comment:    "the implementation(s) of the subcontrol",
 		}),
-
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: s,
 			edgeSchema: ControlScheduledJob{},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: s,
+			ref:        "to_subcontrols",
+			name:       "mapped_to_subcontrols",
+			t:          MappedControl.Type,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: s,
+			ref:        "from_subcontrols",
+			name:       "mapped_from_subcontrols",
+			t:          MappedControl.Type,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
 		}),
 	}
 }

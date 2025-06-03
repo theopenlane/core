@@ -237,6 +237,26 @@ func (su *SubcontrolUpdate) ClearSource() *SubcontrolUpdate {
 	return su
 }
 
+// SetReferenceFramework sets the "reference_framework" field.
+func (su *SubcontrolUpdate) SetReferenceFramework(s string) *SubcontrolUpdate {
+	su.mutation.SetReferenceFramework(s)
+	return su
+}
+
+// SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableReferenceFramework(s *string) *SubcontrolUpdate {
+	if s != nil {
+		su.SetReferenceFramework(*s)
+	}
+	return su
+}
+
+// ClearReferenceFramework clears the value of the "reference_framework" field.
+func (su *SubcontrolUpdate) ClearReferenceFramework() *SubcontrolUpdate {
+	su.mutation.ClearReferenceFramework()
+	return su
+}
+
 // SetControlType sets the "control_type" field.
 func (su *SubcontrolUpdate) SetControlType(et enums.ControlType) *SubcontrolUpdate {
 	su.mutation.SetControlType(et)
@@ -631,21 +651,6 @@ func (su *SubcontrolUpdate) AddInternalPolicies(i ...*InternalPolicy) *Subcontro
 	return su.AddInternalPolicyIDs(ids...)
 }
 
-// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
-func (su *SubcontrolUpdate) AddMappedControlIDs(ids ...string) *SubcontrolUpdate {
-	su.mutation.AddMappedControlIDs(ids...)
-	return su
-}
-
-// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
-func (su *SubcontrolUpdate) AddMappedControls(m ...*MappedControl) *SubcontrolUpdate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
-	}
-	return su.AddMappedControlIDs(ids...)
-}
-
 // SetControlOwner sets the "control_owner" edge to the Group entity.
 func (su *SubcontrolUpdate) SetControlOwner(g *Group) *SubcontrolUpdate {
 	return su.SetControlOwnerID(g.ID)
@@ -689,6 +694,36 @@ func (su *SubcontrolUpdate) AddScheduledJobs(c ...*ControlScheduledJob) *Subcont
 		ids[i] = c[i].ID
 	}
 	return su.AddScheduledJobIDs(ids...)
+}
+
+// AddMappedToSubcontrolIDs adds the "mapped_to_subcontrols" edge to the MappedControl entity by IDs.
+func (su *SubcontrolUpdate) AddMappedToSubcontrolIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.AddMappedToSubcontrolIDs(ids...)
+	return su
+}
+
+// AddMappedToSubcontrols adds the "mapped_to_subcontrols" edges to the MappedControl entity.
+func (su *SubcontrolUpdate) AddMappedToSubcontrols(m ...*MappedControl) *SubcontrolUpdate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return su.AddMappedToSubcontrolIDs(ids...)
+}
+
+// AddMappedFromSubcontrolIDs adds the "mapped_from_subcontrols" edge to the MappedControl entity by IDs.
+func (su *SubcontrolUpdate) AddMappedFromSubcontrolIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.AddMappedFromSubcontrolIDs(ids...)
+	return su
+}
+
+// AddMappedFromSubcontrols adds the "mapped_from_subcontrols" edges to the MappedControl entity.
+func (su *SubcontrolUpdate) AddMappedFromSubcontrols(m ...*MappedControl) *SubcontrolUpdate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return su.AddMappedFromSubcontrolIDs(ids...)
 }
 
 // Mutation returns the SubcontrolMutation object of the builder.
@@ -864,27 +899,6 @@ func (su *SubcontrolUpdate) RemoveInternalPolicies(i ...*InternalPolicy) *Subcon
 	return su.RemoveInternalPolicyIDs(ids...)
 }
 
-// ClearMappedControls clears all "mapped_controls" edges to the MappedControl entity.
-func (su *SubcontrolUpdate) ClearMappedControls() *SubcontrolUpdate {
-	su.mutation.ClearMappedControls()
-	return su
-}
-
-// RemoveMappedControlIDs removes the "mapped_controls" edge to MappedControl entities by IDs.
-func (su *SubcontrolUpdate) RemoveMappedControlIDs(ids ...string) *SubcontrolUpdate {
-	su.mutation.RemoveMappedControlIDs(ids...)
-	return su
-}
-
-// RemoveMappedControls removes "mapped_controls" edges to MappedControl entities.
-func (su *SubcontrolUpdate) RemoveMappedControls(m ...*MappedControl) *SubcontrolUpdate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
-	}
-	return su.RemoveMappedControlIDs(ids...)
-}
-
 // ClearControlOwner clears the "control_owner" edge to the Group entity.
 func (su *SubcontrolUpdate) ClearControlOwner() *SubcontrolUpdate {
 	su.mutation.ClearControlOwner()
@@ -943,6 +957,48 @@ func (su *SubcontrolUpdate) RemoveScheduledJobs(c ...*ControlScheduledJob) *Subc
 		ids[i] = c[i].ID
 	}
 	return su.RemoveScheduledJobIDs(ids...)
+}
+
+// ClearMappedToSubcontrols clears all "mapped_to_subcontrols" edges to the MappedControl entity.
+func (su *SubcontrolUpdate) ClearMappedToSubcontrols() *SubcontrolUpdate {
+	su.mutation.ClearMappedToSubcontrols()
+	return su
+}
+
+// RemoveMappedToSubcontrolIDs removes the "mapped_to_subcontrols" edge to MappedControl entities by IDs.
+func (su *SubcontrolUpdate) RemoveMappedToSubcontrolIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.RemoveMappedToSubcontrolIDs(ids...)
+	return su
+}
+
+// RemoveMappedToSubcontrols removes "mapped_to_subcontrols" edges to MappedControl entities.
+func (su *SubcontrolUpdate) RemoveMappedToSubcontrols(m ...*MappedControl) *SubcontrolUpdate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return su.RemoveMappedToSubcontrolIDs(ids...)
+}
+
+// ClearMappedFromSubcontrols clears all "mapped_from_subcontrols" edges to the MappedControl entity.
+func (su *SubcontrolUpdate) ClearMappedFromSubcontrols() *SubcontrolUpdate {
+	su.mutation.ClearMappedFromSubcontrols()
+	return su
+}
+
+// RemoveMappedFromSubcontrolIDs removes the "mapped_from_subcontrols" edge to MappedControl entities by IDs.
+func (su *SubcontrolUpdate) RemoveMappedFromSubcontrolIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.RemoveMappedFromSubcontrolIDs(ids...)
+	return su
+}
+
+// RemoveMappedFromSubcontrols removes "mapped_from_subcontrols" edges to MappedControl entities.
+func (su *SubcontrolUpdate) RemoveMappedFromSubcontrols(m ...*MappedControl) *SubcontrolUpdate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return su.RemoveMappedFromSubcontrolIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1108,6 +1164,12 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.SourceCleared() {
 		_spec.ClearField(subcontrol.FieldSource, field.TypeEnum)
+	}
+	if value, ok := su.mutation.ReferenceFramework(); ok {
+		_spec.SetField(subcontrol.FieldReferenceFramework, field.TypeString, value)
+	}
+	if su.mutation.ReferenceFrameworkCleared() {
+		_spec.ClearField(subcontrol.FieldReferenceFramework, field.TypeString)
 	}
 	if value, ok := su.mutation.ControlType(); ok {
 		_spec.SetField(subcontrol.FieldControlType, field.TypeEnum, value)
@@ -1597,54 +1659,6 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if su.mutation.MappedControlsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.MappedControlsTable,
-			Columns: subcontrol.MappedControlsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.MappedControlSubcontrols
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.RemovedMappedControlsIDs(); len(nodes) > 0 && !su.mutation.MappedControlsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.MappedControlsTable,
-			Columns: subcontrol.MappedControlsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.MappedControlSubcontrols
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.MappedControlsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.MappedControlsTable,
-			Columns: subcontrol.MappedControlsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = su.schemaConfig.MappedControlSubcontrols
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if su.mutation.ControlOwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1829,6 +1843,102 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = su.schemaConfig.ControlScheduledJobSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.MappedToSubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedToSubcontrolsTable,
+			Columns: subcontrol.MappedToSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.MappedControlToSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedMappedToSubcontrolsIDs(); len(nodes) > 0 && !su.mutation.MappedToSubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedToSubcontrolsTable,
+			Columns: subcontrol.MappedToSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.MappedControlToSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.MappedToSubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedToSubcontrolsTable,
+			Columns: subcontrol.MappedToSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.MappedControlToSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.MappedFromSubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedFromSubcontrolsTable,
+			Columns: subcontrol.MappedFromSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.MappedControlFromSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedMappedFromSubcontrolsIDs(); len(nodes) > 0 && !su.mutation.MappedFromSubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedFromSubcontrolsTable,
+			Columns: subcontrol.MappedFromSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.MappedControlFromSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.MappedFromSubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedFromSubcontrolsTable,
+			Columns: subcontrol.MappedFromSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2045,6 +2155,26 @@ func (suo *SubcontrolUpdateOne) SetNillableSource(es *enums.ControlSource) *Subc
 // ClearSource clears the value of the "source" field.
 func (suo *SubcontrolUpdateOne) ClearSource() *SubcontrolUpdateOne {
 	suo.mutation.ClearSource()
+	return suo
+}
+
+// SetReferenceFramework sets the "reference_framework" field.
+func (suo *SubcontrolUpdateOne) SetReferenceFramework(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetReferenceFramework(s)
+	return suo
+}
+
+// SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableReferenceFramework(s *string) *SubcontrolUpdateOne {
+	if s != nil {
+		suo.SetReferenceFramework(*s)
+	}
+	return suo
+}
+
+// ClearReferenceFramework clears the value of the "reference_framework" field.
+func (suo *SubcontrolUpdateOne) ClearReferenceFramework() *SubcontrolUpdateOne {
+	suo.mutation.ClearReferenceFramework()
 	return suo
 }
 
@@ -2442,21 +2572,6 @@ func (suo *SubcontrolUpdateOne) AddInternalPolicies(i ...*InternalPolicy) *Subco
 	return suo.AddInternalPolicyIDs(ids...)
 }
 
-// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
-func (suo *SubcontrolUpdateOne) AddMappedControlIDs(ids ...string) *SubcontrolUpdateOne {
-	suo.mutation.AddMappedControlIDs(ids...)
-	return suo
-}
-
-// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
-func (suo *SubcontrolUpdateOne) AddMappedControls(m ...*MappedControl) *SubcontrolUpdateOne {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
-	}
-	return suo.AddMappedControlIDs(ids...)
-}
-
 // SetControlOwner sets the "control_owner" edge to the Group entity.
 func (suo *SubcontrolUpdateOne) SetControlOwner(g *Group) *SubcontrolUpdateOne {
 	return suo.SetControlOwnerID(g.ID)
@@ -2500,6 +2615,36 @@ func (suo *SubcontrolUpdateOne) AddScheduledJobs(c ...*ControlScheduledJob) *Sub
 		ids[i] = c[i].ID
 	}
 	return suo.AddScheduledJobIDs(ids...)
+}
+
+// AddMappedToSubcontrolIDs adds the "mapped_to_subcontrols" edge to the MappedControl entity by IDs.
+func (suo *SubcontrolUpdateOne) AddMappedToSubcontrolIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.AddMappedToSubcontrolIDs(ids...)
+	return suo
+}
+
+// AddMappedToSubcontrols adds the "mapped_to_subcontrols" edges to the MappedControl entity.
+func (suo *SubcontrolUpdateOne) AddMappedToSubcontrols(m ...*MappedControl) *SubcontrolUpdateOne {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return suo.AddMappedToSubcontrolIDs(ids...)
+}
+
+// AddMappedFromSubcontrolIDs adds the "mapped_from_subcontrols" edge to the MappedControl entity by IDs.
+func (suo *SubcontrolUpdateOne) AddMappedFromSubcontrolIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.AddMappedFromSubcontrolIDs(ids...)
+	return suo
+}
+
+// AddMappedFromSubcontrols adds the "mapped_from_subcontrols" edges to the MappedControl entity.
+func (suo *SubcontrolUpdateOne) AddMappedFromSubcontrols(m ...*MappedControl) *SubcontrolUpdateOne {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return suo.AddMappedFromSubcontrolIDs(ids...)
 }
 
 // Mutation returns the SubcontrolMutation object of the builder.
@@ -2675,27 +2820,6 @@ func (suo *SubcontrolUpdateOne) RemoveInternalPolicies(i ...*InternalPolicy) *Su
 	return suo.RemoveInternalPolicyIDs(ids...)
 }
 
-// ClearMappedControls clears all "mapped_controls" edges to the MappedControl entity.
-func (suo *SubcontrolUpdateOne) ClearMappedControls() *SubcontrolUpdateOne {
-	suo.mutation.ClearMappedControls()
-	return suo
-}
-
-// RemoveMappedControlIDs removes the "mapped_controls" edge to MappedControl entities by IDs.
-func (suo *SubcontrolUpdateOne) RemoveMappedControlIDs(ids ...string) *SubcontrolUpdateOne {
-	suo.mutation.RemoveMappedControlIDs(ids...)
-	return suo
-}
-
-// RemoveMappedControls removes "mapped_controls" edges to MappedControl entities.
-func (suo *SubcontrolUpdateOne) RemoveMappedControls(m ...*MappedControl) *SubcontrolUpdateOne {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
-	}
-	return suo.RemoveMappedControlIDs(ids...)
-}
-
 // ClearControlOwner clears the "control_owner" edge to the Group entity.
 func (suo *SubcontrolUpdateOne) ClearControlOwner() *SubcontrolUpdateOne {
 	suo.mutation.ClearControlOwner()
@@ -2754,6 +2878,48 @@ func (suo *SubcontrolUpdateOne) RemoveScheduledJobs(c ...*ControlScheduledJob) *
 		ids[i] = c[i].ID
 	}
 	return suo.RemoveScheduledJobIDs(ids...)
+}
+
+// ClearMappedToSubcontrols clears all "mapped_to_subcontrols" edges to the MappedControl entity.
+func (suo *SubcontrolUpdateOne) ClearMappedToSubcontrols() *SubcontrolUpdateOne {
+	suo.mutation.ClearMappedToSubcontrols()
+	return suo
+}
+
+// RemoveMappedToSubcontrolIDs removes the "mapped_to_subcontrols" edge to MappedControl entities by IDs.
+func (suo *SubcontrolUpdateOne) RemoveMappedToSubcontrolIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.RemoveMappedToSubcontrolIDs(ids...)
+	return suo
+}
+
+// RemoveMappedToSubcontrols removes "mapped_to_subcontrols" edges to MappedControl entities.
+func (suo *SubcontrolUpdateOne) RemoveMappedToSubcontrols(m ...*MappedControl) *SubcontrolUpdateOne {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return suo.RemoveMappedToSubcontrolIDs(ids...)
+}
+
+// ClearMappedFromSubcontrols clears all "mapped_from_subcontrols" edges to the MappedControl entity.
+func (suo *SubcontrolUpdateOne) ClearMappedFromSubcontrols() *SubcontrolUpdateOne {
+	suo.mutation.ClearMappedFromSubcontrols()
+	return suo
+}
+
+// RemoveMappedFromSubcontrolIDs removes the "mapped_from_subcontrols" edge to MappedControl entities by IDs.
+func (suo *SubcontrolUpdateOne) RemoveMappedFromSubcontrolIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.RemoveMappedFromSubcontrolIDs(ids...)
+	return suo
+}
+
+// RemoveMappedFromSubcontrols removes "mapped_from_subcontrols" edges to MappedControl entities.
+func (suo *SubcontrolUpdateOne) RemoveMappedFromSubcontrols(m ...*MappedControl) *SubcontrolUpdateOne {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return suo.RemoveMappedFromSubcontrolIDs(ids...)
 }
 
 // Where appends a list predicates to the SubcontrolUpdate builder.
@@ -2949,6 +3115,12 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	}
 	if suo.mutation.SourceCleared() {
 		_spec.ClearField(subcontrol.FieldSource, field.TypeEnum)
+	}
+	if value, ok := suo.mutation.ReferenceFramework(); ok {
+		_spec.SetField(subcontrol.FieldReferenceFramework, field.TypeString, value)
+	}
+	if suo.mutation.ReferenceFrameworkCleared() {
+		_spec.ClearField(subcontrol.FieldReferenceFramework, field.TypeString)
 	}
 	if value, ok := suo.mutation.ControlType(); ok {
 		_spec.SetField(subcontrol.FieldControlType, field.TypeEnum, value)
@@ -3438,54 +3610,6 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if suo.mutation.MappedControlsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.MappedControlsTable,
-			Columns: subcontrol.MappedControlsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.MappedControlSubcontrols
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.RemovedMappedControlsIDs(); len(nodes) > 0 && !suo.mutation.MappedControlsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.MappedControlsTable,
-			Columns: subcontrol.MappedControlsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.MappedControlSubcontrols
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.MappedControlsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.MappedControlsTable,
-			Columns: subcontrol.MappedControlsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = suo.schemaConfig.MappedControlSubcontrols
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if suo.mutation.ControlOwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3670,6 +3794,102 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 			},
 		}
 		edge.Schema = suo.schemaConfig.ControlScheduledJobSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.MappedToSubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedToSubcontrolsTable,
+			Columns: subcontrol.MappedToSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.MappedControlToSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedMappedToSubcontrolsIDs(); len(nodes) > 0 && !suo.mutation.MappedToSubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedToSubcontrolsTable,
+			Columns: subcontrol.MappedToSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.MappedControlToSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.MappedToSubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedToSubcontrolsTable,
+			Columns: subcontrol.MappedToSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.MappedControlToSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.MappedFromSubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedFromSubcontrolsTable,
+			Columns: subcontrol.MappedFromSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.MappedControlFromSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedMappedFromSubcontrolsIDs(); len(nodes) > 0 && !suo.mutation.MappedFromSubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedFromSubcontrolsTable,
+			Columns: subcontrol.MappedFromSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.MappedControlFromSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.MappedFromSubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedFromSubcontrolsTable,
+			Columns: subcontrol.MappedFromSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

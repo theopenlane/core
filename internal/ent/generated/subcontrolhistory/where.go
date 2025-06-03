@@ -126,6 +126,11 @@ func AuditorReferenceID(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldAuditorReferenceID, v))
 }
 
+// ReferenceFramework applies equality check predicate on the "reference_framework" field. It's identical to ReferenceFrameworkEQ.
+func ReferenceFramework(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldReferenceFramework, v))
+}
+
 // Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
 func Category(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldEQ(FieldCategory, v))
@@ -1054,6 +1059,81 @@ func SourceIsNil() predicate.SubcontrolHistory {
 // SourceNotNil applies the NotNil predicate on the "source" field.
 func SourceNotNil() predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldSource))
+}
+
+// ReferenceFrameworkEQ applies the EQ predicate on the "reference_framework" field.
+func ReferenceFrameworkEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEQ(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkNEQ applies the NEQ predicate on the "reference_framework" field.
+func ReferenceFrameworkNEQ(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNEQ(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkIn applies the In predicate on the "reference_framework" field.
+func ReferenceFrameworkIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIn(FieldReferenceFramework, vs...))
+}
+
+// ReferenceFrameworkNotIn applies the NotIn predicate on the "reference_framework" field.
+func ReferenceFrameworkNotIn(vs ...string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotIn(FieldReferenceFramework, vs...))
+}
+
+// ReferenceFrameworkGT applies the GT predicate on the "reference_framework" field.
+func ReferenceFrameworkGT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGT(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkGTE applies the GTE predicate on the "reference_framework" field.
+func ReferenceFrameworkGTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldGTE(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkLT applies the LT predicate on the "reference_framework" field.
+func ReferenceFrameworkLT(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLT(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkLTE applies the LTE predicate on the "reference_framework" field.
+func ReferenceFrameworkLTE(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldLTE(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkContains applies the Contains predicate on the "reference_framework" field.
+func ReferenceFrameworkContains(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContains(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkHasPrefix applies the HasPrefix predicate on the "reference_framework" field.
+func ReferenceFrameworkHasPrefix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasPrefix(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkHasSuffix applies the HasSuffix predicate on the "reference_framework" field.
+func ReferenceFrameworkHasSuffix(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldHasSuffix(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkIsNil applies the IsNil predicate on the "reference_framework" field.
+func ReferenceFrameworkIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldReferenceFramework))
+}
+
+// ReferenceFrameworkNotNil applies the NotNil predicate on the "reference_framework" field.
+func ReferenceFrameworkNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldReferenceFramework))
+}
+
+// ReferenceFrameworkEqualFold applies the EqualFold predicate on the "reference_framework" field.
+func ReferenceFrameworkEqualFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldEqualFold(FieldReferenceFramework, v))
+}
+
+// ReferenceFrameworkContainsFold applies the ContainsFold predicate on the "reference_framework" field.
+func ReferenceFrameworkContainsFold(v string) predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldReferenceFramework, v))
 }
 
 // ControlTypeEQ applies the EQ predicate on the "control_type" field.

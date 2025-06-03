@@ -49,12 +49,18 @@ const (
 	FieldDedicatedDb = "dedicated_db"
 	// EdgeControlCreators holds the string denoting the control_creators edge name in mutations.
 	EdgeControlCreators = "control_creators"
+	// EdgeControlImplementationCreators holds the string denoting the control_implementation_creators edge name in mutations.
+	EdgeControlImplementationCreators = "control_implementation_creators"
 	// EdgeControlObjectiveCreators holds the string denoting the control_objective_creators edge name in mutations.
 	EdgeControlObjectiveCreators = "control_objective_creators"
+	// EdgeEvidenceCreators holds the string denoting the evidence_creators edge name in mutations.
+	EdgeEvidenceCreators = "evidence_creators"
 	// EdgeGroupCreators holds the string denoting the group_creators edge name in mutations.
 	EdgeGroupCreators = "group_creators"
 	// EdgeInternalPolicyCreators holds the string denoting the internal_policy_creators edge name in mutations.
 	EdgeInternalPolicyCreators = "internal_policy_creators"
+	// EdgeMappedControlCreators holds the string denoting the mapped_control_creators edge name in mutations.
+	EdgeMappedControlCreators = "mapped_control_creators"
 	// EdgeNarrativeCreators holds the string denoting the narrative_creators edge name in mutations.
 	EdgeNarrativeCreators = "narrative_creators"
 	// EdgeProcedureCreators holds the string denoting the procedure_creators edge name in mutations.
@@ -63,6 +69,10 @@ const (
 	EdgeProgramCreators = "program_creators"
 	// EdgeRiskCreators holds the string denoting the risk_creators edge name in mutations.
 	EdgeRiskCreators = "risk_creators"
+	// EdgeScheduledJobCreators holds the string denoting the scheduled_job_creators edge name in mutations.
+	EdgeScheduledJobCreators = "scheduled_job_creators"
+	// EdgeStandardCreators holds the string denoting the standard_creators edge name in mutations.
+	EdgeStandardCreators = "standard_creators"
 	// EdgeTemplateCreators holds the string denoting the template_creators edge name in mutations.
 	EdgeTemplateCreators = "template_creators"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
@@ -127,6 +137,8 @@ const (
 	EdgeSubcontrols = "subcontrols"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
 	EdgeControlImplementations = "control_implementations"
+	// EdgeMappedControls holds the string denoting the mapped_controls edge name in mutations.
+	EdgeMappedControls = "mapped_controls"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// EdgeStandards holds the string denoting the standards edge name in mutations.
@@ -162,6 +174,13 @@ const (
 	ControlCreatorsInverseTable = "groups"
 	// ControlCreatorsColumn is the table column denoting the control_creators relation/edge.
 	ControlCreatorsColumn = "organization_control_creators"
+	// ControlImplementationCreatorsTable is the table that holds the control_implementation_creators relation/edge.
+	ControlImplementationCreatorsTable = "groups"
+	// ControlImplementationCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ControlImplementationCreatorsInverseTable = "groups"
+	// ControlImplementationCreatorsColumn is the table column denoting the control_implementation_creators relation/edge.
+	ControlImplementationCreatorsColumn = "organization_control_implementation_creators"
 	// ControlObjectiveCreatorsTable is the table that holds the control_objective_creators relation/edge.
 	ControlObjectiveCreatorsTable = "groups"
 	// ControlObjectiveCreatorsInverseTable is the table name for the Group entity.
@@ -169,6 +188,13 @@ const (
 	ControlObjectiveCreatorsInverseTable = "groups"
 	// ControlObjectiveCreatorsColumn is the table column denoting the control_objective_creators relation/edge.
 	ControlObjectiveCreatorsColumn = "organization_control_objective_creators"
+	// EvidenceCreatorsTable is the table that holds the evidence_creators relation/edge.
+	EvidenceCreatorsTable = "groups"
+	// EvidenceCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EvidenceCreatorsInverseTable = "groups"
+	// EvidenceCreatorsColumn is the table column denoting the evidence_creators relation/edge.
+	EvidenceCreatorsColumn = "organization_evidence_creators"
 	// GroupCreatorsTable is the table that holds the group_creators relation/edge.
 	GroupCreatorsTable = "groups"
 	// GroupCreatorsInverseTable is the table name for the Group entity.
@@ -183,6 +209,13 @@ const (
 	InternalPolicyCreatorsInverseTable = "groups"
 	// InternalPolicyCreatorsColumn is the table column denoting the internal_policy_creators relation/edge.
 	InternalPolicyCreatorsColumn = "organization_internal_policy_creators"
+	// MappedControlCreatorsTable is the table that holds the mapped_control_creators relation/edge.
+	MappedControlCreatorsTable = "groups"
+	// MappedControlCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	MappedControlCreatorsInverseTable = "groups"
+	// MappedControlCreatorsColumn is the table column denoting the mapped_control_creators relation/edge.
+	MappedControlCreatorsColumn = "organization_mapped_control_creators"
 	// NarrativeCreatorsTable is the table that holds the narrative_creators relation/edge.
 	NarrativeCreatorsTable = "groups"
 	// NarrativeCreatorsInverseTable is the table name for the Group entity.
@@ -211,6 +244,20 @@ const (
 	RiskCreatorsInverseTable = "groups"
 	// RiskCreatorsColumn is the table column denoting the risk_creators relation/edge.
 	RiskCreatorsColumn = "organization_risk_creators"
+	// ScheduledJobCreatorsTable is the table that holds the scheduled_job_creators relation/edge.
+	ScheduledJobCreatorsTable = "groups"
+	// ScheduledJobCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ScheduledJobCreatorsInverseTable = "groups"
+	// ScheduledJobCreatorsColumn is the table column denoting the scheduled_job_creators relation/edge.
+	ScheduledJobCreatorsColumn = "organization_scheduled_job_creators"
+	// StandardCreatorsTable is the table that holds the standard_creators relation/edge.
+	StandardCreatorsTable = "groups"
+	// StandardCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	StandardCreatorsInverseTable = "groups"
+	// StandardCreatorsColumn is the table column denoting the standard_creators relation/edge.
+	StandardCreatorsColumn = "organization_standard_creators"
 	// TemplateCreatorsTable is the table that holds the template_creators relation/edge.
 	TemplateCreatorsTable = "groups"
 	// TemplateCreatorsInverseTable is the table name for the Group entity.
@@ -421,6 +468,13 @@ const (
 	ControlImplementationsInverseTable = "control_implementations"
 	// ControlImplementationsColumn is the table column denoting the control_implementations relation/edge.
 	ControlImplementationsColumn = "owner_id"
+	// MappedControlsTable is the table that holds the mapped_controls relation/edge.
+	MappedControlsTable = "mapped_controls"
+	// MappedControlsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedControlsInverseTable = "mapped_controls"
+	// MappedControlsColumn is the table column denoting the mapped_controls relation/edge.
+	MappedControlsColumn = "owner_id"
 	// EvidenceTable is the table that holds the evidence relation/edge.
 	EvidenceTable = "evidences"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -566,7 +620,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [15]ent.Hook
+	Hooks        [20]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -694,6 +748,20 @@ func ByControlCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByControlImplementationCreatorsCount orders the results by control_implementation_creators count.
+func ByControlImplementationCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlImplementationCreatorsStep(), opts...)
+	}
+}
+
+// ByControlImplementationCreators orders the results by control_implementation_creators terms.
+func ByControlImplementationCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlImplementationCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlObjectiveCreatorsCount orders the results by control_objective_creators count.
 func ByControlObjectiveCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -705,6 +773,20 @@ func ByControlObjectiveCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByControlObjectiveCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newControlObjectiveCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEvidenceCreatorsCount orders the results by evidence_creators count.
+func ByEvidenceCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEvidenceCreatorsStep(), opts...)
+	}
+}
+
+// ByEvidenceCreators orders the results by evidence_creators terms.
+func ByEvidenceCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -733,6 +815,20 @@ func ByInternalPolicyCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByInternalPolicyCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMappedControlCreatorsCount orders the results by mapped_control_creators count.
+func ByMappedControlCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMappedControlCreatorsStep(), opts...)
+	}
+}
+
+// ByMappedControlCreators orders the results by mapped_control_creators terms.
+func ByMappedControlCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedControlCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -789,6 +885,34 @@ func ByRiskCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByRiskCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newRiskCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByScheduledJobCreatorsCount orders the results by scheduled_job_creators count.
+func ByScheduledJobCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScheduledJobCreatorsStep(), opts...)
+	}
+}
+
+// ByScheduledJobCreators orders the results by scheduled_job_creators terms.
+func ByScheduledJobCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScheduledJobCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByStandardCreatorsCount orders the results by standard_creators count.
+func ByStandardCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newStandardCreatorsStep(), opts...)
+	}
+}
+
+// ByStandardCreators orders the results by standard_creators terms.
+func ByStandardCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStandardCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1219,6 +1343,20 @@ func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 	}
 }
 
+// ByMappedControlsCount orders the results by mapped_controls count.
+func ByMappedControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMappedControlsStep(), opts...)
+	}
+}
+
+// ByMappedControls orders the results by mapped_controls terms.
+func ByMappedControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEvidenceCount orders the results by evidence count.
 func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1407,11 +1545,25 @@ func newControlCreatorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ControlCreatorsTable, ControlCreatorsColumn),
 	)
 }
+func newControlImplementationCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlImplementationCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlImplementationCreatorsTable, ControlImplementationCreatorsColumn),
+	)
+}
 func newControlObjectiveCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlObjectiveCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ControlObjectiveCreatorsTable, ControlObjectiveCreatorsColumn),
+	)
+}
+func newEvidenceCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EvidenceCreatorsTable, EvidenceCreatorsColumn),
 	)
 }
 func newGroupCreatorsStep() *sqlgraph.Step {
@@ -1426,6 +1578,13 @@ func newInternalPolicyCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalPolicyCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, InternalPolicyCreatorsTable, InternalPolicyCreatorsColumn),
+	)
+}
+func newMappedControlCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MappedControlCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MappedControlCreatorsTable, MappedControlCreatorsColumn),
 	)
 }
 func newNarrativeCreatorsStep() *sqlgraph.Step {
@@ -1454,6 +1613,20 @@ func newRiskCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RiskCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, RiskCreatorsTable, RiskCreatorsColumn),
+	)
+}
+func newScheduledJobCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScheduledJobCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobCreatorsTable, ScheduledJobCreatorsColumn),
+	)
+}
+func newStandardCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StandardCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, StandardCreatorsTable, StandardCreatorsColumn),
 	)
 }
 func newTemplateCreatorsStep() *sqlgraph.Step {
@@ -1678,6 +1851,13 @@ func newControlImplementationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ControlImplementationsTable, ControlImplementationsColumn),
+	)
+}
+func newMappedControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MappedControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, MappedControlsTable, MappedControlsColumn),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {

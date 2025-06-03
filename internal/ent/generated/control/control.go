@@ -44,6 +44,8 @@ const (
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
+	// FieldReferenceFramework holds the string denoting the reference_framework field in the database.
+	FieldReferenceFramework = "reference_framework"
 	// FieldControlType holds the string denoting the control_type field in the database.
 	FieldControlType = "control_type"
 	// FieldCategory holds the string denoting the category field in the database.
@@ -92,8 +94,6 @@ const (
 	EdgeProcedures = "procedures"
 	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
 	EdgeInternalPolicies = "internal_policies"
-	// EdgeMappedControls holds the string denoting the mapped_controls edge name in mutations.
-	EdgeMappedControls = "mapped_controls"
 	// EdgeControlOwner holds the string denoting the control_owner edge name in mutations.
 	EdgeControlOwner = "control_owner"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
@@ -104,8 +104,6 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
-	// EdgeViewers holds the string denoting the viewers edge name in mutations.
-	EdgeViewers = "viewers"
 	// EdgeStandard holds the string denoting the standard edge name in mutations.
 	EdgeStandard = "standard"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
@@ -116,6 +114,10 @@ const (
 	EdgeSubcontrols = "subcontrols"
 	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
 	EdgeScheduledJobs = "scheduled_jobs"
+	// EdgeMappedToControls holds the string denoting the mapped_to_controls edge name in mutations.
+	EdgeMappedToControls = "mapped_to_controls"
+	// EdgeMappedFromControls holds the string denoting the mapped_from_controls edge name in mutations.
+	EdgeMappedFromControls = "mapped_from_controls"
 	// Table holds the table name of the control in the database.
 	Table = "controls"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
@@ -158,11 +160,6 @@ const (
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
 	InternalPoliciesInverseTable = "internal_policies"
-	// MappedControlsTable is the table that holds the mapped_controls relation/edge. The primary key declared below.
-	MappedControlsTable = "mapped_control_controls"
-	// MappedControlsInverseTable is the table name for the MappedControl entity.
-	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
-	MappedControlsInverseTable = "mapped_controls"
 	// ControlOwnerTable is the table that holds the control_owner relation/edge.
 	ControlOwnerTable = "controls"
 	// ControlOwnerInverseTable is the table name for the Group entity.
@@ -194,11 +191,6 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
-	// ViewersTable is the table that holds the viewers relation/edge. The primary key declared below.
-	ViewersTable = "control_viewers"
-	// ViewersInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	ViewersInverseTable = "groups"
 	// StandardTable is the table that holds the standard relation/edge.
 	StandardTable = "controls"
 	// StandardInverseTable is the table name for the Standard entity.
@@ -228,6 +220,16 @@ const (
 	// ScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
 	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
 	ScheduledJobsInverseTable = "control_scheduled_jobs"
+	// MappedToControlsTable is the table that holds the mapped_to_controls relation/edge. The primary key declared below.
+	MappedToControlsTable = "mapped_control_to_controls"
+	// MappedToControlsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedToControlsInverseTable = "mapped_controls"
+	// MappedFromControlsTable is the table that holds the mapped_from_controls relation/edge. The primary key declared below.
+	MappedFromControlsTable = "mapped_control_from_controls"
+	// MappedFromControlsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedFromControlsInverseTable = "mapped_controls"
 )
 
 // Columns holds all SQL columns for control fields.
@@ -246,6 +248,7 @@ var Columns = []string{
 	FieldAuditorReferenceID,
 	FieldStatus,
 	FieldSource,
+	FieldReferenceFramework,
 	FieldControlType,
 	FieldCategory,
 	FieldCategoryID,
@@ -289,18 +292,12 @@ var (
 	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
 	// primary key for the internal_policies relation (M2M).
 	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "control_id"}
-	// MappedControlsPrimaryKey and MappedControlsColumn2 are the table columns denoting the
-	// primary key for the mapped_controls relation (M2M).
-	MappedControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
 	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the blocked_groups relation (M2M).
 	BlockedGroupsPrimaryKey = []string{"control_id", "group_id"}
 	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
 	// primary key for the editors relation (M2M).
 	EditorsPrimaryKey = []string{"control_id", "group_id"}
-	// ViewersPrimaryKey and ViewersColumn2 are the table columns denoting the
-	// primary key for the viewers relation (M2M).
-	ViewersPrimaryKey = []string{"control_id", "group_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "control_id"}
@@ -310,6 +307,12 @@ var (
 	// ScheduledJobsPrimaryKey and ScheduledJobsColumn2 are the table columns denoting the
 	// primary key for the scheduled_jobs relation (M2M).
 	ScheduledJobsPrimaryKey = []string{"control_scheduled_job_id", "control_id"}
+	// MappedToControlsPrimaryKey and MappedToControlsColumn2 are the table columns denoting the
+	// primary key for the mapped_to_controls relation (M2M).
+	MappedToControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
+	// MappedFromControlsPrimaryKey and MappedFromControlsColumn2 are the table columns denoting the
+	// primary key for the mapped_from_controls relation (M2M).
+	MappedFromControlsPrimaryKey = []string{"mapped_control_id", "control_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -328,7 +331,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [11]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -451,6 +454,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByReferenceFramework orders the results by the reference_framework field.
+func ByReferenceFramework(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReferenceFramework, opts...).ToFunc()
 }
 
 // ByControlType orders the results by the control_type field.
@@ -610,20 +618,6 @@ func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
-// ByMappedControlsCount orders the results by mapped_controls count.
-func ByMappedControlsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newMappedControlsStep(), opts...)
-	}
-}
-
-// ByMappedControls orders the results by mapped_controls terms.
-func ByMappedControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newMappedControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByControlOwnerField orders the results by control_owner field.
 func ByControlOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -670,20 +664,6 @@ func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByViewersCount orders the results by viewers count.
-func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newViewersStep(), opts...)
-	}
-}
-
-// ByViewers orders the results by viewers terms.
-func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -749,6 +729,34 @@ func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMappedToControlsCount orders the results by mapped_to_controls count.
+func ByMappedToControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMappedToControlsStep(), opts...)
+	}
+}
+
+// ByMappedToControls orders the results by mapped_to_controls terms.
+func ByMappedToControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedToControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMappedFromControlsCount orders the results by mapped_from_controls count.
+func ByMappedFromControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMappedFromControlsStep(), opts...)
+	}
+}
+
+// ByMappedFromControls orders the results by mapped_from_controls terms.
+func ByMappedFromControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedFromControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newEvidenceStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -805,13 +813,6 @@ func newInternalPoliciesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
-func newMappedControlsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(MappedControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, MappedControlsTable, MappedControlsPrimaryKey...),
-	)
-}
 func newControlOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -847,13 +848,6 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 	)
 }
-func newViewersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ViewersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
-	)
-}
 func newStandardStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -887,6 +881,20 @@ func newScheduledJobsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ScheduledJobsTable, ScheduledJobsPrimaryKey...),
+	)
+}
+func newMappedToControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MappedToControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MappedToControlsTable, MappedToControlsPrimaryKey...),
+	)
+}
+func newMappedFromControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MappedFromControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MappedFromControlsTable, MappedFromControlsPrimaryKey...),
 	)
 }
 

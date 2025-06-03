@@ -49,11 +49,6 @@ func (m ControlMixin) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(c, ActionPlan{}),
 		defaultEdgeToWithPagination(c, Procedure{}),
 		defaultEdgeFromWithPagination(c, InternalPolicy{}),
-		edgeFromWithPagination(&edgeDefinition{
-			fromSchema: c,
-			edgeSchema: MappedControl{},
-			comment:    "mapped subcontrols that have a relation to another control or subcontrol",
-		}),
 		// owner is the user who is responsible for the control
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: c,
@@ -128,6 +123,9 @@ var controlFields = []ent.Field{
 		).
 		Default(enums.ControlSourceUserDefined.String()).
 		Comment("source of the control, e.g. framework, template, custom, etc."),
+	field.String("reference_framework").
+		Comment("the reference framework for the control if it came from a standard").
+		Optional(),
 	field.Enum("control_type").
 		GoType(enums.ControlType("")).
 		Default(enums.ControlTypePreventative.String()).

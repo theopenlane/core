@@ -20,16 +20,18 @@ tests:
           audit_log_viewer: true
           can_invite_members: true
           can_invite_admins: true
-          can_create_standard: true
           can_create_control: true
           can_create_subcontrol: true
           can_create_control_objective: true
           can_create_group: true
           can_create_internal_policy: true
+          can_create_mapped_control: true
           can_create_narrative: true
           can_create_procedure: true
           can_create_program: true
           can_create_risk: true
+          can_create_scheduled_job: true
+          can_create_standard: true
           can_create_template: true
           can_create_evidence: true
       - user: user:ulid-of-member
@@ -46,16 +48,18 @@ tests:
           audit_log_viewer: false
           can_invite_members: true
           can_invite_admins: false
-          can_create_standard: false
           can_create_control: false
           can_create_subcontrol: false
           can_create_control_objective: false
           can_create_group: false
           can_create_internal_policy: false
+          can_create_mapped_control: false
           can_create_narrative: false
           can_create_procedure: false
           can_create_program: false
           can_create_risk: false
+          can_create_scheduled_job: false
+          can_create_standard: false
           can_create_template: false
           can_create_evidence: true # group tuple set to allow
       - user: service:ulid-of-service-editor
@@ -76,10 +80,12 @@ tests:
           can_create_control_objective: true
           can_create_group: true
           can_create_internal_policy: true
+          can_create_mapped_control: true
           can_create_narrative: true
           can_create_procedure: true
           can_create_program: true
           can_create_risk: true
+          can_create_scheduled_job: true
           can_create_template: true
           can_create_evidence: true
       - user: service:ulid-of-service-viewer
@@ -96,6 +102,7 @@ tests:
           can_invite_admins: false
           can_create_standard: false
           can_create_control: false
+          can_create_mapped_control: false
           can_create_subcontrol: false
           can_create_control_objective: false
           can_create_group: false
@@ -104,6 +111,7 @@ tests:
           can_create_procedure: false
           can_create_program: false
           can_create_risk: false
+          can_create_scheduled_job: false
           can_create_template: false
           can_create_evidence: false
       - user: user:ulid-of-admin
@@ -120,6 +128,15 @@ tests:
           audit_log_viewer: false
           can_invite_members: true
           can_invite_admins: true
+          can_create_control: true
+          can_create_subcontrol: true
+          can_create_procedure: true
+          can_create_internal_policy: true
+          can_create_narrative: true
+          can_create_risk: true
+          can_create_standard: true
+          can_create_scheduled_job: true
+          can_create_evidence: true
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
         context:
@@ -472,19 +489,19 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:ulid-control-viewer # control viewer has access task 2
+      - user: user:ulid-of-member-3 # member has access task 2 via control association
         object: task:task-2
         assertions:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:ulid-control-viewer # control viewer has no access to task 1
+      - user: user:ulid-of-member-3 # member has no access task 1
         object: task:task-1
         assertions:
           can_view: false
           can_edit: false
           can_delete: false
-      - user: user:ulid-control-viewer # control viewer has no access to note 1, associated with task 1
+      - user: user:ulid-of-member-3 # member has has no access to note 1, associated with task 1
         object: note:note-1
         assertions:
           can_view: false
@@ -566,6 +583,14 @@ tests:
           can_delete: false
       - user: user:ulid-auditor # auditor of the program should have view permissions
         object: internal_policy:internal_policy-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member
+        object: internal_policy:internal_policy-1
+        context:
+          email_domain: "example.com"
         assertions:
           can_view: true
           can_edit: false
@@ -676,18 +701,18 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+      - user: user:ulid-of-member-2 # member of the parent organization that has access to the control
+        object: control:control-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
       - user: user:ulid-group-control-1-editor
         object: control:control-1
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-group-control-1-viewer
-        object: control:control-1
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
       - user: user:ulid-group-control-1-blocked
         object: control:control-1
         assertions:
@@ -706,10 +731,10 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:ulid-of-another-member # no access to the control
+      - user: user:ulid-of-member-3 # access to the control from the parent control
         object: subcontrol:subcontrol-1
         assertions:
-          can_view: false
+          can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-group-control-1-editor
@@ -718,12 +743,6 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-group-control-1-viewer
-        object: subcontrol:subcontrol-1
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
       - user: user:ulid-group-control-1-blocked
         object: subcontrol:subcontrol-1
         assertions:
@@ -742,10 +761,10 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:ulid-of-another-member # no access to the control objective
+      - user: user:ulid-of-member-3 # access to the control objective from the parent control
         object: control_objective:control_objective-1
         assertions:
-          can_view: false
+          can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-group-control-1-editor
@@ -754,12 +773,6 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-group-control-1-viewer
-        object: control_objective:control_objective-1
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
       - user: user:ulid-group-control-1-blocked
         object: control_objective:control_objective-1
         assertions:
@@ -790,12 +803,6 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-group-control-1-viewer
-        object: control_objective:control_objective-2
-        assertions:
-          can_view: true
-          can_edit: false
-          can_delete: false
       - user: user:ulid-group-control-1-blocked
         object: control_objective:control_objective-2
         assertions:
@@ -858,6 +865,36 @@ tests:
           can_delete: false
       - user: user:ulid-group-control-owner-1
         object: control:control-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner
+        object: mapped_control:mapped_control-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner
+        object: mapped_control:mapped_control-2
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member
+        object: mapped_control:mapped_control-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org should have no access
+        object: mapped_control:mapped_control-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-group-mapped-control-1-editor
+        object: mapped_control:mapped_control-1
         assertions:
           can_view: true
           can_edit: true

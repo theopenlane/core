@@ -44,6 +44,8 @@ const (
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
+	// FieldReferenceFramework holds the string denoting the reference_framework field in the database.
+	FieldReferenceFramework = "reference_framework"
 	// FieldControlType holds the string denoting the control_type field in the database.
 	FieldControlType = "control_type"
 	// FieldCategory holds the string denoting the category field in the database.
@@ -92,8 +94,6 @@ const (
 	EdgeProcedures = "procedures"
 	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
 	EdgeInternalPolicies = "internal_policies"
-	// EdgeMappedControls holds the string denoting the mapped_controls edge name in mutations.
-	EdgeMappedControls = "mapped_controls"
 	// EdgeControlOwner holds the string denoting the control_owner edge name in mutations.
 	EdgeControlOwner = "control_owner"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
@@ -106,6 +106,10 @@ const (
 	EdgeControlImplementations = "control_implementations"
 	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
 	EdgeScheduledJobs = "scheduled_jobs"
+	// EdgeMappedToSubcontrols holds the string denoting the mapped_to_subcontrols edge name in mutations.
+	EdgeMappedToSubcontrols = "mapped_to_subcontrols"
+	// EdgeMappedFromSubcontrols holds the string denoting the mapped_from_subcontrols edge name in mutations.
+	EdgeMappedFromSubcontrols = "mapped_from_subcontrols"
 	// Table holds the table name of the subcontrol in the database.
 	Table = "subcontrols"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
@@ -152,11 +156,6 @@ const (
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
 	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
 	InternalPoliciesInverseTable = "internal_policies"
-	// MappedControlsTable is the table that holds the mapped_controls relation/edge. The primary key declared below.
-	MappedControlsTable = "mapped_control_subcontrols"
-	// MappedControlsInverseTable is the table name for the MappedControl entity.
-	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
-	MappedControlsInverseTable = "mapped_controls"
 	// ControlOwnerTable is the table that holds the control_owner relation/edge.
 	ControlOwnerTable = "subcontrols"
 	// ControlOwnerInverseTable is the table name for the Group entity.
@@ -195,6 +194,16 @@ const (
 	// ScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
 	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
 	ScheduledJobsInverseTable = "control_scheduled_jobs"
+	// MappedToSubcontrolsTable is the table that holds the mapped_to_subcontrols relation/edge. The primary key declared below.
+	MappedToSubcontrolsTable = "mapped_control_to_subcontrols"
+	// MappedToSubcontrolsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedToSubcontrolsInverseTable = "mapped_controls"
+	// MappedFromSubcontrolsTable is the table that holds the mapped_from_subcontrols relation/edge. The primary key declared below.
+	MappedFromSubcontrolsTable = "mapped_control_from_subcontrols"
+	// MappedFromSubcontrolsInverseTable is the table name for the MappedControl entity.
+	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
+	MappedFromSubcontrolsInverseTable = "mapped_controls"
 )
 
 // Columns holds all SQL columns for subcontrol fields.
@@ -213,6 +222,7 @@ var Columns = []string{
 	FieldAuditorReferenceID,
 	FieldStatus,
 	FieldSource,
+	FieldReferenceFramework,
 	FieldControlType,
 	FieldCategory,
 	FieldCategoryID,
@@ -257,15 +267,18 @@ var (
 	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
 	// primary key for the internal_policies relation (M2M).
 	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "subcontrol_id"}
-	// MappedControlsPrimaryKey and MappedControlsColumn2 are the table columns denoting the
-	// primary key for the mapped_controls relation (M2M).
-	MappedControlsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
 	// ControlImplementationsPrimaryKey and ControlImplementationsColumn2 are the table columns denoting the
 	// primary key for the control_implementations relation (M2M).
 	ControlImplementationsPrimaryKey = []string{"subcontrol_id", "control_implementation_id"}
 	// ScheduledJobsPrimaryKey and ScheduledJobsColumn2 are the table columns denoting the
 	// primary key for the scheduled_jobs relation (M2M).
 	ScheduledJobsPrimaryKey = []string{"control_scheduled_job_id", "subcontrol_id"}
+	// MappedToSubcontrolsPrimaryKey and MappedToSubcontrolsColumn2 are the table columns denoting the
+	// primary key for the mapped_to_subcontrols relation (M2M).
+	MappedToSubcontrolsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
+	// MappedFromSubcontrolsPrimaryKey and MappedFromSubcontrolsColumn2 are the table columns denoting the
+	// primary key for the mapped_from_subcontrols relation (M2M).
+	MappedFromSubcontrolsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -414,6 +427,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByReferenceFramework orders the results by the reference_framework field.
+func ByReferenceFramework(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReferenceFramework, opts...).ToFunc()
 }
 
 // ByControlType orders the results by the control_type field.
@@ -573,20 +591,6 @@ func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
-// ByMappedControlsCount orders the results by mapped_controls count.
-func ByMappedControlsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newMappedControlsStep(), opts...)
-	}
-}
-
-// ByMappedControls orders the results by mapped_controls terms.
-func ByMappedControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newMappedControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByControlOwnerField orders the results by control_owner field.
 func ByControlOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -640,6 +644,34 @@ func ByScheduledJobsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMappedToSubcontrolsCount orders the results by mapped_to_subcontrols count.
+func ByMappedToSubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMappedToSubcontrolsStep(), opts...)
+	}
+}
+
+// ByMappedToSubcontrols orders the results by mapped_to_subcontrols terms.
+func ByMappedToSubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedToSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByMappedFromSubcontrolsCount orders the results by mapped_from_subcontrols count.
+func ByMappedFromSubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMappedFromSubcontrolsStep(), opts...)
+	}
+}
+
+// ByMappedFromSubcontrols orders the results by mapped_from_subcontrols terms.
+func ByMappedFromSubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMappedFromSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newEvidenceStep() *sqlgraph.Step {
@@ -698,13 +730,6 @@ func newInternalPoliciesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
-func newMappedControlsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(MappedControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, MappedControlsTable, MappedControlsPrimaryKey...),
-	)
-}
 func newControlOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -745,6 +770,20 @@ func newScheduledJobsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ScheduledJobsTable, ScheduledJobsPrimaryKey...),
+	)
+}
+func newMappedToSubcontrolsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MappedToSubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MappedToSubcontrolsTable, MappedToSubcontrolsPrimaryKey...),
+	)
+}
+func newMappedFromSubcontrolsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MappedFromSubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MappedFromSubcontrolsTable, MappedFromSubcontrolsPrimaryKey...),
 	)
 }
 

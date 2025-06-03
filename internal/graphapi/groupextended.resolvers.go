@@ -28,8 +28,16 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 	res, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(obj.ID)).
 		// Control permissions
 		WithControlEditors().
-		WithControlViewers().
 		WithControlBlockedGroups().
+
+		// Control Mapped permissions
+		WithMappedControlEditors().
+		WithMappedControlBlockedGroups().
+
+		// Control Implementation permissions
+		WithControlImplementationViewers().
+		WithControlImplementationEditors().
+		WithControlImplementationBlockedGroups().
 
 		// Control Objective permissions
 		WithControlObjectiveEditors().
@@ -64,9 +72,15 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 	}
 
 	for _, r := range res.Edges {
-		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlViewers, generated.TypeControl, enums.Viewer)...)
 		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlEditors, generated.TypeControl, enums.Editor)...)
 		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlBlockedGroups, generated.TypeControl, enums.Blocked)...)
+
+		perms = append(perms, getGroupPermissions(r.Node.Edges.MappedControlEditors, generated.TypeMappedControl, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.MappedControlBlockedGroups, generated.TypeMappedControl, enums.Blocked)...)
+
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlImplementationViewers, generated.TypeControlImplementation, enums.Viewer)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlImplementationEditors, generated.TypeControlImplementation, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlImplementationBlockedGroups, generated.TypeControlImplementation, enums.Blocked)...)
 
 		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlObjectiveViewers, generated.TypeControlObjective, enums.Viewer)...)
 		perms = append(perms, getGroupPermissions(r.Node.Edges.ControlObjectiveEditors, generated.TypeControlObjective, enums.Editor)...)
@@ -171,12 +185,28 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 			groupInput.ControlEditorIDs = append(groupInput.ControlEditorIDs, controlEditor.ID)
 		}
 
-		for _, controlViewer := range groupWithPermissions.Edges.ControlViewers {
-			groupInput.ControlViewerIDs = append(groupInput.ControlViewerIDs, controlViewer.ID)
-		}
-
 		for _, controlBlockedGroup := range groupWithPermissions.Edges.ControlBlockedGroups {
 			groupInput.ControlBlockedGroupIDs = append(groupInput.ControlBlockedGroupIDs, controlBlockedGroup.ID)
+		}
+
+		for _, mappedControlEditor := range groupWithPermissions.Edges.MappedControlEditors {
+			groupInput.MappedControlEditorIDs = append(groupInput.MappedControlEditorIDs, mappedControlEditor.ID)
+		}
+
+		for _, mappedControlBlockedGroup := range groupWithPermissions.Edges.MappedControlBlockedGroups {
+			groupInput.MappedControlBlockedGroupIDs = append(groupInput.MappedControlBlockedGroupIDs, mappedControlBlockedGroup.ID)
+		}
+
+		for _, controlImplementationViewer := range groupWithPermissions.Edges.ControlImplementationViewers {
+			groupInput.ControlImplementationViewerIDs = append(groupInput.ControlImplementationViewerIDs, controlImplementationViewer.ID)
+		}
+
+		for _, controlImplementationEditor := range groupWithPermissions.Edges.ControlImplementationEditors {
+			groupInput.ControlImplementationEditorIDs = append(groupInput.ControlImplementationEditorIDs, controlImplementationEditor.ID)
+		}
+
+		for _, controlImplementationBlockedGroup := range groupWithPermissions.Edges.ControlImplementationBlockedGroups {
+			groupInput.ControlImplementationBlockedGroupIDs = append(groupInput.ControlImplementationBlockedGroupIDs, controlImplementationBlockedGroup.ID)
 		}
 
 		for _, controlObjectiveEditor := range groupWithPermissions.Edges.ControlObjectiveEditors {
@@ -398,12 +428,28 @@ func (r *updateGroupInputResolver) InheritGroupPermissions(ctx context.Context, 
 		obj.AddControlEditorIDs = append(obj.AddControlEditorIDs, controlEditor.ID)
 	}
 
-	for _, controlViewer := range groupWithPermissions.Edges.ControlViewers {
-		obj.AddControlViewerIDs = append(obj.AddControlViewerIDs, controlViewer.ID)
-	}
-
 	for _, controlBlockedGroup := range groupWithPermissions.Edges.ControlBlockedGroups {
 		obj.AddControlBlockedGroupIDs = append(obj.AddControlBlockedGroupIDs, controlBlockedGroup.ID)
+	}
+
+	for _, mappedControlEditor := range groupWithPermissions.Edges.MappedControlEditors {
+		obj.AddMappedControlEditorIDs = append(obj.AddMappedControlEditorIDs, mappedControlEditor.ID)
+	}
+
+	for _, mappedControlBlockedGroup := range groupWithPermissions.Edges.MappedControlBlockedGroups {
+		obj.AddMappedControlBlockedGroupIDs = append(obj.AddMappedControlBlockedGroupIDs, mappedControlBlockedGroup.ID)
+	}
+
+	for _, controlImplementationViewer := range groupWithPermissions.Edges.ControlImplementationViewers {
+		obj.AddControlImplementationViewerIDs = append(obj.AddControlImplementationViewerIDs, controlImplementationViewer.ID)
+	}
+
+	for _, controlImplementationEditor := range groupWithPermissions.Edges.ControlImplementationEditors {
+		obj.AddControlImplementationEditorIDs = append(obj.AddControlImplementationEditorIDs, controlImplementationEditor.ID)
+	}
+
+	for _, controlImplementationBlockedGroup := range groupWithPermissions.Edges.ControlImplementationBlockedGroups {
+		obj.AddControlImplementationBlockedGroupIDs = append(obj.AddControlImplementationBlockedGroupIDs, controlImplementationBlockedGroup.ID)
 	}
 
 	for _, controlObjectiveEditor := range groupWithPermissions.Edges.ControlObjectiveEditors {

@@ -689,11 +689,6 @@ func TestMutationUpdateGroup(t *testing.T) {
 
 	assert.Assert(t, is.Nil(programResp))
 
-	// ensure user cannot get access to the control
-	controlResp, err := suite.client.api.GetControlByID(gmCtx, control.ID)
-	assert.ErrorContains(t, err, notFoundErrorMsg)
-	assert.Assert(t, is.Nil(controlResp))
-
 	// access to procedures is granted by default in the org
 	procedureResp, err := suite.client.api.GetProcedureByID(gmCtx, procedure.ID)
 	assert.NilError(t, err)
@@ -1186,8 +1181,8 @@ func TestManagedGroups(t *testing.T) {
 	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	input = openlaneclient.UpdateGroupInput{
-		AddProgramEditorIDs:              []string{program.ID},
-		AddControlViewerIDs:              []string{control.ID},
+		AddProgramViewerIDs:              []string{program.ID},
+		AddControlEditorIDs:              []string{control.ID},
 		AddInternalPolicyBlockedGroupIDs: []string{policy.ID},
 	}
 
@@ -1199,8 +1194,8 @@ func TestManagedGroups(t *testing.T) {
 
 	// make sure I can also remove them
 	input = openlaneclient.UpdateGroupInput{
-		RemoveProgramEditorIDs:              []string{program.ID},
-		RemoveControlViewerIDs:              []string{control.ID},
+		RemoveProgramViewerIDs:              []string{program.ID},
+		RemoveControlEditorIDs:              []string{control.ID},
 		RemoveInternalPolicyBlockedGroupIDs: []string{policy.ID},
 	}
 

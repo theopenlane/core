@@ -5041,6 +5041,23 @@ type ControlWhereInput struct {
 	SourceIsNil  bool                  `json:"sourceIsNil,omitempty"`
 	SourceNotNil bool                  `json:"sourceNotNil,omitempty"`
 
+	// "reference_framework" field predicates.
+	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
+	ReferenceFrameworkNEQ          *string  `json:"referenceFrameworkNEQ,omitempty"`
+	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
+	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
+	ReferenceFrameworkGT           *string  `json:"referenceFrameworkGT,omitempty"`
+	ReferenceFrameworkGTE          *string  `json:"referenceFrameworkGTE,omitempty"`
+	ReferenceFrameworkLT           *string  `json:"referenceFrameworkLT,omitempty"`
+	ReferenceFrameworkLTE          *string  `json:"referenceFrameworkLTE,omitempty"`
+	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
+	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
+	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
+	ReferenceFrameworkIsNil        bool     `json:"referenceFrameworkIsNil,omitempty"`
+	ReferenceFrameworkNotNil       bool     `json:"referenceFrameworkNotNil,omitempty"`
+	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
+	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+
 	// "control_type" field predicates.
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNEQ    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -5215,10 +5232,6 @@ type ControlWhereInput struct {
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 
-	// "mapped_controls" edge predicates.
-	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
-	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
-
 	// "control_owner" edge predicates.
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
 	HasControlOwnerWith []*GroupWhereInput `json:"hasControlOwnerWith,omitempty"`
@@ -5238,10 +5251,6 @@ type ControlWhereInput struct {
 	// "editors" edge predicates.
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-
-	// "viewers" edge predicates.
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 
 	// "standard" edge predicates.
 	HasStandard     *bool                 `json:"hasStandard,omitempty"`
@@ -5724,6 +5733,51 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if i.SourceNotNil {
 		predicates = append(predicates, control.SourceNotNil())
+	}
+	if i.ReferenceFramework != nil {
+		predicates = append(predicates, control.ReferenceFrameworkEQ(*i.ReferenceFramework))
+	}
+	if i.ReferenceFrameworkNEQ != nil {
+		predicates = append(predicates, control.ReferenceFrameworkNEQ(*i.ReferenceFrameworkNEQ))
+	}
+	if len(i.ReferenceFrameworkIn) > 0 {
+		predicates = append(predicates, control.ReferenceFrameworkIn(i.ReferenceFrameworkIn...))
+	}
+	if len(i.ReferenceFrameworkNotIn) > 0 {
+		predicates = append(predicates, control.ReferenceFrameworkNotIn(i.ReferenceFrameworkNotIn...))
+	}
+	if i.ReferenceFrameworkGT != nil {
+		predicates = append(predicates, control.ReferenceFrameworkGT(*i.ReferenceFrameworkGT))
+	}
+	if i.ReferenceFrameworkGTE != nil {
+		predicates = append(predicates, control.ReferenceFrameworkGTE(*i.ReferenceFrameworkGTE))
+	}
+	if i.ReferenceFrameworkLT != nil {
+		predicates = append(predicates, control.ReferenceFrameworkLT(*i.ReferenceFrameworkLT))
+	}
+	if i.ReferenceFrameworkLTE != nil {
+		predicates = append(predicates, control.ReferenceFrameworkLTE(*i.ReferenceFrameworkLTE))
+	}
+	if i.ReferenceFrameworkContains != nil {
+		predicates = append(predicates, control.ReferenceFrameworkContains(*i.ReferenceFrameworkContains))
+	}
+	if i.ReferenceFrameworkHasPrefix != nil {
+		predicates = append(predicates, control.ReferenceFrameworkHasPrefix(*i.ReferenceFrameworkHasPrefix))
+	}
+	if i.ReferenceFrameworkHasSuffix != nil {
+		predicates = append(predicates, control.ReferenceFrameworkHasSuffix(*i.ReferenceFrameworkHasSuffix))
+	}
+	if i.ReferenceFrameworkIsNil {
+		predicates = append(predicates, control.ReferenceFrameworkIsNil())
+	}
+	if i.ReferenceFrameworkNotNil {
+		predicates = append(predicates, control.ReferenceFrameworkNotNil())
+	}
+	if i.ReferenceFrameworkEqualFold != nil {
+		predicates = append(predicates, control.ReferenceFrameworkEqualFold(*i.ReferenceFrameworkEqualFold))
+	}
+	if i.ReferenceFrameworkContainsFold != nil {
+		predicates = append(predicates, control.ReferenceFrameworkContainsFold(*i.ReferenceFrameworkContainsFold))
 	}
 	if i.ControlType != nil {
 		predicates = append(predicates, control.ControlTypeEQ(*i.ControlType))
@@ -6242,24 +6296,6 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 		}
 		predicates = append(predicates, control.HasInternalPoliciesWith(with...))
 	}
-	if i.HasMappedControls != nil {
-		p := control.HasMappedControls()
-		if !*i.HasMappedControls {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasMappedControlsWith) > 0 {
-		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlsWith))
-		for _, w := range i.HasMappedControlsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasMappedControlsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasMappedControlsWith(with...))
-	}
 	if i.HasControlOwner != nil {
 		p := control.HasControlOwner()
 		if !*i.HasControlOwner {
@@ -6349,24 +6385,6 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, control.HasEditorsWith(with...))
-	}
-	if i.HasViewers != nil {
-		p := control.HasViewers()
-		if !*i.HasViewers {
-			p = control.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasViewersWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasViewersWith))
-		for _, w := range i.HasViewersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, control.HasViewersWith(with...))
 	}
 	if i.HasStandard != nil {
 		p := control.HasStandard()
@@ -6659,6 +6677,23 @@ type ControlHistoryWhereInput struct {
 	SourceNotIn  []enums.ControlSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  bool                  `json:"sourceIsNil,omitempty"`
 	SourceNotNil bool                  `json:"sourceNotNil,omitempty"`
+
+	// "reference_framework" field predicates.
+	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
+	ReferenceFrameworkNEQ          *string  `json:"referenceFrameworkNEQ,omitempty"`
+	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
+	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
+	ReferenceFrameworkGT           *string  `json:"referenceFrameworkGT,omitempty"`
+	ReferenceFrameworkGTE          *string  `json:"referenceFrameworkGTE,omitempty"`
+	ReferenceFrameworkLT           *string  `json:"referenceFrameworkLT,omitempty"`
+	ReferenceFrameworkLTE          *string  `json:"referenceFrameworkLTE,omitempty"`
+	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
+	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
+	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
+	ReferenceFrameworkIsNil        bool     `json:"referenceFrameworkIsNil,omitempty"`
+	ReferenceFrameworkNotNil       bool     `json:"referenceFrameworkNotNil,omitempty"`
+	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
+	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 
 	// "control_type" field predicates.
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
@@ -7345,6 +7380,51 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	if i.SourceNotNil {
 		predicates = append(predicates, controlhistory.SourceNotNil())
 	}
+	if i.ReferenceFramework != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkEQ(*i.ReferenceFramework))
+	}
+	if i.ReferenceFrameworkNEQ != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkNEQ(*i.ReferenceFrameworkNEQ))
+	}
+	if len(i.ReferenceFrameworkIn) > 0 {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkIn(i.ReferenceFrameworkIn...))
+	}
+	if len(i.ReferenceFrameworkNotIn) > 0 {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkNotIn(i.ReferenceFrameworkNotIn...))
+	}
+	if i.ReferenceFrameworkGT != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkGT(*i.ReferenceFrameworkGT))
+	}
+	if i.ReferenceFrameworkGTE != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkGTE(*i.ReferenceFrameworkGTE))
+	}
+	if i.ReferenceFrameworkLT != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkLT(*i.ReferenceFrameworkLT))
+	}
+	if i.ReferenceFrameworkLTE != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkLTE(*i.ReferenceFrameworkLTE))
+	}
+	if i.ReferenceFrameworkContains != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkContains(*i.ReferenceFrameworkContains))
+	}
+	if i.ReferenceFrameworkHasPrefix != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkHasPrefix(*i.ReferenceFrameworkHasPrefix))
+	}
+	if i.ReferenceFrameworkHasSuffix != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkHasSuffix(*i.ReferenceFrameworkHasSuffix))
+	}
+	if i.ReferenceFrameworkIsNil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkIsNil())
+	}
+	if i.ReferenceFrameworkNotNil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkNotNil())
+	}
+	if i.ReferenceFrameworkEqualFold != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkEqualFold(*i.ReferenceFrameworkEqualFold))
+	}
+	if i.ReferenceFrameworkContainsFold != nil {
+		predicates = append(predicates, controlhistory.ReferenceFrameworkContainsFold(*i.ReferenceFrameworkContainsFold))
+	}
 	if i.ControlType != nil {
 		predicates = append(predicates, controlhistory.ControlTypeEQ(*i.ControlType))
 	}
@@ -7881,6 +7961,18 @@ type ControlImplementationWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "viewers" edge predicates.
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+
 	// "controls" edge predicates.
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -8339,6 +8431,60 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 			with = append(with, p)
 		}
 		predicates = append(predicates, controlimplementation.HasOwnerWith(with...))
+	}
+	if i.HasBlockedGroups != nil {
+		p := controlimplementation.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := controlimplementation.HasEditors()
+		if !*i.HasEditors {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasEditorsWith(with...))
+	}
+	if i.HasViewers != nil {
+		p := controlimplementation.HasViewers()
+		if !*i.HasViewers {
+			p = controlimplementation.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasViewersWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		for _, w := range i.HasViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlimplementation.HasViewersWith(with...))
 	}
 	if i.HasControls != nil {
 		p := controlimplementation.HasControls()
@@ -25569,18 +25715,6 @@ type GroupWhereInput struct {
 	HasControlObjectiveViewers     *bool                         `json:"hasControlObjectiveViewers,omitempty"`
 	HasControlObjectiveViewersWith []*ControlObjectiveWhereInput `json:"hasControlObjectiveViewersWith,omitempty"`
 
-	// "control_editors" edge predicates.
-	HasControlEditors     *bool                `json:"hasControlEditors,omitempty"`
-	HasControlEditorsWith []*ControlWhereInput `json:"hasControlEditorsWith,omitempty"`
-
-	// "control_blocked_groups" edge predicates.
-	HasControlBlockedGroups     *bool                `json:"hasControlBlockedGroups,omitempty"`
-	HasControlBlockedGroupsWith []*ControlWhereInput `json:"hasControlBlockedGroupsWith,omitempty"`
-
-	// "control_viewers" edge predicates.
-	HasControlViewers     *bool                `json:"hasControlViewers,omitempty"`
-	HasControlViewersWith []*ControlWhereInput `json:"hasControlViewersWith,omitempty"`
-
 	// "narrative_editors" edge predicates.
 	HasNarrativeEditors     *bool                  `json:"hasNarrativeEditors,omitempty"`
 	HasNarrativeEditorsWith []*NarrativeWhereInput `json:"hasNarrativeEditorsWith,omitempty"`
@@ -25592,6 +25726,18 @@ type GroupWhereInput struct {
 	// "narrative_viewers" edge predicates.
 	HasNarrativeViewers     *bool                  `json:"hasNarrativeViewers,omitempty"`
 	HasNarrativeViewersWith []*NarrativeWhereInput `json:"hasNarrativeViewersWith,omitempty"`
+
+	// "control_implementation_editors" edge predicates.
+	HasControlImplementationEditors     *bool                              `json:"hasControlImplementationEditors,omitempty"`
+	HasControlImplementationEditorsWith []*ControlImplementationWhereInput `json:"hasControlImplementationEditorsWith,omitempty"`
+
+	// "control_implementation_blocked_groups" edge predicates.
+	HasControlImplementationBlockedGroups     *bool                              `json:"hasControlImplementationBlockedGroups,omitempty"`
+	HasControlImplementationBlockedGroupsWith []*ControlImplementationWhereInput `json:"hasControlImplementationBlockedGroupsWith,omitempty"`
+
+	// "control_implementation_viewers" edge predicates.
+	HasControlImplementationViewers     *bool                              `json:"hasControlImplementationViewers,omitempty"`
+	HasControlImplementationViewersWith []*ControlImplementationWhereInput `json:"hasControlImplementationViewersWith,omitempty"`
 
 	// "procedure_editors" edge predicates.
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
@@ -25608,6 +25754,22 @@ type GroupWhereInput struct {
 	// "internal_policy_blocked_groups" edge predicates.
 	HasInternalPolicyBlockedGroups     *bool                       `json:"hasInternalPolicyBlockedGroups,omitempty"`
 	HasInternalPolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalPolicyBlockedGroupsWith,omitempty"`
+
+	// "control_editors" edge predicates.
+	HasControlEditors     *bool                `json:"hasControlEditors,omitempty"`
+	HasControlEditorsWith []*ControlWhereInput `json:"hasControlEditorsWith,omitempty"`
+
+	// "control_blocked_groups" edge predicates.
+	HasControlBlockedGroups     *bool                `json:"hasControlBlockedGroups,omitempty"`
+	HasControlBlockedGroupsWith []*ControlWhereInput `json:"hasControlBlockedGroupsWith,omitempty"`
+
+	// "mapped_control_editors" edge predicates.
+	HasMappedControlEditors     *bool                      `json:"hasMappedControlEditors,omitempty"`
+	HasMappedControlEditorsWith []*MappedControlWhereInput `json:"hasMappedControlEditorsWith,omitempty"`
+
+	// "mapped_control_blocked_groups" edge predicates.
+	HasMappedControlBlockedGroups     *bool                      `json:"hasMappedControlBlockedGroups,omitempty"`
+	HasMappedControlBlockedGroupsWith []*MappedControlWhereInput `json:"hasMappedControlBlockedGroupsWith,omitempty"`
 
 	// "setting" edge predicates.
 	HasSetting     *bool                     `json:"hasSetting,omitempty"`
@@ -26244,60 +26406,6 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 		}
 		predicates = append(predicates, group.HasControlObjectiveViewersWith(with...))
 	}
-	if i.HasControlEditors != nil {
-		p := group.HasControlEditors()
-		if !*i.HasControlEditors {
-			p = group.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlEditorsWith) > 0 {
-		with := make([]predicate.Control, 0, len(i.HasControlEditorsWith))
-		for _, w := range i.HasControlEditorsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlEditorsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, group.HasControlEditorsWith(with...))
-	}
-	if i.HasControlBlockedGroups != nil {
-		p := group.HasControlBlockedGroups()
-		if !*i.HasControlBlockedGroups {
-			p = group.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlBlockedGroupsWith) > 0 {
-		with := make([]predicate.Control, 0, len(i.HasControlBlockedGroupsWith))
-		for _, w := range i.HasControlBlockedGroupsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlBlockedGroupsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, group.HasControlBlockedGroupsWith(with...))
-	}
-	if i.HasControlViewers != nil {
-		p := group.HasControlViewers()
-		if !*i.HasControlViewers {
-			p = group.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasControlViewersWith) > 0 {
-		with := make([]predicate.Control, 0, len(i.HasControlViewersWith))
-		for _, w := range i.HasControlViewersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlViewersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, group.HasControlViewersWith(with...))
-	}
 	if i.HasNarrativeEditors != nil {
 		p := group.HasNarrativeEditors()
 		if !*i.HasNarrativeEditors {
@@ -26351,6 +26459,60 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, group.HasNarrativeViewersWith(with...))
+	}
+	if i.HasControlImplementationEditors != nil {
+		p := group.HasControlImplementationEditors()
+		if !*i.HasControlImplementationEditors {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationEditorsWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationEditorsWith))
+		for _, w := range i.HasControlImplementationEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasControlImplementationEditorsWith(with...))
+	}
+	if i.HasControlImplementationBlockedGroups != nil {
+		p := group.HasControlImplementationBlockedGroups()
+		if !*i.HasControlImplementationBlockedGroups {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationBlockedGroupsWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationBlockedGroupsWith))
+		for _, w := range i.HasControlImplementationBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasControlImplementationBlockedGroupsWith(with...))
+	}
+	if i.HasControlImplementationViewers != nil {
+		p := group.HasControlImplementationViewers()
+		if !*i.HasControlImplementationViewers {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationViewersWith) > 0 {
+		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationViewersWith))
+		for _, w := range i.HasControlImplementationViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasControlImplementationViewersWith(with...))
 	}
 	if i.HasProcedureEditors != nil {
 		p := group.HasProcedureEditors()
@@ -26423,6 +26585,78 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, group.HasInternalPolicyBlockedGroupsWith(with...))
+	}
+	if i.HasControlEditors != nil {
+		p := group.HasControlEditors()
+		if !*i.HasControlEditors {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlEditorsWith) > 0 {
+		with := make([]predicate.Control, 0, len(i.HasControlEditorsWith))
+		for _, w := range i.HasControlEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasControlEditorsWith(with...))
+	}
+	if i.HasControlBlockedGroups != nil {
+		p := group.HasControlBlockedGroups()
+		if !*i.HasControlBlockedGroups {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlBlockedGroupsWith) > 0 {
+		with := make([]predicate.Control, 0, len(i.HasControlBlockedGroupsWith))
+		for _, w := range i.HasControlBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasControlBlockedGroupsWith(with...))
+	}
+	if i.HasMappedControlEditors != nil {
+		p := group.HasMappedControlEditors()
+		if !*i.HasMappedControlEditors {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMappedControlEditorsWith) > 0 {
+		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlEditorsWith))
+		for _, w := range i.HasMappedControlEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMappedControlEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasMappedControlEditorsWith(with...))
+	}
+	if i.HasMappedControlBlockedGroups != nil {
+		p := group.HasMappedControlBlockedGroups()
+		if !*i.HasMappedControlBlockedGroups {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMappedControlBlockedGroupsWith) > 0 {
+		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlBlockedGroupsWith))
+		for _, w := range i.HasMappedControlBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMappedControlBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasMappedControlBlockedGroupsWith(with...))
 	}
 	if i.HasSetting != nil {
 		p := group.HasSetting()
@@ -39373,22 +39607,28 @@ type MappedControlWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "mapping_type" field predicates.
-	MappingType             *string  `json:"mappingType,omitempty"`
-	MappingTypeNEQ          *string  `json:"mappingTypeNEQ,omitempty"`
-	MappingTypeIn           []string `json:"mappingTypeIn,omitempty"`
-	MappingTypeNotIn        []string `json:"mappingTypeNotIn,omitempty"`
-	MappingTypeGT           *string  `json:"mappingTypeGT,omitempty"`
-	MappingTypeGTE          *string  `json:"mappingTypeGTE,omitempty"`
-	MappingTypeLT           *string  `json:"mappingTypeLT,omitempty"`
-	MappingTypeLTE          *string  `json:"mappingTypeLTE,omitempty"`
-	MappingTypeContains     *string  `json:"mappingTypeContains,omitempty"`
-	MappingTypeHasPrefix    *string  `json:"mappingTypeHasPrefix,omitempty"`
-	MappingTypeHasSuffix    *string  `json:"mappingTypeHasSuffix,omitempty"`
-	MappingTypeIsNil        bool     `json:"mappingTypeIsNil,omitempty"`
-	MappingTypeNotNil       bool     `json:"mappingTypeNotNil,omitempty"`
-	MappingTypeEqualFold    *string  `json:"mappingTypeEqualFold,omitempty"`
-	MappingTypeContainsFold *string  `json:"mappingTypeContainsFold,omitempty"`
+	MappingType      *enums.MappingType  `json:"mappingType,omitempty"`
+	MappingTypeNEQ   *enums.MappingType  `json:"mappingTypeNEQ,omitempty"`
+	MappingTypeIn    []enums.MappingType `json:"mappingTypeIn,omitempty"`
+	MappingTypeNotIn []enums.MappingType `json:"mappingTypeNotIn,omitempty"`
 
 	// "relation" field predicates.
 	Relation             *string  `json:"relation,omitempty"`
@@ -39407,13 +39647,53 @@ type MappedControlWhereInput struct {
 	RelationEqualFold    *string  `json:"relationEqualFold,omitempty"`
 	RelationContainsFold *string  `json:"relationContainsFold,omitempty"`
 
-	// "controls" edge predicates.
-	HasControls     *bool                `json:"hasControls,omitempty"`
-	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// "confidence" field predicates.
+	Confidence       *int  `json:"confidence,omitempty"`
+	ConfidenceNEQ    *int  `json:"confidenceNEQ,omitempty"`
+	ConfidenceIn     []int `json:"confidenceIn,omitempty"`
+	ConfidenceNotIn  []int `json:"confidenceNotIn,omitempty"`
+	ConfidenceGT     *int  `json:"confidenceGT,omitempty"`
+	ConfidenceGTE    *int  `json:"confidenceGTE,omitempty"`
+	ConfidenceLT     *int  `json:"confidenceLT,omitempty"`
+	ConfidenceLTE    *int  `json:"confidenceLTE,omitempty"`
+	ConfidenceIsNil  bool  `json:"confidenceIsNil,omitempty"`
+	ConfidenceNotNil bool  `json:"confidenceNotNil,omitempty"`
 
-	// "subcontrols" edge predicates.
-	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
-	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// "source" field predicates.
+	Source       *enums.MappingSource  `json:"source,omitempty"`
+	SourceNEQ    *enums.MappingSource  `json:"sourceNEQ,omitempty"`
+	SourceIn     []enums.MappingSource `json:"sourceIn,omitempty"`
+	SourceNotIn  []enums.MappingSource `json:"sourceNotIn,omitempty"`
+	SourceIsNil  bool                  `json:"sourceIsNil,omitempty"`
+	SourceNotNil bool                  `json:"sourceNotNil,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "from_controls" edge predicates.
+	HasFromControls     *bool                `json:"hasFromControls,omitempty"`
+	HasFromControlsWith []*ControlWhereInput `json:"hasFromControlsWith,omitempty"`
+
+	// "to_controls" edge predicates.
+	HasToControls     *bool                `json:"hasToControls,omitempty"`
+	HasToControlsWith []*ControlWhereInput `json:"hasToControlsWith,omitempty"`
+
+	// "from_subcontrols" edge predicates.
+	HasFromSubcontrols     *bool                   `json:"hasFromSubcontrols,omitempty"`
+	HasFromSubcontrolsWith []*SubcontrolWhereInput `json:"hasFromSubcontrolsWith,omitempty"`
+
+	// "to_subcontrols" edge predicates.
+	HasToSubcontrols     *bool                   `json:"hasToSubcontrols,omitempty"`
+	HasToSubcontrolsWith []*SubcontrolWhereInput `json:"hasToSubcontrolsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39667,6 +39947,51 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, mappedcontrol.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, mappedcontrol.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, mappedcontrol.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, mappedcontrol.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, mappedcontrol.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, mappedcontrol.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 	if i.MappingType != nil {
 		predicates = append(predicates, mappedcontrol.MappingTypeEQ(*i.MappingType))
 	}
@@ -39678,39 +40003,6 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	}
 	if len(i.MappingTypeNotIn) > 0 {
 		predicates = append(predicates, mappedcontrol.MappingTypeNotIn(i.MappingTypeNotIn...))
-	}
-	if i.MappingTypeGT != nil {
-		predicates = append(predicates, mappedcontrol.MappingTypeGT(*i.MappingTypeGT))
-	}
-	if i.MappingTypeGTE != nil {
-		predicates = append(predicates, mappedcontrol.MappingTypeGTE(*i.MappingTypeGTE))
-	}
-	if i.MappingTypeLT != nil {
-		predicates = append(predicates, mappedcontrol.MappingTypeLT(*i.MappingTypeLT))
-	}
-	if i.MappingTypeLTE != nil {
-		predicates = append(predicates, mappedcontrol.MappingTypeLTE(*i.MappingTypeLTE))
-	}
-	if i.MappingTypeContains != nil {
-		predicates = append(predicates, mappedcontrol.MappingTypeContains(*i.MappingTypeContains))
-	}
-	if i.MappingTypeHasPrefix != nil {
-		predicates = append(predicates, mappedcontrol.MappingTypeHasPrefix(*i.MappingTypeHasPrefix))
-	}
-	if i.MappingTypeHasSuffix != nil {
-		predicates = append(predicates, mappedcontrol.MappingTypeHasSuffix(*i.MappingTypeHasSuffix))
-	}
-	if i.MappingTypeIsNil {
-		predicates = append(predicates, mappedcontrol.MappingTypeIsNil())
-	}
-	if i.MappingTypeNotNil {
-		predicates = append(predicates, mappedcontrol.MappingTypeNotNil())
-	}
-	if i.MappingTypeEqualFold != nil {
-		predicates = append(predicates, mappedcontrol.MappingTypeEqualFold(*i.MappingTypeEqualFold))
-	}
-	if i.MappingTypeContainsFold != nil {
-		predicates = append(predicates, mappedcontrol.MappingTypeContainsFold(*i.MappingTypeContainsFold))
 	}
 	if i.Relation != nil {
 		predicates = append(predicates, mappedcontrol.RelationEQ(*i.Relation))
@@ -39757,42 +40049,180 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	if i.RelationContainsFold != nil {
 		predicates = append(predicates, mappedcontrol.RelationContainsFold(*i.RelationContainsFold))
 	}
+	if i.Confidence != nil {
+		predicates = append(predicates, mappedcontrol.ConfidenceEQ(*i.Confidence))
+	}
+	if i.ConfidenceNEQ != nil {
+		predicates = append(predicates, mappedcontrol.ConfidenceNEQ(*i.ConfidenceNEQ))
+	}
+	if len(i.ConfidenceIn) > 0 {
+		predicates = append(predicates, mappedcontrol.ConfidenceIn(i.ConfidenceIn...))
+	}
+	if len(i.ConfidenceNotIn) > 0 {
+		predicates = append(predicates, mappedcontrol.ConfidenceNotIn(i.ConfidenceNotIn...))
+	}
+	if i.ConfidenceGT != nil {
+		predicates = append(predicates, mappedcontrol.ConfidenceGT(*i.ConfidenceGT))
+	}
+	if i.ConfidenceGTE != nil {
+		predicates = append(predicates, mappedcontrol.ConfidenceGTE(*i.ConfidenceGTE))
+	}
+	if i.ConfidenceLT != nil {
+		predicates = append(predicates, mappedcontrol.ConfidenceLT(*i.ConfidenceLT))
+	}
+	if i.ConfidenceLTE != nil {
+		predicates = append(predicates, mappedcontrol.ConfidenceLTE(*i.ConfidenceLTE))
+	}
+	if i.ConfidenceIsNil {
+		predicates = append(predicates, mappedcontrol.ConfidenceIsNil())
+	}
+	if i.ConfidenceNotNil {
+		predicates = append(predicates, mappedcontrol.ConfidenceNotNil())
+	}
+	if i.Source != nil {
+		predicates = append(predicates, mappedcontrol.SourceEQ(*i.Source))
+	}
+	if i.SourceNEQ != nil {
+		predicates = append(predicates, mappedcontrol.SourceNEQ(*i.SourceNEQ))
+	}
+	if len(i.SourceIn) > 0 {
+		predicates = append(predicates, mappedcontrol.SourceIn(i.SourceIn...))
+	}
+	if len(i.SourceNotIn) > 0 {
+		predicates = append(predicates, mappedcontrol.SourceNotIn(i.SourceNotIn...))
+	}
+	if i.SourceIsNil {
+		predicates = append(predicates, mappedcontrol.SourceIsNil())
+	}
+	if i.SourceNotNil {
+		predicates = append(predicates, mappedcontrol.SourceNotNil())
+	}
 
-	if i.HasControls != nil {
-		p := mappedcontrol.HasControls()
-		if !*i.HasControls {
+	if i.HasOwner != nil {
+		p := mappedcontrol.HasOwner()
+		if !*i.HasOwner {
 			p = mappedcontrol.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasControlsWith) > 0 {
-		with := make([]predicate.Control, 0, len(i.HasControlsWith))
-		for _, w := range i.HasControlsWith {
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasControlsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, mappedcontrol.HasControlsWith(with...))
+		predicates = append(predicates, mappedcontrol.HasOwnerWith(with...))
 	}
-	if i.HasSubcontrols != nil {
-		p := mappedcontrol.HasSubcontrols()
-		if !*i.HasSubcontrols {
+	if i.HasBlockedGroups != nil {
+		p := mappedcontrol.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
 			p = mappedcontrol.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasSubcontrolsWith) > 0 {
-		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
-		for _, w := range i.HasSubcontrolsWith {
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasSubcontrolsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, mappedcontrol.HasSubcontrolsWith(with...))
+		predicates = append(predicates, mappedcontrol.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := mappedcontrol.HasEditors()
+		if !*i.HasEditors {
+			p = mappedcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, mappedcontrol.HasEditorsWith(with...))
+	}
+	if i.HasFromControls != nil {
+		p := mappedcontrol.HasFromControls()
+		if !*i.HasFromControls {
+			p = mappedcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFromControlsWith) > 0 {
+		with := make([]predicate.Control, 0, len(i.HasFromControlsWith))
+		for _, w := range i.HasFromControlsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFromControlsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, mappedcontrol.HasFromControlsWith(with...))
+	}
+	if i.HasToControls != nil {
+		p := mappedcontrol.HasToControls()
+		if !*i.HasToControls {
+			p = mappedcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasToControlsWith) > 0 {
+		with := make([]predicate.Control, 0, len(i.HasToControlsWith))
+		for _, w := range i.HasToControlsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasToControlsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, mappedcontrol.HasToControlsWith(with...))
+	}
+	if i.HasFromSubcontrols != nil {
+		p := mappedcontrol.HasFromSubcontrols()
+		if !*i.HasFromSubcontrols {
+			p = mappedcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFromSubcontrolsWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasFromSubcontrolsWith))
+		for _, w := range i.HasFromSubcontrolsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFromSubcontrolsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, mappedcontrol.HasFromSubcontrolsWith(with...))
+	}
+	if i.HasToSubcontrols != nil {
+		p := mappedcontrol.HasToSubcontrols()
+		if !*i.HasToSubcontrols {
+			p = mappedcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasToSubcontrolsWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasToSubcontrolsWith))
+		for _, w := range i.HasToSubcontrolsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasToSubcontrolsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, mappedcontrol.HasToSubcontrolsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -39914,22 +40344,28 @@ type MappedControlHistoryWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "mapping_type" field predicates.
-	MappingType             *string  `json:"mappingType,omitempty"`
-	MappingTypeNEQ          *string  `json:"mappingTypeNEQ,omitempty"`
-	MappingTypeIn           []string `json:"mappingTypeIn,omitempty"`
-	MappingTypeNotIn        []string `json:"mappingTypeNotIn,omitempty"`
-	MappingTypeGT           *string  `json:"mappingTypeGT,omitempty"`
-	MappingTypeGTE          *string  `json:"mappingTypeGTE,omitempty"`
-	MappingTypeLT           *string  `json:"mappingTypeLT,omitempty"`
-	MappingTypeLTE          *string  `json:"mappingTypeLTE,omitempty"`
-	MappingTypeContains     *string  `json:"mappingTypeContains,omitempty"`
-	MappingTypeHasPrefix    *string  `json:"mappingTypeHasPrefix,omitempty"`
-	MappingTypeHasSuffix    *string  `json:"mappingTypeHasSuffix,omitempty"`
-	MappingTypeIsNil        bool     `json:"mappingTypeIsNil,omitempty"`
-	MappingTypeNotNil       bool     `json:"mappingTypeNotNil,omitempty"`
-	MappingTypeEqualFold    *string  `json:"mappingTypeEqualFold,omitempty"`
-	MappingTypeContainsFold *string  `json:"mappingTypeContainsFold,omitempty"`
+	MappingType      *enums.MappingType  `json:"mappingType,omitempty"`
+	MappingTypeNEQ   *enums.MappingType  `json:"mappingTypeNEQ,omitempty"`
+	MappingTypeIn    []enums.MappingType `json:"mappingTypeIn,omitempty"`
+	MappingTypeNotIn []enums.MappingType `json:"mappingTypeNotIn,omitempty"`
 
 	// "relation" field predicates.
 	Relation             *string  `json:"relation,omitempty"`
@@ -39947,6 +40383,26 @@ type MappedControlHistoryWhereInput struct {
 	RelationNotNil       bool     `json:"relationNotNil,omitempty"`
 	RelationEqualFold    *string  `json:"relationEqualFold,omitempty"`
 	RelationContainsFold *string  `json:"relationContainsFold,omitempty"`
+
+	// "confidence" field predicates.
+	Confidence       *int  `json:"confidence,omitempty"`
+	ConfidenceNEQ    *int  `json:"confidenceNEQ,omitempty"`
+	ConfidenceIn     []int `json:"confidenceIn,omitempty"`
+	ConfidenceNotIn  []int `json:"confidenceNotIn,omitempty"`
+	ConfidenceGT     *int  `json:"confidenceGT,omitempty"`
+	ConfidenceGTE    *int  `json:"confidenceGTE,omitempty"`
+	ConfidenceLT     *int  `json:"confidenceLT,omitempty"`
+	ConfidenceLTE    *int  `json:"confidenceLTE,omitempty"`
+	ConfidenceIsNil  bool  `json:"confidenceIsNil,omitempty"`
+	ConfidenceNotNil bool  `json:"confidenceNotNil,omitempty"`
+
+	// "source" field predicates.
+	Source       *enums.MappingSource  `json:"source,omitempty"`
+	SourceNEQ    *enums.MappingSource  `json:"sourceNEQ,omitempty"`
+	SourceIn     []enums.MappingSource `json:"sourceIn,omitempty"`
+	SourceNotIn  []enums.MappingSource `json:"sourceNotIn,omitempty"`
+	SourceIsNil  bool                  `json:"sourceIsNil,omitempty"`
+	SourceNotNil bool                  `json:"sourceNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -40281,6 +40737,51 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, mappedcontrolhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 	if i.MappingType != nil {
 		predicates = append(predicates, mappedcontrolhistory.MappingTypeEQ(*i.MappingType))
 	}
@@ -40292,39 +40793,6 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	}
 	if len(i.MappingTypeNotIn) > 0 {
 		predicates = append(predicates, mappedcontrolhistory.MappingTypeNotIn(i.MappingTypeNotIn...))
-	}
-	if i.MappingTypeGT != nil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeGT(*i.MappingTypeGT))
-	}
-	if i.MappingTypeGTE != nil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeGTE(*i.MappingTypeGTE))
-	}
-	if i.MappingTypeLT != nil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeLT(*i.MappingTypeLT))
-	}
-	if i.MappingTypeLTE != nil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeLTE(*i.MappingTypeLTE))
-	}
-	if i.MappingTypeContains != nil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeContains(*i.MappingTypeContains))
-	}
-	if i.MappingTypeHasPrefix != nil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeHasPrefix(*i.MappingTypeHasPrefix))
-	}
-	if i.MappingTypeHasSuffix != nil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeHasSuffix(*i.MappingTypeHasSuffix))
-	}
-	if i.MappingTypeIsNil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeIsNil())
-	}
-	if i.MappingTypeNotNil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeNotNil())
-	}
-	if i.MappingTypeEqualFold != nil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeEqualFold(*i.MappingTypeEqualFold))
-	}
-	if i.MappingTypeContainsFold != nil {
-		predicates = append(predicates, mappedcontrolhistory.MappingTypeContainsFold(*i.MappingTypeContainsFold))
 	}
 	if i.Relation != nil {
 		predicates = append(predicates, mappedcontrolhistory.RelationEQ(*i.Relation))
@@ -40370,6 +40838,54 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	}
 	if i.RelationContainsFold != nil {
 		predicates = append(predicates, mappedcontrolhistory.RelationContainsFold(*i.RelationContainsFold))
+	}
+	if i.Confidence != nil {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceEQ(*i.Confidence))
+	}
+	if i.ConfidenceNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceNEQ(*i.ConfidenceNEQ))
+	}
+	if len(i.ConfidenceIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceIn(i.ConfidenceIn...))
+	}
+	if len(i.ConfidenceNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceNotIn(i.ConfidenceNotIn...))
+	}
+	if i.ConfidenceGT != nil {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceGT(*i.ConfidenceGT))
+	}
+	if i.ConfidenceGTE != nil {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceGTE(*i.ConfidenceGTE))
+	}
+	if i.ConfidenceLT != nil {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceLT(*i.ConfidenceLT))
+	}
+	if i.ConfidenceLTE != nil {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceLTE(*i.ConfidenceLTE))
+	}
+	if i.ConfidenceIsNil {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceIsNil())
+	}
+	if i.ConfidenceNotNil {
+		predicates = append(predicates, mappedcontrolhistory.ConfidenceNotNil())
+	}
+	if i.Source != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceEQ(*i.Source))
+	}
+	if i.SourceNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceNEQ(*i.SourceNEQ))
+	}
+	if len(i.SourceIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceIn(i.SourceIn...))
+	}
+	if len(i.SourceNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceNotIn(i.SourceNotIn...))
+	}
+	if i.SourceIsNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceIsNil())
+	}
+	if i.SourceNotNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceNotNil())
 	}
 
 	switch len(predicates) {
@@ -46617,9 +47133,17 @@ type OrganizationWhereInput struct {
 	HasControlCreators     *bool              `json:"hasControlCreators,omitempty"`
 	HasControlCreatorsWith []*GroupWhereInput `json:"hasControlCreatorsWith,omitempty"`
 
+	// "control_implementation_creators" edge predicates.
+	HasControlImplementationCreators     *bool              `json:"hasControlImplementationCreators,omitempty"`
+	HasControlImplementationCreatorsWith []*GroupWhereInput `json:"hasControlImplementationCreatorsWith,omitempty"`
+
 	// "control_objective_creators" edge predicates.
 	HasControlObjectiveCreators     *bool              `json:"hasControlObjectiveCreators,omitempty"`
 	HasControlObjectiveCreatorsWith []*GroupWhereInput `json:"hasControlObjectiveCreatorsWith,omitempty"`
+
+	// "evidence_creators" edge predicates.
+	HasEvidenceCreators     *bool              `json:"hasEvidenceCreators,omitempty"`
+	HasEvidenceCreatorsWith []*GroupWhereInput `json:"hasEvidenceCreatorsWith,omitempty"`
 
 	// "group_creators" edge predicates.
 	HasGroupCreators     *bool              `json:"hasGroupCreators,omitempty"`
@@ -46628,6 +47152,10 @@ type OrganizationWhereInput struct {
 	// "internal_policy_creators" edge predicates.
 	HasInternalPolicyCreators     *bool              `json:"hasInternalPolicyCreators,omitempty"`
 	HasInternalPolicyCreatorsWith []*GroupWhereInput `json:"hasInternalPolicyCreatorsWith,omitempty"`
+
+	// "mapped_control_creators" edge predicates.
+	HasMappedControlCreators     *bool              `json:"hasMappedControlCreators,omitempty"`
+	HasMappedControlCreatorsWith []*GroupWhereInput `json:"hasMappedControlCreatorsWith,omitempty"`
 
 	// "narrative_creators" edge predicates.
 	HasNarrativeCreators     *bool              `json:"hasNarrativeCreators,omitempty"`
@@ -46644,6 +47172,14 @@ type OrganizationWhereInput struct {
 	// "risk_creators" edge predicates.
 	HasRiskCreators     *bool              `json:"hasRiskCreators,omitempty"`
 	HasRiskCreatorsWith []*GroupWhereInput `json:"hasRiskCreatorsWith,omitempty"`
+
+	// "scheduled_job_creators" edge predicates.
+	HasScheduledJobCreators     *bool              `json:"hasScheduledJobCreators,omitempty"`
+	HasScheduledJobCreatorsWith []*GroupWhereInput `json:"hasScheduledJobCreatorsWith,omitempty"`
+
+	// "standard_creators" edge predicates.
+	HasStandardCreators     *bool              `json:"hasStandardCreators,omitempty"`
+	HasStandardCreatorsWith []*GroupWhereInput `json:"hasStandardCreatorsWith,omitempty"`
 
 	// "template_creators" edge predicates.
 	HasTemplateCreators     *bool              `json:"hasTemplateCreators,omitempty"`
@@ -46772,6 +47308,10 @@ type OrganizationWhereInput struct {
 	// "control_implementations" edge predicates.
 	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
 	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+
+	// "mapped_controls" edge predicates.
+	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
+	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
 
 	// "evidence" edge predicates.
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
@@ -47312,6 +47852,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasControlCreatorsWith(with...))
 	}
+	if i.HasControlImplementationCreators != nil {
+		p := organization.HasControlImplementationCreators()
+		if !*i.HasControlImplementationCreators {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlImplementationCreatorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasControlImplementationCreatorsWith))
+		for _, w := range i.HasControlImplementationCreatorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlImplementationCreatorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasControlImplementationCreatorsWith(with...))
+	}
 	if i.HasControlObjectiveCreators != nil {
 		p := organization.HasControlObjectiveCreators()
 		if !*i.HasControlObjectiveCreators {
@@ -47329,6 +47887,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasControlObjectiveCreatorsWith(with...))
+	}
+	if i.HasEvidenceCreators != nil {
+		p := organization.HasEvidenceCreators()
+		if !*i.HasEvidenceCreators {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEvidenceCreatorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEvidenceCreatorsWith))
+		for _, w := range i.HasEvidenceCreatorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEvidenceCreatorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasEvidenceCreatorsWith(with...))
 	}
 	if i.HasGroupCreators != nil {
 		p := organization.HasGroupCreators()
@@ -47365,6 +47941,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasInternalPolicyCreatorsWith(with...))
+	}
+	if i.HasMappedControlCreators != nil {
+		p := organization.HasMappedControlCreators()
+		if !*i.HasMappedControlCreators {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMappedControlCreatorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasMappedControlCreatorsWith))
+		for _, w := range i.HasMappedControlCreatorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMappedControlCreatorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasMappedControlCreatorsWith(with...))
 	}
 	if i.HasNarrativeCreators != nil {
 		p := organization.HasNarrativeCreators()
@@ -47437,6 +48031,42 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasRiskCreatorsWith(with...))
+	}
+	if i.HasScheduledJobCreators != nil {
+		p := organization.HasScheduledJobCreators()
+		if !*i.HasScheduledJobCreators {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasScheduledJobCreatorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasScheduledJobCreatorsWith))
+		for _, w := range i.HasScheduledJobCreatorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasScheduledJobCreatorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasScheduledJobCreatorsWith(with...))
+	}
+	if i.HasStandardCreators != nil {
+		p := organization.HasStandardCreators()
+		if !*i.HasStandardCreators {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasStandardCreatorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasStandardCreatorsWith))
+		for _, w := range i.HasStandardCreatorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasStandardCreatorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasStandardCreatorsWith(with...))
 	}
 	if i.HasTemplateCreators != nil {
 		p := organization.HasTemplateCreators()
@@ -48013,6 +48643,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasControlImplementationsWith(with...))
+	}
+	if i.HasMappedControls != nil {
+		p := organization.HasMappedControls()
+		if !*i.HasMappedControls {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMappedControlsWith) > 0 {
+		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlsWith))
+		for _, w := range i.HasMappedControlsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMappedControlsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasMappedControlsWith(with...))
 	}
 	if i.HasEvidence != nil {
 		p := organization.HasEvidence()
@@ -64119,6 +64767,23 @@ type SubcontrolWhereInput struct {
 	SourceIsNil  bool                  `json:"sourceIsNil,omitempty"`
 	SourceNotNil bool                  `json:"sourceNotNil,omitempty"`
 
+	// "reference_framework" field predicates.
+	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
+	ReferenceFrameworkNEQ          *string  `json:"referenceFrameworkNEQ,omitempty"`
+	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
+	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
+	ReferenceFrameworkGT           *string  `json:"referenceFrameworkGT,omitempty"`
+	ReferenceFrameworkGTE          *string  `json:"referenceFrameworkGTE,omitempty"`
+	ReferenceFrameworkLT           *string  `json:"referenceFrameworkLT,omitempty"`
+	ReferenceFrameworkLTE          *string  `json:"referenceFrameworkLTE,omitempty"`
+	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
+	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
+	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
+	ReferenceFrameworkIsNil        bool     `json:"referenceFrameworkIsNil,omitempty"`
+	ReferenceFrameworkNotNil       bool     `json:"referenceFrameworkNotNil,omitempty"`
+	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
+	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
+
 	// "control_type" field predicates.
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
 	ControlTypeNEQ    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
@@ -64290,10 +64955,6 @@ type SubcontrolWhereInput struct {
 	// "internal_policies" edge predicates.
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
-
-	// "mapped_controls" edge predicates.
-	HasMappedControls     *bool                      `json:"hasMappedControls,omitempty"`
-	HasMappedControlsWith []*MappedControlWhereInput `json:"hasMappedControlsWith,omitempty"`
 
 	// "control_owner" edge predicates.
 	HasControlOwner     *bool              `json:"hasControlOwner,omitempty"`
@@ -64780,6 +65441,51 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if i.SourceNotNil {
 		predicates = append(predicates, subcontrol.SourceNotNil())
+	}
+	if i.ReferenceFramework != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkEQ(*i.ReferenceFramework))
+	}
+	if i.ReferenceFrameworkNEQ != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkNEQ(*i.ReferenceFrameworkNEQ))
+	}
+	if len(i.ReferenceFrameworkIn) > 0 {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkIn(i.ReferenceFrameworkIn...))
+	}
+	if len(i.ReferenceFrameworkNotIn) > 0 {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkNotIn(i.ReferenceFrameworkNotIn...))
+	}
+	if i.ReferenceFrameworkGT != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkGT(*i.ReferenceFrameworkGT))
+	}
+	if i.ReferenceFrameworkGTE != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkGTE(*i.ReferenceFrameworkGTE))
+	}
+	if i.ReferenceFrameworkLT != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkLT(*i.ReferenceFrameworkLT))
+	}
+	if i.ReferenceFrameworkLTE != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkLTE(*i.ReferenceFrameworkLTE))
+	}
+	if i.ReferenceFrameworkContains != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkContains(*i.ReferenceFrameworkContains))
+	}
+	if i.ReferenceFrameworkHasPrefix != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkHasPrefix(*i.ReferenceFrameworkHasPrefix))
+	}
+	if i.ReferenceFrameworkHasSuffix != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkHasSuffix(*i.ReferenceFrameworkHasSuffix))
+	}
+	if i.ReferenceFrameworkIsNil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkIsNil())
+	}
+	if i.ReferenceFrameworkNotNil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkNotNil())
+	}
+	if i.ReferenceFrameworkEqualFold != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkEqualFold(*i.ReferenceFrameworkEqualFold))
+	}
+	if i.ReferenceFrameworkContainsFold != nil {
+		predicates = append(predicates, subcontrol.ReferenceFrameworkContainsFold(*i.ReferenceFrameworkContainsFold))
 	}
 	if i.ControlType != nil {
 		predicates = append(predicates, subcontrol.ControlTypeEQ(*i.ControlType))
@@ -65292,24 +65998,6 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 		}
 		predicates = append(predicates, subcontrol.HasInternalPoliciesWith(with...))
 	}
-	if i.HasMappedControls != nil {
-		p := subcontrol.HasMappedControls()
-		if !*i.HasMappedControls {
-			p = subcontrol.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasMappedControlsWith) > 0 {
-		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlsWith))
-		for _, w := range i.HasMappedControlsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasMappedControlsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, subcontrol.HasMappedControlsWith(with...))
-	}
 	if i.HasControlOwner != nil {
 		p := subcontrol.HasControlOwner()
 		if !*i.HasControlOwner {
@@ -65619,6 +66307,23 @@ type SubcontrolHistoryWhereInput struct {
 	SourceNotIn  []enums.ControlSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  bool                  `json:"sourceIsNil,omitempty"`
 	SourceNotNil bool                  `json:"sourceNotNil,omitempty"`
+
+	// "reference_framework" field predicates.
+	ReferenceFramework             *string  `json:"referenceFramework,omitempty"`
+	ReferenceFrameworkNEQ          *string  `json:"referenceFrameworkNEQ,omitempty"`
+	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
+	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
+	ReferenceFrameworkGT           *string  `json:"referenceFrameworkGT,omitempty"`
+	ReferenceFrameworkGTE          *string  `json:"referenceFrameworkGTE,omitempty"`
+	ReferenceFrameworkLT           *string  `json:"referenceFrameworkLT,omitempty"`
+	ReferenceFrameworkLTE          *string  `json:"referenceFrameworkLTE,omitempty"`
+	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
+	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
+	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
+	ReferenceFrameworkIsNil        bool     `json:"referenceFrameworkIsNil,omitempty"`
+	ReferenceFrameworkNotNil       bool     `json:"referenceFrameworkNotNil,omitempty"`
+	ReferenceFrameworkEqualFold    *string  `json:"referenceFrameworkEqualFold,omitempty"`
+	ReferenceFrameworkContainsFold *string  `json:"referenceFrameworkContainsFold,omitempty"`
 
 	// "control_type" field predicates.
 	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
@@ -66302,6 +67007,51 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.SourceNotNil {
 		predicates = append(predicates, subcontrolhistory.SourceNotNil())
+	}
+	if i.ReferenceFramework != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkEQ(*i.ReferenceFramework))
+	}
+	if i.ReferenceFrameworkNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkNEQ(*i.ReferenceFrameworkNEQ))
+	}
+	if len(i.ReferenceFrameworkIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkIn(i.ReferenceFrameworkIn...))
+	}
+	if len(i.ReferenceFrameworkNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkNotIn(i.ReferenceFrameworkNotIn...))
+	}
+	if i.ReferenceFrameworkGT != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkGT(*i.ReferenceFrameworkGT))
+	}
+	if i.ReferenceFrameworkGTE != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkGTE(*i.ReferenceFrameworkGTE))
+	}
+	if i.ReferenceFrameworkLT != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkLT(*i.ReferenceFrameworkLT))
+	}
+	if i.ReferenceFrameworkLTE != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkLTE(*i.ReferenceFrameworkLTE))
+	}
+	if i.ReferenceFrameworkContains != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkContains(*i.ReferenceFrameworkContains))
+	}
+	if i.ReferenceFrameworkHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkHasPrefix(*i.ReferenceFrameworkHasPrefix))
+	}
+	if i.ReferenceFrameworkHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkHasSuffix(*i.ReferenceFrameworkHasSuffix))
+	}
+	if i.ReferenceFrameworkIsNil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkIsNil())
+	}
+	if i.ReferenceFrameworkNotNil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkNotNil())
+	}
+	if i.ReferenceFrameworkEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkEqualFold(*i.ReferenceFrameworkEqualFold))
+	}
+	if i.ReferenceFrameworkContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkContainsFold(*i.ReferenceFrameworkContainsFold))
 	}
 	if i.ControlType != nil {
 		predicates = append(predicates, subcontrolhistory.ControlTypeEQ(*i.ControlType))

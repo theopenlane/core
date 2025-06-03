@@ -2312,25 +2312,6 @@ func (c *ControlClient) QueryInternalPolicies(co *Control) *InternalPolicyQuery 
 	return query
 }
 
-// QueryMappedControls queries the mapped_controls edge of a Control.
-func (c *ControlClient) QueryMappedControls(co *Control) *MappedControlQuery {
-	query := (&MappedControlClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := co.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedControlsTable, control.MappedControlsPrimaryKey...),
-		)
-		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlControls
-		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryControlOwner queries the control_owner edge of a Control.
 func (c *ControlClient) QueryControlOwner(co *Control) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -2426,25 +2407,6 @@ func (c *ControlClient) QueryEditors(co *Control) *GroupQuery {
 	return query
 }
 
-// QueryViewers queries the viewers edge of a Control.
-func (c *ControlClient) QueryViewers(co *Control) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := co.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, control.ViewersTable, control.ViewersPrimaryKey...),
-		)
-		schemaConfig := co.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlViewers
-		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryStandard queries the standard edge of a Control.
 func (c *ControlClient) QueryStandard(co *Control) *StandardQuery {
 	query := (&StandardClient{config: c.config}).Query()
@@ -2534,6 +2496,44 @@ func (c *ControlClient) QueryScheduledJobs(co *Control) *ControlScheduledJobQuer
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.ControlScheduledJob
 		step.Edge.Schema = schemaConfig.ControlScheduledJobControls
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedToControls queries the mapped_to_controls edge of a Control.
+func (c *ControlClient) QueryMappedToControls(co *Control) *MappedControlQuery {
+	query := (&MappedControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedToControlsTable, control.MappedToControlsPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlToControls
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedFromControls queries the mapped_from_controls edge of a Control.
+func (c *ControlClient) QueryMappedFromControls(co *Control) *MappedControlQuery {
+	query := (&MappedControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedFromControlsTable, control.MappedFromControlsPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlFromControls
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2822,6 +2822,63 @@ func (c *ControlImplementationClient) QueryOwner(ci *ControlImplementation) *Org
 		schemaConfig := ci.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.ControlImplementation
+		fromV = sqlgraph.Neighbors(ci.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a ControlImplementation.
+func (c *ControlImplementationClient) QueryBlockedGroups(ci *ControlImplementation) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ci.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.BlockedGroupsTable, controlimplementation.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := ci.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ControlImplementationBlockedGroups
+		fromV = sqlgraph.Neighbors(ci.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a ControlImplementation.
+func (c *ControlImplementationClient) QueryEditors(ci *ControlImplementation) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ci.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.EditorsTable, controlimplementation.EditorsPrimaryKey...),
+		)
+		schemaConfig := ci.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ControlImplementationEditors
+		fromV = sqlgraph.Neighbors(ci.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a ControlImplementation.
+func (c *ControlImplementationClient) QueryViewers(ci *ControlImplementation) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ci.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.ViewersTable, controlimplementation.ViewersPrimaryKey...),
+		)
+		schemaConfig := ci.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ControlImplementationViewers
 		fromV = sqlgraph.Neighbors(ci.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7421,63 +7478,6 @@ func (c *GroupClient) QueryControlObjectiveViewers(gr *Group) *ControlObjectiveQ
 	return query
 }
 
-// QueryControlEditors queries the control_editors edge of a Group.
-func (c *GroupClient) QueryControlEditors(gr *Group) *ControlQuery {
-	query := (&ControlClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlEditorsTable, group.ControlEditorsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlEditors
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryControlBlockedGroups queries the control_blocked_groups edge of a Group.
-func (c *GroupClient) QueryControlBlockedGroups(gr *Group) *ControlQuery {
-	query := (&ControlClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlBlockedGroupsTable, group.ControlBlockedGroupsPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlBlockedGroups
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryControlViewers queries the control_viewers edge of a Group.
-func (c *GroupClient) QueryControlViewers(gr *Group) *ControlQuery {
-	query := (&ControlClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := gr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(group.Table, group.FieldID, id),
-			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlViewersTable, group.ControlViewersPrimaryKey...),
-		)
-		schemaConfig := gr.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlViewers
-		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryNarrativeEditors queries the narrative_editors edge of a Group.
 func (c *GroupClient) QueryNarrativeEditors(gr *Group) *NarrativeQuery {
 	query := (&NarrativeClient{config: c.config}).Query()
@@ -7529,6 +7529,63 @@ func (c *GroupClient) QueryNarrativeViewers(gr *Group) *NarrativeQuery {
 		schemaConfig := gr.schemaConfig
 		step.To.Schema = schemaConfig.Narrative
 		step.Edge.Schema = schemaConfig.NarrativeViewers
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlImplementationEditors queries the control_implementation_editors edge of a Group.
+func (c *GroupClient) QueryControlImplementationEditors(gr *Group) *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlImplementationEditorsTable, group.ControlImplementationEditorsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementationEditors
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlImplementationBlockedGroups queries the control_implementation_blocked_groups edge of a Group.
+func (c *GroupClient) QueryControlImplementationBlockedGroups(gr *Group) *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlImplementationBlockedGroupsTable, group.ControlImplementationBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementationBlockedGroups
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlImplementationViewers queries the control_implementation_viewers edge of a Group.
+func (c *GroupClient) QueryControlImplementationViewers(gr *Group) *ControlImplementationQuery {
+	query := (&ControlImplementationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlImplementationViewersTable, group.ControlImplementationViewersPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.ControlImplementation
+		step.Edge.Schema = schemaConfig.ControlImplementationViewers
 		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7605,6 +7662,82 @@ func (c *GroupClient) QueryInternalPolicyBlockedGroups(gr *Group) *InternalPolic
 		schemaConfig := gr.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
 		step.Edge.Schema = schemaConfig.InternalPolicyBlockedGroups
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlEditors queries the control_editors edge of a Group.
+func (c *GroupClient) QueryControlEditors(gr *Group) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlEditorsTable, group.ControlEditorsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlEditors
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlBlockedGroups queries the control_blocked_groups edge of a Group.
+func (c *GroupClient) QueryControlBlockedGroups(gr *Group) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlBlockedGroupsTable, group.ControlBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlBlockedGroups
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedControlEditors queries the mapped_control_editors edge of a Group.
+func (c *GroupClient) QueryMappedControlEditors(gr *Group) *MappedControlQuery {
+	query := (&MappedControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.MappedControlEditorsTable, group.MappedControlEditorsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlEditors
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedControlBlockedGroups queries the mapped_control_blocked_groups edge of a Group.
+func (c *GroupClient) QueryMappedControlBlockedGroups(gr *Group) *MappedControlQuery {
+	query := (&MappedControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.MappedControlBlockedGroupsTable, group.MappedControlBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlBlockedGroups
 		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -11119,38 +11252,133 @@ func (c *MappedControlClient) GetX(ctx context.Context, id string) *MappedContro
 	return obj
 }
 
-// QueryControls queries the controls edge of a MappedControl.
-func (c *MappedControlClient) QueryControls(mc *MappedControl) *ControlQuery {
-	query := (&ControlClient{config: c.config}).Query()
+// QueryOwner queries the owner edge of a MappedControl.
+func (c *MappedControlClient) QueryOwner(mc *MappedControl) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
-			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.ControlsTable, mappedcontrol.ControlsPrimaryKey...),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, mappedcontrol.OwnerTable, mappedcontrol.OwnerColumn),
 		)
 		schemaConfig := mc.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.MappedControlControls
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.MappedControl
 		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QuerySubcontrols queries the subcontrols edge of a MappedControl.
-func (c *MappedControlClient) QuerySubcontrols(mc *MappedControl) *SubcontrolQuery {
+// QueryBlockedGroups queries the blocked_groups edge of a MappedControl.
+func (c *MappedControlClient) QueryBlockedGroups(mc *MappedControl) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.BlockedGroupsTable, mappedcontrol.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.MappedControlBlockedGroups
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a MappedControl.
+func (c *MappedControlClient) QueryEditors(mc *MappedControl) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.EditorsTable, mappedcontrol.EditorsPrimaryKey...),
+		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.MappedControlEditors
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFromControls queries the from_controls edge of a MappedControl.
+func (c *MappedControlClient) QueryFromControls(mc *MappedControl) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.FromControlsTable, mappedcontrol.FromControlsPrimaryKey...),
+		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.MappedControlFromControls
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryToControls queries the to_controls edge of a MappedControl.
+func (c *MappedControlClient) QueryToControls(mc *MappedControl) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.ToControlsTable, mappedcontrol.ToControlsPrimaryKey...),
+		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.MappedControlToControls
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFromSubcontrols queries the from_subcontrols edge of a MappedControl.
+func (c *MappedControlClient) QueryFromSubcontrols(mc *MappedControl) *SubcontrolQuery {
 	query := (&SubcontrolClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := mc.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.SubcontrolsTable, mappedcontrol.SubcontrolsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.FromSubcontrolsTable, mappedcontrol.FromSubcontrolsPrimaryKey...),
 		)
 		schemaConfig := mc.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.MappedControlSubcontrols
+		step.Edge.Schema = schemaConfig.MappedControlFromSubcontrols
+		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryToSubcontrols queries the to_subcontrols edge of a MappedControl.
+func (c *MappedControlClient) QueryToSubcontrols(mc *MappedControl) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := mc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.ToSubcontrolsTable, mappedcontrol.ToSubcontrolsPrimaryKey...),
+		)
+		schemaConfig := mc.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.MappedControlToSubcontrols
 		fromV = sqlgraph.Neighbors(mc.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12978,6 +13206,25 @@ func (c *OrganizationClient) QueryControlCreators(o *Organization) *GroupQuery {
 	return query
 }
 
+// QueryControlImplementationCreators queries the control_implementation_creators edge of a Organization.
+func (c *OrganizationClient) QueryControlImplementationCreators(o *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlImplementationCreatorsTable, organization.ControlImplementationCreatorsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControlObjectiveCreators queries the control_objective_creators edge of a Organization.
 func (c *OrganizationClient) QueryControlObjectiveCreators(o *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -12987,6 +13234,25 @@ func (c *OrganizationClient) QueryControlObjectiveCreators(o *Organization) *Gro
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlObjectiveCreatorsTable, organization.ControlObjectiveCreatorsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidenceCreators queries the evidence_creators edge of a Organization.
+func (c *OrganizationClient) QueryEvidenceCreators(o *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.EvidenceCreatorsTable, organization.EvidenceCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -13025,6 +13291,25 @@ func (c *OrganizationClient) QueryInternalPolicyCreators(o *Organization) *Group
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.InternalPolicyCreatorsTable, organization.InternalPolicyCreatorsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedControlCreators queries the mapped_control_creators edge of a Organization.
+func (c *OrganizationClient) QueryMappedControlCreators(o *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.MappedControlCreatorsTable, organization.MappedControlCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -13101,6 +13386,44 @@ func (c *OrganizationClient) QueryRiskCreators(o *Organization) *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RiskCreatorsTable, organization.RiskCreatorsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScheduledJobCreators queries the scheduled_job_creators edge of a Organization.
+func (c *OrganizationClient) QueryScheduledJobCreators(o *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobCreatorsTable, organization.ScheduledJobCreatorsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStandardCreators queries the standard_creators edge of a Organization.
+func (c *OrganizationClient) QueryStandardCreators(o *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.StandardCreatorsTable, organization.StandardCreatorsColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -13713,6 +14036,25 @@ func (c *OrganizationClient) QueryControlImplementations(o *Organization) *Contr
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.ControlImplementation
 		step.Edge.Schema = schemaConfig.ControlImplementation
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedControls queries the mapped_controls edge of a Organization.
+func (c *OrganizationClient) QueryMappedControls(o *Organization) *MappedControlQuery {
+	query := (&MappedControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.MappedControlsTable, organization.MappedControlsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControl
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -17777,25 +18119,6 @@ func (c *SubcontrolClient) QueryInternalPolicies(s *Subcontrol) *InternalPolicyQ
 	return query
 }
 
-// QueryMappedControls queries the mapped_controls edge of a Subcontrol.
-func (c *SubcontrolClient) QueryMappedControls(s *Subcontrol) *MappedControlQuery {
-	query := (&MappedControlClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
-			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.MappedControlsTable, subcontrol.MappedControlsPrimaryKey...),
-		)
-		schemaConfig := s.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlSubcontrols
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryControlOwner queries the control_owner edge of a Subcontrol.
 func (c *SubcontrolClient) QueryControlOwner(s *Subcontrol) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -17904,6 +18227,44 @@ func (c *SubcontrolClient) QueryScheduledJobs(s *Subcontrol) *ControlScheduledJo
 		schemaConfig := s.schemaConfig
 		step.To.Schema = schemaConfig.ControlScheduledJob
 		step.Edge.Schema = schemaConfig.ControlScheduledJobSubcontrols
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedToSubcontrols queries the mapped_to_subcontrols edge of a Subcontrol.
+func (c *SubcontrolClient) QueryMappedToSubcontrols(s *Subcontrol) *MappedControlQuery {
+	query := (&MappedControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.MappedToSubcontrolsTable, subcontrol.MappedToSubcontrolsPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlToSubcontrols
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMappedFromSubcontrols queries the mapped_from_subcontrols edge of a Subcontrol.
+func (c *SubcontrolClient) QueryMappedFromSubcontrols(s *Subcontrol) *MappedControlQuery {
+	query := (&MappedControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.MappedFromSubcontrolsTable, subcontrol.MappedFromSubcontrolsPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlFromSubcontrols
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}

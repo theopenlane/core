@@ -621,6 +621,7 @@ type CreateControlInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -641,13 +642,11 @@ type CreateControlInput struct {
 	ActionPlanIDs            []string
 	ProcedureIDs             []string
 	InternalPolicyIDs        []string
-	MappedControlIDs         []string
 	ControlOwnerID           *string
 	DelegateID               *string
 	OwnerID                  *string
 	BlockedGroupIDs          []string
 	EditorIDs                []string
-	ViewerIDs                []string
 	StandardID               *string
 	ProgramIDs               []string
 	ControlImplementationIDs []string
@@ -674,6 +673,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)
@@ -733,9 +735,6 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.InternalPolicyIDs; len(v) > 0 {
 		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.MappedControlIDs; len(v) > 0 {
-		m.AddMappedControlIDs(v...)
-	}
 	if v := i.ControlOwnerID; v != nil {
 		m.SetControlOwnerID(*v)
 	}
@@ -750,9 +749,6 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
-	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
 	}
 	if v := i.StandardID; v != nil {
 		m.SetStandardID(*v)
@@ -792,6 +788,8 @@ type UpdateControlInput struct {
 	Status                         *enums.ControlStatus
 	ClearSource                    bool
 	Source                         *enums.ControlSource
+	ClearReferenceFramework        bool
+	ReferenceFramework             *string
 	ClearControlType               bool
 	ControlType                    *enums.ControlType
 	ClearCategory                  bool
@@ -846,9 +844,6 @@ type UpdateControlInput struct {
 	ClearInternalPolicies          bool
 	AddInternalPolicyIDs           []string
 	RemoveInternalPolicyIDs        []string
-	ClearMappedControls            bool
-	AddMappedControlIDs            []string
-	RemoveMappedControlIDs         []string
 	ClearControlOwner              bool
 	ControlOwnerID                 *string
 	ClearDelegate                  bool
@@ -859,9 +854,6 @@ type UpdateControlInput struct {
 	ClearEditors                   bool
 	AddEditorIDs                   []string
 	RemoveEditorIDs                []string
-	ClearViewers                   bool
-	AddViewerIDs                   []string
-	RemoveViewerIDs                []string
 	ClearStandard                  bool
 	StandardID                     *string
 	ClearPrograms                  bool
@@ -918,6 +910,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearReferenceFramework {
+		m.ClearReferenceFramework()
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if i.ClearControlType {
 		m.ClearControlType()
@@ -1081,15 +1079,6 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
 		m.RemoveInternalPolicyIDs(v...)
 	}
-	if i.ClearMappedControls {
-		m.ClearMappedControls()
-	}
-	if v := i.AddMappedControlIDs; len(v) > 0 {
-		m.AddMappedControlIDs(v...)
-	}
-	if v := i.RemoveMappedControlIDs; len(v) > 0 {
-		m.RemoveMappedControlIDs(v...)
-	}
 	if i.ClearControlOwner {
 		m.ClearControlOwner()
 	}
@@ -1119,15 +1108,6 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearStandard {
 		m.ClearStandard()
@@ -1194,6 +1174,9 @@ type CreateControlImplementationInput struct {
 	VerificationDate   *time.Time
 	Details            *string
 	OwnerID            *string
+	BlockedGroupIDs    []string
+	EditorIDs          []string
+	ViewerIDs          []string
 	ControlIDs         []string
 	SubcontrolIDs      []string
 }
@@ -1220,6 +1203,15 @@ func (i *CreateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -1250,6 +1242,15 @@ type UpdateControlImplementationInput struct {
 	VerificationDate        *time.Time
 	ClearDetails            bool
 	Details                 *string
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
+	ClearViewers            bool
+	AddViewerIDs            []string
+	RemoveViewerIDs         []string
 	ClearControls           bool
 	AddControlIDs           []string
 	RemoveControlIDs        []string
@@ -1298,6 +1299,33 @@ func (i *UpdateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -3291,36 +3319,40 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 
 // CreateGroupInput represents a mutation input for creating groups.
 type CreateGroupInput struct {
-	Tags                            []string
-	Name                            string
-	Description                     *string
-	LogoURL                         *string
-	DisplayName                     *string
-	OwnerID                         *string
-	ProgramEditorIDs                []string
-	ProgramBlockedGroupIDs          []string
-	ProgramViewerIDs                []string
-	RiskEditorIDs                   []string
-	RiskBlockedGroupIDs             []string
-	RiskViewerIDs                   []string
-	ControlObjectiveEditorIDs       []string
-	ControlObjectiveBlockedGroupIDs []string
-	ControlObjectiveViewerIDs       []string
-	ControlEditorIDs                []string
-	ControlBlockedGroupIDs          []string
-	ControlViewerIDs                []string
-	NarrativeEditorIDs              []string
-	NarrativeBlockedGroupIDs        []string
-	NarrativeViewerIDs              []string
-	ProcedureEditorIDs              []string
-	ProcedureBlockedGroupIDs        []string
-	InternalPolicyEditorIDs         []string
-	InternalPolicyBlockedGroupIDs   []string
-	SettingID                       *string
-	EventIDs                        []string
-	IntegrationIDs                  []string
-	FileIDs                         []string
-	TaskIDs                         []string
+	Tags                                 []string
+	Name                                 string
+	Description                          *string
+	LogoURL                              *string
+	DisplayName                          *string
+	OwnerID                              *string
+	ProgramEditorIDs                     []string
+	ProgramBlockedGroupIDs               []string
+	ProgramViewerIDs                     []string
+	RiskEditorIDs                        []string
+	RiskBlockedGroupIDs                  []string
+	RiskViewerIDs                        []string
+	ControlObjectiveEditorIDs            []string
+	ControlObjectiveBlockedGroupIDs      []string
+	ControlObjectiveViewerIDs            []string
+	NarrativeEditorIDs                   []string
+	NarrativeBlockedGroupIDs             []string
+	NarrativeViewerIDs                   []string
+	ControlImplementationEditorIDs       []string
+	ControlImplementationBlockedGroupIDs []string
+	ControlImplementationViewerIDs       []string
+	ProcedureEditorIDs                   []string
+	ProcedureBlockedGroupIDs             []string
+	InternalPolicyEditorIDs              []string
+	InternalPolicyBlockedGroupIDs        []string
+	ControlEditorIDs                     []string
+	ControlBlockedGroupIDs               []string
+	MappedControlEditorIDs               []string
+	MappedControlBlockedGroupIDs         []string
+	SettingID                            *string
+	EventIDs                             []string
+	IntegrationIDs                       []string
+	FileIDs                              []string
+	TaskIDs                              []string
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -3368,15 +3400,6 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.ControlObjectiveViewerIDs; len(v) > 0 {
 		m.AddControlObjectiveViewerIDs(v...)
 	}
-	if v := i.ControlEditorIDs; len(v) > 0 {
-		m.AddControlEditorIDs(v...)
-	}
-	if v := i.ControlBlockedGroupIDs; len(v) > 0 {
-		m.AddControlBlockedGroupIDs(v...)
-	}
-	if v := i.ControlViewerIDs; len(v) > 0 {
-		m.AddControlViewerIDs(v...)
-	}
 	if v := i.NarrativeEditorIDs; len(v) > 0 {
 		m.AddNarrativeEditorIDs(v...)
 	}
@@ -3385,6 +3408,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.NarrativeViewerIDs; len(v) > 0 {
 		m.AddNarrativeViewerIDs(v...)
+	}
+	if v := i.ControlImplementationEditorIDs; len(v) > 0 {
+		m.AddControlImplementationEditorIDs(v...)
+	}
+	if v := i.ControlImplementationBlockedGroupIDs; len(v) > 0 {
+		m.AddControlImplementationBlockedGroupIDs(v...)
+	}
+	if v := i.ControlImplementationViewerIDs; len(v) > 0 {
+		m.AddControlImplementationViewerIDs(v...)
 	}
 	if v := i.ProcedureEditorIDs; len(v) > 0 {
 		m.AddProcedureEditorIDs(v...)
@@ -3397,6 +3429,18 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.InternalPolicyBlockedGroupIDs; len(v) > 0 {
 		m.AddInternalPolicyBlockedGroupIDs(v...)
+	}
+	if v := i.ControlEditorIDs; len(v) > 0 {
+		m.AddControlEditorIDs(v...)
+	}
+	if v := i.ControlBlockedGroupIDs; len(v) > 0 {
+		m.AddControlBlockedGroupIDs(v...)
+	}
+	if v := i.MappedControlEditorIDs; len(v) > 0 {
+		m.AddMappedControlEditorIDs(v...)
+	}
+	if v := i.MappedControlBlockedGroupIDs; len(v) > 0 {
+		m.AddMappedControlBlockedGroupIDs(v...)
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
@@ -3423,88 +3467,100 @@ func (c *GroupCreate) SetInput(i CreateGroupInput) *GroupCreate {
 
 // UpdateGroupInput represents a mutation input for updating groups.
 type UpdateGroupInput struct {
-	ClearTags                             bool
-	Tags                                  []string
-	AppendTags                            []string
-	Name                                  *string
-	ClearDescription                      bool
-	Description                           *string
-	ClearLogoURL                          bool
-	LogoURL                               *string
-	DisplayName                           *string
-	ClearOwner                            bool
-	OwnerID                               *string
-	ClearProgramEditors                   bool
-	AddProgramEditorIDs                   []string
-	RemoveProgramEditorIDs                []string
-	ClearProgramBlockedGroups             bool
-	AddProgramBlockedGroupIDs             []string
-	RemoveProgramBlockedGroupIDs          []string
-	ClearProgramViewers                   bool
-	AddProgramViewerIDs                   []string
-	RemoveProgramViewerIDs                []string
-	ClearRiskEditors                      bool
-	AddRiskEditorIDs                      []string
-	RemoveRiskEditorIDs                   []string
-	ClearRiskBlockedGroups                bool
-	AddRiskBlockedGroupIDs                []string
-	RemoveRiskBlockedGroupIDs             []string
-	ClearRiskViewers                      bool
-	AddRiskViewerIDs                      []string
-	RemoveRiskViewerIDs                   []string
-	ClearControlObjectiveEditors          bool
-	AddControlObjectiveEditorIDs          []string
-	RemoveControlObjectiveEditorIDs       []string
-	ClearControlObjectiveBlockedGroups    bool
-	AddControlObjectiveBlockedGroupIDs    []string
-	RemoveControlObjectiveBlockedGroupIDs []string
-	ClearControlObjectiveViewers          bool
-	AddControlObjectiveViewerIDs          []string
-	RemoveControlObjectiveViewerIDs       []string
-	ClearControlEditors                   bool
-	AddControlEditorIDs                   []string
-	RemoveControlEditorIDs                []string
-	ClearControlBlockedGroups             bool
-	AddControlBlockedGroupIDs             []string
-	RemoveControlBlockedGroupIDs          []string
-	ClearControlViewers                   bool
-	AddControlViewerIDs                   []string
-	RemoveControlViewerIDs                []string
-	ClearNarrativeEditors                 bool
-	AddNarrativeEditorIDs                 []string
-	RemoveNarrativeEditorIDs              []string
-	ClearNarrativeBlockedGroups           bool
-	AddNarrativeBlockedGroupIDs           []string
-	RemoveNarrativeBlockedGroupIDs        []string
-	ClearNarrativeViewers                 bool
-	AddNarrativeViewerIDs                 []string
-	RemoveNarrativeViewerIDs              []string
-	ClearProcedureEditors                 bool
-	AddProcedureEditorIDs                 []string
-	RemoveProcedureEditorIDs              []string
-	ClearProcedureBlockedGroups           bool
-	AddProcedureBlockedGroupIDs           []string
-	RemoveProcedureBlockedGroupIDs        []string
-	ClearInternalPolicyEditors            bool
-	AddInternalPolicyEditorIDs            []string
-	RemoveInternalPolicyEditorIDs         []string
-	ClearInternalPolicyBlockedGroups      bool
-	AddInternalPolicyBlockedGroupIDs      []string
-	RemoveInternalPolicyBlockedGroupIDs   []string
-	ClearSetting                          bool
-	SettingID                             *string
-	ClearEvents                           bool
-	AddEventIDs                           []string
-	RemoveEventIDs                        []string
-	ClearIntegrations                     bool
-	AddIntegrationIDs                     []string
-	RemoveIntegrationIDs                  []string
-	ClearFiles                            bool
-	AddFileIDs                            []string
-	RemoveFileIDs                         []string
-	ClearTasks                            bool
-	AddTaskIDs                            []string
-	RemoveTaskIDs                         []string
+	ClearTags                                  bool
+	Tags                                       []string
+	AppendTags                                 []string
+	Name                                       *string
+	ClearDescription                           bool
+	Description                                *string
+	ClearLogoURL                               bool
+	LogoURL                                    *string
+	DisplayName                                *string
+	ClearOwner                                 bool
+	OwnerID                                    *string
+	ClearProgramEditors                        bool
+	AddProgramEditorIDs                        []string
+	RemoveProgramEditorIDs                     []string
+	ClearProgramBlockedGroups                  bool
+	AddProgramBlockedGroupIDs                  []string
+	RemoveProgramBlockedGroupIDs               []string
+	ClearProgramViewers                        bool
+	AddProgramViewerIDs                        []string
+	RemoveProgramViewerIDs                     []string
+	ClearRiskEditors                           bool
+	AddRiskEditorIDs                           []string
+	RemoveRiskEditorIDs                        []string
+	ClearRiskBlockedGroups                     bool
+	AddRiskBlockedGroupIDs                     []string
+	RemoveRiskBlockedGroupIDs                  []string
+	ClearRiskViewers                           bool
+	AddRiskViewerIDs                           []string
+	RemoveRiskViewerIDs                        []string
+	ClearControlObjectiveEditors               bool
+	AddControlObjectiveEditorIDs               []string
+	RemoveControlObjectiveEditorIDs            []string
+	ClearControlObjectiveBlockedGroups         bool
+	AddControlObjectiveBlockedGroupIDs         []string
+	RemoveControlObjectiveBlockedGroupIDs      []string
+	ClearControlObjectiveViewers               bool
+	AddControlObjectiveViewerIDs               []string
+	RemoveControlObjectiveViewerIDs            []string
+	ClearNarrativeEditors                      bool
+	AddNarrativeEditorIDs                      []string
+	RemoveNarrativeEditorIDs                   []string
+	ClearNarrativeBlockedGroups                bool
+	AddNarrativeBlockedGroupIDs                []string
+	RemoveNarrativeBlockedGroupIDs             []string
+	ClearNarrativeViewers                      bool
+	AddNarrativeViewerIDs                      []string
+	RemoveNarrativeViewerIDs                   []string
+	ClearControlImplementationEditors          bool
+	AddControlImplementationEditorIDs          []string
+	RemoveControlImplementationEditorIDs       []string
+	ClearControlImplementationBlockedGroups    bool
+	AddControlImplementationBlockedGroupIDs    []string
+	RemoveControlImplementationBlockedGroupIDs []string
+	ClearControlImplementationViewers          bool
+	AddControlImplementationViewerIDs          []string
+	RemoveControlImplementationViewerIDs       []string
+	ClearProcedureEditors                      bool
+	AddProcedureEditorIDs                      []string
+	RemoveProcedureEditorIDs                   []string
+	ClearProcedureBlockedGroups                bool
+	AddProcedureBlockedGroupIDs                []string
+	RemoveProcedureBlockedGroupIDs             []string
+	ClearInternalPolicyEditors                 bool
+	AddInternalPolicyEditorIDs                 []string
+	RemoveInternalPolicyEditorIDs              []string
+	ClearInternalPolicyBlockedGroups           bool
+	AddInternalPolicyBlockedGroupIDs           []string
+	RemoveInternalPolicyBlockedGroupIDs        []string
+	ClearControlEditors                        bool
+	AddControlEditorIDs                        []string
+	RemoveControlEditorIDs                     []string
+	ClearControlBlockedGroups                  bool
+	AddControlBlockedGroupIDs                  []string
+	RemoveControlBlockedGroupIDs               []string
+	ClearMappedControlEditors                  bool
+	AddMappedControlEditorIDs                  []string
+	RemoveMappedControlEditorIDs               []string
+	ClearMappedControlBlockedGroups            bool
+	AddMappedControlBlockedGroupIDs            []string
+	RemoveMappedControlBlockedGroupIDs         []string
+	ClearSetting                               bool
+	SettingID                                  *string
+	ClearEvents                                bool
+	AddEventIDs                                []string
+	RemoveEventIDs                             []string
+	ClearIntegrations                          bool
+	AddIntegrationIDs                          []string
+	RemoveIntegrationIDs                       []string
+	ClearFiles                                 bool
+	AddFileIDs                                 []string
+	RemoveFileIDs                              []string
+	ClearTasks                                 bool
+	AddTaskIDs                                 []string
+	RemoveTaskIDs                              []string
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -3623,33 +3679,6 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.RemoveControlObjectiveViewerIDs; len(v) > 0 {
 		m.RemoveControlObjectiveViewerIDs(v...)
 	}
-	if i.ClearControlEditors {
-		m.ClearControlEditors()
-	}
-	if v := i.AddControlEditorIDs; len(v) > 0 {
-		m.AddControlEditorIDs(v...)
-	}
-	if v := i.RemoveControlEditorIDs; len(v) > 0 {
-		m.RemoveControlEditorIDs(v...)
-	}
-	if i.ClearControlBlockedGroups {
-		m.ClearControlBlockedGroups()
-	}
-	if v := i.AddControlBlockedGroupIDs; len(v) > 0 {
-		m.AddControlBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveControlBlockedGroupIDs; len(v) > 0 {
-		m.RemoveControlBlockedGroupIDs(v...)
-	}
-	if i.ClearControlViewers {
-		m.ClearControlViewers()
-	}
-	if v := i.AddControlViewerIDs; len(v) > 0 {
-		m.AddControlViewerIDs(v...)
-	}
-	if v := i.RemoveControlViewerIDs; len(v) > 0 {
-		m.RemoveControlViewerIDs(v...)
-	}
 	if i.ClearNarrativeEditors {
 		m.ClearNarrativeEditors()
 	}
@@ -3676,6 +3705,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveNarrativeViewerIDs; len(v) > 0 {
 		m.RemoveNarrativeViewerIDs(v...)
+	}
+	if i.ClearControlImplementationEditors {
+		m.ClearControlImplementationEditors()
+	}
+	if v := i.AddControlImplementationEditorIDs; len(v) > 0 {
+		m.AddControlImplementationEditorIDs(v...)
+	}
+	if v := i.RemoveControlImplementationEditorIDs; len(v) > 0 {
+		m.RemoveControlImplementationEditorIDs(v...)
+	}
+	if i.ClearControlImplementationBlockedGroups {
+		m.ClearControlImplementationBlockedGroups()
+	}
+	if v := i.AddControlImplementationBlockedGroupIDs; len(v) > 0 {
+		m.AddControlImplementationBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveControlImplementationBlockedGroupIDs; len(v) > 0 {
+		m.RemoveControlImplementationBlockedGroupIDs(v...)
+	}
+	if i.ClearControlImplementationViewers {
+		m.ClearControlImplementationViewers()
+	}
+	if v := i.AddControlImplementationViewerIDs; len(v) > 0 {
+		m.AddControlImplementationViewerIDs(v...)
+	}
+	if v := i.RemoveControlImplementationViewerIDs; len(v) > 0 {
+		m.RemoveControlImplementationViewerIDs(v...)
 	}
 	if i.ClearProcedureEditors {
 		m.ClearProcedureEditors()
@@ -3712,6 +3768,42 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveInternalPolicyBlockedGroupIDs; len(v) > 0 {
 		m.RemoveInternalPolicyBlockedGroupIDs(v...)
+	}
+	if i.ClearControlEditors {
+		m.ClearControlEditors()
+	}
+	if v := i.AddControlEditorIDs; len(v) > 0 {
+		m.AddControlEditorIDs(v...)
+	}
+	if v := i.RemoveControlEditorIDs; len(v) > 0 {
+		m.RemoveControlEditorIDs(v...)
+	}
+	if i.ClearControlBlockedGroups {
+		m.ClearControlBlockedGroups()
+	}
+	if v := i.AddControlBlockedGroupIDs; len(v) > 0 {
+		m.AddControlBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveControlBlockedGroupIDs; len(v) > 0 {
+		m.RemoveControlBlockedGroupIDs(v...)
+	}
+	if i.ClearMappedControlEditors {
+		m.ClearMappedControlEditors()
+	}
+	if v := i.AddMappedControlEditorIDs; len(v) > 0 {
+		m.AddMappedControlEditorIDs(v...)
+	}
+	if v := i.RemoveMappedControlEditorIDs; len(v) > 0 {
+		m.RemoveMappedControlEditorIDs(v...)
+	}
+	if i.ClearMappedControlBlockedGroups {
+		m.ClearMappedControlBlockedGroups()
+	}
+	if v := i.AddMappedControlBlockedGroupIDs; len(v) > 0 {
+		m.AddMappedControlBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveMappedControlBlockedGroupIDs; len(v) > 0 {
+		m.RemoveMappedControlBlockedGroupIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()
@@ -5057,11 +5149,18 @@ func (c *MappableDomainUpdateOne) SetInput(i UpdateMappableDomainInput) *Mappabl
 
 // CreateMappedControlInput represents a mutation input for creating mappedcontrols.
 type CreateMappedControlInput struct {
-	Tags          []string
-	MappingType   *string
-	Relation      *string
-	ControlIDs    []string
-	SubcontrolIDs []string
+	Tags              []string
+	MappingType       *enums.MappingType
+	Relation          *string
+	Confidence        *int
+	Source            *enums.MappingSource
+	OwnerID           *string
+	BlockedGroupIDs   []string
+	EditorIDs         []string
+	FromControlIDs    []string
+	ToControlIDs      []string
+	FromSubcontrolIDs []string
+	ToSubcontrolIDs   []string
 }
 
 // Mutate applies the CreateMappedControlInput on the MappedControlMutation builder.
@@ -5075,11 +5174,32 @@ func (i *CreateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if v := i.Relation; v != nil {
 		m.SetRelation(*v)
 	}
-	if v := i.ControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
+	if v := i.Confidence; v != nil {
+		m.SetConfidence(*v)
 	}
-	if v := i.SubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.FromControlIDs; len(v) > 0 {
+		m.AddFromControlIDs(v...)
+	}
+	if v := i.ToControlIDs; len(v) > 0 {
+		m.AddToControlIDs(v...)
+	}
+	if v := i.FromSubcontrolIDs; len(v) > 0 {
+		m.AddFromSubcontrolIDs(v...)
+	}
+	if v := i.ToSubcontrolIDs; len(v) > 0 {
+		m.AddToSubcontrolIDs(v...)
 	}
 }
 
@@ -5091,19 +5211,36 @@ func (c *MappedControlCreate) SetInput(i CreateMappedControlInput) *MappedContro
 
 // UpdateMappedControlInput represents a mutation input for updating mappedcontrols.
 type UpdateMappedControlInput struct {
-	ClearTags           bool
-	Tags                []string
-	AppendTags          []string
-	ClearMappingType    bool
-	MappingType         *string
-	ClearRelation       bool
-	Relation            *string
-	ClearControls       bool
-	AddControlIDs       []string
-	RemoveControlIDs    []string
-	ClearSubcontrols    bool
-	AddSubcontrolIDs    []string
-	RemoveSubcontrolIDs []string
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	MappingType             *enums.MappingType
+	ClearRelation           bool
+	Relation                *string
+	ClearConfidence         bool
+	Confidence              *int
+	ClearSource             bool
+	Source                  *enums.MappingSource
+	ClearOwner              bool
+	OwnerID                 *string
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
+	ClearFromControls       bool
+	AddFromControlIDs       []string
+	RemoveFromControlIDs    []string
+	ClearToControls         bool
+	AddToControlIDs         []string
+	RemoveToControlIDs      []string
+	ClearFromSubcontrols    bool
+	AddFromSubcontrolIDs    []string
+	RemoveFromSubcontrolIDs []string
+	ClearToSubcontrols      bool
+	AddToSubcontrolIDs      []string
+	RemoveToSubcontrolIDs   []string
 }
 
 // Mutate applies the UpdateMappedControlInput on the MappedControlMutation builder.
@@ -5117,9 +5254,6 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if i.ClearMappingType {
-		m.ClearMappingType()
-	}
 	if v := i.MappingType; v != nil {
 		m.SetMappingType(*v)
 	}
@@ -5129,23 +5263,77 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if v := i.Relation; v != nil {
 		m.SetRelation(*v)
 	}
-	if i.ClearControls {
-		m.ClearControls()
+	if i.ClearConfidence {
+		m.ClearConfidence()
 	}
-	if v := i.AddControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
+	if v := i.Confidence; v != nil {
+		m.SetConfidence(*v)
 	}
-	if v := i.RemoveControlIDs; len(v) > 0 {
-		m.RemoveControlIDs(v...)
+	if i.ClearSource {
+		m.ClearSource()
 	}
-	if i.ClearSubcontrols {
-		m.ClearSubcontrols()
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
 	}
-	if v := i.AddSubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
+	if i.ClearOwner {
+		m.ClearOwner()
 	}
-	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
-		m.RemoveSubcontrolIDs(v...)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearFromControls {
+		m.ClearFromControls()
+	}
+	if v := i.AddFromControlIDs; len(v) > 0 {
+		m.AddFromControlIDs(v...)
+	}
+	if v := i.RemoveFromControlIDs; len(v) > 0 {
+		m.RemoveFromControlIDs(v...)
+	}
+	if i.ClearToControls {
+		m.ClearToControls()
+	}
+	if v := i.AddToControlIDs; len(v) > 0 {
+		m.AddToControlIDs(v...)
+	}
+	if v := i.RemoveToControlIDs; len(v) > 0 {
+		m.RemoveToControlIDs(v...)
+	}
+	if i.ClearFromSubcontrols {
+		m.ClearFromSubcontrols()
+	}
+	if v := i.AddFromSubcontrolIDs; len(v) > 0 {
+		m.AddFromSubcontrolIDs(v...)
+	}
+	if v := i.RemoveFromSubcontrolIDs; len(v) > 0 {
+		m.RemoveFromSubcontrolIDs(v...)
+	}
+	if i.ClearToSubcontrols {
+		m.ClearToSubcontrols()
+	}
+	if v := i.AddToSubcontrolIDs; len(v) > 0 {
+		m.AddToSubcontrolIDs(v...)
+	}
+	if v := i.RemoveToSubcontrolIDs; len(v) > 0 {
+		m.RemoveToSubcontrolIDs(v...)
 	}
 }
 
@@ -5529,64 +5717,70 @@ func (c *OrgMembershipUpdateOne) SetInput(i UpdateOrgMembershipInput) *OrgMember
 
 // CreateOrganizationInput represents a mutation input for creating organizations.
 type CreateOrganizationInput struct {
-	Tags                          []string
-	Name                          string
-	DisplayName                   *string
-	Description                   *string
-	PersonalOrg                   *bool
-	AvatarRemoteURL               *string
-	AvatarUpdatedAt               *time.Time
-	DedicatedDb                   *bool
-	ControlCreatorIDs             []string
-	ControlObjectiveCreatorIDs    []string
-	GroupCreatorIDs               []string
-	InternalPolicyCreatorIDs      []string
-	NarrativeCreatorIDs           []string
-	ProcedureCreatorIDs           []string
-	ProgramCreatorIDs             []string
-	RiskCreatorIDs                []string
-	TemplateCreatorIDs            []string
-	ParentID                      *string
-	SettingID                     *string
-	PersonalAccessTokenIDs        []string
-	APITokenIDs                   []string
-	FileIDs                       []string
-	EventIDs                      []string
-	SecretIDs                     []string
-	AvatarFileID                  *string
-	GroupIDs                      []string
-	TemplateIDs                   []string
-	IntegrationIDs                []string
-	DocumentIDs                   []string
-	OrgSubscriptionIDs            []string
-	InviteIDs                     []string
-	SubscriberIDs                 []string
-	EntityIDs                     []string
-	EntityTypeIDs                 []string
-	ContactIDs                    []string
-	NoteIDs                       []string
-	TaskIDs                       []string
-	ProgramIDs                    []string
-	ProcedureIDs                  []string
-	InternalPolicyIDs             []string
-	RiskIDs                       []string
-	ControlObjectiveIDs           []string
-	NarrativeIDs                  []string
-	ControlIDs                    []string
-	SubcontrolIDs                 []string
-	ControlImplementationIDs      []string
-	EvidenceIDs                   []string
-	StandardIDs                   []string
-	ActionPlanIDs                 []string
-	CustomDomainIDs               []string
-	JobRunnerIDs                  []string
-	JobRunnerTokenIDs             []string
-	JobRunnerRegistrationTokenIDs []string
-	DNSVerificationIDs            []string
-	JobIDs                        []string
-	ScheduledJobIDs               []string
-	JobResultIDs                  []string
-	ScheduledJobRunIDs            []string
+	Tags                            []string
+	Name                            string
+	DisplayName                     *string
+	Description                     *string
+	PersonalOrg                     *bool
+	AvatarRemoteURL                 *string
+	AvatarUpdatedAt                 *time.Time
+	DedicatedDb                     *bool
+	ControlCreatorIDs               []string
+	ControlImplementationCreatorIDs []string
+	ControlObjectiveCreatorIDs      []string
+	EvidenceCreatorIDs              []string
+	GroupCreatorIDs                 []string
+	InternalPolicyCreatorIDs        []string
+	MappedControlCreatorIDs         []string
+	NarrativeCreatorIDs             []string
+	ProcedureCreatorIDs             []string
+	ProgramCreatorIDs               []string
+	RiskCreatorIDs                  []string
+	ScheduledJobCreatorIDs          []string
+	StandardCreatorIDs              []string
+	TemplateCreatorIDs              []string
+	ParentID                        *string
+	SettingID                       *string
+	PersonalAccessTokenIDs          []string
+	APITokenIDs                     []string
+	FileIDs                         []string
+	EventIDs                        []string
+	SecretIDs                       []string
+	AvatarFileID                    *string
+	GroupIDs                        []string
+	TemplateIDs                     []string
+	IntegrationIDs                  []string
+	DocumentIDs                     []string
+	OrgSubscriptionIDs              []string
+	InviteIDs                       []string
+	SubscriberIDs                   []string
+	EntityIDs                       []string
+	EntityTypeIDs                   []string
+	ContactIDs                      []string
+	NoteIDs                         []string
+	TaskIDs                         []string
+	ProgramIDs                      []string
+	ProcedureIDs                    []string
+	InternalPolicyIDs               []string
+	RiskIDs                         []string
+	ControlObjectiveIDs             []string
+	NarrativeIDs                    []string
+	ControlIDs                      []string
+	SubcontrolIDs                   []string
+	ControlImplementationIDs        []string
+	MappedControlIDs                []string
+	EvidenceIDs                     []string
+	StandardIDs                     []string
+	ActionPlanIDs                   []string
+	CustomDomainIDs                 []string
+	JobRunnerIDs                    []string
+	JobRunnerTokenIDs               []string
+	JobRunnerRegistrationTokenIDs   []string
+	DNSVerificationIDs              []string
+	JobIDs                          []string
+	ScheduledJobIDs                 []string
+	JobResultIDs                    []string
+	ScheduledJobRunIDs              []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -5616,14 +5810,23 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ControlCreatorIDs; len(v) > 0 {
 		m.AddControlCreatorIDs(v...)
 	}
+	if v := i.ControlImplementationCreatorIDs; len(v) > 0 {
+		m.AddControlImplementationCreatorIDs(v...)
+	}
 	if v := i.ControlObjectiveCreatorIDs; len(v) > 0 {
 		m.AddControlObjectiveCreatorIDs(v...)
+	}
+	if v := i.EvidenceCreatorIDs; len(v) > 0 {
+		m.AddEvidenceCreatorIDs(v...)
 	}
 	if v := i.GroupCreatorIDs; len(v) > 0 {
 		m.AddGroupCreatorIDs(v...)
 	}
 	if v := i.InternalPolicyCreatorIDs; len(v) > 0 {
 		m.AddInternalPolicyCreatorIDs(v...)
+	}
+	if v := i.MappedControlCreatorIDs; len(v) > 0 {
+		m.AddMappedControlCreatorIDs(v...)
 	}
 	if v := i.NarrativeCreatorIDs; len(v) > 0 {
 		m.AddNarrativeCreatorIDs(v...)
@@ -5636,6 +5839,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RiskCreatorIDs; len(v) > 0 {
 		m.AddRiskCreatorIDs(v...)
+	}
+	if v := i.ScheduledJobCreatorIDs; len(v) > 0 {
+		m.AddScheduledJobCreatorIDs(v...)
+	}
+	if v := i.StandardCreatorIDs; len(v) > 0 {
+		m.AddStandardCreatorIDs(v...)
 	}
 	if v := i.TemplateCreatorIDs; len(v) > 0 {
 		m.AddTemplateCreatorIDs(v...)
@@ -5727,6 +5936,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ControlImplementationIDs; len(v) > 0 {
 		m.AddControlImplementationIDs(v...)
 	}
+	if v := i.MappedControlIDs; len(v) > 0 {
+		m.AddMappedControlIDs(v...)
+	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
 	}
@@ -5773,162 +5985,180 @@ func (c *OrganizationCreate) SetInput(i CreateOrganizationInput) *OrganizationCr
 
 // UpdateOrganizationInput represents a mutation input for updating organizations.
 type UpdateOrganizationInput struct {
-	ClearTags                           bool
-	Tags                                []string
-	AppendTags                          []string
-	Name                                *string
-	DisplayName                         *string
-	ClearDescription                    bool
-	Description                         *string
-	ClearAvatarRemoteURL                bool
-	AvatarRemoteURL                     *string
-	ClearAvatarUpdatedAt                bool
-	AvatarUpdatedAt                     *time.Time
-	ClearControlCreators                bool
-	AddControlCreatorIDs                []string
-	RemoveControlCreatorIDs             []string
-	ClearControlObjectiveCreators       bool
-	AddControlObjectiveCreatorIDs       []string
-	RemoveControlObjectiveCreatorIDs    []string
-	ClearGroupCreators                  bool
-	AddGroupCreatorIDs                  []string
-	RemoveGroupCreatorIDs               []string
-	ClearInternalPolicyCreators         bool
-	AddInternalPolicyCreatorIDs         []string
-	RemoveInternalPolicyCreatorIDs      []string
-	ClearNarrativeCreators              bool
-	AddNarrativeCreatorIDs              []string
-	RemoveNarrativeCreatorIDs           []string
-	ClearProcedureCreators              bool
-	AddProcedureCreatorIDs              []string
-	RemoveProcedureCreatorIDs           []string
-	ClearProgramCreators                bool
-	AddProgramCreatorIDs                []string
-	RemoveProgramCreatorIDs             []string
-	ClearRiskCreators                   bool
-	AddRiskCreatorIDs                   []string
-	RemoveRiskCreatorIDs                []string
-	ClearTemplateCreators               bool
-	AddTemplateCreatorIDs               []string
-	RemoveTemplateCreatorIDs            []string
-	ClearSetting                        bool
-	SettingID                           *string
-	ClearPersonalAccessTokens           bool
-	AddPersonalAccessTokenIDs           []string
-	RemovePersonalAccessTokenIDs        []string
-	ClearAPITokens                      bool
-	AddAPITokenIDs                      []string
-	RemoveAPITokenIDs                   []string
-	ClearFiles                          bool
-	AddFileIDs                          []string
-	RemoveFileIDs                       []string
-	ClearEvents                         bool
-	AddEventIDs                         []string
-	RemoveEventIDs                      []string
-	ClearSecrets                        bool
-	AddSecretIDs                        []string
-	RemoveSecretIDs                     []string
-	ClearAvatarFile                     bool
-	AvatarFileID                        *string
-	ClearGroups                         bool
-	AddGroupIDs                         []string
-	RemoveGroupIDs                      []string
-	ClearTemplates                      bool
-	AddTemplateIDs                      []string
-	RemoveTemplateIDs                   []string
-	ClearIntegrations                   bool
-	AddIntegrationIDs                   []string
-	RemoveIntegrationIDs                []string
-	ClearDocuments                      bool
-	AddDocumentIDs                      []string
-	RemoveDocumentIDs                   []string
-	ClearOrgSubscriptions               bool
-	AddOrgSubscriptionIDs               []string
-	RemoveOrgSubscriptionIDs            []string
-	ClearInvites                        bool
-	AddInviteIDs                        []string
-	RemoveInviteIDs                     []string
-	ClearSubscribers                    bool
-	AddSubscriberIDs                    []string
-	RemoveSubscriberIDs                 []string
-	ClearEntities                       bool
-	AddEntityIDs                        []string
-	RemoveEntityIDs                     []string
-	ClearEntityTypes                    bool
-	AddEntityTypeIDs                    []string
-	RemoveEntityTypeIDs                 []string
-	ClearContacts                       bool
-	AddContactIDs                       []string
-	RemoveContactIDs                    []string
-	ClearNotes                          bool
-	AddNoteIDs                          []string
-	RemoveNoteIDs                       []string
-	ClearTasks                          bool
-	AddTaskIDs                          []string
-	RemoveTaskIDs                       []string
-	ClearPrograms                       bool
-	AddProgramIDs                       []string
-	RemoveProgramIDs                    []string
-	ClearProcedures                     bool
-	AddProcedureIDs                     []string
-	RemoveProcedureIDs                  []string
-	ClearInternalPolicies               bool
-	AddInternalPolicyIDs                []string
-	RemoveInternalPolicyIDs             []string
-	ClearRisks                          bool
-	AddRiskIDs                          []string
-	RemoveRiskIDs                       []string
-	ClearControlObjectives              bool
-	AddControlObjectiveIDs              []string
-	RemoveControlObjectiveIDs           []string
-	ClearNarratives                     bool
-	AddNarrativeIDs                     []string
-	RemoveNarrativeIDs                  []string
-	ClearControls                       bool
-	AddControlIDs                       []string
-	RemoveControlIDs                    []string
-	ClearSubcontrols                    bool
-	AddSubcontrolIDs                    []string
-	RemoveSubcontrolIDs                 []string
-	ClearControlImplementations         bool
-	AddControlImplementationIDs         []string
-	RemoveControlImplementationIDs      []string
-	ClearEvidence                       bool
-	AddEvidenceIDs                      []string
-	RemoveEvidenceIDs                   []string
-	ClearStandards                      bool
-	AddStandardIDs                      []string
-	RemoveStandardIDs                   []string
-	ClearActionPlans                    bool
-	AddActionPlanIDs                    []string
-	RemoveActionPlanIDs                 []string
-	ClearCustomDomains                  bool
-	AddCustomDomainIDs                  []string
-	RemoveCustomDomainIDs               []string
-	ClearJobRunners                     bool
-	AddJobRunnerIDs                     []string
-	RemoveJobRunnerIDs                  []string
-	ClearJobRunnerTokens                bool
-	AddJobRunnerTokenIDs                []string
-	RemoveJobRunnerTokenIDs             []string
-	ClearJobRunnerRegistrationTokens    bool
-	AddJobRunnerRegistrationTokenIDs    []string
-	RemoveJobRunnerRegistrationTokenIDs []string
-	ClearDNSVerifications               bool
-	AddDNSVerificationIDs               []string
-	RemoveDNSVerificationIDs            []string
-	ClearJobs                           bool
-	AddJobIDs                           []string
-	RemoveJobIDs                        []string
-	ClearScheduledJobs                  bool
-	AddScheduledJobIDs                  []string
-	RemoveScheduledJobIDs               []string
-	ClearJobResults                     bool
-	AddJobResultIDs                     []string
-	RemoveJobResultIDs                  []string
-	ClearScheduledJobRuns               bool
-	AddScheduledJobRunIDs               []string
-	RemoveScheduledJobRunIDs            []string
+	ClearTags                             bool
+	Tags                                  []string
+	AppendTags                            []string
+	Name                                  *string
+	DisplayName                           *string
+	ClearDescription                      bool
+	Description                           *string
+	ClearAvatarRemoteURL                  bool
+	AvatarRemoteURL                       *string
+	ClearAvatarUpdatedAt                  bool
+	AvatarUpdatedAt                       *time.Time
+	ClearControlCreators                  bool
+	AddControlCreatorIDs                  []string
+	RemoveControlCreatorIDs               []string
+	ClearControlImplementationCreators    bool
+	AddControlImplementationCreatorIDs    []string
+	RemoveControlImplementationCreatorIDs []string
+	ClearControlObjectiveCreators         bool
+	AddControlObjectiveCreatorIDs         []string
+	RemoveControlObjectiveCreatorIDs      []string
+	ClearEvidenceCreators                 bool
+	AddEvidenceCreatorIDs                 []string
+	RemoveEvidenceCreatorIDs              []string
+	ClearGroupCreators                    bool
+	AddGroupCreatorIDs                    []string
+	RemoveGroupCreatorIDs                 []string
+	ClearInternalPolicyCreators           bool
+	AddInternalPolicyCreatorIDs           []string
+	RemoveInternalPolicyCreatorIDs        []string
+	ClearMappedControlCreators            bool
+	AddMappedControlCreatorIDs            []string
+	RemoveMappedControlCreatorIDs         []string
+	ClearNarrativeCreators                bool
+	AddNarrativeCreatorIDs                []string
+	RemoveNarrativeCreatorIDs             []string
+	ClearProcedureCreators                bool
+	AddProcedureCreatorIDs                []string
+	RemoveProcedureCreatorIDs             []string
+	ClearProgramCreators                  bool
+	AddProgramCreatorIDs                  []string
+	RemoveProgramCreatorIDs               []string
+	ClearRiskCreators                     bool
+	AddRiskCreatorIDs                     []string
+	RemoveRiskCreatorIDs                  []string
+	ClearScheduledJobCreators             bool
+	AddScheduledJobCreatorIDs             []string
+	RemoveScheduledJobCreatorIDs          []string
+	ClearStandardCreators                 bool
+	AddStandardCreatorIDs                 []string
+	RemoveStandardCreatorIDs              []string
+	ClearTemplateCreators                 bool
+	AddTemplateCreatorIDs                 []string
+	RemoveTemplateCreatorIDs              []string
+	ClearSetting                          bool
+	SettingID                             *string
+	ClearPersonalAccessTokens             bool
+	AddPersonalAccessTokenIDs             []string
+	RemovePersonalAccessTokenIDs          []string
+	ClearAPITokens                        bool
+	AddAPITokenIDs                        []string
+	RemoveAPITokenIDs                     []string
+	ClearFiles                            bool
+	AddFileIDs                            []string
+	RemoveFileIDs                         []string
+	ClearEvents                           bool
+	AddEventIDs                           []string
+	RemoveEventIDs                        []string
+	ClearSecrets                          bool
+	AddSecretIDs                          []string
+	RemoveSecretIDs                       []string
+	ClearAvatarFile                       bool
+	AvatarFileID                          *string
+	ClearGroups                           bool
+	AddGroupIDs                           []string
+	RemoveGroupIDs                        []string
+	ClearTemplates                        bool
+	AddTemplateIDs                        []string
+	RemoveTemplateIDs                     []string
+	ClearIntegrations                     bool
+	AddIntegrationIDs                     []string
+	RemoveIntegrationIDs                  []string
+	ClearDocuments                        bool
+	AddDocumentIDs                        []string
+	RemoveDocumentIDs                     []string
+	ClearOrgSubscriptions                 bool
+	AddOrgSubscriptionIDs                 []string
+	RemoveOrgSubscriptionIDs              []string
+	ClearInvites                          bool
+	AddInviteIDs                          []string
+	RemoveInviteIDs                       []string
+	ClearSubscribers                      bool
+	AddSubscriberIDs                      []string
+	RemoveSubscriberIDs                   []string
+	ClearEntities                         bool
+	AddEntityIDs                          []string
+	RemoveEntityIDs                       []string
+	ClearEntityTypes                      bool
+	AddEntityTypeIDs                      []string
+	RemoveEntityTypeIDs                   []string
+	ClearContacts                         bool
+	AddContactIDs                         []string
+	RemoveContactIDs                      []string
+	ClearNotes                            bool
+	AddNoteIDs                            []string
+	RemoveNoteIDs                         []string
+	ClearTasks                            bool
+	AddTaskIDs                            []string
+	RemoveTaskIDs                         []string
+	ClearPrograms                         bool
+	AddProgramIDs                         []string
+	RemoveProgramIDs                      []string
+	ClearProcedures                       bool
+	AddProcedureIDs                       []string
+	RemoveProcedureIDs                    []string
+	ClearInternalPolicies                 bool
+	AddInternalPolicyIDs                  []string
+	RemoveInternalPolicyIDs               []string
+	ClearRisks                            bool
+	AddRiskIDs                            []string
+	RemoveRiskIDs                         []string
+	ClearControlObjectives                bool
+	AddControlObjectiveIDs                []string
+	RemoveControlObjectiveIDs             []string
+	ClearNarratives                       bool
+	AddNarrativeIDs                       []string
+	RemoveNarrativeIDs                    []string
+	ClearControls                         bool
+	AddControlIDs                         []string
+	RemoveControlIDs                      []string
+	ClearSubcontrols                      bool
+	AddSubcontrolIDs                      []string
+	RemoveSubcontrolIDs                   []string
+	ClearControlImplementations           bool
+	AddControlImplementationIDs           []string
+	RemoveControlImplementationIDs        []string
+	ClearMappedControls                   bool
+	AddMappedControlIDs                   []string
+	RemoveMappedControlIDs                []string
+	ClearEvidence                         bool
+	AddEvidenceIDs                        []string
+	RemoveEvidenceIDs                     []string
+	ClearStandards                        bool
+	AddStandardIDs                        []string
+	RemoveStandardIDs                     []string
+	ClearActionPlans                      bool
+	AddActionPlanIDs                      []string
+	RemoveActionPlanIDs                   []string
+	ClearCustomDomains                    bool
+	AddCustomDomainIDs                    []string
+	RemoveCustomDomainIDs                 []string
+	ClearJobRunners                       bool
+	AddJobRunnerIDs                       []string
+	RemoveJobRunnerIDs                    []string
+	ClearJobRunnerTokens                  bool
+	AddJobRunnerTokenIDs                  []string
+	RemoveJobRunnerTokenIDs               []string
+	ClearJobRunnerRegistrationTokens      bool
+	AddJobRunnerRegistrationTokenIDs      []string
+	RemoveJobRunnerRegistrationTokenIDs   []string
+	ClearDNSVerifications                 bool
+	AddDNSVerificationIDs                 []string
+	RemoveDNSVerificationIDs              []string
+	ClearJobs                             bool
+	AddJobIDs                             []string
+	RemoveJobIDs                          []string
+	ClearScheduledJobs                    bool
+	AddScheduledJobIDs                    []string
+	RemoveScheduledJobIDs                 []string
+	ClearJobResults                       bool
+	AddJobResultIDs                       []string
+	RemoveJobResultIDs                    []string
+	ClearScheduledJobRuns                 bool
+	AddScheduledJobRunIDs                 []string
+	RemoveScheduledJobRunIDs              []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5975,6 +6205,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveControlCreatorIDs; len(v) > 0 {
 		m.RemoveControlCreatorIDs(v...)
 	}
+	if i.ClearControlImplementationCreators {
+		m.ClearControlImplementationCreators()
+	}
+	if v := i.AddControlImplementationCreatorIDs; len(v) > 0 {
+		m.AddControlImplementationCreatorIDs(v...)
+	}
+	if v := i.RemoveControlImplementationCreatorIDs; len(v) > 0 {
+		m.RemoveControlImplementationCreatorIDs(v...)
+	}
 	if i.ClearControlObjectiveCreators {
 		m.ClearControlObjectiveCreators()
 	}
@@ -5983,6 +6222,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveControlObjectiveCreatorIDs; len(v) > 0 {
 		m.RemoveControlObjectiveCreatorIDs(v...)
+	}
+	if i.ClearEvidenceCreators {
+		m.ClearEvidenceCreators()
+	}
+	if v := i.AddEvidenceCreatorIDs; len(v) > 0 {
+		m.AddEvidenceCreatorIDs(v...)
+	}
+	if v := i.RemoveEvidenceCreatorIDs; len(v) > 0 {
+		m.RemoveEvidenceCreatorIDs(v...)
 	}
 	if i.ClearGroupCreators {
 		m.ClearGroupCreators()
@@ -6001,6 +6249,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveInternalPolicyCreatorIDs; len(v) > 0 {
 		m.RemoveInternalPolicyCreatorIDs(v...)
+	}
+	if i.ClearMappedControlCreators {
+		m.ClearMappedControlCreators()
+	}
+	if v := i.AddMappedControlCreatorIDs; len(v) > 0 {
+		m.AddMappedControlCreatorIDs(v...)
+	}
+	if v := i.RemoveMappedControlCreatorIDs; len(v) > 0 {
+		m.RemoveMappedControlCreatorIDs(v...)
 	}
 	if i.ClearNarrativeCreators {
 		m.ClearNarrativeCreators()
@@ -6037,6 +6294,24 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveRiskCreatorIDs; len(v) > 0 {
 		m.RemoveRiskCreatorIDs(v...)
+	}
+	if i.ClearScheduledJobCreators {
+		m.ClearScheduledJobCreators()
+	}
+	if v := i.AddScheduledJobCreatorIDs; len(v) > 0 {
+		m.AddScheduledJobCreatorIDs(v...)
+	}
+	if v := i.RemoveScheduledJobCreatorIDs; len(v) > 0 {
+		m.RemoveScheduledJobCreatorIDs(v...)
+	}
+	if i.ClearStandardCreators {
+		m.ClearStandardCreators()
+	}
+	if v := i.AddStandardCreatorIDs; len(v) > 0 {
+		m.AddStandardCreatorIDs(v...)
+	}
+	if v := i.RemoveStandardCreatorIDs; len(v) > 0 {
+		m.RemoveStandardCreatorIDs(v...)
 	}
 	if i.ClearTemplateCreators {
 		m.ClearTemplateCreators()
@@ -6292,6 +6567,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
 		m.RemoveControlImplementationIDs(v...)
+	}
+	if i.ClearMappedControls {
+		m.ClearMappedControls()
+	}
+	if v := i.AddMappedControlIDs; len(v) > 0 {
+		m.AddMappedControlIDs(v...)
+	}
+	if v := i.RemoveMappedControlIDs; len(v) > 0 {
+		m.RemoveMappedControlIDs(v...)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()
@@ -8351,6 +8635,7 @@ type CreateSubcontrolInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -8371,7 +8656,6 @@ type CreateSubcontrolInput struct {
 	ActionPlanIDs            []string
 	ProcedureIDs             []string
 	InternalPolicyIDs        []string
-	MappedControlIDs         []string
 	ControlOwnerID           *string
 	DelegateID               *string
 	OwnerID                  *string
@@ -8399,6 +8683,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)
@@ -8458,9 +8745,6 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.InternalPolicyIDs; len(v) > 0 {
 		m.AddInternalPolicyIDs(v...)
 	}
-	if v := i.MappedControlIDs; len(v) > 0 {
-		m.AddMappedControlIDs(v...)
-	}
 	if v := i.ControlOwnerID; v != nil {
 		m.SetControlOwnerID(*v)
 	}
@@ -8500,6 +8784,8 @@ type UpdateSubcontrolInput struct {
 	Status                         *enums.ControlStatus
 	ClearSource                    bool
 	Source                         *enums.ControlSource
+	ClearReferenceFramework        bool
+	ReferenceFramework             *string
 	ClearControlType               bool
 	ControlType                    *enums.ControlType
 	ClearCategory                  bool
@@ -8554,9 +8840,6 @@ type UpdateSubcontrolInput struct {
 	ClearInternalPolicies          bool
 	AddInternalPolicyIDs           []string
 	RemoveInternalPolicyIDs        []string
-	ClearMappedControls            bool
-	AddMappedControlIDs            []string
-	RemoveMappedControlIDs         []string
 	ClearControlOwner              bool
 	ControlOwnerID                 *string
 	ClearDelegate                  bool
@@ -8610,6 +8893,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearReferenceFramework {
+		m.ClearReferenceFramework()
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if i.ClearControlType {
 		m.ClearControlType()
@@ -8772,15 +9061,6 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
 		m.RemoveInternalPolicyIDs(v...)
-	}
-	if i.ClearMappedControls {
-		m.ClearMappedControls()
-	}
-	if v := i.AddMappedControlIDs; len(v) > 0 {
-		m.AddMappedControlIDs(v...)
-	}
-	if v := i.RemoveMappedControlIDs; len(v) > 0 {
-		m.RemoveMappedControlIDs(v...)
 	}
 	if i.ClearControlOwner {
 		m.ClearControlOwner()

@@ -89,6 +89,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "controlType":
 				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":
@@ -137,8 +139,6 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
@@ -149,8 +149,6 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Control_viewers(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
@@ -231,6 +229,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "controlType":
 				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":
@@ -279,8 +279,6 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
@@ -291,8 +289,6 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Control_viewers(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":
@@ -417,6 +413,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_status(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "controlType":
 				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":
@@ -465,8 +463,6 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_procedures(ctx, field)
 			case "internalPolicies":
 				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Control_mappedControls(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Control_controlOwner(ctx, field)
 			case "delegate":
@@ -477,8 +473,6 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_Control_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Control_viewers(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
 			case "programs":

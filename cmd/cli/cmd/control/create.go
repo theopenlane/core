@@ -36,7 +36,6 @@ func init() {
 	createCmd.Flags().StringP("framework-id", "f", "", "framework of the control")
 
 	createCmd.Flags().StringSliceP("editors", "e", []string{}, "group ID(s) given editor access to the control")
-	createCmd.Flags().StringSliceP("viewers", "w", []string{}, "group ID(s) given viewer access to the control")
 	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the control")
 }
 
@@ -101,11 +100,6 @@ func createValidation() (input openlaneclient.CreateControlInput, err error) {
 	editors := cmd.Config.Strings("editors")
 	if len(editors) > 0 {
 		input.EditorIDs = editors
-	}
-
-	viewers := cmd.Config.Strings("viewers")
-	if len(viewers) > 0 {
-		input.ViewerIDs = viewers
 	}
 
 	return input, nil

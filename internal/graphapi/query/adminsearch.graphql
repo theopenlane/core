@@ -82,6 +82,7 @@ query AdminSearch($query: String!) {
           description
           referenceID
           auditorReferenceID
+          referenceFramework
           category
           categoryID
           subcategory
@@ -466,7 +467,7 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
-          mappingType
+          ownerID
           relation
         }
       }
@@ -712,6 +713,7 @@ query AdminSearch($query: String!) {
           description
           referenceID
           auditorReferenceID
+          referenceFramework
           category
           categoryID
           subcategory

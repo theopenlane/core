@@ -88,8 +88,8 @@ func (InternalPolicy) Annotations() []schema.Annotation {
 func (InternalPolicy) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
-			hooks.HookOrgOwnedTuples(),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			hooks.OrgOwnedTuplesHookWithAdmin(),
+			ent.OpCreate,
 		),
 	}
 }
@@ -97,7 +97,7 @@ func (InternalPolicy) Hooks() []ent.Hook {
 // Interceptors of the InternalPolicy
 func (InternalPolicy) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		// procedures are org owned, but we need to ensure the groups are filtered as well
+		// policies are org owned, but we need to ensure the groups are filtered as well
 		interceptors.FilterQueryResults[generated.InternalPolicy](),
 	}
 }

@@ -202,6 +202,20 @@ func (sc *SubcontrolCreate) SetNillableSource(es *enums.ControlSource) *Subcontr
 	return sc
 }
 
+// SetReferenceFramework sets the "reference_framework" field.
+func (sc *SubcontrolCreate) SetReferenceFramework(s string) *SubcontrolCreate {
+	sc.mutation.SetReferenceFramework(s)
+	return sc
+}
+
+// SetNillableReferenceFramework sets the "reference_framework" field if the given value is not nil.
+func (sc *SubcontrolCreate) SetNillableReferenceFramework(s *string) *SubcontrolCreate {
+	if s != nil {
+		sc.SetReferenceFramework(*s)
+	}
+	return sc
+}
+
 // SetControlType sets the "control_type" field.
 func (sc *SubcontrolCreate) SetControlType(et enums.ControlType) *SubcontrolCreate {
 	sc.mutation.SetControlType(et)
@@ -488,21 +502,6 @@ func (sc *SubcontrolCreate) AddInternalPolicies(i ...*InternalPolicy) *Subcontro
 	return sc.AddInternalPolicyIDs(ids...)
 }
 
-// AddMappedControlIDs adds the "mapped_controls" edge to the MappedControl entity by IDs.
-func (sc *SubcontrolCreate) AddMappedControlIDs(ids ...string) *SubcontrolCreate {
-	sc.mutation.AddMappedControlIDs(ids...)
-	return sc
-}
-
-// AddMappedControls adds the "mapped_controls" edges to the MappedControl entity.
-func (sc *SubcontrolCreate) AddMappedControls(m ...*MappedControl) *SubcontrolCreate {
-	ids := make([]string, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
-	}
-	return sc.AddMappedControlIDs(ids...)
-}
-
 // SetControlOwner sets the "control_owner" edge to the Group entity.
 func (sc *SubcontrolCreate) SetControlOwner(g *Group) *SubcontrolCreate {
 	return sc.SetControlOwnerID(g.ID)
@@ -551,6 +550,36 @@ func (sc *SubcontrolCreate) AddScheduledJobs(c ...*ControlScheduledJob) *Subcont
 		ids[i] = c[i].ID
 	}
 	return sc.AddScheduledJobIDs(ids...)
+}
+
+// AddMappedToSubcontrolIDs adds the "mapped_to_subcontrols" edge to the MappedControl entity by IDs.
+func (sc *SubcontrolCreate) AddMappedToSubcontrolIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddMappedToSubcontrolIDs(ids...)
+	return sc
+}
+
+// AddMappedToSubcontrols adds the "mapped_to_subcontrols" edges to the MappedControl entity.
+func (sc *SubcontrolCreate) AddMappedToSubcontrols(m ...*MappedControl) *SubcontrolCreate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return sc.AddMappedToSubcontrolIDs(ids...)
+}
+
+// AddMappedFromSubcontrolIDs adds the "mapped_from_subcontrols" edge to the MappedControl entity by IDs.
+func (sc *SubcontrolCreate) AddMappedFromSubcontrolIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddMappedFromSubcontrolIDs(ids...)
+	return sc
+}
+
+// AddMappedFromSubcontrols adds the "mapped_from_subcontrols" edges to the MappedControl entity.
+func (sc *SubcontrolCreate) AddMappedFromSubcontrols(m ...*MappedControl) *SubcontrolCreate {
+	ids := make([]string, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return sc.AddMappedFromSubcontrolIDs(ids...)
 }
 
 // Mutation returns the SubcontrolMutation object of the builder.
@@ -767,6 +796,10 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)
 		_node.Source = value
 	}
+	if value, ok := sc.mutation.ReferenceFramework(); ok {
+		_spec.SetField(subcontrol.FieldReferenceFramework, field.TypeString, value)
+		_node.ReferenceFramework = value
+	}
 	if value, ok := sc.mutation.ControlType(); ok {
 		_spec.SetField(subcontrol.FieldControlType, field.TypeEnum, value)
 		_node.ControlType = value
@@ -951,23 +984,6 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := sc.mutation.MappedControlsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.MappedControlsTable,
-			Columns: subcontrol.MappedControlsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = sc.schemaConfig.MappedControlSubcontrols
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := sc.mutation.ControlOwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1069,6 +1085,40 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = sc.schemaConfig.ControlScheduledJobSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.MappedToSubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedToSubcontrolsTable,
+			Columns: subcontrol.MappedToSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.MappedControlToSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.MappedFromSubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.MappedFromSubcontrolsTable,
+			Columns: subcontrol.MappedFromSubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

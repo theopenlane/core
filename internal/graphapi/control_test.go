@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"testing"
 
 	"gotest.tools/v3/assert"
@@ -28,32 +29,36 @@ func TestQueryControl(t *testing.T) {
 	controlIDs := []string{}
 	// add test cases for querying the control
 	testCases := []struct {
-		name     string
-		queryID  string
-		client   *openlaneclient.OpenlaneClient
-		ctx      context.Context
-		errorMsg string
+		name          string
+		queryID       string
+		programAccess bool // whether the user has access to the program
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		errorMsg      string
 	}{
 		{
-			name:   "happy path",
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			name:          "happy path",
+			programAccess: true,
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
 		},
 		{
-			name:     "read only user, same org, no access to the program",
-			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			name:          "read only user, inherits access from the organization",
+			programAccess: false,
+			client:        suite.client.api,
+			ctx:           viewOnlyUser.UserCtx,
 		},
 		{
-			name:   "admin user, access to the program",
-			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			name:          "admin user, access to the program",
+			programAccess: true,
+			client:        suite.client.api,
+			ctx:           adminUser.UserCtx,
 		},
 		{
-			name:   "happy path using personal access token",
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			name:          "happy path using personal access token",
+			programAccess: true,
+			client:        suite.client.apiWithPAT,
+			ctx:           context.Background(),
 		},
 		{
 			name:     "control not found, invalid ID",
@@ -102,12 +107,11 @@ func TestQueryControl(t *testing.T) {
 			assert.Equal(t, tc.queryID, resp.Control.ID)
 			assert.Check(t, len(resp.Control.RefCode) != 0)
 
-			assert.Check(t, is.Len(resp.Control.Programs.Edges, 1))
-			assert.Check(t, len(resp.Control.Programs.Edges[0].Node.ID) != 0)
-
-			// delete the created evidence, update for the token user cases
-			if tc.ctx == context.Background() {
-				tc.ctx = testUser1.UserCtx
+			if tc.programAccess {
+				assert.Check(t, is.Len(resp.Control.Programs.Edges, 1))
+				assert.Check(t, len(resp.Control.Programs.Edges[0].Node.ID) != 0)
+			} else {
+				assert.Check(t, is.Len(resp.Control.Programs.Edges, 0))
 			}
 		})
 	}
@@ -180,16 +184,16 @@ func TestQueryControls(t *testing.T) {
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
-			name:            "happy path, using read only user of the same org, no programs or groups associated",
+			name:            "happy path, using read only user of the same org should inherit access from the org",
 			client:          suite.client.api,
 			ctx:             viewOnlyUser.UserCtx,
-			expectedResults: 0,
+			expectedResults: testutils.MaxResultLimit,
 		},
 		{
-			name:            "happy path, no access to the program or group",
+			name:            "happy path, with api token",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 0,
+			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "happy path, using pat",
@@ -260,7 +264,6 @@ func TestMutationCreateControl(t *testing.T) {
 
 	// create groups to be associated with the control
 	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// create control implementation to be associated with the control
 	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -343,7 +346,6 @@ func TestMutationCreateControl(t *testing.T) {
 				RefCode:         "A-3",
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
-				ViewerIDs:       []string{viewerGroup.ID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -572,13 +574,6 @@ func TestMutationCreateControl(t *testing.T) {
 				}
 			}
 
-			if len(tc.request.ViewerIDs) > 0 {
-				assert.Check(t, is.Len(resp.CreateControl.Control.Viewers.Edges, 1))
-				for _, edge := range resp.CreateControl.Control.Viewers.Edges {
-					assert.Equal(t, viewerGroup.ID, edge.Node.ID)
-				}
-			}
-
 			if tc.request.ControlImplementationIDs != nil {
 				assert.Assert(t, is.Len(resp.CreateControl.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs)))
 			}
@@ -606,7 +601,7 @@ func TestMutationCreateControl(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, blockedGroup.ID, viewerGroup.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, blockedGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateControlsByClone(t *testing.T) {
@@ -693,8 +688,8 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
-			// created directly under organization with no program, view only user should not have access
-			expectNoAccessViewer: true,
+			// created directly under organization with no program, view only user should have access
+			expectNoAccessViewer: false,
 		},
 		{
 			name: "happy path, clone control under org with program",
@@ -881,16 +876,18 @@ func TestMutationUpdateControl(t *testing.T) {
 	// add adminUser to the program so that they can update the control
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
 
-	// create another admin user and add them to the same organization and group as testUser1
-	// this will allow us to test the group editor/viewer permissions
-	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	// create another user and add them to the same organization and group as testUser1
+	// this will allow us to test the group editor permissions
+	anotherViewerUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID}).MustNew(testUser1.UserCtx, t)
 
-	// ensure the user does not currently have access to the control
-	res, err := suite.client.api.GetControlByID(anotherAdminUser.UserCtx, control.ID)
-	assert.ErrorContains(t, err, notFoundErrorMsg)
+	// ensure the user does not currently have access to update the control
+	res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, openlaneclient.UpdateControlInput{
+		Status: lo.ToPtr(enums.ControlStatusPreparing),
+	})
+	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 	assert.Assert(t, is.Nil(res))
 
 	testCases := []struct {
@@ -905,7 +902,7 @@ func TestMutationUpdateControl(t *testing.T) {
 			request: openlaneclient.UpdateControlInput{
 				Description:   lo.ToPtr("Updated description"),
 				AddProgramIDs: []string{program1.ID, program2.ID}, // add multiple programs (one already associated)
-				AddViewerIDs:  []string{groupMember.GroupID},
+				AddEditorIDs:  []string{groupMember.GroupID},
 				AddControlImplementationIDs: []string{
 					controlImplementation.ID,
 				},
@@ -991,7 +988,7 @@ func TestMutationUpdateControl(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update allowed, user added to one of the programs",
@@ -1113,11 +1110,11 @@ func TestMutationUpdateControl(t *testing.T) {
 				assert.Assert(t, is.Len(resp.UpdateControl.Control.Programs.Edges, len(tc.request.AddProgramIDs)))
 			}
 
-			if len(tc.request.AddViewerIDs) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateControl.Control.Viewers.Edges, 1))
+			if len(tc.request.AddEditorIDs) > 0 {
+				assert.Assert(t, is.Len(resp.UpdateControl.Control.Editors.Edges, 1))
 				found := false
-				for _, edge := range resp.UpdateControl.Control.Viewers.Edges {
-					if edge.Node.ID == tc.request.AddViewerIDs[0] {
+				for _, edge := range resp.UpdateControl.Control.Editors.Edges {
+					if edge.Node.ID == tc.request.AddEditorIDs[0] {
 						found = true
 						break
 					}
@@ -1126,10 +1123,13 @@ func TestMutationUpdateControl(t *testing.T) {
 				assert.Check(t, found)
 
 				// ensure the user has access to the control now
-				res, err := suite.client.api.GetControlByID(anotherAdminUser.UserCtx, control.ID)
+				res, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, openlaneclient.UpdateControlInput{
+					Tags: []string{"tag1"},
+				})
 				assert.NilError(t, err)
 				assert.Assert(t, res != nil)
-				assert.Equal(t, control.ID, res.Control.ID)
+				assert.Equal(t, control.ID, res.UpdateControl.Control.ID)
+				assert.Check(t, slices.Contains(res.UpdateControl.Control.Tags, "tag1"))
 			}
 		})
 	}

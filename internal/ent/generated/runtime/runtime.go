@@ -454,8 +454,6 @@ func init() {
 	control.Hooks[9] = controlMixinHooks7[0]
 
 	control.Hooks[10] = controlMixinHooks7[1]
-
-	control.Hooks[11] = controlMixinHooks7[2]
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters6 := controlMixin[6].Interceptors()
 	control.Interceptors[0] = controlMixinInters1[0]
@@ -542,6 +540,7 @@ func init() {
 	controlimplementationMixinHooks0 := controlimplementationMixin[0].Hooks()
 	controlimplementationMixinHooks1 := controlimplementationMixin[1].Hooks()
 	controlimplementationMixinHooks5 := controlimplementationMixin[5].Hooks()
+	controlimplementationMixinHooks6 := controlimplementationMixin[6].Hooks()
 	controlimplementationHooks := schema.ControlImplementation{}.Hooks()
 
 	controlimplementation.Hooks[1] = controlimplementationMixinHooks0[0]
@@ -554,7 +553,13 @@ func init() {
 
 	controlimplementation.Hooks[5] = controlimplementationMixinHooks5[2]
 
-	controlimplementation.Hooks[6] = controlimplementationHooks[0]
+	controlimplementation.Hooks[6] = controlimplementationMixinHooks6[0]
+
+	controlimplementation.Hooks[7] = controlimplementationMixinHooks6[1]
+
+	controlimplementation.Hooks[8] = controlimplementationMixinHooks6[2]
+
+	controlimplementation.Hooks[9] = controlimplementationHooks[0]
 	controlimplementationMixinInters1 := controlimplementationMixin[1].Interceptors()
 	controlimplementationMixinInters5 := controlimplementationMixin[5].Interceptors()
 	controlimplementation.Interceptors[0] = controlimplementationMixinInters1[0]
@@ -2786,18 +2791,35 @@ func init() {
 	}
 	mappedcontrolMixinHooks0 := mappedcontrolMixin[0].Hooks()
 	mappedcontrolMixinHooks1 := mappedcontrolMixin[1].Hooks()
+	mappedcontrolMixinHooks5 := mappedcontrolMixin[5].Hooks()
+	mappedcontrolMixinHooks6 := mappedcontrolMixin[6].Hooks()
+	mappedcontrolHooks := schema.MappedControl{}.Hooks()
 
 	mappedcontrol.Hooks[1] = mappedcontrolMixinHooks0[0]
 
 	mappedcontrol.Hooks[2] = mappedcontrolMixinHooks1[0]
+
+	mappedcontrol.Hooks[3] = mappedcontrolMixinHooks5[0]
+
+	mappedcontrol.Hooks[4] = mappedcontrolMixinHooks6[0]
+
+	mappedcontrol.Hooks[5] = mappedcontrolMixinHooks6[1]
+
+	mappedcontrol.Hooks[6] = mappedcontrolHooks[0]
 	mappedcontrolMixinInters1 := mappedcontrolMixin[1].Interceptors()
+	mappedcontrolMixinInters5 := mappedcontrolMixin[5].Interceptors()
+	mappedcontrolInters := schema.MappedControl{}.Interceptors()
 	mappedcontrol.Interceptors[0] = mappedcontrolMixinInters1[0]
+	mappedcontrol.Interceptors[1] = mappedcontrolMixinInters5[0]
+	mappedcontrol.Interceptors[2] = mappedcontrolInters[0]
 	mappedcontrolMixinFields0 := mappedcontrolMixin[0].Fields()
 	_ = mappedcontrolMixinFields0
 	mappedcontrolMixinFields2 := mappedcontrolMixin[2].Fields()
 	_ = mappedcontrolMixinFields2
 	mappedcontrolMixinFields3 := mappedcontrolMixin[3].Fields()
 	_ = mappedcontrolMixinFields3
+	mappedcontrolMixinFields5 := mappedcontrolMixin[5].Fields()
+	_ = mappedcontrolMixinFields5
 	mappedcontrolFields := schema.MappedControl{}.Fields()
 	_ = mappedcontrolFields
 	// mappedcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -2814,6 +2836,28 @@ func init() {
 	mappedcontrolDescTags := mappedcontrolMixinFields3[0].Descriptor()
 	// mappedcontrol.DefaultTags holds the default value on creation for the tags field.
 	mappedcontrol.DefaultTags = mappedcontrolDescTags.Default.([]string)
+	// mappedcontrolDescOwnerID is the schema descriptor for owner_id field.
+	mappedcontrolDescOwnerID := mappedcontrolMixinFields5[0].Descriptor()
+	// mappedcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	mappedcontrol.OwnerIDValidator = mappedcontrolDescOwnerID.Validators[0].(func(string) error)
+	// mappedcontrolDescConfidence is the schema descriptor for confidence field.
+	mappedcontrolDescConfidence := mappedcontrolFields[2].Descriptor()
+	// mappedcontrol.ConfidenceValidator is a validator for the "confidence" field. It is called by the builders before save.
+	mappedcontrol.ConfidenceValidator = func() func(int) error {
+		validators := mappedcontrolDescConfidence.Validators
+		fns := [...]func(int) error{
+			validators[0].(func(int) error),
+			validators[1].(func(int) error),
+		}
+		return func(confidence int) error {
+			for _, fn := range fns {
+				if err := fn(confidence); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// mappedcontrolDescID is the schema descriptor for id field.
 	mappedcontrolDescID := mappedcontrolMixinFields2[0].Descriptor()
 	// mappedcontrol.DefaultID holds the default value on creation for the id field.
@@ -3247,11 +3291,21 @@ func init() {
 
 	organization.Hooks[11] = organizationMixinHooks5[8]
 
-	organization.Hooks[12] = organizationHooks[0]
+	organization.Hooks[12] = organizationMixinHooks5[9]
 
-	organization.Hooks[13] = organizationHooks[1]
+	organization.Hooks[13] = organizationMixinHooks5[10]
 
-	organization.Hooks[14] = organizationHooks[2]
+	organization.Hooks[14] = organizationMixinHooks5[11]
+
+	organization.Hooks[15] = organizationMixinHooks5[12]
+
+	organization.Hooks[16] = organizationMixinHooks5[13]
+
+	organization.Hooks[17] = organizationHooks[0]
+
+	organization.Hooks[18] = organizationHooks[1]
+
+	organization.Hooks[19] = organizationHooks[2]
 	organizationMixinInters1 := organizationMixin[1].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters1[0]

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/enums"
@@ -225,6 +226,51 @@ func (ciu *ControlImplementationUpdate) ClearDetails() *ControlImplementationUpd
 	return ciu
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ciu *ControlImplementationUpdate) AddBlockedGroupIDs(ids ...string) *ControlImplementationUpdate {
+	ciu.mutation.AddBlockedGroupIDs(ids...)
+	return ciu
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ciu *ControlImplementationUpdate) AddBlockedGroups(g ...*Group) *ControlImplementationUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciu.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ciu *ControlImplementationUpdate) AddEditorIDs(ids ...string) *ControlImplementationUpdate {
+	ciu.mutation.AddEditorIDs(ids...)
+	return ciu
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ciu *ControlImplementationUpdate) AddEditors(g ...*Group) *ControlImplementationUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciu.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (ciu *ControlImplementationUpdate) AddViewerIDs(ids ...string) *ControlImplementationUpdate {
+	ciu.mutation.AddViewerIDs(ids...)
+	return ciu
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (ciu *ControlImplementationUpdate) AddViewers(g ...*Group) *ControlImplementationUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciu.AddViewerIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (ciu *ControlImplementationUpdate) AddControlIDs(ids ...string) *ControlImplementationUpdate {
 	ciu.mutation.AddControlIDs(ids...)
@@ -258,6 +304,69 @@ func (ciu *ControlImplementationUpdate) AddSubcontrols(s ...*Subcontrol) *Contro
 // Mutation returns the ControlImplementationMutation object of the builder.
 func (ciu *ControlImplementationUpdate) Mutation() *ControlImplementationMutation {
 	return ciu.mutation
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (ciu *ControlImplementationUpdate) ClearBlockedGroups() *ControlImplementationUpdate {
+	ciu.mutation.ClearBlockedGroups()
+	return ciu
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (ciu *ControlImplementationUpdate) RemoveBlockedGroupIDs(ids ...string) *ControlImplementationUpdate {
+	ciu.mutation.RemoveBlockedGroupIDs(ids...)
+	return ciu
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (ciu *ControlImplementationUpdate) RemoveBlockedGroups(g ...*Group) *ControlImplementationUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciu.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (ciu *ControlImplementationUpdate) ClearEditors() *ControlImplementationUpdate {
+	ciu.mutation.ClearEditors()
+	return ciu
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (ciu *ControlImplementationUpdate) RemoveEditorIDs(ids ...string) *ControlImplementationUpdate {
+	ciu.mutation.RemoveEditorIDs(ids...)
+	return ciu
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (ciu *ControlImplementationUpdate) RemoveEditors(g ...*Group) *ControlImplementationUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciu.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (ciu *ControlImplementationUpdate) ClearViewers() *ControlImplementationUpdate {
+	ciu.mutation.ClearViewers()
+	return ciu
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (ciu *ControlImplementationUpdate) RemoveViewerIDs(ids ...string) *ControlImplementationUpdate {
+	ciu.mutation.RemoveViewerIDs(ids...)
+	return ciu
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (ciu *ControlImplementationUpdate) RemoveViewers(g ...*Group) *ControlImplementationUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciu.RemoveViewerIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -442,6 +551,150 @@ func (ciu *ControlImplementationUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if ciu.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementation.FieldDetails, field.TypeString)
+	}
+	if ciu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.BlockedGroupsTable,
+			Columns: controlimplementation.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.ControlImplementationBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ciu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.BlockedGroupsTable,
+			Columns: controlimplementation.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.ControlImplementationBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.BlockedGroupsTable,
+			Columns: controlimplementation.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.ControlImplementationBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ciu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.EditorsTable,
+			Columns: controlimplementation.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.ControlImplementationEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ciu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.EditorsTable,
+			Columns: controlimplementation.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.ControlImplementationEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.EditorsTable,
+			Columns: controlimplementation.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.ControlImplementationEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ciu.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.ViewersTable,
+			Columns: controlimplementation.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.ControlImplementationViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.RemovedViewersIDs(); len(nodes) > 0 && !ciu.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.ViewersTable,
+			Columns: controlimplementation.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.ControlImplementationViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.ViewersTable,
+			Columns: controlimplementation.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciu.schemaConfig.ControlImplementationViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ciu.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -753,6 +1006,51 @@ func (ciuo *ControlImplementationUpdateOne) ClearDetails() *ControlImplementatio
 	return ciuo
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ciuo *ControlImplementationUpdateOne) AddBlockedGroupIDs(ids ...string) *ControlImplementationUpdateOne {
+	ciuo.mutation.AddBlockedGroupIDs(ids...)
+	return ciuo
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ciuo *ControlImplementationUpdateOne) AddBlockedGroups(g ...*Group) *ControlImplementationUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciuo.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ciuo *ControlImplementationUpdateOne) AddEditorIDs(ids ...string) *ControlImplementationUpdateOne {
+	ciuo.mutation.AddEditorIDs(ids...)
+	return ciuo
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ciuo *ControlImplementationUpdateOne) AddEditors(g ...*Group) *ControlImplementationUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciuo.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (ciuo *ControlImplementationUpdateOne) AddViewerIDs(ids ...string) *ControlImplementationUpdateOne {
+	ciuo.mutation.AddViewerIDs(ids...)
+	return ciuo
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (ciuo *ControlImplementationUpdateOne) AddViewers(g ...*Group) *ControlImplementationUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciuo.AddViewerIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (ciuo *ControlImplementationUpdateOne) AddControlIDs(ids ...string) *ControlImplementationUpdateOne {
 	ciuo.mutation.AddControlIDs(ids...)
@@ -786,6 +1084,69 @@ func (ciuo *ControlImplementationUpdateOne) AddSubcontrols(s ...*Subcontrol) *Co
 // Mutation returns the ControlImplementationMutation object of the builder.
 func (ciuo *ControlImplementationUpdateOne) Mutation() *ControlImplementationMutation {
 	return ciuo.mutation
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (ciuo *ControlImplementationUpdateOne) ClearBlockedGroups() *ControlImplementationUpdateOne {
+	ciuo.mutation.ClearBlockedGroups()
+	return ciuo
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (ciuo *ControlImplementationUpdateOne) RemoveBlockedGroupIDs(ids ...string) *ControlImplementationUpdateOne {
+	ciuo.mutation.RemoveBlockedGroupIDs(ids...)
+	return ciuo
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (ciuo *ControlImplementationUpdateOne) RemoveBlockedGroups(g ...*Group) *ControlImplementationUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciuo.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (ciuo *ControlImplementationUpdateOne) ClearEditors() *ControlImplementationUpdateOne {
+	ciuo.mutation.ClearEditors()
+	return ciuo
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (ciuo *ControlImplementationUpdateOne) RemoveEditorIDs(ids ...string) *ControlImplementationUpdateOne {
+	ciuo.mutation.RemoveEditorIDs(ids...)
+	return ciuo
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (ciuo *ControlImplementationUpdateOne) RemoveEditors(g ...*Group) *ControlImplementationUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciuo.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (ciuo *ControlImplementationUpdateOne) ClearViewers() *ControlImplementationUpdateOne {
+	ciuo.mutation.ClearViewers()
+	return ciuo
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (ciuo *ControlImplementationUpdateOne) RemoveViewerIDs(ids ...string) *ControlImplementationUpdateOne {
+	ciuo.mutation.RemoveViewerIDs(ids...)
+	return ciuo
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (ciuo *ControlImplementationUpdateOne) RemoveViewers(g ...*Group) *ControlImplementationUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ciuo.RemoveViewerIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -1000,6 +1361,150 @@ func (ciuo *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if ciuo.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementation.FieldDetails, field.TypeString)
+	}
+	if ciuo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.BlockedGroupsTable,
+			Columns: controlimplementation.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.ControlImplementationBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ciuo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.BlockedGroupsTable,
+			Columns: controlimplementation.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.ControlImplementationBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.BlockedGroupsTable,
+			Columns: controlimplementation.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.ControlImplementationBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ciuo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.EditorsTable,
+			Columns: controlimplementation.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.ControlImplementationEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ciuo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.EditorsTable,
+			Columns: controlimplementation.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.ControlImplementationEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.EditorsTable,
+			Columns: controlimplementation.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.ControlImplementationEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ciuo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.ViewersTable,
+			Columns: controlimplementation.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.ControlImplementationViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !ciuo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.ViewersTable,
+			Columns: controlimplementation.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.ControlImplementationViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlimplementation.ViewersTable,
+			Columns: controlimplementation.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ciuo.schemaConfig.ControlImplementationViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ciuo.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{

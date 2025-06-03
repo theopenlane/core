@@ -23,18 +23,16 @@
 - user: program:program-1
   relation: parent
   object: task:task-1 # program has access to task
+  # add this here to so its correct for the task; this is a duplicate of the one in controls.yaml
+- user: organization:openlane
+  relation: parent
+  object: control:control-1
 - user: control:control-1
   relation: parent
   object: task:task-2 # control has access to task
 - user: program:program-2
   relation: parent
   object: control:control-1 # program has access to control
-- user: group:control-viewer#member
-  relation: viewer
-  object: control:control-1
-- user: user:ulid-control-viewer
-  relation: member
-  object: group:control-viewer
 - user: user:ulid-other-3
   relation: admin
   object: program:program-2

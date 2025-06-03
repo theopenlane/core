@@ -53,6 +53,8 @@ type ControlHistory struct {
 	Status enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
+	// the reference framework for the control if it came from a standard
+	ReferenceFramework string `json:"reference_framework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType enums.ControlType `json:"control_type,omitempty"`
 	// category of the control
@@ -97,7 +99,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldControlType, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldRefCode, controlhistory.FieldStandardID:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldReferenceFramework, controlhistory.FieldControlType, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldRefCode, controlhistory.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -219,6 +221,12 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
 			} else if value.Valid {
 				ch.Source = enums.ControlSource(value.String)
+			}
+		case controlhistory.FieldReferenceFramework:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reference_framework", values[i])
+			} else if value.Valid {
+				ch.ReferenceFramework = value.String
 			}
 		case controlhistory.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -413,6 +421,9 @@ func (ch *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Source))
+	builder.WriteString(", ")
+	builder.WriteString("reference_framework=")
+	builder.WriteString(ch.ReferenceFramework)
 	builder.WriteString(", ")
 	builder.WriteString("control_type=")
 	builder.WriteString(fmt.Sprintf("%v", ch.ControlType))

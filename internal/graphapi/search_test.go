@@ -100,11 +100,11 @@ func TestGlobalSearch(t *testing.T) {
 			client:           suite.client.api,
 			ctx:              testViewOnlyUser.UserCtx,
 			query:            "Test",
-			expectedResults:  15, // this is total count of all objects searched
+			expectedResults:  18, // this is total count of all objects searched
 			expectedGroups:   10, // 12 groups created by max results in tests is 10 and we are testing len of edges
 			expectedContacts: 3,
 			expectedPrograms: 0, // no access to the programs by the view only user
-			expectedControls: 0, // no access to the controls by the view only user
+			expectedControls: 3,
 		},
 		{
 			name:            "no results",

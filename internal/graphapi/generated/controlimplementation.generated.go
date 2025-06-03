@@ -91,6 +91,12 @@ func (ec *executionContext) fieldContext_ControlImplementationBulkCreatePayload_
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlImplementation_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_ControlImplementation_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_ControlImplementation_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ControlImplementation_viewers(ctx, field)
 			case "controls":
 				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			case "subcontrols":
@@ -167,6 +173,12 @@ func (ec *executionContext) fieldContext_ControlImplementationCreatePayload_cont
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlImplementation_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_ControlImplementation_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_ControlImplementation_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ControlImplementation_viewers(ctx, field)
 			case "controls":
 				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			case "subcontrols":
@@ -287,6 +299,12 @@ func (ec *executionContext) fieldContext_ControlImplementationUpdatePayload_cont
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlImplementation_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_ControlImplementation_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_ControlImplementation_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ControlImplementation_viewers(ctx, field)
 			case "controls":
 				return ec.fieldContext_ControlImplementation_controls(ctx, field)
 			case "subcontrols":

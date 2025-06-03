@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -63,115 +64,127 @@ import (
 // OrganizationQuery is the builder for querying Organization entities.
 type OrganizationQuery struct {
 	config
-	ctx                                  *QueryContext
-	order                                []organization.OrderOption
-	inters                               []Interceptor
-	predicates                           []predicate.Organization
-	withControlCreators                  *GroupQuery
-	withControlObjectiveCreators         *GroupQuery
-	withGroupCreators                    *GroupQuery
-	withInternalPolicyCreators           *GroupQuery
-	withNarrativeCreators                *GroupQuery
-	withProcedureCreators                *GroupQuery
-	withProgramCreators                  *GroupQuery
-	withRiskCreators                     *GroupQuery
-	withTemplateCreators                 *GroupQuery
-	withParent                           *OrganizationQuery
-	withChildren                         *OrganizationQuery
-	withSetting                          *OrganizationSettingQuery
-	withPersonalAccessTokens             *PersonalAccessTokenQuery
-	withAPITokens                        *APITokenQuery
-	withUsers                            *UserQuery
-	withFiles                            *FileQuery
-	withEvents                           *EventQuery
-	withSecrets                          *HushQuery
-	withAvatarFile                       *FileQuery
-	withGroups                           *GroupQuery
-	withTemplates                        *TemplateQuery
-	withIntegrations                     *IntegrationQuery
-	withDocuments                        *DocumentDataQuery
-	withOrgSubscriptions                 *OrgSubscriptionQuery
-	withInvites                          *InviteQuery
-	withSubscribers                      *SubscriberQuery
-	withEntities                         *EntityQuery
-	withEntityTypes                      *EntityTypeQuery
-	withContacts                         *ContactQuery
-	withNotes                            *NoteQuery
-	withTasks                            *TaskQuery
-	withPrograms                         *ProgramQuery
-	withProcedures                       *ProcedureQuery
-	withInternalPolicies                 *InternalPolicyQuery
-	withRisks                            *RiskQuery
-	withControlObjectives                *ControlObjectiveQuery
-	withNarratives                       *NarrativeQuery
-	withControls                         *ControlQuery
-	withSubcontrols                      *SubcontrolQuery
-	withControlImplementations           *ControlImplementationQuery
-	withEvidence                         *EvidenceQuery
-	withStandards                        *StandardQuery
-	withActionPlans                      *ActionPlanQuery
-	withCustomDomains                    *CustomDomainQuery
-	withJobRunners                       *JobRunnerQuery
-	withJobRunnerTokens                  *JobRunnerTokenQuery
-	withJobRunnerRegistrationTokens      *JobRunnerRegistrationTokenQuery
-	withDNSVerifications                 *DNSVerificationQuery
-	withJobs                             *ScheduledJobQuery
-	withScheduledJobs                    *ControlScheduledJobQuery
-	withJobResults                       *JobResultQuery
-	withScheduledJobRuns                 *ScheduledJobRunQuery
-	withMembers                          *OrgMembershipQuery
-	loadTotal                            []func(context.Context, []*Organization) error
-	modifiers                            []func(*sql.Selector)
-	withNamedControlCreators             map[string]*GroupQuery
-	withNamedControlObjectiveCreators    map[string]*GroupQuery
-	withNamedGroupCreators               map[string]*GroupQuery
-	withNamedInternalPolicyCreators      map[string]*GroupQuery
-	withNamedNarrativeCreators           map[string]*GroupQuery
-	withNamedProcedureCreators           map[string]*GroupQuery
-	withNamedProgramCreators             map[string]*GroupQuery
-	withNamedRiskCreators                map[string]*GroupQuery
-	withNamedTemplateCreators            map[string]*GroupQuery
-	withNamedChildren                    map[string]*OrganizationQuery
-	withNamedPersonalAccessTokens        map[string]*PersonalAccessTokenQuery
-	withNamedAPITokens                   map[string]*APITokenQuery
-	withNamedUsers                       map[string]*UserQuery
-	withNamedFiles                       map[string]*FileQuery
-	withNamedEvents                      map[string]*EventQuery
-	withNamedSecrets                     map[string]*HushQuery
-	withNamedGroups                      map[string]*GroupQuery
-	withNamedTemplates                   map[string]*TemplateQuery
-	withNamedIntegrations                map[string]*IntegrationQuery
-	withNamedDocuments                   map[string]*DocumentDataQuery
-	withNamedOrgSubscriptions            map[string]*OrgSubscriptionQuery
-	withNamedInvites                     map[string]*InviteQuery
-	withNamedSubscribers                 map[string]*SubscriberQuery
-	withNamedEntities                    map[string]*EntityQuery
-	withNamedEntityTypes                 map[string]*EntityTypeQuery
-	withNamedContacts                    map[string]*ContactQuery
-	withNamedNotes                       map[string]*NoteQuery
-	withNamedTasks                       map[string]*TaskQuery
-	withNamedPrograms                    map[string]*ProgramQuery
-	withNamedProcedures                  map[string]*ProcedureQuery
-	withNamedInternalPolicies            map[string]*InternalPolicyQuery
-	withNamedRisks                       map[string]*RiskQuery
-	withNamedControlObjectives           map[string]*ControlObjectiveQuery
-	withNamedNarratives                  map[string]*NarrativeQuery
-	withNamedControls                    map[string]*ControlQuery
-	withNamedSubcontrols                 map[string]*SubcontrolQuery
-	withNamedControlImplementations      map[string]*ControlImplementationQuery
-	withNamedEvidence                    map[string]*EvidenceQuery
-	withNamedStandards                   map[string]*StandardQuery
-	withNamedActionPlans                 map[string]*ActionPlanQuery
-	withNamedCustomDomains               map[string]*CustomDomainQuery
-	withNamedJobRunners                  map[string]*JobRunnerQuery
-	withNamedJobRunnerTokens             map[string]*JobRunnerTokenQuery
-	withNamedJobRunnerRegistrationTokens map[string]*JobRunnerRegistrationTokenQuery
-	withNamedDNSVerifications            map[string]*DNSVerificationQuery
-	withNamedJobs                        map[string]*ScheduledJobQuery
-	withNamedScheduledJobs               map[string]*ControlScheduledJobQuery
-	withNamedJobResults                  map[string]*JobResultQuery
-	withNamedScheduledJobRuns            map[string]*ScheduledJobRunQuery
-	withNamedMembers                     map[string]*OrgMembershipQuery
+	ctx                                    *QueryContext
+	order                                  []organization.OrderOption
+	inters                                 []Interceptor
+	predicates                             []predicate.Organization
+	withControlCreators                    *GroupQuery
+	withControlImplementationCreators      *GroupQuery
+	withControlObjectiveCreators           *GroupQuery
+	withEvidenceCreators                   *GroupQuery
+	withGroupCreators                      *GroupQuery
+	withInternalPolicyCreators             *GroupQuery
+	withMappedControlCreators              *GroupQuery
+	withNarrativeCreators                  *GroupQuery
+	withProcedureCreators                  *GroupQuery
+	withProgramCreators                    *GroupQuery
+	withRiskCreators                       *GroupQuery
+	withScheduledJobCreators               *GroupQuery
+	withStandardCreators                   *GroupQuery
+	withTemplateCreators                   *GroupQuery
+	withParent                             *OrganizationQuery
+	withChildren                           *OrganizationQuery
+	withSetting                            *OrganizationSettingQuery
+	withPersonalAccessTokens               *PersonalAccessTokenQuery
+	withAPITokens                          *APITokenQuery
+	withUsers                              *UserQuery
+	withFiles                              *FileQuery
+	withEvents                             *EventQuery
+	withSecrets                            *HushQuery
+	withAvatarFile                         *FileQuery
+	withGroups                             *GroupQuery
+	withTemplates                          *TemplateQuery
+	withIntegrations                       *IntegrationQuery
+	withDocuments                          *DocumentDataQuery
+	withOrgSubscriptions                   *OrgSubscriptionQuery
+	withInvites                            *InviteQuery
+	withSubscribers                        *SubscriberQuery
+	withEntities                           *EntityQuery
+	withEntityTypes                        *EntityTypeQuery
+	withContacts                           *ContactQuery
+	withNotes                              *NoteQuery
+	withTasks                              *TaskQuery
+	withPrograms                           *ProgramQuery
+	withProcedures                         *ProcedureQuery
+	withInternalPolicies                   *InternalPolicyQuery
+	withRisks                              *RiskQuery
+	withControlObjectives                  *ControlObjectiveQuery
+	withNarratives                         *NarrativeQuery
+	withControls                           *ControlQuery
+	withSubcontrols                        *SubcontrolQuery
+	withControlImplementations             *ControlImplementationQuery
+	withMappedControls                     *MappedControlQuery
+	withEvidence                           *EvidenceQuery
+	withStandards                          *StandardQuery
+	withActionPlans                        *ActionPlanQuery
+	withCustomDomains                      *CustomDomainQuery
+	withJobRunners                         *JobRunnerQuery
+	withJobRunnerTokens                    *JobRunnerTokenQuery
+	withJobRunnerRegistrationTokens        *JobRunnerRegistrationTokenQuery
+	withDNSVerifications                   *DNSVerificationQuery
+	withJobs                               *ScheduledJobQuery
+	withScheduledJobs                      *ControlScheduledJobQuery
+	withJobResults                         *JobResultQuery
+	withScheduledJobRuns                   *ScheduledJobRunQuery
+	withMembers                            *OrgMembershipQuery
+	loadTotal                              []func(context.Context, []*Organization) error
+	modifiers                              []func(*sql.Selector)
+	withNamedControlCreators               map[string]*GroupQuery
+	withNamedControlImplementationCreators map[string]*GroupQuery
+	withNamedControlObjectiveCreators      map[string]*GroupQuery
+	withNamedEvidenceCreators              map[string]*GroupQuery
+	withNamedGroupCreators                 map[string]*GroupQuery
+	withNamedInternalPolicyCreators        map[string]*GroupQuery
+	withNamedMappedControlCreators         map[string]*GroupQuery
+	withNamedNarrativeCreators             map[string]*GroupQuery
+	withNamedProcedureCreators             map[string]*GroupQuery
+	withNamedProgramCreators               map[string]*GroupQuery
+	withNamedRiskCreators                  map[string]*GroupQuery
+	withNamedScheduledJobCreators          map[string]*GroupQuery
+	withNamedStandardCreators              map[string]*GroupQuery
+	withNamedTemplateCreators              map[string]*GroupQuery
+	withNamedChildren                      map[string]*OrganizationQuery
+	withNamedPersonalAccessTokens          map[string]*PersonalAccessTokenQuery
+	withNamedAPITokens                     map[string]*APITokenQuery
+	withNamedUsers                         map[string]*UserQuery
+	withNamedFiles                         map[string]*FileQuery
+	withNamedEvents                        map[string]*EventQuery
+	withNamedSecrets                       map[string]*HushQuery
+	withNamedGroups                        map[string]*GroupQuery
+	withNamedTemplates                     map[string]*TemplateQuery
+	withNamedIntegrations                  map[string]*IntegrationQuery
+	withNamedDocuments                     map[string]*DocumentDataQuery
+	withNamedOrgSubscriptions              map[string]*OrgSubscriptionQuery
+	withNamedInvites                       map[string]*InviteQuery
+	withNamedSubscribers                   map[string]*SubscriberQuery
+	withNamedEntities                      map[string]*EntityQuery
+	withNamedEntityTypes                   map[string]*EntityTypeQuery
+	withNamedContacts                      map[string]*ContactQuery
+	withNamedNotes                         map[string]*NoteQuery
+	withNamedTasks                         map[string]*TaskQuery
+	withNamedPrograms                      map[string]*ProgramQuery
+	withNamedProcedures                    map[string]*ProcedureQuery
+	withNamedInternalPolicies              map[string]*InternalPolicyQuery
+	withNamedRisks                         map[string]*RiskQuery
+	withNamedControlObjectives             map[string]*ControlObjectiveQuery
+	withNamedNarratives                    map[string]*NarrativeQuery
+	withNamedControls                      map[string]*ControlQuery
+	withNamedSubcontrols                   map[string]*SubcontrolQuery
+	withNamedControlImplementations        map[string]*ControlImplementationQuery
+	withNamedMappedControls                map[string]*MappedControlQuery
+	withNamedEvidence                      map[string]*EvidenceQuery
+	withNamedStandards                     map[string]*StandardQuery
+	withNamedActionPlans                   map[string]*ActionPlanQuery
+	withNamedCustomDomains                 map[string]*CustomDomainQuery
+	withNamedJobRunners                    map[string]*JobRunnerQuery
+	withNamedJobRunnerTokens               map[string]*JobRunnerTokenQuery
+	withNamedJobRunnerRegistrationTokens   map[string]*JobRunnerRegistrationTokenQuery
+	withNamedDNSVerifications              map[string]*DNSVerificationQuery
+	withNamedJobs                          map[string]*ScheduledJobQuery
+	withNamedScheduledJobs                 map[string]*ControlScheduledJobQuery
+	withNamedJobResults                    map[string]*JobResultQuery
+	withNamedScheduledJobRuns              map[string]*ScheduledJobRunQuery
+	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -233,6 +246,31 @@ func (oq *OrganizationQuery) QueryControlCreators() *GroupQuery {
 	return query
 }
 
+// QueryControlImplementationCreators chains the current query on the "control_implementation_creators" edge.
+func (oq *OrganizationQuery) QueryControlImplementationCreators() *GroupQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlImplementationCreatorsTable, organization.ControlImplementationCreatorsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControlObjectiveCreators chains the current query on the "control_objective_creators" edge.
 func (oq *OrganizationQuery) QueryControlObjectiveCreators() *GroupQuery {
 	query := (&GroupClient{config: oq.config}).Query()
@@ -248,6 +286,31 @@ func (oq *OrganizationQuery) QueryControlObjectiveCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlObjectiveCreatorsTable, organization.ControlObjectiveCreatorsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvidenceCreators chains the current query on the "evidence_creators" edge.
+func (oq *OrganizationQuery) QueryEvidenceCreators() *GroupQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.EvidenceCreatorsTable, organization.EvidenceCreatorsColumn),
 		)
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -298,6 +361,31 @@ func (oq *OrganizationQuery) QueryInternalPolicyCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.InternalPolicyCreatorsTable, organization.InternalPolicyCreatorsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMappedControlCreators chains the current query on the "mapped_control_creators" edge.
+func (oq *OrganizationQuery) QueryMappedControlCreators() *GroupQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.MappedControlCreatorsTable, organization.MappedControlCreatorsColumn),
 		)
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -398,6 +486,56 @@ func (oq *OrganizationQuery) QueryRiskCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RiskCreatorsTable, organization.RiskCreatorsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScheduledJobCreators chains the current query on the "scheduled_job_creators" edge.
+func (oq *OrganizationQuery) QueryScheduledJobCreators() *GroupQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobCreatorsTable, organization.ScheduledJobCreatorsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryStandardCreators chains the current query on the "standard_creators" edge.
+func (oq *OrganizationQuery) QueryStandardCreators() *GroupQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.StandardCreatorsTable, organization.StandardCreatorsColumn),
 		)
 		schemaConfig := oq.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -1208,6 +1346,31 @@ func (oq *OrganizationQuery) QueryControlImplementations() *ControlImplementatio
 	return query
 }
 
+// QueryMappedControls chains the current query on the "mapped_controls" edge.
+func (oq *OrganizationQuery) QueryMappedControls() *MappedControlQuery {
+	query := (&MappedControlClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.MappedControlsTable, organization.MappedControlsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControl
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryEvidence chains the current query on the "evidence" edge.
 func (oq *OrganizationQuery) QueryEvidence() *EvidenceQuery {
 	query := (&EvidenceClient{config: oq.config}).Query()
@@ -1720,64 +1883,70 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		return nil
 	}
 	return &OrganizationQuery{
-		config:                          oq.config,
-		ctx:                             oq.ctx.Clone(),
-		order:                           append([]organization.OrderOption{}, oq.order...),
-		inters:                          append([]Interceptor{}, oq.inters...),
-		predicates:                      append([]predicate.Organization{}, oq.predicates...),
-		withControlCreators:             oq.withControlCreators.Clone(),
-		withControlObjectiveCreators:    oq.withControlObjectiveCreators.Clone(),
-		withGroupCreators:               oq.withGroupCreators.Clone(),
-		withInternalPolicyCreators:      oq.withInternalPolicyCreators.Clone(),
-		withNarrativeCreators:           oq.withNarrativeCreators.Clone(),
-		withProcedureCreators:           oq.withProcedureCreators.Clone(),
-		withProgramCreators:             oq.withProgramCreators.Clone(),
-		withRiskCreators:                oq.withRiskCreators.Clone(),
-		withTemplateCreators:            oq.withTemplateCreators.Clone(),
-		withParent:                      oq.withParent.Clone(),
-		withChildren:                    oq.withChildren.Clone(),
-		withSetting:                     oq.withSetting.Clone(),
-		withPersonalAccessTokens:        oq.withPersonalAccessTokens.Clone(),
-		withAPITokens:                   oq.withAPITokens.Clone(),
-		withUsers:                       oq.withUsers.Clone(),
-		withFiles:                       oq.withFiles.Clone(),
-		withEvents:                      oq.withEvents.Clone(),
-		withSecrets:                     oq.withSecrets.Clone(),
-		withAvatarFile:                  oq.withAvatarFile.Clone(),
-		withGroups:                      oq.withGroups.Clone(),
-		withTemplates:                   oq.withTemplates.Clone(),
-		withIntegrations:                oq.withIntegrations.Clone(),
-		withDocuments:                   oq.withDocuments.Clone(),
-		withOrgSubscriptions:            oq.withOrgSubscriptions.Clone(),
-		withInvites:                     oq.withInvites.Clone(),
-		withSubscribers:                 oq.withSubscribers.Clone(),
-		withEntities:                    oq.withEntities.Clone(),
-		withEntityTypes:                 oq.withEntityTypes.Clone(),
-		withContacts:                    oq.withContacts.Clone(),
-		withNotes:                       oq.withNotes.Clone(),
-		withTasks:                       oq.withTasks.Clone(),
-		withPrograms:                    oq.withPrograms.Clone(),
-		withProcedures:                  oq.withProcedures.Clone(),
-		withInternalPolicies:            oq.withInternalPolicies.Clone(),
-		withRisks:                       oq.withRisks.Clone(),
-		withControlObjectives:           oq.withControlObjectives.Clone(),
-		withNarratives:                  oq.withNarratives.Clone(),
-		withControls:                    oq.withControls.Clone(),
-		withSubcontrols:                 oq.withSubcontrols.Clone(),
-		withControlImplementations:      oq.withControlImplementations.Clone(),
-		withEvidence:                    oq.withEvidence.Clone(),
-		withStandards:                   oq.withStandards.Clone(),
-		withActionPlans:                 oq.withActionPlans.Clone(),
-		withCustomDomains:               oq.withCustomDomains.Clone(),
-		withJobRunners:                  oq.withJobRunners.Clone(),
-		withJobRunnerTokens:             oq.withJobRunnerTokens.Clone(),
-		withJobRunnerRegistrationTokens: oq.withJobRunnerRegistrationTokens.Clone(),
-		withDNSVerifications:            oq.withDNSVerifications.Clone(),
-		withJobs:                        oq.withJobs.Clone(),
-		withScheduledJobs:               oq.withScheduledJobs.Clone(),
-		withJobResults:                  oq.withJobResults.Clone(),
-		withScheduledJobRuns:            oq.withScheduledJobRuns.Clone(),
-		withMembers:                     oq.withMembers.Clone(),
+		config:                            oq.config,
+		ctx:                               oq.ctx.Clone(),
+		order:                             append([]organization.OrderOption{}, oq.order...),
+		inters:                            append([]Interceptor{}, oq.inters...),
+		predicates:                        append([]predicate.Organization{}, oq.predicates...),
+		withControlCreators:               oq.withControlCreators.Clone(),
+		withControlImplementationCreators: oq.withControlImplementationCreators.Clone(),
+		withControlObjectiveCreators:      oq.withControlObjectiveCreators.Clone(),
+		withEvidenceCreators:              oq.withEvidenceCreators.Clone(),
+		withGroupCreators:                 oq.withGroupCreators.Clone(),
+		withInternalPolicyCreators:        oq.withInternalPolicyCreators.Clone(),
+		withMappedControlCreators:         oq.withMappedControlCreators.Clone(),
+		withNarrativeCreators:             oq.withNarrativeCreators.Clone(),
+		withProcedureCreators:             oq.withProcedureCreators.Clone(),
+		withProgramCreators:               oq.withProgramCreators.Clone(),
+		withRiskCreators:                  oq.withRiskCreators.Clone(),
+		withScheduledJobCreators:          oq.withScheduledJobCreators.Clone(),
+		withStandardCreators:              oq.withStandardCreators.Clone(),
+		withTemplateCreators:              oq.withTemplateCreators.Clone(),
+		withParent:                        oq.withParent.Clone(),
+		withChildren:                      oq.withChildren.Clone(),
+		withSetting:                       oq.withSetting.Clone(),
+		withPersonalAccessTokens:          oq.withPersonalAccessTokens.Clone(),
+		withAPITokens:                     oq.withAPITokens.Clone(),
+		withUsers:                         oq.withUsers.Clone(),
+		withFiles:                         oq.withFiles.Clone(),
+		withEvents:                        oq.withEvents.Clone(),
+		withSecrets:                       oq.withSecrets.Clone(),
+		withAvatarFile:                    oq.withAvatarFile.Clone(),
+		withGroups:                        oq.withGroups.Clone(),
+		withTemplates:                     oq.withTemplates.Clone(),
+		withIntegrations:                  oq.withIntegrations.Clone(),
+		withDocuments:                     oq.withDocuments.Clone(),
+		withOrgSubscriptions:              oq.withOrgSubscriptions.Clone(),
+		withInvites:                       oq.withInvites.Clone(),
+		withSubscribers:                   oq.withSubscribers.Clone(),
+		withEntities:                      oq.withEntities.Clone(),
+		withEntityTypes:                   oq.withEntityTypes.Clone(),
+		withContacts:                      oq.withContacts.Clone(),
+		withNotes:                         oq.withNotes.Clone(),
+		withTasks:                         oq.withTasks.Clone(),
+		withPrograms:                      oq.withPrograms.Clone(),
+		withProcedures:                    oq.withProcedures.Clone(),
+		withInternalPolicies:              oq.withInternalPolicies.Clone(),
+		withRisks:                         oq.withRisks.Clone(),
+		withControlObjectives:             oq.withControlObjectives.Clone(),
+		withNarratives:                    oq.withNarratives.Clone(),
+		withControls:                      oq.withControls.Clone(),
+		withSubcontrols:                   oq.withSubcontrols.Clone(),
+		withControlImplementations:        oq.withControlImplementations.Clone(),
+		withMappedControls:                oq.withMappedControls.Clone(),
+		withEvidence:                      oq.withEvidence.Clone(),
+		withStandards:                     oq.withStandards.Clone(),
+		withActionPlans:                   oq.withActionPlans.Clone(),
+		withCustomDomains:                 oq.withCustomDomains.Clone(),
+		withJobRunners:                    oq.withJobRunners.Clone(),
+		withJobRunnerTokens:               oq.withJobRunnerTokens.Clone(),
+		withJobRunnerRegistrationTokens:   oq.withJobRunnerRegistrationTokens.Clone(),
+		withDNSVerifications:              oq.withDNSVerifications.Clone(),
+		withJobs:                          oq.withJobs.Clone(),
+		withScheduledJobs:                 oq.withScheduledJobs.Clone(),
+		withJobResults:                    oq.withJobResults.Clone(),
+		withScheduledJobRuns:              oq.withScheduledJobRuns.Clone(),
+		withMembers:                       oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
 		path:      oq.path,
@@ -1796,6 +1965,17 @@ func (oq *OrganizationQuery) WithControlCreators(opts ...func(*GroupQuery)) *Org
 	return oq
 }
 
+// WithControlImplementationCreators tells the query-builder to eager-load the nodes that are connected to
+// the "control_implementation_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithControlImplementationCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withControlImplementationCreators = query
+	return oq
+}
+
 // WithControlObjectiveCreators tells the query-builder to eager-load the nodes that are connected to
 // the "control_objective_creators" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithControlObjectiveCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -1804,6 +1984,17 @@ func (oq *OrganizationQuery) WithControlObjectiveCreators(opts ...func(*GroupQue
 		opt(query)
 	}
 	oq.withControlObjectiveCreators = query
+	return oq
+}
+
+// WithEvidenceCreators tells the query-builder to eager-load the nodes that are connected to
+// the "evidence_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithEvidenceCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withEvidenceCreators = query
 	return oq
 }
 
@@ -1826,6 +2017,17 @@ func (oq *OrganizationQuery) WithInternalPolicyCreators(opts ...func(*GroupQuery
 		opt(query)
 	}
 	oq.withInternalPolicyCreators = query
+	return oq
+}
+
+// WithMappedControlCreators tells the query-builder to eager-load the nodes that are connected to
+// the "mapped_control_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithMappedControlCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withMappedControlCreators = query
 	return oq
 }
 
@@ -1870,6 +2072,28 @@ func (oq *OrganizationQuery) WithRiskCreators(opts ...func(*GroupQuery)) *Organi
 		opt(query)
 	}
 	oq.withRiskCreators = query
+	return oq
+}
+
+// WithScheduledJobCreators tells the query-builder to eager-load the nodes that are connected to
+// the "scheduled_job_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithScheduledJobCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withScheduledJobCreators = query
+	return oq
+}
+
+// WithStandardCreators tells the query-builder to eager-load the nodes that are connected to
+// the "standard_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithStandardCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withStandardCreators = query
 	return oq
 }
 
@@ -2225,6 +2449,17 @@ func (oq *OrganizationQuery) WithControlImplementations(opts ...func(*ControlImp
 	return oq
 }
 
+// WithMappedControls tells the query-builder to eager-load the nodes that are connected to
+// the "mapped_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithMappedControls(opts ...func(*MappedControlQuery)) *OrganizationQuery {
+	query := (&MappedControlClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withMappedControls = query
+	return oq
+}
+
 // WithEvidence tells the query-builder to eager-load the nodes that are connected to
 // the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithEvidence(opts ...func(*EvidenceQuery)) *OrganizationQuery {
@@ -2452,15 +2687,20 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [53]bool{
+		loadedTypes = [59]bool{
 			oq.withControlCreators != nil,
+			oq.withControlImplementationCreators != nil,
 			oq.withControlObjectiveCreators != nil,
+			oq.withEvidenceCreators != nil,
 			oq.withGroupCreators != nil,
 			oq.withInternalPolicyCreators != nil,
+			oq.withMappedControlCreators != nil,
 			oq.withNarrativeCreators != nil,
 			oq.withProcedureCreators != nil,
 			oq.withProgramCreators != nil,
 			oq.withRiskCreators != nil,
+			oq.withScheduledJobCreators != nil,
+			oq.withStandardCreators != nil,
 			oq.withTemplateCreators != nil,
 			oq.withParent != nil,
 			oq.withChildren != nil,
@@ -2493,6 +2733,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withControls != nil,
 			oq.withSubcontrols != nil,
 			oq.withControlImplementations != nil,
+			oq.withMappedControls != nil,
 			oq.withEvidence != nil,
 			oq.withStandards != nil,
 			oq.withActionPlans != nil,
@@ -2538,12 +2779,28 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withControlImplementationCreators; query != nil {
+		if err := oq.loadControlImplementationCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ControlImplementationCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.ControlImplementationCreators = append(n.Edges.ControlImplementationCreators, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withControlObjectiveCreators; query != nil {
 		if err := oq.loadControlObjectiveCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.ControlObjectiveCreators = []*Group{} },
 			func(n *Organization, e *Group) {
 				n.Edges.ControlObjectiveCreators = append(n.Edges.ControlObjectiveCreators, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withEvidenceCreators; query != nil {
+		if err := oq.loadEvidenceCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.EvidenceCreators = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.EvidenceCreators = append(n.Edges.EvidenceCreators, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2559,6 +2816,15 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization) { n.Edges.InternalPolicyCreators = []*Group{} },
 			func(n *Organization, e *Group) {
 				n.Edges.InternalPolicyCreators = append(n.Edges.InternalPolicyCreators, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withMappedControlCreators; query != nil {
+		if err := oq.loadMappedControlCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.MappedControlCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.MappedControlCreators = append(n.Edges.MappedControlCreators, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -2588,6 +2854,22 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadRiskCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.RiskCreators = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.RiskCreators = append(n.Edges.RiskCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withScheduledJobCreators; query != nil {
+		if err := oq.loadScheduledJobCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ScheduledJobCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.ScheduledJobCreators = append(n.Edges.ScheduledJobCreators, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withStandardCreators; query != nil {
+		if err := oq.loadStandardCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.StandardCreators = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.StandardCreators = append(n.Edges.StandardCreators, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2822,6 +3104,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withMappedControls; query != nil {
+		if err := oq.loadMappedControls(ctx, query, nodes,
+			func(n *Organization) { n.Edges.MappedControls = []*MappedControl{} },
+			func(n *Organization, e *MappedControl) { n.Edges.MappedControls = append(n.Edges.MappedControls, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withEvidence; query != nil {
 		if err := oq.loadEvidence(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Evidence = []*Evidence{} },
@@ -2928,10 +3217,24 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range oq.withNamedControlImplementationCreators {
+		if err := oq.loadControlImplementationCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedControlImplementationCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedControlImplementationCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range oq.withNamedControlObjectiveCreators {
 		if err := oq.loadControlObjectiveCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedControlObjectiveCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedControlObjectiveCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedEvidenceCreators {
+		if err := oq.loadEvidenceCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedEvidenceCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedEvidenceCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2946,6 +3249,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadInternalPolicyCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedInternalPolicyCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedInternalPolicyCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedMappedControlCreators {
+		if err := oq.loadMappedControlCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedMappedControlCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedMappedControlCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2974,6 +3284,20 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadRiskCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedRiskCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedRiskCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedScheduledJobCreators {
+		if err := oq.loadScheduledJobCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedScheduledJobCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedScheduledJobCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedStandardCreators {
+		if err := oq.loadStandardCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedStandardCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedStandardCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3180,6 +3504,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range oq.withNamedMappedControls {
+		if err := oq.loadMappedControls(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedMappedControls(name) },
+			func(n *Organization, e *MappedControl) { n.appendNamedMappedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range oq.withNamedEvidence {
 		if err := oq.loadEvidence(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedEvidence(name) },
@@ -3312,6 +3643,37 @@ func (oq *OrganizationQuery) loadControlCreators(ctx context.Context, query *Gro
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadControlImplementationCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ControlImplementationCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_control_implementation_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_control_implementation_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_control_implementation_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadControlObjectiveCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3338,6 +3700,37 @@ func (oq *OrganizationQuery) loadControlObjectiveCreators(ctx context.Context, q
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_control_objective_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadEvidenceCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.EvidenceCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_evidence_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_evidence_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_evidence_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -3400,6 +3793,37 @@ func (oq *OrganizationQuery) loadInternalPolicyCreators(ctx context.Context, que
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_internal_policy_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadMappedControlCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.MappedControlCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_mapped_control_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_mapped_control_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_mapped_control_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -3524,6 +3948,68 @@ func (oq *OrganizationQuery) loadRiskCreators(ctx context.Context, query *GroupQ
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_risk_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadScheduledJobCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ScheduledJobCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_scheduled_job_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_scheduled_job_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_scheduled_job_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadStandardCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.StandardCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_standard_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_standard_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_standard_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -4624,6 +5110,36 @@ func (oq *OrganizationQuery) loadControlImplementations(ctx context.Context, que
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadMappedControls(ctx context.Context, query *MappedControlQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *MappedControl)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(mappedcontrol.FieldOwnerID)
+	}
+	query.Where(predicate.MappedControl(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.MappedControlsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Evidence)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -5135,6 +5651,20 @@ func (oq *OrganizationQuery) WithNamedControlCreators(name string, opts ...func(
 	return oq
 }
 
+// WithNamedControlImplementationCreators tells the query-builder to eager-load the nodes that are connected to the "control_implementation_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedControlImplementationCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedControlImplementationCreators == nil {
+		oq.withNamedControlImplementationCreators = make(map[string]*GroupQuery)
+	}
+	oq.withNamedControlImplementationCreators[name] = query
+	return oq
+}
+
 // WithNamedControlObjectiveCreators tells the query-builder to eager-load the nodes that are connected to the "control_objective_creators"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithNamedControlObjectiveCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -5146,6 +5676,20 @@ func (oq *OrganizationQuery) WithNamedControlObjectiveCreators(name string, opts
 		oq.withNamedControlObjectiveCreators = make(map[string]*GroupQuery)
 	}
 	oq.withNamedControlObjectiveCreators[name] = query
+	return oq
+}
+
+// WithNamedEvidenceCreators tells the query-builder to eager-load the nodes that are connected to the "evidence_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedEvidenceCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedEvidenceCreators == nil {
+		oq.withNamedEvidenceCreators = make(map[string]*GroupQuery)
+	}
+	oq.withNamedEvidenceCreators[name] = query
 	return oq
 }
 
@@ -5174,6 +5718,20 @@ func (oq *OrganizationQuery) WithNamedInternalPolicyCreators(name string, opts .
 		oq.withNamedInternalPolicyCreators = make(map[string]*GroupQuery)
 	}
 	oq.withNamedInternalPolicyCreators[name] = query
+	return oq
+}
+
+// WithNamedMappedControlCreators tells the query-builder to eager-load the nodes that are connected to the "mapped_control_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedMappedControlCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedMappedControlCreators == nil {
+		oq.withNamedMappedControlCreators = make(map[string]*GroupQuery)
+	}
+	oq.withNamedMappedControlCreators[name] = query
 	return oq
 }
 
@@ -5230,6 +5788,34 @@ func (oq *OrganizationQuery) WithNamedRiskCreators(name string, opts ...func(*Gr
 		oq.withNamedRiskCreators = make(map[string]*GroupQuery)
 	}
 	oq.withNamedRiskCreators[name] = query
+	return oq
+}
+
+// WithNamedScheduledJobCreators tells the query-builder to eager-load the nodes that are connected to the "scheduled_job_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedScheduledJobCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedScheduledJobCreators == nil {
+		oq.withNamedScheduledJobCreators = make(map[string]*GroupQuery)
+	}
+	oq.withNamedScheduledJobCreators[name] = query
+	return oq
+}
+
+// WithNamedStandardCreators tells the query-builder to eager-load the nodes that are connected to the "standard_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedStandardCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedStandardCreators == nil {
+		oq.withNamedStandardCreators = make(map[string]*GroupQuery)
+	}
+	oq.withNamedStandardCreators[name] = query
 	return oq
 }
 
@@ -5636,6 +6222,20 @@ func (oq *OrganizationQuery) WithNamedControlImplementations(name string, opts .
 		oq.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
 	}
 	oq.withNamedControlImplementations[name] = query
+	return oq
+}
+
+// WithNamedMappedControls tells the query-builder to eager-load the nodes that are connected to the "mapped_controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedMappedControls(name string, opts ...func(*MappedControlQuery)) *OrganizationQuery {
+	query := (&MappedControlClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedMappedControls == nil {
+		oq.withNamedMappedControls = make(map[string]*MappedControlQuery)
+	}
+	oq.withNamedMappedControls[name] = query
 	return oq
 }
 

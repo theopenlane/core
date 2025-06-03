@@ -50,18 +50,18 @@ type ControlQuery struct {
 	withActionPlans                 *ActionPlanQuery
 	withProcedures                  *ProcedureQuery
 	withInternalPolicies            *InternalPolicyQuery
-	withMappedControls              *MappedControlQuery
 	withControlOwner                *GroupQuery
 	withDelegate                    *GroupQuery
 	withOwner                       *OrganizationQuery
 	withBlockedGroups               *GroupQuery
 	withEditors                     *GroupQuery
-	withViewers                     *GroupQuery
 	withStandard                    *StandardQuery
 	withPrograms                    *ProgramQuery
 	withControlImplementations      *ControlImplementationQuery
 	withSubcontrols                 *SubcontrolQuery
 	withScheduledJobs               *ControlScheduledJobQuery
+	withMappedToControls            *MappedControlQuery
+	withMappedFromControls          *MappedControlQuery
 	loadTotal                       []func(context.Context, []*Control) error
 	modifiers                       []func(*sql.Selector)
 	withNamedEvidence               map[string]*EvidenceQuery
@@ -72,14 +72,14 @@ type ControlQuery struct {
 	withNamedActionPlans            map[string]*ActionPlanQuery
 	withNamedProcedures             map[string]*ProcedureQuery
 	withNamedInternalPolicies       map[string]*InternalPolicyQuery
-	withNamedMappedControls         map[string]*MappedControlQuery
 	withNamedBlockedGroups          map[string]*GroupQuery
 	withNamedEditors                map[string]*GroupQuery
-	withNamedViewers                map[string]*GroupQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
 	withNamedSubcontrols            map[string]*SubcontrolQuery
 	withNamedScheduledJobs          map[string]*ControlScheduledJobQuery
+	withNamedMappedToControls       map[string]*MappedControlQuery
+	withNamedMappedFromControls     map[string]*MappedControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -316,31 +316,6 @@ func (cq *ControlQuery) QueryInternalPolicies() *InternalPolicyQuery {
 	return query
 }
 
-// QueryMappedControls chains the current query on the "mapped_controls" edge.
-func (cq *ControlQuery) QueryMappedControls() *MappedControlQuery {
-	query := (&MappedControlClient{config: cq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := cq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, selector),
-			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedControlsTable, control.MappedControlsPrimaryKey...),
-		)
-		schemaConfig := cq.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlControls
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryControlOwner chains the current query on the "control_owner" edge.
 func (cq *ControlQuery) QueryControlOwner() *GroupQuery {
 	query := (&GroupClient{config: cq.config}).Query()
@@ -466,31 +441,6 @@ func (cq *ControlQuery) QueryEditors() *GroupQuery {
 	return query
 }
 
-// QueryViewers chains the current query on the "viewers" edge.
-func (cq *ControlQuery) QueryViewers() *GroupQuery {
-	query := (&GroupClient{config: cq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := cq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, control.ViewersTable, control.ViewersPrimaryKey...),
-		)
-		schemaConfig := cq.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlViewers
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryStandard chains the current query on the "standard" edge.
 func (cq *ControlQuery) QueryStandard() *StandardQuery {
 	query := (&StandardClient{config: cq.config}).Query()
@@ -610,6 +560,56 @@ func (cq *ControlQuery) QueryScheduledJobs() *ControlScheduledJobQuery {
 		schemaConfig := cq.schemaConfig
 		step.To.Schema = schemaConfig.ControlScheduledJob
 		step.Edge.Schema = schemaConfig.ControlScheduledJobControls
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMappedToControls chains the current query on the "mapped_to_controls" edge.
+func (cq *ControlQuery) QueryMappedToControls() *MappedControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedToControlsTable, control.MappedToControlsPrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlToControls
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMappedFromControls chains the current query on the "mapped_from_controls" edge.
+func (cq *ControlQuery) QueryMappedFromControls() *MappedControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedFromControlsTable, control.MappedFromControlsPrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.MappedControl
+		step.Edge.Schema = schemaConfig.MappedControlFromControls
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -816,18 +816,18 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 		withActionPlans:            cq.withActionPlans.Clone(),
 		withProcedures:             cq.withProcedures.Clone(),
 		withInternalPolicies:       cq.withInternalPolicies.Clone(),
-		withMappedControls:         cq.withMappedControls.Clone(),
 		withControlOwner:           cq.withControlOwner.Clone(),
 		withDelegate:               cq.withDelegate.Clone(),
 		withOwner:                  cq.withOwner.Clone(),
 		withBlockedGroups:          cq.withBlockedGroups.Clone(),
 		withEditors:                cq.withEditors.Clone(),
-		withViewers:                cq.withViewers.Clone(),
 		withStandard:               cq.withStandard.Clone(),
 		withPrograms:               cq.withPrograms.Clone(),
 		withControlImplementations: cq.withControlImplementations.Clone(),
 		withSubcontrols:            cq.withSubcontrols.Clone(),
 		withScheduledJobs:          cq.withScheduledJobs.Clone(),
+		withMappedToControls:       cq.withMappedToControls.Clone(),
+		withMappedFromControls:     cq.withMappedFromControls.Clone(),
 		// clone intermediate query.
 		sql:       cq.sql.Clone(),
 		path:      cq.path,
@@ -923,17 +923,6 @@ func (cq *ControlQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery))
 	return cq
 }
 
-// WithMappedControls tells the query-builder to eager-load the nodes that are connected to
-// the "mapped_controls" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ControlQuery) WithMappedControls(opts ...func(*MappedControlQuery)) *ControlQuery {
-	query := (&MappedControlClient{config: cq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	cq.withMappedControls = query
-	return cq
-}
-
 // WithControlOwner tells the query-builder to eager-load the nodes that are connected to
 // the "control_owner" edge. The optional arguments are used to configure the query builder of the edge.
 func (cq *ControlQuery) WithControlOwner(opts ...func(*GroupQuery)) *ControlQuery {
@@ -989,17 +978,6 @@ func (cq *ControlQuery) WithEditors(opts ...func(*GroupQuery)) *ControlQuery {
 	return cq
 }
 
-// WithViewers tells the query-builder to eager-load the nodes that are connected to
-// the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ControlQuery) WithViewers(opts ...func(*GroupQuery)) *ControlQuery {
-	query := (&GroupClient{config: cq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	cq.withViewers = query
-	return cq
-}
-
 // WithStandard tells the query-builder to eager-load the nodes that are connected to
 // the "standard" edge. The optional arguments are used to configure the query builder of the edge.
 func (cq *ControlQuery) WithStandard(opts ...func(*StandardQuery)) *ControlQuery {
@@ -1052,6 +1030,28 @@ func (cq *ControlQuery) WithScheduledJobs(opts ...func(*ControlScheduledJobQuery
 		opt(query)
 	}
 	cq.withScheduledJobs = query
+	return cq
+}
+
+// WithMappedToControls tells the query-builder to eager-load the nodes that are connected to
+// the "mapped_to_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithMappedToControls(opts ...func(*MappedControlQuery)) *ControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withMappedToControls = query
+	return cq
+}
+
+// WithMappedFromControls tells the query-builder to eager-load the nodes that are connected to
+// the "mapped_from_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithMappedFromControls(opts ...func(*MappedControlQuery)) *ControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withMappedFromControls = query
 	return cq
 }
 
@@ -1148,18 +1148,18 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withActionPlans != nil,
 			cq.withProcedures != nil,
 			cq.withInternalPolicies != nil,
-			cq.withMappedControls != nil,
 			cq.withControlOwner != nil,
 			cq.withDelegate != nil,
 			cq.withOwner != nil,
 			cq.withBlockedGroups != nil,
 			cq.withEditors != nil,
-			cq.withViewers != nil,
 			cq.withStandard != nil,
 			cq.withPrograms != nil,
 			cq.withControlImplementations != nil,
 			cq.withSubcontrols != nil,
 			cq.withScheduledJobs != nil,
+			cq.withMappedToControls != nil,
+			cq.withMappedFromControls != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -1243,13 +1243,6 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
-	if query := cq.withMappedControls; query != nil {
-		if err := cq.loadMappedControls(ctx, query, nodes,
-			func(n *Control) { n.Edges.MappedControls = []*MappedControl{} },
-			func(n *Control, e *MappedControl) { n.Edges.MappedControls = append(n.Edges.MappedControls, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := cq.withControlOwner; query != nil {
 		if err := cq.loadControlOwner(ctx, query, nodes, nil,
 			func(n *Control, e *Group) { n.Edges.ControlOwner = e }); err != nil {
@@ -1279,13 +1272,6 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadEditors(ctx, query, nodes,
 			func(n *Control) { n.Edges.Editors = []*Group{} },
 			func(n *Control, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := cq.withViewers; query != nil {
-		if err := cq.loadViewers(ctx, query, nodes,
-			func(n *Control) { n.Edges.Viewers = []*Group{} },
-			func(n *Control, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1322,6 +1308,20 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadScheduledJobs(ctx, query, nodes,
 			func(n *Control) { n.Edges.ScheduledJobs = []*ControlScheduledJob{} },
 			func(n *Control, e *ControlScheduledJob) { n.Edges.ScheduledJobs = append(n.Edges.ScheduledJobs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withMappedToControls; query != nil {
+		if err := cq.loadMappedToControls(ctx, query, nodes,
+			func(n *Control) { n.Edges.MappedToControls = []*MappedControl{} },
+			func(n *Control, e *MappedControl) { n.Edges.MappedToControls = append(n.Edges.MappedToControls, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withMappedFromControls; query != nil {
+		if err := cq.loadMappedFromControls(ctx, query, nodes,
+			func(n *Control) { n.Edges.MappedFromControls = []*MappedControl{} },
+			func(n *Control, e *MappedControl) { n.Edges.MappedFromControls = append(n.Edges.MappedFromControls, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1381,13 +1381,6 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
-	for name, query := range cq.withNamedMappedControls {
-		if err := cq.loadMappedControls(ctx, query, nodes,
-			func(n *Control) { n.appendNamedMappedControls(name) },
-			func(n *Control, e *MappedControl) { n.appendNamedMappedControls(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range cq.withNamedBlockedGroups {
 		if err := cq.loadBlockedGroups(ctx, query, nodes,
 			func(n *Control) { n.appendNamedBlockedGroups(name) },
@@ -1399,13 +1392,6 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadEditors(ctx, query, nodes,
 			func(n *Control) { n.appendNamedEditors(name) },
 			func(n *Control, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range cq.withNamedViewers {
-		if err := cq.loadViewers(ctx, query, nodes,
-			func(n *Control) { n.appendNamedViewers(name) },
-			func(n *Control, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1434,6 +1420,20 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadScheduledJobs(ctx, query, nodes,
 			func(n *Control) { n.appendNamedScheduledJobs(name) },
 			func(n *Control, e *ControlScheduledJob) { n.appendNamedScheduledJobs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedMappedToControls {
+		if err := cq.loadMappedToControls(ctx, query, nodes,
+			func(n *Control) { n.appendNamedMappedToControls(name) },
+			func(n *Control, e *MappedControl) { n.appendNamedMappedToControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedMappedFromControls {
+		if err := cq.loadMappedFromControls(ctx, query, nodes,
+			func(n *Control) { n.appendNamedMappedFromControls(name) },
+			func(n *Control, e *MappedControl) { n.appendNamedMappedFromControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1941,68 +1941,6 @@ func (cq *ControlQuery) loadInternalPolicies(ctx context.Context, query *Interna
 	}
 	return nil
 }
-func (cq *ControlQuery) loadMappedControls(ctx context.Context, query *MappedControlQuery, nodes []*Control, init func(*Control), assign func(*Control, *MappedControl)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Control)
-	nids := make(map[string]map[*Control]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(control.MappedControlsTable)
-		joinT.Schema(cq.schemaConfig.MappedControlControls)
-		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(control.MappedControlsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(control.MappedControlsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(control.MappedControlsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*MappedControl](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "mapped_controls" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (cq *ControlQuery) loadControlOwner(ctx context.Context, query *GroupQuery, nodes []*Control, init func(*Control), assign func(*Control, *Group)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Control)
@@ -2207,68 +2145,6 @@ func (cq *ControlQuery) loadEditors(ctx context.Context, query *GroupQuery, node
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (cq *ControlQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Control, init func(*Control), assign func(*Control, *Group)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Control)
-	nids := make(map[string]map[*Control]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(control.ViewersTable)
-		joinT.Schema(cq.schemaConfig.ControlViewers)
-		s.Join(joinT).On(s.C(group.FieldID), joinT.C(control.ViewersPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(control.ViewersPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(control.ViewersPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "viewers" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2522,6 +2398,130 @@ func (cq *ControlQuery) loadScheduledJobs(ctx context.Context, query *ControlSch
 	}
 	return nil
 }
+func (cq *ControlQuery) loadMappedToControls(ctx context.Context, query *MappedControlQuery, nodes []*Control, init func(*Control), assign func(*Control, *MappedControl)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.MappedToControlsTable)
+		joinT.Schema(cq.schemaConfig.MappedControlToControls)
+		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(control.MappedToControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.MappedToControlsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.MappedToControlsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*MappedControl](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "mapped_to_controls" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (cq *ControlQuery) loadMappedFromControls(ctx context.Context, query *MappedControlQuery, nodes []*Control, init func(*Control), assign func(*Control, *MappedControl)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.MappedFromControlsTable)
+		joinT.Schema(cq.schemaConfig.MappedControlFromControls)
+		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(control.MappedFromControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.MappedFromControlsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.MappedFromControlsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*MappedControl](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "mapped_from_controls" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (cq *ControlQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
@@ -2745,20 +2745,6 @@ func (cq *ControlQuery) WithNamedInternalPolicies(name string, opts ...func(*Int
 	return cq
 }
 
-// WithNamedMappedControls tells the query-builder to eager-load the nodes that are connected to the "mapped_controls"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (cq *ControlQuery) WithNamedMappedControls(name string, opts ...func(*MappedControlQuery)) *ControlQuery {
-	query := (&MappedControlClient{config: cq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if cq.withNamedMappedControls == nil {
-		cq.withNamedMappedControls = make(map[string]*MappedControlQuery)
-	}
-	cq.withNamedMappedControls[name] = query
-	return cq
-}
-
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (cq *ControlQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ControlQuery {
@@ -2784,20 +2770,6 @@ func (cq *ControlQuery) WithNamedEditors(name string, opts ...func(*GroupQuery))
 		cq.withNamedEditors = make(map[string]*GroupQuery)
 	}
 	cq.withNamedEditors[name] = query
-	return cq
-}
-
-// WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (cq *ControlQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *ControlQuery {
-	query := (&GroupClient{config: cq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if cq.withNamedViewers == nil {
-		cq.withNamedViewers = make(map[string]*GroupQuery)
-	}
-	cq.withNamedViewers[name] = query
 	return cq
 }
 
@@ -2854,6 +2826,34 @@ func (cq *ControlQuery) WithNamedScheduledJobs(name string, opts ...func(*Contro
 		cq.withNamedScheduledJobs = make(map[string]*ControlScheduledJobQuery)
 	}
 	cq.withNamedScheduledJobs[name] = query
+	return cq
+}
+
+// WithNamedMappedToControls tells the query-builder to eager-load the nodes that are connected to the "mapped_to_controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedMappedToControls(name string, opts ...func(*MappedControlQuery)) *ControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedMappedToControls == nil {
+		cq.withNamedMappedToControls = make(map[string]*MappedControlQuery)
+	}
+	cq.withNamedMappedToControls[name] = query
+	return cq
+}
+
+// WithNamedMappedFromControls tells the query-builder to eager-load the nodes that are connected to the "mapped_from_controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedMappedFromControls(name string, opts ...func(*MappedControlQuery)) *ControlQuery {
+	query := (&MappedControlClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedMappedFromControls == nil {
+		cq.withNamedMappedFromControls = make(map[string]*MappedControlQuery)
+	}
+	cq.withNamedMappedFromControls[name] = query
 	return cq
 }
 

@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -37,10 +38,16 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldMappingType holds the string denoting the mapping_type field in the database.
 	FieldMappingType = "mapping_type"
 	// FieldRelation holds the string denoting the relation field in the database.
 	FieldRelation = "relation"
+	// FieldConfidence holds the string denoting the confidence field in the database.
+	FieldConfidence = "confidence"
+	// FieldSource holds the string denoting the source field in the database.
+	FieldSource = "source"
 	// Table holds the table name of the mappedcontrolhistory in the database.
 	Table = "mapped_control_history"
 )
@@ -58,8 +65,11 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldOwnerID,
 	FieldMappingType,
 	FieldRelation,
+	FieldConfidence,
+	FieldSource,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -100,6 +110,30 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("mappedcontrolhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultMappingType enums.MappingType = "EQUAL"
+
+// MappingTypeValidator is a validator for the "mapping_type" field enum values. It is called by the builders before save.
+func MappingTypeValidator(mt enums.MappingType) error {
+	switch mt.String() {
+	case "EQUAL", "SUPERSET", "SUBSET", "INTERSECT", "PARTIAL":
+		return nil
+	default:
+		return fmt.Errorf("mappedcontrolhistory: invalid enum value for mapping_type field: %q", mt)
+	}
+}
+
+const DefaultSource enums.MappingSource = "MANUAL"
+
+// SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
+func SourceValidator(s enums.MappingSource) error {
+	switch s.String() {
+	case "MANUAL", "SUGGESTED", "IMPORTED":
+		return nil
+	default:
+		return fmt.Errorf("mappedcontrolhistory: invalid enum value for source field: %q", s)
 	}
 }
 
@@ -156,6 +190,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByMappingType orders the results by the mapping_type field.
 func ByMappingType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappingType, opts...).ToFunc()
@@ -166,9 +205,33 @@ func ByRelation(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRelation, opts...).ToFunc()
 }
 
+// ByConfidence orders the results by the confidence field.
+func ByConfidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldConfidence, opts...).ToFunc()
+}
+
+// BySource orders the results by the source field.
+func BySource(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.MappingType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.MappingType)(nil)
+	// enums.MappingType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.MappingType)(nil)
+)
+
+var (
+	// enums.MappingSource must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.MappingSource)(nil)
+	// enums.MappingSource must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.MappingSource)(nil)
 )

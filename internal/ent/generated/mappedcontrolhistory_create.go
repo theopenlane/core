@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -145,16 +146,30 @@ func (mchc *MappedControlHistoryCreate) SetTags(s []string) *MappedControlHistor
 	return mchc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (mchc *MappedControlHistoryCreate) SetOwnerID(s string) *MappedControlHistoryCreate {
+	mchc.mutation.SetOwnerID(s)
+	return mchc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (mchc *MappedControlHistoryCreate) SetNillableOwnerID(s *string) *MappedControlHistoryCreate {
+	if s != nil {
+		mchc.SetOwnerID(*s)
+	}
+	return mchc
+}
+
 // SetMappingType sets the "mapping_type" field.
-func (mchc *MappedControlHistoryCreate) SetMappingType(s string) *MappedControlHistoryCreate {
-	mchc.mutation.SetMappingType(s)
+func (mchc *MappedControlHistoryCreate) SetMappingType(et enums.MappingType) *MappedControlHistoryCreate {
+	mchc.mutation.SetMappingType(et)
 	return mchc
 }
 
 // SetNillableMappingType sets the "mapping_type" field if the given value is not nil.
-func (mchc *MappedControlHistoryCreate) SetNillableMappingType(s *string) *MappedControlHistoryCreate {
-	if s != nil {
-		mchc.SetMappingType(*s)
+func (mchc *MappedControlHistoryCreate) SetNillableMappingType(et *enums.MappingType) *MappedControlHistoryCreate {
+	if et != nil {
+		mchc.SetMappingType(*et)
 	}
 	return mchc
 }
@@ -169,6 +184,34 @@ func (mchc *MappedControlHistoryCreate) SetRelation(s string) *MappedControlHist
 func (mchc *MappedControlHistoryCreate) SetNillableRelation(s *string) *MappedControlHistoryCreate {
 	if s != nil {
 		mchc.SetRelation(*s)
+	}
+	return mchc
+}
+
+// SetConfidence sets the "confidence" field.
+func (mchc *MappedControlHistoryCreate) SetConfidence(i int) *MappedControlHistoryCreate {
+	mchc.mutation.SetConfidence(i)
+	return mchc
+}
+
+// SetNillableConfidence sets the "confidence" field if the given value is not nil.
+func (mchc *MappedControlHistoryCreate) SetNillableConfidence(i *int) *MappedControlHistoryCreate {
+	if i != nil {
+		mchc.SetConfidence(*i)
+	}
+	return mchc
+}
+
+// SetSource sets the "source" field.
+func (mchc *MappedControlHistoryCreate) SetSource(es enums.MappingSource) *MappedControlHistoryCreate {
+	mchc.mutation.SetSource(es)
+	return mchc
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (mchc *MappedControlHistoryCreate) SetNillableSource(es *enums.MappingSource) *MappedControlHistoryCreate {
+	if es != nil {
+		mchc.SetSource(*es)
 	}
 	return mchc
 }
@@ -238,6 +281,14 @@ func (mchc *MappedControlHistoryCreate) defaults() {
 		v := mappedcontrolhistory.DefaultTags
 		mchc.mutation.SetTags(v)
 	}
+	if _, ok := mchc.mutation.MappingType(); !ok {
+		v := mappedcontrolhistory.DefaultMappingType
+		mchc.mutation.SetMappingType(v)
+	}
+	if _, ok := mchc.mutation.Source(); !ok {
+		v := mappedcontrolhistory.DefaultSource
+		mchc.mutation.SetSource(v)
+	}
 	if _, ok := mchc.mutation.ID(); !ok {
 		v := mappedcontrolhistory.DefaultID()
 		mchc.mutation.SetID(v)
@@ -255,6 +306,19 @@ func (mchc *MappedControlHistoryCreate) check() error {
 	if v, ok := mchc.mutation.Operation(); ok {
 		if err := mappedcontrolhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.operation": %w`, err)}
+		}
+	}
+	if _, ok := mchc.mutation.MappingType(); !ok {
+		return &ValidationError{Name: "mapping_type", err: errors.New(`generated: missing required field "MappedControlHistory.mapping_type"`)}
+	}
+	if v, ok := mchc.mutation.MappingType(); ok {
+		if err := mappedcontrolhistory.MappingTypeValidator(v); err != nil {
+			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.mapping_type": %w`, err)}
+		}
+	}
+	if v, ok := mchc.mutation.Source(); ok {
+		if err := mappedcontrolhistory.SourceValidator(v); err != nil {
+			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "MappedControlHistory.source": %w`, err)}
 		}
 	}
 	return nil
@@ -333,13 +397,25 @@ func (mchc *MappedControlHistoryCreate) createSpec() (*MappedControlHistory, *sq
 		_spec.SetField(mappedcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := mchc.mutation.OwnerID(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
+	}
 	if value, ok := mchc.mutation.MappingType(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeString, value)
+		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
 		_node.MappingType = value
 	}
 	if value, ok := mchc.mutation.Relation(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldRelation, field.TypeString, value)
 		_node.Relation = value
+	}
+	if value, ok := mchc.mutation.Confidence(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
+		_node.Confidence = &value
+	}
+	if value, ok := mchc.mutation.Source(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)
+		_node.Source = value
 	}
 	return _node, _spec
 }
