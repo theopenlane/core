@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mattn/go-runewidth"
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/renderer"
+	"github.com/olekukonko/tablewriter/tw"
 	"github.com/rs/zerolog/log"
-	"golang.org/x/term"
 )
 
 // PrintAppInfoTable prints the AppInfo in a table format with colorized output and fixed-width columns
@@ -18,27 +18,29 @@ func PrintAppInfoTable(appInfo map[string]AppInfo) {
 		return
 	}
 
-	width, _, err := term.GetSize(int(os.Stdout.Fd())) // nolint:gosec
-	if err != nil {
-		width = 80 // default width if terminal size cannot be determined
+	maxColumnWidth := 50
+
+	opts := []tablewriter.Option{
+		tablewriter.WithRenderer(renderer.NewBlueprint(tw.Rendition{})),
+		tablewriter.WithConfig(tablewriter.Config{
+			Header: tw.CellConfig{Alignment: tw.CellAlignment{Global: tw.AlignLeft}},
+			Row: tw.CellConfig{
+				Alignment:    tw.CellAlignment{Global: tw.AlignLeft},
+				Formatting:   tw.CellFormatting{AutoWrap: tw.WrapTruncate}, // truncate long content
+				ColMaxWidths: tw.CellWidth{Global: maxColumnWidth},
+			},
+			Footer: tw.CellConfig{Alignment: tw.CellAlignment{Global: tw.AlignLeft}},
+		}),
 	}
 
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Name", "Description", "Website", "CPE", "Icon", "Categories"})
-	table.SetBorder(true)
-	table.SetAutoWrapText(false)
-
-	maxColumnWidth := width / 6 // nolint:mnd
+	table := tablewriter.NewTable(os.Stdout, opts...)
+	table.Header([]string{"Name", "Description", "Website", "CPE", "Icon", "Categories"})
 
 	for name, info := range appInfo {
 		row := []string{
-			runewidth.Truncate(name, maxColumnWidth, "..."),
-			runewidth.Truncate(info.Description, maxColumnWidth, "..."),
-			runewidth.Truncate(info.Website, maxColumnWidth, "..."),
-			runewidth.Truncate(info.CPE, maxColumnWidth, "..."),
-			runewidth.Truncate(info.Icon, maxColumnWidth, "..."),
-			runewidth.Truncate(fmt.Sprintf("%v", info.Categories), maxColumnWidth, "..."),
+			name, info.Description, info.Website, info.CPE, info.Icon, fmt.Sprintf("%v", info.Categories),
 		}
+
 		table.Append(row)
 	}
 
