@@ -595,6 +595,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**PollOnly**|`boolean`|||
 |[**Queues**](#jobqueueriverconfqueues)|`object`|||
 |**ReindexerSchedule**||||
+|**ReindexerTimeout**|`integer`|||
 |**RescueStuckJobsAfter**|`integer`|||
 |**RetryPolicy**||||
 |**Schema**|`string`|||

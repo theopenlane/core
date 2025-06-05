@@ -1074,6 +1074,9 @@
           "$ref": "#/$defs/map[string]river.QueueConfig"
         },
         "ReindexerSchedule": true,
+        "ReindexerTimeout": {
+          "type": "integer"
+        },
         "RescueStuckJobsAfter": {
           "type": "integer"
         },
