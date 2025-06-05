@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mattn/go-runewidth"
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/renderer"
+	"github.com/olekukonko/tablewriter/tw"
 	"github.com/pterm/pterm"
 	"golang.org/x/term"
 )
@@ -17,22 +18,28 @@ func PrintDNSRecordsReportTable(report DNSRecordsReport) {
 		width = 80 // default width if terminal size cannot be determined
 	}
 
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Type", "Name", "Value", "TTL", "CDN"})
-	table.SetBorder(true)
-	table.SetAutoWrapText(false)
-
 	maxColumnWidth := width / 4 // nolint:mnd
+
+	opts := []tablewriter.Option{
+		tablewriter.WithRenderer(renderer.NewBlueprint(tw.Rendition{})),
+		tablewriter.WithConfig(tablewriter.Config{
+			Header: tw.CellConfig{Alignment: tw.CellAlignment{Global: tw.AlignLeft}},
+			Row: tw.CellConfig{
+				Alignment:    tw.CellAlignment{Global: tw.AlignLeft},
+				Formatting:   tw.CellFormatting{AutoWrap: tw.WrapTruncate}, // truncate long content
+				ColMaxWidths: tw.CellWidth{Global: maxColumnWidth},
+			},
+			Footer: tw.CellConfig{Alignment: tw.CellAlignment{Global: tw.AlignLeft}},
+		}),
+	}
+
+	table := tablewriter.NewTable(os.Stdout, opts...)
+	table.Header([]string{"Type", "Name", "Value", "TTL", "CDN"})
 
 	addRecordsToTable := func(records []*DNSRecord) {
 		for _, record := range records {
-			row := []string{
-				runewidth.Truncate(record.Type, maxColumnWidth, "..."),
-				runewidth.Truncate(record.Name, maxColumnWidth, "..."),
-				runewidth.Truncate(record.Value, maxColumnWidth, "..."),
-				runewidth.Truncate(fmt.Sprintf("%d", record.TTL), maxColumnWidth, "..."),
-				runewidth.Truncate(record.CDN, maxColumnWidth, "..."),
-			}
+			row := []string{record.Type, record.Name, record.Value, fmt.Sprintf("%d", record.TTL), record.CDN}
+
 			table.Append(row)
 		}
 	}
