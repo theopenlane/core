@@ -946,9 +946,9 @@ func (r *JobRunnerRegistrationRequest) Validate() error {
 	return nil
 }
 
-// JobRunnerRegistrationResponse is the response to begin a webauthn login
+// JobRunnerRegistrationReply is the response to begin a webauthn login
 // this includes the credential creation options and the session token
-type JobRunnerRegistrationResponse struct {
+type JobRunnerRegistrationReply struct {
 	Reply   rout.Reply
 	Message string `json:"message"`
 }
@@ -964,7 +964,7 @@ var ExampleJobRunnerRegistrationRequest = JobRunnerRegistrationRequest{
 
 // ExampleJobRunnerRegistrationResponse is an example of a successful job runner
 // registration response
-var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationResponse{
+var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationReply{
 	Reply:   rout.Reply{Success: true},
 	Message: "Job runner node registered",
 }
