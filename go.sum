@@ -988,8 +988,8 @@ github.com/pressly/goose/v3 v3.24.3 h1:DSWWNwwggVUsYZ0X2VitiAa9sKuqtBfe+Jr9zFGwW
 github.com/pressly/goose/v3 v3.24.3/go.mod h1:v9zYL4xdViLHCUUJh/mhjnm6JrK7Eul8AS93IxiZM4E=
 github.com/projectdiscovery/blackrock v0.0.1 h1:lHQqhaaEFjgf5WkuItbpeCZv2DUIE45k0VbGJyft6LQ=
 github.com/projectdiscovery/blackrock v0.0.1/go.mod h1:ANUtjDfaVrqB453bzToU+YB4cUbvBRpLvEwoWIwlTss=
-github.com/projectdiscovery/cdncheck v1.1.21 h1:dMIQmV/qGeu3OxlJUTKEa5beOfizx/NYrTM/yPb7HyU=
-github.com/projectdiscovery/cdncheck v1.1.21/go.mod h1:dFEGsG0qAJY0AaRr2N1BY0OtZiTxS4kYeT5+OkF8t1U=
+github.com/projectdiscovery/cdncheck v1.1.20 h1:qGbDCeOynz8IQczdQUm0VWd5OjUc1r5VPOnPrKnLSH8=
+github.com/projectdiscovery/cdncheck v1.1.20/go.mod h1:dFEGsG0qAJY0AaRr2N1BY0OtZiTxS4kYeT5+OkF8t1U=
 github.com/projectdiscovery/chaos-client v0.5.2 h1:dN+7GXEypsJAbCD//dBcUxzAEAEH1fjc/7Rf4F/RiNU=
 github.com/projectdiscovery/chaos-client v0.5.2/go.mod h1:KnoJ/NJPhll42uaqlDga6oafFfNw5l2XI2ajRijtDuU=
 github.com/projectdiscovery/dnsx v1.2.2 h1:ZjUov0GOyrS8ERlKAAhk+AOkqzaYHBzCP0qZfO+6Ihg=

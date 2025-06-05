@@ -8,17 +8,11 @@ import (
 	"github.com/olekukonko/tablewriter/renderer"
 	"github.com/olekukonko/tablewriter/tw"
 	"github.com/pterm/pterm"
-	"golang.org/x/term"
 )
 
 // PrintDNSRecordsReportTable prints the DNS records report in a table format with colorized output and fixed-width columns
 func PrintDNSRecordsReportTable(report DNSRecordsReport) {
-	width, _, err := term.GetSize(int(os.Stdout.Fd())) // nolint:gosec
-	if err != nil {
-		width = 80 // default width if terminal size cannot be determined
-	}
-
-	maxColumnWidth := width / 4 // nolint:mnd
+	maxColumnWidth := 50
 
 	opts := []tablewriter.Option{
 		tablewriter.WithRenderer(renderer.NewBlueprint(tw.Rendition{})),
