@@ -81,7 +81,7 @@ require (
 	github.com/theopenlane/iam v0.12.6
 	github.com/theopenlane/newman v0.1.6
 	github.com/theopenlane/riverboat v0.1.3
-	github.com/theopenlane/utils v0.4.5
+	github.com/theopenlane/utils v0.4.6
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.27
 	github.com/vektra/mockery/v3 v3.3.2
