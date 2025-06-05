@@ -85,7 +85,7 @@ func (suite *HandlerTestSuite) TestRegisterJobRunner() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var resp *models.JobRunnerRegistrationResponse
+			var resp *models.JobRunnerRegistrationReply
 
 			// parse response body
 			err = json.NewDecoder(res.Body).Decode(&resp)
@@ -161,7 +161,7 @@ func (suite *HandlerTestSuite) TestRegisterJobRunner_ExpiredToken() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var resp *models.JobRunnerRegistrationResponse
+			var resp *models.JobRunnerRegistrationReply
 
 			// parse response body
 			err = json.NewDecoder(res.Body).Decode(&resp)

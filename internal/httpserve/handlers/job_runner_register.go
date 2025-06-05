@@ -21,8 +21,8 @@ func (h *Handler) BindRegisterRunnerNode() *openapi3.Operation {
 	registerJobRunner.OperationID = "RegisterRunnerNode"
 	registerJobRunner.Security = &openapi3.SecurityRequirements{}
 
-	h.AddRequestBody("RegisterRunner", models.ExampleJobRunnerRegistrationRequest, registerJobRunner)
-	h.AddResponse("RegisterRunnerReply", "success", models.ExampleJobRunnerRegistrationResponse, registerJobRunner, http.StatusOK)
+	h.AddRequestBody("JobRunnerRegistrationRequest", models.ExampleJobRunnerRegistrationRequest, registerJobRunner)
+	h.AddResponse("JobRunnerRegistrationReply", "success", models.ExampleJobRunnerRegistrationResponse, registerJobRunner, http.StatusOK)
 	registerJobRunner.AddResponse(http.StatusBadRequest, badRequest())
 	registerJobRunner.AddResponse(http.StatusBadRequest, invalidInput())
 
@@ -74,7 +74,7 @@ func (h *Handler) RegisterJobRunner(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrUnableToRegisterJobRunner)
 	}
 
-	out := &models.JobRunnerRegistrationResponse{
+	out := &models.JobRunnerRegistrationReply{
 		Reply: rout.Reply{
 			Success: true,
 		},
