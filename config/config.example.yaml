@@ -143,6 +143,7 @@ jobQueue:
         PollOnly: false
         Queues: null
         ReindexerSchedule: null
+        ReindexerTimeout: 0
         RescueStuckJobsAfter: 0
         RetryPolicy: null
         Schema: ""
