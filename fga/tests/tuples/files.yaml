@@ -41,3 +41,39 @@
 - user: organization:contact-org
   relation: parent
   object: contact:contact-1
+
+# user-owned files with organization member access
+- user: user:ulid-file-owner
+  relation: _self
+  object: user:ulid-file-owner
+- user: user:ulid-file-owner
+  relation: member
+  object: organization:openlane
+- user: user:ulid-file-owner
+  relation: parent
+  object: file:file-user-owned
+- user: organization:openlane#member
+  relation: can_view
+  object: file:file-user-owned
+- user: user:ulid-org-member-viewer
+  relation: _self
+  object: user:ulid-org-member-viewer
+- user: user:ulid-org-member-viewer
+  relation: member
+  object: organization:openlane
+- user: user:ulid-other-org-user
+  relation: _self
+  object: user:ulid-other-org-user
+- user: user:ulid-other-org-user
+  relation: member
+  object: organization:other-org
+- user: organization:other-org#member
+  relation: access
+  object: organization:other-org
+  condition:
+    name: email_domains_allowed
+    context:
+      allowed_domains: []
+- user: user:ulid-other-org-owner
+  relation: owner
+  object: organization:other-org

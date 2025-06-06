@@ -407,6 +407,73 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+      # test user-owned file access
+      - user: user:ulid-file-owner # the file owner should have full access
+        object: file:file-user-owned
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-org-member-viewer # org member should be able to view user-owned file
+        object: file:file-user-owned
+        context:
+          email_domain: "theopenlane.io"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member # existing org member should be able to view user-owned file
+        object: file:file-user-owned
+        context:
+          email_domain: "theopenlane.io"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-other-org-user # user from a different org should NOT be able to view file
+        object: file:file-user-owned
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+    list_objects:
+      - user: user:ulid-file-owner
+        type: file
+        assertions:
+          can_view:
+            - file:file-user-owned
+          can_edit:
+            - file:file-user-owned
+          can_delete:
+            - file:file-user-owned
+      - user: user:ulid-org-member-viewer
+        type: file
+        context:
+          email_domain: "theopenlane.io"
+        assertions:
+          can_view:
+            - file:file-user-owned
+          can_edit:
+          can_delete:
+      - user: user:ulid-of-member
+        type: file
+        context:
+          email_domain: "theopenlane.io"
+        assertions:
+          can_view:
+            - file:file-user-owned
+          can_edit:
+          can_delete:
+      - user: user:ulid-other-org-user
+        type: file
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view:
+          can_edit:
+          can_delete:
   - name: tasks
     description: tasks can be associated to many objects and users can access tasks based on their permissions
     tuple_file: tuples/tasks.yaml
