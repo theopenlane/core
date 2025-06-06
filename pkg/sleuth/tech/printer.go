@@ -41,8 +41,8 @@ func PrintAppInfoTable(appInfo map[string]AppInfo) {
 			name, info.Description, info.Website, info.CPE, info.Icon, fmt.Sprintf("%v", info.Categories),
 		}
 
-		table.Append(row)
+		_ = table.Append(row)
 	}
 
-	table.Render()
+	_ = table.Render()
 }

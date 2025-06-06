@@ -6,8 +6,10 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -32,12 +34,33 @@ func AddFilePermissions(ctx context.Context) error {
 			req := fgax.GetTupleKey(fgax.TupleRequest{
 				SubjectID:   f.Parent.ID,
 				SubjectType: f.Parent.Type,
-				ObjectID:    f.ID,     // this is the object id (file id in this case) being created
-				ObjectType:  "file",   // this is the object type (file in this case) being created
-				Relation:    "parent", // this will always be parent in an object owned permission setup
+				ObjectID:    f.ID,                // this is the object id (file id in this case) being created
+				ObjectType:  generated.TypeFile,  // this is the object type (file in this case) being created
+				Relation:    fgax.ParentRelation, // this will always be parent in an object owned permission setup
 			})
 
-			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{req}, nil); err != nil {
+			tuples := []fgax.TupleKey{req}
+
+			// if the file is an avatar, explicitly add view permissions for org members
+			const avatarFileKey = "avatarFile"
+			if f.FieldName == avatarFileKey {
+				orgID, err := auth.GetOrganizationIDFromContext(ctx)
+				if err != nil {
+					return err
+				}
+
+				orgReq := fgax.GetTupleKey(fgax.TupleRequest{
+					SubjectID:       orgID,
+					SubjectType:     generated.TypeOrganization,
+					SubjectRelation: fgax.MemberRelation,
+					ObjectID:        f.ID,
+					ObjectType:      generated.TypeFile,
+					Relation:        fgax.CanView,
+				})
+				tuples = append(tuples, orgReq)
+			}
+
+			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, tuples, nil); err != nil {
 				return err
 			}
 

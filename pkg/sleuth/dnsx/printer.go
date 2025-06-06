@@ -34,7 +34,7 @@ func PrintDNSRecordsReportTable(report DNSRecordsReport) {
 		for _, record := range records {
 			row := []string{record.Type, record.Name, record.Value, fmt.Sprintf("%d", record.TTL), record.CDN}
 
-			table.Append(row)
+			_ = table.Append(row)
 		}
 	}
 
@@ -55,5 +55,5 @@ func PrintDNSRecordsReportTable(report DNSRecordsReport) {
 		}
 	}
 
-	table.Render()
+	_ = table.Render()
 }
