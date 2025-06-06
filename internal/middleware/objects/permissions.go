@@ -42,7 +42,8 @@ func AddFilePermissions(ctx context.Context) error {
 			tuples := []fgax.TupleKey{req}
 
 			// if the file is an avatar, explicitly add view permissions for org members
-			if f.FieldName == "avatarFile" {
+			const avatarFileKey = "avatarFile"
+			if f.FieldName == avatarFileKey {
 				orgID, err := auth.GetOrganizationIDFromContext(ctx)
 				if err != nil {
 					return err
