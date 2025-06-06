@@ -6,6 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -37,7 +38,26 @@ func AddFilePermissions(ctx context.Context) error {
 				Relation:    "parent", // this will always be parent in an object owned permission setup
 			})
 
-			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{req}, nil); err != nil {
+			tuples := []fgax.TupleKey{req}
+
+			// if the parent of the file is a user, explicitly add view permissions for org members
+			if f.Parent.Type == "User" {
+				orgID, err := auth.GetOrganizationIDFromContext(ctx)
+				if err != nil {
+					return err
+				}
+
+				orgReq := fgax.GetTupleKey(fgax.TupleRequest{
+					SubjectID:   orgID + "#member",
+					SubjectType: "organization",
+					ObjectID:    f.ID,
+					ObjectType:  "file",
+					Relation:    "can_view",
+				})
+				tuples = append(tuples, orgReq)
+			}
+
+			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, tuples, nil); err != nil {
 				return err
 			}
 
