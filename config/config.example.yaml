@@ -206,6 +206,7 @@ server:
     graphPool:
         maxWorkers: 100
     idleTimeout: 30000000000
+    keyDir: ./keys
     listen: :17608
     maxResultLimit: 100
     metricsPort: :17609
@@ -219,6 +220,7 @@ server:
         code: 0
         enabled: true
         redirects: null
+    secretManager: ""
     secure:
         contentsecuritypolicy: default-src 'self'
         contenttypenosniff: nosniff

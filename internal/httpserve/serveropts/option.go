@@ -502,3 +502,30 @@ func WithSummarizer() ServerOption {
 		s.Config.Handler.Summarizer = client
 	})
 }
+
+// WithKeyDirOption allows the key directory to be set via server config.
+func WithKeyDirOption() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if s.Config.Settings.Server.KeyDir != "" {
+			WithKeyDir(s.Config.Settings.Server.KeyDir).apply(s)
+		}
+	})
+}
+
+// WithSecretManagerKeysOption allows the secret manager secret name to be set via server config.
+func WithSecretManagerKeysOption() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if s.Config.Settings.Server.SecretManagerSecret != "" {
+			WithSecretManagerKeys(s.Config.Settings.Server.SecretManagerSecret).apply(s)
+		}
+	})
+}
+
+// WithKeyDirWatcherOption allows the key directory watcher to be set via server config.
+func WithKeyDirWatcherOption() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if s.Config.Settings.Server.KeyDir != "" {
+			WithKeyDirWatcher(s.Config.Settings.Server.KeyDir).apply(s)
+		}
+	})
+}

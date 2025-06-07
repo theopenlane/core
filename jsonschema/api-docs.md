@@ -53,6 +53,8 @@ Server settings for the echo server
 |**enableGraphExtensions**|`boolean`|EnableGraphExtensions enables the graph extensions for the graph resolvers<br/>|no|
 |**complexityLimit**|`integer`|ComplexityLimit sets the maximum complexity allowed for a query<br/>|no|
 |**maxResultLimit**|`integer`|MaxResultLimit sets the maximum number of results allowed for a query<br/>|no|
+|**keyDir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>|no|
+|**secretManager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="servertls"></a>

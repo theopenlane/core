@@ -219,6 +219,14 @@
         "maxResultLimit": {
           "type": "integer",
           "description": "MaxResultLimit sets the maximum number of results allowed for a query"
+        },
+        "keyDir": {
+          "type": "string",
+          "description": "KeyDir is the path to the directory containing PEM keys for JWT signing"
+        },
+        "secretManager": {
+          "type": "string",
+          "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
         }
       },
       "additionalProperties": false,

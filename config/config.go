@@ -110,6 +110,10 @@ type Server struct {
 	ComplexityLimit int `json:"complexityLimit" koanf:"complexityLimit" default:"100"`
 	// MaxResultLimit sets the maximum number of results allowed for a query
 	MaxResultLimit int `json:"maxResultLimit" koanf:"maxResultLimit" default:"100"`
+	// KeyDir is the path to the directory containing PEM keys for JWT signing
+	KeyDir string `json:"keyDir" koanf:"keyDir" default:"./keys"`
+	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
+	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:""`
 }
 
 // Auth settings including oauth2 providers and token configuration

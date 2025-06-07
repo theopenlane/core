@@ -62,8 +62,11 @@ func serve(ctx context.Context) error {
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
 
-	// Create keys for development
-	if so.Config.Settings.Auth.Token.GenerateKeys {
+	// Load and watch keys from a directory if provided via CORE_AUTH_TOKEN_KEYDIR
+	so.AddServerOptions(serveropts.WithKeyDirWatcherFromEnv())
+
+	// Create keys for development when no external keys are supplied
+	if so.Config.Settings.Auth.Token.GenerateKeys && len(so.Config.Settings.Auth.Token.Keys) == 0 {
 		so.AddServerOptions(serveropts.WithGeneratedKeys())
 	}
 
