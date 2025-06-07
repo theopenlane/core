@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
+	"github.com/theopenlane/core/pkg/middleware/csrf"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
@@ -110,6 +111,8 @@ type Server struct {
 	ComplexityLimit int `json:"complexityLimit" koanf:"complexityLimit" default:"100"`
 	// MaxResultLimit sets the maximum number of results allowed for a query
 	MaxResultLimit int `json:"maxResultLimit" koanf:"maxResultLimit" default:"100"`
+	// CSRFProtection enables CSRF protection for the server
+	CSRFProtection csrf.Config `json:"csrfProtection" koanf:"csrfProtection" default:"true"`
 }
 
 // Auth settings including oauth2 providers and token configuration

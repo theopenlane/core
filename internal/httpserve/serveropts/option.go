@@ -37,6 +37,7 @@ import (
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
+	"github.com/theopenlane/core/pkg/middleware/csrf"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
@@ -500,5 +501,16 @@ func WithSummarizer() ServerOption {
 		}
 
 		s.Config.Handler.Summarizer = client
+	})
+}
+
+// WithCSRFProtection sets up the CSRF protection middleware for the server
+func WithCSRFProtection() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if s.Config.Settings.Server.CSRFProtection.Enabled {
+			config := s.Config.Settings.Server.CSRFProtection
+			// Use the CSRF middleware wrapper from the csrf package
+			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, csrf.Middleware(&config))
+		}
 	})
 }

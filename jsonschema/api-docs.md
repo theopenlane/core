@@ -53,6 +53,7 @@ Server settings for the echo server
 |**enableGraphExtensions**|`boolean`|EnableGraphExtensions enables the graph extensions for the graph resolvers<br/>|no|
 |**complexityLimit**|`integer`|ComplexityLimit sets the maximum complexity allowed for a query<br/>|no|
 |**maxResultLimit**|`integer`|MaxResultLimit sets the maximum number of results allowed for a query<br/>|no|
+|[**csrfProtection**](#servercsrfprotection)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="servertls"></a>
@@ -209,6 +210,23 @@ PondPool contains the settings for the goroutine pool
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**maxWorkers**|`integer`|MaxWorkers is the maximum number of workers in the pool<br/>||
+
+**Additional Properties:** not allowed  
+<a name="servercsrfprotection"></a>
+### server\.csrfProtection: object
+
+Config defines configuration for the CSRF middleware wrapper.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates whether CSRF protection is enabled.<br/>||
+|**header**|`string`|Header specifies the header name to look for the CSRF token.<br/>||
+|**cookie**|`string`|Cookie specifies the cookie name used to store the CSRF token.<br/>||
+|**secure**|`boolean`|Secure sets the Secure flag on the CSRF cookie.<br/>||
+|**sameSite**|`string`|SameSite configures the SameSite attribute on the CSRF cookie. Valid<br/>values are "Lax", "Strict", "None" and "Default".<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>
