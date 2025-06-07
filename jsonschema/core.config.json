@@ -219,6 +219,10 @@
         "maxResultLimit": {
           "type": "integer",
           "description": "MaxResultLimit sets the maximum number of results allowed for a query"
+        },
+        "csrfProtection": {
+          "$ref": "#/$defs/csrf.Config",
+          "description": "CSRFProtection enables CSRF protection for the server"
         }
       },
       "additionalProperties": false,
@@ -273,6 +277,33 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config holds the cors configuration settings"
+    },
+    "csrf.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates whether CSRF protection is enabled."
+        },
+        "header": {
+          "type": "string",
+          "description": "Header specifies the header name to look for the CSRF token."
+        },
+        "cookie": {
+          "type": "string",
+          "description": "Cookie specifies the cookie name used to store the CSRF token."
+        },
+        "secure": {
+          "type": "boolean",
+          "description": "Secure sets the Secure flag on the CSRF cookie."
+        },
+        "sameSite": {
+          "type": "string",
+          "description": "SameSite configures the SameSite attribute on the CSRF cookie. Valid\nvalues are \"Lax\", \"Strict\", \"None\" and \"Default\"."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config defines configuration for the CSRF middleware wrapper."
     },
     "emailtemplates.Config": {
       "properties": {

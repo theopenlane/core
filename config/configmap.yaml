@@ -50,6 +50,11 @@ data:
   CORE_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.core.server.enableGraphExtensions | default true }}
   CORE_SERVER_COMPLEXITYLIMIT: {{ .Values.core.server.complexityLimit | default 100 }}
   CORE_SERVER_MAXRESULTLIMIT: {{ .Values.core.server.maxResultLimit | default 100 }}
+  CORE_SERVER_CSRFPROTECTION_ENABLED: {{ .Values.core.server.csrfProtection.enabled | default true }}
+  CORE_SERVER_CSRFPROTECTION_HEADER: {{ .Values.core.server.csrfProtection.header | default "X-CSRF-Token" }}
+  CORE_SERVER_CSRFPROTECTION_COOKIE: {{ .Values.core.server.csrfProtection.cookie | default "csrf_token" }}
+  CORE_SERVER_CSRFPROTECTION_SECURE: {{ .Values.core.server.csrfProtection.secure }}
+  CORE_SERVER_CSRFPROTECTION_SAMESITE: {{ .Values.core.server.csrfProtection.sameSite | default "Lax" }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
   CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.core.entConfig.summarizer.type | default "lexrank" }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.core.entConfig.summarizer.llm.provider }}
