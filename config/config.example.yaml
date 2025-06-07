@@ -200,6 +200,12 @@ server:
         cookieInsecure: false
         enabled: true
         prefixes: null
+    csrfProtection:
+        cookie: csrf_token
+        enabled: true
+        header: X-CSRF-Token
+        sameSite: Lax
+        secure: false
     debug: false
     dev: false
     enableGraphExtensions: true

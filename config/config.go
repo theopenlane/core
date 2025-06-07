@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
+	"github.com/theopenlane/core/pkg/middleware/csrf"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
@@ -114,6 +115,8 @@ type Server struct {
 	KeyDir string `json:"keyDir" koanf:"keyDir" default:"./keys"`
 	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
 	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:""`
+	// CSRFProtection enables CSRF protection for the server
+	CSRFProtection csrf.Config `json:"csrfProtection" koanf:"csrfProtection" default:"true"`
 }
 
 // Auth settings including oauth2 providers and token configuration
