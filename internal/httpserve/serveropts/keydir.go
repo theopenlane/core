@@ -11,7 +11,7 @@ import (
 )
 
 // WithKeyDir loads all PEM files in dir into the token key map. The filename (without extension)
-// is used as the kid. This allows keys to be provided via mounted secrets.
+// is used as the kid. This allows keys to be provided via mounted secrets
 func WithKeyDir(dir string) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		entries, err := os.ReadDir(dir)
@@ -36,7 +36,7 @@ func WithKeyDir(dir string) ServerOption {
 }
 
 // WithKeyDirFromEnv loads keys from the directory specified by the
-// CORE_AUTH_TOKEN_KEYDIR environment variable, if set.
+// CORE_AUTH_TOKEN_KEYDIR environment variable, if set
 func WithKeyDirFromEnv() ServerOption {
 	dir := os.Getenv("CORE_AUTH_TOKEN_KEYDIR")
 	if dir == "" {
@@ -44,13 +44,4 @@ func WithKeyDirFromEnv() ServerOption {
 	}
 
 	return WithKeyDir(dir)
-}
-
-// WithKeyDirOption allows the key directory to be set via server config.
-func WithKeyDirOption() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Auth.Token.KeyDir != "" {
-			WithKeyDir(s.Config.Settings.Auth.Token.KeyDir).apply(s)
-		}
-	})
 }

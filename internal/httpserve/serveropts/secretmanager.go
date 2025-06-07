@@ -68,12 +68,3 @@ func WithSecretManagerKeys(secretName string) ServerOption {
 		}
 	})
 }
-
-// WithSecretManagerKeysOption allows the secret manager secret name to be set via server config.
-func WithSecretManagerKeysOption() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Auth.Token.SecretManagerSecret != "" {
-			WithSecretManagerKeys(s.Config.Settings.Auth.Token.SecretManagerSecret).apply(s)
-		}
-	})
-}
