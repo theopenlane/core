@@ -1,0 +1,70 @@
+package trustcenter
+
+import (
+	"context"
+
+	"github.com/spf13/cobra"
+
+	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/openlaneclient"
+)
+
+var createCmd = &cobra.Command{
+	Use:   "create",
+	Short: "create a new trustcenter",
+	Run: func(cmd *cobra.Command, args []string) {
+		err := create(cmd.Context())
+		cobra.CheckErr(err)
+	},
+}
+
+func init() {
+	command.AddCommand(createCmd)
+
+	// command line flags for the create command
+	createCmd.Flags().StringP("slug", "s", "", "slug of the trustcenter")
+	createCmd.Flags().StringP("custom-domain-id", "d", "", "custom domain id for the trustcenter")
+	createCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the trustcenter")
+}
+
+// createValidation validates the required fields for the command
+func createValidation() (input openlaneclient.CreateTrustCenterInput, err error) {
+	// validation of required fields for the create command
+	// output the input struct with the required fields and optional fields based on the command line flags
+	input.Slug = cmd.Config.String("slug")
+	if input.Slug == "" {
+		return input, cmd.NewRequiredFieldMissingError("slug")
+	}
+
+	customDomainID := cmd.Config.String("custom-domain-id")
+	if customDomainID != "" {
+		input.CustomDomainID = &customDomainID
+	}
+
+	tags := cmd.Config.Strings("tags")
+	if len(tags) > 0 {
+		input.Tags = tags
+	}
+
+	return input, nil
+}
+
+// create a new trustcenter
+func create(ctx context.Context) error {
+	// attempt to setup with token, otherwise fall back to JWT with session
+	client, err := cmd.TokenAuth(ctx, cmd.Config)
+	if err != nil || client == nil {
+		// setup http client
+		client, err = cmd.SetupClientWithAuth(ctx)
+		cobra.CheckErr(err)
+		defer cmd.StoreSessionCookies(client)
+	}
+
+	input, err := createValidation()
+	cobra.CheckErr(err)
+
+	o, err := client.CreateTrustCenter(ctx, input)
+	cobra.CheckErr(err)
+
+	return consoleOutput(o)
+}

@@ -59,11 +59,15 @@ type CustomDomainEdges struct {
 	MappableDomain *MappableDomain `json:"mappable_domain,omitempty"`
 	// DNSVerification holds the value of the dns_verification edge.
 	DNSVerification *DNSVerification `json:"dns_verification,omitempty"`
+	// TrustCenters holds the value of the trust_centers edge.
+	TrustCenters []*TrustCenter `json:"trust_centers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
+
+	namedTrustCenters map[string][]*TrustCenter
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -97,6 +101,15 @@ func (e CustomDomainEdges) DNSVerificationOrErr() (*DNSVerification, error) {
 		return nil, &NotFoundError{label: dnsverification.Label}
 	}
 	return nil, &NotLoadedError{edge: "dns_verification"}
+}
+
+// TrustCentersOrErr returns the TrustCenters value or an error if the edge
+// was not loaded in eager-loading.
+func (e CustomDomainEdges) TrustCentersOrErr() ([]*TrustCenter, error) {
+	if e.loadedTypes[3] {
+		return e.TrustCenters, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_centers"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -245,6 +258,11 @@ func (cd *CustomDomain) QueryDNSVerification() *DNSVerificationQuery {
 	return NewCustomDomainClient(cd.config).QueryDNSVerification(cd)
 }
 
+// QueryTrustCenters queries the "trust_centers" edge of the CustomDomain entity.
+func (cd *CustomDomain) QueryTrustCenters() *TrustCenterQuery {
+	return NewCustomDomainClient(cd.config).QueryTrustCenters(cd)
+}
+
 // Update returns a builder for updating this CustomDomain.
 // Note that you need to call CustomDomain.Unwrap() before calling this method if this CustomDomain
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -302,6 +320,30 @@ func (cd *CustomDomain) String() string {
 	builder.WriteString(cd.DNSVerificationID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedTrustCenters returns the TrustCenters named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (cd *CustomDomain) NamedTrustCenters(name string) ([]*TrustCenter, error) {
+	if cd.Edges.namedTrustCenters == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := cd.Edges.namedTrustCenters[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (cd *CustomDomain) appendNamedTrustCenters(name string, edges ...*TrustCenter) {
+	if cd.Edges.namedTrustCenters == nil {
+		cd.Edges.namedTrustCenters = make(map[string][]*TrustCenter)
+	}
+	if len(edges) == 0 {
+		cd.Edges.namedTrustCenters[name] = []*TrustCenter{}
+	} else {
+		cd.Edges.namedTrustCenters[name] = append(cd.Edges.namedTrustCenters[name], edges...)
+	}
 }
 
 // CustomDomains is a parsable slice of CustomDomain.

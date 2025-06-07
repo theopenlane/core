@@ -47,6 +47,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -1633,6 +1634,42 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(uischema)::text LIKE $7", likeQuery)) // search by Uischema
 				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustCenter searches for TrustCenter based on the query string looking for matches
+func searchTrustCenters(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenter.Query().
+		Where(
+			trustcenter.Or(
+				trustcenter.ID(query),               // search equal to ID
+				trustcenter.SlugContainsFold(query), // search by Slug
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustCenter searches for TrustCenter based on the query string looking for matches
+func adminSearchTrustCenters(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenter.Query().
+		Where(
+			trustcenter.Or(
+				trustcenter.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				trustcenter.OwnerIDContainsFold(query),        // search by OwnerID
+				trustcenter.SlugContainsFold(query),           // search by Slug
+				trustcenter.CustomDomainIDContainsFold(query), // search by CustomDomainID
 			),
 		)
 

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -174,6 +175,21 @@ func (cdu *CustomDomainUpdate) SetDNSVerification(d *DNSVerification) *CustomDom
 	return cdu.SetDNSVerificationID(d.ID)
 }
 
+// AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
+func (cdu *CustomDomainUpdate) AddTrustCenterIDs(ids ...string) *CustomDomainUpdate {
+	cdu.mutation.AddTrustCenterIDs(ids...)
+	return cdu
+}
+
+// AddTrustCenters adds the "trust_centers" edges to the TrustCenter entity.
+func (cdu *CustomDomainUpdate) AddTrustCenters(t ...*TrustCenter) *CustomDomainUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cdu.AddTrustCenterIDs(ids...)
+}
+
 // Mutation returns the CustomDomainMutation object of the builder.
 func (cdu *CustomDomainUpdate) Mutation() *CustomDomainMutation {
 	return cdu.mutation
@@ -189,6 +205,27 @@ func (cdu *CustomDomainUpdate) ClearOwner() *CustomDomainUpdate {
 func (cdu *CustomDomainUpdate) ClearDNSVerification() *CustomDomainUpdate {
 	cdu.mutation.ClearDNSVerification()
 	return cdu
+}
+
+// ClearTrustCenters clears all "trust_centers" edges to the TrustCenter entity.
+func (cdu *CustomDomainUpdate) ClearTrustCenters() *CustomDomainUpdate {
+	cdu.mutation.ClearTrustCenters()
+	return cdu
+}
+
+// RemoveTrustCenterIDs removes the "trust_centers" edge to TrustCenter entities by IDs.
+func (cdu *CustomDomainUpdate) RemoveTrustCenterIDs(ids ...string) *CustomDomainUpdate {
+	cdu.mutation.RemoveTrustCenterIDs(ids...)
+	return cdu
+}
+
+// RemoveTrustCenters removes "trust_centers" edges to TrustCenter entities.
+func (cdu *CustomDomainUpdate) RemoveTrustCenters(t ...*TrustCenter) *CustomDomainUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cdu.RemoveTrustCenterIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -362,6 +399,54 @@ func (cdu *CustomDomainUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cdu.mutation.TrustCentersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customdomain.TrustCentersTable,
+			Columns: []string{customdomain.TrustCentersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cdu.schemaConfig.TrustCenter
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cdu.mutation.RemovedTrustCentersIDs(); len(nodes) > 0 && !cdu.mutation.TrustCentersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customdomain.TrustCentersTable,
+			Columns: []string{customdomain.TrustCentersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cdu.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cdu.mutation.TrustCentersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customdomain.TrustCentersTable,
+			Columns: []string{customdomain.TrustCentersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cdu.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = cdu.schemaConfig.CustomDomain
 	ctx = internal.NewSchemaConfigContext(ctx, cdu.schemaConfig)
 	_spec.AddModifiers(cdu.modifiers...)
@@ -526,6 +611,21 @@ func (cduo *CustomDomainUpdateOne) SetDNSVerification(d *DNSVerification) *Custo
 	return cduo.SetDNSVerificationID(d.ID)
 }
 
+// AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
+func (cduo *CustomDomainUpdateOne) AddTrustCenterIDs(ids ...string) *CustomDomainUpdateOne {
+	cduo.mutation.AddTrustCenterIDs(ids...)
+	return cduo
+}
+
+// AddTrustCenters adds the "trust_centers" edges to the TrustCenter entity.
+func (cduo *CustomDomainUpdateOne) AddTrustCenters(t ...*TrustCenter) *CustomDomainUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cduo.AddTrustCenterIDs(ids...)
+}
+
 // Mutation returns the CustomDomainMutation object of the builder.
 func (cduo *CustomDomainUpdateOne) Mutation() *CustomDomainMutation {
 	return cduo.mutation
@@ -541,6 +641,27 @@ func (cduo *CustomDomainUpdateOne) ClearOwner() *CustomDomainUpdateOne {
 func (cduo *CustomDomainUpdateOne) ClearDNSVerification() *CustomDomainUpdateOne {
 	cduo.mutation.ClearDNSVerification()
 	return cduo
+}
+
+// ClearTrustCenters clears all "trust_centers" edges to the TrustCenter entity.
+func (cduo *CustomDomainUpdateOne) ClearTrustCenters() *CustomDomainUpdateOne {
+	cduo.mutation.ClearTrustCenters()
+	return cduo
+}
+
+// RemoveTrustCenterIDs removes the "trust_centers" edge to TrustCenter entities by IDs.
+func (cduo *CustomDomainUpdateOne) RemoveTrustCenterIDs(ids ...string) *CustomDomainUpdateOne {
+	cduo.mutation.RemoveTrustCenterIDs(ids...)
+	return cduo
+}
+
+// RemoveTrustCenters removes "trust_centers" edges to TrustCenter entities.
+func (cduo *CustomDomainUpdateOne) RemoveTrustCenters(t ...*TrustCenter) *CustomDomainUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cduo.RemoveTrustCenterIDs(ids...)
 }
 
 // Where appends a list predicates to the CustomDomainUpdate builder.
@@ -739,6 +860,54 @@ func (cduo *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDo
 			},
 		}
 		edge.Schema = cduo.schemaConfig.CustomDomain
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cduo.mutation.TrustCentersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customdomain.TrustCentersTable,
+			Columns: []string{customdomain.TrustCentersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cduo.schemaConfig.TrustCenter
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cduo.mutation.RemovedTrustCentersIDs(); len(nodes) > 0 && !cduo.mutation.TrustCentersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customdomain.TrustCentersTable,
+			Columns: []string{customdomain.TrustCentersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cduo.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cduo.mutation.TrustCentersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customdomain.TrustCentersTable,
+			Columns: []string{customdomain.TrustCentersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cduo.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

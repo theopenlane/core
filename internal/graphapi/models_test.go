@@ -1340,6 +1340,43 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Cu
 	return customDomain
 }
 
+// TrustCenterBuilder is used to create trust centers
+type TrustCenterBuilder struct {
+	client *client
+
+	// Fields
+	Slug           string
+	CustomDomainID string
+	OwnerID        string
+}
+
+// MustNew trust center builder is used to create, without authz checks, trust centers in the database
+func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenter {
+	ctx = setContext(ctx, tc.client.db)
+
+	if tc.Slug == "" {
+		tc.Slug = gofakeit.UUID()
+	}
+
+	if tc.OwnerID == "" {
+		// Use the organization ID from the test user
+		tc.OwnerID = testUser1.OrganizationID
+	}
+
+	mutation := tc.client.db.TrustCenter.Create().
+		SetSlug(tc.Slug).
+		SetOwnerID(tc.OwnerID)
+
+	if tc.CustomDomainID != "" {
+		mutation.SetCustomDomainID(tc.CustomDomainID)
+	}
+
+	trustCenter, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return trustCenter
+}
+
 type JobRunnerTokenBuilder struct {
 	client *client
 

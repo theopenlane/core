@@ -963,6 +963,27 @@ func (cd *CustomDomain) DNSVerification(ctx context.Context) (*DNSVerification, 
 	return result, MaskNotFound(err)
 }
 
+func (cd *CustomDomain) TrustCenters(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterOrder, where *TrustCenterWhereInput,
+) (*TrustCenterConnection, error) {
+	opts := []TrustCenterPaginateOption{
+		WithTrustCenterOrder(orderBy),
+		WithTrustCenterFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := cd.Edges.totalCount[3][alias]
+	if nodes, err := cd.NamedTrustCenters(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterConnection{Edges: []*TrustCenterEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return cd.QueryTrustCenters().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (dv *DNSVerification) Owner(ctx context.Context) (*Organization, error) {
 	result, err := dv.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -4449,6 +4470,27 @@ func (o *Organization) ScheduledJobRuns(
 	return o.QueryScheduledJobRuns().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) TrustCenters(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterOrder, where *TrustCenterWhereInput,
+) (*TrustCenterConnection, error) {
+	opts := []TrustCenterPaginateOption{
+		WithTrustCenterOrder(orderBy),
+		WithTrustCenterFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[58][alias]
+	if nodes, err := o.NamedTrustCenters(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterConnection{Edges: []*TrustCenterEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryTrustCenters().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -4457,7 +4499,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[58][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[59][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -5999,6 +6041,22 @@ func (t *Template) Files(
 		return conn, nil
 	}
 	return t.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (tc *TrustCenter) Owner(ctx context.Context) (*Organization, error) {
+	result, err := tc.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = tc.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tc *TrustCenter) CustomDomain(ctx context.Context) (*CustomDomain, error) {
+	result, err := tc.Edges.CustomDomainOrErr()
+	if IsNotLoaded(err) {
+		result, err = tc.QueryCustomDomain().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (u *User) PersonalAccessTokens(

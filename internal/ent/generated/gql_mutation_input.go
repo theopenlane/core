@@ -1828,6 +1828,7 @@ type CreateCustomDomainInput struct {
 	OwnerID           *string
 	MappableDomainID  string
 	DNSVerificationID *string
+	TrustCenterIDs    []string
 }
 
 // Mutate applies the CreateCustomDomainInput on the CustomDomainMutation builder.
@@ -1842,6 +1843,9 @@ func (i *CreateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	m.SetMappableDomainID(i.MappableDomainID)
 	if v := i.DNSVerificationID; v != nil {
 		m.SetDNSVerificationID(*v)
+	}
+	if v := i.TrustCenterIDs; len(v) > 0 {
+		m.AddTrustCenterIDs(v...)
 	}
 }
 
@@ -1860,6 +1864,9 @@ type UpdateCustomDomainInput struct {
 	OwnerID              *string
 	ClearDNSVerification bool
 	DNSVerificationID    *string
+	ClearTrustCenters    bool
+	AddTrustCenterIDs    []string
+	RemoveTrustCenterIDs []string
 }
 
 // Mutate applies the UpdateCustomDomainInput on the CustomDomainMutation builder.
@@ -1884,6 +1891,15 @@ func (i *UpdateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	}
 	if v := i.DNSVerificationID; v != nil {
 		m.SetDNSVerificationID(*v)
+	}
+	if i.ClearTrustCenters {
+		m.ClearTrustCenters()
+	}
+	if v := i.AddTrustCenterIDs; len(v) > 0 {
+		m.AddTrustCenterIDs(v...)
+	}
+	if v := i.RemoveTrustCenterIDs; len(v) > 0 {
+		m.RemoveTrustCenterIDs(v...)
 	}
 }
 
@@ -5781,6 +5797,7 @@ type CreateOrganizationInput struct {
 	ScheduledJobIDs                 []string
 	JobResultIDs                    []string
 	ScheduledJobRunIDs              []string
+	TrustCenterIDs                  []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -5975,6 +5992,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ScheduledJobRunIDs; len(v) > 0 {
 		m.AddScheduledJobRunIDs(v...)
 	}
+	if v := i.TrustCenterIDs; len(v) > 0 {
+		m.AddTrustCenterIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -6159,6 +6179,9 @@ type UpdateOrganizationInput struct {
 	ClearScheduledJobRuns                 bool
 	AddScheduledJobRunIDs                 []string
 	RemoveScheduledJobRunIDs              []string
+	ClearTrustCenters                     bool
+	AddTrustCenterIDs                     []string
+	RemoveTrustCenterIDs                  []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -6684,6 +6707,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveScheduledJobRunIDs; len(v) > 0 {
 		m.RemoveScheduledJobRunIDs(v...)
+	}
+	if i.ClearTrustCenters {
+		m.ClearTrustCenters()
+	}
+	if v := i.AddTrustCenterIDs; len(v) > 0 {
+		m.AddTrustCenterIDs(v...)
+	}
+	if v := i.RemoveTrustCenterIDs; len(v) > 0 {
+		m.RemoveTrustCenterIDs(v...)
 	}
 }
 
@@ -9695,6 +9727,86 @@ func (c *TemplateUpdate) SetInput(i UpdateTemplateInput) *TemplateUpdate {
 
 // SetInput applies the change-set in the UpdateTemplateInput on the TemplateUpdateOne builder.
 func (c *TemplateUpdateOne) SetInput(i UpdateTemplateInput) *TemplateUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTrustCenterInput represents a mutation input for creating trustcenters.
+type CreateTrustCenterInput struct {
+	Tags           []string
+	Slug           string
+	OwnerID        *string
+	CustomDomainID *string
+}
+
+// Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
+func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetSlug(i.Slug)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.CustomDomainID; v != nil {
+		m.SetCustomDomainID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterInput on the TrustCenterCreate builder.
+func (c *TrustCenterCreate) SetInput(i CreateTrustCenterInput) *TrustCenterCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterInput represents a mutation input for updating trustcenters.
+type UpdateTrustCenterInput struct {
+	ClearTags         bool
+	Tags              []string
+	AppendTags        []string
+	Slug              *string
+	ClearOwner        bool
+	OwnerID           *string
+	ClearCustomDomain bool
+	CustomDomainID    *string
+}
+
+// Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
+func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Slug; v != nil {
+		m.SetSlug(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearCustomDomain {
+		m.ClearCustomDomain()
+	}
+	if v := i.CustomDomainID; v != nil {
+		m.SetCustomDomainID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterInput on the TrustCenterUpdate builder.
+func (c *TrustCenterUpdate) SetInput(i UpdateTrustCenterInput) *TrustCenterUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterInput on the TrustCenterUpdateOne builder.
+func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

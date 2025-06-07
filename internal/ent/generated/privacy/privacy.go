@@ -2223,6 +2223,54 @@ func (f TemplateHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m gen
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TemplateHistoryMutation", m)
 }
 
+// The TrustCenterQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustCenterQueryRuleFunc func(context.Context, *generated.TrustCenterQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustCenterQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustCenterQuery", q)
+}
+
+// The TrustCenterMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustCenterMutationRuleFunc func(context.Context, *generated.TrustCenterMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustCenterMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TrustCenterMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterMutation", m)
+}
+
+// The TrustCenterHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustCenterHistoryQueryRuleFunc func(context.Context, *generated.TrustCenterHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustCenterHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustCenterHistoryQuery", q)
+}
+
+// The TrustCenterHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustCenterHistoryMutationRuleFunc func(context.Context, *generated.TrustCenterHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustCenterHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TrustCenterHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterHistoryMutation", m)
+}
+
 // The UserQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type UserQueryRuleFunc func(context.Context, *generated.UserQuery) error
@@ -2554,6 +2602,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.TemplateHistoryQuery:
 		return q.Filter(), nil
+	case *generated.TrustCenterQuery:
+		return q.Filter(), nil
+	case *generated.TrustCenterHistoryQuery:
+		return q.Filter(), nil
 	case *generated.UserQuery:
 		return q.Filter(), nil
 	case *generated.UserHistoryQuery:
@@ -2746,6 +2798,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.TemplateMutation:
 		return m.Filter(), nil
 	case *generated.TemplateHistoryMutation:
+		return m.Filter(), nil
+	case *generated.TrustCenterMutation:
+		return m.Filter(), nil
+	case *generated.TrustCenterHistoryMutation:
 		return m.Filter(), nil
 	case *generated.UserMutation:
 		return m.Filter(), nil

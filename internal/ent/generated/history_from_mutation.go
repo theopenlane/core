@@ -9678,6 +9678,202 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.TrustCenterHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if slug, exists := m.Slug(); exists {
+		create = create.SetSlug(slug)
+	}
+
+	if customDomainID, exists := m.CustomDomainID(); exists {
+		create = create.SetCustomDomainID(customDomainID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenter, err := client.TrustCenter.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.TrustCenterHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(trustcenter.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(trustcenter.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(trustcenter.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(trustcenter.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(trustcenter.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(trustcenter.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(trustcenter.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(trustcenter.OwnerID)
+		}
+
+		if slug, exists := m.Slug(); exists {
+			create = create.SetSlug(slug)
+		} else {
+			create = create.SetSlug(trustcenter.Slug)
+		}
+
+		if customDomainID, exists := m.CustomDomainID(); exists {
+			create = create.SetCustomDomainID(customDomainID)
+		} else {
+			create = create.SetCustomDomainID(trustcenter.CustomDomainID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenter, err := client.TrustCenter.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.TrustCenterHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(trustcenter.CreatedAt).
+			SetUpdatedAt(trustcenter.UpdatedAt).
+			SetCreatedBy(trustcenter.CreatedBy).
+			SetUpdatedBy(trustcenter.UpdatedBy).
+			SetDeletedAt(trustcenter.DeletedAt).
+			SetDeletedBy(trustcenter.DeletedBy).
+			SetTags(trustcenter.Tags).
+			SetOwnerID(trustcenter.OwnerID).
+			SetSlug(trustcenter.Slug).
+			SetCustomDomainID(trustcenter.CustomDomainID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 

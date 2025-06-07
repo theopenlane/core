@@ -416,6 +416,16 @@ type OpenlaneGraphClient interface {
 	GetAllTFASettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTFASettings, error)
 	GetTFASetting(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetTFASetting, error)
 	UpdateTFASetting(ctx context.Context, input UpdateTFASettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTFASetting, error)
+	CreateBulkCSVTrustCenter(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenter, error)
+	CreateBulkTrustCenter(ctx context.Context, input []*CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenter, error)
+	CreateTrustCenter(ctx context.Context, input CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenter, error)
+	DeleteTrustCenter(ctx context.Context, deleteTrustCenterID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenter, error)
+	GetAllTrustCenters(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenters, error)
+	GetTrustCenterByID(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterByID, error)
+	GetTrustCenters(ctx context.Context, first *int64, last *int64, where *TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenters, error)
+	UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenter, error)
+	GetAllTrustCenterHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterHistories, error)
+	GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterHistories, error)
 	CreateUser(ctx context.Context, input CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
 	DeleteUser(ctx context.Context, deleteUserID string, interceptors ...clientv2.RequestInterceptor) (*DeleteUser, error)
 	GetAllUsers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsers, error)
@@ -6569,6 +6579,113 @@ func (t *AdminSearch_AdminSearch_Templates) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_TrustCenters_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenters_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_TrustCenters_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_TrustCenters_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_TrustCenters_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_TrustCenters_Edges_Node struct {
+	CustomDomainID *string  "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string   "json:\"id\" graphql:\"id\""
+	OwnerID        *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug           string   "json:\"slug\" graphql:\"slug\""
+	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenters_Edges_Node) GetCustomDomainID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_Edges_Node{}
+	}
+	return t.CustomDomainID
+}
+func (t *AdminSearch_AdminSearch_TrustCenters_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_TrustCenters_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_TrustCenters_Edges_Node) GetSlug() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_Edges_Node{}
+	}
+	return t.Slug
+}
+func (t *AdminSearch_AdminSearch_TrustCenters_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_TrustCenters_Edges struct {
+	Node *AdminSearch_AdminSearch_TrustCenters_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenters_Edges) GetNode() *AdminSearch_AdminSearch_TrustCenters_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_TrustCenters struct {
+	Edges      []*AdminSearch_AdminSearch_TrustCenters_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_TrustCenters_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenters) GetEdges() []*AdminSearch_AdminSearch_TrustCenters_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_TrustCenters) GetPageInfo() *AdminSearch_AdminSearch_TrustCenters_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_TrustCenters) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenters{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -6929,6 +7046,7 @@ type AdminSearch_AdminSearch struct {
 	Tasks                       *AdminSearch_AdminSearch_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *AdminSearch_AdminSearch_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                                "json:\"totalCount\" graphql:\"totalCount\""
+	TrustCenters                *AdminSearch_AdminSearch_TrustCenters                "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
 	UserSettings                *AdminSearch_AdminSearch_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *AdminSearch_AdminSearch_Users                       "json:\"users,omitempty\" graphql:\"users\""
 	Webauthns                   *AdminSearch_AdminSearch_Webauthns                   "json:\"webauthns,omitempty\" graphql:\"webauthns\""
@@ -7161,6 +7279,12 @@ func (t *AdminSearch_AdminSearch) GetTotalCount() int64 {
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.TotalCount
+}
+func (t *AdminSearch_AdminSearch) GetTrustCenters() *AdminSearch_AdminSearch_TrustCenters {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.TrustCenters
 }
 func (t *AdminSearch_AdminSearch) GetUserSettings() *AdminSearch_AdminSearch_UserSettings {
 	if t == nil {
@@ -68434,6 +68558,99 @@ func (t *GlobalSearch_Search_Templates) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_TrustCenters_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_TrustCenters_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_TrustCenters_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_TrustCenters_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_TrustCenters_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_TrustCenters_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Slug string   "json:\"slug\" graphql:\"slug\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_TrustCenters_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_TrustCenters_Edges_Node) GetSlug() string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters_Edges_Node{}
+	}
+	return t.Slug
+}
+func (t *GlobalSearch_Search_TrustCenters_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_TrustCenters_Edges struct {
+	Node *GlobalSearch_Search_TrustCenters_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_TrustCenters_Edges) GetNode() *GlobalSearch_Search_TrustCenters_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_TrustCenters struct {
+	Edges      []*GlobalSearch_Search_TrustCenters_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_TrustCenters_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_TrustCenters) GetEdges() []*GlobalSearch_Search_TrustCenters_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_TrustCenters) GetPageInfo() *GlobalSearch_Search_TrustCenters_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_TrustCenters) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenters{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -68738,6 +68955,7 @@ type GlobalSearch_Search struct {
 	Tasks                       *GlobalSearch_Search_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *GlobalSearch_Search_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                            "json:\"totalCount\" graphql:\"totalCount\""
+	TrustCenters                *GlobalSearch_Search_TrustCenters                "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
 	UserSettings                *GlobalSearch_Search_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *GlobalSearch_Search_Users                       "json:\"users,omitempty\" graphql:\"users\""
 	Webauthns                   *GlobalSearch_Search_Webauthns                   "json:\"webauthns,omitempty\" graphql:\"webauthns\""
@@ -68970,6 +69188,12 @@ func (t *GlobalSearch_Search) GetTotalCount() int64 {
 		t = &GlobalSearch_Search{}
 	}
 	return t.TotalCount
+}
+func (t *GlobalSearch_Search) GetTrustCenters() *GlobalSearch_Search_TrustCenters {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.TrustCenters
 }
 func (t *GlobalSearch_Search) GetUserSettings() *GlobalSearch_Search_UserSettings {
 	if t == nil {
@@ -77205,6 +77429,978 @@ func (t *UpdateTFASetting_UpdateTFASetting) GetTfaSetting() *UpdateTFASetting_Up
 	return &t.TfaSetting
 }
 
+type CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters struct {
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug           string     "json:\"slug\" graphql:\"slug\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters) GetCustomDomainID() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters{}
+	}
+	return t.CustomDomainID
+}
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters) GetSlug() string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters{}
+	}
+	return t.Slug
+}
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter struct {
+	TrustCenters []*CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
+}
+
+func (t *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter) GetTrustCenters() []*CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter_TrustCenters {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter{}
+	}
+	return t.TrustCenters
+}
+
+type CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters struct {
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug           string     "json:\"slug\" graphql:\"slug\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters) GetCustomDomainID() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters{}
+	}
+	return t.CustomDomainID
+}
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters) GetID() string {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters) GetSlug() string {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters{}
+	}
+	return t.Slug
+}
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkTrustCenter_CreateBulkTrustCenter struct {
+	TrustCenters []*CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
+}
+
+func (t *CreateBulkTrustCenter_CreateBulkTrustCenter) GetTrustCenters() []*CreateBulkTrustCenter_CreateBulkTrustCenter_TrustCenters {
+	if t == nil {
+		t = &CreateBulkTrustCenter_CreateBulkTrustCenter{}
+	}
+	return t.TrustCenters
+}
+
+type CreateTrustCenter_CreateTrustCenter_TrustCenter struct {
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug           string     "json:\"slug\" graphql:\"slug\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetCustomDomainID() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.CustomDomainID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.OwnerID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetSlug() string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.Slug
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetTags() []string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.Tags
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTrustCenter_CreateTrustCenter struct {
+	TrustCenter CreateTrustCenter_CreateTrustCenter_TrustCenter "json:\"trustCenter\" graphql:\"trustCenter\""
+}
+
+func (t *CreateTrustCenter_CreateTrustCenter) GetTrustCenter() *CreateTrustCenter_CreateTrustCenter_TrustCenter {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter{}
+	}
+	return &t.TrustCenter
+}
+
+type DeleteTrustCenter_DeleteTrustCenter struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTrustCenter_DeleteTrustCenter) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTrustCenter_DeleteTrustCenter{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTrustCenters_TrustCenters_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenters_TrustCenters_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenters_TrustCenters_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenters_TrustCenters_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenters_TrustCenters_Edges_Node struct {
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug           string     "json:\"slug\" graphql:\"slug\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetCustomDomainID() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.CustomDomainID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetSlug() string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.Slug
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenters_TrustCenters_Edges struct {
+	Node *GetAllTrustCenters_TrustCenters_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters_Edges) GetNode() *GetAllTrustCenters_TrustCenters_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenters_TrustCenters struct {
+	Edges      []*GetAllTrustCenters_TrustCenters_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenters_TrustCenters_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters) GetEdges() []*GetAllTrustCenters_TrustCenters_Edges {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenters_TrustCenters) GetPageInfo() *GetAllTrustCenters_TrustCenters_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenters_TrustCenters) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterByID_TrustCenter struct {
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug           string     "json:\"slug\" graphql:\"slug\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterByID_TrustCenter) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterByID_TrustCenter) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterByID_TrustCenter) GetCustomDomainID() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.CustomDomainID
+}
+func (t *GetTrustCenterByID_TrustCenter) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterByID_TrustCenter) GetOwnerID() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.OwnerID
+}
+func (t *GetTrustCenterByID_TrustCenter) GetSlug() string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.Slug
+}
+func (t *GetTrustCenterByID_TrustCenter) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterByID_TrustCenter) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterByID_TrustCenter) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenters_TrustCenters_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenters_TrustCenters_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenters_TrustCenters_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenters_TrustCenters_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenters_TrustCenters_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenters_TrustCenters_Edges_Node struct {
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug           string     "json:\"slug\" graphql:\"slug\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetCustomDomainID() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.CustomDomainID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetSlug() string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.Slug
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenters_TrustCenters_Edges struct {
+	Node *GetTrustCenters_TrustCenters_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenters_TrustCenters_Edges) GetNode() *GetTrustCenters_TrustCenters_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenters_TrustCenters struct {
+	Edges      []*GetTrustCenters_TrustCenters_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenters_TrustCenters_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenters_TrustCenters) GetEdges() []*GetTrustCenters_TrustCenters_Edges {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenters_TrustCenters) GetPageInfo() *GetTrustCenters_TrustCenters_PageInfo {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenters_TrustCenters) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters{}
+	}
+	return t.TotalCount
+}
+
+type UpdateTrustCenter_UpdateTrustCenter_TrustCenter struct {
+	CreatedAt      *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomainID *string    "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	ID             string     "json:\"id\" graphql:\"id\""
+	OwnerID        *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Slug           string     "json:\"slug\" graphql:\"slug\""
+	Tags           []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetCustomDomainID() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.CustomDomainID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetSlug() string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.Slug
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetTags() []string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.Tags
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTrustCenter_UpdateTrustCenter struct {
+	TrustCenter UpdateTrustCenter_UpdateTrustCenter_TrustCenter "json:\"trustCenter\" graphql:\"trustCenter\""
+}
+
+func (t *UpdateTrustCenter_UpdateTrustCenter) GetTrustCenter() *UpdateTrustCenter_UpdateTrustCenter_TrustCenter {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter{}
+	}
+	return &t.TrustCenter
+}
+
+type GetAllTrustCenterHistories_TrustCenterHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node struct {
+	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomainID *string        "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Slug           string         "json:\"slug\" graphql:\"slug\""
+	Tags           []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetCustomDomainID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.CustomDomainID
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetSlug() string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.Slug
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterHistories_TrustCenterHistories_Edges struct {
+	Node *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterHistories_TrustCenterHistories_Edges) GetNode() *GetAllTrustCenterHistories_TrustCenterHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterHistories_TrustCenterHistories struct {
+	Edges      []*GetAllTrustCenterHistories_TrustCenterHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterHistories_TrustCenterHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                    "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterHistories_TrustCenterHistories) GetEdges() []*GetAllTrustCenterHistories_TrustCenterHistories_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories) GetPageInfo() *GetAllTrustCenterHistories_TrustCenterHistories_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterHistories_TrustCenterHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterHistories_TrustCenterHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterHistories_TrustCenterHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterHistories_TrustCenterHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterHistories_TrustCenterHistories_Edges_Node struct {
+	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CustomDomainID *string        "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
+	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Slug           string         "json:\"slug\" graphql:\"slug\""
+	Tags           []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetCustomDomainID() *string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.CustomDomainID
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetSlug() string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.Slug
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterHistories_TrustCenterHistories_Edges struct {
+	Node *GetTrustCenterHistories_TrustCenterHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterHistories_TrustCenterHistories_Edges) GetNode() *GetTrustCenterHistories_TrustCenterHistories_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterHistories_TrustCenterHistories struct {
+	Edges      []*GetTrustCenterHistories_TrustCenterHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterHistories_TrustCenterHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterHistories_TrustCenterHistories) GetEdges() []*GetTrustCenterHistories_TrustCenterHistories_Edges {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories) GetPageInfo() *GetTrustCenterHistories_TrustCenterHistories_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterHistories_TrustCenterHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterHistories_TrustCenterHistories{}
+	}
+	return t.TotalCount
+}
+
 type CreateUser_CreateUser_User_AvatarFile struct {
 	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
@@ -84657,6 +85853,116 @@ func (t *UpdateTFASetting) GetUpdateTFASetting() *UpdateTFASetting_UpdateTFASett
 	return &t.UpdateTFASetting
 }
 
+type CreateBulkCSVTrustCenter struct {
+	CreateBulkCSVTrustCenter CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter "json:\"createBulkCSVTrustCenter\" graphql:\"createBulkCSVTrustCenter\""
+}
+
+func (t *CreateBulkCSVTrustCenter) GetCreateBulkCSVTrustCenter() *CreateBulkCSVTrustCenter_CreateBulkCSVTrustCenter {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenter{}
+	}
+	return &t.CreateBulkCSVTrustCenter
+}
+
+type CreateBulkTrustCenter struct {
+	CreateBulkTrustCenter CreateBulkTrustCenter_CreateBulkTrustCenter "json:\"createBulkTrustCenter\" graphql:\"createBulkTrustCenter\""
+}
+
+func (t *CreateBulkTrustCenter) GetCreateBulkTrustCenter() *CreateBulkTrustCenter_CreateBulkTrustCenter {
+	if t == nil {
+		t = &CreateBulkTrustCenter{}
+	}
+	return &t.CreateBulkTrustCenter
+}
+
+type CreateTrustCenter struct {
+	CreateTrustCenter CreateTrustCenter_CreateTrustCenter "json:\"createTrustCenter\" graphql:\"createTrustCenter\""
+}
+
+func (t *CreateTrustCenter) GetCreateTrustCenter() *CreateTrustCenter_CreateTrustCenter {
+	if t == nil {
+		t = &CreateTrustCenter{}
+	}
+	return &t.CreateTrustCenter
+}
+
+type DeleteTrustCenter struct {
+	DeleteTrustCenter DeleteTrustCenter_DeleteTrustCenter "json:\"deleteTrustCenter\" graphql:\"deleteTrustCenter\""
+}
+
+func (t *DeleteTrustCenter) GetDeleteTrustCenter() *DeleteTrustCenter_DeleteTrustCenter {
+	if t == nil {
+		t = &DeleteTrustCenter{}
+	}
+	return &t.DeleteTrustCenter
+}
+
+type GetAllTrustCenters struct {
+	TrustCenters GetAllTrustCenters_TrustCenters "json:\"trustCenters\" graphql:\"trustCenters\""
+}
+
+func (t *GetAllTrustCenters) GetTrustCenters() *GetAllTrustCenters_TrustCenters {
+	if t == nil {
+		t = &GetAllTrustCenters{}
+	}
+	return &t.TrustCenters
+}
+
+type GetTrustCenterByID struct {
+	TrustCenter GetTrustCenterByID_TrustCenter "json:\"trustCenter\" graphql:\"trustCenter\""
+}
+
+func (t *GetTrustCenterByID) GetTrustCenter() *GetTrustCenterByID_TrustCenter {
+	if t == nil {
+		t = &GetTrustCenterByID{}
+	}
+	return &t.TrustCenter
+}
+
+type GetTrustCenters struct {
+	TrustCenters GetTrustCenters_TrustCenters "json:\"trustCenters\" graphql:\"trustCenters\""
+}
+
+func (t *GetTrustCenters) GetTrustCenters() *GetTrustCenters_TrustCenters {
+	if t == nil {
+		t = &GetTrustCenters{}
+	}
+	return &t.TrustCenters
+}
+
+type UpdateTrustCenter struct {
+	UpdateTrustCenter UpdateTrustCenter_UpdateTrustCenter "json:\"updateTrustCenter\" graphql:\"updateTrustCenter\""
+}
+
+func (t *UpdateTrustCenter) GetUpdateTrustCenter() *UpdateTrustCenter_UpdateTrustCenter {
+	if t == nil {
+		t = &UpdateTrustCenter{}
+	}
+	return &t.UpdateTrustCenter
+}
+
+type GetAllTrustCenterHistories struct {
+	TrustCenterHistories GetAllTrustCenterHistories_TrustCenterHistories "json:\"trustCenterHistories\" graphql:\"trustCenterHistories\""
+}
+
+func (t *GetAllTrustCenterHistories) GetTrustCenterHistories() *GetAllTrustCenterHistories_TrustCenterHistories {
+	if t == nil {
+		t = &GetAllTrustCenterHistories{}
+	}
+	return &t.TrustCenterHistories
+}
+
+type GetTrustCenterHistories struct {
+	TrustCenterHistories GetTrustCenterHistories_TrustCenterHistories "json:\"trustCenterHistories\" graphql:\"trustCenterHistories\""
+}
+
+func (t *GetTrustCenterHistories) GetTrustCenterHistories() *GetTrustCenterHistories_TrustCenterHistories {
+	if t == nil {
+		t = &GetTrustCenterHistories{}
+	}
+	return &t.TrustCenterHistories
+}
+
 type CreateUser struct {
 	CreateUser CreateUser_CreateUser "json:\"createUser\" graphql:\"createUser\""
 }
@@ -86046,6 +87352,24 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					description
 					jsonconfig
 					uischema
+				}
+			}
+		}
+		trustCenters {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+					ownerID
+					slug
+					customDomainID
 				}
 			}
 		}
@@ -103274,6 +104598,22 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		trustCenters {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					slug
+					tags
+				}
+			}
+		}
 		users {
 			totalCount
 			pageInfo {
@@ -105676,6 +107016,377 @@ func (c *Client) UpdateTFASetting(ctx context.Context, input UpdateTFASettingInp
 	return &res, nil
 }
 
+const CreateBulkCSVTrustCenterDocument = `mutation CreateBulkCSVTrustCenter ($input: Upload!) {
+	createBulkCSVTrustCenter(input: $input) {
+		trustCenters {
+			createdAt
+			createdBy
+			customDomainID
+			id
+			ownerID
+			slug
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVTrustCenter(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenter, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVTrustCenter
+	if err := c.Client.Post(ctx, "CreateBulkCSVTrustCenter", CreateBulkCSVTrustCenterDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkTrustCenterDocument = `mutation CreateBulkTrustCenter ($input: [CreateTrustCenterInput!]) {
+	createBulkTrustCenter(input: $input) {
+		trustCenters {
+			createdAt
+			createdBy
+			customDomainID
+			id
+			ownerID
+			slug
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkTrustCenter(ctx context.Context, input []*CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenter, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkTrustCenter
+	if err := c.Client.Post(ctx, "CreateBulkTrustCenter", CreateBulkTrustCenterDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTrustCenterDocument = `mutation CreateTrustCenter ($input: CreateTrustCenterInput!) {
+	createTrustCenter(input: $input) {
+		trustCenter {
+			createdAt
+			createdBy
+			customDomainID
+			id
+			ownerID
+			slug
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenter(ctx context.Context, input CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenter, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenter
+	if err := c.Client.Post(ctx, "CreateTrustCenter", CreateTrustCenterDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTrustCenterDocument = `mutation DeleteTrustCenter ($deleteTrustCenterId: ID!) {
+	deleteTrustCenter(id: $deleteTrustCenterId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTrustCenter(ctx context.Context, deleteTrustCenterID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenter, error) {
+	vars := map[string]any{
+		"deleteTrustCenterId": deleteTrustCenterID,
+	}
+
+	var res DeleteTrustCenter
+	if err := c.Client.Post(ctx, "DeleteTrustCenter", DeleteTrustCenterDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCentersDocument = `query GetAllTrustCenters {
+	trustCenters {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				customDomainID
+				id
+				ownerID
+				slug
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenters(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenters, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenters
+	if err := c.Client.Post(ctx, "GetAllTrustCenters", GetAllTrustCentersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterByIDDocument = `query GetTrustCenterByID ($trustCenterId: ID!) {
+	trustCenter(id: $trustCenterId) {
+		createdAt
+		createdBy
+		customDomainID
+		id
+		ownerID
+		slug
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetTrustCenterByID(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterByID, error) {
+	vars := map[string]any{
+		"trustCenterId": trustCenterID,
+	}
+
+	var res GetTrustCenterByID
+	if err := c.Client.Post(ctx, "GetTrustCenterByID", GetTrustCenterByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCentersDocument = `query GetTrustCenters ($first: Int, $last: Int, $where: TrustCenterWhereInput) {
+	trustCenters(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				customDomainID
+				id
+				ownerID
+				slug
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenters(ctx context.Context, first *int64, last *int64, where *TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenters, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenters
+	if err := c.Client.Post(ctx, "GetTrustCenters", GetTrustCentersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTrustCenterDocument = `mutation UpdateTrustCenter ($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!) {
+	updateTrustCenter(id: $updateTrustCenterId, input: $input) {
+		trustCenter {
+			createdAt
+			createdBy
+			customDomainID
+			id
+			ownerID
+			slug
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenter, error) {
+	vars := map[string]any{
+		"updateTrustCenterId": updateTrustCenterID,
+		"input":               input,
+	}
+
+	var res UpdateTrustCenter
+	if err := c.Client.Post(ctx, "UpdateTrustCenter", UpdateTrustCenterDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterHistoriesDocument = `query GetAllTrustCenterHistories {
+	trustCenterHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				customDomainID
+				historyTime
+				id
+				operation
+				ownerID
+				ref
+				slug
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterHistories
+	if err := c.Client.Post(ctx, "GetAllTrustCenterHistories", GetAllTrustCenterHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterHistoriesDocument = `query GetTrustCenterHistories ($first: Int, $last: Int, $where: TrustCenterHistoryWhereInput) {
+	trustCenterHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				customDomainID
+				historyTime
+				id
+				operation
+				ownerID
+				ref
+				slug
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterHistories
+	if err := c.Client.Post(ctx, "GetTrustCenterHistories", GetTrustCenterHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!, $avatarFile: Upload) {
 	createUser(input: $input, avatarFile: $avatarFile) {
 		user {
@@ -106913,6 +108624,16 @@ var DocumentOperationNames = map[string]string{
 	GetAllTFASettingsDocument:                    "GetAllTFASettings",
 	GetTFASettingDocument:                        "GetTFASetting",
 	UpdateTFASettingDocument:                     "UpdateTFASetting",
+	CreateBulkCSVTrustCenterDocument:             "CreateBulkCSVTrustCenter",
+	CreateBulkTrustCenterDocument:                "CreateBulkTrustCenter",
+	CreateTrustCenterDocument:                    "CreateTrustCenter",
+	DeleteTrustCenterDocument:                    "DeleteTrustCenter",
+	GetAllTrustCentersDocument:                   "GetAllTrustCenters",
+	GetTrustCenterByIDDocument:                   "GetTrustCenterByID",
+	GetTrustCentersDocument:                      "GetTrustCenters",
+	UpdateTrustCenterDocument:                    "UpdateTrustCenter",
+	GetAllTrustCenterHistoriesDocument:           "GetAllTrustCenterHistories",
+	GetTrustCenterHistoriesDocument:              "GetTrustCenterHistories",
 	CreateUserDocument:                           "CreateUser",
 	DeleteUserDocument:                           "DeleteUser",
 	GetAllUsersDocument:                          "GetAllUsers",

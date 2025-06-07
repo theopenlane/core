@@ -1097,6 +1097,7 @@ type SearchResults struct {
 	Subscribers                 *generated.SubscriberConnection                 `json:"subscribers,omitempty"`
 	Tasks                       *generated.TaskConnection                       `json:"tasks,omitempty"`
 	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
+	TrustCenters                *generated.TrustCenterConnection                `json:"trustCenters,omitempty"`
 	Users                       *generated.UserConnection                       `json:"users,omitempty"`
 	UserSettings                *generated.UserSettingConnection                `json:"userSettings,omitempty"`
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
@@ -1237,6 +1238,30 @@ type TemplateDeletePayload struct {
 type TemplateUpdatePayload struct {
 	// Updated template
 	Template *generated.Template `json:"template"`
+}
+
+// Return response for createBulkTrustCenter mutation
+type TrustCenterBulkCreatePayload struct {
+	// Created trustCenters
+	TrustCenters []*generated.TrustCenter `json:"trustCenters,omitempty"`
+}
+
+// Return response for createTrustCenter mutation
+type TrustCenterCreatePayload struct {
+	// Created trustCenter
+	TrustCenter *generated.TrustCenter `json:"trustCenter"`
+}
+
+// Return response for deleteTrustCenter mutation
+type TrustCenterDeletePayload struct {
+	// Deleted trustCenter ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenter mutation
+type TrustCenterUpdatePayload struct {
+	// Updated trustCenter
+	TrustCenter *generated.TrustCenter `json:"trustCenter"`
 }
 
 // Return response for createBulkUser mutation

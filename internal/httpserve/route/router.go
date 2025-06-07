@@ -209,6 +209,7 @@ func RegisterRoutes(router *Router) error {
 		registerExampleCSVHandler,
 		registerWebAuthnWellKnownHandler,
 		registerAcmeSolverHandler,
+		registerTrustCenterAnonymousJWTHandler,
 
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into

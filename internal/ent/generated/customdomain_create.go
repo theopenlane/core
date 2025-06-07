@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 )
 
 // CustomDomainCreate is the builder for creating a CustomDomain entity.
@@ -180,6 +181,21 @@ func (cdc *CustomDomainCreate) SetMappableDomain(m *MappableDomain) *CustomDomai
 // SetDNSVerification sets the "dns_verification" edge to the DNSVerification entity.
 func (cdc *CustomDomainCreate) SetDNSVerification(d *DNSVerification) *CustomDomainCreate {
 	return cdc.SetDNSVerificationID(d.ID)
+}
+
+// AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
+func (cdc *CustomDomainCreate) AddTrustCenterIDs(ids ...string) *CustomDomainCreate {
+	cdc.mutation.AddTrustCenterIDs(ids...)
+	return cdc
+}
+
+// AddTrustCenters adds the "trust_centers" edges to the TrustCenter entity.
+func (cdc *CustomDomainCreate) AddTrustCenters(t ...*TrustCenter) *CustomDomainCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cdc.AddTrustCenterIDs(ids...)
 }
 
 // Mutation returns the CustomDomainMutation object of the builder.
@@ -388,6 +404,23 @@ func (cdc *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DNSVerificationID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cdc.mutation.TrustCentersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customdomain.TrustCentersTable,
+			Columns: []string{customdomain.TrustCentersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cdc.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

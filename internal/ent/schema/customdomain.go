@@ -95,6 +95,7 @@ func (e CustomDomain) Edges() []ent.Edge {
 			required:   false,
 			immutable:  false,
 		}),
+		defaultEdgeToWithPagination(e, TrustCenter{}),
 	}
 }
 

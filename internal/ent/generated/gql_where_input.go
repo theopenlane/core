@@ -94,6 +94,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -12794,6 +12796,10 @@ type CustomDomainWhereInput struct {
 	// "dns_verification" edge predicates.
 	HasDNSVerification     *bool                        `json:"hasDNSVerification,omitempty"`
 	HasDNSVerificationWith []*DNSVerificationWhereInput `json:"hasDNSVerificationWith,omitempty"`
+
+	// "trust_centers" edge predicates.
+	HasTrustCenters     *bool                    `json:"hasTrustCenters,omitempty"`
+	HasTrustCentersWith []*TrustCenterWhereInput `json:"hasTrustCentersWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -13269,6 +13275,24 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, customdomain.HasDNSVerificationWith(with...))
+	}
+	if i.HasTrustCenters != nil {
+		p := customdomain.HasTrustCenters()
+		if !*i.HasTrustCenters {
+			p = customdomain.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCentersWith) > 0 {
+		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCentersWith))
+		for _, w := range i.HasTrustCentersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCentersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, customdomain.HasTrustCentersWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -47361,6 +47385,10 @@ type OrganizationWhereInput struct {
 	HasScheduledJobRuns     *bool                        `json:"hasScheduledJobRuns,omitempty"`
 	HasScheduledJobRunsWith []*ScheduledJobRunWhereInput `json:"hasScheduledJobRunsWith,omitempty"`
 
+	// "trust_centers" edge predicates.
+	HasTrustCenters     *bool                    `json:"hasTrustCenters,omitempty"`
+	HasTrustCentersWith []*TrustCenterWhereInput `json:"hasTrustCentersWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -48877,6 +48905,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasScheduledJobRunsWith(with...))
+	}
+	if i.HasTrustCenters != nil {
+		p := organization.HasTrustCenters()
+		if !*i.HasTrustCenters {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCentersWith) > 0 {
+		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCentersWith))
+		for _, w := range i.HasTrustCentersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCentersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasTrustCentersWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()
@@ -71825,6 +71871,1200 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 		return predicates[0], nil
 	default:
 		return templatehistory.And(predicates...), nil
+	}
+}
+
+// TrustCenterWhereInput represents a where input for filtering TrustCenter queries.
+type TrustCenterWhereInput struct {
+	Predicates []predicate.TrustCenter  `json:"-"`
+	Not        *TrustCenterWhereInput   `json:"not,omitempty"`
+	Or         []*TrustCenterWhereInput `json:"or,omitempty"`
+	And        []*TrustCenterWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "slug" field predicates.
+	Slug             *string  `json:"slug,omitempty"`
+	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
+	SlugIn           []string `json:"slugIn,omitempty"`
+	SlugNotIn        []string `json:"slugNotIn,omitempty"`
+	SlugGT           *string  `json:"slugGT,omitempty"`
+	SlugGTE          *string  `json:"slugGTE,omitempty"`
+	SlugLT           *string  `json:"slugLT,omitempty"`
+	SlugLTE          *string  `json:"slugLTE,omitempty"`
+	SlugContains     *string  `json:"slugContains,omitempty"`
+	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
+	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
+	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
+	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
+
+	// "custom_domain_id" field predicates.
+	CustomDomainID             *string  `json:"customDomainID,omitempty"`
+	CustomDomainIDNEQ          *string  `json:"customDomainIDNEQ,omitempty"`
+	CustomDomainIDIn           []string `json:"customDomainIDIn,omitempty"`
+	CustomDomainIDNotIn        []string `json:"customDomainIDNotIn,omitempty"`
+	CustomDomainIDGT           *string  `json:"customDomainIDGT,omitempty"`
+	CustomDomainIDGTE          *string  `json:"customDomainIDGTE,omitempty"`
+	CustomDomainIDLT           *string  `json:"customDomainIDLT,omitempty"`
+	CustomDomainIDLTE          *string  `json:"customDomainIDLTE,omitempty"`
+	CustomDomainIDContains     *string  `json:"customDomainIDContains,omitempty"`
+	CustomDomainIDHasPrefix    *string  `json:"customDomainIDHasPrefix,omitempty"`
+	CustomDomainIDHasSuffix    *string  `json:"customDomainIDHasSuffix,omitempty"`
+	CustomDomainIDIsNil        bool     `json:"customDomainIDIsNil,omitempty"`
+	CustomDomainIDNotNil       bool     `json:"customDomainIDNotNil,omitempty"`
+	CustomDomainIDEqualFold    *string  `json:"customDomainIDEqualFold,omitempty"`
+	CustomDomainIDContainsFold *string  `json:"customDomainIDContainsFold,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "custom_domain" edge predicates.
+	HasCustomDomain     *bool                     `json:"hasCustomDomain,omitempty"`
+	HasCustomDomainWith []*CustomDomainWhereInput `json:"hasCustomDomainWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *TrustCenterWhereInput) AddPredicates(predicates ...predicate.TrustCenter) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the TrustCenterWhereInput filter on the TrustCenterQuery builder.
+func (i *TrustCenterWhereInput) Filter(q *TrustCenterQuery) (*TrustCenterQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyTrustCenterWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyTrustCenterWhereInput is returned in case the TrustCenterWhereInput is empty.
+var ErrEmptyTrustCenterWhereInput = errors.New("generated: empty predicate TrustCenterWhereInput")
+
+// P returns a predicate for filtering trustcenters.
+// An error is returned if the input is empty or invalid.
+func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
+	var predicates []predicate.TrustCenter
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, trustcenter.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.TrustCenter, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, trustcenter.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.TrustCenter, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, trustcenter.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, trustcenter.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, trustcenter.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, trustcenter.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, trustcenter.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, trustcenter.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, trustcenter.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, trustcenter.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, trustcenter.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, trustcenter.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, trustcenter.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, trustcenter.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, trustcenter.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, trustcenter.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenter.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, trustcenter.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, trustcenter.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, trustcenter.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, trustcenter.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, trustcenter.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, trustcenter.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, trustcenter.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, trustcenter.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, trustcenter.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenter.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, trustcenter.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, trustcenter.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, trustcenter.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, trustcenter.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, trustcenter.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, trustcenter.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, trustcenter.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, trustcenter.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, trustcenter.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenter.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, trustcenter.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, trustcenter.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, trustcenter.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, trustcenter.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, trustcenter.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenter.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenter.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, trustcenter.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, trustcenter.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, trustcenter.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, trustcenter.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, trustcenter.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, trustcenter.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, trustcenter.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenter.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, trustcenter.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, trustcenter.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, trustcenter.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, trustcenter.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, trustcenter.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenter.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenter.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, trustcenter.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, trustcenter.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, trustcenter.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, trustcenter.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, trustcenter.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, trustcenter.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, trustcenter.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, trustcenter.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, trustcenter.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, trustcenter.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, trustcenter.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, trustcenter.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, trustcenter.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, trustcenter.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, trustcenter.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, trustcenter.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, trustcenter.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, trustcenter.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, trustcenter.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.Slug != nil {
+		predicates = append(predicates, trustcenter.SlugEQ(*i.Slug))
+	}
+	if i.SlugNEQ != nil {
+		predicates = append(predicates, trustcenter.SlugNEQ(*i.SlugNEQ))
+	}
+	if len(i.SlugIn) > 0 {
+		predicates = append(predicates, trustcenter.SlugIn(i.SlugIn...))
+	}
+	if len(i.SlugNotIn) > 0 {
+		predicates = append(predicates, trustcenter.SlugNotIn(i.SlugNotIn...))
+	}
+	if i.SlugGT != nil {
+		predicates = append(predicates, trustcenter.SlugGT(*i.SlugGT))
+	}
+	if i.SlugGTE != nil {
+		predicates = append(predicates, trustcenter.SlugGTE(*i.SlugGTE))
+	}
+	if i.SlugLT != nil {
+		predicates = append(predicates, trustcenter.SlugLT(*i.SlugLT))
+	}
+	if i.SlugLTE != nil {
+		predicates = append(predicates, trustcenter.SlugLTE(*i.SlugLTE))
+	}
+	if i.SlugContains != nil {
+		predicates = append(predicates, trustcenter.SlugContains(*i.SlugContains))
+	}
+	if i.SlugHasPrefix != nil {
+		predicates = append(predicates, trustcenter.SlugHasPrefix(*i.SlugHasPrefix))
+	}
+	if i.SlugHasSuffix != nil {
+		predicates = append(predicates, trustcenter.SlugHasSuffix(*i.SlugHasSuffix))
+	}
+	if i.SlugEqualFold != nil {
+		predicates = append(predicates, trustcenter.SlugEqualFold(*i.SlugEqualFold))
+	}
+	if i.SlugContainsFold != nil {
+		predicates = append(predicates, trustcenter.SlugContainsFold(*i.SlugContainsFold))
+	}
+	if i.CustomDomainID != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDEQ(*i.CustomDomainID))
+	}
+	if i.CustomDomainIDNEQ != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDNEQ(*i.CustomDomainIDNEQ))
+	}
+	if len(i.CustomDomainIDIn) > 0 {
+		predicates = append(predicates, trustcenter.CustomDomainIDIn(i.CustomDomainIDIn...))
+	}
+	if len(i.CustomDomainIDNotIn) > 0 {
+		predicates = append(predicates, trustcenter.CustomDomainIDNotIn(i.CustomDomainIDNotIn...))
+	}
+	if i.CustomDomainIDGT != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDGT(*i.CustomDomainIDGT))
+	}
+	if i.CustomDomainIDGTE != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDGTE(*i.CustomDomainIDGTE))
+	}
+	if i.CustomDomainIDLT != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDLT(*i.CustomDomainIDLT))
+	}
+	if i.CustomDomainIDLTE != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDLTE(*i.CustomDomainIDLTE))
+	}
+	if i.CustomDomainIDContains != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDContains(*i.CustomDomainIDContains))
+	}
+	if i.CustomDomainIDHasPrefix != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDHasPrefix(*i.CustomDomainIDHasPrefix))
+	}
+	if i.CustomDomainIDHasSuffix != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDHasSuffix(*i.CustomDomainIDHasSuffix))
+	}
+	if i.CustomDomainIDIsNil {
+		predicates = append(predicates, trustcenter.CustomDomainIDIsNil())
+	}
+	if i.CustomDomainIDNotNil {
+		predicates = append(predicates, trustcenter.CustomDomainIDNotNil())
+	}
+	if i.CustomDomainIDEqualFold != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDEqualFold(*i.CustomDomainIDEqualFold))
+	}
+	if i.CustomDomainIDContainsFold != nil {
+		predicates = append(predicates, trustcenter.CustomDomainIDContainsFold(*i.CustomDomainIDContainsFold))
+	}
+
+	if i.HasOwner != nil {
+		p := trustcenter.HasOwner()
+		if !*i.HasOwner {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasOwnerWith(with...))
+	}
+	if i.HasCustomDomain != nil {
+		p := trustcenter.HasCustomDomain()
+		if !*i.HasCustomDomain {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCustomDomainWith) > 0 {
+		with := make([]predicate.CustomDomain, 0, len(i.HasCustomDomainWith))
+		for _, w := range i.HasCustomDomainWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCustomDomainWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasCustomDomainWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyTrustCenterWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return trustcenter.And(predicates...), nil
+	}
+}
+
+// TrustCenterHistoryWhereInput represents a where input for filtering TrustCenterHistory queries.
+type TrustCenterHistoryWhereInput struct {
+	Predicates []predicate.TrustCenterHistory  `json:"-"`
+	Not        *TrustCenterHistoryWhereInput   `json:"not,omitempty"`
+	Or         []*TrustCenterHistoryWhereInput `json:"or,omitempty"`
+	And        []*TrustCenterHistoryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "history_time" field predicates.
+	HistoryTime      *time.Time  `json:"historyTime,omitempty"`
+	HistoryTimeNEQ   *time.Time  `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGT    *time.Time  `json:"historyTimeGT,omitempty"`
+	HistoryTimeGTE   *time.Time  `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLT    *time.Time  `json:"historyTimeLT,omitempty"`
+	HistoryTimeLTE   *time.Time  `json:"historyTimeLTE,omitempty"`
+
+	// "ref" field predicates.
+	Ref             *string  `json:"ref,omitempty"`
+	RefNEQ          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGT           *string  `json:"refGT,omitempty"`
+	RefGTE          *string  `json:"refGTE,omitempty"`
+	RefLT           *string  `json:"refLT,omitempty"`
+	RefLTE          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        bool     `json:"refIsNil,omitempty"`
+	RefNotNil       bool     `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+
+	// "operation" field predicates.
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "slug" field predicates.
+	Slug             *string  `json:"slug,omitempty"`
+	SlugNEQ          *string  `json:"slugNEQ,omitempty"`
+	SlugIn           []string `json:"slugIn,omitempty"`
+	SlugNotIn        []string `json:"slugNotIn,omitempty"`
+	SlugGT           *string  `json:"slugGT,omitempty"`
+	SlugGTE          *string  `json:"slugGTE,omitempty"`
+	SlugLT           *string  `json:"slugLT,omitempty"`
+	SlugLTE          *string  `json:"slugLTE,omitempty"`
+	SlugContains     *string  `json:"slugContains,omitempty"`
+	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
+	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
+	SlugEqualFold    *string  `json:"slugEqualFold,omitempty"`
+	SlugContainsFold *string  `json:"slugContainsFold,omitempty"`
+
+	// "custom_domain_id" field predicates.
+	CustomDomainID             *string  `json:"customDomainID,omitempty"`
+	CustomDomainIDNEQ          *string  `json:"customDomainIDNEQ,omitempty"`
+	CustomDomainIDIn           []string `json:"customDomainIDIn,omitempty"`
+	CustomDomainIDNotIn        []string `json:"customDomainIDNotIn,omitempty"`
+	CustomDomainIDGT           *string  `json:"customDomainIDGT,omitempty"`
+	CustomDomainIDGTE          *string  `json:"customDomainIDGTE,omitempty"`
+	CustomDomainIDLT           *string  `json:"customDomainIDLT,omitempty"`
+	CustomDomainIDLTE          *string  `json:"customDomainIDLTE,omitempty"`
+	CustomDomainIDContains     *string  `json:"customDomainIDContains,omitempty"`
+	CustomDomainIDHasPrefix    *string  `json:"customDomainIDHasPrefix,omitempty"`
+	CustomDomainIDHasSuffix    *string  `json:"customDomainIDHasSuffix,omitempty"`
+	CustomDomainIDIsNil        bool     `json:"customDomainIDIsNil,omitempty"`
+	CustomDomainIDNotNil       bool     `json:"customDomainIDNotNil,omitempty"`
+	CustomDomainIDEqualFold    *string  `json:"customDomainIDEqualFold,omitempty"`
+	CustomDomainIDContainsFold *string  `json:"customDomainIDContainsFold,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *TrustCenterHistoryWhereInput) AddPredicates(predicates ...predicate.TrustCenterHistory) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the TrustCenterHistoryWhereInput filter on the TrustCenterHistoryQuery builder.
+func (i *TrustCenterHistoryWhereInput) Filter(q *TrustCenterHistoryQuery) (*TrustCenterHistoryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyTrustCenterHistoryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyTrustCenterHistoryWhereInput is returned in case the TrustCenterHistoryWhereInput is empty.
+var ErrEmptyTrustCenterHistoryWhereInput = errors.New("generated: empty predicate TrustCenterHistoryWhereInput")
+
+// P returns a predicate for filtering trustcenterhistories.
+// An error is returned if the input is empty or invalid.
+func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error) {
+	var predicates []predicate.TrustCenterHistory
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, trustcenterhistory.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.TrustCenterHistory, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, trustcenterhistory.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.TrustCenterHistory, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, trustcenterhistory.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, trustcenterhistory.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, trustcenterhistory.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, trustcenterhistory.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, trustcenterhistory.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, trustcenterhistory.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, trustcenterhistory.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, trustcenterhistory.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.HistoryTime != nil {
+		predicates = append(predicates, trustcenterhistory.HistoryTimeEQ(*i.HistoryTime))
+	}
+	if i.HistoryTimeNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.HistoryTimeNEQ(*i.HistoryTimeNEQ))
+	}
+	if len(i.HistoryTimeIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.HistoryTimeIn(i.HistoryTimeIn...))
+	}
+	if len(i.HistoryTimeNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.HistoryTimeNotIn(i.HistoryTimeNotIn...))
+	}
+	if i.HistoryTimeGT != nil {
+		predicates = append(predicates, trustcenterhistory.HistoryTimeGT(*i.HistoryTimeGT))
+	}
+	if i.HistoryTimeGTE != nil {
+		predicates = append(predicates, trustcenterhistory.HistoryTimeGTE(*i.HistoryTimeGTE))
+	}
+	if i.HistoryTimeLT != nil {
+		predicates = append(predicates, trustcenterhistory.HistoryTimeLT(*i.HistoryTimeLT))
+	}
+	if i.HistoryTimeLTE != nil {
+		predicates = append(predicates, trustcenterhistory.HistoryTimeLTE(*i.HistoryTimeLTE))
+	}
+	if i.Ref != nil {
+		predicates = append(predicates, trustcenterhistory.RefEQ(*i.Ref))
+	}
+	if i.RefNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.RefNEQ(*i.RefNEQ))
+	}
+	if len(i.RefIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.RefIn(i.RefIn...))
+	}
+	if len(i.RefNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.RefNotIn(i.RefNotIn...))
+	}
+	if i.RefGT != nil {
+		predicates = append(predicates, trustcenterhistory.RefGT(*i.RefGT))
+	}
+	if i.RefGTE != nil {
+		predicates = append(predicates, trustcenterhistory.RefGTE(*i.RefGTE))
+	}
+	if i.RefLT != nil {
+		predicates = append(predicates, trustcenterhistory.RefLT(*i.RefLT))
+	}
+	if i.RefLTE != nil {
+		predicates = append(predicates, trustcenterhistory.RefLTE(*i.RefLTE))
+	}
+	if i.RefContains != nil {
+		predicates = append(predicates, trustcenterhistory.RefContains(*i.RefContains))
+	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
+	if i.RefHasSuffix != nil {
+		predicates = append(predicates, trustcenterhistory.RefHasSuffix(*i.RefHasSuffix))
+	}
+	if i.RefIsNil {
+		predicates = append(predicates, trustcenterhistory.RefIsNil())
+	}
+	if i.RefNotNil {
+		predicates = append(predicates, trustcenterhistory.RefNotNil())
+	}
+	if i.RefEqualFold != nil {
+		predicates = append(predicates, trustcenterhistory.RefEqualFold(*i.RefEqualFold))
+	}
+	if i.RefContainsFold != nil {
+		predicates = append(predicates, trustcenterhistory.RefContainsFold(*i.RefContainsFold))
+	}
+	if i.Operation != nil {
+		predicates = append(predicates, trustcenterhistory.OperationEQ(*i.Operation))
+	}
+	if i.OperationNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.OperationNEQ(*i.OperationNEQ))
+	}
+	if len(i.OperationIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.OperationIn(i.OperationIn...))
+	}
+	if len(i.OperationNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.OperationNotIn(i.OperationNotIn...))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, trustcenterhistory.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, trustcenterhistory.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, trustcenterhistory.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, trustcenterhistory.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, trustcenterhistory.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.Slug != nil {
+		predicates = append(predicates, trustcenterhistory.SlugEQ(*i.Slug))
+	}
+	if i.SlugNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.SlugNEQ(*i.SlugNEQ))
+	}
+	if len(i.SlugIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.SlugIn(i.SlugIn...))
+	}
+	if len(i.SlugNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.SlugNotIn(i.SlugNotIn...))
+	}
+	if i.SlugGT != nil {
+		predicates = append(predicates, trustcenterhistory.SlugGT(*i.SlugGT))
+	}
+	if i.SlugGTE != nil {
+		predicates = append(predicates, trustcenterhistory.SlugGTE(*i.SlugGTE))
+	}
+	if i.SlugLT != nil {
+		predicates = append(predicates, trustcenterhistory.SlugLT(*i.SlugLT))
+	}
+	if i.SlugLTE != nil {
+		predicates = append(predicates, trustcenterhistory.SlugLTE(*i.SlugLTE))
+	}
+	if i.SlugContains != nil {
+		predicates = append(predicates, trustcenterhistory.SlugContains(*i.SlugContains))
+	}
+	if i.SlugHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.SlugHasPrefix(*i.SlugHasPrefix))
+	}
+	if i.SlugHasSuffix != nil {
+		predicates = append(predicates, trustcenterhistory.SlugHasSuffix(*i.SlugHasSuffix))
+	}
+	if i.SlugEqualFold != nil {
+		predicates = append(predicates, trustcenterhistory.SlugEqualFold(*i.SlugEqualFold))
+	}
+	if i.SlugContainsFold != nil {
+		predicates = append(predicates, trustcenterhistory.SlugContainsFold(*i.SlugContainsFold))
+	}
+	if i.CustomDomainID != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDEQ(*i.CustomDomainID))
+	}
+	if i.CustomDomainIDNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDNEQ(*i.CustomDomainIDNEQ))
+	}
+	if len(i.CustomDomainIDIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDIn(i.CustomDomainIDIn...))
+	}
+	if len(i.CustomDomainIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDNotIn(i.CustomDomainIDNotIn...))
+	}
+	if i.CustomDomainIDGT != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDGT(*i.CustomDomainIDGT))
+	}
+	if i.CustomDomainIDGTE != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDGTE(*i.CustomDomainIDGTE))
+	}
+	if i.CustomDomainIDLT != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDLT(*i.CustomDomainIDLT))
+	}
+	if i.CustomDomainIDLTE != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDLTE(*i.CustomDomainIDLTE))
+	}
+	if i.CustomDomainIDContains != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDContains(*i.CustomDomainIDContains))
+	}
+	if i.CustomDomainIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDHasPrefix(*i.CustomDomainIDHasPrefix))
+	}
+	if i.CustomDomainIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDHasSuffix(*i.CustomDomainIDHasSuffix))
+	}
+	if i.CustomDomainIDIsNil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDIsNil())
+	}
+	if i.CustomDomainIDNotNil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDNotNil())
+	}
+	if i.CustomDomainIDEqualFold != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDEqualFold(*i.CustomDomainIDEqualFold))
+	}
+	if i.CustomDomainIDContainsFold != nil {
+		predicates = append(predicates, trustcenterhistory.CustomDomainIDContainsFold(*i.CustomDomainIDContainsFold))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyTrustCenterHistoryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return trustcenterhistory.And(predicates...), nil
 	}
 }
 

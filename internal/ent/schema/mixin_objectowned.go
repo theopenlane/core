@@ -111,6 +111,15 @@ func withSkipForSystemAdmin(allow bool) objectOwnedOption {
 	}
 }
 
+// withAllowGlobalRead allows unauthenticated queries
+func withAllowGlobalRead(allow bool) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		if allow {
+			o.SkipInterceptor = interceptors.SkipAll
+		}
+	}
+}
+
 // withOwnerRelation allows to set custom owner relation for the object, the default is "parent"
 func withOwnerRelation(relation string) objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
