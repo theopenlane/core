@@ -67,13 +67,13 @@ func TestWithKeyDirWatcherDetectsNewKey(t *testing.T) {
 
 	require.Eventually(t, func() bool {
 		jwks, err := so.Config.Handler.TokenManager.Keys()
-		return err == nil && len(jwks.Keys()) == 1
+		return err == nil && jwks.Len() == 1
 	}, 5*time.Second, 100*time.Millisecond)
 
 	// add second key
 	writeKey(t, dir, kid2)
 	require.Eventually(t, func() bool {
 		jwks, err := so.Config.Handler.TokenManager.Keys()
-		return err == nil && len(jwks.Keys()) == 2
+		return err == nil && jwks.Len() == 2
 	}, 5*time.Second, 100*time.Millisecond)
 }
