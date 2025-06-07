@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
@@ -82,6 +83,33 @@ func (a *Client) GenerateUserAuthSessionWithOrg(ctx context.Context, w http.Resp
 // this is used during the login process
 func (a *Client) GenerateUserAuthSession(ctx context.Context, w http.ResponseWriter, user *generated.User) (*models.AuthData, error) {
 	return a.GenerateUserAuthSessionWithOrg(ctx, w, user, "")
+}
+
+func (a *Client) GenerateAnonymousAuthSession(ctx context.Context, w http.ResponseWriter, targetOrgID string) (*models.AuthData, error) {
+	anonUserID := fmt.Sprintf("anon_%s", uuid.New().String())
+
+	// create new claims for the user
+	newClaims := createClaimsWithOrg(&generated.User{ID: anonUserID}, targetOrgID)
+
+	// create a new token pair for the user
+	access, refresh, err := a.db.TokenManager.CreateTokenPair(newClaims)
+	if err != nil {
+		return nil, err
+	}
+
+	auth := &models.AuthData{
+		AccessToken:  access,
+		RefreshToken: refresh,
+	}
+
+	auth.Session, err = a.generateUserSession(ctx, w, anonUserID)
+	if err != nil {
+		return nil, err
+	}
+
+	auth.TokenType = bearerScheme
+
+	return auth, nil
 }
 
 // GenerateOauthAuthSession creates a new auth session for the oauth user and their default organization id

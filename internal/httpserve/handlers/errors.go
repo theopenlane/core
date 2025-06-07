@@ -75,6 +75,14 @@ var (
 	ErrJobRunnerRegistrationTokenExpired = errors.New("job runner registration token expired")
 	// ErrJobRunnerAlreadyRegistered is returned when we hit the ip address unique constraint
 	ErrJobRunnerAlreadyRegistered = errors.New("this job runner node exists and cannot be registered twice")
+	// ErrMissingReferer is returned when the referer is missing from the request
+	ErrMissingReferer = errors.New("referer is required")
+	// ErrInvalidRefererURL is returned when the referer URL is invalid
+	ErrInvalidRefererURL = errors.New("invalid referer URL")
+	// ErrMissingSlugInPath is returned when the slug is missing from the path
+	ErrMissingSlugInPath = errors.New("slug is required in the path for default trust center domain")
+	// ErrTrustCenterNotFound is returned when the trust center is not found
+	ErrTrustCenterNotFound = errors.New("trust center not found")
 )
 
 var (

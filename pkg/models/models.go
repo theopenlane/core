@@ -973,3 +973,11 @@ var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationReply{
 type AcmeSolverRequest struct {
 	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
+
+type CreateTrustCenterAnonymousJWTRequest struct {
+	Referer string `query:"referer" description:"The referer of the request" example:"https://trust.openlane.com/something"`
+}
+
+type CreateTrustCenterAnonymousJWTResponse struct {
+	AuthData
+}
