@@ -227,6 +227,7 @@
         "secretManager": {
           "type": "string",
           "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
+        },
         "csrfProtection": {
           "$ref": "#/$defs/csrf.Config",
           "description": "CSRFProtection enables CSRF protection for the server"

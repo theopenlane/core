@@ -526,6 +526,9 @@ func WithSecretManagerKeysOption() ServerOption {
 func WithKeyDirWatcherOption() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Server.KeyDir != "" {
+		}
+	})
+}
 
 // WithCSRFProtection sets up the CSRF protection middleware for the server
 func WithCSRFProtection() ServerOption {
