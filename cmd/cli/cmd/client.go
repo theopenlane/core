@@ -86,7 +86,17 @@ func SetupClientWithAuth(ctx context.Context) (*openlaneclient.OpenlaneClient, e
 		Session:     session,
 	}))
 
-	return openlaneclient.New(config, opts...)
+	client, err := openlaneclient.New(config, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	// initialize csrf token for subsequent requests
+	if err := client.InitCSRF(ctx); err != nil {
+		return nil, err
+	}
+
+	return client, nil
 }
 
 // SetupClient will setup the client without the Authorization header
@@ -97,7 +107,16 @@ func SetupClient(ctx context.Context) (*openlaneclient.OpenlaneClient, error) {
 		return nil, err
 	}
 
-	return openlaneclient.New(config, opts...)
+	client, err := openlaneclient.New(config, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := client.InitCSRF(ctx); err != nil {
+		return nil, err
+	}
+
+	return client, nil
 }
 
 // configureDefaultOpts will setup the default options for the client

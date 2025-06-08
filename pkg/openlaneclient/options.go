@@ -73,3 +73,20 @@ func WithTransport(transport http.RoundTripper) ClientOption {
 		return nil
 	}
 }
+
+// WithCSRFToken sets the CSRF token header on the client for all requests
+func WithCSRFToken(token string) ClientOption {
+	return func(c *APIv1) error {
+		if token == "" {
+			return nil
+		}
+
+		if c.Requester.Header == nil {
+			c.Requester.Header = make(http.Header)
+		}
+
+		c.Requester.Header.Set(csrfHeader, token)
+
+		return nil
+	}
+}

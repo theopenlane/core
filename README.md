@@ -123,6 +123,33 @@ See the [README](/config/README.md) in the `config` directory.
 1. Once this command has finished ^, you can login and perform actions as user
    `mitb@theopenlane.io` with password `mattisthebest1234`
 
+### CSRF Tokens
+
+The server enforces CSRF protection on all mutating requests. Clients must
+include a valid token in the `X-CSRF-Token` header. Existing client code can
+either supply the token directly using the `WithCSRFToken` option when
+creating a new client:
+
+```go
+client, err := openlaneclient.New(config,
+    openlaneclient.WithCSRFToken(myToken))
+```
+
+or call `InitCSRF` on the client which automatically fetches the token from the server's `/livez` endpoint and applies it to subsequent requests:
+
+```go
+ctx := context.Background()
+if err := client.InitCSRF(ctx); err != nil {
+    // handle error
+}
+```
+
+The CLI has been updated to call `InitCSRF` automatically, but other custom clients will need to adopt one of the approaches.
+
+NOTE: Because the CSRF middleware stores the token only in the client’s cookie and not on the server, restarting the core server (or core server running in Kubernetes pods) does not invalidate the token. When the middleware receives a request, it checks the token in the `csrf_token` cookie against the `X-CSRF-Token` header. If the cookie is already present, that same token is used — no new token is generated. The token cookie persists until it expires (default 24h), so clients will continue to send the same value even if the server has restarted.
+
+Therefore, rolling restarts on Kubernetes will not force new tokens to be issued and should not cause requests to fail, provided the client retains its CSRF cookie.
+
 ### Creating Queries in GraphQL
 
 The best method of forming / testing queries against the server is to run

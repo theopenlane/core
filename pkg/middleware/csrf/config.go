@@ -11,13 +11,13 @@ import (
 // Config defines configuration for the CSRF middleware wrapper.
 type Config struct {
 	// Enabled indicates whether CSRF protection is enabled.
-	Enabled bool `json:"enabled" koanf:"enabled" default:"true"`
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// Header specifies the header name to look for the CSRF token.
 	Header string `json:"header" koanf:"header" default:"X-CSRF-Token"`
 	// Cookie specifies the cookie name used to store the CSRF token.
 	Cookie string `json:"cookie" koanf:"cookie" default:"csrf_token"`
 	// Secure sets the Secure flag on the CSRF cookie.
-	Secure bool `json:"secure" koanf:"secure"`
+	Secure bool `json:"secure" koanf:"secure" default:"true"`
 	// SameSite configures the SameSite attribute on the CSRF cookie. Valid
 	// values are "Lax", "Strict", "None" and "Default".
 	SameSite string `json:"sameSite" koanf:"sameSite" default:"Lax"`
@@ -29,7 +29,7 @@ func NewConfig() *Config {
 		Enabled:  true,
 		Header:   "X-CSRF-Token",
 		Cookie:   "csrf_token",
-		Secure:   false,
+		Secure:   true,
 		SameSite: "Lax",
 	}
 }
