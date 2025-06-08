@@ -4,7 +4,6 @@ package generated
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"time"
 
@@ -13,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 )
 
 // TrustCenterCreate is the builder for creating a TrustCenter entity.
@@ -132,6 +132,14 @@ func (tcc *TrustCenterCreate) SetSlug(s string) *TrustCenterCreate {
 	return tcc
 }
 
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (tcc *TrustCenterCreate) SetNillableSlug(s *string) *TrustCenterCreate {
+	if s != nil {
+		tcc.SetSlug(*s)
+	}
+	return tcc
+}
+
 // SetCustomDomainID sets the "custom_domain_id" field.
 func (tcc *TrustCenterCreate) SetCustomDomainID(s string) *TrustCenterCreate {
 	tcc.mutation.SetCustomDomainID(s)
@@ -168,6 +176,25 @@ func (tcc *TrustCenterCreate) SetOwner(o *Organization) *TrustCenterCreate {
 // SetCustomDomain sets the "custom_domain" edge to the CustomDomain entity.
 func (tcc *TrustCenterCreate) SetCustomDomain(c *CustomDomain) *TrustCenterCreate {
 	return tcc.SetCustomDomainID(c.ID)
+}
+
+// SetSettingID sets the "setting" edge to the TrustCenterSetting entity by ID.
+func (tcc *TrustCenterCreate) SetSettingID(id string) *TrustCenterCreate {
+	tcc.mutation.SetSettingID(id)
+	return tcc
+}
+
+// SetNillableSettingID sets the "setting" edge to the TrustCenterSetting entity by ID if the given value is not nil.
+func (tcc *TrustCenterCreate) SetNillableSettingID(id *string) *TrustCenterCreate {
+	if id != nil {
+		tcc = tcc.SetSettingID(*id)
+	}
+	return tcc
+}
+
+// SetSetting sets the "setting" edge to the TrustCenterSetting entity.
+func (tcc *TrustCenterCreate) SetSetting(t *TrustCenterSetting) *TrustCenterCreate {
+	return tcc.SetSettingID(t.ID)
 }
 
 // Mutation returns the TrustCenterMutation object of the builder.
@@ -241,9 +268,6 @@ func (tcc *TrustCenterCreate) check() error {
 		if err := trustcenter.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.owner_id": %w`, err)}
 		}
-	}
-	if _, ok := tcc.mutation.Slug(); !ok {
-		return &ValidationError{Name: "slug", err: errors.New(`generated: missing required field "TrustCenter.slug"`)}
 	}
 	if v, ok := tcc.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
@@ -352,6 +376,24 @@ func (tcc *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) 
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.CustomDomainID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tcc.mutation.SettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.SettingTable,
+			Columns: []string{trustcenter.SettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcc.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.trust_center_setting = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

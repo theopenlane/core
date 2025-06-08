@@ -22,7 +22,6 @@ func init() {
 	command.AddCommand(createCmd)
 
 	// command line flags for the create command
-	createCmd.Flags().StringP("slug", "s", "", "slug of the trustcenter")
 	createCmd.Flags().StringP("custom-domain-id", "d", "", "custom domain id for the trustcenter")
 	createCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the trustcenter")
 }
@@ -31,10 +30,6 @@ func init() {
 func createValidation() (input openlaneclient.CreateTrustCenterInput, err error) {
 	// validation of required fields for the create command
 	// output the input struct with the required fields and optional fields based on the command line flags
-	input.Slug = cmd.Config.String("slug")
-	if input.Slug == "" {
-		return input, cmd.NewRequiredFieldMissingError("slug")
-	}
 
 	customDomainID := cmd.Config.String("custom-domain-id")
 	if customDomainID != "" {

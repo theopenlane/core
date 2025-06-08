@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -158,6 +159,12 @@ func (tcu *TrustCenterUpdate) SetNillableSlug(s *string) *TrustCenterUpdate {
 	return tcu
 }
 
+// ClearSlug clears the value of the "slug" field.
+func (tcu *TrustCenterUpdate) ClearSlug() *TrustCenterUpdate {
+	tcu.mutation.ClearSlug()
+	return tcu
+}
+
 // SetCustomDomainID sets the "custom_domain_id" field.
 func (tcu *TrustCenterUpdate) SetCustomDomainID(s string) *TrustCenterUpdate {
 	tcu.mutation.SetCustomDomainID(s)
@@ -188,6 +195,25 @@ func (tcu *TrustCenterUpdate) SetCustomDomain(c *CustomDomain) *TrustCenterUpdat
 	return tcu.SetCustomDomainID(c.ID)
 }
 
+// SetSettingID sets the "setting" edge to the TrustCenterSetting entity by ID.
+func (tcu *TrustCenterUpdate) SetSettingID(id string) *TrustCenterUpdate {
+	tcu.mutation.SetSettingID(id)
+	return tcu
+}
+
+// SetNillableSettingID sets the "setting" edge to the TrustCenterSetting entity by ID if the given value is not nil.
+func (tcu *TrustCenterUpdate) SetNillableSettingID(id *string) *TrustCenterUpdate {
+	if id != nil {
+		tcu = tcu.SetSettingID(*id)
+	}
+	return tcu
+}
+
+// SetSetting sets the "setting" edge to the TrustCenterSetting entity.
+func (tcu *TrustCenterUpdate) SetSetting(t *TrustCenterSetting) *TrustCenterUpdate {
+	return tcu.SetSettingID(t.ID)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (tcu *TrustCenterUpdate) Mutation() *TrustCenterMutation {
 	return tcu.mutation
@@ -202,6 +228,12 @@ func (tcu *TrustCenterUpdate) ClearOwner() *TrustCenterUpdate {
 // ClearCustomDomain clears the "custom_domain" edge to the CustomDomain entity.
 func (tcu *TrustCenterUpdate) ClearCustomDomain() *TrustCenterUpdate {
 	tcu.mutation.ClearCustomDomain()
+	return tcu
+}
+
+// ClearSetting clears the "setting" edge to the TrustCenterSetting entity.
+func (tcu *TrustCenterUpdate) ClearSetting() *TrustCenterUpdate {
+	tcu.mutation.ClearSetting()
 	return tcu
 }
 
@@ -324,6 +356,9 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := tcu.mutation.Slug(); ok {
 		_spec.SetField(trustcenter.FieldSlug, field.TypeString, value)
 	}
+	if tcu.mutation.SlugCleared() {
+		_spec.ClearField(trustcenter.FieldSlug, field.TypeString)
+	}
 	if tcu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -378,6 +413,37 @@ func (tcu *TrustCenterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcu.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcu.mutation.SettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.SettingTable,
+			Columns: []string{trustcenter.SettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcu.schemaConfig.TrustCenter
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcu.mutation.SettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.SettingTable,
+			Columns: []string{trustcenter.SettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tcu.schemaConfig.TrustCenter
@@ -534,6 +600,12 @@ func (tcuo *TrustCenterUpdateOne) SetNillableSlug(s *string) *TrustCenterUpdateO
 	return tcuo
 }
 
+// ClearSlug clears the value of the "slug" field.
+func (tcuo *TrustCenterUpdateOne) ClearSlug() *TrustCenterUpdateOne {
+	tcuo.mutation.ClearSlug()
+	return tcuo
+}
+
 // SetCustomDomainID sets the "custom_domain_id" field.
 func (tcuo *TrustCenterUpdateOne) SetCustomDomainID(s string) *TrustCenterUpdateOne {
 	tcuo.mutation.SetCustomDomainID(s)
@@ -564,6 +636,25 @@ func (tcuo *TrustCenterUpdateOne) SetCustomDomain(c *CustomDomain) *TrustCenterU
 	return tcuo.SetCustomDomainID(c.ID)
 }
 
+// SetSettingID sets the "setting" edge to the TrustCenterSetting entity by ID.
+func (tcuo *TrustCenterUpdateOne) SetSettingID(id string) *TrustCenterUpdateOne {
+	tcuo.mutation.SetSettingID(id)
+	return tcuo
+}
+
+// SetNillableSettingID sets the "setting" edge to the TrustCenterSetting entity by ID if the given value is not nil.
+func (tcuo *TrustCenterUpdateOne) SetNillableSettingID(id *string) *TrustCenterUpdateOne {
+	if id != nil {
+		tcuo = tcuo.SetSettingID(*id)
+	}
+	return tcuo
+}
+
+// SetSetting sets the "setting" edge to the TrustCenterSetting entity.
+func (tcuo *TrustCenterUpdateOne) SetSetting(t *TrustCenterSetting) *TrustCenterUpdateOne {
+	return tcuo.SetSettingID(t.ID)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (tcuo *TrustCenterUpdateOne) Mutation() *TrustCenterMutation {
 	return tcuo.mutation
@@ -578,6 +669,12 @@ func (tcuo *TrustCenterUpdateOne) ClearOwner() *TrustCenterUpdateOne {
 // ClearCustomDomain clears the "custom_domain" edge to the CustomDomain entity.
 func (tcuo *TrustCenterUpdateOne) ClearCustomDomain() *TrustCenterUpdateOne {
 	tcuo.mutation.ClearCustomDomain()
+	return tcuo
+}
+
+// ClearSetting clears the "setting" edge to the TrustCenterSetting entity.
+func (tcuo *TrustCenterUpdateOne) ClearSetting() *TrustCenterUpdateOne {
+	tcuo.mutation.ClearSetting()
 	return tcuo
 }
 
@@ -730,6 +827,9 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 	if value, ok := tcuo.mutation.Slug(); ok {
 		_spec.SetField(trustcenter.FieldSlug, field.TypeString, value)
 	}
+	if tcuo.mutation.SlugCleared() {
+		_spec.ClearField(trustcenter.FieldSlug, field.TypeString)
+	}
 	if tcuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -784,6 +884,37 @@ func (tcuo *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCent
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcuo.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcuo.mutation.SettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.SettingTable,
+			Columns: []string{trustcenter.SettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcuo.schemaConfig.TrustCenter
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcuo.mutation.SettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.SettingTable,
+			Columns: []string{trustcenter.SettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tcuo.schemaConfig.TrustCenter

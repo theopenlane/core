@@ -53,6 +53,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -1180,6 +1181,21 @@ func (oc *OrganizationCreate) AddTrustCenters(t ...*TrustCenter) *OrganizationCr
 		ids[i] = t[i].ID
 	}
 	return oc.AddTrustCenterIDs(ids...)
+}
+
+// AddTrustCenterSettingIDs adds the "trust_center_settings" edge to the TrustCenterSetting entity by IDs.
+func (oc *OrganizationCreate) AddTrustCenterSettingIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddTrustCenterSettingIDs(ids...)
+	return oc
+}
+
+// AddTrustCenterSettings adds the "trust_center_settings" edges to the TrustCenterSetting entity.
+func (oc *OrganizationCreate) AddTrustCenterSettings(t ...*TrustCenterSetting) *OrganizationCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return oc.AddTrustCenterSettingIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2406,6 +2422,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.TrustCenterSettingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSettingsTable,
+			Columns: []string{organization.TrustCenterSettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -1,4 +1,4 @@
-h1:4Vvm2Q5Gpa7iwahTI1/0rpC6pdj5GzUAqviQ8giv664=
+h1:piP/G3Mx1s7jgE9E1mYb1mvP/l6sJeYCGHWnkBQGcZ4=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -18,4 +18,4 @@ h1:4Vvm2Q5Gpa7iwahTI1/0rpC6pdj5GzUAqviQ8giv664=
 20250526222006_dns_ssl_verification_statuses.sql h1:81J9YgX/aLscjIqHFuqDpVxgh2dZsphk17zNbuzMalI=
 20250528204157_job_fixes.sql h1:wnKFxB2C35UojFvUkbrVXKRLvnjgIZputHKF62m0lQY=
 20250603215417_controls_mapping.sql h1:eDd2gW23UfptueYySt5zLxB/NCQJ9PY58a3qdquQI2E=
-20250606191712_inprogresstrustcenter.sql h1:CjtYMKgJNai1gOsePabxwVlDn4RLutfOXE6/cNTm2bg=
+20250608160435_trustcenterinit.sql h1:L2q05EHXPH017BLIaJWTkHAdmyMIdzEG/ffv4kLDiQg=

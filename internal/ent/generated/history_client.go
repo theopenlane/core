@@ -125,6 +125,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*TrustCenterMutation]() {
 		c.TrustCenter.Use(hook)
 	}
+	for _, hook := range history.Hooks[*TrustCenterSettingMutation]() {
+		c.TrustCenterSetting.Use(hook)
+	}
 	for _, hook := range history.Hooks[*UserMutation]() {
 		c.User.Use(hook)
 	}

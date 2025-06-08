@@ -156,6 +156,12 @@ func (tchu *TrustCenterHistoryUpdate) SetNillableSlug(s *string) *TrustCenterHis
 	return tchu
 }
 
+// ClearSlug clears the value of the "slug" field.
+func (tchu *TrustCenterHistoryUpdate) ClearSlug() *TrustCenterHistoryUpdate {
+	tchu.mutation.ClearSlug()
+	return tchu
+}
+
 // SetCustomDomainID sets the "custom_domain_id" field.
 func (tchu *TrustCenterHistoryUpdate) SetCustomDomainID(s string) *TrustCenterHistoryUpdate {
 	tchu.mutation.SetCustomDomainID(s)
@@ -284,6 +290,9 @@ func (tchu *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if value, ok := tchu.mutation.Slug(); ok {
 		_spec.SetField(trustcenterhistory.FieldSlug, field.TypeString, value)
+	}
+	if tchu.mutation.SlugCleared() {
+		_spec.ClearField(trustcenterhistory.FieldSlug, field.TypeString)
 	}
 	if value, ok := tchu.mutation.CustomDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldCustomDomainID, field.TypeString, value)
@@ -436,6 +445,12 @@ func (tchuo *TrustCenterHistoryUpdateOne) SetNillableSlug(s *string) *TrustCente
 	if s != nil {
 		tchuo.SetSlug(*s)
 	}
+	return tchuo
+}
+
+// ClearSlug clears the value of the "slug" field.
+func (tchuo *TrustCenterHistoryUpdateOne) ClearSlug() *TrustCenterHistoryUpdateOne {
+	tchuo.mutation.ClearSlug()
 	return tchuo
 }
 
@@ -597,6 +612,9 @@ func (tchuo *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if value, ok := tchuo.mutation.Slug(); ok {
 		_spec.SetField(trustcenterhistory.FieldSlug, field.TypeString, value)
+	}
+	if tchuo.mutation.SlugCleared() {
+		_spec.ClearField(trustcenterhistory.FieldSlug, field.TypeString)
 	}
 	if value, ok := tchuo.mutation.CustomDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldCustomDomainID, field.TypeString, value)

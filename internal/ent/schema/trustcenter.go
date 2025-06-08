@@ -7,9 +7,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -51,34 +51,12 @@ func (TrustCenter) Fields() []ent.Field {
 			Comment("Slug for the trust center").
 			MaxLen(trustCenterNameMaxLen).
 			Annotations(
-				entx.FieldSearchable(),
-				entgql.OrderField("slug"),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
-			NotEmpty(),
+			Optional(),
 		field.String("custom_domain_id").
 			Comment("custom domain id for the trust center").
 			Optional(),
-		// field.Text("title").
-		// 	Comment("title of the trust center").
-		// 	MaxLen(trustCenterNameMaxLen).
-		// 	Optional(),
-		// field.Text("overview").
-		// 	Comment("overview of the trust center").
-		// 	MaxLen(trustCenterDescriptionMaxLen).
-		// 	Optional(),
-		// field.String("logo_url").
-		// 	Comment("logo url for the trust center").
-		// 	MaxLen(trustCenterURLMaxLen).
-		// 	Validate(validator.ValidateURL()).
-		// 	Optional(),
-		// field.String("favicon_url").
-		// 	Comment("favicon url for the trust center").
-		// 	MaxLen(trustCenterURLMaxLen).
-		// 	Validate(validator.ValidateURL()).
-		// 	Optional(),
-		// field.String("primary_color").
-		// 	Comment("primary color for the trust center").
-		// 	Optional(),
 	}
 }
 
@@ -86,7 +64,7 @@ func (TrustCenter) Fields() []ent.Field {
 func (t TrustCenter) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t, withAllowGlobalRead(true)),
+			newOrgOwnedMixin(t),
 		},
 	}.getMixins()
 }
@@ -103,13 +81,19 @@ func (t TrustCenter) Edges() []ent.Edge {
 			required:   false,
 			immutable:  false,
 		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema:    t,
+			t:             TrustCenterSetting.Type,
+			cascadeDelete: "TrustCenter",
+			name:          "setting",
+		}),
 	}
 }
 
 // Hooks of the TrustCenter
 func (TrustCenter) Hooks() []ent.Hook {
 	return []ent.Hook{
-		// hooks.HookTrustCenter(),
+		hooks.HookTrustCenter(),
 	}
 }
 

@@ -810,6 +810,28 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    trustCenterSettings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          trustCenterID
+          title
+          overview
+          logoURL
+          faviconURL
+          primaryColor
+        }
+      }
+    }
     users {
       totalCount
       pageInfo {

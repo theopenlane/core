@@ -24,7 +24,6 @@ func init() {
 	updateCmd.Flags().StringP("id", "i", "", "trustcenter id to update")
 
 	// command line flags for the update command
-	updateCmd.Flags().StringP("slug", "s", "", "slug of the trustcenter")
 	updateCmd.Flags().StringP("custom-domain-id", "d", "", "custom domain id for the trustcenter")
 	updateCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the trustcenter")
 	updateCmd.Flags().StringSliceP("append-tags", "a", []string{}, "append tags to the trustcenter")
@@ -35,11 +34,6 @@ func updateValidation() (id string, input openlaneclient.UpdateTrustCenterInput,
 	id = cmd.Config.String("id")
 	if id == "" {
 		return id, input, cmd.NewRequiredFieldMissingError("id")
-	}
-
-	slug := cmd.Config.String("slug")
-	if slug != "" {
-		input.Slug = &slug
 	}
 
 	customDomainID := cmd.Config.String("custom-domain-id")

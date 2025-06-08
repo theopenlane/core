@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 )
 
 // TrustCenter is the model entity for the TrustCenter schema.
@@ -44,6 +45,7 @@ type TrustCenter struct {
 	// The values are being populated by the TrustCenterQuery when eager-loading is set.
 	Edges                       TrustCenterEdges `json:"edges"`
 	custom_domain_trust_centers *string
+	trust_center_setting        *string
 	selectValues                sql.SelectValues
 }
 
@@ -53,11 +55,13 @@ type TrustCenterEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// CustomDomain holds the value of the custom_domain edge.
 	CustomDomain *CustomDomain `json:"custom_domain,omitempty"`
+	// Setting holds the value of the setting edge.
+	Setting *TrustCenterSetting `json:"setting,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -82,6 +86,17 @@ func (e TrustCenterEdges) CustomDomainOrErr() (*CustomDomain, error) {
 	return nil, &NotLoadedError{edge: "custom_domain"}
 }
 
+// SettingOrErr returns the Setting value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterEdges) SettingOrErr() (*TrustCenterSetting, error) {
+	if e.Setting != nil {
+		return e.Setting, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: trustcentersetting.Label}
+	}
+	return nil, &NotLoadedError{edge: "setting"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -94,6 +109,8 @@ func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 		case trustcenter.FieldCreatedAt, trustcenter.FieldUpdatedAt, trustcenter.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case trustcenter.ForeignKeys[0]: // custom_domain_trust_centers
+			values[i] = new(sql.NullString)
+		case trustcenter.ForeignKeys[1]: // trust_center_setting
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -185,6 +202,13 @@ func (tc *TrustCenter) assignValues(columns []string, values []any) error {
 				tc.custom_domain_trust_centers = new(string)
 				*tc.custom_domain_trust_centers = value.String
 			}
+		case trustcenter.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_setting", values[i])
+			} else if value.Valid {
+				tc.trust_center_setting = new(string)
+				*tc.trust_center_setting = value.String
+			}
 		default:
 			tc.selectValues.Set(columns[i], values[i])
 		}
@@ -206,6 +230,11 @@ func (tc *TrustCenter) QueryOwner() *OrganizationQuery {
 // QueryCustomDomain queries the "custom_domain" edge of the TrustCenter entity.
 func (tc *TrustCenter) QueryCustomDomain() *CustomDomainQuery {
 	return NewTrustCenterClient(tc.config).QueryCustomDomain(tc)
+}
+
+// QuerySetting queries the "setting" edge of the TrustCenter entity.
+func (tc *TrustCenter) QuerySetting() *TrustCenterSettingQuery {
+	return NewTrustCenterClient(tc.config).QuerySetting(tc)
 }
 
 // Update returns a builder for updating this TrustCenter.

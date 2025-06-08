@@ -674,6 +674,25 @@ func (r *mutationResolver) bulkCreateTrustCenter(ctx context.Context, input []*g
 	}, nil
 }
 
+// bulkCreateTrustCenterSetting uses the CreateBulk function to create multiple TrustCenterSetting entities
+func (r *mutationResolver) bulkCreateTrustCenterSetting(ctx context.Context, input []*generated.CreateTrustCenterSettingInput) (*model.TrustCenterSettingBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.TrustCenterSettingCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.TrustCenterSetting.Create().SetInput(*data)
+	}
+
+	res, err := c.TrustCenterSetting.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcentersetting"})
+	}
+
+	// return response
+	return &model.TrustCenterSettingBulkCreatePayload{
+		TrustCenterSettings: res,
+	}, nil
+}
+
 // bulkCreateUserSetting uses the CreateBulk function to create multiple UserSetting entities
 func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*generated.CreateUserSettingInput) (*model.UserSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

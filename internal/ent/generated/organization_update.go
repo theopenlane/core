@@ -56,6 +56,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -1155,6 +1156,21 @@ func (ou *OrganizationUpdate) AddTrustCenters(t ...*TrustCenter) *OrganizationUp
 		ids[i] = t[i].ID
 	}
 	return ou.AddTrustCenterIDs(ids...)
+}
+
+// AddTrustCenterSettingIDs adds the "trust_center_settings" edge to the TrustCenterSetting entity by IDs.
+func (ou *OrganizationUpdate) AddTrustCenterSettingIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddTrustCenterSettingIDs(ids...)
+	return ou
+}
+
+// AddTrustCenterSettings adds the "trust_center_settings" edges to the TrustCenterSetting entity.
+func (ou *OrganizationUpdate) AddTrustCenterSettings(t ...*TrustCenterSetting) *OrganizationUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ou.AddTrustCenterSettingIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2363,6 +2379,27 @@ func (ou *OrganizationUpdate) RemoveTrustCenters(t ...*TrustCenter) *Organizatio
 		ids[i] = t[i].ID
 	}
 	return ou.RemoveTrustCenterIDs(ids...)
+}
+
+// ClearTrustCenterSettings clears all "trust_center_settings" edges to the TrustCenterSetting entity.
+func (ou *OrganizationUpdate) ClearTrustCenterSettings() *OrganizationUpdate {
+	ou.mutation.ClearTrustCenterSettings()
+	return ou
+}
+
+// RemoveTrustCenterSettingIDs removes the "trust_center_settings" edge to TrustCenterSetting entities by IDs.
+func (ou *OrganizationUpdate) RemoveTrustCenterSettingIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveTrustCenterSettingIDs(ids...)
+	return ou
+}
+
+// RemoveTrustCenterSettings removes "trust_center_settings" edges to TrustCenterSetting entities.
+func (ou *OrganizationUpdate) RemoveTrustCenterSettings(t ...*TrustCenterSetting) *OrganizationUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ou.RemoveTrustCenterSettingIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5315,6 +5352,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.TrustCenterSettingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSettingsTable,
+			Columns: []string{organization.TrustCenterSettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedTrustCenterSettingsIDs(); len(nodes) > 0 && !ou.mutation.TrustCenterSettingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSettingsTable,
+			Columns: []string{organization.TrustCenterSettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.TrustCenterSettingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSettingsTable,
+			Columns: []string{organization.TrustCenterSettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -6467,6 +6552,21 @@ func (ouo *OrganizationUpdateOne) AddTrustCenters(t ...*TrustCenter) *Organizati
 		ids[i] = t[i].ID
 	}
 	return ouo.AddTrustCenterIDs(ids...)
+}
+
+// AddTrustCenterSettingIDs adds the "trust_center_settings" edge to the TrustCenterSetting entity by IDs.
+func (ouo *OrganizationUpdateOne) AddTrustCenterSettingIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddTrustCenterSettingIDs(ids...)
+	return ouo
+}
+
+// AddTrustCenterSettings adds the "trust_center_settings" edges to the TrustCenterSetting entity.
+func (ouo *OrganizationUpdateOne) AddTrustCenterSettings(t ...*TrustCenterSetting) *OrganizationUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ouo.AddTrustCenterSettingIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -7675,6 +7775,27 @@ func (ouo *OrganizationUpdateOne) RemoveTrustCenters(t ...*TrustCenter) *Organiz
 		ids[i] = t[i].ID
 	}
 	return ouo.RemoveTrustCenterIDs(ids...)
+}
+
+// ClearTrustCenterSettings clears all "trust_center_settings" edges to the TrustCenterSetting entity.
+func (ouo *OrganizationUpdateOne) ClearTrustCenterSettings() *OrganizationUpdateOne {
+	ouo.mutation.ClearTrustCenterSettings()
+	return ouo
+}
+
+// RemoveTrustCenterSettingIDs removes the "trust_center_settings" edge to TrustCenterSetting entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveTrustCenterSettingIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveTrustCenterSettingIDs(ids...)
+	return ouo
+}
+
+// RemoveTrustCenterSettings removes "trust_center_settings" edges to TrustCenterSetting entities.
+func (ouo *OrganizationUpdateOne) RemoveTrustCenterSettings(t ...*TrustCenterSetting) *OrganizationUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ouo.RemoveTrustCenterSettingIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -10652,6 +10773,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.TrustCenterSettingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSettingsTable,
+			Columns: []string{organization.TrustCenterSettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedTrustCenterSettingsIDs(); len(nodes) > 0 && !ouo.mutation.TrustCenterSettingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSettingsTable,
+			Columns: []string{organization.TrustCenterSettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.TrustCenterSettingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSettingsTable,
+			Columns: []string{organization.TrustCenterSettingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.TrustCenterSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

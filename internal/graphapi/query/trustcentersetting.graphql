@@ -1,0 +1,160 @@
+
+mutation CreateBulkCSVTrustCenterSetting($input: Upload!) {
+  createBulkCSVTrustCenterSetting(input: $input) {
+    trustCenterSettings {
+      createdAt
+      createdBy
+      faviconURL
+      id
+      logoURL
+      overview
+      ownerID
+      primaryColor
+      tags
+      title
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkTrustCenterSetting($input: [CreateTrustCenterSettingInput!]) {
+  createBulkTrustCenterSetting(input: $input) {
+    trustCenterSettings {
+      createdAt
+      createdBy
+      faviconURL
+      id
+      logoURL
+      overview
+      ownerID
+      primaryColor
+      tags
+      title
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateTrustCenterSetting($input: CreateTrustCenterSettingInput!) {
+  createTrustCenterSetting(input: $input) {
+    trustCenterSetting {
+      createdAt
+      createdBy
+      faviconURL
+      id
+      logoURL
+      overview
+      ownerID
+      primaryColor
+      tags
+      title
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteTrustCenterSetting($deleteTrustCenterSettingId: ID!) {
+  deleteTrustCenterSetting(id: $deleteTrustCenterSettingId) {
+    deletedID
+  }
+}
+
+query GetAllTrustCenterSettings {
+  trustCenterSettings {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        faviconURL
+        id
+        logoURL
+        overview
+        ownerID
+        primaryColor
+        tags
+        title
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
+  trustCenterSetting(id: $trustCenterSettingId) {
+    createdAt
+    createdBy
+    faviconURL
+    id
+    logoURL
+    overview
+    ownerID
+    primaryColor
+    tags
+    title
+    trustCenterID
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSettingWhereInput) {
+  trustCenterSettings(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        faviconURL
+        id
+        logoURL
+        overview
+        ownerID
+        primaryColor
+        tags
+        title
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!) {
+  updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input) {
+    trustCenterSetting {
+      createdAt
+      createdBy
+      faviconURL
+      id
+      logoURL
+      overview
+      ownerID
+      primaryColor
+      tags
+      title
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}

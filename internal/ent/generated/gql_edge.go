@@ -4491,6 +4491,27 @@ func (o *Organization) TrustCenters(
 	return o.QueryTrustCenters().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) TrustCenterSettings(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterSettingOrder, where *TrustCenterSettingWhereInput,
+) (*TrustCenterSettingConnection, error) {
+	opts := []TrustCenterSettingPaginateOption{
+		WithTrustCenterSettingOrder(orderBy),
+		WithTrustCenterSettingFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[59][alias]
+	if nodes, err := o.NamedTrustCenterSettings(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterSettingPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterSettingConnection{Edges: []*TrustCenterSettingEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryTrustCenterSettings().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -4499,7 +4520,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[59][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[60][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -6057,6 +6078,30 @@ func (tc *TrustCenter) CustomDomain(ctx context.Context) (*CustomDomain, error) 
 		result, err = tc.QueryCustomDomain().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (tc *TrustCenter) Setting(ctx context.Context) (*TrustCenterSetting, error) {
+	result, err := tc.Edges.SettingOrErr()
+	if IsNotLoaded(err) {
+		result, err = tc.QuerySetting().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tcs *TrustCenterSetting) Owner(ctx context.Context) (*Organization, error) {
+	result, err := tcs.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tcs *TrustCenterSetting) TrustCenter(ctx context.Context) (*TrustCenter, error) {
+	result, err := tcs.Edges.TrustCenterOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QueryTrustCenter().Only(ctx)
+	}
+	return result, err
 }
 
 func (u *User) PersonalAccessTokens(

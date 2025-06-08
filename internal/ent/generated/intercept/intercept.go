@@ -99,6 +99,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -2592,6 +2594,60 @@ func (f TraverseTrustCenterHistory) Traverse(ctx context.Context, q generated.Qu
 	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterHistoryQuery", q)
 }
 
+// The TrustCenterSettingFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterSettingFunc func(context.Context, *generated.TrustCenterSettingQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterSettingFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TrustCenterSettingQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSettingQuery", q)
+}
+
+// The TraverseTrustCenterSetting type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterSetting func(context.Context, *generated.TrustCenterSettingQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterSetting) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterSetting) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterSettingQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSettingQuery", q)
+}
+
+// The TrustCenterSettingHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterSettingHistoryFunc func(context.Context, *generated.TrustCenterSettingHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterSettingHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TrustCenterSettingHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSettingHistoryQuery", q)
+}
+
+// The TraverseTrustCenterSettingHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterSettingHistory func(context.Context, *generated.TrustCenterSettingHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterSettingHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterSettingHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterSettingHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSettingHistoryQuery", q)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary function as a Querier.
 type UserFunc func(context.Context, *generated.UserQuery) (generated.Value, error)
 
@@ -2910,6 +2966,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.TrustCenterQuery, predicate.TrustCenter, trustcenter.OrderOption]{typ: generated.TypeTrustCenter, tq: q}, nil
 	case *generated.TrustCenterHistoryQuery:
 		return &query[*generated.TrustCenterHistoryQuery, predicate.TrustCenterHistory, trustcenterhistory.OrderOption]{typ: generated.TypeTrustCenterHistory, tq: q}, nil
+	case *generated.TrustCenterSettingQuery:
+		return &query[*generated.TrustCenterSettingQuery, predicate.TrustCenterSetting, trustcentersetting.OrderOption]{typ: generated.TypeTrustCenterSetting, tq: q}, nil
+	case *generated.TrustCenterSettingHistoryQuery:
+		return &query[*generated.TrustCenterSettingHistoryQuery, predicate.TrustCenterSettingHistory, trustcentersettinghistory.OrderOption]{typ: generated.TypeTrustCenterSettingHistory, tq: q}, nil
 	case *generated.UserQuery:
 		return &query[*generated.UserQuery, predicate.User, user.OrderOption]{typ: generated.TypeUser, tq: q}, nil
 	case *generated.UserHistoryQuery:

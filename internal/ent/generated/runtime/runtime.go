@@ -96,6 +96,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -4913,12 +4915,15 @@ func init() {
 	trustcenterMixinHooks0 := trustcenterMixin[0].Hooks()
 	trustcenterMixinHooks1 := trustcenterMixin[1].Hooks()
 	trustcenterMixinHooks5 := trustcenterMixin[5].Hooks()
+	trustcenterHooks := schema.TrustCenter{}.Hooks()
 
 	trustcenter.Hooks[1] = trustcenterMixinHooks0[0]
 
 	trustcenter.Hooks[2] = trustcenterMixinHooks1[0]
 
 	trustcenter.Hooks[3] = trustcenterMixinHooks5[0]
+
+	trustcenter.Hooks[4] = trustcenterHooks[0]
 	trustcenterMixinInters1 := trustcenterMixin[1].Interceptors()
 	trustcenterMixinInters5 := trustcenterMixin[5].Interceptors()
 	trustcenter.Interceptors[0] = trustcenterMixinInters1[0]
@@ -4954,21 +4959,7 @@ func init() {
 	// trustcenterDescSlug is the schema descriptor for slug field.
 	trustcenterDescSlug := trustcenterFields[0].Descriptor()
 	// trustcenter.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
-	trustcenter.SlugValidator = func() func(string) error {
-		validators := trustcenterDescSlug.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(slug string) error {
-			for _, fn := range fns {
-				if err := fn(slug); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
+	trustcenter.SlugValidator = trustcenterDescSlug.Validators[0].(func(string) error)
 	// trustcenterDescID is the schema descriptor for id field.
 	trustcenterDescID := trustcenterMixinFields2[0].Descriptor()
 	// trustcenter.DefaultID holds the default value on creation for the id field.
@@ -4999,6 +4990,135 @@ func init() {
 	trustcenterhistoryDescID := trustcenterhistoryFields[9].Descriptor()
 	// trustcenterhistory.DefaultID holds the default value on creation for the id field.
 	trustcenterhistory.DefaultID = trustcenterhistoryDescID.Default.(func() string)
+	trustcentersettingMixin := schema.TrustCenterSetting{}.Mixin()
+	trustcentersetting.Policy = privacy.NewPolicies(schema.TrustCenterSetting{})
+	trustcentersetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcentersetting.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcentersettingMixinHooks0 := trustcentersettingMixin[0].Hooks()
+	trustcentersettingMixinHooks1 := trustcentersettingMixin[1].Hooks()
+	trustcentersettingMixinHooks5 := trustcentersettingMixin[5].Hooks()
+
+	trustcentersetting.Hooks[1] = trustcentersettingMixinHooks0[0]
+
+	trustcentersetting.Hooks[2] = trustcentersettingMixinHooks1[0]
+
+	trustcentersetting.Hooks[3] = trustcentersettingMixinHooks5[0]
+	trustcentersettingMixinInters1 := trustcentersettingMixin[1].Interceptors()
+	trustcentersettingMixinInters5 := trustcentersettingMixin[5].Interceptors()
+	trustcentersetting.Interceptors[0] = trustcentersettingMixinInters1[0]
+	trustcentersetting.Interceptors[1] = trustcentersettingMixinInters5[0]
+	trustcentersettingMixinFields0 := trustcentersettingMixin[0].Fields()
+	_ = trustcentersettingMixinFields0
+	trustcentersettingMixinFields2 := trustcentersettingMixin[2].Fields()
+	_ = trustcentersettingMixinFields2
+	trustcentersettingMixinFields3 := trustcentersettingMixin[3].Fields()
+	_ = trustcentersettingMixinFields3
+	trustcentersettingMixinFields5 := trustcentersettingMixin[5].Fields()
+	_ = trustcentersettingMixinFields5
+	trustcentersettingFields := schema.TrustCenterSetting{}.Fields()
+	_ = trustcentersettingFields
+	// trustcentersettingDescCreatedAt is the schema descriptor for created_at field.
+	trustcentersettingDescCreatedAt := trustcentersettingMixinFields0[0].Descriptor()
+	// trustcentersetting.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcentersetting.DefaultCreatedAt = trustcentersettingDescCreatedAt.Default.(func() time.Time)
+	// trustcentersettingDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcentersettingDescUpdatedAt := trustcentersettingMixinFields0[1].Descriptor()
+	// trustcentersetting.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcentersetting.DefaultUpdatedAt = trustcentersettingDescUpdatedAt.Default.(func() time.Time)
+	// trustcentersetting.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcentersetting.UpdateDefaultUpdatedAt = trustcentersettingDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcentersettingDescTags is the schema descriptor for tags field.
+	trustcentersettingDescTags := trustcentersettingMixinFields3[0].Descriptor()
+	// trustcentersetting.DefaultTags holds the default value on creation for the tags field.
+	trustcentersetting.DefaultTags = trustcentersettingDescTags.Default.([]string)
+	// trustcentersettingDescOwnerID is the schema descriptor for owner_id field.
+	trustcentersettingDescOwnerID := trustcentersettingMixinFields5[0].Descriptor()
+	// trustcentersetting.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	trustcentersetting.OwnerIDValidator = trustcentersettingDescOwnerID.Validators[0].(func(string) error)
+	// trustcentersettingDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcentersettingDescTrustCenterID := trustcentersettingFields[0].Descriptor()
+	// trustcentersetting.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcentersetting.TrustCenterIDValidator = trustcentersettingDescTrustCenterID.Validators[0].(func(string) error)
+	// trustcentersettingDescTitle is the schema descriptor for title field.
+	trustcentersettingDescTitle := trustcentersettingFields[1].Descriptor()
+	// trustcentersetting.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	trustcentersetting.TitleValidator = trustcentersettingDescTitle.Validators[0].(func(string) error)
+	// trustcentersettingDescOverview is the schema descriptor for overview field.
+	trustcentersettingDescOverview := trustcentersettingFields[2].Descriptor()
+	// trustcentersetting.OverviewValidator is a validator for the "overview" field. It is called by the builders before save.
+	trustcentersetting.OverviewValidator = trustcentersettingDescOverview.Validators[0].(func(string) error)
+	// trustcentersettingDescLogoURL is the schema descriptor for logo_url field.
+	trustcentersettingDescLogoURL := trustcentersettingFields[3].Descriptor()
+	// trustcentersetting.LogoURLValidator is a validator for the "logo_url" field. It is called by the builders before save.
+	trustcentersetting.LogoURLValidator = func() func(string) error {
+		validators := trustcentersettingDescLogoURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(logo_url string) error {
+			for _, fn := range fns {
+				if err := fn(logo_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// trustcentersettingDescFaviconURL is the schema descriptor for favicon_url field.
+	trustcentersettingDescFaviconURL := trustcentersettingFields[4].Descriptor()
+	// trustcentersetting.FaviconURLValidator is a validator for the "favicon_url" field. It is called by the builders before save.
+	trustcentersetting.FaviconURLValidator = func() func(string) error {
+		validators := trustcentersettingDescFaviconURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(favicon_url string) error {
+			for _, fn := range fns {
+				if err := fn(favicon_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// trustcentersettingDescID is the schema descriptor for id field.
+	trustcentersettingDescID := trustcentersettingMixinFields2[0].Descriptor()
+	// trustcentersetting.DefaultID holds the default value on creation for the id field.
+	trustcentersetting.DefaultID = trustcentersettingDescID.Default.(func() string)
+	trustcentersettinghistoryInters := schema.TrustCenterSettingHistory{}.Interceptors()
+	trustcentersettinghistory.Interceptors[0] = trustcentersettinghistoryInters[0]
+	trustcentersettinghistoryFields := schema.TrustCenterSettingHistory{}.Fields()
+	_ = trustcentersettinghistoryFields
+	// trustcentersettinghistoryDescHistoryTime is the schema descriptor for history_time field.
+	trustcentersettinghistoryDescHistoryTime := trustcentersettinghistoryFields[0].Descriptor()
+	// trustcentersettinghistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	trustcentersettinghistory.DefaultHistoryTime = trustcentersettinghistoryDescHistoryTime.Default.(func() time.Time)
+	// trustcentersettinghistoryDescCreatedAt is the schema descriptor for created_at field.
+	trustcentersettinghistoryDescCreatedAt := trustcentersettinghistoryFields[3].Descriptor()
+	// trustcentersettinghistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcentersettinghistory.DefaultCreatedAt = trustcentersettinghistoryDescCreatedAt.Default.(func() time.Time)
+	// trustcentersettinghistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcentersettinghistoryDescUpdatedAt := trustcentersettinghistoryFields[4].Descriptor()
+	// trustcentersettinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcentersettinghistory.DefaultUpdatedAt = trustcentersettinghistoryDescUpdatedAt.Default.(func() time.Time)
+	// trustcentersettinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcentersettinghistory.UpdateDefaultUpdatedAt = trustcentersettinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcentersettinghistoryDescTags is the schema descriptor for tags field.
+	trustcentersettinghistoryDescTags := trustcentersettinghistoryFields[10].Descriptor()
+	// trustcentersettinghistory.DefaultTags holds the default value on creation for the tags field.
+	trustcentersettinghistory.DefaultTags = trustcentersettinghistoryDescTags.Default.([]string)
+	// trustcentersettinghistoryDescID is the schema descriptor for id field.
+	trustcentersettinghistoryDescID := trustcentersettinghistoryFields[9].Descriptor()
+	// trustcentersettinghistory.DefaultID holds the default value on creation for the id field.
+	trustcentersettinghistory.DefaultID = trustcentersettinghistoryDescID.Default.(func() string)
 	userMixin := schema.User{}.Mixin()
 	user.Policy = privacy.NewPolicies(schema.User{})
 	user.Hooks[0] = func(next ent.Mutator) ent.Mutator {

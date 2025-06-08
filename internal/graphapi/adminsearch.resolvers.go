@@ -66,6 +66,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
 		trustcenterResults                *generated.TrustCenterConnection
+		trustcentersettingResults         *generated.TrustCenterSettingConnection
 		userResults                       *generated.UserConnection
 		usersettingResults                *generated.UserSettingConnection
 		webauthnResults                   *generated.WebauthnConnection
@@ -340,6 +341,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
+			trustcentersettingResults, err = searchTrustCenterSettings(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			userResults, err = searchUsers(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -559,6 +567,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.TrustCenters = trustcenterResults
 
 		res.TotalCount += trustcenterResults.TotalCount
+	}
+	if trustcentersettingResults != nil && len(trustcentersettingResults.Edges) > 0 {
+		res.TrustCenterSettings = trustcentersettingResults
+
+		res.TotalCount += trustcentersettingResults.TotalCount
 	}
 	if userResults != nil && len(userResults.Edges) > 0 {
 		res.Users = userResults
@@ -1261,6 +1274,24 @@ func (r *queryResolver) AdminTrustCenterSearch(ctx context.Context, query string
 
 	// return the results
 	return trustcenterResults, nil
+}
+func (r *queryResolver) AdminTrustCenterSettingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterSettingConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	trustcentersettingResults, err := adminSearchTrustCenterSettings(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return trustcentersettingResults, nil
 }
 func (r *queryResolver) AdminUserSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
 	// ensure the user is a system admin

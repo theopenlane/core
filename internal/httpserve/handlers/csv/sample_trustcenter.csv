@@ -1,2 +1,2 @@
-Tags,Slug,OwnerId,CustomDomainId
-example_tags,example_slug,example_ownerid,example_customdomainid
+Tags,OwnerId,CustomDomainId,SettingId
+example_tags,example_ownerid,example_customdomainid,example_settingid

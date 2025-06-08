@@ -627,6 +627,16 @@ func SlugHasSuffix(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldHasSuffix(FieldSlug, v))
 }
 
+// SlugIsNil applies the IsNil predicate on the "slug" field.
+func SlugIsNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIsNull(FieldSlug))
+}
+
+// SlugNotNil applies the NotNil predicate on the "slug" field.
+func SlugNotNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotNull(FieldSlug))
+}
+
 // SlugEqualFold applies the EqualFold predicate on the "slug" field.
 func SlugEqualFold(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEqualFold(FieldSlug, v))
@@ -761,6 +771,35 @@ func HasCustomDomainWith(preds ...predicate.CustomDomain) predicate.TrustCenter 
 		step := newCustomDomainStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSetting applies the HasEdge predicate on the "setting" edge.
+func HasSetting() predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, SettingTable, SettingColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSettingWith applies the HasEdge predicate on the "setting" edge with a given conditions (other predicates).
+func HasSettingWith(preds ...predicate.TrustCenterSetting) predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := newSettingStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterSetting
 		step.Edge.Schema = schemaConfig.TrustCenter
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

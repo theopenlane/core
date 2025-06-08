@@ -43,6 +43,13 @@ mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
       tags
       updatedAt
       updatedBy
+      setting {
+        id
+        faviconURL
+        overview
+        logoURL
+        title
+      }
     }
   }
 }

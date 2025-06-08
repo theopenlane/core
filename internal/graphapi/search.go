@@ -48,6 +48,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -1645,11 +1646,10 @@ func searchTrustCenters(ctx context.Context, query string, after *entgql.Cursor[
 	request := withTransactionalMutation(ctx).TrustCenter.Query().
 		Where(
 			trustcenter.Or(
-				trustcenter.ID(query),               // search equal to ID
-				trustcenter.SlugContainsFold(query), // search by Slug
+				trustcenter.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -1670,6 +1670,45 @@ func adminSearchTrustCenters(ctx context.Context, query string, after *entgql.Cu
 				trustcenter.OwnerIDContainsFold(query),        // search by OwnerID
 				trustcenter.SlugContainsFold(query),           // search by Slug
 				trustcenter.CustomDomainIDContainsFold(query), // search by CustomDomainID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustCenterSetting searches for TrustCenterSetting based on the query string looking for matches
+func searchTrustCenterSettings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterSettingConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterSetting.Query().
+		Where(
+			trustcentersetting.Or(
+				trustcentersetting.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustCenterSetting searches for TrustCenterSetting based on the query string looking for matches
+func adminSearchTrustCenterSettings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterSettingConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterSetting.Query().
+		Where(
+			trustcentersetting.Or(
+				trustcentersetting.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				trustcentersetting.OwnerIDContainsFold(query),       // search by OwnerID
+				trustcentersetting.TrustCenterIDContainsFold(query), // search by TrustCenterID
+				trustcentersetting.TitleContainsFold(query),         // search by Title
+				trustcentersetting.OverviewContainsFold(query),      // search by Overview
+				trustcentersetting.LogoURLContainsFold(query),       // search by LogoURL
+				trustcentersetting.FaviconURLContainsFold(query),    // search by FaviconURL
+				trustcentersetting.PrimaryColorContainsFold(query),  // search by PrimaryColor
 			),
 		)
 

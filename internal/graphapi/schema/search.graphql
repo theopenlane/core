@@ -950,6 +950,31 @@ extend type Query{
         last: Int
     ): TrustCenterConnection
     """
+    Search across TrustCenterSetting objects
+    """
+    trustCenterSettingSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TrustCenterSettingConnection
+    """
     Search across User objects
     """
     userSearch(
@@ -1072,6 +1097,7 @@ type SearchResults{
   tasks: TaskConnection
   templates: TemplateConnection
   trustCenters: TrustCenterConnection
+  trustCenterSettings: TrustCenterSettingConnection
   users: UserConnection
   userSettings: UserSettingConnection
   webauthns: WebauthnConnection

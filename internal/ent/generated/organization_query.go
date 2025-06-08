@@ -57,6 +57,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -128,6 +129,7 @@ type OrganizationQuery struct {
 	withJobResults                         *JobResultQuery
 	withScheduledJobRuns                   *ScheduledJobRunQuery
 	withTrustCenters                       *TrustCenterQuery
+	withTrustCenterSettings                *TrustCenterSettingQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -187,6 +189,7 @@ type OrganizationQuery struct {
 	withNamedJobResults                    map[string]*JobResultQuery
 	withNamedScheduledJobRuns              map[string]*ScheduledJobRunQuery
 	withNamedTrustCenters                  map[string]*TrustCenterQuery
+	withNamedTrustCenterSettings           map[string]*TrustCenterSettingQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1699,6 +1702,31 @@ func (oq *OrganizationQuery) QueryTrustCenters() *TrustCenterQuery {
 	return query
 }
 
+// QueryTrustCenterSettings chains the current query on the "trust_center_settings" edge.
+func (oq *OrganizationQuery) QueryTrustCenterSettings() *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterSettingsTable, organization.TrustCenterSettingsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1975,6 +2003,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withJobResults:                    oq.withJobResults.Clone(),
 		withScheduledJobRuns:              oq.withScheduledJobRuns.Clone(),
 		withTrustCenters:                  oq.withTrustCenters.Clone(),
+		withTrustCenterSettings:           oq.withTrustCenterSettings.Clone(),
 		withMembers:                       oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -2632,6 +2661,17 @@ func (oq *OrganizationQuery) WithTrustCenters(opts ...func(*TrustCenterQuery)) *
 	return oq
 }
 
+// WithTrustCenterSettings tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_settings" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithTrustCenterSettings(opts ...func(*TrustCenterSettingQuery)) *OrganizationQuery {
+	query := (&TrustCenterSettingClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withTrustCenterSettings = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -2727,7 +2767,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [60]bool{
+		loadedTypes = [61]bool{
 			oq.withControlCreators != nil,
 			oq.withControlImplementationCreators != nil,
 			oq.withControlObjectiveCreators != nil,
@@ -2787,6 +2827,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withJobResults != nil,
 			oq.withScheduledJobRuns != nil,
 			oq.withTrustCenters != nil,
+			oq.withTrustCenterSettings != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -3251,6 +3292,15 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withTrustCenterSettings; query != nil {
+		if err := oq.loadTrustCenterSettings(ctx, query, nodes,
+			func(n *Organization) { n.Edges.TrustCenterSettings = []*TrustCenterSetting{} },
+			func(n *Organization, e *TrustCenterSetting) {
+				n.Edges.TrustCenterSettings = append(n.Edges.TrustCenterSettings, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -3649,6 +3699,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadTrustCenters(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedTrustCenters(name) },
 			func(n *Organization, e *TrustCenter) { n.appendNamedTrustCenters(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedTrustCenterSettings {
+		if err := oq.loadTrustCenterSettings(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedTrustCenterSettings(name) },
+			func(n *Organization, e *TrustCenterSetting) { n.appendNamedTrustCenterSettings(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5588,6 +5645,36 @@ func (oq *OrganizationQuery) loadTrustCenters(ctx context.Context, query *TrustC
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadTrustCenterSettings(ctx context.Context, query *TrustCenterSettingQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *TrustCenterSetting)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(trustcentersetting.FieldOwnerID)
+	}
+	query.Where(predicate.TrustCenterSetting(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.TrustCenterSettingsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -6504,6 +6591,20 @@ func (oq *OrganizationQuery) WithNamedTrustCenters(name string, opts ...func(*Tr
 		oq.withNamedTrustCenters = make(map[string]*TrustCenterQuery)
 	}
 	oq.withNamedTrustCenters[name] = query
+	return oq
+}
+
+// WithNamedTrustCenterSettings tells the query-builder to eager-load the nodes that are connected to the "trust_center_settings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedTrustCenterSettings(name string, opts ...func(*TrustCenterSettingQuery)) *OrganizationQuery {
+	query := (&TrustCenterSettingClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedTrustCenterSettings == nil {
+		oq.withNamedTrustCenterSettings = make(map[string]*TrustCenterSettingQuery)
+	}
+	oq.withNamedTrustCenterSettings[name] = query
 	return oq
 }
 

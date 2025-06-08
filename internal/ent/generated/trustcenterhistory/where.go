@@ -770,6 +770,16 @@ func SlugHasSuffix(v string) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldHasSuffix(FieldSlug, v))
 }
 
+// SlugIsNil applies the IsNil predicate on the "slug" field.
+func SlugIsNil() predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldIsNull(FieldSlug))
+}
+
+// SlugNotNil applies the NotNil predicate on the "slug" field.
+func SlugNotNil() predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldNotNull(FieldSlug))
+}
+
 // SlugEqualFold applies the EqualFold predicate on the "slug" field.
 func SlugEqualFold(v string) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldEqualFold(FieldSlug, v))

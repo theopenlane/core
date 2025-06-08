@@ -165,6 +165,14 @@ func (tchc *TrustCenterHistoryCreate) SetSlug(s string) *TrustCenterHistoryCreat
 	return tchc
 }
 
+// SetNillableSlug sets the "slug" field if the given value is not nil.
+func (tchc *TrustCenterHistoryCreate) SetNillableSlug(s *string) *TrustCenterHistoryCreate {
+	if s != nil {
+		tchc.SetSlug(*s)
+	}
+	return tchc
+}
+
 // SetCustomDomainID sets the "custom_domain_id" field.
 func (tchc *TrustCenterHistoryCreate) SetCustomDomainID(s string) *TrustCenterHistoryCreate {
 	tchc.mutation.SetCustomDomainID(s)
@@ -262,9 +270,6 @@ func (tchc *TrustCenterHistoryCreate) check() error {
 		if err := trustcenterhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := tchc.mutation.Slug(); !ok {
-		return &ValidationError{Name: "slug", err: errors.New(`generated: missing required field "TrustCenterHistory.slug"`)}
 	}
 	return nil
 }

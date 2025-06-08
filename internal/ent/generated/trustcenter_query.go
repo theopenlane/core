@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -29,6 +30,7 @@ type TrustCenterQuery struct {
 	predicates       []predicate.TrustCenter
 	withOwner        *OrganizationQuery
 	withCustomDomain *CustomDomainQuery
+	withSetting      *TrustCenterSettingQuery
 	withFKs          bool
 	loadTotal        []func(context.Context, []*TrustCenter) error
 	modifiers        []func(*sql.Selector)
@@ -111,6 +113,31 @@ func (tcq *TrustCenterQuery) QueryCustomDomain() *CustomDomainQuery {
 		)
 		schemaConfig := tcq.schemaConfig
 		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromU = sqlgraph.SetNeighbors(tcq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySetting chains the current query on the "setting" edge.
+func (tcq *TrustCenterQuery) QuerySetting() *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: tcq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tcq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tcq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.SettingTable, trustcenter.SettingColumn),
+		)
+		schemaConfig := tcq.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSetting
 		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(tcq.driver.Dialect(), step)
 		return fromU, nil
@@ -312,6 +339,7 @@ func (tcq *TrustCenterQuery) Clone() *TrustCenterQuery {
 		predicates:       append([]predicate.TrustCenter{}, tcq.predicates...),
 		withOwner:        tcq.withOwner.Clone(),
 		withCustomDomain: tcq.withCustomDomain.Clone(),
+		withSetting:      tcq.withSetting.Clone(),
 		// clone intermediate query.
 		sql:       tcq.sql.Clone(),
 		path:      tcq.path,
@@ -338,6 +366,17 @@ func (tcq *TrustCenterQuery) WithCustomDomain(opts ...func(*CustomDomainQuery)) 
 		opt(query)
 	}
 	tcq.withCustomDomain = query
+	return tcq
+}
+
+// WithSetting tells the query-builder to eager-load the nodes that are connected to
+// the "setting" edge. The optional arguments are used to configure the query builder of the edge.
+func (tcq *TrustCenterQuery) WithSetting(opts ...func(*TrustCenterSettingQuery)) *TrustCenterQuery {
+	query := (&TrustCenterSettingClient{config: tcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tcq.withSetting = query
 	return tcq
 }
 
@@ -426,11 +465,15 @@ func (tcq *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		nodes       = []*TrustCenter{}
 		withFKs     = tcq.withFKs
 		_spec       = tcq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			tcq.withOwner != nil,
 			tcq.withCustomDomain != nil,
+			tcq.withSetting != nil,
 		}
 	)
+	if tcq.withSetting != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, trustcenter.ForeignKeys...)
 	}
@@ -466,6 +509,12 @@ func (tcq *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if query := tcq.withCustomDomain; query != nil {
 		if err := tcq.loadCustomDomain(ctx, query, nodes, nil,
 			func(n *TrustCenter, e *CustomDomain) { n.Edges.CustomDomain = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tcq.withSetting; query != nil {
+		if err := tcq.loadSetting(ctx, query, nodes, nil,
+			func(n *TrustCenter, e *TrustCenterSetting) { n.Edges.Setting = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -528,6 +577,38 @@ func (tcq *TrustCenterQuery) loadCustomDomain(ctx context.Context, query *Custom
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "custom_domain_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tcq *TrustCenterQuery) loadSetting(ctx context.Context, query *TrustCenterSettingQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *TrustCenterSetting)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenter)
+	for i := range nodes {
+		if nodes[i].trust_center_setting == nil {
+			continue
+		}
+		fk := *nodes[i].trust_center_setting
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(trustcentersetting.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_setting" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

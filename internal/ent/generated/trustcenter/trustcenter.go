@@ -39,6 +39,8 @@ const (
 	EdgeOwner = "owner"
 	// EdgeCustomDomain holds the string denoting the custom_domain edge name in mutations.
 	EdgeCustomDomain = "custom_domain"
+	// EdgeSetting holds the string denoting the setting edge name in mutations.
+	EdgeSetting = "setting"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -55,6 +57,13 @@ const (
 	CustomDomainInverseTable = "custom_domains"
 	// CustomDomainColumn is the table column denoting the custom_domain relation/edge.
 	CustomDomainColumn = "custom_domain_id"
+	// SettingTable is the table that holds the setting relation/edge.
+	SettingTable = "trust_centers"
+	// SettingInverseTable is the table name for the TrustCenterSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
+	SettingInverseTable = "trust_center_settings"
+	// SettingColumn is the table column denoting the setting relation/edge.
+	SettingColumn = "trust_center_setting"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -76,6 +85,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"custom_domain_trust_centers",
+	"trust_center_setting",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -99,7 +109,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [4]ent.Hook
+	Hooks        [5]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -184,6 +194,13 @@ func ByCustomDomainField(field string, opts ...sql.OrderTermOption) OrderOption 
 		sqlgraph.OrderByNeighborTerms(s, newCustomDomainStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// BySettingField orders the results by setting field.
+func BySettingField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSettingStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -196,5 +213,12 @@ func newCustomDomainStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CustomDomainInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, CustomDomainTable, CustomDomainColumn),
+	)
+}
+func newSettingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SettingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, SettingTable, SettingColumn),
 	)
 }

@@ -626,7 +626,21 @@ query GlobalSearch($query: String!) {
       edges {
         node {
           id
-          slug
+          tags
+        }
+      }
+    }
+    trustCenterSettings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
           tags
         }
       }
