@@ -2,8 +2,6 @@ package openlaneclient
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/theopenlane/httpsling"
@@ -39,6 +37,7 @@ func (c *OpenlaneClient) FetchCSRFToken(ctx context.Context) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	if resp != nil {
 		resp.Body.Close()
 	}
@@ -51,13 +50,14 @@ func (c *OpenlaneClient) FetchCSRFToken(ctx context.Context) (string, error) {
 	for _, ck := range cookies {
 		if ck.Name == csrfCookie {
 			if ck.Value == "" {
-				return "", errors.New("empty csrf token")
+				return "", ErrEmptyCSRFToken
 			}
+
 			return ck.Value, nil
 		}
 	}
 
-	return "", fmt.Errorf("csrf cookie %s not found", csrfCookie)
+	return "", ErrCSRFCookieNotFound
 }
 
 // SetCSRFToken sets the CSRF header on the client for all subsequent requests.
