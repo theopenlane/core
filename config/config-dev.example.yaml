@@ -6,6 +6,8 @@ server:
   graphPool:
     maxCapacity: 100
     maxWorkers: 10
+  csrfProtection:
+    enabled: false
   enableGraphExtensions: true
   cacheControl:
     enabled: false
