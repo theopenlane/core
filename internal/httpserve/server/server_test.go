@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/mcuadros/go-defaults"
 
@@ -34,7 +33,7 @@ func TestServerCSRF(t *testing.T) {
 	// create base configuration with defaults
 	cfg := config.Config{}
 	defaults.SetDefaults(&cfg)
-	cfg.Server.Listen = "127.0.0.1:0"
+	cfg.Server.Listen = "localhost:0"
 	cfg.Server.MetricsPort = ":0"
 	cfg.Server.CSRFProtection.Enabled = true
 	cfg.Server.CSRFProtection.Secure = false
@@ -49,7 +48,7 @@ func TestServerCSRF(t *testing.T) {
 	so.AddServerOptions(serveropts.WithCSRF())
 
 	srv, err := server.NewServer(so.Config)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// apply middleware to echo instance
 	for _, m := range so.Config.DefaultMiddleware {
@@ -68,13 +67,13 @@ func TestServerCSRF(t *testing.T) {
 	defer ts.Close()
 
 	jar, err := cookiejar.New(nil)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	client := &http.Client{Jar: jar}
 
 	// first request should set csrf cookie
 	resp, err := client.Get(ts.URL + "/livez")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	resp.Body.Close()
 	var token string
 	for _, ck := range jar.Cookies(resp.Request.URL) {
@@ -82,22 +81,22 @@ func TestServerCSRF(t *testing.T) {
 			token = ck.Value
 		}
 	}
-	require.NotEmpty(t, token)
+	assert.NotEmpty(t, token)
 
 	// missing header should return 400
 	req, err := http.NewRequest(http.MethodPost, ts.URL+"/test", nil)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	resp, err = client.Do(req)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 	resp.Body.Close()
 
 	// include token header
 	req, err = http.NewRequest(http.MethodPost, ts.URL+"/test", nil)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	req.Header.Set("X-CSRF-Token", token)
 	resp, err = client.Do(req)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	resp.Body.Close()
 }
