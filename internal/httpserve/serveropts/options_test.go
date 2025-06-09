@@ -9,6 +9,8 @@ import (
 )
 
 func TestWithGeneratedKeys(t *testing.T) {
+	t.Parallel()
+
 	defer os.Remove("private_key.pem")
 	so := &ServerOptions{Config: serverconfig.Config{Settings: coreconfig.Config{}}}
 	opt := WithGeneratedKeys()

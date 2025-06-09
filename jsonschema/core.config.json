@@ -131,6 +131,29 @@
       ],
       "description": "Auth settings including oauth2 providers and token configuration"
     },
+    "config.KeyWatcher": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates whether the key watcher is enabled"
+        },
+        "keyDir": {
+          "type": "string",
+          "description": "KeyDir is the path to the directory containing PEM keys for JWT signing"
+        },
+        "externalSecretsIntegration": {
+          "type": "boolean",
+          "description": "ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)"
+        },
+        "secretManager": {
+          "type": "string",
+          "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "KeyWatcher contains settings for the key watcher that manages JWT signing keys"
+    },
     "config.PondPool": {
       "properties": {
         "maxWorkers": {
@@ -223,6 +246,10 @@
         "csrfProtection": {
           "$ref": "#/$defs/csrf.Config",
           "description": "CSRFProtection enables CSRF protection for the server"
+        },
+        "secretManager": {
+          "type": "string",
+          "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
         }
       },
       "additionalProperties": false,
@@ -1412,6 +1439,10 @@
     "subscription": {
       "$ref": "#/$defs/entitlements.Config",
       "description": "Entitlements contains the configuration for the entitlements service"
+    },
+    "keywatcher": {
+      "$ref": "#/$defs/config.KeyWatcher",
+      "description": "Keywatcher contains the configuration for the key watcher that manages JWT signing keys"
     }
   },
   "additionalProperties": false,

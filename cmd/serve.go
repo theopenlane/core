@@ -58,13 +58,15 @@ func serve(ctx context.Context) error {
 		serveropts.WithObjectStorage(),
 		serveropts.WithEntitlements(),
 		serveropts.WithSummarizer(),
+		serveropts.WithKeyDirOption(),
+		serveropts.WithSecretManagerKeysOption(),
 		serveropts.WithCSRF(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
 
-	// Create keys for development
-	if so.Config.Settings.Auth.Token.GenerateKeys {
+	// Create keys for development when no external keys are supplied
+	if so.Config.Settings.Auth.Token.GenerateKeys && len(so.Config.Settings.Auth.Token.Keys) == 0 {
 		so.AddServerOptions(serveropts.WithGeneratedKeys())
 	}
 

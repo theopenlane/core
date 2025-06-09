@@ -61,7 +61,7 @@ func (s *ProviderWithRefresh) refreshConfig() {
 	for {
 		select {
 		case <-s.stop:
-			break
+			return
 		case <-s.ticker.C:
 		}
 
@@ -71,7 +71,7 @@ func (s *ProviderWithRefresh) refreshConfig() {
 			continue
 		}
 
-		log.Info().Msg("loaded new server configuration")
+		log.Debug().Msg("loaded new server configuration")
 
 		s.Lock()
 		s.config = newConfig

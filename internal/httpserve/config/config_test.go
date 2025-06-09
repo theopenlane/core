@@ -5,6 +5,8 @@ import (
 )
 
 func TestWithDefaultTLSConfig(t *testing.T) {
+	t.Parallel()
+
 	var c Config
 	c = c.WithDefaultTLSConfig()
 	if !c.Settings.Server.TLS.Enabled {
@@ -16,6 +18,8 @@ func TestWithDefaultTLSConfig(t *testing.T) {
 }
 
 func TestWithTLSCerts(t *testing.T) {
+	t.Parallel()
+
 	c := &Config{}
 	c.WithTLSCerts("a", "b")
 	if c.Settings.Server.TLS.CertFile != "a" || c.Settings.Server.TLS.CertKey != "b" {
@@ -24,6 +28,8 @@ func TestWithTLSCerts(t *testing.T) {
 }
 
 func TestWithAutoCert(t *testing.T) {
+	t.Parallel()
+
 	c := &Config{}
 	c.WithAutoCert("example.com")
 	if !c.Settings.Server.TLS.Enabled {
@@ -39,6 +45,8 @@ func TestWithAutoCert(t *testing.T) {
 }
 
 func TestConfigGet(t *testing.T) {
+	t.Parallel()
+
 	cfg := &Config{}
 	got, err := cfg.Get()
 	if err != nil {

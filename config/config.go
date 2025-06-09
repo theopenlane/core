@@ -69,6 +69,8 @@ type Config struct {
 	ObjectStorage objects.Config `json:"objectStorage" koanf:"objectStorage"`
 	// Entitlements contains the configuration for the entitlements service
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
+	// Keywatcher contains the configuration for the key watcher that manages JWT signing keys
+	Keywatcher KeyWatcher `json:"keywatcher" koanf:"keywatcher"`
 }
 
 // Server settings for the echo server
@@ -113,6 +115,20 @@ type Server struct {
 	MaxResultLimit int `json:"maxResultLimit" koanf:"maxResultLimit" default:"100"`
 	// CSRFProtection enables CSRF protection for the server
 	CSRFProtection csrf.Config `json:"csrfProtection" koanf:"csrfProtection" default:"true"`
+	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
+	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:""`
+}
+
+// KeyWatcher contains settings for the key watcher that manages JWT signing keys
+type KeyWatcher struct {
+	// Enabled indicates whether the key watcher is enabled
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// KeyDir is the path to the directory containing PEM keys for JWT signing
+	KeyDir string `json:"keyDir" koanf:"keyDir" default:"./keys"`
+	// ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)
+	ExternalSecretsIntegration bool `json:"externalSecretsIntegration" koanf:"externalSecretsIntegration" default:"false"`
+	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
+	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:""`
 }
 
 // Auth settings including oauth2 providers and token configuration

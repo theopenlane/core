@@ -18,3 +18,18 @@ Configuration precedence is as follows, the latter overriding the former:
 ## Regenerating
 
 If you've made changes to the code in this code base (specifically interfaces referenced in the `config.go`) and want to regenerate the configuration, run `task config:generate`
+
+## Token key configuration
+
+JWT signing keys are provided via the `token.keys` map. Each entry maps a ULID
+(`kid`) to the path of a PEM encoded RSA private key. Keys can also be supplied
+through the environment variable `CORE_AUTH_TOKEN_KEYS` using a comma separated
+list in the form `kid=/path/key.pem`. When running inside Kubernetes you can
+mount a secret containing one or more PEM files and set
+`CORE_AUTH_TOKEN_KEYDIR` to the mount path to automatically load all keys from
+that directory. When `CORE_AUTH_TOKEN_KEYDIR` is set the server also watches the
+directory for changes and reloads the key set without needing a restart.
+
+To rotate keys, create a new PEM file with a new ULID in the directory or update
+the `CORE_AUTH_TOKEN_KEYS` variable with the additional entry. Keep the previous
+key until all issued tokens expire.

@@ -11,6 +11,8 @@ import (
 )
 
 func TestNewRouter(t *testing.T) {
+	t.Parallel()
+
 	r, err := NewRouter()
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -21,6 +23,8 @@ func TestNewRouter(t *testing.T) {
 }
 
 func TestCustomHTTPErrorHandler(t *testing.T) {
+	t.Parallel()
+
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/hello?x=1", nil)
 	rec := httptest.NewRecorder()

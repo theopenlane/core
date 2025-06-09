@@ -9,6 +9,8 @@ import (
 )
 
 func TestLevelNameHook(t *testing.T) {
+	t.Parallel()
+
 	b := &strings.Builder{}
 	logger := zerolog.New(b).Hook(LevelNameHook{})
 	logger.Log().Msg("test")

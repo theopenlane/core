@@ -156,6 +156,11 @@ jobQueue:
         WorkerMiddleware: null
         Workers: null
     runMigrations: false
+keywatcher:
+    enabled: false
+    externalSecretsIntegration: false
+    keyDir: ./keys
+    secretManager: ""
 objectStorage:
     accessKey: ""
     credentialsJSON: ""
@@ -225,6 +230,7 @@ server:
         code: 0
         enabled: true
         redirects: null
+    secretManager: ""
     secure:
         contentsecuritypolicy: default-src 'self'
         contenttypenosniff: nosniff
