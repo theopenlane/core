@@ -37,6 +37,7 @@ func TestServerCSRF(t *testing.T) {
 	cfg.Server.Listen = "127.0.0.1:0"
 	cfg.Server.MetricsPort = ":0"
 	cfg.Server.CSRFProtection.Enabled = true
+	cfg.Server.CSRFProtection.Secure = false
 	cfg.ObjectStorage.Enabled = false
 
 	so := &serveropts.ServerOptions{
