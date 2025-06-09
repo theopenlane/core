@@ -78839,7 +78839,7 @@ scalar DateTime
 """
 AAGUID (Authenticator Attestation Global Unique Identifier) is a 128-bit identifier used in the WebAuthn and FIDO2 protocols to uniquely identify the model of an authenticator device
 """
-scalar AAGUID 
+scalar AAGUID
 """
 JobConfiguration is the configuration for an automated job
 """
@@ -78849,7 +78849,7 @@ JobCadence is when a job should be scheduled to run
 """
 scalar JobCadence
 """
-Change is a difference between two updates to an object used by 
+Change is a difference between two updates to an object used by
 the audit history resolvers
 """
 scalar Change

@@ -1584,7 +1584,7 @@ input AuditLogWhereInput {
 	after: Time
 }
 """
-Change is a difference between two updates to an object used by 
+Change is a difference between two updates to an object used by
 the audit history resolvers
 """
 scalar Change

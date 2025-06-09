@@ -1,5 +1,12 @@
-query AuditLogs {
-  auditLogs {
+query AuditLogs($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: AuditLogWhereInput, $orderBy: [AuditLogOrder!]) {
+  auditLogs(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+  ) {
     edges {
       node {
         id

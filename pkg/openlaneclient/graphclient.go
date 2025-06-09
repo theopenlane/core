@@ -32,7 +32,7 @@ type OpenlaneGraphClient interface {
 	GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error)
 	GetAPITokens(ctx context.Context, where *APITokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAPITokens, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
-	AuditLogs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error)
+	AuditLogs(ctx context.Context, first *int64, last *int64, after *string, before *string, where *AuditLogWhereInput, orderBy []*AuditLogOrder, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
 	CreateContact(ctx context.Context, input CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateContact, error)
@@ -83994,8 +83994,8 @@ func (c *Client) UpdateAPIToken(ctx context.Context, updateAPITokenID string, in
 	return &res, nil
 }
 
-const AuditLogsDocument = `query AuditLogs {
-	auditLogs {
+const AuditLogsDocument = `query AuditLogs ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: AuditLogWhereInput, $orderBy: [AuditLogOrder!]) {
+	auditLogs(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
 		edges {
 			node {
 				id
@@ -84010,8 +84010,15 @@ const AuditLogsDocument = `query AuditLogs {
 }
 `
 
-func (c *Client) AuditLogs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error) {
-	vars := map[string]any{}
+func (c *Client) AuditLogs(ctx context.Context, first *int64, last *int64, after *string, before *string, where *AuditLogWhereInput, orderBy []*AuditLogOrder, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
+	}
 
 	var res AuditLogs
 	if err := c.Client.Post(ctx, "AuditLogs", AuditLogsDocument, &res, vars, interceptors...); err != nil {

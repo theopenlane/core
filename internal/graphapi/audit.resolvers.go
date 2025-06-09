@@ -9,18 +9,34 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // AuditLogs is the resolver for the auditLogs field.
 func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy []*generated.AuditLogOrder) (*generated.AuditLogConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
 	var (
 		auditLogs *generated.AuditLogConnection
 		err       error
 	)
 
+	// prevent nil pointer dereference
+	if where == nil {
+		where = &generated.AuditLogWhereInput{}
+	}
+
 	auditLogs, err = withTransactionalMutation(ctx).AuditWithFilter(ctx, after, first, before, last, where, nil)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
+	}
+
+	if auditLogs == nil {
+		auditLogs = &generated.AuditLogConnection{
+			TotalCount: 0,
+			Edges:      []*generated.AuditLogEdge{},
+		}
 	}
 
 	return auditLogs, nil
