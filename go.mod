@@ -4,8 +4,6 @@ go 1.24.4
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
-replace github.com/theopenlane/entx => ../entx
-
 require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.2
@@ -77,7 +75,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.3
-	github.com/theopenlane/entx v0.7.2
+	github.com/theopenlane/entx v0.8.0
 	github.com/theopenlane/gqlgen-plugins v0.6.1
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.12.7
