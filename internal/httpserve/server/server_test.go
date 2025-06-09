@@ -30,6 +30,8 @@ func (testHandler) Routes(g *echo.Group) {
 }
 
 func TestServerCSRF(t *testing.T) {
+	t.Parallel()
+
 	// create base configuration with defaults
 	cfg := config.Config{}
 	defaults.SetDefaults(&cfg)

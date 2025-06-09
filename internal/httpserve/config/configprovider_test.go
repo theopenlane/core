@@ -20,6 +20,8 @@ func (d *dummyProvider) Get() (*Config, error) {
 }
 
 func TestProviderWithRefresh_NoRefresh(t *testing.T) {
+	t.Parallel()
+
 	dp := &dummyProvider{cfg: &Config{}}
 	pr, err := NewProviderWithRefresh(dp)
 	if err != nil {
@@ -39,6 +41,8 @@ func TestProviderWithRefresh_NoRefresh(t *testing.T) {
 }
 
 func TestProviderWithRefresh_Refresh(t *testing.T) {
+	t.Parallel()
+
 	base := &Config{}
 	base.Settings.RefreshInterval = 10 * time.Millisecond
 	dp := &dummyProvider{cfg: base}

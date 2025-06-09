@@ -44,6 +44,8 @@ func newServerOptions() *ServerOptions {
 }
 
 func TestWithKeyDirLoadsKeys(t *testing.T) {
+	t.Parallel()
+
 	dir := t.TempDir()
 	kid := ulid.Make().String()
 	writeKey(t, dir, kid)
@@ -56,6 +58,8 @@ func TestWithKeyDirLoadsKeys(t *testing.T) {
 }
 
 func TestWithKeyDirWatcherDetectsNewKey(t *testing.T) {
+	t.Parallel()
+
 	dir := t.TempDir()
 	kid1 := ulid.Make().String()
 	kid2 := ulid.Make().String()
@@ -79,6 +83,8 @@ func TestWithKeyDirWatcherDetectsNewKey(t *testing.T) {
 }
 
 func TestWithKeyDirNoKID(t *testing.T) {
+	t.Parallel()
+
 	dir := t.TempDir()
 	// Write a key file with a random name (simulate no KID in config)
 	keyFile := writeKey(t, dir, "nokid")
