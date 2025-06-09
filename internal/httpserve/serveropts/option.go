@@ -524,13 +524,17 @@ func WithSecretManagerKeysOption() ServerOption {
 	})
 }
 
-// WithCSRFProtection sets up the CSRF protection middleware for the server
-func WithCSRFProtection() ServerOption {
+// WithCSRF sets up the CSRF middleware for the server
+func WithCSRF() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Server.CSRFProtection.Enabled {
-			config := s.Config.Settings.Server.CSRFProtection
-			// Use the CSRF middleware wrapper from the csrf package
-			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, csrf.Middleware(&config))
+			cfg := csrf.NewConfig()
+			cfg.Enabled = s.Config.Settings.Server.CSRFProtection.Enabled
+			cfg.Header = s.Config.Settings.Server.CSRFProtection.Header
+			cfg.Cookie = s.Config.Settings.Server.CSRFProtection.Cookie
+			cfg.Secure = s.Config.Settings.Server.CSRFProtection.Secure
+			cfg.SameSite = s.Config.Settings.Server.CSRFProtection.SameSite
+			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, csrf.Middleware(cfg))
 		}
 	})
 }

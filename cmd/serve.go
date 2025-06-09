@@ -58,9 +58,10 @@ func serve(ctx context.Context) error {
 		serveropts.WithObjectStorage(),
 		serveropts.WithEntitlements(),
 		serveropts.WithSummarizer(),
-		serveropts.WithCSRFProtection(),
 		serveropts.WithKeyDirOption(),
 		serveropts.WithSecretManagerKeysOption(),
+		serveropts.WithCSRF(),
+
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))

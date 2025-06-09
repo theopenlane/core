@@ -207,10 +207,10 @@ server:
         prefixes: null
     csrfProtection:
         cookie: csrf_token
-        enabled: true
+        enabled: false
         header: X-CSRF-Token
         sameSite: Lax
-        secure: false
+        secure: true
     debug: false
     dev: false
     enableGraphExtensions: true

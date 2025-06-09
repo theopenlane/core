@@ -58,9 +58,9 @@ func NewWithConfig(config Config) (echo.MiddlewareFunc, error) {
 		conf := middleware.CORSConfig{
 			AllowOrigins:     origins,
 			AllowMethods:     []string{"GET", "HEAD", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"},
-			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization", "X-CSRF-Token"},
 			ExposeHeaders:    []string{"Content-Length"},
-			AllowCredentials: true,
+			AllowCredentials: true,                            // Allow credentials to be sent with requests - this is important for CSRF to work
 			MaxAge:           int((24 * time.Hour).Seconds()), //nolint:mnd
 		}
 

@@ -8,6 +8,10 @@ server:
     maxWorkers: 10
   csrfProtection:
     enabled: false
+    header: X-CSRF-Token
+    cookie: csrf_token
+    secure: false # set to true in production
+    sameSite: Lax
   enableGraphExtensions: true
   cacheControl:
     enabled: false
