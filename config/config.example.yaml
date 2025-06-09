@@ -156,6 +156,11 @@ jobQueue:
         WorkerMiddleware: null
         Workers: null
     runMigrations: false
+keywatcher:
+    enabled: false
+    externalSecretsIntegration: false
+    keyDir: ./keys
+    secretManager: ""
 objectStorage:
     accessKey: ""
     credentialsJSON: ""
@@ -212,7 +217,6 @@ server:
     graphPool:
         maxWorkers: 100
     idleTimeout: 30000000000
-    keyDir: ./keys
     listen: :17608
     maxResultLimit: 100
     metricsPort: :17609

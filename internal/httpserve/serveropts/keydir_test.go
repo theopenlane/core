@@ -77,3 +77,24 @@ func TestWithKeyDirWatcherDetectsNewKey(t *testing.T) {
 		return err == nil && jwks.Len() == 2
 	}, 5*time.Second, 100*time.Millisecond)
 }
+
+func TestWithKeyDirNoKID(t *testing.T) {
+	dir := t.TempDir()
+	// Write a key file with a random name (simulate no KID in config)
+	keyFile := writeKey(t, dir, "nokid")
+
+	so := newServerOptions()
+	// Remove any KID from config
+	so.Config.Settings.Auth.Token.KID = ""
+	// Remove any keys from config
+	so.Config.Settings.Auth.Token.Keys = map[string]string{}
+
+	WithKeyDir(dir).apply(so)
+
+	// Should have exactly one key, with the filename (without .pem) as the KID
+	require.Len(t, so.Config.Settings.Auth.Token.Keys, 1)
+	for loadedKID, path := range so.Config.Settings.Auth.Token.Keys {
+		require.Equal(t, keyFile, path)
+		require.Equal(t, "nokid", loadedKID)
+	}
+}

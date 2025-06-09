@@ -22,6 +22,7 @@ Config contains the configuration for the core server
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the default rate limiter<br/>||
 |[**objectStorage**](#objectstorage)|`object`|Config is the configuration for the object store<br/>||
 |[**subscription**](#subscription)|`object`|||
+|[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 
 **Additional Properties:** not allowed  
 <a name="server"></a>
@@ -53,9 +54,8 @@ Server settings for the echo server
 |**enableGraphExtensions**|`boolean`|EnableGraphExtensions enables the graph extensions for the graph resolvers<br/>|no|
 |**complexityLimit**|`integer`|ComplexityLimit sets the maximum complexity allowed for a query<br/>|no|
 |**maxResultLimit**|`integer`|MaxResultLimit sets the maximum number of results allowed for a query<br/>|no|
-|**keyDir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>|no|
-|**secretManager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |[**csrfProtection**](#servercsrfprotection)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>|no|
+|**secretManager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="servertls"></a>
@@ -901,4 +901,20 @@ Config is the configuration for the object store
 
 **Items**
 
+<a name="keywatcher"></a>
+## keywatcher: object
+
+KeyWatcher contains settings for the key watcher that manages JWT signing keys
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates whether the key watcher is enabled<br/>||
+|**keyDir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>||
+|**externalSecretsIntegration**|`boolean`|ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)<br/>||
+|**secretManager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>||
+
+**Additional Properties:** not allowed  
 

@@ -25,10 +25,12 @@ func WithSecretManagerKeys(secretName string) ServerOption {
 		}
 
 		ctx := context.Background()
+
 		client, err := secretmanager.NewClient(ctx)
 		if err != nil {
 			log.Panic().Err(err).Msg("failed to create secretmanager client")
 		}
+
 		defer client.Close()
 
 		req := &secretmanagerpb.AccessSecretVersionRequest{
@@ -43,11 +45,13 @@ func WithSecretManagerKeys(secretName string) ServerOption {
 		data := result.Payload.GetData()
 
 		keyMap := map[string]string{}
+
 		if err := json.Unmarshal(data, &keyMap); err != nil || len(keyMap) == 0 {
 			kid := s.Config.Settings.Auth.Token.KID
 			if kid == "" {
 				kid = ulids.New().String()
 			}
+
 			keyMap = map[string]string{kid: string(data)}
 		}
 
@@ -61,9 +65,11 @@ func WithSecretManagerKeys(secretName string) ServerOption {
 			}
 
 			path := filepath.Join(os.TempDir(), fmt.Sprintf("%s.pem", kid))
-			if err := os.WriteFile(path, []byte(pemStr), 0o600); err != nil {
+
+			if err := os.WriteFile(path, []byte(pemStr), 0o600); err != nil { // nolint: mnd
 				log.Panic().Err(err).Msg("failed to write key from secret manager")
 			}
+
 			s.Config.Settings.Auth.Token.Keys[kid] = path
 		}
 	})

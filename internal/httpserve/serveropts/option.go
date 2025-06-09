@@ -396,6 +396,7 @@ func WithCORS() ServerOption {
 	})
 }
 
+// WithObjectStorage sets up the object storage for the server
 func WithObjectStorage() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		settings := s.Config.Settings.ObjectStorage
@@ -507,8 +508,9 @@ func WithSummarizer() ServerOption {
 // WithKeyDirOption allows the key directory to be set via server config.
 func WithKeyDirOption() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Server.KeyDir != "" {
-			WithKeyDir(s.Config.Settings.Server.KeyDir).apply(s)
+		if s.Config.Settings.Keywatcher.Enabled && s.Config.Settings.Keywatcher.KeyDir != "" {
+			WithKeyDir(s.Config.Settings.Keywatcher.KeyDir).apply(s)
+			WithKeyDirWatcher(s.Config.Settings.Keywatcher.KeyDir).apply(s)
 		}
 	})
 }
@@ -516,16 +518,8 @@ func WithKeyDirOption() ServerOption {
 // WithSecretManagerKeysOption allows the secret manager secret name to be set via server config.
 func WithSecretManagerKeysOption() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Server.SecretManagerSecret != "" {
+		if s.Config.Settings.Keywatcher.SecretManagerSecret != "" && s.Config.Settings.Keywatcher.ExternalSecretsIntegration {
 			WithSecretManagerKeys(s.Config.Settings.Server.SecretManagerSecret).apply(s)
-		}
-	})
-}
-
-// WithKeyDirWatcherOption allows the key directory watcher to be set via server config.
-func WithKeyDirWatcherOption() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Server.KeyDir != "" {
 		}
 	})
 }
