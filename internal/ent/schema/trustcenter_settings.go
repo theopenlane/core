@@ -7,8 +7,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -37,29 +40,29 @@ func (TrustCenterSetting) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("trust_center_id").
 			Comment("the ID of the trust center the settings belong to").
-			// Actually required, but i have to make codegen happy
+			NotEmpty(). // validate its not empty
 			Optional(),
-		// field.String("title").
-		// 	Comment("title of the trust center").
-		// 	MaxLen(trustCenterNameMaxLen).
-		// 	Optional(),
-		// field.Text("overview").
-		// 	Comment("overview of the trust center").
-		// 	MaxLen(trustCenterDescriptionMaxLen).
-		// 	Optional(),
-		// field.String("logo_url").
-		// 	Comment("logo url for the trust center").
-		// 	MaxLen(trustCenterURLMaxLen).
-		// 	Validate(validator.ValidateURL()).
-		// 	Optional(),
-		// field.String("favicon_url").
-		// 	Comment("favicon url for the trust center").
-		// 	MaxLen(trustCenterURLMaxLen).
-		// 	Validate(validator.ValidateURL()).
-		// 	Optional(),
-		// field.String("primary_color").
-		// 	Comment("primary color for the trust center").
-		// 	Optional(),
+		field.String("title").
+			Comment("title of the trust center").
+			MaxLen(trustCenterNameMaxLen).
+			Optional(),
+		field.Text("overview").
+			Comment("overview of the trust center").
+			MaxLen(trustCenterDescriptionMaxLen).
+			Optional(),
+		field.String("logo_url").
+			Comment("logo url for the trust center").
+			MaxLen(trustCenterURLMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional(),
+		field.String("favicon_url").
+			Comment("favicon url for the trust center").
+			MaxLen(trustCenterURLMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional(),
+		field.String("primary_color").
+			Comment("primary color for the trust center").
+			Optional(),
 	}
 }
 
@@ -82,6 +85,13 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 	}
 }
 
+// Interceptors of the TrustCenterSetting
+func (TrustCenterSetting) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorTrustCenterSetting(),
+	}
+}
+
 // Hooks of the TrustCenterSetting
 func (TrustCenterSetting) Hooks() []ent.Hook {
 	return []ent.Hook{}
@@ -92,9 +102,9 @@ func (TrustCenterSetting) Policy() ent.Policy {
 		policy.WithQueryRules(
 			privacy.AlwaysAllowRule(),
 		),
-		// policy.WithMutationRules(
-		// 	policy.CheckOrgWriteAccess(),
-		// ),
+		policy.WithMutationRules(
+			entfga.CheckEditAccess[*generated.TrustCenterSettingMutation](),
+		),
 	)
 }
 

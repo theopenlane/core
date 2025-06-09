@@ -80,9 +80,9 @@ type MockOpenlaneGraphClient_AddUserToGroupWithRole_Call struct {
 }
 
 // AddUserToGroupWithRole is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateGroupMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) AddUserToGroupWithRole(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_AddUserToGroupWithRole_Call {
 	return &MockOpenlaneGraphClient_AddUserToGroupWithRole_Call{Call: _e.mock.On("AddUserToGroupWithRole",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -90,8 +90,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) AddUserToGroupWithRole(ctx interface
 
 func (_c *MockOpenlaneGraphClient_AddUserToGroupWithRole_Call) Run(run func(ctx context.Context, input openlaneclient.CreateGroupMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_AddUserToGroupWithRole_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateGroupMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateGroupMembershipInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateGroupMembershipInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -146,9 +163,9 @@ type MockOpenlaneGraphClient_AddUserToOrgWithRole_Call struct {
 }
 
 // AddUserToOrgWithRole is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateOrgMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) AddUserToOrgWithRole(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_AddUserToOrgWithRole_Call {
 	return &MockOpenlaneGraphClient_AddUserToOrgWithRole_Call{Call: _e.mock.On("AddUserToOrgWithRole",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -156,8 +173,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) AddUserToOrgWithRole(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_AddUserToOrgWithRole_Call) Run(run func(ctx context.Context, input openlaneclient.CreateOrgMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_AddUserToOrgWithRole_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateOrgMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateOrgMembershipInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateOrgMembershipInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -212,9 +246,9 @@ type MockOpenlaneGraphClient_AddUserToProgramWithRole_Call struct {
 }
 
 // AddUserToProgramWithRole is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateProgramMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) AddUserToProgramWithRole(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_AddUserToProgramWithRole_Call {
 	return &MockOpenlaneGraphClient_AddUserToProgramWithRole_Call{Call: _e.mock.On("AddUserToProgramWithRole",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -222,8 +256,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) AddUserToProgramWithRole(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_AddUserToProgramWithRole_Call) Run(run func(ctx context.Context, input openlaneclient.CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_AddUserToProgramWithRole_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateProgramMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateProgramMembershipInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateProgramMembershipInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -278,9 +329,9 @@ type MockOpenlaneGraphClient_AdminSearch_Call struct {
 }
 
 // AdminSearch is a helper method to define mock.On call
-//   - ctx
-//   - query
-//   - interceptors
+//   - ctx context.Context
+//   - query string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) AdminSearch(ctx interface{}, query interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_AdminSearch_Call {
 	return &MockOpenlaneGraphClient_AdminSearch_Call{Call: _e.mock.On("AdminSearch",
 		append([]interface{}{ctx, query}, interceptors...)...)}
@@ -288,8 +339,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) AdminSearch(ctx interface{}, query i
 
 func (_c *MockOpenlaneGraphClient_AdminSearch_Call) Run(run func(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_AdminSearch_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -344,8 +412,8 @@ type MockOpenlaneGraphClient_AuditLogs_Call struct {
 }
 
 // AuditLogs is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) AuditLogs(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_AuditLogs_Call {
 	return &MockOpenlaneGraphClient_AuditLogs_Call{Call: _e.mock.On("AuditLogs",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -353,8 +421,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) AuditLogs(ctx interface{}, intercept
 
 func (_c *MockOpenlaneGraphClient_AuditLogs_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_AuditLogs_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -409,9 +489,9 @@ type MockOpenlaneGraphClient_CreateAPIToken_Call struct {
 }
 
 // CreateAPIToken is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateAPITokenInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateAPIToken(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateAPIToken_Call {
 	return &MockOpenlaneGraphClient_CreateAPIToken_Call{Call: _e.mock.On("CreateAPIToken",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -419,8 +499,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateAPIToken(ctx interface{}, inpu
 
 func (_c *MockOpenlaneGraphClient_CreateAPIToken_Call) Run(run func(ctx context.Context, input openlaneclient.CreateAPITokenInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateAPIToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateAPITokenInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateAPITokenInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateAPITokenInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -475,9 +572,9 @@ type MockOpenlaneGraphClient_CreateActionPlan_Call struct {
 }
 
 // CreateActionPlan is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateActionPlanInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateActionPlan(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateActionPlan_Call {
 	return &MockOpenlaneGraphClient_CreateActionPlan_Call{Call: _e.mock.On("CreateActionPlan",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -485,8 +582,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateActionPlan(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_CreateActionPlan_Call) Run(run func(ctx context.Context, input openlaneclient.CreateActionPlanInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateActionPlan_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateActionPlanInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateActionPlanInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateActionPlanInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -541,9 +655,9 @@ type MockOpenlaneGraphClient_CreateBulkActionPlan_Call struct {
 }
 
 // CreateBulkActionPlan is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateActionPlanInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkActionPlan(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkActionPlan_Call {
 	return &MockOpenlaneGraphClient_CreateBulkActionPlan_Call{Call: _e.mock.On("CreateBulkActionPlan",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -551,8 +665,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkActionPlan(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateBulkActionPlan_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateActionPlanInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkActionPlan_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateActionPlanInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateActionPlanInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateActionPlanInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -607,9 +738,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVActionPlan_Call struct {
 }
 
 // CreateBulkCSVActionPlan is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVActionPlan(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVActionPlan_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVActionPlan_Call{Call: _e.mock.On("CreateBulkCSVActionPlan",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -617,8 +748,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVActionPlan(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVActionPlan_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVActionPlan_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -673,9 +821,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVContact_Call struct {
 }
 
 // CreateBulkCSVContact is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVContact(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVContact_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVContact_Call{Call: _e.mock.On("CreateBulkCSVContact",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -683,8 +831,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVContact(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVContact_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVContact_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -739,9 +904,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVControl_Call struct {
 }
 
 // CreateBulkCSVControl is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVControl(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVControl_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVControl_Call{Call: _e.mock.On("CreateBulkCSVControl",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -749,8 +914,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVControl(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVControl_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -805,9 +987,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVControlImplementation_Call struct {
 }
 
 // CreateBulkCSVControlImplementation is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVControlImplementation(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVControlImplementation_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVControlImplementation_Call{Call: _e.mock.On("CreateBulkCSVControlImplementation",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -815,8 +997,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVControlImplementation(c
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVControlImplementation_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVControlImplementation_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -871,9 +1070,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVControlObjective_Call struct {
 }
 
 // CreateBulkCSVControlObjective is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVControlObjective(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVControlObjective_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVControlObjective_Call{Call: _e.mock.On("CreateBulkCSVControlObjective",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -881,8 +1080,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVControlObjective(ctx in
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVControlObjective_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVControlObjective_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -937,9 +1153,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVControlScheduledJob_Call struct {
 }
 
 // CreateBulkCSVControlScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVControlScheduledJob(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVControlScheduledJob_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVControlScheduledJob_Call{Call: _e.mock.On("CreateBulkCSVControlScheduledJob",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -947,8 +1163,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVControlScheduledJob(ctx
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVControlScheduledJob_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVControlScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1003,9 +1236,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVCustomDomain_Call struct {
 }
 
 // CreateBulkCSVCustomDomain is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVCustomDomain(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVCustomDomain_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVCustomDomain_Call{Call: _e.mock.On("CreateBulkCSVCustomDomain",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1013,8 +1246,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVCustomDomain(ctx interf
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVCustomDomain_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVCustomDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1069,9 +1319,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVDNSVerification_Call struct {
 }
 
 // CreateBulkCSVDNSVerification is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVDNSVerification(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVDNSVerification_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVDNSVerification_Call{Call: _e.mock.On("CreateBulkCSVDNSVerification",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1079,8 +1329,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVDNSVerification(ctx int
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVDNSVerification_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVDNSVerification_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1135,9 +1402,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVEntity_Call struct {
 }
 
 // CreateBulkCSVEntity is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVEntity(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVEntity_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVEntity_Call{Call: _e.mock.On("CreateBulkCSVEntity",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1145,8 +1412,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVEntity(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVEntity_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVEntity_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1201,9 +1485,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVEntityType_Call struct {
 }
 
 // CreateBulkCSVEntityType is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVEntityType(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVEntityType_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVEntityType_Call{Call: _e.mock.On("CreateBulkCSVEntityType",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1211,8 +1495,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVEntityType(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVEntityType_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVEntityType_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1267,9 +1568,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVEvent_Call struct {
 }
 
 // CreateBulkCSVEvent is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVEvent(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVEvent_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVEvent_Call{Call: _e.mock.On("CreateBulkCSVEvent",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1277,8 +1578,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVEvent(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVEvent_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVEvent_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1333,9 +1651,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVGroup_Call struct {
 }
 
 // CreateBulkCSVGroup is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVGroup(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVGroup_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVGroup_Call{Call: _e.mock.On("CreateBulkCSVGroup",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1343,8 +1661,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVGroup(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVGroup_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVGroup_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1399,9 +1734,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVGroupMembers_Call struct {
 }
 
 // CreateBulkCSVGroupMembers is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVGroupMembers(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVGroupMembers_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVGroupMembers_Call{Call: _e.mock.On("CreateBulkCSVGroupMembers",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1409,8 +1744,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVGroupMembers(ctx interf
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVGroupMembers_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVGroupMembers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1465,9 +1817,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVHush_Call struct {
 }
 
 // CreateBulkCSVHush is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVHush(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVHush_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVHush_Call{Call: _e.mock.On("CreateBulkCSVHush",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1475,8 +1827,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVHush(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVHush_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVHush_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1531,9 +1900,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVIntegration_Call struct {
 }
 
 // CreateBulkCSVIntegration is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVIntegration(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVIntegration_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVIntegration_Call{Call: _e.mock.On("CreateBulkCSVIntegration",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1541,8 +1910,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVIntegration(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVIntegration_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVIntegration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1597,9 +1983,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVInternalPolicy_Call struct {
 }
 
 // CreateBulkCSVInternalPolicy is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVInternalPolicy(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVInternalPolicy_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVInternalPolicy_Call{Call: _e.mock.On("CreateBulkCSVInternalPolicy",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1607,8 +1993,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVInternalPolicy(ctx inte
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVInternalPolicy_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVInternalPolicy_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1663,9 +2066,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVInvite_Call struct {
 }
 
 // CreateBulkCSVInvite is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVInvite(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVInvite_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVInvite_Call{Call: _e.mock.On("CreateBulkCSVInvite",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1673,8 +2076,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVInvite(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVInvite_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVInvite_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1729,9 +2149,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVMappableDomain_Call struct {
 }
 
 // CreateBulkCSVMappableDomain is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVMappableDomain(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVMappableDomain_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVMappableDomain_Call{Call: _e.mock.On("CreateBulkCSVMappableDomain",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1739,8 +2159,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVMappableDomain(ctx inte
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVMappableDomain_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVMappableDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1795,9 +2232,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVMappedControl_Call struct {
 }
 
 // CreateBulkCSVMappedControl is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVMappedControl(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVMappedControl_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVMappedControl_Call{Call: _e.mock.On("CreateBulkCSVMappedControl",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1805,8 +2242,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVMappedControl(ctx inter
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVMappedControl_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVMappedControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1861,9 +2315,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVNarrative_Call struct {
 }
 
 // CreateBulkCSVNarrative is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVNarrative(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVNarrative_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVNarrative_Call{Call: _e.mock.On("CreateBulkCSVNarrative",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1871,8 +2325,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVNarrative(ctx interface
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVNarrative_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVNarrative_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1927,9 +2398,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVOrgMembers_Call struct {
 }
 
 // CreateBulkCSVOrgMembers is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVOrgMembers(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVOrgMembers_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVOrgMembers_Call{Call: _e.mock.On("CreateBulkCSVOrgMembers",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -1937,8 +2408,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVOrgMembers(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVOrgMembers_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVOrgMembers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -1993,9 +2481,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVProcedure_Call struct {
 }
 
 // CreateBulkCSVProcedure is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVProcedure(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVProcedure_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVProcedure_Call{Call: _e.mock.On("CreateBulkCSVProcedure",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2003,8 +2491,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVProcedure(ctx interface
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVProcedure_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVProcedure_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2059,9 +2564,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVProgram_Call struct {
 }
 
 // CreateBulkCSVProgram is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVProgram(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVProgram_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVProgram_Call{Call: _e.mock.On("CreateBulkCSVProgram",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2069,8 +2574,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVProgram(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVProgram_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVProgram_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2125,9 +2647,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVProgramMembers_Call struct {
 }
 
 // CreateBulkCSVProgramMembers is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVProgramMembers(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVProgramMembers_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVProgramMembers_Call{Call: _e.mock.On("CreateBulkCSVProgramMembers",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2135,8 +2657,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVProgramMembers(ctx inte
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVProgramMembers_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVProgramMembers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2191,9 +2730,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVProgramMembership_Call struct {
 }
 
 // CreateBulkCSVProgramMembership is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVProgramMembership(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVProgramMembership_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVProgramMembership_Call{Call: _e.mock.On("CreateBulkCSVProgramMembership",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2201,8 +2740,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVProgramMembership(ctx i
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVProgramMembership_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVProgramMembership_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2257,9 +2813,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVRisk_Call struct {
 }
 
 // CreateBulkCSVRisk is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVRisk(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVRisk_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVRisk_Call{Call: _e.mock.On("CreateBulkCSVRisk",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2267,8 +2823,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVRisk(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVRisk_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVRisk_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2323,9 +2896,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVScheduledJob_Call struct {
 }
 
 // CreateBulkCSVScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVScheduledJob(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVScheduledJob_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVScheduledJob_Call{Call: _e.mock.On("CreateBulkCSVScheduledJob",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2333,8 +2906,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVScheduledJob(ctx interf
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVScheduledJob_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2389,9 +2979,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVSubcontrol_Call struct {
 }
 
 // CreateBulkCSVSubcontrol is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVSubcontrol(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVSubcontrol_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVSubcontrol_Call{Call: _e.mock.On("CreateBulkCSVSubcontrol",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2399,8 +2989,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVSubcontrol(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVSubcontrol_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVSubcontrol_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2455,9 +3062,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVSubscriber_Call struct {
 }
 
 // CreateBulkCSVSubscriber is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVSubscriber(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVSubscriber_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVSubscriber_Call{Call: _e.mock.On("CreateBulkCSVSubscriber",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2465,8 +3072,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVSubscriber(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVSubscriber_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVSubscriber_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2521,9 +3145,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVTask_Call struct {
 }
 
 // CreateBulkCSVTask is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVTask(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVTask_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVTask_Call{Call: _e.mock.On("CreateBulkCSVTask",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2531,8 +3155,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVTask(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVTask_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVTask_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2587,9 +3228,9 @@ type MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call struct {
 }
 
 // CreateBulkCSVTemplate is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVTemplate(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call{Call: _e.mock.On("CreateBulkCSVTemplate",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2597,8 +3238,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVTemplate(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2609,6 +3267,172 @@ func (_c *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call) Return(createBulkC
 }
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTemplate, error)) *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateBulkCSVTrustCenter provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkCSVTrustCenter(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenter, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkCSVTrustCenter")
+	}
+
+	var r0 *openlaneclient.CreateBulkCSVTrustCenter
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenter, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkCSVTrustCenter); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkCSVTrustCenter)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkCSVTrustCenter'
+type MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call struct {
+	*mock.Call
+}
+
+// CreateBulkCSVTrustCenter is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVTrustCenter(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call {
+	return &MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call{Call: _e.mock.On("CreateBulkCSVTrustCenter",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call) Return(createBulkCSVTrustCenter *openlaneclient.CreateBulkCSVTrustCenter, err error) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call {
+	_c.Call.Return(createBulkCSVTrustCenter, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenter, error)) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenter_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateBulkCSVTrustCenterSetting provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkCSVTrustCenterSetting(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenterSetting, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkCSVTrustCenterSetting")
+	}
+
+	var r0 *openlaneclient.CreateBulkCSVTrustCenterSetting
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenterSetting, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkCSVTrustCenterSetting); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkCSVTrustCenterSetting)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkCSVTrustCenterSetting'
+type MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call struct {
+	*mock.Call
+}
+
+// CreateBulkCSVTrustCenterSetting is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVTrustCenterSetting(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call {
+	return &MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call{Call: _e.mock.On("CreateBulkCSVTrustCenterSetting",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call) Return(createBulkCSVTrustCenterSetting *openlaneclient.CreateBulkCSVTrustCenterSetting, err error) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call {
+	_c.Call.Return(createBulkCSVTrustCenterSetting, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenterSetting, error)) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSetting_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -2653,9 +3477,9 @@ type MockOpenlaneGraphClient_CreateBulkContact_Call struct {
 }
 
 // CreateBulkContact is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateContactInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkContact(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkContact_Call {
 	return &MockOpenlaneGraphClient_CreateBulkContact_Call{Call: _e.mock.On("CreateBulkContact",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2663,8 +3487,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkContact(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_CreateBulkContact_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateContactInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkContact_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateContactInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateContactInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateContactInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2719,9 +3560,9 @@ type MockOpenlaneGraphClient_CreateBulkControl_Call struct {
 }
 
 // CreateBulkControl is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateControlInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkControl(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkControl_Call {
 	return &MockOpenlaneGraphClient_CreateBulkControl_Call{Call: _e.mock.On("CreateBulkControl",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2729,8 +3570,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkControl(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_CreateBulkControl_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateControlInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateControlInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateControlInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateControlInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2785,9 +3643,9 @@ type MockOpenlaneGraphClient_CreateBulkControlImplementation_Call struct {
 }
 
 // CreateBulkControlImplementation is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateControlImplementationInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkControlImplementation(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkControlImplementation_Call {
 	return &MockOpenlaneGraphClient_CreateBulkControlImplementation_Call{Call: _e.mock.On("CreateBulkControlImplementation",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2795,8 +3653,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkControlImplementation(ctx 
 
 func (_c *MockOpenlaneGraphClient_CreateBulkControlImplementation_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateControlImplementationInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkControlImplementation_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateControlImplementationInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateControlImplementationInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateControlImplementationInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2851,9 +3726,9 @@ type MockOpenlaneGraphClient_CreateBulkControlObjective_Call struct {
 }
 
 // CreateBulkControlObjective is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateControlObjectiveInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkControlObjective(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkControlObjective_Call {
 	return &MockOpenlaneGraphClient_CreateBulkControlObjective_Call{Call: _e.mock.On("CreateBulkControlObjective",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2861,8 +3736,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkControlObjective(ctx inter
 
 func (_c *MockOpenlaneGraphClient_CreateBulkControlObjective_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateControlObjectiveInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkControlObjective_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateControlObjectiveInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateControlObjectiveInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateControlObjectiveInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2917,9 +3809,9 @@ type MockOpenlaneGraphClient_CreateBulkControlScheduledJob_Call struct {
 }
 
 // CreateBulkControlScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateControlScheduledJobInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkControlScheduledJob(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkControlScheduledJob_Call {
 	return &MockOpenlaneGraphClient_CreateBulkControlScheduledJob_Call{Call: _e.mock.On("CreateBulkControlScheduledJob",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2927,8 +3819,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkControlScheduledJob(ctx in
 
 func (_c *MockOpenlaneGraphClient_CreateBulkControlScheduledJob_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateControlScheduledJobInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkControlScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateControlScheduledJobInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateControlScheduledJobInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateControlScheduledJobInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -2983,9 +3892,9 @@ type MockOpenlaneGraphClient_CreateBulkCustomDomain_Call struct {
 }
 
 // CreateBulkCustomDomain is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateCustomDomainInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCustomDomain(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCustomDomain_Call {
 	return &MockOpenlaneGraphClient_CreateBulkCustomDomain_Call{Call: _e.mock.On("CreateBulkCustomDomain",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -2993,8 +3902,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCustomDomain(ctx interface
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCustomDomain_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateCustomDomainInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCustomDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateCustomDomainInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateCustomDomainInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateCustomDomainInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3049,9 +3975,9 @@ type MockOpenlaneGraphClient_CreateBulkDNSVerification_Call struct {
 }
 
 // CreateBulkDNSVerification is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateDNSVerificationInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkDNSVerification(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkDNSVerification_Call {
 	return &MockOpenlaneGraphClient_CreateBulkDNSVerification_Call{Call: _e.mock.On("CreateBulkDNSVerification",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3059,8 +3985,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkDNSVerification(ctx interf
 
 func (_c *MockOpenlaneGraphClient_CreateBulkDNSVerification_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkDNSVerification_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateDNSVerificationInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateDNSVerificationInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateDNSVerificationInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3115,9 +4058,9 @@ type MockOpenlaneGraphClient_CreateBulkEntity_Call struct {
 }
 
 // CreateBulkEntity is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateEntityInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkEntity(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkEntity_Call {
 	return &MockOpenlaneGraphClient_CreateBulkEntity_Call{Call: _e.mock.On("CreateBulkEntity",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3125,8 +4068,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkEntity(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_CreateBulkEntity_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateEntityInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkEntity_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateEntityInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateEntityInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateEntityInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3181,9 +4141,9 @@ type MockOpenlaneGraphClient_CreateBulkEntityType_Call struct {
 }
 
 // CreateBulkEntityType is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateEntityTypeInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkEntityType(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkEntityType_Call {
 	return &MockOpenlaneGraphClient_CreateBulkEntityType_Call{Call: _e.mock.On("CreateBulkEntityType",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3191,8 +4151,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkEntityType(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateBulkEntityType_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateEntityTypeInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkEntityType_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateEntityTypeInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateEntityTypeInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateEntityTypeInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3247,9 +4224,9 @@ type MockOpenlaneGraphClient_CreateBulkEvent_Call struct {
 }
 
 // CreateBulkEvent is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateEventInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkEvent(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkEvent_Call {
 	return &MockOpenlaneGraphClient_CreateBulkEvent_Call{Call: _e.mock.On("CreateBulkEvent",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3257,8 +4234,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkEvent(ctx interface{}, inp
 
 func (_c *MockOpenlaneGraphClient_CreateBulkEvent_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateEventInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkEvent_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateEventInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateEventInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateEventInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3313,9 +4307,9 @@ type MockOpenlaneGraphClient_CreateBulkGroup_Call struct {
 }
 
 // CreateBulkGroup is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateGroupInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkGroup(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkGroup_Call {
 	return &MockOpenlaneGraphClient_CreateBulkGroup_Call{Call: _e.mock.On("CreateBulkGroup",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3323,8 +4317,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkGroup(ctx interface{}, inp
 
 func (_c *MockOpenlaneGraphClient_CreateBulkGroup_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateGroupInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkGroup_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateGroupInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateGroupInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateGroupInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3379,9 +4390,9 @@ type MockOpenlaneGraphClient_CreateBulkGroupMembers_Call struct {
 }
 
 // CreateBulkGroupMembers is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateGroupMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkGroupMembers(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkGroupMembers_Call {
 	return &MockOpenlaneGraphClient_CreateBulkGroupMembers_Call{Call: _e.mock.On("CreateBulkGroupMembers",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3389,8 +4400,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkGroupMembers(ctx interface
 
 func (_c *MockOpenlaneGraphClient_CreateBulkGroupMembers_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateGroupMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkGroupMembers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateGroupMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateGroupMembershipInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateGroupMembershipInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3445,9 +4473,9 @@ type MockOpenlaneGraphClient_CreateBulkHush_Call struct {
 }
 
 // CreateBulkHush is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateHushInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkHush(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkHush_Call {
 	return &MockOpenlaneGraphClient_CreateBulkHush_Call{Call: _e.mock.On("CreateBulkHush",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3455,8 +4483,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkHush(ctx interface{}, inpu
 
 func (_c *MockOpenlaneGraphClient_CreateBulkHush_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateHushInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkHush_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateHushInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateHushInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateHushInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3511,9 +4556,9 @@ type MockOpenlaneGraphClient_CreateBulkIntegration_Call struct {
 }
 
 // CreateBulkIntegration is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateIntegrationInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkIntegration(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkIntegration_Call {
 	return &MockOpenlaneGraphClient_CreateBulkIntegration_Call{Call: _e.mock.On("CreateBulkIntegration",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3521,8 +4566,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkIntegration(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_CreateBulkIntegration_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateIntegrationInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkIntegration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateIntegrationInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateIntegrationInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateIntegrationInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3577,9 +4639,9 @@ type MockOpenlaneGraphClient_CreateBulkInternalPolicy_Call struct {
 }
 
 // CreateBulkInternalPolicy is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateInternalPolicyInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkInternalPolicy(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkInternalPolicy_Call {
 	return &MockOpenlaneGraphClient_CreateBulkInternalPolicy_Call{Call: _e.mock.On("CreateBulkInternalPolicy",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3587,8 +4649,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkInternalPolicy(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_CreateBulkInternalPolicy_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkInternalPolicy_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateInternalPolicyInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateInternalPolicyInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateInternalPolicyInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3643,9 +4722,9 @@ type MockOpenlaneGraphClient_CreateBulkInvite_Call struct {
 }
 
 // CreateBulkInvite is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateInviteInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkInvite(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkInvite_Call {
 	return &MockOpenlaneGraphClient_CreateBulkInvite_Call{Call: _e.mock.On("CreateBulkInvite",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3653,8 +4732,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkInvite(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_CreateBulkInvite_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateInviteInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkInvite_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateInviteInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateInviteInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateInviteInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3709,9 +4805,9 @@ type MockOpenlaneGraphClient_CreateBulkMappableDomain_Call struct {
 }
 
 // CreateBulkMappableDomain is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateMappableDomainInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkMappableDomain(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkMappableDomain_Call {
 	return &MockOpenlaneGraphClient_CreateBulkMappableDomain_Call{Call: _e.mock.On("CreateBulkMappableDomain",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3719,8 +4815,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkMappableDomain(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_CreateBulkMappableDomain_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkMappableDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateMappableDomainInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateMappableDomainInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateMappableDomainInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3775,9 +4888,9 @@ type MockOpenlaneGraphClient_CreateBulkMappedControl_Call struct {
 }
 
 // CreateBulkMappedControl is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateMappedControlInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkMappedControl(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkMappedControl_Call {
 	return &MockOpenlaneGraphClient_CreateBulkMappedControl_Call{Call: _e.mock.On("CreateBulkMappedControl",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3785,8 +4898,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkMappedControl(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_CreateBulkMappedControl_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateMappedControlInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkMappedControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateMappedControlInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateMappedControlInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateMappedControlInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3841,9 +4971,9 @@ type MockOpenlaneGraphClient_CreateBulkNarrative_Call struct {
 }
 
 // CreateBulkNarrative is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateNarrativeInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkNarrative(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkNarrative_Call {
 	return &MockOpenlaneGraphClient_CreateBulkNarrative_Call{Call: _e.mock.On("CreateBulkNarrative",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3851,8 +4981,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkNarrative(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_CreateBulkNarrative_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateNarrativeInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkNarrative_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateNarrativeInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateNarrativeInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateNarrativeInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3907,9 +5054,9 @@ type MockOpenlaneGraphClient_CreateBulkOrgMembers_Call struct {
 }
 
 // CreateBulkOrgMembers is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateOrgMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkOrgMembers(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkOrgMembers_Call {
 	return &MockOpenlaneGraphClient_CreateBulkOrgMembers_Call{Call: _e.mock.On("CreateBulkOrgMembers",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3917,8 +5064,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkOrgMembers(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateBulkOrgMembers_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateOrgMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkOrgMembers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateOrgMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateOrgMembershipInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateOrgMembershipInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -3973,9 +5137,9 @@ type MockOpenlaneGraphClient_CreateBulkProcedure_Call struct {
 }
 
 // CreateBulkProcedure is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateProcedureInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkProcedure(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkProcedure_Call {
 	return &MockOpenlaneGraphClient_CreateBulkProcedure_Call{Call: _e.mock.On("CreateBulkProcedure",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -3983,8 +5147,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkProcedure(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_CreateBulkProcedure_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateProcedureInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkProcedure_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateProcedureInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateProcedureInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateProcedureInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4039,9 +5220,9 @@ type MockOpenlaneGraphClient_CreateBulkProgram_Call struct {
 }
 
 // CreateBulkProgram is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateProgramInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkProgram(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkProgram_Call {
 	return &MockOpenlaneGraphClient_CreateBulkProgram_Call{Call: _e.mock.On("CreateBulkProgram",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4049,8 +5230,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkProgram(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_CreateBulkProgram_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateProgramInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkProgram_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateProgramInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateProgramInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateProgramInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4105,9 +5303,9 @@ type MockOpenlaneGraphClient_CreateBulkProgramMembers_Call struct {
 }
 
 // CreateBulkProgramMembers is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateProgramMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkProgramMembers(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkProgramMembers_Call {
 	return &MockOpenlaneGraphClient_CreateBulkProgramMembers_Call{Call: _e.mock.On("CreateBulkProgramMembers",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4115,8 +5313,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkProgramMembers(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_CreateBulkProgramMembers_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkProgramMembers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateProgramMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateProgramMembershipInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateProgramMembershipInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4171,9 +5386,9 @@ type MockOpenlaneGraphClient_CreateBulkProgramMembership_Call struct {
 }
 
 // CreateBulkProgramMembership is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateProgramMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkProgramMembership(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkProgramMembership_Call {
 	return &MockOpenlaneGraphClient_CreateBulkProgramMembership_Call{Call: _e.mock.On("CreateBulkProgramMembership",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4181,8 +5396,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkProgramMembership(ctx inte
 
 func (_c *MockOpenlaneGraphClient_CreateBulkProgramMembership_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkProgramMembership_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateProgramMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateProgramMembershipInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateProgramMembershipInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4237,9 +5469,9 @@ type MockOpenlaneGraphClient_CreateBulkRisk_Call struct {
 }
 
 // CreateBulkRisk is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateRiskInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkRisk(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkRisk_Call {
 	return &MockOpenlaneGraphClient_CreateBulkRisk_Call{Call: _e.mock.On("CreateBulkRisk",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4247,8 +5479,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkRisk(ctx interface{}, inpu
 
 func (_c *MockOpenlaneGraphClient_CreateBulkRisk_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateRiskInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkRisk_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateRiskInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateRiskInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateRiskInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4303,9 +5552,9 @@ type MockOpenlaneGraphClient_CreateBulkScheduledJob_Call struct {
 }
 
 // CreateBulkScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateScheduledJobInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkScheduledJob(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkScheduledJob_Call {
 	return &MockOpenlaneGraphClient_CreateBulkScheduledJob_Call{Call: _e.mock.On("CreateBulkScheduledJob",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4313,8 +5562,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkScheduledJob(ctx interface
 
 func (_c *MockOpenlaneGraphClient_CreateBulkScheduledJob_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateScheduledJobInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateScheduledJobInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateScheduledJobInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateScheduledJobInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4369,9 +5635,9 @@ type MockOpenlaneGraphClient_CreateBulkSubcontrol_Call struct {
 }
 
 // CreateBulkSubcontrol is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateSubcontrolInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkSubcontrol(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkSubcontrol_Call {
 	return &MockOpenlaneGraphClient_CreateBulkSubcontrol_Call{Call: _e.mock.On("CreateBulkSubcontrol",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4379,8 +5645,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkSubcontrol(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateBulkSubcontrol_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateSubcontrolInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkSubcontrol_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateSubcontrolInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateSubcontrolInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateSubcontrolInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4435,9 +5718,9 @@ type MockOpenlaneGraphClient_CreateBulkSubscriber_Call struct {
 }
 
 // CreateBulkSubscriber is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateSubscriberInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkSubscriber(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkSubscriber_Call {
 	return &MockOpenlaneGraphClient_CreateBulkSubscriber_Call{Call: _e.mock.On("CreateBulkSubscriber",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4445,8 +5728,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkSubscriber(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateBulkSubscriber_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkSubscriber_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateSubscriberInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateSubscriberInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateSubscriberInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4501,9 +5801,9 @@ type MockOpenlaneGraphClient_CreateBulkTask_Call struct {
 }
 
 // CreateBulkTask is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateTaskInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkTask(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkTask_Call {
 	return &MockOpenlaneGraphClient_CreateBulkTask_Call{Call: _e.mock.On("CreateBulkTask",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4511,8 +5811,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkTask(ctx interface{}, inpu
 
 func (_c *MockOpenlaneGraphClient_CreateBulkTask_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateTaskInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkTask_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateTaskInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateTaskInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateTaskInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4567,9 +5884,9 @@ type MockOpenlaneGraphClient_CreateBulkTemplate_Call struct {
 }
 
 // CreateBulkTemplate is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateTemplateInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkTemplate(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkTemplate_Call {
 	return &MockOpenlaneGraphClient_CreateBulkTemplate_Call{Call: _e.mock.On("CreateBulkTemplate",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4577,8 +5894,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkTemplate(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_CreateBulkTemplate_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateTemplateInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkTemplate_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].([]*openlaneclient.CreateTemplateInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateTemplateInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateTemplateInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4589,6 +5923,172 @@ func (_c *MockOpenlaneGraphClient_CreateBulkTemplate_Call) Return(createBulkTemp
 }
 
 func (_c *MockOpenlaneGraphClient_CreateBulkTemplate_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.CreateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTemplate, error)) *MockOpenlaneGraphClient_CreateBulkTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateBulkTrustCenter provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkTrustCenter(ctx context.Context, input []*openlaneclient.CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTrustCenter, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkTrustCenter")
+	}
+
+	var r0 *openlaneclient.CreateBulkTrustCenter
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateTrustCenterInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTrustCenter, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateTrustCenterInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkTrustCenter); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkTrustCenter)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []*openlaneclient.CreateTrustCenterInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkTrustCenter_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkTrustCenter'
+type MockOpenlaneGraphClient_CreateBulkTrustCenter_Call struct {
+	*mock.Call
+}
+
+// CreateBulkTrustCenter is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateTrustCenterInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkTrustCenter(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkTrustCenter_Call {
+	return &MockOpenlaneGraphClient_CreateBulkTrustCenter_Call{Call: _e.mock.On("CreateBulkTrustCenter",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTrustCenter_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkTrustCenter_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateTrustCenterInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateTrustCenterInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTrustCenter_Call) Return(createBulkTrustCenter *openlaneclient.CreateBulkTrustCenter, err error) *MockOpenlaneGraphClient_CreateBulkTrustCenter_Call {
+	_c.Call.Return(createBulkTrustCenter, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTrustCenter_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTrustCenter, error)) *MockOpenlaneGraphClient_CreateBulkTrustCenter_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateBulkTrustCenterSetting provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkTrustCenterSetting(ctx context.Context, input []*openlaneclient.CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTrustCenterSetting, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkTrustCenterSetting")
+	}
+
+	var r0 *openlaneclient.CreateBulkTrustCenterSetting
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateTrustCenterSettingInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTrustCenterSetting, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateTrustCenterSettingInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkTrustCenterSetting); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkTrustCenterSetting)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []*openlaneclient.CreateTrustCenterSettingInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkTrustCenterSetting'
+type MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call struct {
+	*mock.Call
+}
+
+// CreateBulkTrustCenterSetting is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateTrustCenterSettingInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkTrustCenterSetting(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call {
+	return &MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call{Call: _e.mock.On("CreateBulkTrustCenterSetting",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateTrustCenterSettingInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateTrustCenterSettingInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call) Return(createBulkTrustCenterSetting *openlaneclient.CreateBulkTrustCenterSetting, err error) *MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call {
+	_c.Call.Return(createBulkTrustCenterSetting, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTrustCenterSetting, error)) *MockOpenlaneGraphClient_CreateBulkTrustCenterSetting_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -4633,9 +6133,9 @@ type MockOpenlaneGraphClient_CreateContact_Call struct {
 }
 
 // CreateContact is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateContactInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateContact(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateContact_Call {
 	return &MockOpenlaneGraphClient_CreateContact_Call{Call: _e.mock.On("CreateContact",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4643,8 +6143,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateContact(ctx interface{}, input
 
 func (_c *MockOpenlaneGraphClient_CreateContact_Call) Run(run func(ctx context.Context, input openlaneclient.CreateContactInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateContact_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateContactInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateContactInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateContactInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4699,9 +6216,9 @@ type MockOpenlaneGraphClient_CreateControl_Call struct {
 }
 
 // CreateControl is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateControlInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateControl(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateControl_Call {
 	return &MockOpenlaneGraphClient_CreateControl_Call{Call: _e.mock.On("CreateControl",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4709,8 +6226,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateControl(ctx interface{}, input
 
 func (_c *MockOpenlaneGraphClient_CreateControl_Call) Run(run func(ctx context.Context, input openlaneclient.CreateControlInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateControlInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateControlInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateControlInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4765,9 +6299,9 @@ type MockOpenlaneGraphClient_CreateControlImplementation_Call struct {
 }
 
 // CreateControlImplementation is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateControlImplementationInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateControlImplementation(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateControlImplementation_Call {
 	return &MockOpenlaneGraphClient_CreateControlImplementation_Call{Call: _e.mock.On("CreateControlImplementation",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4775,8 +6309,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateControlImplementation(ctx inte
 
 func (_c *MockOpenlaneGraphClient_CreateControlImplementation_Call) Run(run func(ctx context.Context, input openlaneclient.CreateControlImplementationInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateControlImplementation_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateControlImplementationInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateControlImplementationInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateControlImplementationInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4831,9 +6382,9 @@ type MockOpenlaneGraphClient_CreateControlObjective_Call struct {
 }
 
 // CreateControlObjective is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateControlObjectiveInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateControlObjective(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateControlObjective_Call {
 	return &MockOpenlaneGraphClient_CreateControlObjective_Call{Call: _e.mock.On("CreateControlObjective",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4841,8 +6392,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateControlObjective(ctx interface
 
 func (_c *MockOpenlaneGraphClient_CreateControlObjective_Call) Run(run func(ctx context.Context, input openlaneclient.CreateControlObjectiveInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateControlObjective_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateControlObjectiveInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateControlObjectiveInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateControlObjectiveInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4897,9 +6465,9 @@ type MockOpenlaneGraphClient_CreateControlScheduledJob_Call struct {
 }
 
 // CreateControlScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateControlScheduledJobInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateControlScheduledJob(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateControlScheduledJob_Call {
 	return &MockOpenlaneGraphClient_CreateControlScheduledJob_Call{Call: _e.mock.On("CreateControlScheduledJob",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4907,8 +6475,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateControlScheduledJob(ctx interf
 
 func (_c *MockOpenlaneGraphClient_CreateControlScheduledJob_Call) Run(run func(ctx context.Context, input openlaneclient.CreateControlScheduledJobInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateControlScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateControlScheduledJobInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateControlScheduledJobInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateControlScheduledJobInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -4963,9 +6548,9 @@ type MockOpenlaneGraphClient_CreateControlWithSubcontrols_Call struct {
 }
 
 // CreateControlWithSubcontrols is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateControlWithSubcontrolsInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateControlWithSubcontrols(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateControlWithSubcontrols_Call {
 	return &MockOpenlaneGraphClient_CreateControlWithSubcontrols_Call{Call: _e.mock.On("CreateControlWithSubcontrols",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -4973,8 +6558,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateControlWithSubcontrols(ctx int
 
 func (_c *MockOpenlaneGraphClient_CreateControlWithSubcontrols_Call) Run(run func(ctx context.Context, input openlaneclient.CreateControlWithSubcontrolsInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateControlWithSubcontrols_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateControlWithSubcontrolsInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateControlWithSubcontrolsInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateControlWithSubcontrolsInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5029,9 +6631,9 @@ type MockOpenlaneGraphClient_CreateControlsByClone_Call struct {
 }
 
 // CreateControlsByClone is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CloneControlInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateControlsByClone(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateControlsByClone_Call {
 	return &MockOpenlaneGraphClient_CreateControlsByClone_Call{Call: _e.mock.On("CreateControlsByClone",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5039,8 +6641,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateControlsByClone(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_CreateControlsByClone_Call) Run(run func(ctx context.Context, input openlaneclient.CloneControlInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateControlsByClone_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CloneControlInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CloneControlInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CloneControlInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5095,9 +6714,9 @@ type MockOpenlaneGraphClient_CreateCustomDomain_Call struct {
 }
 
 // CreateCustomDomain is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateCustomDomainInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateCustomDomain(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateCustomDomain_Call {
 	return &MockOpenlaneGraphClient_CreateCustomDomain_Call{Call: _e.mock.On("CreateCustomDomain",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5105,8 +6724,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateCustomDomain(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_CreateCustomDomain_Call) Run(run func(ctx context.Context, input openlaneclient.CreateCustomDomainInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateCustomDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateCustomDomainInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateCustomDomainInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateCustomDomainInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5161,9 +6797,9 @@ type MockOpenlaneGraphClient_CreateDNSVerification_Call struct {
 }
 
 // CreateDNSVerification is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateDNSVerificationInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateDNSVerification(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateDNSVerification_Call {
 	return &MockOpenlaneGraphClient_CreateDNSVerification_Call{Call: _e.mock.On("CreateDNSVerification",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5171,8 +6807,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateDNSVerification(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_CreateDNSVerification_Call) Run(run func(ctx context.Context, input openlaneclient.CreateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateDNSVerification_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateDNSVerificationInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateDNSVerificationInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateDNSVerificationInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5227,9 +6880,9 @@ type MockOpenlaneGraphClient_CreateDocumentData_Call struct {
 }
 
 // CreateDocumentData is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateDocumentDataInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateDocumentData(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateDocumentData_Call {
 	return &MockOpenlaneGraphClient_CreateDocumentData_Call{Call: _e.mock.On("CreateDocumentData",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5237,8 +6890,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateDocumentData(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_CreateDocumentData_Call) Run(run func(ctx context.Context, input openlaneclient.CreateDocumentDataInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateDocumentData_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateDocumentDataInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateDocumentDataInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateDocumentDataInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5293,9 +6963,9 @@ type MockOpenlaneGraphClient_CreateEntity_Call struct {
 }
 
 // CreateEntity is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateEntityInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateEntity(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateEntity_Call {
 	return &MockOpenlaneGraphClient_CreateEntity_Call{Call: _e.mock.On("CreateEntity",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5303,8 +6973,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateEntity(ctx interface{}, input 
 
 func (_c *MockOpenlaneGraphClient_CreateEntity_Call) Run(run func(ctx context.Context, input openlaneclient.CreateEntityInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateEntity_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateEntityInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateEntityInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateEntityInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5359,9 +7046,9 @@ type MockOpenlaneGraphClient_CreateEntityType_Call struct {
 }
 
 // CreateEntityType is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateEntityTypeInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateEntityType(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateEntityType_Call {
 	return &MockOpenlaneGraphClient_CreateEntityType_Call{Call: _e.mock.On("CreateEntityType",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5369,8 +7056,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateEntityType(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_CreateEntityType_Call) Run(run func(ctx context.Context, input openlaneclient.CreateEntityTypeInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateEntityType_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateEntityTypeInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateEntityTypeInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateEntityTypeInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5425,9 +7129,9 @@ type MockOpenlaneGraphClient_CreateEvent_Call struct {
 }
 
 // CreateEvent is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateEventInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateEvent(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateEvent_Call {
 	return &MockOpenlaneGraphClient_CreateEvent_Call{Call: _e.mock.On("CreateEvent",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5435,8 +7139,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateEvent(ctx interface{}, input i
 
 func (_c *MockOpenlaneGraphClient_CreateEvent_Call) Run(run func(ctx context.Context, input openlaneclient.CreateEventInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateEvent_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateEventInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateEventInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateEventInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5491,10 +7212,10 @@ type MockOpenlaneGraphClient_CreateEvidence_Call struct {
 }
 
 // CreateEvidence is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - evidenceFiles
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateEvidenceInput
+//   - evidenceFiles []*graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateEvidence(ctx interface{}, input interface{}, evidenceFiles interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateEvidence_Call {
 	return &MockOpenlaneGraphClient_CreateEvidence_Call{Call: _e.mock.On("CreateEvidence",
 		append([]interface{}{ctx, input, evidenceFiles}, interceptors...)...)}
@@ -5502,8 +7223,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateEvidence(ctx interface{}, inpu
 
 func (_c *MockOpenlaneGraphClient_CreateEvidence_Call) Run(run func(ctx context.Context, input openlaneclient.CreateEvidenceInput, evidenceFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateEvidence_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateEvidenceInput), args[2].([]*graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateEvidenceInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateEvidenceInput)
+		}
+		var arg2 []*graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].([]*graphql.Upload)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -5558,9 +7301,9 @@ type MockOpenlaneGraphClient_CreateFullProgram_Call struct {
 }
 
 // CreateFullProgram is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateFullProgramInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateFullProgram(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateFullProgram_Call {
 	return &MockOpenlaneGraphClient_CreateFullProgram_Call{Call: _e.mock.On("CreateFullProgram",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5568,8 +7311,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateFullProgram(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_CreateFullProgram_Call) Run(run func(ctx context.Context, input openlaneclient.CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateFullProgram_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateFullProgramInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateFullProgramInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateFullProgramInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5624,9 +7384,9 @@ type MockOpenlaneGraphClient_CreateGroup_Call struct {
 }
 
 // CreateGroup is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateGroupInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateGroup(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateGroup_Call {
 	return &MockOpenlaneGraphClient_CreateGroup_Call{Call: _e.mock.On("CreateGroup",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5634,8 +7394,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateGroup(ctx interface{}, input i
 
 func (_c *MockOpenlaneGraphClient_CreateGroup_Call) Run(run func(ctx context.Context, input openlaneclient.CreateGroupInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateGroup_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateGroupInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateGroupInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateGroupInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5690,11 +7467,11 @@ type MockOpenlaneGraphClient_CreateGroupByClone_Call struct {
 }
 
 // CreateGroupByClone is a helper method to define mock.On call
-//   - ctx
-//   - groupInput
-//   - inheritGroupPermissions
-//   - cloneGroupMembers
-//   - interceptors
+//   - ctx context.Context
+//   - groupInput openlaneclient.CreateGroupInput
+//   - inheritGroupPermissions *string
+//   - cloneGroupMembers *string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateGroupByClone(ctx interface{}, groupInput interface{}, inheritGroupPermissions interface{}, cloneGroupMembers interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateGroupByClone_Call {
 	return &MockOpenlaneGraphClient_CreateGroupByClone_Call{Call: _e.mock.On("CreateGroupByClone",
 		append([]interface{}{ctx, groupInput, inheritGroupPermissions, cloneGroupMembers}, interceptors...)...)}
@@ -5702,8 +7479,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateGroupByClone(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_CreateGroupByClone_Call) Run(run func(ctx context.Context, groupInput openlaneclient.CreateGroupInput, inheritGroupPermissions *string, cloneGroupMembers *string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateGroupByClone_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateGroupInput), args[2].(*string), args[3].(*string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateGroupInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateGroupInput)
+		}
+		var arg2 *string
+		if args[2] != nil {
+			arg2 = args[2].(*string)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -5758,10 +7562,10 @@ type MockOpenlaneGraphClient_CreateGroupWithMembers_Call struct {
 }
 
 // CreateGroupWithMembers is a helper method to define mock.On call
-//   - ctx
-//   - groupInput
-//   - members
-//   - interceptors
+//   - ctx context.Context
+//   - groupInput openlaneclient.CreateGroupInput
+//   - members []*openlaneclient.GroupMembersInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateGroupWithMembers(ctx interface{}, groupInput interface{}, members interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateGroupWithMembers_Call {
 	return &MockOpenlaneGraphClient_CreateGroupWithMembers_Call{Call: _e.mock.On("CreateGroupWithMembers",
 		append([]interface{}{ctx, groupInput, members}, interceptors...)...)}
@@ -5769,8 +7573,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateGroupWithMembers(ctx interface
 
 func (_c *MockOpenlaneGraphClient_CreateGroupWithMembers_Call) Run(run func(ctx context.Context, groupInput openlaneclient.CreateGroupInput, members []*openlaneclient.GroupMembersInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateGroupWithMembers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateGroupInput), args[2].([]*openlaneclient.GroupMembersInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateGroupInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateGroupInput)
+		}
+		var arg2 []*openlaneclient.GroupMembersInput
+		if args[2] != nil {
+			arg2 = args[2].([]*openlaneclient.GroupMembersInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -5825,9 +7651,9 @@ type MockOpenlaneGraphClient_CreateHush_Call struct {
 }
 
 // CreateHush is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateHushInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateHush(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateHush_Call {
 	return &MockOpenlaneGraphClient_CreateHush_Call{Call: _e.mock.On("CreateHush",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5835,8 +7661,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateHush(ctx interface{}, input in
 
 func (_c *MockOpenlaneGraphClient_CreateHush_Call) Run(run func(ctx context.Context, input openlaneclient.CreateHushInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateHush_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateHushInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateHushInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateHushInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5891,9 +7734,9 @@ type MockOpenlaneGraphClient_CreateIntegration_Call struct {
 }
 
 // CreateIntegration is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateIntegrationInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateIntegration(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateIntegration_Call {
 	return &MockOpenlaneGraphClient_CreateIntegration_Call{Call: _e.mock.On("CreateIntegration",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5901,8 +7744,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateIntegration(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_CreateIntegration_Call) Run(run func(ctx context.Context, input openlaneclient.CreateIntegrationInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateIntegration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateIntegrationInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateIntegrationInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateIntegrationInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -5957,9 +7817,9 @@ type MockOpenlaneGraphClient_CreateInternalPolicy_Call struct {
 }
 
 // CreateInternalPolicy is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateInternalPolicyInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateInternalPolicy(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateInternalPolicy_Call {
 	return &MockOpenlaneGraphClient_CreateInternalPolicy_Call{Call: _e.mock.On("CreateInternalPolicy",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -5967,8 +7827,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateInternalPolicy(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateInternalPolicy_Call) Run(run func(ctx context.Context, input openlaneclient.CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateInternalPolicy_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateInternalPolicyInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateInternalPolicyInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateInternalPolicyInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6023,9 +7900,9 @@ type MockOpenlaneGraphClient_CreateInvite_Call struct {
 }
 
 // CreateInvite is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateInviteInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateInvite(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateInvite_Call {
 	return &MockOpenlaneGraphClient_CreateInvite_Call{Call: _e.mock.On("CreateInvite",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6033,8 +7910,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateInvite(ctx interface{}, input 
 
 func (_c *MockOpenlaneGraphClient_CreateInvite_Call) Run(run func(ctx context.Context, input openlaneclient.CreateInviteInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateInvite_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateInviteInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateInviteInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateInviteInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6089,9 +7983,9 @@ type MockOpenlaneGraphClient_CreateJobRunnerRegistrationToken_Call struct {
 }
 
 // CreateJobRunnerRegistrationToken is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateJobRunnerRegistrationTokenInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateJobRunnerRegistrationToken(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateJobRunnerRegistrationToken_Call {
 	return &MockOpenlaneGraphClient_CreateJobRunnerRegistrationToken_Call{Call: _e.mock.On("CreateJobRunnerRegistrationToken",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6099,8 +7993,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateJobRunnerRegistrationToken(ctx
 
 func (_c *MockOpenlaneGraphClient_CreateJobRunnerRegistrationToken_Call) Run(run func(ctx context.Context, input openlaneclient.CreateJobRunnerRegistrationTokenInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateJobRunnerRegistrationToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateJobRunnerRegistrationTokenInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateJobRunnerRegistrationTokenInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateJobRunnerRegistrationTokenInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6155,9 +8066,9 @@ type MockOpenlaneGraphClient_CreateJobRunnerToken_Call struct {
 }
 
 // CreateJobRunnerToken is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateJobRunnerTokenInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateJobRunnerToken(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateJobRunnerToken_Call {
 	return &MockOpenlaneGraphClient_CreateJobRunnerToken_Call{Call: _e.mock.On("CreateJobRunnerToken",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6165,8 +8076,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateJobRunnerToken(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateJobRunnerToken_Call) Run(run func(ctx context.Context, input openlaneclient.CreateJobRunnerTokenInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateJobRunnerToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateJobRunnerTokenInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateJobRunnerTokenInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateJobRunnerTokenInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6221,9 +8149,9 @@ type MockOpenlaneGraphClient_CreateMappableDomain_Call struct {
 }
 
 // CreateMappableDomain is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateMappableDomainInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateMappableDomain(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateMappableDomain_Call {
 	return &MockOpenlaneGraphClient_CreateMappableDomain_Call{Call: _e.mock.On("CreateMappableDomain",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6231,8 +8159,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateMappableDomain(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_CreateMappableDomain_Call) Run(run func(ctx context.Context, input openlaneclient.CreateMappableDomainInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateMappableDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateMappableDomainInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateMappableDomainInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateMappableDomainInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6287,9 +8232,9 @@ type MockOpenlaneGraphClient_CreateMappedControl_Call struct {
 }
 
 // CreateMappedControl is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateMappedControlInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateMappedControl(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateMappedControl_Call {
 	return &MockOpenlaneGraphClient_CreateMappedControl_Call{Call: _e.mock.On("CreateMappedControl",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6297,8 +8242,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateMappedControl(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_CreateMappedControl_Call) Run(run func(ctx context.Context, input openlaneclient.CreateMappedControlInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateMappedControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateMappedControlInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateMappedControlInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateMappedControlInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6353,9 +8315,9 @@ type MockOpenlaneGraphClient_CreateNarrative_Call struct {
 }
 
 // CreateNarrative is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateNarrativeInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateNarrative(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateNarrative_Call {
 	return &MockOpenlaneGraphClient_CreateNarrative_Call{Call: _e.mock.On("CreateNarrative",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6363,8 +8325,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateNarrative(ctx interface{}, inp
 
 func (_c *MockOpenlaneGraphClient_CreateNarrative_Call) Run(run func(ctx context.Context, input openlaneclient.CreateNarrativeInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateNarrative_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateNarrativeInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateNarrativeInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateNarrativeInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6419,9 +8398,9 @@ type MockOpenlaneGraphClient_CreateOnboarding_Call struct {
 }
 
 // CreateOnboarding is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateOnboardingInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateOnboarding(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateOnboarding_Call {
 	return &MockOpenlaneGraphClient_CreateOnboarding_Call{Call: _e.mock.On("CreateOnboarding",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6429,8 +8408,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateOnboarding(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_CreateOnboarding_Call) Run(run func(ctx context.Context, input openlaneclient.CreateOnboardingInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateOnboarding_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateOnboardingInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateOnboardingInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateOnboardingInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6485,10 +8481,10 @@ type MockOpenlaneGraphClient_CreateOrganization_Call struct {
 }
 
 // CreateOrganization is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - avatarFile
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateOrganizationInput
+//   - avatarFile *graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateOrganization(ctx interface{}, input interface{}, avatarFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateOrganization_Call {
 	return &MockOpenlaneGraphClient_CreateOrganization_Call{Call: _e.mock.On("CreateOrganization",
 		append([]interface{}{ctx, input, avatarFile}, interceptors...)...)}
@@ -6496,8 +8492,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateOrganization(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_CreateOrganization_Call) Run(run func(ctx context.Context, input openlaneclient.CreateOrganizationInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateOrganization_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateOrganizationInput), args[2].(*graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateOrganizationInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateOrganizationInput)
+		}
+		var arg2 *graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].(*graphql.Upload)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -6552,10 +8570,10 @@ type MockOpenlaneGraphClient_CreateOrganizationWithMembers_Call struct {
 }
 
 // CreateOrganizationWithMembers is a helper method to define mock.On call
-//   - ctx
-//   - organizationInput
-//   - members
-//   - interceptors
+//   - ctx context.Context
+//   - organizationInput openlaneclient.CreateOrganizationInput
+//   - members []*openlaneclient.OrgMembersInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateOrganizationWithMembers(ctx interface{}, organizationInput interface{}, members interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateOrganizationWithMembers_Call {
 	return &MockOpenlaneGraphClient_CreateOrganizationWithMembers_Call{Call: _e.mock.On("CreateOrganizationWithMembers",
 		append([]interface{}{ctx, organizationInput, members}, interceptors...)...)}
@@ -6563,8 +8581,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateOrganizationWithMembers(ctx in
 
 func (_c *MockOpenlaneGraphClient_CreateOrganizationWithMembers_Call) Run(run func(ctx context.Context, organizationInput openlaneclient.CreateOrganizationInput, members []*openlaneclient.OrgMembersInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateOrganizationWithMembers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateOrganizationInput), args[2].([]*openlaneclient.OrgMembersInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateOrganizationInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateOrganizationInput)
+		}
+		var arg2 []*openlaneclient.OrgMembersInput
+		if args[2] != nil {
+			arg2 = args[2].([]*openlaneclient.OrgMembersInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -6619,9 +8659,9 @@ type MockOpenlaneGraphClient_CreatePersonalAccessToken_Call struct {
 }
 
 // CreatePersonalAccessToken is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreatePersonalAccessTokenInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreatePersonalAccessToken(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreatePersonalAccessToken_Call {
 	return &MockOpenlaneGraphClient_CreatePersonalAccessToken_Call{Call: _e.mock.On("CreatePersonalAccessToken",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6629,8 +8669,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreatePersonalAccessToken(ctx interf
 
 func (_c *MockOpenlaneGraphClient_CreatePersonalAccessToken_Call) Run(run func(ctx context.Context, input openlaneclient.CreatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreatePersonalAccessToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreatePersonalAccessTokenInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreatePersonalAccessTokenInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreatePersonalAccessTokenInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6685,9 +8742,9 @@ type MockOpenlaneGraphClient_CreateProcedure_Call struct {
 }
 
 // CreateProcedure is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateProcedureInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateProcedure(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateProcedure_Call {
 	return &MockOpenlaneGraphClient_CreateProcedure_Call{Call: _e.mock.On("CreateProcedure",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6695,8 +8752,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateProcedure(ctx interface{}, inp
 
 func (_c *MockOpenlaneGraphClient_CreateProcedure_Call) Run(run func(ctx context.Context, input openlaneclient.CreateProcedureInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateProcedure_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateProcedureInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateProcedureInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateProcedureInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6751,9 +8825,9 @@ type MockOpenlaneGraphClient_CreateProgram_Call struct {
 }
 
 // CreateProgram is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateProgramInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateProgram(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateProgram_Call {
 	return &MockOpenlaneGraphClient_CreateProgram_Call{Call: _e.mock.On("CreateProgram",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6761,8 +8835,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateProgram(ctx interface{}, input
 
 func (_c *MockOpenlaneGraphClient_CreateProgram_Call) Run(run func(ctx context.Context, input openlaneclient.CreateProgramInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateProgram_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateProgramInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateProgramInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateProgramInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6817,9 +8908,9 @@ type MockOpenlaneGraphClient_CreateProgramMembership_Call struct {
 }
 
 // CreateProgramMembership is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateProgramMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateProgramMembership(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateProgramMembership_Call {
 	return &MockOpenlaneGraphClient_CreateProgramMembership_Call{Call: _e.mock.On("CreateProgramMembership",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6827,8 +8918,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateProgramMembership(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_CreateProgramMembership_Call) Run(run func(ctx context.Context, input openlaneclient.CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateProgramMembership_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateProgramMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateProgramMembershipInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateProgramMembershipInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6883,9 +8991,9 @@ type MockOpenlaneGraphClient_CreateProgramWithMembers_Call struct {
 }
 
 // CreateProgramWithMembers is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateProgramWithMembersInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateProgramWithMembers(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateProgramWithMembers_Call {
 	return &MockOpenlaneGraphClient_CreateProgramWithMembers_Call{Call: _e.mock.On("CreateProgramWithMembers",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6893,8 +9001,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateProgramWithMembers(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_CreateProgramWithMembers_Call) Run(run func(ctx context.Context, input openlaneclient.CreateProgramWithMembersInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateProgramWithMembers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateProgramWithMembersInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateProgramWithMembersInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateProgramWithMembersInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -6949,9 +9074,9 @@ type MockOpenlaneGraphClient_CreateRisk_Call struct {
 }
 
 // CreateRisk is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateRiskInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateRisk(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateRisk_Call {
 	return &MockOpenlaneGraphClient_CreateRisk_Call{Call: _e.mock.On("CreateRisk",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -6959,8 +9084,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateRisk(ctx interface{}, input in
 
 func (_c *MockOpenlaneGraphClient_CreateRisk_Call) Run(run func(ctx context.Context, input openlaneclient.CreateRiskInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateRisk_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateRiskInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateRiskInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateRiskInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7015,9 +9157,9 @@ type MockOpenlaneGraphClient_CreateScheduledJob_Call struct {
 }
 
 // CreateScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateScheduledJobInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateScheduledJob(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateScheduledJob_Call {
 	return &MockOpenlaneGraphClient_CreateScheduledJob_Call{Call: _e.mock.On("CreateScheduledJob",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -7025,8 +9167,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateScheduledJob(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_CreateScheduledJob_Call) Run(run func(ctx context.Context, input openlaneclient.CreateScheduledJobInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateScheduledJobInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateScheduledJobInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateScheduledJobInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7081,9 +9240,9 @@ type MockOpenlaneGraphClient_CreateStandard_Call struct {
 }
 
 // CreateStandard is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateStandardInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateStandard(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateStandard_Call {
 	return &MockOpenlaneGraphClient_CreateStandard_Call{Call: _e.mock.On("CreateStandard",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -7091,8 +9250,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateStandard(ctx interface{}, inpu
 
 func (_c *MockOpenlaneGraphClient_CreateStandard_Call) Run(run func(ctx context.Context, input openlaneclient.CreateStandardInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateStandard_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateStandardInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateStandardInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateStandardInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7147,9 +9323,9 @@ type MockOpenlaneGraphClient_CreateSubcontrol_Call struct {
 }
 
 // CreateSubcontrol is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateSubcontrolInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateSubcontrol(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateSubcontrol_Call {
 	return &MockOpenlaneGraphClient_CreateSubcontrol_Call{Call: _e.mock.On("CreateSubcontrol",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -7157,8 +9333,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateSubcontrol(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_CreateSubcontrol_Call) Run(run func(ctx context.Context, input openlaneclient.CreateSubcontrolInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateSubcontrol_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateSubcontrolInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateSubcontrolInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateSubcontrolInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7213,9 +9406,9 @@ type MockOpenlaneGraphClient_CreateSubscriber_Call struct {
 }
 
 // CreateSubscriber is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateSubscriberInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateSubscriber(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateSubscriber_Call {
 	return &MockOpenlaneGraphClient_CreateSubscriber_Call{Call: _e.mock.On("CreateSubscriber",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -7223,8 +9416,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateSubscriber(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_CreateSubscriber_Call) Run(run func(ctx context.Context, input openlaneclient.CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateSubscriber_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateSubscriberInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateSubscriberInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateSubscriberInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7279,9 +9489,9 @@ type MockOpenlaneGraphClient_CreateTFASetting_Call struct {
 }
 
 // CreateTFASetting is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateTFASettingInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateTFASetting(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTFASetting_Call {
 	return &MockOpenlaneGraphClient_CreateTFASetting_Call{Call: _e.mock.On("CreateTFASetting",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -7289,8 +9499,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateTFASetting(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_CreateTFASetting_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTFASettingInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTFASetting_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateTFASettingInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTFASettingInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTFASettingInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7345,9 +9572,9 @@ type MockOpenlaneGraphClient_CreateTask_Call struct {
 }
 
 // CreateTask is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateTaskInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateTask(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTask_Call {
 	return &MockOpenlaneGraphClient_CreateTask_Call{Call: _e.mock.On("CreateTask",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -7355,8 +9582,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateTask(ctx interface{}, input in
 
 func (_c *MockOpenlaneGraphClient_CreateTask_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTaskInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTask_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateTaskInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTaskInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTaskInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7411,9 +9655,9 @@ type MockOpenlaneGraphClient_CreateTemplate_Call struct {
 }
 
 // CreateTemplate is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateTemplateInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateTemplate(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTemplate_Call {
 	return &MockOpenlaneGraphClient_CreateTemplate_Call{Call: _e.mock.On("CreateTemplate",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -7421,8 +9665,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateTemplate(ctx interface{}, inpu
 
 func (_c *MockOpenlaneGraphClient_CreateTemplate_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTemplateInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTemplate_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateTemplateInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTemplateInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTemplateInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7433,6 +9694,172 @@ func (_c *MockOpenlaneGraphClient_CreateTemplate_Call) Return(createTemplate *op
 }
 
 func (_c *MockOpenlaneGraphClient_CreateTemplate_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTemplate, error)) *MockOpenlaneGraphClient_CreateTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateTrustCenter provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateTrustCenter(ctx context.Context, input openlaneclient.CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenter, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateTrustCenter")
+	}
+
+	var r0 *openlaneclient.CreateTrustCenter
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenter, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateTrustCenter); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateTrustCenter)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateTrustCenterInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateTrustCenter_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateTrustCenter'
+type MockOpenlaneGraphClient_CreateTrustCenter_Call struct {
+	*mock.Call
+}
+
+// CreateTrustCenter is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateTrustCenterInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateTrustCenter(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTrustCenter_Call {
+	return &MockOpenlaneGraphClient_CreateTrustCenter_Call{Call: _e.mock.On("CreateTrustCenter",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenter_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTrustCenter_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTrustCenterInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTrustCenterInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenter_Call) Return(createTrustCenter *openlaneclient.CreateTrustCenter, err error) *MockOpenlaneGraphClient_CreateTrustCenter_Call {
+	_c.Call.Return(createTrustCenter, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenter_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenter, error)) *MockOpenlaneGraphClient_CreateTrustCenter_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateTrustCenterSetting provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateTrustCenterSetting(ctx context.Context, input openlaneclient.CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterSetting, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateTrustCenterSetting")
+	}
+
+	var r0 *openlaneclient.CreateTrustCenterSetting
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterSettingInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterSetting, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterSettingInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateTrustCenterSetting); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateTrustCenterSetting)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateTrustCenterSettingInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateTrustCenterSetting_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateTrustCenterSetting'
+type MockOpenlaneGraphClient_CreateTrustCenterSetting_Call struct {
+	*mock.Call
+}
+
+// CreateTrustCenterSetting is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateTrustCenterSettingInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateTrustCenterSetting(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call {
+	return &MockOpenlaneGraphClient_CreateTrustCenterSetting_Call{Call: _e.mock.On("CreateTrustCenterSetting",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTrustCenterSettingInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTrustCenterSettingInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call) Return(createTrustCenterSetting *openlaneclient.CreateTrustCenterSetting, err error) *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call {
+	_c.Call.Return(createTrustCenterSetting, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterSetting, error)) *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -7477,10 +9904,10 @@ type MockOpenlaneGraphClient_CreateUser_Call struct {
 }
 
 // CreateUser is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - avatarFile
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.CreateUserInput
+//   - avatarFile *graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) CreateUser(ctx interface{}, input interface{}, avatarFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateUser_Call {
 	return &MockOpenlaneGraphClient_CreateUser_Call{Call: _e.mock.On("CreateUser",
 		append([]interface{}{ctx, input, avatarFile}, interceptors...)...)}
@@ -7488,8 +9915,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) CreateUser(ctx interface{}, input in
 
 func (_c *MockOpenlaneGraphClient_CreateUser_Call) Run(run func(ctx context.Context, input openlaneclient.CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.CreateUserInput), args[2].(*graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateUserInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateUserInput)
+		}
+		var arg2 *graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].(*graphql.Upload)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -7544,9 +9993,9 @@ type MockOpenlaneGraphClient_DeleteAPIToken_Call struct {
 }
 
 // DeleteAPIToken is a helper method to define mock.On call
-//   - ctx
-//   - deleteAPITokenID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteAPITokenID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteAPIToken(ctx interface{}, deleteAPITokenID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteAPIToken_Call {
 	return &MockOpenlaneGraphClient_DeleteAPIToken_Call{Call: _e.mock.On("DeleteAPIToken",
 		append([]interface{}{ctx, deleteAPITokenID}, interceptors...)...)}
@@ -7554,8 +10003,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteAPIToken(ctx interface{}, dele
 
 func (_c *MockOpenlaneGraphClient_DeleteAPIToken_Call) Run(run func(ctx context.Context, deleteAPITokenID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteAPIToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7610,9 +10076,9 @@ type MockOpenlaneGraphClient_DeleteActionPlan_Call struct {
 }
 
 // DeleteActionPlan is a helper method to define mock.On call
-//   - ctx
-//   - deleteActionPlanID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteActionPlanID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteActionPlan(ctx interface{}, deleteActionPlanID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteActionPlan_Call {
 	return &MockOpenlaneGraphClient_DeleteActionPlan_Call{Call: _e.mock.On("DeleteActionPlan",
 		append([]interface{}{ctx, deleteActionPlanID}, interceptors...)...)}
@@ -7620,8 +10086,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteActionPlan(ctx interface{}, de
 
 func (_c *MockOpenlaneGraphClient_DeleteActionPlan_Call) Run(run func(ctx context.Context, deleteActionPlanID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteActionPlan_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7676,9 +10159,9 @@ type MockOpenlaneGraphClient_DeleteContact_Call struct {
 }
 
 // DeleteContact is a helper method to define mock.On call
-//   - ctx
-//   - deleteContactID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteContactID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteContact(ctx interface{}, deleteContactID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteContact_Call {
 	return &MockOpenlaneGraphClient_DeleteContact_Call{Call: _e.mock.On("DeleteContact",
 		append([]interface{}{ctx, deleteContactID}, interceptors...)...)}
@@ -7686,8 +10169,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteContact(ctx interface{}, delet
 
 func (_c *MockOpenlaneGraphClient_DeleteContact_Call) Run(run func(ctx context.Context, deleteContactID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteContact_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7742,9 +10242,9 @@ type MockOpenlaneGraphClient_DeleteControl_Call struct {
 }
 
 // DeleteControl is a helper method to define mock.On call
-//   - ctx
-//   - deleteControlID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteControlID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteControl(ctx interface{}, deleteControlID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteControl_Call {
 	return &MockOpenlaneGraphClient_DeleteControl_Call{Call: _e.mock.On("DeleteControl",
 		append([]interface{}{ctx, deleteControlID}, interceptors...)...)}
@@ -7752,8 +10252,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteControl(ctx interface{}, delet
 
 func (_c *MockOpenlaneGraphClient_DeleteControl_Call) Run(run func(ctx context.Context, deleteControlID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7808,9 +10325,9 @@ type MockOpenlaneGraphClient_DeleteControlImplementation_Call struct {
 }
 
 // DeleteControlImplementation is a helper method to define mock.On call
-//   - ctx
-//   - deleteControlImplementationID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteControlImplementationID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteControlImplementation(ctx interface{}, deleteControlImplementationID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteControlImplementation_Call {
 	return &MockOpenlaneGraphClient_DeleteControlImplementation_Call{Call: _e.mock.On("DeleteControlImplementation",
 		append([]interface{}{ctx, deleteControlImplementationID}, interceptors...)...)}
@@ -7818,8 +10335,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteControlImplementation(ctx inte
 
 func (_c *MockOpenlaneGraphClient_DeleteControlImplementation_Call) Run(run func(ctx context.Context, deleteControlImplementationID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteControlImplementation_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7874,9 +10408,9 @@ type MockOpenlaneGraphClient_DeleteControlObjective_Call struct {
 }
 
 // DeleteControlObjective is a helper method to define mock.On call
-//   - ctx
-//   - deleteControlObjectiveID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteControlObjectiveID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteControlObjective(ctx interface{}, deleteControlObjectiveID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteControlObjective_Call {
 	return &MockOpenlaneGraphClient_DeleteControlObjective_Call{Call: _e.mock.On("DeleteControlObjective",
 		append([]interface{}{ctx, deleteControlObjectiveID}, interceptors...)...)}
@@ -7884,8 +10418,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteControlObjective(ctx interface
 
 func (_c *MockOpenlaneGraphClient_DeleteControlObjective_Call) Run(run func(ctx context.Context, deleteControlObjectiveID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteControlObjective_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -7940,9 +10491,9 @@ type MockOpenlaneGraphClient_DeleteControlScheduledJob_Call struct {
 }
 
 // DeleteControlScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - deleteControlScheduledJobID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteControlScheduledJobID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteControlScheduledJob(ctx interface{}, deleteControlScheduledJobID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteControlScheduledJob_Call {
 	return &MockOpenlaneGraphClient_DeleteControlScheduledJob_Call{Call: _e.mock.On("DeleteControlScheduledJob",
 		append([]interface{}{ctx, deleteControlScheduledJobID}, interceptors...)...)}
@@ -7950,8 +10501,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteControlScheduledJob(ctx interf
 
 func (_c *MockOpenlaneGraphClient_DeleteControlScheduledJob_Call) Run(run func(ctx context.Context, deleteControlScheduledJobID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteControlScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8006,9 +10574,9 @@ type MockOpenlaneGraphClient_DeleteCustomDomain_Call struct {
 }
 
 // DeleteCustomDomain is a helper method to define mock.On call
-//   - ctx
-//   - deleteCustomDomainID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteCustomDomainID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteCustomDomain(ctx interface{}, deleteCustomDomainID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteCustomDomain_Call {
 	return &MockOpenlaneGraphClient_DeleteCustomDomain_Call{Call: _e.mock.On("DeleteCustomDomain",
 		append([]interface{}{ctx, deleteCustomDomainID}, interceptors...)...)}
@@ -8016,8 +10584,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteCustomDomain(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_DeleteCustomDomain_Call) Run(run func(ctx context.Context, deleteCustomDomainID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteCustomDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8072,9 +10657,9 @@ type MockOpenlaneGraphClient_DeleteDNSVerification_Call struct {
 }
 
 // DeleteDNSVerification is a helper method to define mock.On call
-//   - ctx
-//   - deleteDNSVerificationID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteDNSVerificationID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteDNSVerification(ctx interface{}, deleteDNSVerificationID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteDNSVerification_Call {
 	return &MockOpenlaneGraphClient_DeleteDNSVerification_Call{Call: _e.mock.On("DeleteDNSVerification",
 		append([]interface{}{ctx, deleteDNSVerificationID}, interceptors...)...)}
@@ -8082,8 +10667,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteDNSVerification(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_DeleteDNSVerification_Call) Run(run func(ctx context.Context, deleteDNSVerificationID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteDNSVerification_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8138,9 +10740,9 @@ type MockOpenlaneGraphClient_DeleteDocumentData_Call struct {
 }
 
 // DeleteDocumentData is a helper method to define mock.On call
-//   - ctx
-//   - deleteDocumentDataID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteDocumentDataID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteDocumentData(ctx interface{}, deleteDocumentDataID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteDocumentData_Call {
 	return &MockOpenlaneGraphClient_DeleteDocumentData_Call{Call: _e.mock.On("DeleteDocumentData",
 		append([]interface{}{ctx, deleteDocumentDataID}, interceptors...)...)}
@@ -8148,8 +10750,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteDocumentData(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_DeleteDocumentData_Call) Run(run func(ctx context.Context, deleteDocumentDataID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteDocumentData_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8204,9 +10823,9 @@ type MockOpenlaneGraphClient_DeleteEntity_Call struct {
 }
 
 // DeleteEntity is a helper method to define mock.On call
-//   - ctx
-//   - deleteEntityID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteEntityID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteEntity(ctx interface{}, deleteEntityID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteEntity_Call {
 	return &MockOpenlaneGraphClient_DeleteEntity_Call{Call: _e.mock.On("DeleteEntity",
 		append([]interface{}{ctx, deleteEntityID}, interceptors...)...)}
@@ -8214,8 +10833,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteEntity(ctx interface{}, delete
 
 func (_c *MockOpenlaneGraphClient_DeleteEntity_Call) Run(run func(ctx context.Context, deleteEntityID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteEntity_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8270,9 +10906,9 @@ type MockOpenlaneGraphClient_DeleteEntityType_Call struct {
 }
 
 // DeleteEntityType is a helper method to define mock.On call
-//   - ctx
-//   - deleteEntityTypeID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteEntityTypeID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteEntityType(ctx interface{}, deleteEntityTypeID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteEntityType_Call {
 	return &MockOpenlaneGraphClient_DeleteEntityType_Call{Call: _e.mock.On("DeleteEntityType",
 		append([]interface{}{ctx, deleteEntityTypeID}, interceptors...)...)}
@@ -8280,8 +10916,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteEntityType(ctx interface{}, de
 
 func (_c *MockOpenlaneGraphClient_DeleteEntityType_Call) Run(run func(ctx context.Context, deleteEntityTypeID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteEntityType_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8336,9 +10989,9 @@ type MockOpenlaneGraphClient_DeleteEvent_Call struct {
 }
 
 // DeleteEvent is a helper method to define mock.On call
-//   - ctx
-//   - deleteEventID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteEventID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteEvent(ctx interface{}, deleteEventID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteEvent_Call {
 	return &MockOpenlaneGraphClient_DeleteEvent_Call{Call: _e.mock.On("DeleteEvent",
 		append([]interface{}{ctx, deleteEventID}, interceptors...)...)}
@@ -8346,8 +10999,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteEvent(ctx interface{}, deleteE
 
 func (_c *MockOpenlaneGraphClient_DeleteEvent_Call) Run(run func(ctx context.Context, deleteEventID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteEvent_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8402,9 +11072,9 @@ type MockOpenlaneGraphClient_DeleteEvidence_Call struct {
 }
 
 // DeleteEvidence is a helper method to define mock.On call
-//   - ctx
-//   - deleteEvidenceID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteEvidenceID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteEvidence(ctx interface{}, deleteEvidenceID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteEvidence_Call {
 	return &MockOpenlaneGraphClient_DeleteEvidence_Call{Call: _e.mock.On("DeleteEvidence",
 		append([]interface{}{ctx, deleteEvidenceID}, interceptors...)...)}
@@ -8412,8 +11082,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteEvidence(ctx interface{}, dele
 
 func (_c *MockOpenlaneGraphClient_DeleteEvidence_Call) Run(run func(ctx context.Context, deleteEvidenceID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteEvidence_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8468,9 +11155,9 @@ type MockOpenlaneGraphClient_DeleteFile_Call struct {
 }
 
 // DeleteFile is a helper method to define mock.On call
-//   - ctx
-//   - deleteFileID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteFileID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteFile(ctx interface{}, deleteFileID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteFile_Call {
 	return &MockOpenlaneGraphClient_DeleteFile_Call{Call: _e.mock.On("DeleteFile",
 		append([]interface{}{ctx, deleteFileID}, interceptors...)...)}
@@ -8478,8 +11165,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteFile(ctx interface{}, deleteFi
 
 func (_c *MockOpenlaneGraphClient_DeleteFile_Call) Run(run func(ctx context.Context, deleteFileID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteFile_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8534,9 +11238,9 @@ type MockOpenlaneGraphClient_DeleteGroup_Call struct {
 }
 
 // DeleteGroup is a helper method to define mock.On call
-//   - ctx
-//   - deleteGroupID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteGroupID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteGroup(ctx interface{}, deleteGroupID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteGroup_Call {
 	return &MockOpenlaneGraphClient_DeleteGroup_Call{Call: _e.mock.On("DeleteGroup",
 		append([]interface{}{ctx, deleteGroupID}, interceptors...)...)}
@@ -8544,8 +11248,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteGroup(ctx interface{}, deleteG
 
 func (_c *MockOpenlaneGraphClient_DeleteGroup_Call) Run(run func(ctx context.Context, deleteGroupID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteGroup_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8600,9 +11321,9 @@ type MockOpenlaneGraphClient_DeleteIntegration_Call struct {
 }
 
 // DeleteIntegration is a helper method to define mock.On call
-//   - ctx
-//   - deleteIntegrationID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteIntegrationID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteIntegration(ctx interface{}, deleteIntegrationID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteIntegration_Call {
 	return &MockOpenlaneGraphClient_DeleteIntegration_Call{Call: _e.mock.On("DeleteIntegration",
 		append([]interface{}{ctx, deleteIntegrationID}, interceptors...)...)}
@@ -8610,8 +11331,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteIntegration(ctx interface{}, d
 
 func (_c *MockOpenlaneGraphClient_DeleteIntegration_Call) Run(run func(ctx context.Context, deleteIntegrationID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteIntegration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8666,9 +11404,9 @@ type MockOpenlaneGraphClient_DeleteInternalPolicy_Call struct {
 }
 
 // DeleteInternalPolicy is a helper method to define mock.On call
-//   - ctx
-//   - deleteInternalPolicyID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteInternalPolicyID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteInternalPolicy(ctx interface{}, deleteInternalPolicyID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteInternalPolicy_Call {
 	return &MockOpenlaneGraphClient_DeleteInternalPolicy_Call{Call: _e.mock.On("DeleteInternalPolicy",
 		append([]interface{}{ctx, deleteInternalPolicyID}, interceptors...)...)}
@@ -8676,8 +11414,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteInternalPolicy(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_DeleteInternalPolicy_Call) Run(run func(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteInternalPolicy_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8732,9 +11487,9 @@ type MockOpenlaneGraphClient_DeleteInvite_Call struct {
 }
 
 // DeleteInvite is a helper method to define mock.On call
-//   - ctx
-//   - deleteInviteID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteInviteID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteInvite(ctx interface{}, deleteInviteID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteInvite_Call {
 	return &MockOpenlaneGraphClient_DeleteInvite_Call{Call: _e.mock.On("DeleteInvite",
 		append([]interface{}{ctx, deleteInviteID}, interceptors...)...)}
@@ -8742,8 +11497,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteInvite(ctx interface{}, delete
 
 func (_c *MockOpenlaneGraphClient_DeleteInvite_Call) Run(run func(ctx context.Context, deleteInviteID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteInvite_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8798,9 +11570,9 @@ type MockOpenlaneGraphClient_DeleteJobRunner_Call struct {
 }
 
 // DeleteJobRunner is a helper method to define mock.On call
-//   - ctx
-//   - deleteJobRunnerID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteJobRunnerID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteJobRunner(ctx interface{}, deleteJobRunnerID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteJobRunner_Call {
 	return &MockOpenlaneGraphClient_DeleteJobRunner_Call{Call: _e.mock.On("DeleteJobRunner",
 		append([]interface{}{ctx, deleteJobRunnerID}, interceptors...)...)}
@@ -8808,8 +11580,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteJobRunner(ctx interface{}, del
 
 func (_c *MockOpenlaneGraphClient_DeleteJobRunner_Call) Run(run func(ctx context.Context, deleteJobRunnerID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteJobRunner_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8864,9 +11653,9 @@ type MockOpenlaneGraphClient_DeleteJobRunnerRegistrationToken_Call struct {
 }
 
 // DeleteJobRunnerRegistrationToken is a helper method to define mock.On call
-//   - ctx
-//   - deleteJobRunnerRegistrationTokenID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteJobRunnerRegistrationTokenID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteJobRunnerRegistrationToken(ctx interface{}, deleteJobRunnerRegistrationTokenID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteJobRunnerRegistrationToken_Call {
 	return &MockOpenlaneGraphClient_DeleteJobRunnerRegistrationToken_Call{Call: _e.mock.On("DeleteJobRunnerRegistrationToken",
 		append([]interface{}{ctx, deleteJobRunnerRegistrationTokenID}, interceptors...)...)}
@@ -8874,8 +11663,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteJobRunnerRegistrationToken(ctx
 
 func (_c *MockOpenlaneGraphClient_DeleteJobRunnerRegistrationToken_Call) Run(run func(ctx context.Context, deleteJobRunnerRegistrationTokenID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteJobRunnerRegistrationToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8930,9 +11736,9 @@ type MockOpenlaneGraphClient_DeleteJobRunnerToken_Call struct {
 }
 
 // DeleteJobRunnerToken is a helper method to define mock.On call
-//   - ctx
-//   - deleteJobRunnerTokenID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteJobRunnerTokenID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteJobRunnerToken(ctx interface{}, deleteJobRunnerTokenID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteJobRunnerToken_Call {
 	return &MockOpenlaneGraphClient_DeleteJobRunnerToken_Call{Call: _e.mock.On("DeleteJobRunnerToken",
 		append([]interface{}{ctx, deleteJobRunnerTokenID}, interceptors...)...)}
@@ -8940,8 +11746,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteJobRunnerToken(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_DeleteJobRunnerToken_Call) Run(run func(ctx context.Context, deleteJobRunnerTokenID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteJobRunnerToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -8996,9 +11819,9 @@ type MockOpenlaneGraphClient_DeleteMappableDomain_Call struct {
 }
 
 // DeleteMappableDomain is a helper method to define mock.On call
-//   - ctx
-//   - deleteMappableDomainID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteMappableDomainID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteMappableDomain(ctx interface{}, deleteMappableDomainID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteMappableDomain_Call {
 	return &MockOpenlaneGraphClient_DeleteMappableDomain_Call{Call: _e.mock.On("DeleteMappableDomain",
 		append([]interface{}{ctx, deleteMappableDomainID}, interceptors...)...)}
@@ -9006,8 +11829,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteMappableDomain(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_DeleteMappableDomain_Call) Run(run func(ctx context.Context, deleteMappableDomainID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteMappableDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9062,9 +11902,9 @@ type MockOpenlaneGraphClient_DeleteMappedControl_Call struct {
 }
 
 // DeleteMappedControl is a helper method to define mock.On call
-//   - ctx
-//   - deleteMappedControlID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteMappedControlID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteMappedControl(ctx interface{}, deleteMappedControlID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteMappedControl_Call {
 	return &MockOpenlaneGraphClient_DeleteMappedControl_Call{Call: _e.mock.On("DeleteMappedControl",
 		append([]interface{}{ctx, deleteMappedControlID}, interceptors...)...)}
@@ -9072,8 +11912,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteMappedControl(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_DeleteMappedControl_Call) Run(run func(ctx context.Context, deleteMappedControlID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteMappedControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9128,9 +11985,9 @@ type MockOpenlaneGraphClient_DeleteNarrative_Call struct {
 }
 
 // DeleteNarrative is a helper method to define mock.On call
-//   - ctx
-//   - deleteNarrativeID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteNarrativeID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteNarrative(ctx interface{}, deleteNarrativeID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteNarrative_Call {
 	return &MockOpenlaneGraphClient_DeleteNarrative_Call{Call: _e.mock.On("DeleteNarrative",
 		append([]interface{}{ctx, deleteNarrativeID}, interceptors...)...)}
@@ -9138,8 +11995,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteNarrative(ctx interface{}, del
 
 func (_c *MockOpenlaneGraphClient_DeleteNarrative_Call) Run(run func(ctx context.Context, deleteNarrativeID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteNarrative_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9194,9 +12068,9 @@ type MockOpenlaneGraphClient_DeleteOrganization_Call struct {
 }
 
 // DeleteOrganization is a helper method to define mock.On call
-//   - ctx
-//   - deleteOrganizationID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteOrganizationID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteOrganization(ctx interface{}, deleteOrganizationID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteOrganization_Call {
 	return &MockOpenlaneGraphClient_DeleteOrganization_Call{Call: _e.mock.On("DeleteOrganization",
 		append([]interface{}{ctx, deleteOrganizationID}, interceptors...)...)}
@@ -9204,8 +12078,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteOrganization(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_DeleteOrganization_Call) Run(run func(ctx context.Context, deleteOrganizationID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteOrganization_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9260,9 +12151,9 @@ type MockOpenlaneGraphClient_DeletePersonalAccessToken_Call struct {
 }
 
 // DeletePersonalAccessToken is a helper method to define mock.On call
-//   - ctx
-//   - deletePersonalAccessTokenID
-//   - interceptors
+//   - ctx context.Context
+//   - deletePersonalAccessTokenID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeletePersonalAccessToken(ctx interface{}, deletePersonalAccessTokenID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeletePersonalAccessToken_Call {
 	return &MockOpenlaneGraphClient_DeletePersonalAccessToken_Call{Call: _e.mock.On("DeletePersonalAccessToken",
 		append([]interface{}{ctx, deletePersonalAccessTokenID}, interceptors...)...)}
@@ -9270,8 +12161,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeletePersonalAccessToken(ctx interf
 
 func (_c *MockOpenlaneGraphClient_DeletePersonalAccessToken_Call) Run(run func(ctx context.Context, deletePersonalAccessTokenID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeletePersonalAccessToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9326,9 +12234,9 @@ type MockOpenlaneGraphClient_DeleteProcedure_Call struct {
 }
 
 // DeleteProcedure is a helper method to define mock.On call
-//   - ctx
-//   - deleteProcedureID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteProcedureID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteProcedure(ctx interface{}, deleteProcedureID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteProcedure_Call {
 	return &MockOpenlaneGraphClient_DeleteProcedure_Call{Call: _e.mock.On("DeleteProcedure",
 		append([]interface{}{ctx, deleteProcedureID}, interceptors...)...)}
@@ -9336,8 +12244,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteProcedure(ctx interface{}, del
 
 func (_c *MockOpenlaneGraphClient_DeleteProcedure_Call) Run(run func(ctx context.Context, deleteProcedureID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteProcedure_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9392,9 +12317,9 @@ type MockOpenlaneGraphClient_DeleteProgram_Call struct {
 }
 
 // DeleteProgram is a helper method to define mock.On call
-//   - ctx
-//   - deleteProgramID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteProgramID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteProgram(ctx interface{}, deleteProgramID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteProgram_Call {
 	return &MockOpenlaneGraphClient_DeleteProgram_Call{Call: _e.mock.On("DeleteProgram",
 		append([]interface{}{ctx, deleteProgramID}, interceptors...)...)}
@@ -9402,8 +12327,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteProgram(ctx interface{}, delet
 
 func (_c *MockOpenlaneGraphClient_DeleteProgram_Call) Run(run func(ctx context.Context, deleteProgramID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteProgram_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9458,9 +12400,9 @@ type MockOpenlaneGraphClient_DeleteProgramMembership_Call struct {
 }
 
 // DeleteProgramMembership is a helper method to define mock.On call
-//   - ctx
-//   - deleteProgramMembershipID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteProgramMembershipID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteProgramMembership(ctx interface{}, deleteProgramMembershipID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteProgramMembership_Call {
 	return &MockOpenlaneGraphClient_DeleteProgramMembership_Call{Call: _e.mock.On("DeleteProgramMembership",
 		append([]interface{}{ctx, deleteProgramMembershipID}, interceptors...)...)}
@@ -9468,8 +12410,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteProgramMembership(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_DeleteProgramMembership_Call) Run(run func(ctx context.Context, deleteProgramMembershipID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteProgramMembership_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9524,9 +12483,9 @@ type MockOpenlaneGraphClient_DeleteRisk_Call struct {
 }
 
 // DeleteRisk is a helper method to define mock.On call
-//   - ctx
-//   - deleteRiskID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteRiskID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteRisk(ctx interface{}, deleteRiskID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteRisk_Call {
 	return &MockOpenlaneGraphClient_DeleteRisk_Call{Call: _e.mock.On("DeleteRisk",
 		append([]interface{}{ctx, deleteRiskID}, interceptors...)...)}
@@ -9534,8 +12493,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteRisk(ctx interface{}, deleteRi
 
 func (_c *MockOpenlaneGraphClient_DeleteRisk_Call) Run(run func(ctx context.Context, deleteRiskID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteRisk_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9590,9 +12566,9 @@ type MockOpenlaneGraphClient_DeleteScheduledJob_Call struct {
 }
 
 // DeleteScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - deleteScheduledJobID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteScheduledJobID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteScheduledJob(ctx interface{}, deleteScheduledJobID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteScheduledJob_Call {
 	return &MockOpenlaneGraphClient_DeleteScheduledJob_Call{Call: _e.mock.On("DeleteScheduledJob",
 		append([]interface{}{ctx, deleteScheduledJobID}, interceptors...)...)}
@@ -9600,8 +12576,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteScheduledJob(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_DeleteScheduledJob_Call) Run(run func(ctx context.Context, deleteScheduledJobID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9656,9 +12649,9 @@ type MockOpenlaneGraphClient_DeleteStandard_Call struct {
 }
 
 // DeleteStandard is a helper method to define mock.On call
-//   - ctx
-//   - deleteStandardID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteStandardID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteStandard(ctx interface{}, deleteStandardID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteStandard_Call {
 	return &MockOpenlaneGraphClient_DeleteStandard_Call{Call: _e.mock.On("DeleteStandard",
 		append([]interface{}{ctx, deleteStandardID}, interceptors...)...)}
@@ -9666,8 +12659,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteStandard(ctx interface{}, dele
 
 func (_c *MockOpenlaneGraphClient_DeleteStandard_Call) Run(run func(ctx context.Context, deleteStandardID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteStandard_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9722,9 +12732,9 @@ type MockOpenlaneGraphClient_DeleteSubcontrol_Call struct {
 }
 
 // DeleteSubcontrol is a helper method to define mock.On call
-//   - ctx
-//   - deleteSubcontrolID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteSubcontrolID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteSubcontrol(ctx interface{}, deleteSubcontrolID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteSubcontrol_Call {
 	return &MockOpenlaneGraphClient_DeleteSubcontrol_Call{Call: _e.mock.On("DeleteSubcontrol",
 		append([]interface{}{ctx, deleteSubcontrolID}, interceptors...)...)}
@@ -9732,8 +12742,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteSubcontrol(ctx interface{}, de
 
 func (_c *MockOpenlaneGraphClient_DeleteSubcontrol_Call) Run(run func(ctx context.Context, deleteSubcontrolID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteSubcontrol_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9788,10 +12815,10 @@ type MockOpenlaneGraphClient_DeleteSubscriber_Call struct {
 }
 
 // DeleteSubscriber is a helper method to define mock.On call
-//   - ctx
-//   - deleteSubscriberEmail
-//   - subscriberOrganization
-//   - interceptors
+//   - ctx context.Context
+//   - deleteSubscriberEmail string
+//   - subscriberOrganization *string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteSubscriber(ctx interface{}, deleteSubscriberEmail interface{}, subscriberOrganization interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteSubscriber_Call {
 	return &MockOpenlaneGraphClient_DeleteSubscriber_Call{Call: _e.mock.On("DeleteSubscriber",
 		append([]interface{}{ctx, deleteSubscriberEmail, subscriberOrganization}, interceptors...)...)}
@@ -9799,8 +12826,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteSubscriber(ctx interface{}, de
 
 func (_c *MockOpenlaneGraphClient_DeleteSubscriber_Call) Run(run func(ctx context.Context, deleteSubscriberEmail string, subscriberOrganization *string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteSubscriber_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(*string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 *string
+		if args[2] != nil {
+			arg2 = args[2].(*string)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -9855,9 +12904,9 @@ type MockOpenlaneGraphClient_DeleteTask_Call struct {
 }
 
 // DeleteTask is a helper method to define mock.On call
-//   - ctx
-//   - deleteTaskID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteTaskID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteTask(ctx interface{}, deleteTaskID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteTask_Call {
 	return &MockOpenlaneGraphClient_DeleteTask_Call{Call: _e.mock.On("DeleteTask",
 		append([]interface{}{ctx, deleteTaskID}, interceptors...)...)}
@@ -9865,8 +12914,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteTask(ctx interface{}, deleteTa
 
 func (_c *MockOpenlaneGraphClient_DeleteTask_Call) Run(run func(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteTask_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9877,6 +12943,172 @@ func (_c *MockOpenlaneGraphClient_DeleteTask_Call) Return(deleteTask *openlanecl
 }
 
 func (_c *MockOpenlaneGraphClient_DeleteTask_Call) RunAndReturn(run func(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTask, error)) *MockOpenlaneGraphClient_DeleteTask_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteTrustCenter provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteTrustCenter(ctx context.Context, deleteTrustCenterID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenter, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, deleteTrustCenterID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, deleteTrustCenterID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteTrustCenter")
+	}
+
+	var r0 *openlaneclient.DeleteTrustCenter
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenter, error)); ok {
+		return returnFunc(ctx, deleteTrustCenterID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteTrustCenter); ok {
+		r0 = returnFunc(ctx, deleteTrustCenterID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteTrustCenter)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, deleteTrustCenterID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteTrustCenter_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteTrustCenter'
+type MockOpenlaneGraphClient_DeleteTrustCenter_Call struct {
+	*mock.Call
+}
+
+// DeleteTrustCenter is a helper method to define mock.On call
+//   - ctx context.Context
+//   - deleteTrustCenterID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteTrustCenter(ctx interface{}, deleteTrustCenterID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteTrustCenter_Call {
+	return &MockOpenlaneGraphClient_DeleteTrustCenter_Call{Call: _e.mock.On("DeleteTrustCenter",
+		append([]interface{}{ctx, deleteTrustCenterID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenter_Call) Run(run func(ctx context.Context, deleteTrustCenterID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteTrustCenter_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenter_Call) Return(deleteTrustCenter *openlaneclient.DeleteTrustCenter, err error) *MockOpenlaneGraphClient_DeleteTrustCenter_Call {
+	_c.Call.Return(deleteTrustCenter, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenter_Call) RunAndReturn(run func(ctx context.Context, deleteTrustCenterID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenter, error)) *MockOpenlaneGraphClient_DeleteTrustCenter_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteTrustCenterSetting provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteTrustCenterSetting(ctx context.Context, deleteTrustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterSetting, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, deleteTrustCenterSettingID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, deleteTrustCenterSettingID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteTrustCenterSetting")
+	}
+
+	var r0 *openlaneclient.DeleteTrustCenterSetting
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterSetting, error)); ok {
+		return returnFunc(ctx, deleteTrustCenterSettingID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteTrustCenterSetting); ok {
+		r0 = returnFunc(ctx, deleteTrustCenterSettingID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteTrustCenterSetting)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, deleteTrustCenterSettingID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteTrustCenterSetting'
+type MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call struct {
+	*mock.Call
+}
+
+// DeleteTrustCenterSetting is a helper method to define mock.On call
+//   - ctx context.Context
+//   - deleteTrustCenterSettingID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteTrustCenterSetting(ctx interface{}, deleteTrustCenterSettingID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call {
+	return &MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call{Call: _e.mock.On("DeleteTrustCenterSetting",
+		append([]interface{}{ctx, deleteTrustCenterSettingID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call) Run(run func(ctx context.Context, deleteTrustCenterSettingID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call) Return(deleteTrustCenterSetting *openlaneclient.DeleteTrustCenterSetting, err error) *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call {
+	_c.Call.Return(deleteTrustCenterSetting, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call) RunAndReturn(run func(ctx context.Context, deleteTrustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterSetting, error)) *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -9921,9 +13153,9 @@ type MockOpenlaneGraphClient_DeleteUser_Call struct {
 }
 
 // DeleteUser is a helper method to define mock.On call
-//   - ctx
-//   - deleteUserID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteUserID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteUser(ctx interface{}, deleteUserID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteUser_Call {
 	return &MockOpenlaneGraphClient_DeleteUser_Call{Call: _e.mock.On("DeleteUser",
 		append([]interface{}{ctx, deleteUserID}, interceptors...)...)}
@@ -9931,8 +13163,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteUser(ctx interface{}, deleteUs
 
 func (_c *MockOpenlaneGraphClient_DeleteUser_Call) Run(run func(ctx context.Context, deleteUserID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -9987,9 +13236,9 @@ type MockOpenlaneGraphClient_DeleteWebauthn_Call struct {
 }
 
 // DeleteWebauthn is a helper method to define mock.On call
-//   - ctx
-//   - deleteWebauthnID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteWebauthnID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) DeleteWebauthn(ctx interface{}, deleteWebauthnID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteWebauthn_Call {
 	return &MockOpenlaneGraphClient_DeleteWebauthn_Call{Call: _e.mock.On("DeleteWebauthn",
 		append([]interface{}{ctx, deleteWebauthnID}, interceptors...)...)}
@@ -9997,8 +13246,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) DeleteWebauthn(ctx interface{}, dele
 
 func (_c *MockOpenlaneGraphClient_DeleteWebauthn_Call) Run(run func(ctx context.Context, deleteWebauthnID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteWebauthn_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -10053,9 +13319,9 @@ type MockOpenlaneGraphClient_GetAPITokenByID_Call struct {
 }
 
 // GetAPITokenByID is a helper method to define mock.On call
-//   - ctx
-//   - apiTokenID
-//   - interceptors
+//   - ctx context.Context
+//   - apiTokenID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAPITokenByID(ctx interface{}, apiTokenID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAPITokenByID_Call {
 	return &MockOpenlaneGraphClient_GetAPITokenByID_Call{Call: _e.mock.On("GetAPITokenByID",
 		append([]interface{}{ctx, apiTokenID}, interceptors...)...)}
@@ -10063,8 +13329,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAPITokenByID(ctx interface{}, api
 
 func (_c *MockOpenlaneGraphClient_GetAPITokenByID_Call) Run(run func(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAPITokenByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -10119,9 +13402,9 @@ type MockOpenlaneGraphClient_GetAPITokens_Call struct {
 }
 
 // GetAPITokens is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.APITokenWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAPITokens(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAPITokens_Call {
 	return &MockOpenlaneGraphClient_GetAPITokens_Call{Call: _e.mock.On("GetAPITokens",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -10129,8 +13412,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAPITokens(ctx interface{}, where 
 
 func (_c *MockOpenlaneGraphClient_GetAPITokens_Call) Run(run func(ctx context.Context, where *openlaneclient.APITokenWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAPITokens_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.APITokenWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.APITokenWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.APITokenWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -10185,9 +13485,9 @@ type MockOpenlaneGraphClient_GetActionPlanByID_Call struct {
 }
 
 // GetActionPlanByID is a helper method to define mock.On call
-//   - ctx
-//   - actionPlanID
-//   - interceptors
+//   - ctx context.Context
+//   - actionPlanID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetActionPlanByID(ctx interface{}, actionPlanID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetActionPlanByID_Call {
 	return &MockOpenlaneGraphClient_GetActionPlanByID_Call{Call: _e.mock.On("GetActionPlanByID",
 		append([]interface{}{ctx, actionPlanID}, interceptors...)...)}
@@ -10195,8 +13495,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetActionPlanByID(ctx interface{}, a
 
 func (_c *MockOpenlaneGraphClient_GetActionPlanByID_Call) Run(run func(ctx context.Context, actionPlanID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetActionPlanByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -10251,9 +13568,9 @@ type MockOpenlaneGraphClient_GetActionPlanHistories_Call struct {
 }
 
 // GetActionPlanHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ActionPlanHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetActionPlanHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetActionPlanHistories_Call {
 	return &MockOpenlaneGraphClient_GetActionPlanHistories_Call{Call: _e.mock.On("GetActionPlanHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -10261,8 +13578,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetActionPlanHistories(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetActionPlanHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.ActionPlanHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetActionPlanHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ActionPlanHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ActionPlanHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ActionPlanHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -10317,9 +13651,9 @@ type MockOpenlaneGraphClient_GetActionPlans_Call struct {
 }
 
 // GetActionPlans is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ActionPlanWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetActionPlans(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetActionPlans_Call {
 	return &MockOpenlaneGraphClient_GetActionPlans_Call{Call: _e.mock.On("GetActionPlans",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -10327,8 +13661,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetActionPlans(ctx interface{}, wher
 
 func (_c *MockOpenlaneGraphClient_GetActionPlans_Call) Run(run func(ctx context.Context, where *openlaneclient.ActionPlanWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetActionPlans_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ActionPlanWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ActionPlanWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ActionPlanWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -10383,8 +13734,8 @@ type MockOpenlaneGraphClient_GetAllAPITokens_Call struct {
 }
 
 // GetAllAPITokens is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllAPITokens(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllAPITokens_Call {
 	return &MockOpenlaneGraphClient_GetAllAPITokens_Call{Call: _e.mock.On("GetAllAPITokens",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10392,8 +13743,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllAPITokens(ctx interface{}, int
 
 func (_c *MockOpenlaneGraphClient_GetAllAPITokens_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllAPITokens_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -10448,8 +13811,8 @@ type MockOpenlaneGraphClient_GetAllActionPlanHistories_Call struct {
 }
 
 // GetAllActionPlanHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllActionPlanHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllActionPlanHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllActionPlanHistories_Call{Call: _e.mock.On("GetAllActionPlanHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10457,8 +13820,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllActionPlanHistories(ctx interf
 
 func (_c *MockOpenlaneGraphClient_GetAllActionPlanHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllActionPlanHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -10513,8 +13888,8 @@ type MockOpenlaneGraphClient_GetAllActionPlans_Call struct {
 }
 
 // GetAllActionPlans is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllActionPlans(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllActionPlans_Call {
 	return &MockOpenlaneGraphClient_GetAllActionPlans_Call{Call: _e.mock.On("GetAllActionPlans",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10522,8 +13897,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllActionPlans(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_GetAllActionPlans_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllActionPlans_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -10578,8 +13965,8 @@ type MockOpenlaneGraphClient_GetAllContactHistories_Call struct {
 }
 
 // GetAllContactHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllContactHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllContactHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllContactHistories_Call{Call: _e.mock.On("GetAllContactHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10587,8 +13974,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllContactHistories(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetAllContactHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllContactHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -10643,8 +14042,8 @@ type MockOpenlaneGraphClient_GetAllContacts_Call struct {
 }
 
 // GetAllContacts is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllContacts(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllContacts_Call {
 	return &MockOpenlaneGraphClient_GetAllContacts_Call{Call: _e.mock.On("GetAllContacts",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10652,8 +14051,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllContacts(ctx interface{}, inte
 
 func (_c *MockOpenlaneGraphClient_GetAllContacts_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllContacts_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -10708,8 +14119,8 @@ type MockOpenlaneGraphClient_GetAllControlHistories_Call struct {
 }
 
 // GetAllControlHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllControlHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllControlHistories_Call{Call: _e.mock.On("GetAllControlHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10717,8 +14128,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlHistories(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetAllControlHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllControlHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -10773,8 +14196,8 @@ type MockOpenlaneGraphClient_GetAllControlImplementationHistories_Call struct {
 }
 
 // GetAllControlImplementationHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlImplementationHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllControlImplementationHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllControlImplementationHistories_Call{Call: _e.mock.On("GetAllControlImplementationHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10782,8 +14205,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlImplementationHistories
 
 func (_c *MockOpenlaneGraphClient_GetAllControlImplementationHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllControlImplementationHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -10838,8 +14273,8 @@ type MockOpenlaneGraphClient_GetAllControlImplementations_Call struct {
 }
 
 // GetAllControlImplementations is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlImplementations(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllControlImplementations_Call {
 	return &MockOpenlaneGraphClient_GetAllControlImplementations_Call{Call: _e.mock.On("GetAllControlImplementations",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10847,8 +14282,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlImplementations(ctx int
 
 func (_c *MockOpenlaneGraphClient_GetAllControlImplementations_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllControlImplementations_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -10903,8 +14350,8 @@ type MockOpenlaneGraphClient_GetAllControlObjectiveHistories_Call struct {
 }
 
 // GetAllControlObjectiveHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlObjectiveHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllControlObjectiveHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllControlObjectiveHistories_Call{Call: _e.mock.On("GetAllControlObjectiveHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10912,8 +14359,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlObjectiveHistories(ctx 
 
 func (_c *MockOpenlaneGraphClient_GetAllControlObjectiveHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllControlObjectiveHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -10968,8 +14427,8 @@ type MockOpenlaneGraphClient_GetAllControlObjectives_Call struct {
 }
 
 // GetAllControlObjectives is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlObjectives(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllControlObjectives_Call {
 	return &MockOpenlaneGraphClient_GetAllControlObjectives_Call{Call: _e.mock.On("GetAllControlObjectives",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -10977,8 +14436,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlObjectives(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetAllControlObjectives_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllControlObjectives_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11033,8 +14504,8 @@ type MockOpenlaneGraphClient_GetAllControlScheduledJobHistories_Call struct {
 }
 
 // GetAllControlScheduledJobHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlScheduledJobHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllControlScheduledJobHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllControlScheduledJobHistories_Call{Call: _e.mock.On("GetAllControlScheduledJobHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11042,8 +14513,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlScheduledJobHistories(c
 
 func (_c *MockOpenlaneGraphClient_GetAllControlScheduledJobHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllControlScheduledJobHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11098,8 +14581,8 @@ type MockOpenlaneGraphClient_GetAllControlScheduledJobs_Call struct {
 }
 
 // GetAllControlScheduledJobs is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlScheduledJobs(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllControlScheduledJobs_Call {
 	return &MockOpenlaneGraphClient_GetAllControlScheduledJobs_Call{Call: _e.mock.On("GetAllControlScheduledJobs",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11107,8 +14590,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllControlScheduledJobs(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetAllControlScheduledJobs_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllControlScheduledJobs_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11163,8 +14658,8 @@ type MockOpenlaneGraphClient_GetAllControls_Call struct {
 }
 
 // GetAllControls is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllControls(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllControls_Call {
 	return &MockOpenlaneGraphClient_GetAllControls_Call{Call: _e.mock.On("GetAllControls",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11172,8 +14667,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllControls(ctx interface{}, inte
 
 func (_c *MockOpenlaneGraphClient_GetAllControls_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllControls_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11228,8 +14735,8 @@ type MockOpenlaneGraphClient_GetAllCustomDomainHistories_Call struct {
 }
 
 // GetAllCustomDomainHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllCustomDomainHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllCustomDomainHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllCustomDomainHistories_Call{Call: _e.mock.On("GetAllCustomDomainHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11237,8 +14744,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllCustomDomainHistories(ctx inte
 
 func (_c *MockOpenlaneGraphClient_GetAllCustomDomainHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllCustomDomainHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11293,8 +14812,8 @@ type MockOpenlaneGraphClient_GetAllCustomDomains_Call struct {
 }
 
 // GetAllCustomDomains is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllCustomDomains(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllCustomDomains_Call {
 	return &MockOpenlaneGraphClient_GetAllCustomDomains_Call{Call: _e.mock.On("GetAllCustomDomains",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11302,8 +14821,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllCustomDomains(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllCustomDomains_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllCustomDomains_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11358,8 +14889,8 @@ type MockOpenlaneGraphClient_GetAllDNSVerificationHistories_Call struct {
 }
 
 // GetAllDNSVerificationHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllDNSVerificationHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllDNSVerificationHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllDNSVerificationHistories_Call{Call: _e.mock.On("GetAllDNSVerificationHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11367,8 +14898,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllDNSVerificationHistories(ctx i
 
 func (_c *MockOpenlaneGraphClient_GetAllDNSVerificationHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllDNSVerificationHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11423,8 +14966,8 @@ type MockOpenlaneGraphClient_GetAllDNSVerifications_Call struct {
 }
 
 // GetAllDNSVerifications is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllDNSVerifications(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllDNSVerifications_Call {
 	return &MockOpenlaneGraphClient_GetAllDNSVerifications_Call{Call: _e.mock.On("GetAllDNSVerifications",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11432,8 +14975,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllDNSVerifications(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetAllDNSVerifications_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllDNSVerifications_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11488,8 +15043,8 @@ type MockOpenlaneGraphClient_GetAllDocumentDataHistories_Call struct {
 }
 
 // GetAllDocumentDataHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllDocumentDataHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllDocumentDataHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllDocumentDataHistories_Call{Call: _e.mock.On("GetAllDocumentDataHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11497,8 +15052,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllDocumentDataHistories(ctx inte
 
 func (_c *MockOpenlaneGraphClient_GetAllDocumentDataHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllDocumentDataHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11553,8 +15120,8 @@ type MockOpenlaneGraphClient_GetAllEntities_Call struct {
 }
 
 // GetAllEntities is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllEntities(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllEntities_Call {
 	return &MockOpenlaneGraphClient_GetAllEntities_Call{Call: _e.mock.On("GetAllEntities",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11562,8 +15129,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllEntities(ctx interface{}, inte
 
 func (_c *MockOpenlaneGraphClient_GetAllEntities_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllEntities_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11618,8 +15197,8 @@ type MockOpenlaneGraphClient_GetAllEntityHistories_Call struct {
 }
 
 // GetAllEntityHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllEntityHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllEntityHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllEntityHistories_Call{Call: _e.mock.On("GetAllEntityHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11627,8 +15206,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllEntityHistories(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetAllEntityHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllEntityHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11683,8 +15274,8 @@ type MockOpenlaneGraphClient_GetAllEntityTypeHistories_Call struct {
 }
 
 // GetAllEntityTypeHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllEntityTypeHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllEntityTypeHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllEntityTypeHistories_Call{Call: _e.mock.On("GetAllEntityTypeHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11692,8 +15283,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllEntityTypeHistories(ctx interf
 
 func (_c *MockOpenlaneGraphClient_GetAllEntityTypeHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllEntityTypeHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11748,8 +15351,8 @@ type MockOpenlaneGraphClient_GetAllEntityTypes_Call struct {
 }
 
 // GetAllEntityTypes is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllEntityTypes(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllEntityTypes_Call {
 	return &MockOpenlaneGraphClient_GetAllEntityTypes_Call{Call: _e.mock.On("GetAllEntityTypes",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11757,8 +15360,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllEntityTypes(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_GetAllEntityTypes_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllEntityTypes_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11813,8 +15428,8 @@ type MockOpenlaneGraphClient_GetAllEventHistories_Call struct {
 }
 
 // GetAllEventHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllEventHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllEventHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllEventHistories_Call{Call: _e.mock.On("GetAllEventHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11822,8 +15437,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllEventHistories(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetAllEventHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllEventHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11878,8 +15505,8 @@ type MockOpenlaneGraphClient_GetAllEvents_Call struct {
 }
 
 // GetAllEvents is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllEvents(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllEvents_Call {
 	return &MockOpenlaneGraphClient_GetAllEvents_Call{Call: _e.mock.On("GetAllEvents",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11887,8 +15514,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllEvents(ctx interface{}, interc
 
 func (_c *MockOpenlaneGraphClient_GetAllEvents_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllEvents_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -11943,8 +15582,8 @@ type MockOpenlaneGraphClient_GetAllEvidenceHistories_Call struct {
 }
 
 // GetAllEvidenceHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllEvidenceHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllEvidenceHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllEvidenceHistories_Call{Call: _e.mock.On("GetAllEvidenceHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -11952,8 +15591,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllEvidenceHistories(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetAllEvidenceHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllEvidenceHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12008,8 +15659,8 @@ type MockOpenlaneGraphClient_GetAllEvidences_Call struct {
 }
 
 // GetAllEvidences is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllEvidences(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllEvidences_Call {
 	return &MockOpenlaneGraphClient_GetAllEvidences_Call{Call: _e.mock.On("GetAllEvidences",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12017,8 +15668,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllEvidences(ctx interface{}, int
 
 func (_c *MockOpenlaneGraphClient_GetAllEvidences_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllEvidences_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12073,8 +15736,8 @@ type MockOpenlaneGraphClient_GetAllFileHistories_Call struct {
 }
 
 // GetAllFileHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllFileHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllFileHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllFileHistories_Call{Call: _e.mock.On("GetAllFileHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12082,8 +15745,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllFileHistories(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllFileHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllFileHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12138,8 +15813,8 @@ type MockOpenlaneGraphClient_GetAllFiles_Call struct {
 }
 
 // GetAllFiles is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllFiles(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllFiles_Call {
 	return &MockOpenlaneGraphClient_GetAllFiles_Call{Call: _e.mock.On("GetAllFiles",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12147,8 +15822,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllFiles(ctx interface{}, interce
 
 func (_c *MockOpenlaneGraphClient_GetAllFiles_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllFiles_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12203,8 +15890,8 @@ type MockOpenlaneGraphClient_GetAllGroupHistories_Call struct {
 }
 
 // GetAllGroupHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroupHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllGroupHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllGroupHistories_Call{Call: _e.mock.On("GetAllGroupHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12212,8 +15899,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroupHistories(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetAllGroupHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllGroupHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12268,8 +15967,8 @@ type MockOpenlaneGraphClient_GetAllGroupMembershipHistories_Call struct {
 }
 
 // GetAllGroupMembershipHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroupMembershipHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllGroupMembershipHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllGroupMembershipHistories_Call{Call: _e.mock.On("GetAllGroupMembershipHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12277,8 +15976,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroupMembershipHistories(ctx i
 
 func (_c *MockOpenlaneGraphClient_GetAllGroupMembershipHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllGroupMembershipHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12333,8 +16044,8 @@ type MockOpenlaneGraphClient_GetAllGroupSettingHistories_Call struct {
 }
 
 // GetAllGroupSettingHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroupSettingHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllGroupSettingHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllGroupSettingHistories_Call{Call: _e.mock.On("GetAllGroupSettingHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12342,8 +16053,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroupSettingHistories(ctx inte
 
 func (_c *MockOpenlaneGraphClient_GetAllGroupSettingHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllGroupSettingHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12398,8 +16121,8 @@ type MockOpenlaneGraphClient_GetAllGroupSettings_Call struct {
 }
 
 // GetAllGroupSettings is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroupSettings(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllGroupSettings_Call {
 	return &MockOpenlaneGraphClient_GetAllGroupSettings_Call{Call: _e.mock.On("GetAllGroupSettings",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12407,8 +16130,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroupSettings(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllGroupSettings_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllGroupSettings_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12463,8 +16198,8 @@ type MockOpenlaneGraphClient_GetAllGroups_Call struct {
 }
 
 // GetAllGroups is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroups(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllGroups_Call {
 	return &MockOpenlaneGraphClient_GetAllGroups_Call{Call: _e.mock.On("GetAllGroups",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12472,8 +16207,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllGroups(ctx interface{}, interc
 
 func (_c *MockOpenlaneGraphClient_GetAllGroups_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllGroups_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12528,8 +16275,8 @@ type MockOpenlaneGraphClient_GetAllHushHistories_Call struct {
 }
 
 // GetAllHushHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllHushHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllHushHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllHushHistories_Call{Call: _e.mock.On("GetAllHushHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12537,8 +16284,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllHushHistories(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllHushHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllHushHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12593,8 +16352,8 @@ type MockOpenlaneGraphClient_GetAllHushes_Call struct {
 }
 
 // GetAllHushes is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllHushes(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllHushes_Call {
 	return &MockOpenlaneGraphClient_GetAllHushes_Call{Call: _e.mock.On("GetAllHushes",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12602,8 +16361,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllHushes(ctx interface{}, interc
 
 func (_c *MockOpenlaneGraphClient_GetAllHushes_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllHushes_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12658,8 +16429,8 @@ type MockOpenlaneGraphClient_GetAllIntegrationHistories_Call struct {
 }
 
 // GetAllIntegrationHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllIntegrationHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllIntegrationHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllIntegrationHistories_Call{Call: _e.mock.On("GetAllIntegrationHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12667,8 +16438,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllIntegrationHistories(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetAllIntegrationHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllIntegrationHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12723,8 +16506,8 @@ type MockOpenlaneGraphClient_GetAllIntegrations_Call struct {
 }
 
 // GetAllIntegrations is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllIntegrations(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllIntegrations_Call {
 	return &MockOpenlaneGraphClient_GetAllIntegrations_Call{Call: _e.mock.On("GetAllIntegrations",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12732,8 +16515,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllIntegrations(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_GetAllIntegrations_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllIntegrations_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12788,8 +16583,8 @@ type MockOpenlaneGraphClient_GetAllInternalPolicies_Call struct {
 }
 
 // GetAllInternalPolicies is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllInternalPolicies(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllInternalPolicies_Call {
 	return &MockOpenlaneGraphClient_GetAllInternalPolicies_Call{Call: _e.mock.On("GetAllInternalPolicies",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12797,8 +16592,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllInternalPolicies(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetAllInternalPolicies_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllInternalPolicies_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12853,8 +16660,8 @@ type MockOpenlaneGraphClient_GetAllInternalPolicyHistories_Call struct {
 }
 
 // GetAllInternalPolicyHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllInternalPolicyHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllInternalPolicyHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllInternalPolicyHistories_Call{Call: _e.mock.On("GetAllInternalPolicyHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12862,8 +16669,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllInternalPolicyHistories(ctx in
 
 func (_c *MockOpenlaneGraphClient_GetAllInternalPolicyHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllInternalPolicyHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12918,8 +16737,8 @@ type MockOpenlaneGraphClient_GetAllInvites_Call struct {
 }
 
 // GetAllInvites is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllInvites(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllInvites_Call {
 	return &MockOpenlaneGraphClient_GetAllInvites_Call{Call: _e.mock.On("GetAllInvites",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12927,8 +16746,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllInvites(ctx interface{}, inter
 
 func (_c *MockOpenlaneGraphClient_GetAllInvites_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllInvites_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -12983,8 +16814,8 @@ type MockOpenlaneGraphClient_GetAllJobResults_Call struct {
 }
 
 // GetAllJobResults is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobResults(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllJobResults_Call {
 	return &MockOpenlaneGraphClient_GetAllJobResults_Call{Call: _e.mock.On("GetAllJobResults",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -12992,8 +16823,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobResults(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_GetAllJobResults_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllJobResults_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13048,8 +16891,8 @@ type MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call struct {
 }
 
 // GetAllJobRunnerHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobRunnerHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call{Call: _e.mock.On("GetAllJobRunnerHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13057,8 +16900,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobRunnerHistories(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13113,8 +16968,8 @@ type MockOpenlaneGraphClient_GetAllJobRunnerRegistrationTokens_Call struct {
 }
 
 // GetAllJobRunnerRegistrationTokens is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobRunnerRegistrationTokens(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllJobRunnerRegistrationTokens_Call {
 	return &MockOpenlaneGraphClient_GetAllJobRunnerRegistrationTokens_Call{Call: _e.mock.On("GetAllJobRunnerRegistrationTokens",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13122,8 +16977,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobRunnerRegistrationTokens(ct
 
 func (_c *MockOpenlaneGraphClient_GetAllJobRunnerRegistrationTokens_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllJobRunnerRegistrationTokens_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13178,8 +17045,8 @@ type MockOpenlaneGraphClient_GetAllJobRunnerTokens_Call struct {
 }
 
 // GetAllJobRunnerTokens is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobRunnerTokens(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllJobRunnerTokens_Call {
 	return &MockOpenlaneGraphClient_GetAllJobRunnerTokens_Call{Call: _e.mock.On("GetAllJobRunnerTokens",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13187,8 +17054,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobRunnerTokens(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetAllJobRunnerTokens_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllJobRunnerTokens_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13243,8 +17122,8 @@ type MockOpenlaneGraphClient_GetAllJobRunners_Call struct {
 }
 
 // GetAllJobRunners is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobRunners(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllJobRunners_Call {
 	return &MockOpenlaneGraphClient_GetAllJobRunners_Call{Call: _e.mock.On("GetAllJobRunners",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13252,8 +17131,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobRunners(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_GetAllJobRunners_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllJobRunners_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13308,8 +17199,8 @@ type MockOpenlaneGraphClient_GetAllMappableDomainHistories_Call struct {
 }
 
 // GetAllMappableDomainHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllMappableDomainHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllMappableDomainHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllMappableDomainHistories_Call{Call: _e.mock.On("GetAllMappableDomainHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13317,8 +17208,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllMappableDomainHistories(ctx in
 
 func (_c *MockOpenlaneGraphClient_GetAllMappableDomainHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllMappableDomainHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13373,8 +17276,8 @@ type MockOpenlaneGraphClient_GetAllMappableDomains_Call struct {
 }
 
 // GetAllMappableDomains is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllMappableDomains(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllMappableDomains_Call {
 	return &MockOpenlaneGraphClient_GetAllMappableDomains_Call{Call: _e.mock.On("GetAllMappableDomains",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13382,8 +17285,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllMappableDomains(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetAllMappableDomains_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllMappableDomains_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13438,8 +17353,8 @@ type MockOpenlaneGraphClient_GetAllMappedControlHistories_Call struct {
 }
 
 // GetAllMappedControlHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllMappedControlHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllMappedControlHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllMappedControlHistories_Call{Call: _e.mock.On("GetAllMappedControlHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13447,8 +17362,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllMappedControlHistories(ctx int
 
 func (_c *MockOpenlaneGraphClient_GetAllMappedControlHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllMappedControlHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13503,8 +17430,8 @@ type MockOpenlaneGraphClient_GetAllMappedControls_Call struct {
 }
 
 // GetAllMappedControls is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllMappedControls(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllMappedControls_Call {
 	return &MockOpenlaneGraphClient_GetAllMappedControls_Call{Call: _e.mock.On("GetAllMappedControls",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13512,8 +17439,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllMappedControls(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetAllMappedControls_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllMappedControls_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13568,8 +17507,8 @@ type MockOpenlaneGraphClient_GetAllNarrativeHistories_Call struct {
 }
 
 // GetAllNarrativeHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllNarrativeHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllNarrativeHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllNarrativeHistories_Call{Call: _e.mock.On("GetAllNarrativeHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13577,8 +17516,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllNarrativeHistories(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetAllNarrativeHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllNarrativeHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13633,8 +17584,8 @@ type MockOpenlaneGraphClient_GetAllNarratives_Call struct {
 }
 
 // GetAllNarratives is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllNarratives(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllNarratives_Call {
 	return &MockOpenlaneGraphClient_GetAllNarratives_Call{Call: _e.mock.On("GetAllNarratives",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13642,8 +17593,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllNarratives(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_GetAllNarratives_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllNarratives_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13698,8 +17661,8 @@ type MockOpenlaneGraphClient_GetAllNoteHistories_Call struct {
 }
 
 // GetAllNoteHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllNoteHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllNoteHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllNoteHistories_Call{Call: _e.mock.On("GetAllNoteHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13707,8 +17670,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllNoteHistories(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllNoteHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllNoteHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13763,8 +17738,8 @@ type MockOpenlaneGraphClient_GetAllOrgMembershipHistories_Call struct {
 }
 
 // GetAllOrgMembershipHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrgMembershipHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllOrgMembershipHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllOrgMembershipHistories_Call{Call: _e.mock.On("GetAllOrgMembershipHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13772,8 +17747,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrgMembershipHistories(ctx int
 
 func (_c *MockOpenlaneGraphClient_GetAllOrgMembershipHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllOrgMembershipHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13828,8 +17815,8 @@ type MockOpenlaneGraphClient_GetAllOrgSubscriptionHistories_Call struct {
 }
 
 // GetAllOrgSubscriptionHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrgSubscriptionHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllOrgSubscriptionHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllOrgSubscriptionHistories_Call{Call: _e.mock.On("GetAllOrgSubscriptionHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13837,8 +17824,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrgSubscriptionHistories(ctx i
 
 func (_c *MockOpenlaneGraphClient_GetAllOrgSubscriptionHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllOrgSubscriptionHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13893,8 +17892,8 @@ type MockOpenlaneGraphClient_GetAllOrgSubscriptions_Call struct {
 }
 
 // GetAllOrgSubscriptions is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrgSubscriptions(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllOrgSubscriptions_Call {
 	return &MockOpenlaneGraphClient_GetAllOrgSubscriptions_Call{Call: _e.mock.On("GetAllOrgSubscriptions",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13902,8 +17901,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrgSubscriptions(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetAllOrgSubscriptions_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllOrgSubscriptions_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -13958,8 +17969,8 @@ type MockOpenlaneGraphClient_GetAllOrganizationHistories_Call struct {
 }
 
 // GetAllOrganizationHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrganizationHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllOrganizationHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllOrganizationHistories_Call{Call: _e.mock.On("GetAllOrganizationHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -13967,8 +17978,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrganizationHistories(ctx inte
 
 func (_c *MockOpenlaneGraphClient_GetAllOrganizationHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllOrganizationHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14023,8 +18046,8 @@ type MockOpenlaneGraphClient_GetAllOrganizationSettingHistories_Call struct {
 }
 
 // GetAllOrganizationSettingHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrganizationSettingHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllOrganizationSettingHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllOrganizationSettingHistories_Call{Call: _e.mock.On("GetAllOrganizationSettingHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14032,8 +18055,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrganizationSettingHistories(c
 
 func (_c *MockOpenlaneGraphClient_GetAllOrganizationSettingHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllOrganizationSettingHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14088,8 +18123,8 @@ type MockOpenlaneGraphClient_GetAllOrganizationSettings_Call struct {
 }
 
 // GetAllOrganizationSettings is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrganizationSettings(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllOrganizationSettings_Call {
 	return &MockOpenlaneGraphClient_GetAllOrganizationSettings_Call{Call: _e.mock.On("GetAllOrganizationSettings",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14097,8 +18132,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrganizationSettings(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetAllOrganizationSettings_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllOrganizationSettings_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14153,8 +18200,8 @@ type MockOpenlaneGraphClient_GetAllOrganizations_Call struct {
 }
 
 // GetAllOrganizations is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrganizations(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllOrganizations_Call {
 	return &MockOpenlaneGraphClient_GetAllOrganizations_Call{Call: _e.mock.On("GetAllOrganizations",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14162,8 +18209,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllOrganizations(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllOrganizations_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllOrganizations_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14218,8 +18277,8 @@ type MockOpenlaneGraphClient_GetAllPersonalAccessTokens_Call struct {
 }
 
 // GetAllPersonalAccessTokens is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllPersonalAccessTokens(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllPersonalAccessTokens_Call {
 	return &MockOpenlaneGraphClient_GetAllPersonalAccessTokens_Call{Call: _e.mock.On("GetAllPersonalAccessTokens",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14227,8 +18286,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllPersonalAccessTokens(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetAllPersonalAccessTokens_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllPersonalAccessTokens_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14283,8 +18354,8 @@ type MockOpenlaneGraphClient_GetAllProcedureHistories_Call struct {
 }
 
 // GetAllProcedureHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllProcedureHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllProcedureHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllProcedureHistories_Call{Call: _e.mock.On("GetAllProcedureHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14292,8 +18363,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllProcedureHistories(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetAllProcedureHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllProcedureHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14348,8 +18431,8 @@ type MockOpenlaneGraphClient_GetAllProcedures_Call struct {
 }
 
 // GetAllProcedures is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllProcedures(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllProcedures_Call {
 	return &MockOpenlaneGraphClient_GetAllProcedures_Call{Call: _e.mock.On("GetAllProcedures",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14357,8 +18440,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllProcedures(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_GetAllProcedures_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllProcedures_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14413,8 +18508,8 @@ type MockOpenlaneGraphClient_GetAllProgramHistories_Call struct {
 }
 
 // GetAllProgramHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllProgramHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllProgramHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllProgramHistories_Call{Call: _e.mock.On("GetAllProgramHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14422,8 +18517,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllProgramHistories(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetAllProgramHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllProgramHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14478,8 +18585,8 @@ type MockOpenlaneGraphClient_GetAllProgramMembershipHistories_Call struct {
 }
 
 // GetAllProgramMembershipHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllProgramMembershipHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllProgramMembershipHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllProgramMembershipHistories_Call{Call: _e.mock.On("GetAllProgramMembershipHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14487,8 +18594,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllProgramMembershipHistories(ctx
 
 func (_c *MockOpenlaneGraphClient_GetAllProgramMembershipHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllProgramMembershipHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14543,8 +18662,8 @@ type MockOpenlaneGraphClient_GetAllProgramMemberships_Call struct {
 }
 
 // GetAllProgramMemberships is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllProgramMemberships(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllProgramMemberships_Call {
 	return &MockOpenlaneGraphClient_GetAllProgramMemberships_Call{Call: _e.mock.On("GetAllProgramMemberships",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14552,8 +18671,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllProgramMemberships(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetAllProgramMemberships_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllProgramMemberships_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14608,8 +18739,8 @@ type MockOpenlaneGraphClient_GetAllPrograms_Call struct {
 }
 
 // GetAllPrograms is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllPrograms(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllPrograms_Call {
 	return &MockOpenlaneGraphClient_GetAllPrograms_Call{Call: _e.mock.On("GetAllPrograms",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14617,8 +18748,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllPrograms(ctx interface{}, inte
 
 func (_c *MockOpenlaneGraphClient_GetAllPrograms_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllPrograms_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14673,8 +18816,8 @@ type MockOpenlaneGraphClient_GetAllRiskHistories_Call struct {
 }
 
 // GetAllRiskHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllRiskHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllRiskHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllRiskHistories_Call{Call: _e.mock.On("GetAllRiskHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14682,8 +18825,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllRiskHistories(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllRiskHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllRiskHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14738,8 +18893,8 @@ type MockOpenlaneGraphClient_GetAllRisks_Call struct {
 }
 
 // GetAllRisks is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllRisks(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllRisks_Call {
 	return &MockOpenlaneGraphClient_GetAllRisks_Call{Call: _e.mock.On("GetAllRisks",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14747,8 +18902,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllRisks(ctx interface{}, interce
 
 func (_c *MockOpenlaneGraphClient_GetAllRisks_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllRisks_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14803,8 +18970,8 @@ type MockOpenlaneGraphClient_GetAllScheduledJobHistories_Call struct {
 }
 
 // GetAllScheduledJobHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllScheduledJobHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllScheduledJobHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllScheduledJobHistories_Call{Call: _e.mock.On("GetAllScheduledJobHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14812,8 +18979,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllScheduledJobHistories(ctx inte
 
 func (_c *MockOpenlaneGraphClient_GetAllScheduledJobHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllScheduledJobHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14868,8 +19047,8 @@ type MockOpenlaneGraphClient_GetAllScheduledJobRuns_Call struct {
 }
 
 // GetAllScheduledJobRuns is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllScheduledJobRuns(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllScheduledJobRuns_Call {
 	return &MockOpenlaneGraphClient_GetAllScheduledJobRuns_Call{Call: _e.mock.On("GetAllScheduledJobRuns",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14877,8 +19056,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllScheduledJobRuns(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetAllScheduledJobRuns_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllScheduledJobRuns_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14933,8 +19124,8 @@ type MockOpenlaneGraphClient_GetAllScheduledJobs_Call struct {
 }
 
 // GetAllScheduledJobs is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllScheduledJobs(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllScheduledJobs_Call {
 	return &MockOpenlaneGraphClient_GetAllScheduledJobs_Call{Call: _e.mock.On("GetAllScheduledJobs",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -14942,8 +19133,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllScheduledJobs(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllScheduledJobs_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllScheduledJobs_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -14998,8 +19201,8 @@ type MockOpenlaneGraphClient_GetAllStandardHistories_Call struct {
 }
 
 // GetAllStandardHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllStandardHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllStandardHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllStandardHistories_Call{Call: _e.mock.On("GetAllStandardHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15007,8 +19210,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllStandardHistories(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetAllStandardHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllStandardHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15063,8 +19278,8 @@ type MockOpenlaneGraphClient_GetAllStandards_Call struct {
 }
 
 // GetAllStandards is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllStandards(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllStandards_Call {
 	return &MockOpenlaneGraphClient_GetAllStandards_Call{Call: _e.mock.On("GetAllStandards",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15072,8 +19287,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllStandards(ctx interface{}, int
 
 func (_c *MockOpenlaneGraphClient_GetAllStandards_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllStandards_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15128,8 +19355,8 @@ type MockOpenlaneGraphClient_GetAllSubcontrolHistories_Call struct {
 }
 
 // GetAllSubcontrolHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubcontrolHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllSubcontrolHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllSubcontrolHistories_Call{Call: _e.mock.On("GetAllSubcontrolHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15137,8 +19364,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubcontrolHistories(ctx interf
 
 func (_c *MockOpenlaneGraphClient_GetAllSubcontrolHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllSubcontrolHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15193,8 +19432,8 @@ type MockOpenlaneGraphClient_GetAllSubcontrols_Call struct {
 }
 
 // GetAllSubcontrols is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubcontrols(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllSubcontrols_Call {
 	return &MockOpenlaneGraphClient_GetAllSubcontrols_Call{Call: _e.mock.On("GetAllSubcontrols",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15202,8 +19441,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubcontrols(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_GetAllSubcontrols_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllSubcontrols_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15258,8 +19509,8 @@ type MockOpenlaneGraphClient_GetAllSubscribers_Call struct {
 }
 
 // GetAllSubscribers is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubscribers(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllSubscribers_Call {
 	return &MockOpenlaneGraphClient_GetAllSubscribers_Call{Call: _e.mock.On("GetAllSubscribers",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15267,8 +19518,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubscribers(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_GetAllSubscribers_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllSubscribers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15323,8 +19586,8 @@ type MockOpenlaneGraphClient_GetAllTFASettings_Call struct {
 }
 
 // GetAllTFASettings is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllTFASettings(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTFASettings_Call {
 	return &MockOpenlaneGraphClient_GetAllTFASettings_Call{Call: _e.mock.On("GetAllTFASettings",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15332,8 +19595,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllTFASettings(ctx interface{}, i
 
 func (_c *MockOpenlaneGraphClient_GetAllTFASettings_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTFASettings_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15388,8 +19663,8 @@ type MockOpenlaneGraphClient_GetAllTaskHistories_Call struct {
 }
 
 // GetAllTaskHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllTaskHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTaskHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllTaskHistories_Call{Call: _e.mock.On("GetAllTaskHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15397,8 +19672,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllTaskHistories(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllTaskHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTaskHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15453,8 +19740,8 @@ type MockOpenlaneGraphClient_GetAllTasks_Call struct {
 }
 
 // GetAllTasks is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllTasks(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTasks_Call {
 	return &MockOpenlaneGraphClient_GetAllTasks_Call{Call: _e.mock.On("GetAllTasks",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15462,8 +19749,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllTasks(ctx interface{}, interce
 
 func (_c *MockOpenlaneGraphClient_GetAllTasks_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTasks_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15518,8 +19817,8 @@ type MockOpenlaneGraphClient_GetAllTemplateHistories_Call struct {
 }
 
 // GetAllTemplateHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllTemplateHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTemplateHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllTemplateHistories_Call{Call: _e.mock.On("GetAllTemplateHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15527,8 +19826,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllTemplateHistories(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetAllTemplateHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTemplateHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15583,8 +19894,8 @@ type MockOpenlaneGraphClient_GetAllTemplates_Call struct {
 }
 
 // GetAllTemplates is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllTemplates(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTemplates_Call {
 	return &MockOpenlaneGraphClient_GetAllTemplates_Call{Call: _e.mock.On("GetAllTemplates",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15592,8 +19903,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllTemplates(ctx interface{}, int
 
 func (_c *MockOpenlaneGraphClient_GetAllTemplates_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTemplates_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15604,6 +19927,314 @@ func (_c *MockOpenlaneGraphClient_GetAllTemplates_Call) Return(getAllTemplates *
 }
 
 func (_c *MockOpenlaneGraphClient_GetAllTemplates_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTemplates, error)) *MockOpenlaneGraphClient_GetAllTemplates_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllTrustCenterHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllTrustCenterHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllTrustCenterHistories")
+	}
+
+	var r0 *openlaneclient.GetAllTrustCenterHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterHistories, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTrustCenterHistories); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllTrustCenterHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllTrustCenterHistories'
+type MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call struct {
+	*mock.Call
+}
+
+// GetAllTrustCenterHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTrustCenterHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call {
+	return &MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call{Call: _e.mock.On("GetAllTrustCenterHistories",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call) Return(getAllTrustCenterHistories *openlaneclient.GetAllTrustCenterHistories, err error) *MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call {
+	_c.Call.Return(getAllTrustCenterHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterHistories, error)) *MockOpenlaneGraphClient_GetAllTrustCenterHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllTrustCenterSettingHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllTrustCenterSettingHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSettingHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllTrustCenterSettingHistories")
+	}
+
+	var r0 *openlaneclient.GetAllTrustCenterSettingHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSettingHistories, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTrustCenterSettingHistories); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllTrustCenterSettingHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllTrustCenterSettingHistories'
+type MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call struct {
+	*mock.Call
+}
+
+// GetAllTrustCenterSettingHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTrustCenterSettingHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call {
+	return &MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call{Call: _e.mock.On("GetAllTrustCenterSettingHistories",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call) Return(getAllTrustCenterSettingHistories *openlaneclient.GetAllTrustCenterSettingHistories, err error) *MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call {
+	_c.Call.Return(getAllTrustCenterSettingHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSettingHistories, error)) *MockOpenlaneGraphClient_GetAllTrustCenterSettingHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllTrustCenterSettings provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllTrustCenterSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSettings, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllTrustCenterSettings")
+	}
+
+	var r0 *openlaneclient.GetAllTrustCenterSettings
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSettings, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTrustCenterSettings); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllTrustCenterSettings)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllTrustCenterSettings'
+type MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call struct {
+	*mock.Call
+}
+
+// GetAllTrustCenterSettings is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTrustCenterSettings(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call {
+	return &MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call{Call: _e.mock.On("GetAllTrustCenterSettings",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call) Return(getAllTrustCenterSettings *openlaneclient.GetAllTrustCenterSettings, err error) *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call {
+	_c.Call.Return(getAllTrustCenterSettings, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSettings, error)) *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllTrustCenters provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllTrustCenters(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenters, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllTrustCenters")
+	}
+
+	var r0 *openlaneclient.GetAllTrustCenters
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenters, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTrustCenters); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllTrustCenters)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllTrustCenters_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllTrustCenters'
+type MockOpenlaneGraphClient_GetAllTrustCenters_Call struct {
+	*mock.Call
+}
+
+// GetAllTrustCenters is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTrustCenters(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTrustCenters_Call {
+	return &MockOpenlaneGraphClient_GetAllTrustCenters_Call{Call: _e.mock.On("GetAllTrustCenters",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenters_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTrustCenters_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenters_Call) Return(getAllTrustCenters *openlaneclient.GetAllTrustCenters, err error) *MockOpenlaneGraphClient_GetAllTrustCenters_Call {
+	_c.Call.Return(getAllTrustCenters, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenters_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenters, error)) *MockOpenlaneGraphClient_GetAllTrustCenters_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -15648,8 +20279,8 @@ type MockOpenlaneGraphClient_GetAllUserHistories_Call struct {
 }
 
 // GetAllUserHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllUserHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllUserHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllUserHistories_Call{Call: _e.mock.On("GetAllUserHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15657,8 +20288,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllUserHistories(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetAllUserHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllUserHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15713,8 +20356,8 @@ type MockOpenlaneGraphClient_GetAllUserSettingHistories_Call struct {
 }
 
 // GetAllUserSettingHistories is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllUserSettingHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllUserSettingHistories_Call {
 	return &MockOpenlaneGraphClient_GetAllUserSettingHistories_Call{Call: _e.mock.On("GetAllUserSettingHistories",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15722,8 +20365,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllUserSettingHistories(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetAllUserSettingHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllUserSettingHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15778,8 +20433,8 @@ type MockOpenlaneGraphClient_GetAllUserSettings_Call struct {
 }
 
 // GetAllUserSettings is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllUserSettings(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllUserSettings_Call {
 	return &MockOpenlaneGraphClient_GetAllUserSettings_Call{Call: _e.mock.On("GetAllUserSettings",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15787,8 +20442,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllUserSettings(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_GetAllUserSettings_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllUserSettings_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15843,8 +20510,8 @@ type MockOpenlaneGraphClient_GetAllUsers_Call struct {
 }
 
 // GetAllUsers is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllUsers(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllUsers_Call {
 	return &MockOpenlaneGraphClient_GetAllUsers_Call{Call: _e.mock.On("GetAllUsers",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15852,8 +20519,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllUsers(ctx interface{}, interce
 
 func (_c *MockOpenlaneGraphClient_GetAllUsers_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllUsers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15908,8 +20587,8 @@ type MockOpenlaneGraphClient_GetAllWebauthns_Call struct {
 }
 
 // GetAllWebauthns is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetAllWebauthns(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllWebauthns_Call {
 	return &MockOpenlaneGraphClient_GetAllWebauthns_Call{Call: _e.mock.On("GetAllWebauthns",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -15917,8 +20596,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetAllWebauthns(ctx interface{}, int
 
 func (_c *MockOpenlaneGraphClient_GetAllWebauthns_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllWebauthns_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -15973,9 +20664,9 @@ type MockOpenlaneGraphClient_GetContactByID_Call struct {
 }
 
 // GetContactByID is a helper method to define mock.On call
-//   - ctx
-//   - contactID
-//   - interceptors
+//   - ctx context.Context
+//   - contactID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetContactByID(ctx interface{}, contactID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetContactByID_Call {
 	return &MockOpenlaneGraphClient_GetContactByID_Call{Call: _e.mock.On("GetContactByID",
 		append([]interface{}{ctx, contactID}, interceptors...)...)}
@@ -15983,8 +20674,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetContactByID(ctx interface{}, cont
 
 func (_c *MockOpenlaneGraphClient_GetContactByID_Call) Run(run func(ctx context.Context, contactID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetContactByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16039,9 +20747,9 @@ type MockOpenlaneGraphClient_GetContactHistories_Call struct {
 }
 
 // GetContactHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ContactHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetContactHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetContactHistories_Call {
 	return &MockOpenlaneGraphClient_GetContactHistories_Call{Call: _e.mock.On("GetContactHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -16049,8 +20757,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetContactHistories(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetContactHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.ContactHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetContactHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ContactHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ContactHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ContactHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16105,9 +20830,9 @@ type MockOpenlaneGraphClient_GetContacts_Call struct {
 }
 
 // GetContacts is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ContactWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetContacts(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetContacts_Call {
 	return &MockOpenlaneGraphClient_GetContacts_Call{Call: _e.mock.On("GetContacts",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -16115,8 +20840,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetContacts(ctx interface{}, where i
 
 func (_c *MockOpenlaneGraphClient_GetContacts_Call) Run(run func(ctx context.Context, where *openlaneclient.ContactWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetContacts_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ContactWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ContactWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ContactWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16171,9 +20913,9 @@ type MockOpenlaneGraphClient_GetControlByID_Call struct {
 }
 
 // GetControlByID is a helper method to define mock.On call
-//   - ctx
-//   - controlID
-//   - interceptors
+//   - ctx context.Context
+//   - controlID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlByID(ctx interface{}, controlID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlByID_Call {
 	return &MockOpenlaneGraphClient_GetControlByID_Call{Call: _e.mock.On("GetControlByID",
 		append([]interface{}{ctx, controlID}, interceptors...)...)}
@@ -16181,8 +20923,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlByID(ctx interface{}, cont
 
 func (_c *MockOpenlaneGraphClient_GetControlByID_Call) Run(run func(ctx context.Context, controlID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16237,9 +20996,9 @@ type MockOpenlaneGraphClient_GetControlHistories_Call struct {
 }
 
 // GetControlHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ControlHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlHistories_Call {
 	return &MockOpenlaneGraphClient_GetControlHistories_Call{Call: _e.mock.On("GetControlHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -16247,8 +21006,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlHistories(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetControlHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.ControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ControlHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ControlHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ControlHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16303,9 +21079,9 @@ type MockOpenlaneGraphClient_GetControlImplementationByID_Call struct {
 }
 
 // GetControlImplementationByID is a helper method to define mock.On call
-//   - ctx
-//   - controlImplementationID
-//   - interceptors
+//   - ctx context.Context
+//   - controlImplementationID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlImplementationByID(ctx interface{}, controlImplementationID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlImplementationByID_Call {
 	return &MockOpenlaneGraphClient_GetControlImplementationByID_Call{Call: _e.mock.On("GetControlImplementationByID",
 		append([]interface{}{ctx, controlImplementationID}, interceptors...)...)}
@@ -16313,8 +21089,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlImplementationByID(ctx int
 
 func (_c *MockOpenlaneGraphClient_GetControlImplementationByID_Call) Run(run func(ctx context.Context, controlImplementationID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlImplementationByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16369,9 +21162,9 @@ type MockOpenlaneGraphClient_GetControlImplementationHistories_Call struct {
 }
 
 // GetControlImplementationHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ControlImplementationHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlImplementationHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlImplementationHistories_Call {
 	return &MockOpenlaneGraphClient_GetControlImplementationHistories_Call{Call: _e.mock.On("GetControlImplementationHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -16379,8 +21172,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlImplementationHistories(ct
 
 func (_c *MockOpenlaneGraphClient_GetControlImplementationHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.ControlImplementationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlImplementationHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ControlImplementationHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ControlImplementationHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ControlImplementationHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16435,9 +21245,9 @@ type MockOpenlaneGraphClient_GetControlImplementations_Call struct {
 }
 
 // GetControlImplementations is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ControlImplementationWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlImplementations(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlImplementations_Call {
 	return &MockOpenlaneGraphClient_GetControlImplementations_Call{Call: _e.mock.On("GetControlImplementations",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -16445,8 +21255,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlImplementations(ctx interf
 
 func (_c *MockOpenlaneGraphClient_GetControlImplementations_Call) Run(run func(ctx context.Context, where *openlaneclient.ControlImplementationWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlImplementations_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ControlImplementationWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ControlImplementationWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ControlImplementationWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16501,9 +21328,9 @@ type MockOpenlaneGraphClient_GetControlObjectiveByID_Call struct {
 }
 
 // GetControlObjectiveByID is a helper method to define mock.On call
-//   - ctx
-//   - controlObjectiveID
-//   - interceptors
+//   - ctx context.Context
+//   - controlObjectiveID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlObjectiveByID(ctx interface{}, controlObjectiveID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlObjectiveByID_Call {
 	return &MockOpenlaneGraphClient_GetControlObjectiveByID_Call{Call: _e.mock.On("GetControlObjectiveByID",
 		append([]interface{}{ctx, controlObjectiveID}, interceptors...)...)}
@@ -16511,8 +21338,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlObjectiveByID(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetControlObjectiveByID_Call) Run(run func(ctx context.Context, controlObjectiveID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlObjectiveByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16567,9 +21411,9 @@ type MockOpenlaneGraphClient_GetControlObjectiveHistories_Call struct {
 }
 
 // GetControlObjectiveHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ControlObjectiveHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlObjectiveHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlObjectiveHistories_Call {
 	return &MockOpenlaneGraphClient_GetControlObjectiveHistories_Call{Call: _e.mock.On("GetControlObjectiveHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -16577,8 +21421,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlObjectiveHistories(ctx int
 
 func (_c *MockOpenlaneGraphClient_GetControlObjectiveHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.ControlObjectiveHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlObjectiveHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ControlObjectiveHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ControlObjectiveHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ControlObjectiveHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16633,9 +21494,9 @@ type MockOpenlaneGraphClient_GetControlObjectives_Call struct {
 }
 
 // GetControlObjectives is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ControlObjectiveWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlObjectives(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlObjectives_Call {
 	return &MockOpenlaneGraphClient_GetControlObjectives_Call{Call: _e.mock.On("GetControlObjectives",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -16643,8 +21504,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlObjectives(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetControlObjectives_Call) Run(run func(ctx context.Context, where *openlaneclient.ControlObjectiveWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlObjectives_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ControlObjectiveWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ControlObjectiveWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ControlObjectiveWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16699,9 +21577,9 @@ type MockOpenlaneGraphClient_GetControlScheduledJobByID_Call struct {
 }
 
 // GetControlScheduledJobByID is a helper method to define mock.On call
-//   - ctx
-//   - controlScheduledJobID
-//   - interceptors
+//   - ctx context.Context
+//   - controlScheduledJobID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlScheduledJobByID(ctx interface{}, controlScheduledJobID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlScheduledJobByID_Call {
 	return &MockOpenlaneGraphClient_GetControlScheduledJobByID_Call{Call: _e.mock.On("GetControlScheduledJobByID",
 		append([]interface{}{ctx, controlScheduledJobID}, interceptors...)...)}
@@ -16709,8 +21587,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlScheduledJobByID(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetControlScheduledJobByID_Call) Run(run func(ctx context.Context, controlScheduledJobID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlScheduledJobByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -16765,11 +21660,11 @@ type MockOpenlaneGraphClient_GetControlScheduledJobHistories_Call struct {
 }
 
 // GetControlScheduledJobHistories is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.ControlScheduledJobHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlScheduledJobHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlScheduledJobHistories_Call {
 	return &MockOpenlaneGraphClient_GetControlScheduledJobHistories_Call{Call: _e.mock.On("GetControlScheduledJobHistories",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -16777,8 +21672,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlScheduledJobHistories(ctx 
 
 func (_c *MockOpenlaneGraphClient_GetControlScheduledJobHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.ControlScheduledJobHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlScheduledJobHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.ControlScheduledJobHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.ControlScheduledJobHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.ControlScheduledJobHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -16833,11 +21755,11 @@ type MockOpenlaneGraphClient_GetControlScheduledJobs_Call struct {
 }
 
 // GetControlScheduledJobs is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.ControlScheduledJobWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControlScheduledJobs(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlScheduledJobs_Call {
 	return &MockOpenlaneGraphClient_GetControlScheduledJobs_Call{Call: _e.mock.On("GetControlScheduledJobs",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -16845,8 +21767,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControlScheduledJobs(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetControlScheduledJobs_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.ControlScheduledJobWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlScheduledJobs_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.ControlScheduledJobWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.ControlScheduledJobWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.ControlScheduledJobWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -16901,11 +21850,11 @@ type MockOpenlaneGraphClient_GetControls_Call struct {
 }
 
 // GetControls is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.ControlWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetControls(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControls_Call {
 	return &MockOpenlaneGraphClient_GetControls_Call{Call: _e.mock.On("GetControls",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -16913,8 +21862,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetControls(ctx interface{}, first i
 
 func (_c *MockOpenlaneGraphClient_GetControls_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.ControlWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControls_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.ControlWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.ControlWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.ControlWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -16969,9 +21945,9 @@ type MockOpenlaneGraphClient_GetCustomDomainByID_Call struct {
 }
 
 // GetCustomDomainByID is a helper method to define mock.On call
-//   - ctx
-//   - customDomainID
-//   - interceptors
+//   - ctx context.Context
+//   - customDomainID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetCustomDomainByID(ctx interface{}, customDomainID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetCustomDomainByID_Call {
 	return &MockOpenlaneGraphClient_GetCustomDomainByID_Call{Call: _e.mock.On("GetCustomDomainByID",
 		append([]interface{}{ctx, customDomainID}, interceptors...)...)}
@@ -16979,8 +21955,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetCustomDomainByID(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetCustomDomainByID_Call) Run(run func(ctx context.Context, customDomainID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetCustomDomainByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17035,11 +22028,11 @@ type MockOpenlaneGraphClient_GetCustomDomainHistories_Call struct {
 }
 
 // GetCustomDomainHistories is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.CustomDomainHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetCustomDomainHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetCustomDomainHistories_Call {
 	return &MockOpenlaneGraphClient_GetCustomDomainHistories_Call{Call: _e.mock.On("GetCustomDomainHistories",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -17047,8 +22040,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetCustomDomainHistories(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetCustomDomainHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.CustomDomainHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetCustomDomainHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.CustomDomainHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.CustomDomainHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.CustomDomainHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -17103,11 +22123,11 @@ type MockOpenlaneGraphClient_GetCustomDomains_Call struct {
 }
 
 // GetCustomDomains is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.CustomDomainWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetCustomDomains(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetCustomDomains_Call {
 	return &MockOpenlaneGraphClient_GetCustomDomains_Call{Call: _e.mock.On("GetCustomDomains",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -17115,8 +22135,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetCustomDomains(ctx interface{}, fi
 
 func (_c *MockOpenlaneGraphClient_GetCustomDomains_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.CustomDomainWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetCustomDomains_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.CustomDomainWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.CustomDomainWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.CustomDomainWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -17171,9 +22218,9 @@ type MockOpenlaneGraphClient_GetDNSVerificationByID_Call struct {
 }
 
 // GetDNSVerificationByID is a helper method to define mock.On call
-//   - ctx
-//   - dnsVerificationID
-//   - interceptors
+//   - ctx context.Context
+//   - dnsVerificationID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetDNSVerificationByID(ctx interface{}, dnsVerificationID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetDNSVerificationByID_Call {
 	return &MockOpenlaneGraphClient_GetDNSVerificationByID_Call{Call: _e.mock.On("GetDNSVerificationByID",
 		append([]interface{}{ctx, dnsVerificationID}, interceptors...)...)}
@@ -17181,8 +22228,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetDNSVerificationByID(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetDNSVerificationByID_Call) Run(run func(ctx context.Context, dnsVerificationID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetDNSVerificationByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17237,11 +22301,11 @@ type MockOpenlaneGraphClient_GetDNSVerificationHistories_Call struct {
 }
 
 // GetDNSVerificationHistories is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.DNSVerificationHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetDNSVerificationHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetDNSVerificationHistories_Call {
 	return &MockOpenlaneGraphClient_GetDNSVerificationHistories_Call{Call: _e.mock.On("GetDNSVerificationHistories",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -17249,8 +22313,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetDNSVerificationHistories(ctx inte
 
 func (_c *MockOpenlaneGraphClient_GetDNSVerificationHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.DNSVerificationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetDNSVerificationHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.DNSVerificationHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.DNSVerificationHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.DNSVerificationHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -17305,11 +22396,11 @@ type MockOpenlaneGraphClient_GetDNSVerifications_Call struct {
 }
 
 // GetDNSVerifications is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.DNSVerificationWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetDNSVerifications(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetDNSVerifications_Call {
 	return &MockOpenlaneGraphClient_GetDNSVerifications_Call{Call: _e.mock.On("GetDNSVerifications",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -17317,8 +22408,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetDNSVerifications(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetDNSVerifications_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.DNSVerificationWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetDNSVerifications_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.DNSVerificationWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.DNSVerificationWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.DNSVerificationWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -17373,9 +22491,9 @@ type MockOpenlaneGraphClient_GetDocumentDataByID_Call struct {
 }
 
 // GetDocumentDataByID is a helper method to define mock.On call
-//   - ctx
-//   - documentDataID
-//   - interceptors
+//   - ctx context.Context
+//   - documentDataID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetDocumentDataByID(ctx interface{}, documentDataID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetDocumentDataByID_Call {
 	return &MockOpenlaneGraphClient_GetDocumentDataByID_Call{Call: _e.mock.On("GetDocumentDataByID",
 		append([]interface{}{ctx, documentDataID}, interceptors...)...)}
@@ -17383,8 +22501,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetDocumentDataByID(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetDocumentDataByID_Call) Run(run func(ctx context.Context, documentDataID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetDocumentDataByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17439,9 +22574,9 @@ type MockOpenlaneGraphClient_GetDocumentDataHistories_Call struct {
 }
 
 // GetDocumentDataHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.DocumentDataHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetDocumentDataHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetDocumentDataHistories_Call {
 	return &MockOpenlaneGraphClient_GetDocumentDataHistories_Call{Call: _e.mock.On("GetDocumentDataHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -17449,8 +22584,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetDocumentDataHistories(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetDocumentDataHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.DocumentDataHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetDocumentDataHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.DocumentDataHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.DocumentDataHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.DocumentDataHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17505,9 +22657,9 @@ type MockOpenlaneGraphClient_GetEntities_Call struct {
 }
 
 // GetEntities is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.EntityWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEntities(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEntities_Call {
 	return &MockOpenlaneGraphClient_GetEntities_Call{Call: _e.mock.On("GetEntities",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -17515,8 +22667,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEntities(ctx interface{}, where i
 
 func (_c *MockOpenlaneGraphClient_GetEntities_Call) Run(run func(ctx context.Context, where *openlaneclient.EntityWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEntities_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.EntityWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.EntityWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.EntityWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17571,9 +22740,9 @@ type MockOpenlaneGraphClient_GetEntityByID_Call struct {
 }
 
 // GetEntityByID is a helper method to define mock.On call
-//   - ctx
-//   - entityID
-//   - interceptors
+//   - ctx context.Context
+//   - entityID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEntityByID(ctx interface{}, entityID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEntityByID_Call {
 	return &MockOpenlaneGraphClient_GetEntityByID_Call{Call: _e.mock.On("GetEntityByID",
 		append([]interface{}{ctx, entityID}, interceptors...)...)}
@@ -17581,8 +22750,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEntityByID(ctx interface{}, entit
 
 func (_c *MockOpenlaneGraphClient_GetEntityByID_Call) Run(run func(ctx context.Context, entityID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEntityByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17637,9 +22823,9 @@ type MockOpenlaneGraphClient_GetEntityHistories_Call struct {
 }
 
 // GetEntityHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.EntityHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEntityHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEntityHistories_Call {
 	return &MockOpenlaneGraphClient_GetEntityHistories_Call{Call: _e.mock.On("GetEntityHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -17647,8 +22833,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEntityHistories(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_GetEntityHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.EntityHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEntityHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.EntityHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.EntityHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.EntityHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17703,9 +22906,9 @@ type MockOpenlaneGraphClient_GetEntityTypeByID_Call struct {
 }
 
 // GetEntityTypeByID is a helper method to define mock.On call
-//   - ctx
-//   - entityTypeID
-//   - interceptors
+//   - ctx context.Context
+//   - entityTypeID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEntityTypeByID(ctx interface{}, entityTypeID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEntityTypeByID_Call {
 	return &MockOpenlaneGraphClient_GetEntityTypeByID_Call{Call: _e.mock.On("GetEntityTypeByID",
 		append([]interface{}{ctx, entityTypeID}, interceptors...)...)}
@@ -17713,8 +22916,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEntityTypeByID(ctx interface{}, e
 
 func (_c *MockOpenlaneGraphClient_GetEntityTypeByID_Call) Run(run func(ctx context.Context, entityTypeID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEntityTypeByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17769,9 +22989,9 @@ type MockOpenlaneGraphClient_GetEntityTypeHistories_Call struct {
 }
 
 // GetEntityTypeHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.EntityTypeHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEntityTypeHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEntityTypeHistories_Call {
 	return &MockOpenlaneGraphClient_GetEntityTypeHistories_Call{Call: _e.mock.On("GetEntityTypeHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -17779,8 +22999,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEntityTypeHistories(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetEntityTypeHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.EntityTypeHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEntityTypeHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.EntityTypeHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.EntityTypeHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.EntityTypeHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17835,9 +23072,9 @@ type MockOpenlaneGraphClient_GetEntityTypes_Call struct {
 }
 
 // GetEntityTypes is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.EntityTypeWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEntityTypes(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEntityTypes_Call {
 	return &MockOpenlaneGraphClient_GetEntityTypes_Call{Call: _e.mock.On("GetEntityTypes",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -17845,8 +23082,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEntityTypes(ctx interface{}, wher
 
 func (_c *MockOpenlaneGraphClient_GetEntityTypes_Call) Run(run func(ctx context.Context, where *openlaneclient.EntityTypeWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEntityTypes_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.EntityTypeWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.EntityTypeWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.EntityTypeWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17901,9 +23155,9 @@ type MockOpenlaneGraphClient_GetEventByID_Call struct {
 }
 
 // GetEventByID is a helper method to define mock.On call
-//   - ctx
-//   - eventID
-//   - interceptors
+//   - ctx context.Context
+//   - eventID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEventByID(ctx interface{}, eventID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEventByID_Call {
 	return &MockOpenlaneGraphClient_GetEventByID_Call{Call: _e.mock.On("GetEventByID",
 		append([]interface{}{ctx, eventID}, interceptors...)...)}
@@ -17911,8 +23165,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEventByID(ctx interface{}, eventI
 
 func (_c *MockOpenlaneGraphClient_GetEventByID_Call) Run(run func(ctx context.Context, eventID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEventByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -17967,9 +23238,9 @@ type MockOpenlaneGraphClient_GetEventHistories_Call struct {
 }
 
 // GetEventHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.EventHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEventHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEventHistories_Call {
 	return &MockOpenlaneGraphClient_GetEventHistories_Call{Call: _e.mock.On("GetEventHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -17977,8 +23248,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEventHistories(ctx interface{}, w
 
 func (_c *MockOpenlaneGraphClient_GetEventHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.EventHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEventHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.EventHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.EventHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.EventHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18033,9 +23321,9 @@ type MockOpenlaneGraphClient_GetEvents_Call struct {
 }
 
 // GetEvents is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.EventWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEvents(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEvents_Call {
 	return &MockOpenlaneGraphClient_GetEvents_Call{Call: _e.mock.On("GetEvents",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18043,8 +23331,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEvents(ctx interface{}, where int
 
 func (_c *MockOpenlaneGraphClient_GetEvents_Call) Run(run func(ctx context.Context, where *openlaneclient.EventWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEvents_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.EventWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.EventWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.EventWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18099,9 +23404,9 @@ type MockOpenlaneGraphClient_GetEvidenceByID_Call struct {
 }
 
 // GetEvidenceByID is a helper method to define mock.On call
-//   - ctx
-//   - evidenceID
-//   - interceptors
+//   - ctx context.Context
+//   - evidenceID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEvidenceByID(ctx interface{}, evidenceID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEvidenceByID_Call {
 	return &MockOpenlaneGraphClient_GetEvidenceByID_Call{Call: _e.mock.On("GetEvidenceByID",
 		append([]interface{}{ctx, evidenceID}, interceptors...)...)}
@@ -18109,8 +23414,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEvidenceByID(ctx interface{}, evi
 
 func (_c *MockOpenlaneGraphClient_GetEvidenceByID_Call) Run(run func(ctx context.Context, evidenceID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEvidenceByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18165,9 +23487,9 @@ type MockOpenlaneGraphClient_GetEvidenceHistories_Call struct {
 }
 
 // GetEvidenceHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.EvidenceHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEvidenceHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEvidenceHistories_Call {
 	return &MockOpenlaneGraphClient_GetEvidenceHistories_Call{Call: _e.mock.On("GetEvidenceHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18175,8 +23497,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEvidenceHistories(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetEvidenceHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.EvidenceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEvidenceHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.EvidenceHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.EvidenceHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.EvidenceHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18231,9 +23570,9 @@ type MockOpenlaneGraphClient_GetEvidences_Call struct {
 }
 
 // GetEvidences is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.EvidenceWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetEvidences(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEvidences_Call {
 	return &MockOpenlaneGraphClient_GetEvidences_Call{Call: _e.mock.On("GetEvidences",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18241,8 +23580,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetEvidences(ctx interface{}, where 
 
 func (_c *MockOpenlaneGraphClient_GetEvidences_Call) Run(run func(ctx context.Context, where *openlaneclient.EvidenceWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEvidences_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.EvidenceWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.EvidenceWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.EvidenceWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18297,9 +23653,9 @@ type MockOpenlaneGraphClient_GetFileByID_Call struct {
 }
 
 // GetFileByID is a helper method to define mock.On call
-//   - ctx
-//   - fileID
-//   - interceptors
+//   - ctx context.Context
+//   - fileID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetFileByID(ctx interface{}, fileID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetFileByID_Call {
 	return &MockOpenlaneGraphClient_GetFileByID_Call{Call: _e.mock.On("GetFileByID",
 		append([]interface{}{ctx, fileID}, interceptors...)...)}
@@ -18307,8 +23663,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetFileByID(ctx interface{}, fileID 
 
 func (_c *MockOpenlaneGraphClient_GetFileByID_Call) Run(run func(ctx context.Context, fileID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetFileByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18363,9 +23736,9 @@ type MockOpenlaneGraphClient_GetFileHistories_Call struct {
 }
 
 // GetFileHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.FileHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetFileHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetFileHistories_Call {
 	return &MockOpenlaneGraphClient_GetFileHistories_Call{Call: _e.mock.On("GetFileHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18373,8 +23746,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetFileHistories(ctx interface{}, wh
 
 func (_c *MockOpenlaneGraphClient_GetFileHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.FileHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetFileHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.FileHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.FileHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.FileHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18429,9 +23819,9 @@ type MockOpenlaneGraphClient_GetFiles_Call struct {
 }
 
 // GetFiles is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.FileWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetFiles(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetFiles_Call {
 	return &MockOpenlaneGraphClient_GetFiles_Call{Call: _e.mock.On("GetFiles",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18439,8 +23829,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetFiles(ctx interface{}, where inte
 
 func (_c *MockOpenlaneGraphClient_GetFiles_Call) Run(run func(ctx context.Context, where *openlaneclient.FileWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetFiles_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.FileWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.FileWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.FileWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18495,9 +23902,9 @@ type MockOpenlaneGraphClient_GetGroupByID_Call struct {
 }
 
 // GetGroupByID is a helper method to define mock.On call
-//   - ctx
-//   - groupID
-//   - interceptors
+//   - ctx context.Context
+//   - groupID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetGroupByID(ctx interface{}, groupID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetGroupByID_Call {
 	return &MockOpenlaneGraphClient_GetGroupByID_Call{Call: _e.mock.On("GetGroupByID",
 		append([]interface{}{ctx, groupID}, interceptors...)...)}
@@ -18505,8 +23912,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetGroupByID(ctx interface{}, groupI
 
 func (_c *MockOpenlaneGraphClient_GetGroupByID_Call) Run(run func(ctx context.Context, groupID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetGroupByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18561,9 +23985,9 @@ type MockOpenlaneGraphClient_GetGroupHistories_Call struct {
 }
 
 // GetGroupHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.GroupHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetGroupHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetGroupHistories_Call {
 	return &MockOpenlaneGraphClient_GetGroupHistories_Call{Call: _e.mock.On("GetGroupHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18571,8 +23995,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetGroupHistories(ctx interface{}, w
 
 func (_c *MockOpenlaneGraphClient_GetGroupHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.GroupHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetGroupHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.GroupHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.GroupHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.GroupHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18627,9 +24068,9 @@ type MockOpenlaneGraphClient_GetGroupInfo_Call struct {
 }
 
 // GetGroupInfo is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.GroupWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetGroupInfo(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetGroupInfo_Call {
 	return &MockOpenlaneGraphClient_GetGroupInfo_Call{Call: _e.mock.On("GetGroupInfo",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18637,8 +24078,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetGroupInfo(ctx interface{}, where 
 
 func (_c *MockOpenlaneGraphClient_GetGroupInfo_Call) Run(run func(ctx context.Context, where *openlaneclient.GroupWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetGroupInfo_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.GroupWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.GroupWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.GroupWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18693,9 +24151,9 @@ type MockOpenlaneGraphClient_GetGroupMembersByGroupID_Call struct {
 }
 
 // GetGroupMembersByGroupID is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.GroupMembershipWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetGroupMembersByGroupID(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetGroupMembersByGroupID_Call {
 	return &MockOpenlaneGraphClient_GetGroupMembersByGroupID_Call{Call: _e.mock.On("GetGroupMembersByGroupID",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18703,8 +24161,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetGroupMembersByGroupID(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetGroupMembersByGroupID_Call) Run(run func(ctx context.Context, where *openlaneclient.GroupMembershipWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetGroupMembersByGroupID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.GroupMembershipWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.GroupMembershipWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.GroupMembershipWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18759,9 +24234,9 @@ type MockOpenlaneGraphClient_GetGroupMembershipHistories_Call struct {
 }
 
 // GetGroupMembershipHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.GroupMembershipHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetGroupMembershipHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetGroupMembershipHistories_Call {
 	return &MockOpenlaneGraphClient_GetGroupMembershipHistories_Call{Call: _e.mock.On("GetGroupMembershipHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18769,8 +24244,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetGroupMembershipHistories(ctx inte
 
 func (_c *MockOpenlaneGraphClient_GetGroupMembershipHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.GroupMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetGroupMembershipHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.GroupMembershipHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.GroupMembershipHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.GroupMembershipHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18825,9 +24317,9 @@ type MockOpenlaneGraphClient_GetGroupSettingByID_Call struct {
 }
 
 // GetGroupSettingByID is a helper method to define mock.On call
-//   - ctx
-//   - groupSettingID
-//   - interceptors
+//   - ctx context.Context
+//   - groupSettingID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetGroupSettingByID(ctx interface{}, groupSettingID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetGroupSettingByID_Call {
 	return &MockOpenlaneGraphClient_GetGroupSettingByID_Call{Call: _e.mock.On("GetGroupSettingByID",
 		append([]interface{}{ctx, groupSettingID}, interceptors...)...)}
@@ -18835,8 +24327,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetGroupSettingByID(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetGroupSettingByID_Call) Run(run func(ctx context.Context, groupSettingID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetGroupSettingByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18891,9 +24400,9 @@ type MockOpenlaneGraphClient_GetGroupSettingHistories_Call struct {
 }
 
 // GetGroupSettingHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.GroupSettingHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetGroupSettingHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetGroupSettingHistories_Call {
 	return &MockOpenlaneGraphClient_GetGroupSettingHistories_Call{Call: _e.mock.On("GetGroupSettingHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18901,8 +24410,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetGroupSettingHistories(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetGroupSettingHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.GroupSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetGroupSettingHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.GroupSettingHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.GroupSettingHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.GroupSettingHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -18957,9 +24483,9 @@ type MockOpenlaneGraphClient_GetGroupSettings_Call struct {
 }
 
 // GetGroupSettings is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where openlaneclient.GroupSettingWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetGroupSettings(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetGroupSettings_Call {
 	return &MockOpenlaneGraphClient_GetGroupSettings_Call{Call: _e.mock.On("GetGroupSettings",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -18967,8 +24493,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetGroupSettings(ctx interface{}, wh
 
 func (_c *MockOpenlaneGraphClient_GetGroupSettings_Call) Run(run func(ctx context.Context, where openlaneclient.GroupSettingWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetGroupSettings_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.GroupSettingWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.GroupSettingWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.GroupSettingWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19023,9 +24566,9 @@ type MockOpenlaneGraphClient_GetGroups_Call struct {
 }
 
 // GetGroups is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.GroupWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetGroups(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetGroups_Call {
 	return &MockOpenlaneGraphClient_GetGroups_Call{Call: _e.mock.On("GetGroups",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -19033,8 +24576,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetGroups(ctx interface{}, where int
 
 func (_c *MockOpenlaneGraphClient_GetGroups_Call) Run(run func(ctx context.Context, where *openlaneclient.GroupWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetGroups_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.GroupWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.GroupWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.GroupWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19089,9 +24649,9 @@ type MockOpenlaneGraphClient_GetHushByID_Call struct {
 }
 
 // GetHushByID is a helper method to define mock.On call
-//   - ctx
-//   - hushID
-//   - interceptors
+//   - ctx context.Context
+//   - hushID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetHushByID(ctx interface{}, hushID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetHushByID_Call {
 	return &MockOpenlaneGraphClient_GetHushByID_Call{Call: _e.mock.On("GetHushByID",
 		append([]interface{}{ctx, hushID}, interceptors...)...)}
@@ -19099,8 +24659,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetHushByID(ctx interface{}, hushID 
 
 func (_c *MockOpenlaneGraphClient_GetHushByID_Call) Run(run func(ctx context.Context, hushID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetHushByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19155,9 +24732,9 @@ type MockOpenlaneGraphClient_GetHushHistories_Call struct {
 }
 
 // GetHushHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.HushHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetHushHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetHushHistories_Call {
 	return &MockOpenlaneGraphClient_GetHushHistories_Call{Call: _e.mock.On("GetHushHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -19165,8 +24742,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetHushHistories(ctx interface{}, wh
 
 func (_c *MockOpenlaneGraphClient_GetHushHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.HushHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetHushHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.HushHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.HushHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.HushHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19221,9 +24815,9 @@ type MockOpenlaneGraphClient_GetHushes_Call struct {
 }
 
 // GetHushes is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.HushWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetHushes(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetHushes_Call {
 	return &MockOpenlaneGraphClient_GetHushes_Call{Call: _e.mock.On("GetHushes",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -19231,8 +24825,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetHushes(ctx interface{}, where int
 
 func (_c *MockOpenlaneGraphClient_GetHushes_Call) Run(run func(ctx context.Context, where *openlaneclient.HushWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetHushes_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.HushWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.HushWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.HushWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19287,9 +24898,9 @@ type MockOpenlaneGraphClient_GetIntegrationByID_Call struct {
 }
 
 // GetIntegrationByID is a helper method to define mock.On call
-//   - ctx
-//   - integrationID
-//   - interceptors
+//   - ctx context.Context
+//   - integrationID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetIntegrationByID(ctx interface{}, integrationID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetIntegrationByID_Call {
 	return &MockOpenlaneGraphClient_GetIntegrationByID_Call{Call: _e.mock.On("GetIntegrationByID",
 		append([]interface{}{ctx, integrationID}, interceptors...)...)}
@@ -19297,8 +24908,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetIntegrationByID(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_GetIntegrationByID_Call) Run(run func(ctx context.Context, integrationID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetIntegrationByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19353,9 +24981,9 @@ type MockOpenlaneGraphClient_GetIntegrationHistories_Call struct {
 }
 
 // GetIntegrationHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.IntegrationHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetIntegrationHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetIntegrationHistories_Call {
 	return &MockOpenlaneGraphClient_GetIntegrationHistories_Call{Call: _e.mock.On("GetIntegrationHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -19363,8 +24991,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetIntegrationHistories(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetIntegrationHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.IntegrationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetIntegrationHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.IntegrationHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.IntegrationHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.IntegrationHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19419,9 +25064,9 @@ type MockOpenlaneGraphClient_GetIntegrations_Call struct {
 }
 
 // GetIntegrations is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.IntegrationWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetIntegrations(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetIntegrations_Call {
 	return &MockOpenlaneGraphClient_GetIntegrations_Call{Call: _e.mock.On("GetIntegrations",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -19429,8 +25074,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetIntegrations(ctx interface{}, whe
 
 func (_c *MockOpenlaneGraphClient_GetIntegrations_Call) Run(run func(ctx context.Context, where *openlaneclient.IntegrationWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetIntegrations_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.IntegrationWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.IntegrationWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.IntegrationWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19485,9 +25147,9 @@ type MockOpenlaneGraphClient_GetInternalPolicies_Call struct {
 }
 
 // GetInternalPolicies is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.InternalPolicyWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetInternalPolicies(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetInternalPolicies_Call {
 	return &MockOpenlaneGraphClient_GetInternalPolicies_Call{Call: _e.mock.On("GetInternalPolicies",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -19495,8 +25157,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetInternalPolicies(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetInternalPolicies_Call) Run(run func(ctx context.Context, where *openlaneclient.InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetInternalPolicies_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.InternalPolicyWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.InternalPolicyWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.InternalPolicyWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19551,9 +25230,9 @@ type MockOpenlaneGraphClient_GetInternalPolicyByID_Call struct {
 }
 
 // GetInternalPolicyByID is a helper method to define mock.On call
-//   - ctx
-//   - internalPolicyID
-//   - interceptors
+//   - ctx context.Context
+//   - internalPolicyID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetInternalPolicyByID(ctx interface{}, internalPolicyID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetInternalPolicyByID_Call {
 	return &MockOpenlaneGraphClient_GetInternalPolicyByID_Call{Call: _e.mock.On("GetInternalPolicyByID",
 		append([]interface{}{ctx, internalPolicyID}, interceptors...)...)}
@@ -19561,8 +25240,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetInternalPolicyByID(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetInternalPolicyByID_Call) Run(run func(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetInternalPolicyByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19617,9 +25313,9 @@ type MockOpenlaneGraphClient_GetInternalPolicyHistories_Call struct {
 }
 
 // GetInternalPolicyHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.InternalPolicyHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetInternalPolicyHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetInternalPolicyHistories_Call {
 	return &MockOpenlaneGraphClient_GetInternalPolicyHistories_Call{Call: _e.mock.On("GetInternalPolicyHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -19627,8 +25323,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetInternalPolicyHistories(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetInternalPolicyHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.InternalPolicyHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetInternalPolicyHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.InternalPolicyHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.InternalPolicyHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.InternalPolicyHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19683,9 +25396,9 @@ type MockOpenlaneGraphClient_GetInviteByID_Call struct {
 }
 
 // GetInviteByID is a helper method to define mock.On call
-//   - ctx
-//   - inviteID
-//   - interceptors
+//   - ctx context.Context
+//   - inviteID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetInviteByID(ctx interface{}, inviteID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetInviteByID_Call {
 	return &MockOpenlaneGraphClient_GetInviteByID_Call{Call: _e.mock.On("GetInviteByID",
 		append([]interface{}{ctx, inviteID}, interceptors...)...)}
@@ -19693,8 +25406,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetInviteByID(ctx interface{}, invit
 
 func (_c *MockOpenlaneGraphClient_GetInviteByID_Call) Run(run func(ctx context.Context, inviteID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetInviteByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19749,9 +25479,9 @@ type MockOpenlaneGraphClient_GetJobResultByID_Call struct {
 }
 
 // GetJobResultByID is a helper method to define mock.On call
-//   - ctx
-//   - jobResultID
-//   - interceptors
+//   - ctx context.Context
+//   - jobResultID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetJobResultByID(ctx interface{}, jobResultID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobResultByID_Call {
 	return &MockOpenlaneGraphClient_GetJobResultByID_Call{Call: _e.mock.On("GetJobResultByID",
 		append([]interface{}{ctx, jobResultID}, interceptors...)...)}
@@ -19759,8 +25489,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetJobResultByID(ctx interface{}, jo
 
 func (_c *MockOpenlaneGraphClient_GetJobResultByID_Call) Run(run func(ctx context.Context, jobResultID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobResultByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19815,11 +25562,11 @@ type MockOpenlaneGraphClient_GetJobResults_Call struct {
 }
 
 // GetJobResults is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.JobResultWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetJobResults(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobResults_Call {
 	return &MockOpenlaneGraphClient_GetJobResults_Call{Call: _e.mock.On("GetJobResults",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -19827,8 +25574,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetJobResults(ctx interface{}, first
 
 func (_c *MockOpenlaneGraphClient_GetJobResults_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.JobResultWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobResults_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.JobResultWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.JobResultWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.JobResultWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -19883,9 +25657,9 @@ type MockOpenlaneGraphClient_GetJobRunnerByID_Call struct {
 }
 
 // GetJobRunnerByID is a helper method to define mock.On call
-//   - ctx
-//   - jobRunnerID
-//   - interceptors
+//   - ctx context.Context
+//   - jobRunnerID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerByID(ctx interface{}, jobRunnerID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobRunnerByID_Call {
 	return &MockOpenlaneGraphClient_GetJobRunnerByID_Call{Call: _e.mock.On("GetJobRunnerByID",
 		append([]interface{}{ctx, jobRunnerID}, interceptors...)...)}
@@ -19893,8 +25667,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerByID(ctx interface{}, jo
 
 func (_c *MockOpenlaneGraphClient_GetJobRunnerByID_Call) Run(run func(ctx context.Context, jobRunnerID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobRunnerByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -19949,11 +25740,11 @@ type MockOpenlaneGraphClient_GetJobRunnerHistories_Call struct {
 }
 
 // GetJobRunnerHistories is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.JobRunnerHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobRunnerHistories_Call {
 	return &MockOpenlaneGraphClient_GetJobRunnerHistories_Call{Call: _e.mock.On("GetJobRunnerHistories",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -19961,8 +25752,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerHistories(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetJobRunnerHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.JobRunnerHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobRunnerHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.JobRunnerHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.JobRunnerHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.JobRunnerHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -20017,9 +25835,9 @@ type MockOpenlaneGraphClient_GetJobRunnerRegistrationTokenByID_Call struct {
 }
 
 // GetJobRunnerRegistrationTokenByID is a helper method to define mock.On call
-//   - ctx
-//   - jobRunnerRegistrationTokenID
-//   - interceptors
+//   - ctx context.Context
+//   - jobRunnerRegistrationTokenID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerRegistrationTokenByID(ctx interface{}, jobRunnerRegistrationTokenID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobRunnerRegistrationTokenByID_Call {
 	return &MockOpenlaneGraphClient_GetJobRunnerRegistrationTokenByID_Call{Call: _e.mock.On("GetJobRunnerRegistrationTokenByID",
 		append([]interface{}{ctx, jobRunnerRegistrationTokenID}, interceptors...)...)}
@@ -20027,8 +25845,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerRegistrationTokenByID(ct
 
 func (_c *MockOpenlaneGraphClient_GetJobRunnerRegistrationTokenByID_Call) Run(run func(ctx context.Context, jobRunnerRegistrationTokenID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobRunnerRegistrationTokenByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -20083,11 +25918,11 @@ type MockOpenlaneGraphClient_GetJobRunnerRegistrationTokens_Call struct {
 }
 
 // GetJobRunnerRegistrationTokens is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.JobRunnerRegistrationTokenWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerRegistrationTokens(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobRunnerRegistrationTokens_Call {
 	return &MockOpenlaneGraphClient_GetJobRunnerRegistrationTokens_Call{Call: _e.mock.On("GetJobRunnerRegistrationTokens",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -20095,8 +25930,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerRegistrationTokens(ctx i
 
 func (_c *MockOpenlaneGraphClient_GetJobRunnerRegistrationTokens_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.JobRunnerRegistrationTokenWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobRunnerRegistrationTokens_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.JobRunnerRegistrationTokenWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.JobRunnerRegistrationTokenWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.JobRunnerRegistrationTokenWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -20151,9 +26013,9 @@ type MockOpenlaneGraphClient_GetJobRunnerTokenByID_Call struct {
 }
 
 // GetJobRunnerTokenByID is a helper method to define mock.On call
-//   - ctx
-//   - jobRunnerTokenID
-//   - interceptors
+//   - ctx context.Context
+//   - jobRunnerTokenID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerTokenByID(ctx interface{}, jobRunnerTokenID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobRunnerTokenByID_Call {
 	return &MockOpenlaneGraphClient_GetJobRunnerTokenByID_Call{Call: _e.mock.On("GetJobRunnerTokenByID",
 		append([]interface{}{ctx, jobRunnerTokenID}, interceptors...)...)}
@@ -20161,8 +26023,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerTokenByID(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetJobRunnerTokenByID_Call) Run(run func(ctx context.Context, jobRunnerTokenID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobRunnerTokenByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -20217,11 +26096,11 @@ type MockOpenlaneGraphClient_GetJobRunnerTokens_Call struct {
 }
 
 // GetJobRunnerTokens is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.JobRunnerTokenWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerTokens(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobRunnerTokens_Call {
 	return &MockOpenlaneGraphClient_GetJobRunnerTokens_Call{Call: _e.mock.On("GetJobRunnerTokens",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -20229,8 +26108,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerTokens(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_GetJobRunnerTokens_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.JobRunnerTokenWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobRunnerTokens_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.JobRunnerTokenWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.JobRunnerTokenWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.JobRunnerTokenWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -20285,11 +26191,11 @@ type MockOpenlaneGraphClient_GetJobRunners_Call struct {
 }
 
 // GetJobRunners is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.JobRunnerWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunners(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobRunners_Call {
 	return &MockOpenlaneGraphClient_GetJobRunners_Call{Call: _e.mock.On("GetJobRunners",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -20297,8 +26203,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunners(ctx interface{}, first
 
 func (_c *MockOpenlaneGraphClient_GetJobRunners_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.JobRunnerWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobRunners_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.JobRunnerWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.JobRunnerWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.JobRunnerWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -20353,9 +26286,9 @@ type MockOpenlaneGraphClient_GetMappableDomainByID_Call struct {
 }
 
 // GetMappableDomainByID is a helper method to define mock.On call
-//   - ctx
-//   - mappableDomainID
-//   - interceptors
+//   - ctx context.Context
+//   - mappableDomainID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetMappableDomainByID(ctx interface{}, mappableDomainID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappableDomainByID_Call {
 	return &MockOpenlaneGraphClient_GetMappableDomainByID_Call{Call: _e.mock.On("GetMappableDomainByID",
 		append([]interface{}{ctx, mappableDomainID}, interceptors...)...)}
@@ -20363,8 +26296,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetMappableDomainByID(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetMappableDomainByID_Call) Run(run func(ctx context.Context, mappableDomainID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappableDomainByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -20419,11 +26369,11 @@ type MockOpenlaneGraphClient_GetMappableDomainHistories_Call struct {
 }
 
 // GetMappableDomainHistories is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.MappableDomainHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetMappableDomainHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappableDomainHistories_Call {
 	return &MockOpenlaneGraphClient_GetMappableDomainHistories_Call{Call: _e.mock.On("GetMappableDomainHistories",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -20431,8 +26381,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetMappableDomainHistories(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetMappableDomainHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappableDomainHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappableDomainHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.MappableDomainHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.MappableDomainHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.MappableDomainHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -20487,11 +26464,11 @@ type MockOpenlaneGraphClient_GetMappableDomains_Call struct {
 }
 
 // GetMappableDomains is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.MappableDomainWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetMappableDomains(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappableDomains_Call {
 	return &MockOpenlaneGraphClient_GetMappableDomains_Call{Call: _e.mock.On("GetMappableDomains",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -20499,8 +26476,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetMappableDomains(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_GetMappableDomains_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappableDomainWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappableDomains_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.MappableDomainWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.MappableDomainWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.MappableDomainWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -20555,9 +26559,9 @@ type MockOpenlaneGraphClient_GetMappedControlByID_Call struct {
 }
 
 // GetMappedControlByID is a helper method to define mock.On call
-//   - ctx
-//   - mappedControlID
-//   - interceptors
+//   - ctx context.Context
+//   - mappedControlID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControlByID(ctx interface{}, mappedControlID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappedControlByID_Call {
 	return &MockOpenlaneGraphClient_GetMappedControlByID_Call{Call: _e.mock.On("GetMappedControlByID",
 		append([]interface{}{ctx, mappedControlID}, interceptors...)...)}
@@ -20565,8 +26569,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControlByID(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetMappedControlByID_Call) Run(run func(ctx context.Context, mappedControlID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappedControlByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -20621,11 +26642,11 @@ type MockOpenlaneGraphClient_GetMappedControlHistories_Call struct {
 }
 
 // GetMappedControlHistories is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.MappedControlHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControlHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappedControlHistories_Call {
 	return &MockOpenlaneGraphClient_GetMappedControlHistories_Call{Call: _e.mock.On("GetMappedControlHistories",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -20633,8 +26654,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControlHistories(ctx interf
 
 func (_c *MockOpenlaneGraphClient_GetMappedControlHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappedControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappedControlHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.MappedControlHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.MappedControlHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.MappedControlHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -20689,11 +26737,11 @@ type MockOpenlaneGraphClient_GetMappedControls_Call struct {
 }
 
 // GetMappedControls is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.MappedControlWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControls(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetMappedControls_Call {
 	return &MockOpenlaneGraphClient_GetMappedControls_Call{Call: _e.mock.On("GetMappedControls",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -20701,8 +26749,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetMappedControls(ctx interface{}, f
 
 func (_c *MockOpenlaneGraphClient_GetMappedControls_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.MappedControlWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetMappedControls_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.MappedControlWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.MappedControlWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.MappedControlWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -20757,9 +26832,9 @@ type MockOpenlaneGraphClient_GetNarrativeByID_Call struct {
 }
 
 // GetNarrativeByID is a helper method to define mock.On call
-//   - ctx
-//   - narrativeID
-//   - interceptors
+//   - ctx context.Context
+//   - narrativeID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetNarrativeByID(ctx interface{}, narrativeID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetNarrativeByID_Call {
 	return &MockOpenlaneGraphClient_GetNarrativeByID_Call{Call: _e.mock.On("GetNarrativeByID",
 		append([]interface{}{ctx, narrativeID}, interceptors...)...)}
@@ -20767,8 +26842,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetNarrativeByID(ctx interface{}, na
 
 func (_c *MockOpenlaneGraphClient_GetNarrativeByID_Call) Run(run func(ctx context.Context, narrativeID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetNarrativeByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -20823,9 +26915,9 @@ type MockOpenlaneGraphClient_GetNarrativeHistories_Call struct {
 }
 
 // GetNarrativeHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.NarrativeHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetNarrativeHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetNarrativeHistories_Call {
 	return &MockOpenlaneGraphClient_GetNarrativeHistories_Call{Call: _e.mock.On("GetNarrativeHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -20833,8 +26925,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetNarrativeHistories(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetNarrativeHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.NarrativeHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetNarrativeHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.NarrativeHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.NarrativeHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.NarrativeHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -20889,9 +26998,9 @@ type MockOpenlaneGraphClient_GetNarratives_Call struct {
 }
 
 // GetNarratives is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.NarrativeWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetNarratives(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetNarratives_Call {
 	return &MockOpenlaneGraphClient_GetNarratives_Call{Call: _e.mock.On("GetNarratives",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -20899,8 +27008,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetNarratives(ctx interface{}, where
 
 func (_c *MockOpenlaneGraphClient_GetNarratives_Call) Run(run func(ctx context.Context, where *openlaneclient.NarrativeWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetNarratives_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.NarrativeWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.NarrativeWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.NarrativeWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -20955,9 +27081,9 @@ type MockOpenlaneGraphClient_GetNoteByID_Call struct {
 }
 
 // GetNoteByID is a helper method to define mock.On call
-//   - ctx
-//   - noteID
-//   - interceptors
+//   - ctx context.Context
+//   - noteID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetNoteByID(ctx interface{}, noteID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetNoteByID_Call {
 	return &MockOpenlaneGraphClient_GetNoteByID_Call{Call: _e.mock.On("GetNoteByID",
 		append([]interface{}{ctx, noteID}, interceptors...)...)}
@@ -20965,8 +27091,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetNoteByID(ctx interface{}, noteID 
 
 func (_c *MockOpenlaneGraphClient_GetNoteByID_Call) Run(run func(ctx context.Context, noteID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetNoteByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21021,9 +27164,9 @@ type MockOpenlaneGraphClient_GetNoteHistories_Call struct {
 }
 
 // GetNoteHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.NoteHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetNoteHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetNoteHistories_Call {
 	return &MockOpenlaneGraphClient_GetNoteHistories_Call{Call: _e.mock.On("GetNoteHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21031,8 +27174,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetNoteHistories(ctx interface{}, wh
 
 func (_c *MockOpenlaneGraphClient_GetNoteHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.NoteHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetNoteHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.NoteHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.NoteHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.NoteHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21087,9 +27247,9 @@ type MockOpenlaneGraphClient_GetOrgMembersByOrgID_Call struct {
 }
 
 // GetOrgMembersByOrgID is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.OrgMembershipWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrgMembersByOrgID(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrgMembersByOrgID_Call {
 	return &MockOpenlaneGraphClient_GetOrgMembersByOrgID_Call{Call: _e.mock.On("GetOrgMembersByOrgID",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21097,8 +27257,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrgMembersByOrgID(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetOrgMembersByOrgID_Call) Run(run func(ctx context.Context, where *openlaneclient.OrgMembershipWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrgMembersByOrgID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.OrgMembershipWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.OrgMembershipWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.OrgMembershipWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21153,9 +27330,9 @@ type MockOpenlaneGraphClient_GetOrgMembershipHistories_Call struct {
 }
 
 // GetOrgMembershipHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.OrgMembershipHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrgMembershipHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrgMembershipHistories_Call {
 	return &MockOpenlaneGraphClient_GetOrgMembershipHistories_Call{Call: _e.mock.On("GetOrgMembershipHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21163,8 +27340,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrgMembershipHistories(ctx interf
 
 func (_c *MockOpenlaneGraphClient_GetOrgMembershipHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.OrgMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrgMembershipHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.OrgMembershipHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.OrgMembershipHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.OrgMembershipHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21219,9 +27413,9 @@ type MockOpenlaneGraphClient_GetOrgSubscriptionByID_Call struct {
 }
 
 // GetOrgSubscriptionByID is a helper method to define mock.On call
-//   - ctx
-//   - orgSubscriptionID
-//   - interceptors
+//   - ctx context.Context
+//   - orgSubscriptionID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrgSubscriptionByID(ctx interface{}, orgSubscriptionID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrgSubscriptionByID_Call {
 	return &MockOpenlaneGraphClient_GetOrgSubscriptionByID_Call{Call: _e.mock.On("GetOrgSubscriptionByID",
 		append([]interface{}{ctx, orgSubscriptionID}, interceptors...)...)}
@@ -21229,8 +27423,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrgSubscriptionByID(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetOrgSubscriptionByID_Call) Run(run func(ctx context.Context, orgSubscriptionID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrgSubscriptionByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21285,9 +27496,9 @@ type MockOpenlaneGraphClient_GetOrgSubscriptionHistories_Call struct {
 }
 
 // GetOrgSubscriptionHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.OrgSubscriptionHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrgSubscriptionHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrgSubscriptionHistories_Call {
 	return &MockOpenlaneGraphClient_GetOrgSubscriptionHistories_Call{Call: _e.mock.On("GetOrgSubscriptionHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21295,8 +27506,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrgSubscriptionHistories(ctx inte
 
 func (_c *MockOpenlaneGraphClient_GetOrgSubscriptionHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.OrgSubscriptionHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrgSubscriptionHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.OrgSubscriptionHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.OrgSubscriptionHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.OrgSubscriptionHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21351,9 +27579,9 @@ type MockOpenlaneGraphClient_GetOrgSubscriptions_Call struct {
 }
 
 // GetOrgSubscriptions is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.OrgSubscriptionWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrgSubscriptions(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrgSubscriptions_Call {
 	return &MockOpenlaneGraphClient_GetOrgSubscriptions_Call{Call: _e.mock.On("GetOrgSubscriptions",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21361,8 +27589,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrgSubscriptions(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetOrgSubscriptions_Call) Run(run func(ctx context.Context, where *openlaneclient.OrgSubscriptionWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrgSubscriptions_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.OrgSubscriptionWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.OrgSubscriptionWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.OrgSubscriptionWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21417,9 +27662,9 @@ type MockOpenlaneGraphClient_GetOrganizationByID_Call struct {
 }
 
 // GetOrganizationByID is a helper method to define mock.On call
-//   - ctx
-//   - organizationID
-//   - interceptors
+//   - ctx context.Context
+//   - organizationID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationByID(ctx interface{}, organizationID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrganizationByID_Call {
 	return &MockOpenlaneGraphClient_GetOrganizationByID_Call{Call: _e.mock.On("GetOrganizationByID",
 		append([]interface{}{ctx, organizationID}, interceptors...)...)}
@@ -21427,8 +27672,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationByID(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetOrganizationByID_Call) Run(run func(ctx context.Context, organizationID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrganizationByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21483,9 +27745,9 @@ type MockOpenlaneGraphClient_GetOrganizationHistories_Call struct {
 }
 
 // GetOrganizationHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.OrganizationHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrganizationHistories_Call {
 	return &MockOpenlaneGraphClient_GetOrganizationHistories_Call{Call: _e.mock.On("GetOrganizationHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21493,8 +27755,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationHistories(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetOrganizationHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.OrganizationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrganizationHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.OrganizationHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.OrganizationHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.OrganizationHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21549,9 +27828,9 @@ type MockOpenlaneGraphClient_GetOrganizationSettingByID_Call struct {
 }
 
 // GetOrganizationSettingByID is a helper method to define mock.On call
-//   - ctx
-//   - organizationSettingID
-//   - interceptors
+//   - ctx context.Context
+//   - organizationSettingID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationSettingByID(ctx interface{}, organizationSettingID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrganizationSettingByID_Call {
 	return &MockOpenlaneGraphClient_GetOrganizationSettingByID_Call{Call: _e.mock.On("GetOrganizationSettingByID",
 		append([]interface{}{ctx, organizationSettingID}, interceptors...)...)}
@@ -21559,8 +27838,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationSettingByID(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetOrganizationSettingByID_Call) Run(run func(ctx context.Context, organizationSettingID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrganizationSettingByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21615,9 +27911,9 @@ type MockOpenlaneGraphClient_GetOrganizationSettingHistories_Call struct {
 }
 
 // GetOrganizationSettingHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.OrganizationSettingHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationSettingHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrganizationSettingHistories_Call {
 	return &MockOpenlaneGraphClient_GetOrganizationSettingHistories_Call{Call: _e.mock.On("GetOrganizationSettingHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21625,8 +27921,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationSettingHistories(ctx 
 
 func (_c *MockOpenlaneGraphClient_GetOrganizationSettingHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.OrganizationSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrganizationSettingHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.OrganizationSettingHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.OrganizationSettingHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.OrganizationSettingHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21681,9 +27994,9 @@ type MockOpenlaneGraphClient_GetOrganizationSettings_Call struct {
 }
 
 // GetOrganizationSettings is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where openlaneclient.OrganizationSettingWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationSettings(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrganizationSettings_Call {
 	return &MockOpenlaneGraphClient_GetOrganizationSettings_Call{Call: _e.mock.On("GetOrganizationSettings",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21691,8 +28004,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizationSettings(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetOrganizationSettings_Call) Run(run func(ctx context.Context, where openlaneclient.OrganizationSettingWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrganizationSettings_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.OrganizationSettingWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.OrganizationSettingWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.OrganizationSettingWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21747,9 +28077,9 @@ type MockOpenlaneGraphClient_GetOrganizations_Call struct {
 }
 
 // GetOrganizations is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.OrganizationWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizations(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetOrganizations_Call {
 	return &MockOpenlaneGraphClient_GetOrganizations_Call{Call: _e.mock.On("GetOrganizations",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21757,8 +28087,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetOrganizations(ctx interface{}, wh
 
 func (_c *MockOpenlaneGraphClient_GetOrganizations_Call) Run(run func(ctx context.Context, where *openlaneclient.OrganizationWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetOrganizations_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.OrganizationWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.OrganizationWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.OrganizationWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21813,9 +28160,9 @@ type MockOpenlaneGraphClient_GetPersonalAccessTokenByID_Call struct {
 }
 
 // GetPersonalAccessTokenByID is a helper method to define mock.On call
-//   - ctx
-//   - personalAccessTokenID
-//   - interceptors
+//   - ctx context.Context
+//   - personalAccessTokenID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetPersonalAccessTokenByID(ctx interface{}, personalAccessTokenID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetPersonalAccessTokenByID_Call {
 	return &MockOpenlaneGraphClient_GetPersonalAccessTokenByID_Call{Call: _e.mock.On("GetPersonalAccessTokenByID",
 		append([]interface{}{ctx, personalAccessTokenID}, interceptors...)...)}
@@ -21823,8 +28170,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetPersonalAccessTokenByID(ctx inter
 
 func (_c *MockOpenlaneGraphClient_GetPersonalAccessTokenByID_Call) Run(run func(ctx context.Context, personalAccessTokenID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetPersonalAccessTokenByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21879,9 +28243,9 @@ type MockOpenlaneGraphClient_GetPersonalAccessTokens_Call struct {
 }
 
 // GetPersonalAccessTokens is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.PersonalAccessTokenWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetPersonalAccessTokens(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetPersonalAccessTokens_Call {
 	return &MockOpenlaneGraphClient_GetPersonalAccessTokens_Call{Call: _e.mock.On("GetPersonalAccessTokens",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -21889,8 +28253,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetPersonalAccessTokens(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetPersonalAccessTokens_Call) Run(run func(ctx context.Context, where *openlaneclient.PersonalAccessTokenWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetPersonalAccessTokens_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.PersonalAccessTokenWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.PersonalAccessTokenWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.PersonalAccessTokenWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -21945,9 +28326,9 @@ type MockOpenlaneGraphClient_GetProcedureByID_Call struct {
 }
 
 // GetProcedureByID is a helper method to define mock.On call
-//   - ctx
-//   - procedureID
-//   - interceptors
+//   - ctx context.Context
+//   - procedureID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetProcedureByID(ctx interface{}, procedureID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetProcedureByID_Call {
 	return &MockOpenlaneGraphClient_GetProcedureByID_Call{Call: _e.mock.On("GetProcedureByID",
 		append([]interface{}{ctx, procedureID}, interceptors...)...)}
@@ -21955,8 +28336,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetProcedureByID(ctx interface{}, pr
 
 func (_c *MockOpenlaneGraphClient_GetProcedureByID_Call) Run(run func(ctx context.Context, procedureID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetProcedureByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22011,9 +28409,9 @@ type MockOpenlaneGraphClient_GetProcedureHistories_Call struct {
 }
 
 // GetProcedureHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ProcedureHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetProcedureHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetProcedureHistories_Call {
 	return &MockOpenlaneGraphClient_GetProcedureHistories_Call{Call: _e.mock.On("GetProcedureHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -22021,8 +28419,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetProcedureHistories(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetProcedureHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.ProcedureHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetProcedureHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ProcedureHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ProcedureHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ProcedureHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22077,9 +28492,9 @@ type MockOpenlaneGraphClient_GetProcedures_Call struct {
 }
 
 // GetProcedures is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ProcedureWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetProcedures(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetProcedures_Call {
 	return &MockOpenlaneGraphClient_GetProcedures_Call{Call: _e.mock.On("GetProcedures",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -22087,8 +28502,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetProcedures(ctx interface{}, where
 
 func (_c *MockOpenlaneGraphClient_GetProcedures_Call) Run(run func(ctx context.Context, where *openlaneclient.ProcedureWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetProcedures_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ProcedureWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ProcedureWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ProcedureWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22143,9 +28575,9 @@ type MockOpenlaneGraphClient_GetProgramByID_Call struct {
 }
 
 // GetProgramByID is a helper method to define mock.On call
-//   - ctx
-//   - programID
-//   - interceptors
+//   - ctx context.Context
+//   - programID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetProgramByID(ctx interface{}, programID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetProgramByID_Call {
 	return &MockOpenlaneGraphClient_GetProgramByID_Call{Call: _e.mock.On("GetProgramByID",
 		append([]interface{}{ctx, programID}, interceptors...)...)}
@@ -22153,8 +28585,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetProgramByID(ctx interface{}, prog
 
 func (_c *MockOpenlaneGraphClient_GetProgramByID_Call) Run(run func(ctx context.Context, programID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetProgramByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22209,9 +28658,9 @@ type MockOpenlaneGraphClient_GetProgramHistories_Call struct {
 }
 
 // GetProgramHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ProgramHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetProgramHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetProgramHistories_Call {
 	return &MockOpenlaneGraphClient_GetProgramHistories_Call{Call: _e.mock.On("GetProgramHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -22219,8 +28668,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetProgramHistories(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetProgramHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.ProgramHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetProgramHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ProgramHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ProgramHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ProgramHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22275,9 +28741,9 @@ type MockOpenlaneGraphClient_GetProgramMembersByProgramID_Call struct {
 }
 
 // GetProgramMembersByProgramID is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ProgramMembershipWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetProgramMembersByProgramID(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetProgramMembersByProgramID_Call {
 	return &MockOpenlaneGraphClient_GetProgramMembersByProgramID_Call{Call: _e.mock.On("GetProgramMembersByProgramID",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -22285,8 +28751,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetProgramMembersByProgramID(ctx int
 
 func (_c *MockOpenlaneGraphClient_GetProgramMembersByProgramID_Call) Run(run func(ctx context.Context, where *openlaneclient.ProgramMembershipWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetProgramMembersByProgramID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ProgramMembershipWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ProgramMembershipWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ProgramMembershipWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22341,9 +28824,9 @@ type MockOpenlaneGraphClient_GetProgramMembershipByID_Call struct {
 }
 
 // GetProgramMembershipByID is a helper method to define mock.On call
-//   - ctx
-//   - programMembershipID
-//   - interceptors
+//   - ctx context.Context
+//   - programMembershipID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetProgramMembershipByID(ctx interface{}, programMembershipID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetProgramMembershipByID_Call {
 	return &MockOpenlaneGraphClient_GetProgramMembershipByID_Call{Call: _e.mock.On("GetProgramMembershipByID",
 		append([]interface{}{ctx, programMembershipID}, interceptors...)...)}
@@ -22351,8 +28834,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetProgramMembershipByID(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetProgramMembershipByID_Call) Run(run func(ctx context.Context, programMembershipID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetProgramMembershipByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22407,9 +28907,9 @@ type MockOpenlaneGraphClient_GetProgramMembershipHistories_Call struct {
 }
 
 // GetProgramMembershipHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ProgramMembershipHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetProgramMembershipHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetProgramMembershipHistories_Call {
 	return &MockOpenlaneGraphClient_GetProgramMembershipHistories_Call{Call: _e.mock.On("GetProgramMembershipHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -22417,8 +28917,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetProgramMembershipHistories(ctx in
 
 func (_c *MockOpenlaneGraphClient_GetProgramMembershipHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.ProgramMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetProgramMembershipHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ProgramMembershipHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ProgramMembershipHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ProgramMembershipHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22473,9 +28990,9 @@ type MockOpenlaneGraphClient_GetProgramMemberships_Call struct {
 }
 
 // GetProgramMemberships is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ProgramMembershipWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetProgramMemberships(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetProgramMemberships_Call {
 	return &MockOpenlaneGraphClient_GetProgramMemberships_Call{Call: _e.mock.On("GetProgramMemberships",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -22483,8 +29000,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetProgramMemberships(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_GetProgramMemberships_Call) Run(run func(ctx context.Context, where *openlaneclient.ProgramMembershipWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetProgramMemberships_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ProgramMembershipWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ProgramMembershipWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ProgramMembershipWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22539,9 +29073,9 @@ type MockOpenlaneGraphClient_GetPrograms_Call struct {
 }
 
 // GetPrograms is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.ProgramWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetPrograms(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetPrograms_Call {
 	return &MockOpenlaneGraphClient_GetPrograms_Call{Call: _e.mock.On("GetPrograms",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -22549,8 +29083,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetPrograms(ctx interface{}, where i
 
 func (_c *MockOpenlaneGraphClient_GetPrograms_Call) Run(run func(ctx context.Context, where *openlaneclient.ProgramWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetPrograms_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.ProgramWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.ProgramWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.ProgramWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22605,9 +29156,9 @@ type MockOpenlaneGraphClient_GetRiskByID_Call struct {
 }
 
 // GetRiskByID is a helper method to define mock.On call
-//   - ctx
-//   - riskID
-//   - interceptors
+//   - ctx context.Context
+//   - riskID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetRiskByID(ctx interface{}, riskID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetRiskByID_Call {
 	return &MockOpenlaneGraphClient_GetRiskByID_Call{Call: _e.mock.On("GetRiskByID",
 		append([]interface{}{ctx, riskID}, interceptors...)...)}
@@ -22615,8 +29166,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetRiskByID(ctx interface{}, riskID 
 
 func (_c *MockOpenlaneGraphClient_GetRiskByID_Call) Run(run func(ctx context.Context, riskID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetRiskByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22671,9 +29239,9 @@ type MockOpenlaneGraphClient_GetRiskHistories_Call struct {
 }
 
 // GetRiskHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.RiskHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetRiskHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetRiskHistories_Call {
 	return &MockOpenlaneGraphClient_GetRiskHistories_Call{Call: _e.mock.On("GetRiskHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -22681,8 +29249,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetRiskHistories(ctx interface{}, wh
 
 func (_c *MockOpenlaneGraphClient_GetRiskHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.RiskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetRiskHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.RiskHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.RiskHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.RiskHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22737,9 +29322,9 @@ type MockOpenlaneGraphClient_GetRisks_Call struct {
 }
 
 // GetRisks is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.RiskWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetRisks(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetRisks_Call {
 	return &MockOpenlaneGraphClient_GetRisks_Call{Call: _e.mock.On("GetRisks",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -22747,8 +29332,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetRisks(ctx interface{}, where inte
 
 func (_c *MockOpenlaneGraphClient_GetRisks_Call) Run(run func(ctx context.Context, where *openlaneclient.RiskWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetRisks_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.RiskWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.RiskWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.RiskWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22803,9 +29405,9 @@ type MockOpenlaneGraphClient_GetScheduledJobByID_Call struct {
 }
 
 // GetScheduledJobByID is a helper method to define mock.On call
-//   - ctx
-//   - scheduledJobID
-//   - interceptors
+//   - ctx context.Context
+//   - scheduledJobID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobByID(ctx interface{}, scheduledJobID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetScheduledJobByID_Call {
 	return &MockOpenlaneGraphClient_GetScheduledJobByID_Call{Call: _e.mock.On("GetScheduledJobByID",
 		append([]interface{}{ctx, scheduledJobID}, interceptors...)...)}
@@ -22813,8 +29415,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobByID(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetScheduledJobByID_Call) Run(run func(ctx context.Context, scheduledJobID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetScheduledJobByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -22869,11 +29488,11 @@ type MockOpenlaneGraphClient_GetScheduledJobHistories_Call struct {
 }
 
 // GetScheduledJobHistories is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.ScheduledJobHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetScheduledJobHistories_Call {
 	return &MockOpenlaneGraphClient_GetScheduledJobHistories_Call{Call: _e.mock.On("GetScheduledJobHistories",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -22881,8 +29500,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobHistories(ctx interfa
 
 func (_c *MockOpenlaneGraphClient_GetScheduledJobHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.ScheduledJobHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetScheduledJobHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.ScheduledJobHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.ScheduledJobHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.ScheduledJobHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -22937,9 +29583,9 @@ type MockOpenlaneGraphClient_GetScheduledJobRunByID_Call struct {
 }
 
 // GetScheduledJobRunByID is a helper method to define mock.On call
-//   - ctx
-//   - scheduledJobRunID
-//   - interceptors
+//   - ctx context.Context
+//   - scheduledJobRunID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobRunByID(ctx interface{}, scheduledJobRunID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetScheduledJobRunByID_Call {
 	return &MockOpenlaneGraphClient_GetScheduledJobRunByID_Call{Call: _e.mock.On("GetScheduledJobRunByID",
 		append([]interface{}{ctx, scheduledJobRunID}, interceptors...)...)}
@@ -22947,8 +29593,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobRunByID(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetScheduledJobRunByID_Call) Run(run func(ctx context.Context, scheduledJobRunID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetScheduledJobRunByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23003,11 +29666,11 @@ type MockOpenlaneGraphClient_GetScheduledJobRuns_Call struct {
 }
 
 // GetScheduledJobRuns is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.ScheduledJobRunWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobRuns(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetScheduledJobRuns_Call {
 	return &MockOpenlaneGraphClient_GetScheduledJobRuns_Call{Call: _e.mock.On("GetScheduledJobRuns",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -23015,8 +29678,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobRuns(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetScheduledJobRuns_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.ScheduledJobRunWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetScheduledJobRuns_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.ScheduledJobRunWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.ScheduledJobRunWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.ScheduledJobRunWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -23071,11 +29761,11 @@ type MockOpenlaneGraphClient_GetScheduledJobs_Call struct {
 }
 
 // GetScheduledJobs is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.ScheduledJobWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobs(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetScheduledJobs_Call {
 	return &MockOpenlaneGraphClient_GetScheduledJobs_Call{Call: _e.mock.On("GetScheduledJobs",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -23083,8 +29773,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetScheduledJobs(ctx interface{}, fi
 
 func (_c *MockOpenlaneGraphClient_GetScheduledJobs_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.ScheduledJobWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetScheduledJobs_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.ScheduledJobWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.ScheduledJobWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.ScheduledJobWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -23139,8 +29856,8 @@ type MockOpenlaneGraphClient_GetSelf_Call struct {
 }
 
 // GetSelf is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetSelf(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSelf_Call {
 	return &MockOpenlaneGraphClient_GetSelf_Call{Call: _e.mock.On("GetSelf",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -23148,8 +29865,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetSelf(ctx interface{}, interceptor
 
 func (_c *MockOpenlaneGraphClient_GetSelf_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSelf_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -23204,9 +29933,9 @@ type MockOpenlaneGraphClient_GetStandardByID_Call struct {
 }
 
 // GetStandardByID is a helper method to define mock.On call
-//   - ctx
-//   - standardID
-//   - interceptors
+//   - ctx context.Context
+//   - standardID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetStandardByID(ctx interface{}, standardID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetStandardByID_Call {
 	return &MockOpenlaneGraphClient_GetStandardByID_Call{Call: _e.mock.On("GetStandardByID",
 		append([]interface{}{ctx, standardID}, interceptors...)...)}
@@ -23214,8 +29943,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetStandardByID(ctx interface{}, sta
 
 func (_c *MockOpenlaneGraphClient_GetStandardByID_Call) Run(run func(ctx context.Context, standardID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetStandardByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23270,9 +30016,9 @@ type MockOpenlaneGraphClient_GetStandardHistories_Call struct {
 }
 
 // GetStandardHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.StandardHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetStandardHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetStandardHistories_Call {
 	return &MockOpenlaneGraphClient_GetStandardHistories_Call{Call: _e.mock.On("GetStandardHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -23280,8 +30026,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetStandardHistories(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetStandardHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.StandardHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetStandardHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.StandardHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.StandardHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.StandardHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23336,11 +30099,11 @@ type MockOpenlaneGraphClient_GetStandards_Call struct {
 }
 
 // GetStandards is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.StandardWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetStandards(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetStandards_Call {
 	return &MockOpenlaneGraphClient_GetStandards_Call{Call: _e.mock.On("GetStandards",
 		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
@@ -23348,8 +30111,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetStandards(ctx interface{}, first 
 
 func (_c *MockOpenlaneGraphClient_GetStandards_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.StandardWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetStandards_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*openlaneclient.StandardWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.StandardWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.StandardWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -23404,9 +30194,9 @@ type MockOpenlaneGraphClient_GetSubcontrolByID_Call struct {
 }
 
 // GetSubcontrolByID is a helper method to define mock.On call
-//   - ctx
-//   - subcontrolID
-//   - interceptors
+//   - ctx context.Context
+//   - subcontrolID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetSubcontrolByID(ctx interface{}, subcontrolID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubcontrolByID_Call {
 	return &MockOpenlaneGraphClient_GetSubcontrolByID_Call{Call: _e.mock.On("GetSubcontrolByID",
 		append([]interface{}{ctx, subcontrolID}, interceptors...)...)}
@@ -23414,8 +30204,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetSubcontrolByID(ctx interface{}, s
 
 func (_c *MockOpenlaneGraphClient_GetSubcontrolByID_Call) Run(run func(ctx context.Context, subcontrolID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubcontrolByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23470,9 +30277,9 @@ type MockOpenlaneGraphClient_GetSubcontrolHistories_Call struct {
 }
 
 // GetSubcontrolHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.SubcontrolHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetSubcontrolHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubcontrolHistories_Call {
 	return &MockOpenlaneGraphClient_GetSubcontrolHistories_Call{Call: _e.mock.On("GetSubcontrolHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -23480,8 +30287,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetSubcontrolHistories(ctx interface
 
 func (_c *MockOpenlaneGraphClient_GetSubcontrolHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.SubcontrolHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubcontrolHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.SubcontrolHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.SubcontrolHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.SubcontrolHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23536,9 +30360,9 @@ type MockOpenlaneGraphClient_GetSubcontrols_Call struct {
 }
 
 // GetSubcontrols is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.SubcontrolWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetSubcontrols(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubcontrols_Call {
 	return &MockOpenlaneGraphClient_GetSubcontrols_Call{Call: _e.mock.On("GetSubcontrols",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -23546,8 +30370,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetSubcontrols(ctx interface{}, wher
 
 func (_c *MockOpenlaneGraphClient_GetSubcontrols_Call) Run(run func(ctx context.Context, where *openlaneclient.SubcontrolWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubcontrols_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.SubcontrolWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.SubcontrolWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.SubcontrolWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23602,9 +30443,9 @@ type MockOpenlaneGraphClient_GetSubscriberByEmail_Call struct {
 }
 
 // GetSubscriberByEmail is a helper method to define mock.On call
-//   - ctx
-//   - email
-//   - interceptors
+//   - ctx context.Context
+//   - email string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetSubscriberByEmail(ctx interface{}, email interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubscriberByEmail_Call {
 	return &MockOpenlaneGraphClient_GetSubscriberByEmail_Call{Call: _e.mock.On("GetSubscriberByEmail",
 		append([]interface{}{ctx, email}, interceptors...)...)}
@@ -23612,8 +30453,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetSubscriberByEmail(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetSubscriberByEmail_Call) Run(run func(ctx context.Context, email string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubscriberByEmail_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23668,9 +30526,9 @@ type MockOpenlaneGraphClient_GetSubscribers_Call struct {
 }
 
 // GetSubscribers is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.SubscriberWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetSubscribers(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubscribers_Call {
 	return &MockOpenlaneGraphClient_GetSubscribers_Call{Call: _e.mock.On("GetSubscribers",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -23678,8 +30536,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetSubscribers(ctx interface{}, wher
 
 func (_c *MockOpenlaneGraphClient_GetSubscribers_Call) Run(run func(ctx context.Context, where *openlaneclient.SubscriberWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubscribers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.SubscriberWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.SubscriberWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.SubscriberWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23734,8 +30609,8 @@ type MockOpenlaneGraphClient_GetTFASetting_Call struct {
 }
 
 // GetTFASetting is a helper method to define mock.On call
-//   - ctx
-//   - interceptors
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetTFASetting(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTFASetting_Call {
 	return &MockOpenlaneGraphClient_GetTFASetting_Call{Call: _e.mock.On("GetTFASetting",
 		append([]interface{}{ctx}, interceptors...)...)}
@@ -23743,8 +30618,20 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetTFASetting(ctx interface{}, inter
 
 func (_c *MockOpenlaneGraphClient_GetTFASetting_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTFASetting_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[1].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
 	})
 	return _c
 }
@@ -23799,9 +30686,9 @@ type MockOpenlaneGraphClient_GetTaskByID_Call struct {
 }
 
 // GetTaskByID is a helper method to define mock.On call
-//   - ctx
-//   - taskID
-//   - interceptors
+//   - ctx context.Context
+//   - taskID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetTaskByID(ctx interface{}, taskID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTaskByID_Call {
 	return &MockOpenlaneGraphClient_GetTaskByID_Call{Call: _e.mock.On("GetTaskByID",
 		append([]interface{}{ctx, taskID}, interceptors...)...)}
@@ -23809,8 +30696,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetTaskByID(ctx interface{}, taskID 
 
 func (_c *MockOpenlaneGraphClient_GetTaskByID_Call) Run(run func(ctx context.Context, taskID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTaskByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23865,9 +30769,9 @@ type MockOpenlaneGraphClient_GetTaskHistories_Call struct {
 }
 
 // GetTaskHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.TaskHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetTaskHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTaskHistories_Call {
 	return &MockOpenlaneGraphClient_GetTaskHistories_Call{Call: _e.mock.On("GetTaskHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -23875,8 +30779,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetTaskHistories(ctx interface{}, wh
 
 func (_c *MockOpenlaneGraphClient_GetTaskHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.TaskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTaskHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.TaskHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.TaskHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.TaskHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -23931,14 +30852,14 @@ type MockOpenlaneGraphClient_GetTasks_Call struct {
 }
 
 // GetTasks is a helper method to define mock.On call
-//   - ctx
-//   - first
-//   - last
-//   - after
-//   - before
-//   - where
-//   - orderBy
-//   - interceptors
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - after *string
+//   - before *string
+//   - where *openlaneclient.TaskWhereInput
+//   - orderBy []*openlaneclient.TaskOrder
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetTasks(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, where interface{}, orderBy interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTasks_Call {
 	return &MockOpenlaneGraphClient_GetTasks_Call{Call: _e.mock.On("GetTasks",
 		append([]interface{}{ctx, first, last, after, before, where, orderBy}, interceptors...)...)}
@@ -23946,8 +30867,50 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetTasks(ctx interface{}, first inte
 
 func (_c *MockOpenlaneGraphClient_GetTasks_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.TaskWhereInput, orderBy []*openlaneclient.TaskOrder, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTasks_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[7].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*int64), args[2].(*int64), args[3].(*string), args[4].(*string), args[5].(*openlaneclient.TaskWhereInput), args[6].([]*openlaneclient.TaskOrder), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 *openlaneclient.TaskWhereInput
+		if args[5] != nil {
+			arg5 = args[5].(*openlaneclient.TaskWhereInput)
+		}
+		var arg6 []*openlaneclient.TaskOrder
+		if args[6] != nil {
+			arg6 = args[6].([]*openlaneclient.TaskOrder)
+		}
+		var arg7 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 7 {
+			variadicArgs = args[7].([]clientv2.RequestInterceptor)
+		}
+		arg7 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6,
+			arg7...,
+		)
 	})
 	return _c
 }
@@ -24002,9 +30965,9 @@ type MockOpenlaneGraphClient_GetTemplateByID_Call struct {
 }
 
 // GetTemplateByID is a helper method to define mock.On call
-//   - ctx
-//   - getTemplateID
-//   - interceptors
+//   - ctx context.Context
+//   - getTemplateID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetTemplateByID(ctx interface{}, getTemplateID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTemplateByID_Call {
 	return &MockOpenlaneGraphClient_GetTemplateByID_Call{Call: _e.mock.On("GetTemplateByID",
 		append([]interface{}{ctx, getTemplateID}, interceptors...)...)}
@@ -24012,8 +30975,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetTemplateByID(ctx interface{}, get
 
 func (_c *MockOpenlaneGraphClient_GetTemplateByID_Call) Run(run func(ctx context.Context, getTemplateID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTemplateByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24068,9 +31048,9 @@ type MockOpenlaneGraphClient_GetTemplateHistories_Call struct {
 }
 
 // GetTemplateHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.TemplateHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetTemplateHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTemplateHistories_Call {
 	return &MockOpenlaneGraphClient_GetTemplateHistories_Call{Call: _e.mock.On("GetTemplateHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -24078,8 +31058,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetTemplateHistories(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_GetTemplateHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.TemplateHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTemplateHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.TemplateHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.TemplateHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.TemplateHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24090,6 +31087,552 @@ func (_c *MockOpenlaneGraphClient_GetTemplateHistories_Call) Return(getTemplateH
 }
 
 func (_c *MockOpenlaneGraphClient_GetTemplateHistories_Call) RunAndReturn(run func(ctx context.Context, where *openlaneclient.TemplateHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTemplateHistories, error)) *MockOpenlaneGraphClient_GetTemplateHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterByID provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterByID(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterByID, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, trustCenterID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, trustCenterID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterByID")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterByID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterByID, error)); ok {
+		return returnFunc(ctx, trustCenterID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterByID); ok {
+		r0 = returnFunc(ctx, trustCenterID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterByID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, trustCenterID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterByID'
+type MockOpenlaneGraphClient_GetTrustCenterByID_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - trustCenterID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterByID(ctx interface{}, trustCenterID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterByID_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterByID_Call{Call: _e.mock.On("GetTrustCenterByID",
+		append([]interface{}{ctx, trustCenterID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterByID_Call) Run(run func(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterByID_Call) Return(getTrustCenterByID *openlaneclient.GetTrustCenterByID, err error) *MockOpenlaneGraphClient_GetTrustCenterByID_Call {
+	_c.Call.Return(getTrustCenterByID, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterByID_Call) RunAndReturn(run func(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterByID, error)) *MockOpenlaneGraphClient_GetTrustCenterByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterHistories")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterHistoryWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterHistories, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterHistoryWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterHistories); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterHistoryWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterHistories'
+type MockOpenlaneGraphClient_GetTrustCenterHistories_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TrustCenterHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterHistories_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterHistories_Call{Call: _e.mock.On("GetTrustCenterHistories",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TrustCenterHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TrustCenterHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterHistories_Call) Return(getTrustCenterHistories *openlaneclient.GetTrustCenterHistories, err error) *MockOpenlaneGraphClient_GetTrustCenterHistories_Call {
+	_c.Call.Return(getTrustCenterHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterHistories_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterHistories, error)) *MockOpenlaneGraphClient_GetTrustCenterHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterSettingByID provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterSettingByID(ctx context.Context, trustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettingByID, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, trustCenterSettingID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, trustCenterSettingID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterSettingByID")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterSettingByID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettingByID, error)); ok {
+		return returnFunc(ctx, trustCenterSettingID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterSettingByID); ok {
+		r0 = returnFunc(ctx, trustCenterSettingID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterSettingByID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, trustCenterSettingID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterSettingByID'
+type MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterSettingByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - trustCenterSettingID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterSettingByID(ctx interface{}, trustCenterSettingID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call{Call: _e.mock.On("GetTrustCenterSettingByID",
+		append([]interface{}{ctx, trustCenterSettingID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call) Run(run func(ctx context.Context, trustCenterSettingID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call) Return(getTrustCenterSettingByID *openlaneclient.GetTrustCenterSettingByID, err error) *MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call {
+	_c.Call.Return(getTrustCenterSettingByID, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call) RunAndReturn(run func(ctx context.Context, trustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettingByID, error)) *MockOpenlaneGraphClient_GetTrustCenterSettingByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterSettingHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterSettingHistories(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettingHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterSettingHistories")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterSettingHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSettingHistoryWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettingHistories, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSettingHistoryWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterSettingHistories); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterSettingHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSettingHistoryWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterSettingHistories'
+type MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterSettingHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TrustCenterSettingHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterSettingHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call{Call: _e.mock.On("GetTrustCenterSettingHistories",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TrustCenterSettingHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TrustCenterSettingHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call) Return(getTrustCenterSettingHistories *openlaneclient.GetTrustCenterSettingHistories, err error) *MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call {
+	_c.Call.Return(getTrustCenterSettingHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettingHistories, error)) *MockOpenlaneGraphClient_GetTrustCenterSettingHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterSettings provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterSettings(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettings, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterSettings")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterSettings
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSettingWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettings, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSettingWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterSettings); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterSettings)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSettingWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterSettings_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterSettings'
+type MockOpenlaneGraphClient_GetTrustCenterSettings_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterSettings is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TrustCenterSettingWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterSettings(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterSettings_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterSettings_Call{Call: _e.mock.On("GetTrustCenterSettings",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSettings_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSettingWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterSettings_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TrustCenterSettingWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TrustCenterSettingWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSettings_Call) Return(getTrustCenterSettings *openlaneclient.GetTrustCenterSettings, err error) *MockOpenlaneGraphClient_GetTrustCenterSettings_Call {
+	_c.Call.Return(getTrustCenterSettings, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSettings_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettings, error)) *MockOpenlaneGraphClient_GetTrustCenterSettings_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenters provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenters(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenters")
+	}
+
+	var r0 *openlaneclient.GetTrustCenters
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenters); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenters)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenters_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenters'
+type MockOpenlaneGraphClient_GetTrustCenters_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenters is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TrustCenterWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenters(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenters_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenters_Call{Call: _e.mock.On("GetTrustCenters",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenters_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenters_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TrustCenterWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TrustCenterWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenters_Call) Return(getTrustCenters *openlaneclient.GetTrustCenters, err error) *MockOpenlaneGraphClient_GetTrustCenters_Call {
+	_c.Call.Return(getTrustCenters, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenters_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error)) *MockOpenlaneGraphClient_GetTrustCenters_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -24134,9 +31677,9 @@ type MockOpenlaneGraphClient_GetUserByID_Call struct {
 }
 
 // GetUserByID is a helper method to define mock.On call
-//   - ctx
-//   - userID
-//   - interceptors
+//   - ctx context.Context
+//   - userID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetUserByID(ctx interface{}, userID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetUserByID_Call {
 	return &MockOpenlaneGraphClient_GetUserByID_Call{Call: _e.mock.On("GetUserByID",
 		append([]interface{}{ctx, userID}, interceptors...)...)}
@@ -24144,8 +31687,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetUserByID(ctx interface{}, userID 
 
 func (_c *MockOpenlaneGraphClient_GetUserByID_Call) Run(run func(ctx context.Context, userID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetUserByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24200,9 +31760,9 @@ type MockOpenlaneGraphClient_GetUserByIDWithOrgs_Call struct {
 }
 
 // GetUserByIDWithOrgs is a helper method to define mock.On call
-//   - ctx
-//   - userID
-//   - interceptors
+//   - ctx context.Context
+//   - userID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetUserByIDWithOrgs(ctx interface{}, userID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetUserByIDWithOrgs_Call {
 	return &MockOpenlaneGraphClient_GetUserByIDWithOrgs_Call{Call: _e.mock.On("GetUserByIDWithOrgs",
 		append([]interface{}{ctx, userID}, interceptors...)...)}
@@ -24210,8 +31770,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetUserByIDWithOrgs(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_GetUserByIDWithOrgs_Call) Run(run func(ctx context.Context, userID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetUserByIDWithOrgs_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24266,9 +31843,9 @@ type MockOpenlaneGraphClient_GetUserHistories_Call struct {
 }
 
 // GetUserHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.UserHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetUserHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetUserHistories_Call {
 	return &MockOpenlaneGraphClient_GetUserHistories_Call{Call: _e.mock.On("GetUserHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -24276,8 +31853,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetUserHistories(ctx interface{}, wh
 
 func (_c *MockOpenlaneGraphClient_GetUserHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.UserHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetUserHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.UserHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.UserHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.UserHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24332,9 +31926,9 @@ type MockOpenlaneGraphClient_GetUserSettingByID_Call struct {
 }
 
 // GetUserSettingByID is a helper method to define mock.On call
-//   - ctx
-//   - userSettingID
-//   - interceptors
+//   - ctx context.Context
+//   - userSettingID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetUserSettingByID(ctx interface{}, userSettingID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetUserSettingByID_Call {
 	return &MockOpenlaneGraphClient_GetUserSettingByID_Call{Call: _e.mock.On("GetUserSettingByID",
 		append([]interface{}{ctx, userSettingID}, interceptors...)...)}
@@ -24342,8 +31936,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetUserSettingByID(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_GetUserSettingByID_Call) Run(run func(ctx context.Context, userSettingID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetUserSettingByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24398,9 +32009,9 @@ type MockOpenlaneGraphClient_GetUserSettingHistories_Call struct {
 }
 
 // GetUserSettingHistories is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.UserSettingHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetUserSettingHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetUserSettingHistories_Call {
 	return &MockOpenlaneGraphClient_GetUserSettingHistories_Call{Call: _e.mock.On("GetUserSettingHistories",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -24408,8 +32019,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetUserSettingHistories(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_GetUserSettingHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.UserSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetUserSettingHistories_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.UserSettingHistoryWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.UserSettingHistoryWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.UserSettingHistoryWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24464,9 +32092,9 @@ type MockOpenlaneGraphClient_GetUserSettings_Call struct {
 }
 
 // GetUserSettings is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where openlaneclient.UserSettingWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GetUserSettings(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetUserSettings_Call {
 	return &MockOpenlaneGraphClient_GetUserSettings_Call{Call: _e.mock.On("GetUserSettings",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -24474,8 +32102,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GetUserSettings(ctx interface{}, whe
 
 func (_c *MockOpenlaneGraphClient_GetUserSettings_Call) Run(run func(ctx context.Context, where openlaneclient.UserSettingWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetUserSettings_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.UserSettingWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.UserSettingWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.UserSettingWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24530,9 +32175,9 @@ type MockOpenlaneGraphClient_GlobalSearch_Call struct {
 }
 
 // GlobalSearch is a helper method to define mock.On call
-//   - ctx
-//   - query
-//   - interceptors
+//   - ctx context.Context
+//   - query string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) GlobalSearch(ctx interface{}, query interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GlobalSearch_Call {
 	return &MockOpenlaneGraphClient_GlobalSearch_Call{Call: _e.mock.On("GlobalSearch",
 		append([]interface{}{ctx, query}, interceptors...)...)}
@@ -24540,8 +32185,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) GlobalSearch(ctx interface{}, query 
 
 func (_c *MockOpenlaneGraphClient_GlobalSearch_Call) Run(run func(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GlobalSearch_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24596,9 +32258,9 @@ type MockOpenlaneGraphClient_InvitesByOrgID_Call struct {
 }
 
 // InvitesByOrgID is a helper method to define mock.On call
-//   - ctx
-//   - where
-//   - interceptors
+//   - ctx context.Context
+//   - where *openlaneclient.InviteWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) InvitesByOrgID(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_InvitesByOrgID_Call {
 	return &MockOpenlaneGraphClient_InvitesByOrgID_Call{Call: _e.mock.On("InvitesByOrgID",
 		append([]interface{}{ctx, where}, interceptors...)...)}
@@ -24606,8 +32268,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) InvitesByOrgID(ctx interface{}, wher
 
 func (_c *MockOpenlaneGraphClient_InvitesByOrgID_Call) Run(run func(ctx context.Context, where *openlaneclient.InviteWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_InvitesByOrgID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(*openlaneclient.InviteWhereInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *openlaneclient.InviteWhereInput
+		if args[1] != nil {
+			arg1 = args[1].(*openlaneclient.InviteWhereInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24662,9 +32341,9 @@ type MockOpenlaneGraphClient_RemoveUserFromGroup_Call struct {
 }
 
 // RemoveUserFromGroup is a helper method to define mock.On call
-//   - ctx
-//   - deleteGroupMembershipID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteGroupMembershipID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) RemoveUserFromGroup(ctx interface{}, deleteGroupMembershipID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_RemoveUserFromGroup_Call {
 	return &MockOpenlaneGraphClient_RemoveUserFromGroup_Call{Call: _e.mock.On("RemoveUserFromGroup",
 		append([]interface{}{ctx, deleteGroupMembershipID}, interceptors...)...)}
@@ -24672,8 +32351,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) RemoveUserFromGroup(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_RemoveUserFromGroup_Call) Run(run func(ctx context.Context, deleteGroupMembershipID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_RemoveUserFromGroup_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24728,9 +32424,9 @@ type MockOpenlaneGraphClient_RemoveUserFromOrg_Call struct {
 }
 
 // RemoveUserFromOrg is a helper method to define mock.On call
-//   - ctx
-//   - deleteOrgMembershipID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteOrgMembershipID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) RemoveUserFromOrg(ctx interface{}, deleteOrgMembershipID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_RemoveUserFromOrg_Call {
 	return &MockOpenlaneGraphClient_RemoveUserFromOrg_Call{Call: _e.mock.On("RemoveUserFromOrg",
 		append([]interface{}{ctx, deleteOrgMembershipID}, interceptors...)...)}
@@ -24738,8 +32434,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) RemoveUserFromOrg(ctx interface{}, d
 
 func (_c *MockOpenlaneGraphClient_RemoveUserFromOrg_Call) Run(run func(ctx context.Context, deleteOrgMembershipID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_RemoveUserFromOrg_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24794,9 +32507,9 @@ type MockOpenlaneGraphClient_RemoveUserFromProgram_Call struct {
 }
 
 // RemoveUserFromProgram is a helper method to define mock.On call
-//   - ctx
-//   - deleteProgramMembershipID
-//   - interceptors
+//   - ctx context.Context
+//   - deleteProgramMembershipID string
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) RemoveUserFromProgram(ctx interface{}, deleteProgramMembershipID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_RemoveUserFromProgram_Call {
 	return &MockOpenlaneGraphClient_RemoveUserFromProgram_Call{Call: _e.mock.On("RemoveUserFromProgram",
 		append([]interface{}{ctx, deleteProgramMembershipID}, interceptors...)...)}
@@ -24804,8 +32517,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) RemoveUserFromProgram(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_RemoveUserFromProgram_Call) Run(run func(ctx context.Context, deleteProgramMembershipID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_RemoveUserFromProgram_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -24860,10 +32590,10 @@ type MockOpenlaneGraphClient_UpdateAPIToken_Call struct {
 }
 
 // UpdateAPIToken is a helper method to define mock.On call
-//   - ctx
-//   - updateAPITokenID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateAPITokenID string
+//   - input openlaneclient.UpdateAPITokenInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateAPIToken(ctx interface{}, updateAPITokenID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateAPIToken_Call {
 	return &MockOpenlaneGraphClient_UpdateAPIToken_Call{Call: _e.mock.On("UpdateAPIToken",
 		append([]interface{}{ctx, updateAPITokenID, input}, interceptors...)...)}
@@ -24871,8 +32601,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateAPIToken(ctx interface{}, upda
 
 func (_c *MockOpenlaneGraphClient_UpdateAPIToken_Call) Run(run func(ctx context.Context, updateAPITokenID string, input openlaneclient.UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateAPIToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateAPITokenInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateAPITokenInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateAPITokenInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -24927,10 +32679,10 @@ type MockOpenlaneGraphClient_UpdateActionPlan_Call struct {
 }
 
 // UpdateActionPlan is a helper method to define mock.On call
-//   - ctx
-//   - updateActionPlanID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateActionPlanID string
+//   - input openlaneclient.UpdateActionPlanInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateActionPlan(ctx interface{}, updateActionPlanID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateActionPlan_Call {
 	return &MockOpenlaneGraphClient_UpdateActionPlan_Call{Call: _e.mock.On("UpdateActionPlan",
 		append([]interface{}{ctx, updateActionPlanID, input}, interceptors...)...)}
@@ -24938,8 +32690,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateActionPlan(ctx interface{}, up
 
 func (_c *MockOpenlaneGraphClient_UpdateActionPlan_Call) Run(run func(ctx context.Context, updateActionPlanID string, input openlaneclient.UpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateActionPlan_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateActionPlanInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateActionPlanInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateActionPlanInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -24994,10 +32768,10 @@ type MockOpenlaneGraphClient_UpdateContact_Call struct {
 }
 
 // UpdateContact is a helper method to define mock.On call
-//   - ctx
-//   - updateContactID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateContactID string
+//   - input openlaneclient.UpdateContactInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateContact(ctx interface{}, updateContactID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateContact_Call {
 	return &MockOpenlaneGraphClient_UpdateContact_Call{Call: _e.mock.On("UpdateContact",
 		append([]interface{}{ctx, updateContactID, input}, interceptors...)...)}
@@ -25005,8 +32779,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateContact(ctx interface{}, updat
 
 func (_c *MockOpenlaneGraphClient_UpdateContact_Call) Run(run func(ctx context.Context, updateContactID string, input openlaneclient.UpdateContactInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateContact_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateContactInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateContactInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateContactInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25061,10 +32857,10 @@ type MockOpenlaneGraphClient_UpdateControl_Call struct {
 }
 
 // UpdateControl is a helper method to define mock.On call
-//   - ctx
-//   - updateControlID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateControlID string
+//   - input openlaneclient.UpdateControlInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateControl(ctx interface{}, updateControlID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateControl_Call {
 	return &MockOpenlaneGraphClient_UpdateControl_Call{Call: _e.mock.On("UpdateControl",
 		append([]interface{}{ctx, updateControlID, input}, interceptors...)...)}
@@ -25072,8 +32868,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateControl(ctx interface{}, updat
 
 func (_c *MockOpenlaneGraphClient_UpdateControl_Call) Run(run func(ctx context.Context, updateControlID string, input openlaneclient.UpdateControlInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateControlInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateControlInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateControlInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25128,10 +32946,10 @@ type MockOpenlaneGraphClient_UpdateControlImplementation_Call struct {
 }
 
 // UpdateControlImplementation is a helper method to define mock.On call
-//   - ctx
-//   - updateControlImplementationID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateControlImplementationID string
+//   - input openlaneclient.UpdateControlImplementationInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateControlImplementation(ctx interface{}, updateControlImplementationID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateControlImplementation_Call {
 	return &MockOpenlaneGraphClient_UpdateControlImplementation_Call{Call: _e.mock.On("UpdateControlImplementation",
 		append([]interface{}{ctx, updateControlImplementationID, input}, interceptors...)...)}
@@ -25139,8 +32957,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateControlImplementation(ctx inte
 
 func (_c *MockOpenlaneGraphClient_UpdateControlImplementation_Call) Run(run func(ctx context.Context, updateControlImplementationID string, input openlaneclient.UpdateControlImplementationInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateControlImplementation_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateControlImplementationInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateControlImplementationInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateControlImplementationInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25195,10 +33035,10 @@ type MockOpenlaneGraphClient_UpdateControlObjective_Call struct {
 }
 
 // UpdateControlObjective is a helper method to define mock.On call
-//   - ctx
-//   - updateControlObjectiveID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateControlObjectiveID string
+//   - input openlaneclient.UpdateControlObjectiveInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateControlObjective(ctx interface{}, updateControlObjectiveID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateControlObjective_Call {
 	return &MockOpenlaneGraphClient_UpdateControlObjective_Call{Call: _e.mock.On("UpdateControlObjective",
 		append([]interface{}{ctx, updateControlObjectiveID, input}, interceptors...)...)}
@@ -25206,8 +33046,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateControlObjective(ctx interface
 
 func (_c *MockOpenlaneGraphClient_UpdateControlObjective_Call) Run(run func(ctx context.Context, updateControlObjectiveID string, input openlaneclient.UpdateControlObjectiveInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateControlObjective_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateControlObjectiveInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateControlObjectiveInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateControlObjectiveInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25262,10 +33124,10 @@ type MockOpenlaneGraphClient_UpdateControlScheduledJob_Call struct {
 }
 
 // UpdateControlScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - updateControlScheduledJobID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateControlScheduledJobID string
+//   - input openlaneclient.UpdateControlScheduledJobInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateControlScheduledJob(ctx interface{}, updateControlScheduledJobID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateControlScheduledJob_Call {
 	return &MockOpenlaneGraphClient_UpdateControlScheduledJob_Call{Call: _e.mock.On("UpdateControlScheduledJob",
 		append([]interface{}{ctx, updateControlScheduledJobID, input}, interceptors...)...)}
@@ -25273,8 +33135,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateControlScheduledJob(ctx interf
 
 func (_c *MockOpenlaneGraphClient_UpdateControlScheduledJob_Call) Run(run func(ctx context.Context, updateControlScheduledJobID string, input openlaneclient.UpdateControlScheduledJobInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateControlScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateControlScheduledJobInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateControlScheduledJobInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateControlScheduledJobInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25329,10 +33213,10 @@ type MockOpenlaneGraphClient_UpdateCustomDomain_Call struct {
 }
 
 // UpdateCustomDomain is a helper method to define mock.On call
-//   - ctx
-//   - updateCustomDomainID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateCustomDomainID string
+//   - input openlaneclient.UpdateCustomDomainInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateCustomDomain(ctx interface{}, updateCustomDomainID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateCustomDomain_Call {
 	return &MockOpenlaneGraphClient_UpdateCustomDomain_Call{Call: _e.mock.On("UpdateCustomDomain",
 		append([]interface{}{ctx, updateCustomDomainID, input}, interceptors...)...)}
@@ -25340,8 +33224,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateCustomDomain(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_UpdateCustomDomain_Call) Run(run func(ctx context.Context, updateCustomDomainID string, input openlaneclient.UpdateCustomDomainInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateCustomDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateCustomDomainInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateCustomDomainInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateCustomDomainInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25396,10 +33302,10 @@ type MockOpenlaneGraphClient_UpdateDNSVerification_Call struct {
 }
 
 // UpdateDNSVerification is a helper method to define mock.On call
-//   - ctx
-//   - updateDNSVerificationID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateDNSVerificationID string
+//   - input openlaneclient.UpdateDNSVerificationInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateDNSVerification(ctx interface{}, updateDNSVerificationID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateDNSVerification_Call {
 	return &MockOpenlaneGraphClient_UpdateDNSVerification_Call{Call: _e.mock.On("UpdateDNSVerification",
 		append([]interface{}{ctx, updateDNSVerificationID, input}, interceptors...)...)}
@@ -25407,8 +33313,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateDNSVerification(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_UpdateDNSVerification_Call) Run(run func(ctx context.Context, updateDNSVerificationID string, input openlaneclient.UpdateDNSVerificationInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateDNSVerification_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateDNSVerificationInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateDNSVerificationInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateDNSVerificationInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25463,10 +33391,10 @@ type MockOpenlaneGraphClient_UpdateDocumentData_Call struct {
 }
 
 // UpdateDocumentData is a helper method to define mock.On call
-//   - ctx
-//   - updateDocumentDataID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateDocumentDataID string
+//   - input openlaneclient.UpdateDocumentDataInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateDocumentData(ctx interface{}, updateDocumentDataID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateDocumentData_Call {
 	return &MockOpenlaneGraphClient_UpdateDocumentData_Call{Call: _e.mock.On("UpdateDocumentData",
 		append([]interface{}{ctx, updateDocumentDataID, input}, interceptors...)...)}
@@ -25474,8 +33402,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateDocumentData(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_UpdateDocumentData_Call) Run(run func(ctx context.Context, updateDocumentDataID string, input openlaneclient.UpdateDocumentDataInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateDocumentData_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateDocumentDataInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateDocumentDataInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateDocumentDataInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25530,10 +33480,10 @@ type MockOpenlaneGraphClient_UpdateEntity_Call struct {
 }
 
 // UpdateEntity is a helper method to define mock.On call
-//   - ctx
-//   - updateEntityID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateEntityID string
+//   - input openlaneclient.UpdateEntityInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateEntity(ctx interface{}, updateEntityID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateEntity_Call {
 	return &MockOpenlaneGraphClient_UpdateEntity_Call{Call: _e.mock.On("UpdateEntity",
 		append([]interface{}{ctx, updateEntityID, input}, interceptors...)...)}
@@ -25541,8 +33491,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateEntity(ctx interface{}, update
 
 func (_c *MockOpenlaneGraphClient_UpdateEntity_Call) Run(run func(ctx context.Context, updateEntityID string, input openlaneclient.UpdateEntityInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateEntity_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateEntityInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateEntityInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateEntityInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25597,10 +33569,10 @@ type MockOpenlaneGraphClient_UpdateEntityType_Call struct {
 }
 
 // UpdateEntityType is a helper method to define mock.On call
-//   - ctx
-//   - updateEntityTypeID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateEntityTypeID string
+//   - input openlaneclient.UpdateEntityTypeInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateEntityType(ctx interface{}, updateEntityTypeID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateEntityType_Call {
 	return &MockOpenlaneGraphClient_UpdateEntityType_Call{Call: _e.mock.On("UpdateEntityType",
 		append([]interface{}{ctx, updateEntityTypeID, input}, interceptors...)...)}
@@ -25608,8 +33580,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateEntityType(ctx interface{}, up
 
 func (_c *MockOpenlaneGraphClient_UpdateEntityType_Call) Run(run func(ctx context.Context, updateEntityTypeID string, input openlaneclient.UpdateEntityTypeInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateEntityType_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateEntityTypeInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateEntityTypeInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateEntityTypeInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25664,10 +33658,10 @@ type MockOpenlaneGraphClient_UpdateEvent_Call struct {
 }
 
 // UpdateEvent is a helper method to define mock.On call
-//   - ctx
-//   - updateEventID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateEventID string
+//   - input openlaneclient.UpdateEventInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateEvent(ctx interface{}, updateEventID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateEvent_Call {
 	return &MockOpenlaneGraphClient_UpdateEvent_Call{Call: _e.mock.On("UpdateEvent",
 		append([]interface{}{ctx, updateEventID, input}, interceptors...)...)}
@@ -25675,8 +33669,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateEvent(ctx interface{}, updateE
 
 func (_c *MockOpenlaneGraphClient_UpdateEvent_Call) Run(run func(ctx context.Context, updateEventID string, input openlaneclient.UpdateEventInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateEvent_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateEventInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateEventInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateEventInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25731,11 +33747,11 @@ type MockOpenlaneGraphClient_UpdateEvidence_Call struct {
 }
 
 // UpdateEvidence is a helper method to define mock.On call
-//   - ctx
-//   - updateEvidenceID
-//   - input
-//   - evidenceFiles
-//   - interceptors
+//   - ctx context.Context
+//   - updateEvidenceID string
+//   - input openlaneclient.UpdateEvidenceInput
+//   - evidenceFiles []*graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateEvidence(ctx interface{}, updateEvidenceID interface{}, input interface{}, evidenceFiles interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateEvidence_Call {
 	return &MockOpenlaneGraphClient_UpdateEvidence_Call{Call: _e.mock.On("UpdateEvidence",
 		append([]interface{}{ctx, updateEvidenceID, input, evidenceFiles}, interceptors...)...)}
@@ -25743,8 +33759,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateEvidence(ctx interface{}, upda
 
 func (_c *MockOpenlaneGraphClient_UpdateEvidence_Call) Run(run func(ctx context.Context, updateEvidenceID string, input openlaneclient.UpdateEvidenceInput, evidenceFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateEvidence_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateEvidenceInput), args[3].([]*graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateEvidenceInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateEvidenceInput)
+		}
+		var arg3 []*graphql.Upload
+		if args[3] != nil {
+			arg3 = args[3].([]*graphql.Upload)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -25799,10 +33842,10 @@ type MockOpenlaneGraphClient_UpdateGroup_Call struct {
 }
 
 // UpdateGroup is a helper method to define mock.On call
-//   - ctx
-//   - updateGroupID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateGroupID string
+//   - input openlaneclient.UpdateGroupInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateGroup(ctx interface{}, updateGroupID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateGroup_Call {
 	return &MockOpenlaneGraphClient_UpdateGroup_Call{Call: _e.mock.On("UpdateGroup",
 		append([]interface{}{ctx, updateGroupID, input}, interceptors...)...)}
@@ -25810,8 +33853,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateGroup(ctx interface{}, updateG
 
 func (_c *MockOpenlaneGraphClient_UpdateGroup_Call) Run(run func(ctx context.Context, updateGroupID string, input openlaneclient.UpdateGroupInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateGroup_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateGroupInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateGroupInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateGroupInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25866,10 +33931,10 @@ type MockOpenlaneGraphClient_UpdateGroupSetting_Call struct {
 }
 
 // UpdateGroupSetting is a helper method to define mock.On call
-//   - ctx
-//   - updateGroupSettingID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateGroupSettingID string
+//   - input openlaneclient.UpdateGroupSettingInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateGroupSetting(ctx interface{}, updateGroupSettingID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateGroupSetting_Call {
 	return &MockOpenlaneGraphClient_UpdateGroupSetting_Call{Call: _e.mock.On("UpdateGroupSetting",
 		append([]interface{}{ctx, updateGroupSettingID, input}, interceptors...)...)}
@@ -25877,8 +33942,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateGroupSetting(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_UpdateGroupSetting_Call) Run(run func(ctx context.Context, updateGroupSettingID string, input openlaneclient.UpdateGroupSettingInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateGroupSetting_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateGroupSettingInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateGroupSettingInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateGroupSettingInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -25933,10 +34020,10 @@ type MockOpenlaneGraphClient_UpdateHush_Call struct {
 }
 
 // UpdateHush is a helper method to define mock.On call
-//   - ctx
-//   - updateHushID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateHushID string
+//   - input openlaneclient.UpdateHushInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateHush(ctx interface{}, updateHushID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateHush_Call {
 	return &MockOpenlaneGraphClient_UpdateHush_Call{Call: _e.mock.On("UpdateHush",
 		append([]interface{}{ctx, updateHushID, input}, interceptors...)...)}
@@ -25944,8 +34031,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateHush(ctx interface{}, updateHu
 
 func (_c *MockOpenlaneGraphClient_UpdateHush_Call) Run(run func(ctx context.Context, updateHushID string, input openlaneclient.UpdateHushInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateHush_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateHushInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateHushInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateHushInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26000,10 +34109,10 @@ type MockOpenlaneGraphClient_UpdateIntegration_Call struct {
 }
 
 // UpdateIntegration is a helper method to define mock.On call
-//   - ctx
-//   - updateIntegrationID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateIntegrationID string
+//   - input openlaneclient.UpdateIntegrationInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateIntegration(ctx interface{}, updateIntegrationID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateIntegration_Call {
 	return &MockOpenlaneGraphClient_UpdateIntegration_Call{Call: _e.mock.On("UpdateIntegration",
 		append([]interface{}{ctx, updateIntegrationID, input}, interceptors...)...)}
@@ -26011,8 +34120,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateIntegration(ctx interface{}, u
 
 func (_c *MockOpenlaneGraphClient_UpdateIntegration_Call) Run(run func(ctx context.Context, updateIntegrationID string, input openlaneclient.UpdateIntegrationInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateIntegration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateIntegrationInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateIntegrationInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateIntegrationInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26067,10 +34198,10 @@ type MockOpenlaneGraphClient_UpdateInternalPolicy_Call struct {
 }
 
 // UpdateInternalPolicy is a helper method to define mock.On call
-//   - ctx
-//   - updateInternalPolicyID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateInternalPolicyID string
+//   - input openlaneclient.UpdateInternalPolicyInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateInternalPolicy(ctx interface{}, updateInternalPolicyID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateInternalPolicy_Call {
 	return &MockOpenlaneGraphClient_UpdateInternalPolicy_Call{Call: _e.mock.On("UpdateInternalPolicy",
 		append([]interface{}{ctx, updateInternalPolicyID, input}, interceptors...)...)}
@@ -26078,8 +34209,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateInternalPolicy(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_UpdateInternalPolicy_Call) Run(run func(ctx context.Context, updateInternalPolicyID string, input openlaneclient.UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateInternalPolicy_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateInternalPolicyInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateInternalPolicyInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateInternalPolicyInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26134,10 +34287,10 @@ type MockOpenlaneGraphClient_UpdateJobRunner_Call struct {
 }
 
 // UpdateJobRunner is a helper method to define mock.On call
-//   - ctx
-//   - updateJobRunnerID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateJobRunnerID string
+//   - input openlaneclient.UpdateJobRunnerInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateJobRunner(ctx interface{}, updateJobRunnerID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateJobRunner_Call {
 	return &MockOpenlaneGraphClient_UpdateJobRunner_Call{Call: _e.mock.On("UpdateJobRunner",
 		append([]interface{}{ctx, updateJobRunnerID, input}, interceptors...)...)}
@@ -26145,8 +34298,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateJobRunner(ctx interface{}, upd
 
 func (_c *MockOpenlaneGraphClient_UpdateJobRunner_Call) Run(run func(ctx context.Context, updateJobRunnerID string, input openlaneclient.UpdateJobRunnerInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateJobRunner_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateJobRunnerInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateJobRunnerInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateJobRunnerInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26201,10 +34376,10 @@ type MockOpenlaneGraphClient_UpdateMappableDomain_Call struct {
 }
 
 // UpdateMappableDomain is a helper method to define mock.On call
-//   - ctx
-//   - updateMappableDomainID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateMappableDomainID string
+//   - input openlaneclient.UpdateMappableDomainInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateMappableDomain(ctx interface{}, updateMappableDomainID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateMappableDomain_Call {
 	return &MockOpenlaneGraphClient_UpdateMappableDomain_Call{Call: _e.mock.On("UpdateMappableDomain",
 		append([]interface{}{ctx, updateMappableDomainID, input}, interceptors...)...)}
@@ -26212,8 +34387,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateMappableDomain(ctx interface{}
 
 func (_c *MockOpenlaneGraphClient_UpdateMappableDomain_Call) Run(run func(ctx context.Context, updateMappableDomainID string, input openlaneclient.UpdateMappableDomainInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateMappableDomain_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateMappableDomainInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateMappableDomainInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateMappableDomainInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26268,10 +34465,10 @@ type MockOpenlaneGraphClient_UpdateMappedControl_Call struct {
 }
 
 // UpdateMappedControl is a helper method to define mock.On call
-//   - ctx
-//   - updateMappedControlID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateMappedControlID string
+//   - input openlaneclient.UpdateMappedControlInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateMappedControl(ctx interface{}, updateMappedControlID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateMappedControl_Call {
 	return &MockOpenlaneGraphClient_UpdateMappedControl_Call{Call: _e.mock.On("UpdateMappedControl",
 		append([]interface{}{ctx, updateMappedControlID, input}, interceptors...)...)}
@@ -26279,8 +34476,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateMappedControl(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_UpdateMappedControl_Call) Run(run func(ctx context.Context, updateMappedControlID string, input openlaneclient.UpdateMappedControlInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateMappedControl_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateMappedControlInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateMappedControlInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateMappedControlInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26335,10 +34554,10 @@ type MockOpenlaneGraphClient_UpdateNarrative_Call struct {
 }
 
 // UpdateNarrative is a helper method to define mock.On call
-//   - ctx
-//   - updateNarrativeID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateNarrativeID string
+//   - input openlaneclient.UpdateNarrativeInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateNarrative(ctx interface{}, updateNarrativeID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateNarrative_Call {
 	return &MockOpenlaneGraphClient_UpdateNarrative_Call{Call: _e.mock.On("UpdateNarrative",
 		append([]interface{}{ctx, updateNarrativeID, input}, interceptors...)...)}
@@ -26346,8 +34565,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateNarrative(ctx interface{}, upd
 
 func (_c *MockOpenlaneGraphClient_UpdateNarrative_Call) Run(run func(ctx context.Context, updateNarrativeID string, input openlaneclient.UpdateNarrativeInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateNarrative_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateNarrativeInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateNarrativeInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateNarrativeInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26402,11 +34643,11 @@ type MockOpenlaneGraphClient_UpdateOrganization_Call struct {
 }
 
 // UpdateOrganization is a helper method to define mock.On call
-//   - ctx
-//   - updateOrganizationID
-//   - input
-//   - avatarFile
-//   - interceptors
+//   - ctx context.Context
+//   - updateOrganizationID string
+//   - input openlaneclient.UpdateOrganizationInput
+//   - avatarFile *graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateOrganization(ctx interface{}, updateOrganizationID interface{}, input interface{}, avatarFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateOrganization_Call {
 	return &MockOpenlaneGraphClient_UpdateOrganization_Call{Call: _e.mock.On("UpdateOrganization",
 		append([]interface{}{ctx, updateOrganizationID, input, avatarFile}, interceptors...)...)}
@@ -26414,8 +34655,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateOrganization(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_UpdateOrganization_Call) Run(run func(ctx context.Context, updateOrganizationID string, input openlaneclient.UpdateOrganizationInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateOrganization_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateOrganizationInput), args[3].(*graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateOrganizationInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateOrganizationInput)
+		}
+		var arg3 *graphql.Upload
+		if args[3] != nil {
+			arg3 = args[3].(*graphql.Upload)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -26470,10 +34738,10 @@ type MockOpenlaneGraphClient_UpdateOrganizationSetting_Call struct {
 }
 
 // UpdateOrganizationSetting is a helper method to define mock.On call
-//   - ctx
-//   - updateOrganizationSettingID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateOrganizationSettingID string
+//   - input openlaneclient.UpdateOrganizationSettingInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateOrganizationSetting(ctx interface{}, updateOrganizationSettingID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateOrganizationSetting_Call {
 	return &MockOpenlaneGraphClient_UpdateOrganizationSetting_Call{Call: _e.mock.On("UpdateOrganizationSetting",
 		append([]interface{}{ctx, updateOrganizationSettingID, input}, interceptors...)...)}
@@ -26481,8 +34749,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateOrganizationSetting(ctx interf
 
 func (_c *MockOpenlaneGraphClient_UpdateOrganizationSetting_Call) Run(run func(ctx context.Context, updateOrganizationSettingID string, input openlaneclient.UpdateOrganizationSettingInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateOrganizationSetting_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateOrganizationSettingInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateOrganizationSettingInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateOrganizationSettingInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26537,10 +34827,10 @@ type MockOpenlaneGraphClient_UpdatePersonalAccessToken_Call struct {
 }
 
 // UpdatePersonalAccessToken is a helper method to define mock.On call
-//   - ctx
-//   - updatePersonalAccessTokenID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updatePersonalAccessTokenID string
+//   - input openlaneclient.UpdatePersonalAccessTokenInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdatePersonalAccessToken(ctx interface{}, updatePersonalAccessTokenID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdatePersonalAccessToken_Call {
 	return &MockOpenlaneGraphClient_UpdatePersonalAccessToken_Call{Call: _e.mock.On("UpdatePersonalAccessToken",
 		append([]interface{}{ctx, updatePersonalAccessTokenID, input}, interceptors...)...)}
@@ -26548,8 +34838,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdatePersonalAccessToken(ctx interf
 
 func (_c *MockOpenlaneGraphClient_UpdatePersonalAccessToken_Call) Run(run func(ctx context.Context, updatePersonalAccessTokenID string, input openlaneclient.UpdatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdatePersonalAccessToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdatePersonalAccessTokenInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdatePersonalAccessTokenInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdatePersonalAccessTokenInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26604,10 +34916,10 @@ type MockOpenlaneGraphClient_UpdateProcedure_Call struct {
 }
 
 // UpdateProcedure is a helper method to define mock.On call
-//   - ctx
-//   - updateProcedureID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateProcedureID string
+//   - input openlaneclient.UpdateProcedureInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateProcedure(ctx interface{}, updateProcedureID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateProcedure_Call {
 	return &MockOpenlaneGraphClient_UpdateProcedure_Call{Call: _e.mock.On("UpdateProcedure",
 		append([]interface{}{ctx, updateProcedureID, input}, interceptors...)...)}
@@ -26615,8 +34927,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateProcedure(ctx interface{}, upd
 
 func (_c *MockOpenlaneGraphClient_UpdateProcedure_Call) Run(run func(ctx context.Context, updateProcedureID string, input openlaneclient.UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateProcedure_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateProcedureInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateProcedureInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateProcedureInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26671,10 +35005,10 @@ type MockOpenlaneGraphClient_UpdateProgram_Call struct {
 }
 
 // UpdateProgram is a helper method to define mock.On call
-//   - ctx
-//   - updateProgramID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateProgramID string
+//   - input openlaneclient.UpdateProgramInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateProgram(ctx interface{}, updateProgramID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateProgram_Call {
 	return &MockOpenlaneGraphClient_UpdateProgram_Call{Call: _e.mock.On("UpdateProgram",
 		append([]interface{}{ctx, updateProgramID, input}, interceptors...)...)}
@@ -26682,8 +35016,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateProgram(ctx interface{}, updat
 
 func (_c *MockOpenlaneGraphClient_UpdateProgram_Call) Run(run func(ctx context.Context, updateProgramID string, input openlaneclient.UpdateProgramInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateProgram_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateProgramInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateProgramInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateProgramInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26738,10 +35094,10 @@ type MockOpenlaneGraphClient_UpdateProgramMembership_Call struct {
 }
 
 // UpdateProgramMembership is a helper method to define mock.On call
-//   - ctx
-//   - updateProgramMembershipID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateProgramMembershipID string
+//   - input openlaneclient.UpdateProgramMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateProgramMembership(ctx interface{}, updateProgramMembershipID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateProgramMembership_Call {
 	return &MockOpenlaneGraphClient_UpdateProgramMembership_Call{Call: _e.mock.On("UpdateProgramMembership",
 		append([]interface{}{ctx, updateProgramMembershipID, input}, interceptors...)...)}
@@ -26749,8 +35105,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateProgramMembership(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_UpdateProgramMembership_Call) Run(run func(ctx context.Context, updateProgramMembershipID string, input openlaneclient.UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateProgramMembership_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateProgramMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateProgramMembershipInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateProgramMembershipInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26805,10 +35183,10 @@ type MockOpenlaneGraphClient_UpdateRisk_Call struct {
 }
 
 // UpdateRisk is a helper method to define mock.On call
-//   - ctx
-//   - updateRiskID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateRiskID string
+//   - input openlaneclient.UpdateRiskInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateRisk(ctx interface{}, updateRiskID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateRisk_Call {
 	return &MockOpenlaneGraphClient_UpdateRisk_Call{Call: _e.mock.On("UpdateRisk",
 		append([]interface{}{ctx, updateRiskID, input}, interceptors...)...)}
@@ -26816,8 +35194,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateRisk(ctx interface{}, updateRi
 
 func (_c *MockOpenlaneGraphClient_UpdateRisk_Call) Run(run func(ctx context.Context, updateRiskID string, input openlaneclient.UpdateRiskInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateRisk_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateRiskInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateRiskInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateRiskInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26872,10 +35272,10 @@ type MockOpenlaneGraphClient_UpdateScheduledJob_Call struct {
 }
 
 // UpdateScheduledJob is a helper method to define mock.On call
-//   - ctx
-//   - updateScheduledJobID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateScheduledJobID string
+//   - input openlaneclient.UpdateScheduledJobInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateScheduledJob(ctx interface{}, updateScheduledJobID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateScheduledJob_Call {
 	return &MockOpenlaneGraphClient_UpdateScheduledJob_Call{Call: _e.mock.On("UpdateScheduledJob",
 		append([]interface{}{ctx, updateScheduledJobID, input}, interceptors...)...)}
@@ -26883,8 +35283,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateScheduledJob(ctx interface{}, 
 
 func (_c *MockOpenlaneGraphClient_UpdateScheduledJob_Call) Run(run func(ctx context.Context, updateScheduledJobID string, input openlaneclient.UpdateScheduledJobInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateScheduledJob_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateScheduledJobInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateScheduledJobInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateScheduledJobInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -26939,10 +35361,10 @@ type MockOpenlaneGraphClient_UpdateStandard_Call struct {
 }
 
 // UpdateStandard is a helper method to define mock.On call
-//   - ctx
-//   - updateStandardID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateStandardID string
+//   - input openlaneclient.UpdateStandardInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateStandard(ctx interface{}, updateStandardID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateStandard_Call {
 	return &MockOpenlaneGraphClient_UpdateStandard_Call{Call: _e.mock.On("UpdateStandard",
 		append([]interface{}{ctx, updateStandardID, input}, interceptors...)...)}
@@ -26950,8 +35372,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateStandard(ctx interface{}, upda
 
 func (_c *MockOpenlaneGraphClient_UpdateStandard_Call) Run(run func(ctx context.Context, updateStandardID string, input openlaneclient.UpdateStandardInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateStandard_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateStandardInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateStandardInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateStandardInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -27006,10 +35450,10 @@ type MockOpenlaneGraphClient_UpdateSubcontrol_Call struct {
 }
 
 // UpdateSubcontrol is a helper method to define mock.On call
-//   - ctx
-//   - updateSubcontrolID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateSubcontrolID string
+//   - input openlaneclient.UpdateSubcontrolInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateSubcontrol(ctx interface{}, updateSubcontrolID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateSubcontrol_Call {
 	return &MockOpenlaneGraphClient_UpdateSubcontrol_Call{Call: _e.mock.On("UpdateSubcontrol",
 		append([]interface{}{ctx, updateSubcontrolID, input}, interceptors...)...)}
@@ -27017,8 +35461,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateSubcontrol(ctx interface{}, up
 
 func (_c *MockOpenlaneGraphClient_UpdateSubcontrol_Call) Run(run func(ctx context.Context, updateSubcontrolID string, input openlaneclient.UpdateSubcontrolInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateSubcontrol_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateSubcontrolInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateSubcontrolInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateSubcontrolInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -27073,10 +35539,10 @@ type MockOpenlaneGraphClient_UpdateSubscriber_Call struct {
 }
 
 // UpdateSubscriber is a helper method to define mock.On call
-//   - ctx
-//   - email
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - email string
+//   - input openlaneclient.UpdateSubscriberInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateSubscriber(ctx interface{}, email interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateSubscriber_Call {
 	return &MockOpenlaneGraphClient_UpdateSubscriber_Call{Call: _e.mock.On("UpdateSubscriber",
 		append([]interface{}{ctx, email, input}, interceptors...)...)}
@@ -27084,8 +35550,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateSubscriber(ctx interface{}, em
 
 func (_c *MockOpenlaneGraphClient_UpdateSubscriber_Call) Run(run func(ctx context.Context, email string, input openlaneclient.UpdateSubscriberInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateSubscriber_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateSubscriberInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateSubscriberInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateSubscriberInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -27140,9 +35628,9 @@ type MockOpenlaneGraphClient_UpdateTFASetting_Call struct {
 }
 
 // UpdateTFASetting is a helper method to define mock.On call
-//   - ctx
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - input openlaneclient.UpdateTFASettingInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateTFASetting(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTFASetting_Call {
 	return &MockOpenlaneGraphClient_UpdateTFASetting_Call{Call: _e.mock.On("UpdateTFASetting",
 		append([]interface{}{ctx, input}, interceptors...)...)}
@@ -27150,8 +35638,25 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateTFASetting(ctx interface{}, in
 
 func (_c *MockOpenlaneGraphClient_UpdateTFASetting_Call) Run(run func(ctx context.Context, input openlaneclient.UpdateTFASettingInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTFASetting_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(openlaneclient.UpdateTFASettingInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.UpdateTFASettingInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.UpdateTFASettingInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
@@ -27206,10 +35711,10 @@ type MockOpenlaneGraphClient_UpdateTask_Call struct {
 }
 
 // UpdateTask is a helper method to define mock.On call
-//   - ctx
-//   - updateTaskID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateTaskID string
+//   - input openlaneclient.UpdateTaskInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateTask(ctx interface{}, updateTaskID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTask_Call {
 	return &MockOpenlaneGraphClient_UpdateTask_Call{Call: _e.mock.On("UpdateTask",
 		append([]interface{}{ctx, updateTaskID, input}, interceptors...)...)}
@@ -27217,8 +35722,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateTask(ctx interface{}, updateTa
 
 func (_c *MockOpenlaneGraphClient_UpdateTask_Call) Run(run func(ctx context.Context, updateTaskID string, input openlaneclient.UpdateTaskInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTask_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateTaskInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateTaskInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateTaskInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -27273,11 +35800,11 @@ type MockOpenlaneGraphClient_UpdateTaskComment_Call struct {
 }
 
 // UpdateTaskComment is a helper method to define mock.On call
-//   - ctx
-//   - updateTaskCommentID
-//   - input
-//   - noteFiles
-//   - interceptors
+//   - ctx context.Context
+//   - updateTaskCommentID string
+//   - input openlaneclient.UpdateNoteInput
+//   - noteFiles []*graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateTaskComment(ctx interface{}, updateTaskCommentID interface{}, input interface{}, noteFiles interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTaskComment_Call {
 	return &MockOpenlaneGraphClient_UpdateTaskComment_Call{Call: _e.mock.On("UpdateTaskComment",
 		append([]interface{}{ctx, updateTaskCommentID, input, noteFiles}, interceptors...)...)}
@@ -27285,8 +35812,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateTaskComment(ctx interface{}, u
 
 func (_c *MockOpenlaneGraphClient_UpdateTaskComment_Call) Run(run func(ctx context.Context, updateTaskCommentID string, input openlaneclient.UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTaskComment_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateNoteInput), args[3].([]*graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateNoteInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateNoteInput)
+		}
+		var arg3 []*graphql.Upload
+		if args[3] != nil {
+			arg3 = args[3].([]*graphql.Upload)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -27341,10 +35895,10 @@ type MockOpenlaneGraphClient_UpdateTemplate_Call struct {
 }
 
 // UpdateTemplate is a helper method to define mock.On call
-//   - ctx
-//   - updateTemplateID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateTemplateID string
+//   - input openlaneclient.UpdateTemplateInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateTemplate(ctx interface{}, updateTemplateID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTemplate_Call {
 	return &MockOpenlaneGraphClient_UpdateTemplate_Call{Call: _e.mock.On("UpdateTemplate",
 		append([]interface{}{ctx, updateTemplateID, input}, interceptors...)...)}
@@ -27352,8 +35906,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateTemplate(ctx interface{}, upda
 
 func (_c *MockOpenlaneGraphClient_UpdateTemplate_Call) Run(run func(ctx context.Context, updateTemplateID string, input openlaneclient.UpdateTemplateInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTemplate_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateTemplateInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateTemplateInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateTemplateInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -27364,6 +35940,184 @@ func (_c *MockOpenlaneGraphClient_UpdateTemplate_Call) Return(updateTemplate *op
 }
 
 func (_c *MockOpenlaneGraphClient_UpdateTemplate_Call) RunAndReturn(run func(ctx context.Context, updateTemplateID string, input openlaneclient.UpdateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTemplate, error)) *MockOpenlaneGraphClient_UpdateTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateTrustCenter provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input openlaneclient.UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenter, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateTrustCenterID, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateTrustCenterID, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateTrustCenter")
+	}
+
+	var r0 *openlaneclient.UpdateTrustCenter
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenter, error)); ok {
+		return returnFunc(ctx, updateTrustCenterID, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTrustCenter); ok {
+		r0 = returnFunc(ctx, updateTrustCenterID, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateTrustCenter)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateTrustCenterInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateTrustCenterID, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateTrustCenter_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateTrustCenter'
+type MockOpenlaneGraphClient_UpdateTrustCenter_Call struct {
+	*mock.Call
+}
+
+// UpdateTrustCenter is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateTrustCenterID string
+//   - input openlaneclient.UpdateTrustCenterInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateTrustCenter(ctx interface{}, updateTrustCenterID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
+	return &MockOpenlaneGraphClient_UpdateTrustCenter_Call{Call: _e.mock.On("UpdateTrustCenter",
+		append([]interface{}{ctx, updateTrustCenterID, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenter_Call) Run(run func(ctx context.Context, updateTrustCenterID string, input openlaneclient.UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateTrustCenterInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateTrustCenterInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenter_Call) Return(updateTrustCenter *openlaneclient.UpdateTrustCenter, err error) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
+	_c.Call.Return(updateTrustCenter, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenter_Call) RunAndReturn(run func(ctx context.Context, updateTrustCenterID string, input openlaneclient.UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenter, error)) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateTrustCenterSetting provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input openlaneclient.UpdateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterSetting, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateTrustCenterSettingID, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateTrustCenterSettingID, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateTrustCenterSetting")
+	}
+
+	var r0 *openlaneclient.UpdateTrustCenterSetting
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterSettingInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterSetting, error)); ok {
+		return returnFunc(ctx, updateTrustCenterSettingID, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterSettingInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTrustCenterSetting); ok {
+		r0 = returnFunc(ctx, updateTrustCenterSettingID, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateTrustCenterSetting)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateTrustCenterSettingInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateTrustCenterSettingID, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateTrustCenterSetting'
+type MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call struct {
+	*mock.Call
+}
+
+// UpdateTrustCenterSetting is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateTrustCenterSettingID string
+//   - input openlaneclient.UpdateTrustCenterSettingInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateTrustCenterSetting(ctx interface{}, updateTrustCenterSettingID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call {
+	return &MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call{Call: _e.mock.On("UpdateTrustCenterSetting",
+		append([]interface{}{ctx, updateTrustCenterSettingID, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call) Run(run func(ctx context.Context, updateTrustCenterSettingID string, input openlaneclient.UpdateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateTrustCenterSettingInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateTrustCenterSettingInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call) Return(updateTrustCenterSetting *openlaneclient.UpdateTrustCenterSetting, err error) *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call {
+	_c.Call.Return(updateTrustCenterSetting, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call) RunAndReturn(run func(ctx context.Context, updateTrustCenterSettingID string, input openlaneclient.UpdateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterSetting, error)) *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -27408,11 +36162,11 @@ type MockOpenlaneGraphClient_UpdateUser_Call struct {
 }
 
 // UpdateUser is a helper method to define mock.On call
-//   - ctx
-//   - updateUserID
-//   - input
-//   - avatarFile
-//   - interceptors
+//   - ctx context.Context
+//   - updateUserID string
+//   - input openlaneclient.UpdateUserInput
+//   - avatarFile *graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateUser(ctx interface{}, updateUserID interface{}, input interface{}, avatarFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateUser_Call {
 	return &MockOpenlaneGraphClient_UpdateUser_Call{Call: _e.mock.On("UpdateUser",
 		append([]interface{}{ctx, updateUserID, input, avatarFile}, interceptors...)...)}
@@ -27420,8 +36174,35 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateUser(ctx interface{}, updateUs
 
 func (_c *MockOpenlaneGraphClient_UpdateUser_Call) Run(run func(ctx context.Context, updateUserID string, input openlaneclient.UpdateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[4].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateUserInput), args[3].(*graphql.Upload), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateUserInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateUserInput)
+		}
+		var arg3 *graphql.Upload
+		if args[3] != nil {
+			arg3 = args[3].(*graphql.Upload)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
 	})
 	return _c
 }
@@ -27476,10 +36257,10 @@ type MockOpenlaneGraphClient_UpdateUserRoleInGroup_Call struct {
 }
 
 // UpdateUserRoleInGroup is a helper method to define mock.On call
-//   - ctx
-//   - updateGroupMemberID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateGroupMemberID string
+//   - input openlaneclient.UpdateGroupMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateUserRoleInGroup(ctx interface{}, updateGroupMemberID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateUserRoleInGroup_Call {
 	return &MockOpenlaneGraphClient_UpdateUserRoleInGroup_Call{Call: _e.mock.On("UpdateUserRoleInGroup",
 		append([]interface{}{ctx, updateGroupMemberID, input}, interceptors...)...)}
@@ -27487,8 +36268,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateUserRoleInGroup(ctx interface{
 
 func (_c *MockOpenlaneGraphClient_UpdateUserRoleInGroup_Call) Run(run func(ctx context.Context, updateGroupMemberID string, input openlaneclient.UpdateGroupMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateUserRoleInGroup_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateGroupMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateGroupMembershipInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateGroupMembershipInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -27543,10 +36346,10 @@ type MockOpenlaneGraphClient_UpdateUserRoleInOrg_Call struct {
 }
 
 // UpdateUserRoleInOrg is a helper method to define mock.On call
-//   - ctx
-//   - updateOrgMemberID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateOrgMemberID string
+//   - input openlaneclient.UpdateOrgMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateUserRoleInOrg(ctx interface{}, updateOrgMemberID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateUserRoleInOrg_Call {
 	return &MockOpenlaneGraphClient_UpdateUserRoleInOrg_Call{Call: _e.mock.On("UpdateUserRoleInOrg",
 		append([]interface{}{ctx, updateOrgMemberID, input}, interceptors...)...)}
@@ -27554,8 +36357,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateUserRoleInOrg(ctx interface{},
 
 func (_c *MockOpenlaneGraphClient_UpdateUserRoleInOrg_Call) Run(run func(ctx context.Context, updateOrgMemberID string, input openlaneclient.UpdateOrgMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateUserRoleInOrg_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateOrgMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateOrgMembershipInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateOrgMembershipInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -27610,10 +36435,10 @@ type MockOpenlaneGraphClient_UpdateUserRoleInProgram_Call struct {
 }
 
 // UpdateUserRoleInProgram is a helper method to define mock.On call
-//   - ctx
-//   - updateProgramMemberID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateProgramMemberID string
+//   - input openlaneclient.UpdateProgramMembershipInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateUserRoleInProgram(ctx interface{}, updateProgramMemberID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateUserRoleInProgram_Call {
 	return &MockOpenlaneGraphClient_UpdateUserRoleInProgram_Call{Call: _e.mock.On("UpdateUserRoleInProgram",
 		append([]interface{}{ctx, updateProgramMemberID, input}, interceptors...)...)}
@@ -27621,8 +36446,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateUserRoleInProgram(ctx interfac
 
 func (_c *MockOpenlaneGraphClient_UpdateUserRoleInProgram_Call) Run(run func(ctx context.Context, updateProgramMemberID string, input openlaneclient.UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateUserRoleInProgram_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateProgramMembershipInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateProgramMembershipInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateProgramMembershipInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -27677,10 +36524,10 @@ type MockOpenlaneGraphClient_UpdateUserSetting_Call struct {
 }
 
 // UpdateUserSetting is a helper method to define mock.On call
-//   - ctx
-//   - updateUserSettingID
-//   - input
-//   - interceptors
+//   - ctx context.Context
+//   - updateUserSettingID string
+//   - input openlaneclient.UpdateUserSettingInput
+//   - interceptors ...clientv2.RequestInterceptor
 func (_e *MockOpenlaneGraphClient_Expecter) UpdateUserSetting(ctx interface{}, updateUserSettingID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateUserSetting_Call {
 	return &MockOpenlaneGraphClient_UpdateUserSetting_Call{Call: _e.mock.On("UpdateUserSetting",
 		append([]interface{}{ctx, updateUserSettingID, input}, interceptors...)...)}
@@ -27688,8 +36535,30 @@ func (_e *MockOpenlaneGraphClient_Expecter) UpdateUserSetting(ctx interface{}, u
 
 func (_c *MockOpenlaneGraphClient_UpdateUserSetting_Call) Run(run func(ctx context.Context, updateUserSettingID string, input openlaneclient.UpdateUserSettingInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateUserSetting_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]clientv2.RequestInterceptor)
-		run(args[0].(context.Context), args[1].(string), args[2].(openlaneclient.UpdateUserSettingInput), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateUserSettingInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateUserSettingInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }

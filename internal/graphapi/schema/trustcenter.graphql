@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up trustCenter by ID
+    """
+     trustCenter(
+        """
+        ID of the trustCenter
+        """
+        id: ID!
+    ):  TrustCenter!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenter
+    """
+    createTrustCenter(
+        """
+        values of the trustCenter
+        """
+        input: CreateTrustCenterInput!
+    ): TrustCenterCreatePayload!
+    """
+    Create multiple new trustCenters
+    """
+    createBulkTrustCenter(
+        """
+        values of the trustCenter
+        """
+        input: [CreateTrustCenterInput!]
+    ): TrustCenterBulkCreatePayload!
+    """
+    Create multiple new trustCenters via file upload
+    """
+    createBulkCSVTrustCenter(
+        """
+        csv file containing values of the trustCenter
+        """
+        input: Upload!
+    ): TrustCenterBulkCreatePayload!
+    """
+    Update an existing trustCenter
+    """
+    updateTrustCenter(
+        """
+        ID of the trustCenter
+        """
+        id: ID!
+        """
+        New values for the trustCenter
+        """
+        input: UpdateTrustCenterInput!
+    ): TrustCenterUpdatePayload!
+    """
+    Delete an existing trustCenter
+    """
+    deleteTrustCenter(
+        """
+        ID of the trustCenter
+        """
+        id: ID!
+    ): TrustCenterDeletePayload!
+}
+
+"""
+Return response for createTrustCenter mutation
+"""
+type TrustCenterCreatePayload {
+    """
+    Created trustCenter
+    """
+    trustCenter: TrustCenter!
+}
+
+"""
+Return response for updateTrustCenter mutation
+"""
+type TrustCenterUpdatePayload {
+    """
+    Updated trustCenter
+    """
+    trustCenter: TrustCenter!
+}
+
+"""
+Return response for deleteTrustCenter mutation
+"""
+type TrustCenterDeletePayload {
+    """
+    Deleted trustCenter ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenter mutation
+"""
+type TrustCenterBulkCreatePayload {
+    """
+    Created trustCenters
+    """
+    trustCenters: [TrustCenter!]
+}

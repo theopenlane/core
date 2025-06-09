@@ -50,6 +50,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/entx/history"
@@ -2846,6 +2848,126 @@ func (th *TemplateHistory) Diff(history *TemplateHistory) (*HistoryDiff[Template
 	return nil, IdenticalHistoryError
 }
 
+func (tch *TrustCenterHistory) changes(new *TrustCenterHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(tch.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldCreatedAt, tch.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(tch.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldUpdatedAt, tch.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(tch.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldCreatedBy, tch.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(tch.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldDeletedAt, tch.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(tch.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldDeletedBy, tch.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(tch.Tags, new.Tags) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldTags, tch.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(tch.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldOwnerID, tch.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(tch.Slug, new.Slug) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldSlug, tch.Slug, new.Slug))
+	}
+	if !reflect.DeepEqual(tch.CustomDomainID, new.CustomDomainID) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldCustomDomainID, tch.CustomDomainID, new.CustomDomainID))
+	}
+	return changes
+}
+
+func (tch *TrustCenterHistory) Diff(history *TrustCenterHistory) (*HistoryDiff[TrustCenterHistory], error) {
+	if tch.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	tchUnix, historyUnix := tch.HistoryTime.Unix(), history.HistoryTime.Unix()
+	tchOlder := tchUnix < historyUnix || (tchUnix == historyUnix && tch.ID < history.ID)
+	historyOlder := tchUnix > historyUnix || (tchUnix == historyUnix && tch.ID > history.ID)
+
+	if tchOlder {
+		return &HistoryDiff[TrustCenterHistory]{
+			Old:     tch,
+			New:     history,
+			Changes: tch.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[TrustCenterHistory]{
+			Old:     history,
+			New:     tch,
+			Changes: history.changes(tch),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (tcsh *TrustCenterSettingHistory) changes(new *TrustCenterSettingHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(tcsh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldCreatedAt, tcsh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(tcsh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldUpdatedAt, tcsh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(tcsh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldCreatedBy, tcsh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(tcsh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldDeletedAt, tcsh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(tcsh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldDeletedBy, tcsh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(tcsh.TrustCenterID, new.TrustCenterID) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldTrustCenterID, tcsh.TrustCenterID, new.TrustCenterID))
+	}
+	if !reflect.DeepEqual(tcsh.Title, new.Title) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldTitle, tcsh.Title, new.Title))
+	}
+	if !reflect.DeepEqual(tcsh.Overview, new.Overview) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldOverview, tcsh.Overview, new.Overview))
+	}
+	if !reflect.DeepEqual(tcsh.LogoURL, new.LogoURL) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldLogoURL, tcsh.LogoURL, new.LogoURL))
+	}
+	if !reflect.DeepEqual(tcsh.FaviconURL, new.FaviconURL) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldFaviconURL, tcsh.FaviconURL, new.FaviconURL))
+	}
+	if !reflect.DeepEqual(tcsh.PrimaryColor, new.PrimaryColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldPrimaryColor, tcsh.PrimaryColor, new.PrimaryColor))
+	}
+	return changes
+}
+
+func (tcsh *TrustCenterSettingHistory) Diff(history *TrustCenterSettingHistory) (*HistoryDiff[TrustCenterSettingHistory], error) {
+	if tcsh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	tcshUnix, historyUnix := tcsh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	tcshOlder := tcshUnix < historyUnix || (tcshUnix == historyUnix && tcsh.ID < history.ID)
+	historyOlder := tcshUnix > historyUnix || (tcshUnix == historyUnix && tcsh.ID > history.ID)
+
+	if tcshOlder {
+		return &HistoryDiff[TrustCenterSettingHistory]{
+			Old:     tcsh,
+			New:     history,
+			Changes: tcsh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[TrustCenterSettingHistory]{
+			Old:     history,
+			New:     tcsh,
+			Changes: history.changes(tcsh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (uh *UserHistory) changes(new *UserHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(uh.CreatedAt, new.CreatedAt) {
@@ -3273,6 +3395,18 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditTrustCenterHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
+	record, err = auditTrustCenterSettingHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditUserHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -3630,6 +3764,24 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("TemplateHistory", "History") {
 		record, err = auditTemplateHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("TrustCenterHistory", "History") {
+		record, err = auditTrustCenterHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("TrustCenterSettingHistory", "History") {
+		record, err = auditTrustCenterSettingHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -5691,6 +5843,112 @@ func auditTemplateHistory(ctx context.Context, config config) ([][]string, error
 			default:
 				if i == 0 {
 					record.Changes = (&TemplateHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type trustcenterhistoryref struct {
+	Ref string
+}
+
+func auditTrustCenterHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []trustcenterhistoryref
+	client := NewTrustCenterHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(trustcenterhistory.ByRef()).
+		Select(trustcenterhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(trustcenterhistory.Ref(currRef.Ref)).
+			Order(trustcenterhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "TrustCenterHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&TrustCenterHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&TrustCenterHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&TrustCenterHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type trustcentersettinghistoryref struct {
+	Ref string
+}
+
+func auditTrustCenterSettingHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []trustcentersettinghistoryref
+	client := NewTrustCenterSettingHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(trustcentersettinghistory.ByRef()).
+		Select(trustcentersettinghistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(trustcentersettinghistory.Ref(currRef.Ref)).
+			Order(trustcentersettinghistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "TrustCenterSettingHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&TrustCenterSettingHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&TrustCenterSettingHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&TrustCenterSettingHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

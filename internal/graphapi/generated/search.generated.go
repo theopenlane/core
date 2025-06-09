@@ -1941,6 +1941,55 @@ func (ec *executionContext) fieldContext_SearchResults_templates(_ context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_trustCenters(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SearchResults_trustCenters(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TrustCenters, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*generated.TrustCenterConnection)
+	fc.Result = res
+	return ec.marshalOTrustCenterConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_trustCenters(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_TrustCenterConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_TrustCenterConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_TrustCenterConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_users(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SearchResults_users(ctx, field)
 	if err != nil {
@@ -2195,6 +2244,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_tasks(ctx, field, obj)
 		case "templates":
 			out.Values[i] = ec._SearchResults_templates(ctx, field, obj)
+		case "trustCenters":
+			out.Values[i] = ec._SearchResults_trustCenters(ctx, field, obj)
 		case "users":
 			out.Values[i] = ec._SearchResults_users(ctx, field, obj)
 		case "userSettings":

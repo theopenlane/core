@@ -118,15 +118,26 @@ type MockStorage_Download_Call struct {
 }
 
 // Download is a helper method to define mock.On call
-//   - context1
-//   - downloadFileOptions
+//   - context1 context.Context
+//   - downloadFileOptions *objects.DownloadFileOptions
 func (_e *MockStorage_Expecter) Download(context1 interface{}, downloadFileOptions interface{}) *MockStorage_Download_Call {
 	return &MockStorage_Download_Call{Call: _e.mock.On("Download", context1, downloadFileOptions)}
 }
 
 func (_c *MockStorage_Download_Call) Run(run func(context1 context.Context, downloadFileOptions *objects.DownloadFileOptions)) *MockStorage_Download_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(*objects.DownloadFileOptions))
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *objects.DownloadFileOptions
+		if args[1] != nil {
+			arg1 = args[1].(*objects.DownloadFileOptions)
+		}
+		run(
+			arg0,
+			arg1,
+		)
 	})
 	return _c
 }
@@ -173,15 +184,26 @@ type MockStorage_GetPresignedURL_Call struct {
 }
 
 // GetPresignedURL is a helper method to define mock.On call
-//   - s
-//   - duration
+//   - s string
+//   - duration time.Duration
 func (_e *MockStorage_Expecter) GetPresignedURL(s interface{}, duration interface{}) *MockStorage_GetPresignedURL_Call {
 	return &MockStorage_GetPresignedURL_Call{Call: _e.mock.On("GetPresignedURL", s, duration)}
 }
 
 func (_c *MockStorage_GetPresignedURL_Call) Run(run func(s string, duration time.Duration)) *MockStorage_GetPresignedURL_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(string), args[1].(time.Duration))
+		var arg0 string
+		if args[0] != nil {
+			arg0 = args[0].(string)
+		}
+		var arg1 time.Duration
+		if args[1] != nil {
+			arg1 = args[1].(time.Duration)
+		}
+		run(
+			arg0,
+			arg1,
+		)
 	})
 	return _c
 }
@@ -320,15 +342,26 @@ type MockStorage_ManagerUpload_Call struct {
 }
 
 // ManagerUpload is a helper method to define mock.On call
-//   - context1
-//   - bytess
+//   - context1 context.Context
+//   - bytess [][]byte
 func (_e *MockStorage_Expecter) ManagerUpload(context1 interface{}, bytess interface{}) *MockStorage_ManagerUpload_Call {
 	return &MockStorage_ManagerUpload_Call{Call: _e.mock.On("ManagerUpload", context1, bytess)}
 }
 
 func (_c *MockStorage_ManagerUpload_Call) Run(run func(context1 context.Context, bytess [][]byte)) *MockStorage_ManagerUpload_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].([][]byte))
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 [][]byte
+		if args[1] != nil {
+			arg1 = args[1].([][]byte)
+		}
+		run(
+			arg0,
+			arg1,
+		)
 	})
 	return _c
 }
@@ -377,16 +410,32 @@ type MockStorage_Upload_Call struct {
 }
 
 // Upload is a helper method to define mock.On call
-//   - context1
-//   - reader
-//   - uploadFileOptions
+//   - context1 context.Context
+//   - reader io.Reader
+//   - uploadFileOptions *objects.UploadFileOptions
 func (_e *MockStorage_Expecter) Upload(context1 interface{}, reader interface{}, uploadFileOptions interface{}) *MockStorage_Upload_Call {
 	return &MockStorage_Upload_Call{Call: _e.mock.On("Upload", context1, reader, uploadFileOptions)}
 }
 
 func (_c *MockStorage_Upload_Call) Run(run func(context1 context.Context, reader io.Reader, uploadFileOptions *objects.UploadFileOptions)) *MockStorage_Upload_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(io.Reader), args[2].(*objects.UploadFileOptions))
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 io.Reader
+		if args[1] != nil {
+			arg1 = args[1].(io.Reader)
+		}
+		var arg2 *objects.UploadFileOptions
+		if args[2] != nil {
+			arg2 = args[2].(*objects.UploadFileOptions)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
 	})
 	return _c
 }
