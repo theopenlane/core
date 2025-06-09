@@ -10,6 +10,8 @@ import (
 var (
 	ErrFailedToGetOauthToken = errors.New("failed to get oauth2 token")
 	ErrNoCookieJarSet        = errors.New("client does not have a cookie jar, cannot set cookies")
+	ErrEmptyCSRFToken        = errors.New("empty csrf token received from server, cannot continue")
+	ErrCSRFCookieNotFound    = errors.New("csrf cookie not found in cookie jar, cannot continue")
 )
 
 // AuthenticationError is returned when a user cannot be authenticated

@@ -80,10 +80,10 @@ type MockCustomHostnamesService_Delete_Call struct {
 }
 
 // Delete is a helper method to define mock.On call
-//   - context1
-//   - s
-//   - customHostnameDeleteParams
-//   - vs
+//   - context1 context.Context
+//   - s string
+//   - customHostnameDeleteParams custom_hostnames.CustomHostnameDeleteParams
+//   - vs ...option.RequestOption
 func (_e *MockCustomHostnamesService_Expecter) Delete(context1 interface{}, s interface{}, customHostnameDeleteParams interface{}, vs ...interface{}) *MockCustomHostnamesService_Delete_Call {
 	return &MockCustomHostnamesService_Delete_Call{Call: _e.mock.On("Delete",
 		append([]interface{}{context1, s, customHostnameDeleteParams}, vs...)...)}
@@ -91,8 +91,30 @@ func (_e *MockCustomHostnamesService_Expecter) Delete(context1 interface{}, s in
 
 func (_c *MockCustomHostnamesService_Delete_Call) Run(run func(context1 context.Context, s string, customHostnameDeleteParams custom_hostnames.CustomHostnameDeleteParams, vs ...option.RequestOption)) *MockCustomHostnamesService_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]option.RequestOption)
-		run(args[0].(context.Context), args[1].(string), args[2].(custom_hostnames.CustomHostnameDeleteParams), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 custom_hostnames.CustomHostnameDeleteParams
+		if args[2] != nil {
+			arg2 = args[2].(custom_hostnames.CustomHostnameDeleteParams)
+		}
+		var arg3 []option.RequestOption
+		var variadicArgs []option.RequestOption
+		if len(args) > 3 {
+			variadicArgs = args[3].([]option.RequestOption)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -147,10 +169,10 @@ type MockCustomHostnamesService_Get_Call struct {
 }
 
 // Get is a helper method to define mock.On call
-//   - context1
-//   - s
-//   - customHostnameGetParams
-//   - vs
+//   - context1 context.Context
+//   - s string
+//   - customHostnameGetParams custom_hostnames.CustomHostnameGetParams
+//   - vs ...option.RequestOption
 func (_e *MockCustomHostnamesService_Expecter) Get(context1 interface{}, s interface{}, customHostnameGetParams interface{}, vs ...interface{}) *MockCustomHostnamesService_Get_Call {
 	return &MockCustomHostnamesService_Get_Call{Call: _e.mock.On("Get",
 		append([]interface{}{context1, s, customHostnameGetParams}, vs...)...)}
@@ -158,8 +180,30 @@ func (_e *MockCustomHostnamesService_Expecter) Get(context1 interface{}, s inter
 
 func (_c *MockCustomHostnamesService_Get_Call) Run(run func(context1 context.Context, s string, customHostnameGetParams custom_hostnames.CustomHostnameGetParams, vs ...option.RequestOption)) *MockCustomHostnamesService_Get_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[3].([]option.RequestOption)
-		run(args[0].(context.Context), args[1].(string), args[2].(custom_hostnames.CustomHostnameGetParams), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 custom_hostnames.CustomHostnameGetParams
+		if args[2] != nil {
+			arg2 = args[2].(custom_hostnames.CustomHostnameGetParams)
+		}
+		var arg3 []option.RequestOption
+		var variadicArgs []option.RequestOption
+		if len(args) > 3 {
+			variadicArgs = args[3].([]option.RequestOption)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
 	})
 	return _c
 }
@@ -214,9 +258,9 @@ type MockCustomHostnamesService_New_Call struct {
 }
 
 // New is a helper method to define mock.On call
-//   - context1
-//   - customHostnameNewParams
-//   - vs
+//   - context1 context.Context
+//   - customHostnameNewParams custom_hostnames.CustomHostnameNewParams
+//   - vs ...option.RequestOption
 func (_e *MockCustomHostnamesService_Expecter) New(context1 interface{}, customHostnameNewParams interface{}, vs ...interface{}) *MockCustomHostnamesService_New_Call {
 	return &MockCustomHostnamesService_New_Call{Call: _e.mock.On("New",
 		append([]interface{}{context1, customHostnameNewParams}, vs...)...)}
@@ -224,8 +268,25 @@ func (_e *MockCustomHostnamesService_Expecter) New(context1 interface{}, customH
 
 func (_c *MockCustomHostnamesService_New_Call) Run(run func(context1 context.Context, customHostnameNewParams custom_hostnames.CustomHostnameNewParams, vs ...option.RequestOption)) *MockCustomHostnamesService_New_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := args[2].([]option.RequestOption)
-		run(args[0].(context.Context), args[1].(custom_hostnames.CustomHostnameNewParams), variadicArgs...)
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 custom_hostnames.CustomHostnameNewParams
+		if args[1] != nil {
+			arg1 = args[1].(custom_hostnames.CustomHostnameNewParams)
+		}
+		var arg2 []option.RequestOption
+		var variadicArgs []option.RequestOption
+		if len(args) > 2 {
+			variadicArgs = args[2].([]option.RequestOption)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
 	})
 	return _c
 }
