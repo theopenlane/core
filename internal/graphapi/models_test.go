@@ -1511,3 +1511,108 @@ func (b *ControlScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) 
 
 	return result
 }
+
+// TrustCenterBuilder is used to create trust centers
+type TrustCenterBuilder struct {
+	client *client
+
+	// Fields
+	Slug           string
+	CustomDomainID string
+	OwnerID        string
+}
+
+// TrustCenterSettingBuilder is used to create trust center settings
+type TrustCenterSettingBuilder struct {
+	client *client
+
+	// Fields
+	Title         string
+	Overview      string
+	LogoURL       string
+	FaviconURL    string
+	PrimaryColor  string
+	TrustCenterID string
+	OwnerID       string
+	Tags          []string
+}
+
+// MustNew trust center builder is used to create, without authz checks, trust centers in the database
+func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenter {
+	ctx = setContext(ctx, tc.client.db)
+
+	if tc.Slug == "" {
+		tc.Slug = randomName(t)
+	}
+
+	if tc.OwnerID == "" {
+		// Use the organization ID from the test user
+		tc.OwnerID = testUser1.OrganizationID
+	}
+
+	mutation := tc.client.db.TrustCenter.Create().
+		SetSlug(tc.Slug).
+		SetOwnerID(tc.OwnerID)
+
+	if tc.CustomDomainID != "" {
+		mutation.SetCustomDomainID(tc.CustomDomainID)
+	}
+
+	trustCenter, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return trustCenter
+}
+
+// MustNew trust center setting builder is used to create, without authz checks, trust center settings in the database
+func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterSetting {
+	ctx = setContext(ctx, tcs.client.db)
+
+	if tcs.Title == "" {
+		tcs.Title = gofakeit.Company() + " Trust Center"
+	}
+
+	if tcs.Overview == "" {
+		tcs.Overview = gofakeit.Sentence(10)
+	}
+
+	if tcs.LogoURL == "" {
+		tcs.LogoURL = gofakeit.URL()
+	}
+
+	if tcs.FaviconURL == "" {
+		tcs.FaviconURL = gofakeit.URL()
+	}
+
+	if tcs.PrimaryColor == "" {
+		tcs.PrimaryColor = gofakeit.HexColor()
+	}
+
+	if tcs.TrustCenterID == "" {
+		// Create a trust center if not provided
+		trustCenter := (&TrustCenterBuilder{client: tcs.client}).MustNew(ctx, t)
+		tcs.TrustCenterID = trustCenter.ID
+	}
+
+	if tcs.OwnerID == "" {
+		// Use the organization ID from the test user
+		tcs.OwnerID = testUser1.OrganizationID
+	}
+
+	if len(tcs.Tags) == 0 {
+		tcs.Tags = []string{"test", "trust-center"}
+	}
+
+	mutation := tcs.client.db.TrustCenterSetting.Create().
+		SetTitle(tcs.Title).
+		SetOverview(tcs.Overview).
+		SetLogoURL(tcs.LogoURL).
+		SetFaviconURL(tcs.FaviconURL).
+		SetPrimaryColor(tcs.PrimaryColor).
+		SetTrustCenterID(tcs.TrustCenterID)
+
+	trustCenterSetting, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return trustCenterSetting
+}
