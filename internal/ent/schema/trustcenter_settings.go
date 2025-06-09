@@ -3,12 +3,14 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // TrustCenterSetting holds the schema definition for the TrustCenterSetting entity
@@ -36,8 +38,8 @@ func (TrustCenterSetting) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("trust_center_id").
 			Comment("the ID of the trust center the settings belong to").
-			NotEmpty().
-			Immutable(),
+			// Actually required, but i have to make codegen happy
+			Optional(),
 		field.String("title").
 			Comment("title of the trust center").
 			MaxLen(trustCenterNameMaxLen).
@@ -65,21 +67,18 @@ func (TrustCenterSetting) Fields() []ent.Field {
 // Mixin of the TrustCenterSetting
 func (t TrustCenterSetting) Mixin() []ent.Mixin {
 	return mixinConfig{
-		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t),
-		},
+		excludeTags: true,
 	}.getMixins()
 }
 
 // Edges of the TrustCenterSetting
 func (t TrustCenterSetting) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: t,
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
-			required:   true,
-			immutable:  true,
+			ref:        "setting",
 		}),
 	}
 }
@@ -94,9 +93,9 @@ func (TrustCenterSetting) Policy() ent.Policy {
 		policy.WithQueryRules(
 			privacy.AlwaysAllowRule(),
 		),
-		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
-		),
+		// policy.WithMutationRules(
+		// 	policy.CheckOrgWriteAccess(),
+		// ),
 	)
 }
 
@@ -104,5 +103,11 @@ func (TrustCenterSetting) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("trust_center_id").
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+	}
+}
+
+func (TrustCenterSetting) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SettingsChecks("trust_center"),
 	}
 }

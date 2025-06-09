@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
@@ -87,12 +86,5 @@ func (IntegrationHistory) Fields() []ent.Field {
 func (IntegrationHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
-	}
-}
-
-// Interceptors of the IntegrationHistory
-func (IntegrationHistory) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
@@ -11,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/entx"
 )
 
 const (
@@ -82,10 +84,12 @@ func (t TrustCenter) Edges() []ent.Edge {
 			immutable:  false,
 		}),
 		uniqueEdgeTo(&edgeDefinition{
-			fromSchema:    t,
-			t:             TrustCenterSetting.Type,
-			cascadeDelete: "TrustCenter",
-			name:          "setting",
+			fromSchema: t,
+			name:       "setting",
+			t:          TrustCenterSetting.Type,
+			annotations: []schema.Annotation{
+				entx.CascadeAnnotationField("TrustCenter"),
+			},
 		}),
 	}
 }

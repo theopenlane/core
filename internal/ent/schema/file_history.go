@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
@@ -93,12 +92,5 @@ func (FileHistory) Fields() []ent.Field {
 func (FileHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
-	}
-}
-
-// Interceptors of the FileHistory
-func (FileHistory) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.FilterListQuery(),
 	}
 }

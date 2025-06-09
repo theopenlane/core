@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // TrustCenterSettingHistory holds the schema definition for the TrustCenterSettingHistory entity.
@@ -34,6 +34,11 @@ func (TrustCenterSettingHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "trust_center",
+			IDField:      "TrustCenterID",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -87,12 +92,5 @@ func (TrustCenterSettingHistory) Fields() []ent.Field {
 func (TrustCenterSettingHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
-	}
-}
-
-// Interceptors of the TrustCenterSettingHistory
-func (TrustCenterSettingHistory) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
 	}
 }
