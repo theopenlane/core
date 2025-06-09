@@ -8,9 +8,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"reflect"
 	"strings"
 	"time"
+
+	"entgo.io/contrib/entgql"
+	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
+	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
@@ -23,7 +30,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
-	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
@@ -32,7 +38,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
@@ -52,13 +57,60 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
-	"github.com/theopenlane/entx/history"
 )
 
 type Change struct {
 	FieldName string
 	Old       any
 	New       any
+}
+
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (c Change) MarshalGQL(w io.Writer) {
+	marshalGQLJSON(w, c)
+}
+
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (c *Change) UnmarshalGQL(v interface{}) error {
+	return unmarshalGQLJSON(v, c)
+}
+
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (c AuditLogOrderField) MarshalGQL(w io.Writer) {
+	marshalGQLJSON(w, c)
+}
+
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (c *AuditLogOrderField) UnmarshalGQL(v interface{}) error {
+	return unmarshalGQLJSON(v, c)
+}
+
+// marshalGQLJSON marshals the given type into JSON and writes it to the given writer
+func marshalGQLJSON[T any](w io.Writer, a T) {
+	byteData, err := json.Marshal(a)
+	if err != nil {
+		log.Fatal().Err(err).Msg("error marshalling json object")
+	}
+
+	_, err = w.Write(byteData)
+	if err != nil {
+		log.Fatal().Err(err).Msg("error writing json object")
+	}
+}
+
+// unmarshalGQLJSON unmarshals a JSON object into the given type
+func unmarshalGQLJSON[T any](v any, a T) error {
+	byteData, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(byteData, &a)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func NewChange(fieldName string, old, new any) Change {
@@ -75,9 +127,99 @@ type HistoryDiff[T any] struct {
 	Changes []Change
 }
 
+// AuditLog is the representation of an audit log entry.
+type AuditLog struct {
+	// Table is the name of the table that this audit log entry is for.
+	Table string `json:"table"`
+	// Ref is the reference ID of the object that this audit log entry is for.
+	RefID string `json:"id"`
+	// HistoryTime is the time when the history entry was created.
+	HistoryTime time.Time `json:"time"`
+	// Operation is the type of operation that was performed on the object.
+	Operation history.OpType `json:"operation"`
+	// Changes is a JSON-encoded string containing the changes made to the object.
+	Changes []Change `json:"changes"`
+	// UpdatedBy is the user who performed the operation.
+	UpdatedBy string `json:"updatedBy"`
+}
+
+var auditlogImplementors = []string{"AuditLog", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AuditLog) IsNode() {}
+
+// AuditLogEdge is the edge representation of AuditLog.
+type AuditLogEdge struct {
+	Node   *AuditLog `json:"node"`
+	Cursor Cursor    `json:"cursor"`
+}
+
+// AuditLogConnection is the connection containing edges to AuditLog.
+type AuditLogConnection struct {
+	Edges      []*AuditLogEdge `json:"edges"`
+	PageInfo   PageInfo        `json:"pageInfo"`
+	TotalCount int             `json:"totalCount"`
+}
+
+// AuditLogWhereInput is the input type for filtering AuditLog entries
+// Table is always required for now due to pagination on a single table
+// TODO: (sfunk) use joins to allow for pagination across multiple tables
+type AuditLogWhereInput struct {
+	RefID     *string         `json:"refID,omitempty"`
+	UpdatedBy *string         `json:"updatedBy,omitempty"`
+	Operation *history.OpType `json:"operation,omitempty"`
+	Table     string          `json:"table"`
+	Before    *time.Time      `json:"before,omitempty"`
+	After     *time.Time      `json:"after,omitempty"`
+}
+
+// AuditLogOrderField defines the ordering field of AuditLog.
+type AuditLogOrderField struct {
+	// Value extracts the ordering value from the given AuditLog.
+	Value    func(*AuditLog) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) OrderOption
+	toCursor func(*AuditLog) Cursor
+}
+
+// OrderOption defines the ordering options for the AuditLog queries.
+type OrderOption func(*sql.Selector)
+
+// AuditLogOrder defines the ordering of AuditLog.
+type AuditLogOrder struct {
+	Direction OrderDirection      `json:"direction"`
+	Field     *AuditLogOrderField `json:"field"`
+}
+
+// ByHistoryTime orders the results by the history_time field.
+func ByHistoryTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(AuditLogFieldHistoryTime, opts...).ToFunc()
+}
+
+const (
+	AuditLogFieldHistoryTime = "history_time"
+)
+
 var (
-	MismatchedRefError    = errors.New("cannot take diff of histories with different Refs")
-	IdenticalHistoryError = errors.New("cannot take diff of identical history")
+	// AuditLogOrderFieldCreatedAt orders AuditLog by history_time.
+	AuditLogOrderFieldHistoryTime = &AuditLogOrderField{
+		Value: func(al *AuditLog) (ent.Value, error) {
+			return al.HistoryTime, nil
+		},
+		column: AuditLogFieldHistoryTime,
+		toTerm: ByHistoryTime,
+		toCursor: func(al *AuditLog) Cursor {
+			return Cursor{
+				ID:    al.RefID,
+				Value: al.HistoryTime,
+			}
+		},
+	}
+)
+
+var (
+	ErrMismatchedRef    = errors.New("cannot take diff of histories with different Refs")
+	ErrIdenticalHistory = errors.New("cannot take diff of identical history")
 )
 
 func (aph *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
@@ -150,7 +292,7 @@ func (aph *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 
 func (aph *ActionPlanHistory) Diff(history *ActionPlanHistory) (*HistoryDiff[ActionPlanHistory], error) {
 	if aph.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	aphUnix, historyUnix := aph.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -170,7 +312,7 @@ func (aph *ActionPlanHistory) Diff(history *ActionPlanHistory) (*HistoryDiff[Act
 			Changes: history.changes(aph),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (ch *ContactHistory) changes(new *ContactHistory) []Change {
@@ -222,7 +364,7 @@ func (ch *ContactHistory) changes(new *ContactHistory) []Change {
 
 func (ch *ContactHistory) Diff(history *ContactHistory) (*HistoryDiff[ContactHistory], error) {
 	if ch.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	chUnix, historyUnix := ch.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -242,7 +384,7 @@ func (ch *ContactHistory) Diff(history *ContactHistory) (*HistoryDiff[ContactHis
 			Changes: history.changes(ch),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (ch *ControlHistory) changes(new *ControlHistory) []Change {
@@ -339,7 +481,7 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 
 func (ch *ControlHistory) Diff(history *ControlHistory) (*HistoryDiff[ControlHistory], error) {
 	if ch.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	chUnix, historyUnix := ch.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -359,7 +501,7 @@ func (ch *ControlHistory) Diff(history *ControlHistory) (*HistoryDiff[ControlHis
 			Changes: history.changes(ch),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (cih *ControlImplementationHistory) changes(new *ControlImplementationHistory) []Change {
@@ -405,7 +547,7 @@ func (cih *ControlImplementationHistory) changes(new *ControlImplementationHisto
 
 func (cih *ControlImplementationHistory) Diff(history *ControlImplementationHistory) (*HistoryDiff[ControlImplementationHistory], error) {
 	if cih.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	cihUnix, historyUnix := cih.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -425,7 +567,7 @@ func (cih *ControlImplementationHistory) Diff(history *ControlImplementationHist
 			Changes: history.changes(cih),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Change {
@@ -483,7 +625,7 @@ func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chan
 
 func (coh *ControlObjectiveHistory) Diff(history *ControlObjectiveHistory) (*HistoryDiff[ControlObjectiveHistory], error) {
 	if coh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	cohUnix, historyUnix := coh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -503,7 +645,7 @@ func (coh *ControlObjectiveHistory) Diff(history *ControlObjectiveHistory) (*His
 			Changes: history.changes(coh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (csjh *ControlScheduledJobHistory) changes(new *ControlScheduledJobHistory) []Change {
@@ -546,7 +688,7 @@ func (csjh *ControlScheduledJobHistory) changes(new *ControlScheduledJobHistory)
 
 func (csjh *ControlScheduledJobHistory) Diff(history *ControlScheduledJobHistory) (*HistoryDiff[ControlScheduledJobHistory], error) {
 	if csjh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	csjhUnix, historyUnix := csjh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -566,7 +708,7 @@ func (csjh *ControlScheduledJobHistory) Diff(history *ControlScheduledJobHistory
 			Changes: history.changes(csjh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (cdh *CustomDomainHistory) changes(new *CustomDomainHistory) []Change {
@@ -606,7 +748,7 @@ func (cdh *CustomDomainHistory) changes(new *CustomDomainHistory) []Change {
 
 func (cdh *CustomDomainHistory) Diff(history *CustomDomainHistory) (*HistoryDiff[CustomDomainHistory], error) {
 	if cdh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	cdhUnix, historyUnix := cdh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -626,7 +768,7 @@ func (cdh *CustomDomainHistory) Diff(history *CustomDomainHistory) (*HistoryDiff
 			Changes: history.changes(cdh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (dvh *DNSVerificationHistory) changes(new *DNSVerificationHistory) []Change {
@@ -684,7 +826,7 @@ func (dvh *DNSVerificationHistory) changes(new *DNSVerificationHistory) []Change
 
 func (dvh *DNSVerificationHistory) Diff(history *DNSVerificationHistory) (*HistoryDiff[DNSVerificationHistory], error) {
 	if dvh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	dvhUnix, historyUnix := dvh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -704,7 +846,7 @@ func (dvh *DNSVerificationHistory) Diff(history *DNSVerificationHistory) (*Histo
 			Changes: history.changes(dvh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (ddh *DocumentDataHistory) changes(new *DocumentDataHistory) []Change {
@@ -741,7 +883,7 @@ func (ddh *DocumentDataHistory) changes(new *DocumentDataHistory) []Change {
 
 func (ddh *DocumentDataHistory) Diff(history *DocumentDataHistory) (*HistoryDiff[DocumentDataHistory], error) {
 	if ddh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	ddhUnix, historyUnix := ddh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -761,7 +903,7 @@ func (ddh *DocumentDataHistory) Diff(history *DocumentDataHistory) (*HistoryDiff
 			Changes: history.changes(ddh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (eh *EntityHistory) changes(new *EntityHistory) []Change {
@@ -810,7 +952,7 @@ func (eh *EntityHistory) changes(new *EntityHistory) []Change {
 
 func (eh *EntityHistory) Diff(history *EntityHistory) (*HistoryDiff[EntityHistory], error) {
 	if eh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	ehUnix, historyUnix := eh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -830,7 +972,7 @@ func (eh *EntityHistory) Diff(history *EntityHistory) (*HistoryDiff[EntityHistor
 			Changes: history.changes(eh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (eth *EntityTypeHistory) changes(new *EntityTypeHistory) []Change {
@@ -864,7 +1006,7 @@ func (eth *EntityTypeHistory) changes(new *EntityTypeHistory) []Change {
 
 func (eth *EntityTypeHistory) Diff(history *EntityTypeHistory) (*HistoryDiff[EntityTypeHistory], error) {
 	if eth.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	ethUnix, historyUnix := eth.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -884,61 +1026,7 @@ func (eth *EntityTypeHistory) Diff(history *EntityTypeHistory) (*HistoryDiff[Ent
 			Changes: history.changes(eth),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
-}
-
-func (eh *EventHistory) changes(new *EventHistory) []Change {
-	var changes []Change
-	if !reflect.DeepEqual(eh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(eventhistory.FieldCreatedAt, eh.CreatedAt, new.CreatedAt))
-	}
-	if !reflect.DeepEqual(eh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(eventhistory.FieldUpdatedAt, eh.UpdatedAt, new.UpdatedAt))
-	}
-	if !reflect.DeepEqual(eh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(eventhistory.FieldCreatedBy, eh.CreatedBy, new.CreatedBy))
-	}
-	if !reflect.DeepEqual(eh.Tags, new.Tags) {
-		changes = append(changes, NewChange(eventhistory.FieldTags, eh.Tags, new.Tags))
-	}
-	if !reflect.DeepEqual(eh.EventID, new.EventID) {
-		changes = append(changes, NewChange(eventhistory.FieldEventID, eh.EventID, new.EventID))
-	}
-	if !reflect.DeepEqual(eh.CorrelationID, new.CorrelationID) {
-		changes = append(changes, NewChange(eventhistory.FieldCorrelationID, eh.CorrelationID, new.CorrelationID))
-	}
-	if !reflect.DeepEqual(eh.EventType, new.EventType) {
-		changes = append(changes, NewChange(eventhistory.FieldEventType, eh.EventType, new.EventType))
-	}
-	if !reflect.DeepEqual(eh.Metadata, new.Metadata) {
-		changes = append(changes, NewChange(eventhistory.FieldMetadata, eh.Metadata, new.Metadata))
-	}
-	return changes
-}
-
-func (eh *EventHistory) Diff(history *EventHistory) (*HistoryDiff[EventHistory], error) {
-	if eh.Ref != history.Ref {
-		return nil, MismatchedRefError
-	}
-
-	ehUnix, historyUnix := eh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ehOlder := ehUnix < historyUnix || (ehUnix == historyUnix && eh.ID < history.ID)
-	historyOlder := ehUnix > historyUnix || (ehUnix == historyUnix && eh.ID > history.ID)
-
-	if ehOlder {
-		return &HistoryDiff[EventHistory]{
-			Old:     eh,
-			New:     history,
-			Changes: eh.changes(history),
-		}, nil
-	} else if historyOlder {
-		return &HistoryDiff[EventHistory]{
-			Old:     history,
-			New:     eh,
-			Changes: history.changes(eh),
-		}, nil
-	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (eh *EvidenceHistory) changes(new *EvidenceHistory) []Change {
@@ -999,7 +1087,7 @@ func (eh *EvidenceHistory) changes(new *EvidenceHistory) []Change {
 
 func (eh *EvidenceHistory) Diff(history *EvidenceHistory) (*HistoryDiff[EvidenceHistory], error) {
 	if eh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	ehUnix, historyUnix := eh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1019,7 +1107,7 @@ func (eh *EvidenceHistory) Diff(history *EvidenceHistory) (*HistoryDiff[Evidence
 			Changes: history.changes(eh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (fh *FileHistory) changes(new *FileHistory) []Change {
@@ -1089,7 +1177,7 @@ func (fh *FileHistory) changes(new *FileHistory) []Change {
 
 func (fh *FileHistory) Diff(history *FileHistory) (*HistoryDiff[FileHistory], error) {
 	if fh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	fhUnix, historyUnix := fh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1109,7 +1197,7 @@ func (fh *FileHistory) Diff(history *FileHistory) (*HistoryDiff[FileHistory], er
 			Changes: history.changes(fh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (gh *GroupHistory) changes(new *GroupHistory) []Change {
@@ -1161,7 +1249,7 @@ func (gh *GroupHistory) changes(new *GroupHistory) []Change {
 
 func (gh *GroupHistory) Diff(history *GroupHistory) (*HistoryDiff[GroupHistory], error) {
 	if gh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	ghUnix, historyUnix := gh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1181,7 +1269,7 @@ func (gh *GroupHistory) Diff(history *GroupHistory) (*HistoryDiff[GroupHistory],
 			Changes: history.changes(gh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (gmh *GroupMembershipHistory) changes(new *GroupMembershipHistory) []Change {
@@ -1209,7 +1297,7 @@ func (gmh *GroupMembershipHistory) changes(new *GroupMembershipHistory) []Change
 
 func (gmh *GroupMembershipHistory) Diff(history *GroupMembershipHistory) (*HistoryDiff[GroupMembershipHistory], error) {
 	if gmh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	gmhUnix, historyUnix := gmh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1229,7 +1317,7 @@ func (gmh *GroupMembershipHistory) Diff(history *GroupMembershipHistory) (*Histo
 			Changes: history.changes(gmh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (gsh *GroupSettingHistory) changes(new *GroupSettingHistory) []Change {
@@ -1269,7 +1357,7 @@ func (gsh *GroupSettingHistory) changes(new *GroupSettingHistory) []Change {
 
 func (gsh *GroupSettingHistory) Diff(history *GroupSettingHistory) (*HistoryDiff[GroupSettingHistory], error) {
 	if gsh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	gshUnix, historyUnix := gsh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1289,7 +1377,7 @@ func (gsh *GroupSettingHistory) Diff(history *GroupSettingHistory) (*HistoryDiff
 			Changes: history.changes(gsh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (hh *HushHistory) changes(new *HushHistory) []Change {
@@ -1332,7 +1420,7 @@ func (hh *HushHistory) changes(new *HushHistory) []Change {
 
 func (hh *HushHistory) Diff(history *HushHistory) (*HistoryDiff[HushHistory], error) {
 	if hh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	hhUnix, historyUnix := hh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1352,7 +1440,7 @@ func (hh *HushHistory) Diff(history *HushHistory) (*HistoryDiff[HushHistory], er
 			Changes: history.changes(hh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (ih *IntegrationHistory) changes(new *IntegrationHistory) []Change {
@@ -1392,7 +1480,7 @@ func (ih *IntegrationHistory) changes(new *IntegrationHistory) []Change {
 
 func (ih *IntegrationHistory) Diff(history *IntegrationHistory) (*HistoryDiff[IntegrationHistory], error) {
 	if ih.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	ihUnix, historyUnix := ih.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1412,7 +1500,7 @@ func (ih *IntegrationHistory) Diff(history *IntegrationHistory) (*HistoryDiff[In
 			Changes: history.changes(ih),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (iph *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
@@ -1479,7 +1567,7 @@ func (iph *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 
 func (iph *InternalPolicyHistory) Diff(history *InternalPolicyHistory) (*HistoryDiff[InternalPolicyHistory], error) {
 	if iph.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	iphUnix, historyUnix := iph.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1499,73 +1587,7 @@ func (iph *InternalPolicyHistory) Diff(history *InternalPolicyHistory) (*History
 			Changes: history.changes(iph),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
-}
-
-func (jrh *JobRunnerHistory) changes(new *JobRunnerHistory) []Change {
-	var changes []Change
-	if !reflect.DeepEqual(jrh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldCreatedAt, jrh.CreatedAt, new.CreatedAt))
-	}
-	if !reflect.DeepEqual(jrh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldUpdatedAt, jrh.UpdatedAt, new.UpdatedAt))
-	}
-	if !reflect.DeepEqual(jrh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldCreatedBy, jrh.CreatedBy, new.CreatedBy))
-	}
-	if !reflect.DeepEqual(jrh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldDeletedAt, jrh.DeletedAt, new.DeletedAt))
-	}
-	if !reflect.DeepEqual(jrh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldDeletedBy, jrh.DeletedBy, new.DeletedBy))
-	}
-	if !reflect.DeepEqual(jrh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldDisplayID, jrh.DisplayID, new.DisplayID))
-	}
-	if !reflect.DeepEqual(jrh.Tags, new.Tags) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldTags, jrh.Tags, new.Tags))
-	}
-	if !reflect.DeepEqual(jrh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldOwnerID, jrh.OwnerID, new.OwnerID))
-	}
-	if !reflect.DeepEqual(jrh.SystemOwned, new.SystemOwned) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldSystemOwned, jrh.SystemOwned, new.SystemOwned))
-	}
-	if !reflect.DeepEqual(jrh.Name, new.Name) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldName, jrh.Name, new.Name))
-	}
-	if !reflect.DeepEqual(jrh.Status, new.Status) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldStatus, jrh.Status, new.Status))
-	}
-	if !reflect.DeepEqual(jrh.IPAddress, new.IPAddress) {
-		changes = append(changes, NewChange(jobrunnerhistory.FieldIPAddress, jrh.IPAddress, new.IPAddress))
-	}
-	return changes
-}
-
-func (jrh *JobRunnerHistory) Diff(history *JobRunnerHistory) (*HistoryDiff[JobRunnerHistory], error) {
-	if jrh.Ref != history.Ref {
-		return nil, MismatchedRefError
-	}
-
-	jrhUnix, historyUnix := jrh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	jrhOlder := jrhUnix < historyUnix || (jrhUnix == historyUnix && jrh.ID < history.ID)
-	historyOlder := jrhUnix > historyUnix || (jrhUnix == historyUnix && jrh.ID > history.ID)
-
-	if jrhOlder {
-		return &HistoryDiff[JobRunnerHistory]{
-			Old:     jrh,
-			New:     history,
-			Changes: jrh.changes(history),
-		}, nil
-	} else if historyOlder {
-		return &HistoryDiff[JobRunnerHistory]{
-			Old:     history,
-			New:     jrh,
-			Changes: history.changes(jrh),
-		}, nil
-	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (mdh *MappableDomainHistory) changes(new *MappableDomainHistory) []Change {
@@ -1599,7 +1621,7 @@ func (mdh *MappableDomainHistory) changes(new *MappableDomainHistory) []Change {
 
 func (mdh *MappableDomainHistory) Diff(history *MappableDomainHistory) (*HistoryDiff[MappableDomainHistory], error) {
 	if mdh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	mdhUnix, historyUnix := mdh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1619,7 +1641,7 @@ func (mdh *MappableDomainHistory) Diff(history *MappableDomainHistory) (*History
 			Changes: history.changes(mdh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (mch *MappedControlHistory) changes(new *MappedControlHistory) []Change {
@@ -1662,7 +1684,7 @@ func (mch *MappedControlHistory) changes(new *MappedControlHistory) []Change {
 
 func (mch *MappedControlHistory) Diff(history *MappedControlHistory) (*HistoryDiff[MappedControlHistory], error) {
 	if mch.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	mchUnix, historyUnix := mch.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1682,7 +1704,7 @@ func (mch *MappedControlHistory) Diff(history *MappedControlHistory) (*HistoryDi
 			Changes: history.changes(mch),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (nh *NarrativeHistory) changes(new *NarrativeHistory) []Change {
@@ -1725,7 +1747,7 @@ func (nh *NarrativeHistory) changes(new *NarrativeHistory) []Change {
 
 func (nh *NarrativeHistory) Diff(history *NarrativeHistory) (*HistoryDiff[NarrativeHistory], error) {
 	if nh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	nhUnix, historyUnix := nh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1745,7 +1767,7 @@ func (nh *NarrativeHistory) Diff(history *NarrativeHistory) (*HistoryDiff[Narrat
 			Changes: history.changes(nh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (nh *NoteHistory) changes(new *NoteHistory) []Change {
@@ -1779,7 +1801,7 @@ func (nh *NoteHistory) changes(new *NoteHistory) []Change {
 
 func (nh *NoteHistory) Diff(history *NoteHistory) (*HistoryDiff[NoteHistory], error) {
 	if nh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	nhUnix, historyUnix := nh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1799,7 +1821,7 @@ func (nh *NoteHistory) Diff(history *NoteHistory) (*HistoryDiff[NoteHistory], er
 			Changes: history.changes(nh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (omh *OrgMembershipHistory) changes(new *OrgMembershipHistory) []Change {
@@ -1827,7 +1849,7 @@ func (omh *OrgMembershipHistory) changes(new *OrgMembershipHistory) []Change {
 
 func (omh *OrgMembershipHistory) Diff(history *OrgMembershipHistory) (*HistoryDiff[OrgMembershipHistory], error) {
 	if omh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	omhUnix, historyUnix := omh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1847,7 +1869,7 @@ func (omh *OrgMembershipHistory) Diff(history *OrgMembershipHistory) (*HistoryDi
 			Changes: history.changes(omh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (osh *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change {
@@ -1917,7 +1939,7 @@ func (osh *OrgSubscriptionHistory) changes(new *OrgSubscriptionHistory) []Change
 
 func (osh *OrgSubscriptionHistory) Diff(history *OrgSubscriptionHistory) (*HistoryDiff[OrgSubscriptionHistory], error) {
 	if osh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	oshUnix, historyUnix := osh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -1937,7 +1959,7 @@ func (osh *OrgSubscriptionHistory) Diff(history *OrgSubscriptionHistory) (*Histo
 			Changes: history.changes(osh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
@@ -1992,7 +2014,7 @@ func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 
 func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[OrganizationHistory], error) {
 	if oh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	ohUnix, historyUnix := oh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2012,7 +2034,7 @@ func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[
 			Changes: history.changes(oh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (osh *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) []Change {
@@ -2070,7 +2092,7 @@ func (osh *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) 
 
 func (osh *OrganizationSettingHistory) Diff(history *OrganizationSettingHistory) (*HistoryDiff[OrganizationSettingHistory], error) {
 	if osh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	oshUnix, historyUnix := osh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2090,7 +2112,7 @@ func (osh *OrganizationSettingHistory) Diff(history *OrganizationSettingHistory)
 			Changes: history.changes(osh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (ph *ProcedureHistory) changes(new *ProcedureHistory) []Change {
@@ -2157,7 +2179,7 @@ func (ph *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 
 func (ph *ProcedureHistory) Diff(history *ProcedureHistory) (*HistoryDiff[ProcedureHistory], error) {
 	if ph.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	phUnix, historyUnix := ph.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2177,7 +2199,7 @@ func (ph *ProcedureHistory) Diff(history *ProcedureHistory) (*HistoryDiff[Proced
 			Changes: history.changes(ph),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (ph *ProgramHistory) changes(new *ProgramHistory) []Change {
@@ -2250,7 +2272,7 @@ func (ph *ProgramHistory) changes(new *ProgramHistory) []Change {
 
 func (ph *ProgramHistory) Diff(history *ProgramHistory) (*HistoryDiff[ProgramHistory], error) {
 	if ph.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	phUnix, historyUnix := ph.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2270,7 +2292,7 @@ func (ph *ProgramHistory) Diff(history *ProgramHistory) (*HistoryDiff[ProgramHis
 			Changes: history.changes(ph),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (pmh *ProgramMembershipHistory) changes(new *ProgramMembershipHistory) []Change {
@@ -2298,7 +2320,7 @@ func (pmh *ProgramMembershipHistory) changes(new *ProgramMembershipHistory) []Ch
 
 func (pmh *ProgramMembershipHistory) Diff(history *ProgramMembershipHistory) (*HistoryDiff[ProgramMembershipHistory], error) {
 	if pmh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	pmhUnix, historyUnix := pmh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2318,7 +2340,7 @@ func (pmh *ProgramMembershipHistory) Diff(history *ProgramMembershipHistory) (*H
 			Changes: history.changes(pmh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (rh *RiskHistory) changes(new *RiskHistory) []Change {
@@ -2388,7 +2410,7 @@ func (rh *RiskHistory) changes(new *RiskHistory) []Change {
 
 func (rh *RiskHistory) Diff(history *RiskHistory) (*HistoryDiff[RiskHistory], error) {
 	if rh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	rhUnix, historyUnix := rh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2408,7 +2430,7 @@ func (rh *RiskHistory) Diff(history *RiskHistory) (*HistoryDiff[RiskHistory], er
 			Changes: history.changes(rh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
@@ -2466,7 +2488,7 @@ func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
 
 func (sjh *ScheduledJobHistory) Diff(history *ScheduledJobHistory) (*HistoryDiff[ScheduledJobHistory], error) {
 	if sjh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	sjhUnix, historyUnix := sjh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2486,7 +2508,7 @@ func (sjh *ScheduledJobHistory) Diff(history *ScheduledJobHistory) (*HistoryDiff
 			Changes: history.changes(sjh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (sh *StandardHistory) changes(new *StandardHistory) []Change {
@@ -2562,7 +2584,7 @@ func (sh *StandardHistory) changes(new *StandardHistory) []Change {
 
 func (sh *StandardHistory) Diff(history *StandardHistory) (*HistoryDiff[StandardHistory], error) {
 	if sh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2582,7 +2604,7 @@ func (sh *StandardHistory) Diff(history *StandardHistory) (*HistoryDiff[Standard
 			Changes: history.changes(sh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
@@ -2679,7 +2701,7 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 
 func (sh *SubcontrolHistory) Diff(history *SubcontrolHistory) (*HistoryDiff[SubcontrolHistory], error) {
 	if sh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2699,7 +2721,7 @@ func (sh *SubcontrolHistory) Diff(history *SubcontrolHistory) (*HistoryDiff[Subc
 			Changes: history.changes(sh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (th *TaskHistory) changes(new *TaskHistory) []Change {
@@ -2757,7 +2779,7 @@ func (th *TaskHistory) changes(new *TaskHistory) []Change {
 
 func (th *TaskHistory) Diff(history *TaskHistory) (*HistoryDiff[TaskHistory], error) {
 	if th.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	thUnix, historyUnix := th.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2777,7 +2799,7 @@ func (th *TaskHistory) Diff(history *TaskHistory) (*HistoryDiff[TaskHistory], er
 			Changes: history.changes(th),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (th *TemplateHistory) changes(new *TemplateHistory) []Change {
@@ -2823,7 +2845,7 @@ func (th *TemplateHistory) changes(new *TemplateHistory) []Change {
 
 func (th *TemplateHistory) Diff(history *TemplateHistory) (*HistoryDiff[TemplateHistory], error) {
 	if th.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	thUnix, historyUnix := th.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2843,7 +2865,7 @@ func (th *TemplateHistory) Diff(history *TemplateHistory) (*HistoryDiff[Template
 			Changes: history.changes(th),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (uh *UserHistory) changes(new *UserHistory) []Change {
@@ -2913,7 +2935,7 @@ func (uh *UserHistory) changes(new *UserHistory) []Change {
 
 func (uh *UserHistory) Diff(history *UserHistory) (*HistoryDiff[UserHistory], error) {
 	if uh.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	uhUnix, historyUnix := uh.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -2933,7 +2955,7 @@ func (uh *UserHistory) Diff(history *UserHistory) (*HistoryDiff[UserHistory], er
 			Changes: history.changes(uh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (ush *UserSettingHistory) changes(new *UserSettingHistory) []Change {
@@ -2988,7 +3010,7 @@ func (ush *UserSettingHistory) changes(new *UserSettingHistory) []Change {
 
 func (ush *UserSettingHistory) Diff(history *UserSettingHistory) (*HistoryDiff[UserSettingHistory], error) {
 	if ush.Ref != history.Ref {
-		return nil, MismatchedRefError
+		return nil, ErrMismatchedRef
 	}
 
 	ushUnix, historyUnix := ush.HistoryTime.Unix(), history.HistoryTime.Unix()
@@ -3008,7 +3030,7 @@ func (ush *UserSettingHistory) Diff(history *UserSettingHistory) (*HistoryDiff[U
 			Changes: history.changes(ush),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return nil, ErrIdenticalHistory
 }
 
 func (c Change) String(op history.OpType) string {
@@ -3039,639 +3061,1809 @@ func (c Change) String(op history.OpType) string {
 	}
 }
 
-func (c *Client) Audit(ctx context.Context) ([][]string, error) {
-	records := [][]string{
-		{"Table", "Ref Id", "History Time", "Operation", "Changes", "Updated By"},
-	}
-	var record [][]string
-	var err error
-	record, err = auditActionPlanHistory(ctx, c.config)
+func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *Cursor, last *int) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{}
+
+	var record *AuditLogConnection
+	record, err = auditActionPlanHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditContactHistory(ctx, c.config)
+	record, err = auditContactHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditControlHistory(ctx, c.config)
+	record, err = auditControlHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditControlImplementationHistory(ctx, c.config)
+	record, err = auditControlImplementationHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditControlObjectiveHistory(ctx, c.config)
+	record, err = auditControlObjectiveHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditControlScheduledJobHistory(ctx, c.config)
+	record, err = auditControlScheduledJobHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditCustomDomainHistory(ctx, c.config)
+	record, err = auditCustomDomainHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditDNSVerificationHistory(ctx, c.config)
+	record, err = auditDNSVerificationHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditDocumentDataHistory(ctx, c.config)
+	record, err = auditDocumentDataHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditEntityHistory(ctx, c.config)
+	record, err = auditEntityHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditEntityTypeHistory(ctx, c.config)
+	record, err = auditEntityTypeHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditEventHistory(ctx, c.config)
+	record, err = auditEvidenceHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditEvidenceHistory(ctx, c.config)
+	record, err = auditFileHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditFileHistory(ctx, c.config)
+	record, err = auditGroupHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditGroupHistory(ctx, c.config)
+	record, err = auditGroupMembershipHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditGroupMembershipHistory(ctx, c.config)
+	record, err = auditGroupSettingHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditGroupSettingHistory(ctx, c.config)
+	record, err = auditHushHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditHushHistory(ctx, c.config)
+	record, err = auditIntegrationHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditIntegrationHistory(ctx, c.config)
+	record, err = auditInternalPolicyHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditInternalPolicyHistory(ctx, c.config)
+	record, err = auditMappableDomainHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditJobRunnerHistory(ctx, c.config)
+	record, err = auditMappedControlHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditMappableDomainHistory(ctx, c.config)
+	record, err = auditNarrativeHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditMappedControlHistory(ctx, c.config)
+	record, err = auditNoteHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditNarrativeHistory(ctx, c.config)
+	record, err = auditOrgMembershipHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditNoteHistory(ctx, c.config)
+	record, err = auditOrgSubscriptionHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditOrgMembershipHistory(ctx, c.config)
+	record, err = auditOrganizationHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditOrgSubscriptionHistory(ctx, c.config)
+	record, err = auditOrganizationSettingHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditOrganizationHistory(ctx, c.config)
+	record, err = auditProcedureHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditOrganizationSettingHistory(ctx, c.config)
+	record, err = auditProgramHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditProcedureHistory(ctx, c.config)
+	record, err = auditProgramMembershipHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditProgramHistory(ctx, c.config)
+	record, err = auditRiskHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditProgramMembershipHistory(ctx, c.config)
+	record, err = auditScheduledJobHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditRiskHistory(ctx, c.config)
+	record, err = auditStandardHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditScheduledJobHistory(ctx, c.config)
+	record, err = auditSubcontrolHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditStandardHistory(ctx, c.config)
+	record, err = auditTaskHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditSubcontrolHistory(ctx, c.config)
+	record, err = auditTemplateHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditTaskHistory(ctx, c.config)
+	record, err = auditUserHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditTemplateHistory(ctx, c.config)
+	record, err = auditUserSettingHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditUserHistory(ctx, c.config)
-	if err != nil {
-		return nil, err
-	}
-	records = append(records, record...)
-
-	record, err = auditUserSettingHistory(ctx, c.config)
-	if err != nil {
-		return nil, err
-	}
-	records = append(records, record...)
-
-	return records, nil
+	return result, nil
 }
 
-func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]string, error) {
-	records := [][]string{
-		{"Table", "Ref Id", "History Time", "Operation", "Changes", "Updated By"},
-	}
-	var record [][]string
-	var err error
+func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, where *AuditLogWhereInput, orderBy *AuditLogOrder) (result *AuditLogConnection, err error) {
+	if where.Table == strings.TrimSuffix("ActionPlanHistory", "History") {
+		// map AuditLogWhereInput to ActionPlanHistoryWhereInput
+		whereInput := &ActionPlanHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ActionPlanHistory", "History") {
-		record, err = auditActionPlanHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ActionPlanHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ActionPlanHistoryOrder{
+			Field:     ActionPlanHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditActionPlanHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("ContactHistory", "History") {
+		// map AuditLogWhereInput to ContactHistoryWhereInput
+		whereInput := &ContactHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ContactHistory", "History") {
-		record, err = auditContactHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ContactHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ContactHistoryOrder{
+			Field:     ContactHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditContactHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("ControlHistory", "History") {
+		// map AuditLogWhereInput to ControlHistoryWhereInput
+		whereInput := &ControlHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ControlHistory", "History") {
-		record, err = auditControlHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ControlHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ControlHistoryOrder{
+			Field:     ControlHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditControlHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("ControlImplementationHistory", "History") {
+		// map AuditLogWhereInput to ControlImplementationHistoryWhereInput
+		whereInput := &ControlImplementationHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ControlImplementationHistory", "History") {
-		record, err = auditControlImplementationHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ControlImplementationHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ControlImplementationHistoryOrder{
+			Field:     ControlImplementationHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditControlImplementationHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("ControlObjectiveHistory", "History") {
+		// map AuditLogWhereInput to ControlObjectiveHistoryWhereInput
+		whereInput := &ControlObjectiveHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ControlObjectiveHistory", "History") {
-		record, err = auditControlObjectiveHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ControlObjectiveHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ControlObjectiveHistoryOrder{
+			Field:     ControlObjectiveHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditControlObjectiveHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("ControlScheduledJobHistory", "History") {
+		// map AuditLogWhereInput to ControlScheduledJobHistoryWhereInput
+		whereInput := &ControlScheduledJobHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ControlScheduledJobHistory", "History") {
-		record, err = auditControlScheduledJobHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ControlScheduledJobHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ControlScheduledJobHistoryOrder{
+			Field:     ControlScheduledJobHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditControlScheduledJobHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("CustomDomainHistory", "History") {
+		// map AuditLogWhereInput to CustomDomainHistoryWhereInput
+		whereInput := &CustomDomainHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("CustomDomainHistory", "History") {
-		record, err = auditCustomDomainHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to CustomDomainHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &CustomDomainHistoryOrder{
+			Field:     CustomDomainHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditCustomDomainHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("DNSVerificationHistory", "History") {
+		// map AuditLogWhereInput to DNSVerificationHistoryWhereInput
+		whereInput := &DNSVerificationHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("DNSVerificationHistory", "History") {
-		record, err = auditDNSVerificationHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to DNSVerificationHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &DNSVerificationHistoryOrder{
+			Field:     DNSVerificationHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditDNSVerificationHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("DocumentDataHistory", "History") {
+		// map AuditLogWhereInput to DocumentDataHistoryWhereInput
+		whereInput := &DocumentDataHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("DocumentDataHistory", "History") {
-		record, err = auditDocumentDataHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to DocumentDataHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &DocumentDataHistoryOrder{
+			Field:     DocumentDataHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditDocumentDataHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("EntityHistory", "History") {
+		// map AuditLogWhereInput to EntityHistoryWhereInput
+		whereInput := &EntityHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("EntityHistory", "History") {
-		record, err = auditEntityHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to EntityHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &EntityHistoryOrder{
+			Field:     EntityHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditEntityHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("EntityTypeHistory", "History") {
+		// map AuditLogWhereInput to EntityTypeHistoryWhereInput
+		whereInput := &EntityTypeHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("EntityTypeHistory", "History") {
-		record, err = auditEntityTypeHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to EntityTypeHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &EntityTypeHistoryOrder{
+			Field:     EntityTypeHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditEntityTypeHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("EvidenceHistory", "History") {
+		// map AuditLogWhereInput to EvidenceHistoryWhereInput
+		whereInput := &EvidenceHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("EventHistory", "History") {
-		record, err = auditEventHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to EvidenceHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &EvidenceHistoryOrder{
+			Field:     EvidenceHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditEvidenceHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("FileHistory", "History") {
+		// map AuditLogWhereInput to FileHistoryWhereInput
+		whereInput := &FileHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("EvidenceHistory", "History") {
-		record, err = auditEvidenceHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to FileHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &FileHistoryOrder{
+			Field:     FileHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditFileHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("GroupHistory", "History") {
+		// map AuditLogWhereInput to GroupHistoryWhereInput
+		whereInput := &GroupHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("FileHistory", "History") {
-		record, err = auditFileHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to GroupHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &GroupHistoryOrder{
+			Field:     GroupHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditGroupHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("GroupMembershipHistory", "History") {
+		// map AuditLogWhereInput to GroupMembershipHistoryWhereInput
+		whereInput := &GroupMembershipHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("GroupHistory", "History") {
-		record, err = auditGroupHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to GroupMembershipHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &GroupMembershipHistoryOrder{
+			Field:     GroupMembershipHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditGroupMembershipHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("GroupSettingHistory", "History") {
+		// map AuditLogWhereInput to GroupSettingHistoryWhereInput
+		whereInput := &GroupSettingHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("GroupMembershipHistory", "History") {
-		record, err = auditGroupMembershipHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to GroupSettingHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &GroupSettingHistoryOrder{
+			Field:     GroupSettingHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditGroupSettingHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("HushHistory", "History") {
+		// map AuditLogWhereInput to HushHistoryWhereInput
+		whereInput := &HushHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("GroupSettingHistory", "History") {
-		record, err = auditGroupSettingHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to HushHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &HushHistoryOrder{
+			Field:     HushHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditHushHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("IntegrationHistory", "History") {
+		// map AuditLogWhereInput to IntegrationHistoryWhereInput
+		whereInput := &IntegrationHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("HushHistory", "History") {
-		record, err = auditHushHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to IntegrationHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &IntegrationHistoryOrder{
+			Field:     IntegrationHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditIntegrationHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("InternalPolicyHistory", "History") {
+		// map AuditLogWhereInput to InternalPolicyHistoryWhereInput
+		whereInput := &InternalPolicyHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("IntegrationHistory", "History") {
-		record, err = auditIntegrationHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to InternalPolicyHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &InternalPolicyHistoryOrder{
+			Field:     InternalPolicyHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditInternalPolicyHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("MappableDomainHistory", "History") {
+		// map AuditLogWhereInput to MappableDomainHistoryWhereInput
+		whereInput := &MappableDomainHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("InternalPolicyHistory", "History") {
-		record, err = auditInternalPolicyHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to MappableDomainHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &MappableDomainHistoryOrder{
+			Field:     MappableDomainHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditMappableDomainHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("MappedControlHistory", "History") {
+		// map AuditLogWhereInput to MappedControlHistoryWhereInput
+		whereInput := &MappedControlHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("JobRunnerHistory", "History") {
-		record, err = auditJobRunnerHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to MappedControlHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &MappedControlHistoryOrder{
+			Field:     MappedControlHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditMappedControlHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("NarrativeHistory", "History") {
+		// map AuditLogWhereInput to NarrativeHistoryWhereInput
+		whereInput := &NarrativeHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("MappableDomainHistory", "History") {
-		record, err = auditMappableDomainHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to NarrativeHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &NarrativeHistoryOrder{
+			Field:     NarrativeHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditNarrativeHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("NoteHistory", "History") {
+		// map AuditLogWhereInput to NoteHistoryWhereInput
+		whereInput := &NoteHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("MappedControlHistory", "History") {
-		record, err = auditMappedControlHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to NoteHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &NoteHistoryOrder{
+			Field:     NoteHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditNoteHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("OrgMembershipHistory", "History") {
+		// map AuditLogWhereInput to OrgMembershipHistoryWhereInput
+		whereInput := &OrgMembershipHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("NarrativeHistory", "History") {
-		record, err = auditNarrativeHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to OrgMembershipHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &OrgMembershipHistoryOrder{
+			Field:     OrgMembershipHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditOrgMembershipHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("OrgSubscriptionHistory", "History") {
+		// map AuditLogWhereInput to OrgSubscriptionHistoryWhereInput
+		whereInput := &OrgSubscriptionHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("NoteHistory", "History") {
-		record, err = auditNoteHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to OrgSubscriptionHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &OrgSubscriptionHistoryOrder{
+			Field:     OrgSubscriptionHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditOrgSubscriptionHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("OrganizationHistory", "History") {
+		// map AuditLogWhereInput to OrganizationHistoryWhereInput
+		whereInput := &OrganizationHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("OrgMembershipHistory", "History") {
-		record, err = auditOrgMembershipHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to OrganizationHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &OrganizationHistoryOrder{
+			Field:     OrganizationHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditOrganizationHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("OrganizationSettingHistory", "History") {
+		// map AuditLogWhereInput to OrganizationSettingHistoryWhereInput
+		whereInput := &OrganizationSettingHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("OrgSubscriptionHistory", "History") {
-		record, err = auditOrgSubscriptionHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to OrganizationSettingHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &OrganizationSettingHistoryOrder{
+			Field:     OrganizationSettingHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditOrganizationSettingHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("ProcedureHistory", "History") {
+		// map AuditLogWhereInput to ProcedureHistoryWhereInput
+		whereInput := &ProcedureHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("OrganizationHistory", "History") {
-		record, err = auditOrganizationHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ProcedureHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ProcedureHistoryOrder{
+			Field:     ProcedureHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditProcedureHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("ProgramHistory", "History") {
+		// map AuditLogWhereInput to ProgramHistoryWhereInput
+		whereInput := &ProgramHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("OrganizationSettingHistory", "History") {
-		record, err = auditOrganizationSettingHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ProgramHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ProgramHistoryOrder{
+			Field:     ProgramHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditProgramHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("ProgramMembershipHistory", "History") {
+		// map AuditLogWhereInput to ProgramMembershipHistoryWhereInput
+		whereInput := &ProgramMembershipHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ProcedureHistory", "History") {
-		record, err = auditProcedureHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ProgramMembershipHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ProgramMembershipHistoryOrder{
+			Field:     ProgramMembershipHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditProgramMembershipHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("RiskHistory", "History") {
+		// map AuditLogWhereInput to RiskHistoryWhereInput
+		whereInput := &RiskHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ProgramHistory", "History") {
-		record, err = auditProgramHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to RiskHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &RiskHistoryOrder{
+			Field:     RiskHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditRiskHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("ScheduledJobHistory", "History") {
+		// map AuditLogWhereInput to ScheduledJobHistoryWhereInput
+		whereInput := &ScheduledJobHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ProgramMembershipHistory", "History") {
-		record, err = auditProgramMembershipHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ScheduledJobHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ScheduledJobHistoryOrder{
+			Field:     ScheduledJobHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditScheduledJobHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("StandardHistory", "History") {
+		// map AuditLogWhereInput to StandardHistoryWhereInput
+		whereInput := &StandardHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("RiskHistory", "History") {
-		record, err = auditRiskHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to StandardHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &StandardHistoryOrder{
+			Field:     StandardHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditStandardHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("SubcontrolHistory", "History") {
+		// map AuditLogWhereInput to SubcontrolHistoryWhereInput
+		whereInput := &SubcontrolHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("ScheduledJobHistory", "History") {
-		record, err = auditScheduledJobHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to SubcontrolHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &SubcontrolHistoryOrder{
+			Field:     SubcontrolHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditSubcontrolHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("TaskHistory", "History") {
+		// map AuditLogWhereInput to TaskHistoryWhereInput
+		whereInput := &TaskHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("StandardHistory", "History") {
-		record, err = auditStandardHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to TaskHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &TaskHistoryOrder{
+			Field:     TaskHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditTaskHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("TemplateHistory", "History") {
+		// map AuditLogWhereInput to TemplateHistoryWhereInput
+		whereInput := &TemplateHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("SubcontrolHistory", "History") {
-		record, err = auditSubcontrolHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to TemplateHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &TemplateHistoryOrder{
+			Field:     TemplateHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditTemplateHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("UserHistory", "History") {
+		// map AuditLogWhereInput to UserHistoryWhereInput
+		whereInput := &UserHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("TaskHistory", "History") {
-		record, err = auditTaskHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to UserHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &UserHistoryOrder{
+			Field:     UserHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditUserHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
+	if where.Table == strings.TrimSuffix("UserSettingHistory", "History") {
+		// map AuditLogWhereInput to UserSettingHistoryWhereInput
+		whereInput := &UserSettingHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
 
-	if tableName == "" || tableName == strings.TrimSuffix("TemplateHistory", "History") {
-		record, err = auditTemplateHistory(ctx, c.config)
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to UserSettingHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &UserSettingHistoryOrder{
+			Field:     UserSettingHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditUserSettingHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, record...)
+		return
 	}
 
-	if tableName == "" || tableName == strings.TrimSuffix("UserHistory", "History") {
-		record, err = auditUserHistory(ctx, c.config)
-		if err != nil {
-			return nil, err
-		}
-
-		records = append(records, record...)
-	}
-
-	if tableName == "" || tableName == strings.TrimSuffix("UserSettingHistory", "History") {
-		record, err = auditUserSettingHistory(ctx, c.config)
-		if err != nil {
-			return nil, err
-		}
-
-		records = append(records, record...)
-	}
-
-	return records, nil
+	return
 }
 
-type record struct {
-	Table       string
-	RefId       any
-	HistoryTime time.Time
-	Operation   history.OpType
-	Changes     []Change
-	UpdatedBy   string
-}
-
-func (r *record) toRow() []string {
+func (r *AuditLog) toRow() []string {
 	row := make([]string, 6)
 
 	row[0] = r.Table
-	row[1] = fmt.Sprintf("%v", r.RefId)
+	row[1] = fmt.Sprintf("%v", r.RefID)
 	row[2] = r.HistoryTime.Format(time.ANSIC)
 	row[3] = r.Operation.String()
 	for i, change := range r.Changes {
@@ -3691,2118 +4883,2772 @@ type actionplanhistoryref struct {
 	Ref string
 }
 
-func auditActionPlanHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []actionplanhistoryref
-	client := NewActionPlanHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(actionplanhistory.ByRef()).
-		Select(actionplanhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditActionPlanHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ActionPlanHistoryOrder, where *ActionPlanHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ActionPlanHistoryPaginateOption{
+		WithActionPlanHistoryOrder(orderBy),
+		WithActionPlanHistoryFilter(where.Filter),
+	}
+
+	client := NewActionPlanHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(actionplanhistory.Ref(currRef.Ref)).
-			Order(actionplanhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ActionPlanHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ActionPlanHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ActionPlanHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					actionplanhistory.Ref(curr.Node.Ref),
+					actionplanhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(actionplanhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ActionPlanHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ActionPlanHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ActionPlanHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ActionPlanHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ActionPlanHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type contacthistoryref struct {
 	Ref string
 }
 
-func auditContactHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []contacthistoryref
-	client := NewContactHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(contacthistory.ByRef()).
-		Select(contacthistory.FieldRef).
-		Scan(ctx, &refs)
+func auditContactHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ContactHistoryOrder, where *ContactHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ContactHistoryPaginateOption{
+		WithContactHistoryOrder(orderBy),
+		WithContactHistoryFilter(where.Filter),
+	}
+
+	client := NewContactHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(contacthistory.Ref(currRef.Ref)).
-			Order(contacthistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ContactHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ContactHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ContactHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					contacthistory.Ref(curr.Node.Ref),
+					contacthistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(contacthistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ContactHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ContactHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ContactHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ContactHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ContactHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type controlhistoryref struct {
 	Ref string
 }
 
-func auditControlHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []controlhistoryref
-	client := NewControlHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(controlhistory.ByRef()).
-		Select(controlhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditControlHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ControlHistoryOrder, where *ControlHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ControlHistoryPaginateOption{
+		WithControlHistoryOrder(orderBy),
+		WithControlHistoryFilter(where.Filter),
+	}
+
+	client := NewControlHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(controlhistory.Ref(currRef.Ref)).
-			Order(controlhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ControlHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ControlHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ControlHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					controlhistory.Ref(curr.Node.Ref),
+					controlhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(controlhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ControlHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ControlHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ControlHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ControlHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ControlHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type controlimplementationhistoryref struct {
 	Ref string
 }
 
-func auditControlImplementationHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []controlimplementationhistoryref
-	client := NewControlImplementationHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(controlimplementationhistory.ByRef()).
-		Select(controlimplementationhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditControlImplementationHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ControlImplementationHistoryOrder, where *ControlImplementationHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ControlImplementationHistoryPaginateOption{
+		WithControlImplementationHistoryOrder(orderBy),
+		WithControlImplementationHistoryFilter(where.Filter),
+	}
+
+	client := NewControlImplementationHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(controlimplementationhistory.Ref(currRef.Ref)).
-			Order(controlimplementationhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ControlImplementationHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ControlImplementationHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ControlImplementationHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					controlimplementationhistory.Ref(curr.Node.Ref),
+					controlimplementationhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(controlimplementationhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ControlImplementationHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ControlImplementationHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ControlImplementationHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ControlImplementationHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ControlImplementationHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type controlobjectivehistoryref struct {
 	Ref string
 }
 
-func auditControlObjectiveHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []controlobjectivehistoryref
-	client := NewControlObjectiveHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(controlobjectivehistory.ByRef()).
-		Select(controlobjectivehistory.FieldRef).
-		Scan(ctx, &refs)
+func auditControlObjectiveHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ControlObjectiveHistoryOrder, where *ControlObjectiveHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ControlObjectiveHistoryPaginateOption{
+		WithControlObjectiveHistoryOrder(orderBy),
+		WithControlObjectiveHistoryFilter(where.Filter),
+	}
+
+	client := NewControlObjectiveHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(controlobjectivehistory.Ref(currRef.Ref)).
-			Order(controlobjectivehistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ControlObjectiveHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ControlObjectiveHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ControlObjectiveHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					controlobjectivehistory.Ref(curr.Node.Ref),
+					controlobjectivehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(controlobjectivehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ControlObjectiveHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ControlObjectiveHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ControlObjectiveHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ControlObjectiveHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ControlObjectiveHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type controlscheduledjobhistoryref struct {
 	Ref string
 }
 
-func auditControlScheduledJobHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []controlscheduledjobhistoryref
-	client := NewControlScheduledJobHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(controlscheduledjobhistory.ByRef()).
-		Select(controlscheduledjobhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditControlScheduledJobHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ControlScheduledJobHistoryOrder, where *ControlScheduledJobHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ControlScheduledJobHistoryPaginateOption{
+		WithControlScheduledJobHistoryOrder(orderBy),
+		WithControlScheduledJobHistoryFilter(where.Filter),
+	}
+
+	client := NewControlScheduledJobHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(controlscheduledjobhistory.Ref(currRef.Ref)).
-			Order(controlscheduledjobhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ControlScheduledJobHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ControlScheduledJobHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ControlScheduledJobHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					controlscheduledjobhistory.Ref(curr.Node.Ref),
+					controlscheduledjobhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(controlscheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ControlScheduledJobHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ControlScheduledJobHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ControlScheduledJobHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ControlScheduledJobHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ControlScheduledJobHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type customdomainhistoryref struct {
 	Ref string
 }
 
-func auditCustomDomainHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []customdomainhistoryref
-	client := NewCustomDomainHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(customdomainhistory.ByRef()).
-		Select(customdomainhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditCustomDomainHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *CustomDomainHistoryOrder, where *CustomDomainHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []CustomDomainHistoryPaginateOption{
+		WithCustomDomainHistoryOrder(orderBy),
+		WithCustomDomainHistoryFilter(where.Filter),
+	}
+
+	client := NewCustomDomainHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(customdomainhistory.Ref(currRef.Ref)).
-			Order(customdomainhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "CustomDomainHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&CustomDomainHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&CustomDomainHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					customdomainhistory.Ref(curr.Node.Ref),
+					customdomainhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(customdomainhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &CustomDomainHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "CustomDomainHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&CustomDomainHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&CustomDomainHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&CustomDomainHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type dnsverificationhistoryref struct {
 	Ref string
 }
 
-func auditDNSVerificationHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []dnsverificationhistoryref
-	client := NewDNSVerificationHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(dnsverificationhistory.ByRef()).
-		Select(dnsverificationhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditDNSVerificationHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *DNSVerificationHistoryOrder, where *DNSVerificationHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []DNSVerificationHistoryPaginateOption{
+		WithDNSVerificationHistoryOrder(orderBy),
+		WithDNSVerificationHistoryFilter(where.Filter),
+	}
+
+	client := NewDNSVerificationHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(dnsverificationhistory.Ref(currRef.Ref)).
-			Order(dnsverificationhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "DNSVerificationHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&DNSVerificationHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&DNSVerificationHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					dnsverificationhistory.Ref(curr.Node.Ref),
+					dnsverificationhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(dnsverificationhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &DNSVerificationHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "DNSVerificationHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&DNSVerificationHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&DNSVerificationHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&DNSVerificationHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type documentdatahistoryref struct {
 	Ref string
 }
 
-func auditDocumentDataHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []documentdatahistoryref
-	client := NewDocumentDataHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(documentdatahistory.ByRef()).
-		Select(documentdatahistory.FieldRef).
-		Scan(ctx, &refs)
+func auditDocumentDataHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *DocumentDataHistoryOrder, where *DocumentDataHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []DocumentDataHistoryPaginateOption{
+		WithDocumentDataHistoryOrder(orderBy),
+		WithDocumentDataHistoryFilter(where.Filter),
+	}
+
+	client := NewDocumentDataHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(documentdatahistory.Ref(currRef.Ref)).
-			Order(documentdatahistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "DocumentDataHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&DocumentDataHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&DocumentDataHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					documentdatahistory.Ref(curr.Node.Ref),
+					documentdatahistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(documentdatahistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &DocumentDataHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "DocumentDataHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&DocumentDataHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&DocumentDataHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&DocumentDataHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type entityhistoryref struct {
 	Ref string
 }
 
-func auditEntityHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []entityhistoryref
-	client := NewEntityHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(entityhistory.ByRef()).
-		Select(entityhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditEntityHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *EntityHistoryOrder, where *EntityHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []EntityHistoryPaginateOption{
+		WithEntityHistoryOrder(orderBy),
+		WithEntityHistoryFilter(where.Filter),
+	}
+
+	client := NewEntityHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(entityhistory.Ref(currRef.Ref)).
-			Order(entityhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "EntityHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&EntityHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&EntityHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					entityhistory.Ref(curr.Node.Ref),
+					entityhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(entityhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &EntityHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "EntityHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&EntityHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&EntityHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&EntityHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type entitytypehistoryref struct {
 	Ref string
 }
 
-func auditEntityTypeHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []entitytypehistoryref
+func auditEntityTypeHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *EntityTypeHistoryOrder, where *EntityTypeHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []EntityTypeHistoryPaginateOption{
+		WithEntityTypeHistoryOrder(orderBy),
+		WithEntityTypeHistoryFilter(where.Filter),
+	}
+
 	client := NewEntityTypeHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(entitytypehistory.ByRef()).
-		Select(entitytypehistory.FieldRef).
-		Scan(ctx, &refs)
 
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(entitytypehistory.Ref(currRef.Ref)).
-			Order(entitytypehistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "EntityTypeHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&EntityTypeHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&EntityTypeHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					entitytypehistory.Ref(curr.Node.Ref),
+					entitytypehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(entitytypehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &EntityTypeHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "EntityTypeHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&EntityTypeHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&EntityTypeHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&EntityTypeHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
-}
 
-type eventhistoryref struct {
-	Ref string
-}
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
 
-func auditEventHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []eventhistoryref
-	client := NewEventHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(eventhistory.ByRef()).
-		Select(eventhistory.FieldRef).
-		Scan(ctx, &refs)
-
-	if err != nil {
-		return nil, err
-	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(eventhistory.Ref(currRef.Ref)).
-			Order(eventhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
-		}
-
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "EventHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&EventHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&EventHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&EventHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
-		}
-	}
-	return records, nil
+	return result, nil
 }
 
 type evidencehistoryref struct {
 	Ref string
 }
 
-func auditEvidenceHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []evidencehistoryref
-	client := NewEvidenceHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(evidencehistory.ByRef()).
-		Select(evidencehistory.FieldRef).
-		Scan(ctx, &refs)
+func auditEvidenceHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *EvidenceHistoryOrder, where *EvidenceHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []EvidenceHistoryPaginateOption{
+		WithEvidenceHistoryOrder(orderBy),
+		WithEvidenceHistoryFilter(where.Filter),
+	}
+
+	client := NewEvidenceHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(evidencehistory.Ref(currRef.Ref)).
-			Order(evidencehistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "EvidenceHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&EvidenceHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&EvidenceHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					evidencehistory.Ref(curr.Node.Ref),
+					evidencehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(evidencehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &EvidenceHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "EvidenceHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&EvidenceHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&EvidenceHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&EvidenceHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type filehistoryref struct {
 	Ref string
 }
 
-func auditFileHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []filehistoryref
-	client := NewFileHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(filehistory.ByRef()).
-		Select(filehistory.FieldRef).
-		Scan(ctx, &refs)
+func auditFileHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *FileHistoryOrder, where *FileHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []FileHistoryPaginateOption{
+		WithFileHistoryOrder(orderBy),
+		WithFileHistoryFilter(where.Filter),
+	}
+
+	client := NewFileHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(filehistory.Ref(currRef.Ref)).
-			Order(filehistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "FileHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&FileHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&FileHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					filehistory.Ref(curr.Node.Ref),
+					filehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(filehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &FileHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "FileHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&FileHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&FileHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&FileHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type grouphistoryref struct {
 	Ref string
 }
 
-func auditGroupHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []grouphistoryref
-	client := NewGroupHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(grouphistory.ByRef()).
-		Select(grouphistory.FieldRef).
-		Scan(ctx, &refs)
+func auditGroupHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *GroupHistoryOrder, where *GroupHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []GroupHistoryPaginateOption{
+		WithGroupHistoryOrder(orderBy),
+		WithGroupHistoryFilter(where.Filter),
+	}
+
+	client := NewGroupHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(grouphistory.Ref(currRef.Ref)).
-			Order(grouphistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "GroupHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&GroupHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&GroupHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					grouphistory.Ref(curr.Node.Ref),
+					grouphistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(grouphistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &GroupHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "GroupHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&GroupHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&GroupHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&GroupHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type groupmembershiphistoryref struct {
 	Ref string
 }
 
-func auditGroupMembershipHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []groupmembershiphistoryref
-	client := NewGroupMembershipHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(groupmembershiphistory.ByRef()).
-		Select(groupmembershiphistory.FieldRef).
-		Scan(ctx, &refs)
+func auditGroupMembershipHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *GroupMembershipHistoryOrder, where *GroupMembershipHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []GroupMembershipHistoryPaginateOption{
+		WithGroupMembershipHistoryOrder(orderBy),
+		WithGroupMembershipHistoryFilter(where.Filter),
+	}
+
+	client := NewGroupMembershipHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(groupmembershiphistory.Ref(currRef.Ref)).
-			Order(groupmembershiphistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "GroupMembershipHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&GroupMembershipHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&GroupMembershipHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					groupmembershiphistory.Ref(curr.Node.Ref),
+					groupmembershiphistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(groupmembershiphistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &GroupMembershipHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "GroupMembershipHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&GroupMembershipHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&GroupMembershipHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&GroupMembershipHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type groupsettinghistoryref struct {
 	Ref string
 }
 
-func auditGroupSettingHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []groupsettinghistoryref
-	client := NewGroupSettingHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(groupsettinghistory.ByRef()).
-		Select(groupsettinghistory.FieldRef).
-		Scan(ctx, &refs)
+func auditGroupSettingHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *GroupSettingHistoryOrder, where *GroupSettingHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []GroupSettingHistoryPaginateOption{
+		WithGroupSettingHistoryOrder(orderBy),
+		WithGroupSettingHistoryFilter(where.Filter),
+	}
+
+	client := NewGroupSettingHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(groupsettinghistory.Ref(currRef.Ref)).
-			Order(groupsettinghistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "GroupSettingHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&GroupSettingHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&GroupSettingHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					groupsettinghistory.Ref(curr.Node.Ref),
+					groupsettinghistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(groupsettinghistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &GroupSettingHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "GroupSettingHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&GroupSettingHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&GroupSettingHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&GroupSettingHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type hushhistoryref struct {
 	Ref string
 }
 
-func auditHushHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []hushhistoryref
-	client := NewHushHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(hushhistory.ByRef()).
-		Select(hushhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditHushHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *HushHistoryOrder, where *HushHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []HushHistoryPaginateOption{
+		WithHushHistoryOrder(orderBy),
+		WithHushHistoryFilter(where.Filter),
+	}
+
+	client := NewHushHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(hushhistory.Ref(currRef.Ref)).
-			Order(hushhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "HushHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&HushHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&HushHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					hushhistory.Ref(curr.Node.Ref),
+					hushhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(hushhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &HushHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "HushHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&HushHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&HushHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&HushHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type integrationhistoryref struct {
 	Ref string
 }
 
-func auditIntegrationHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []integrationhistoryref
-	client := NewIntegrationHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(integrationhistory.ByRef()).
-		Select(integrationhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditIntegrationHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *IntegrationHistoryOrder, where *IntegrationHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []IntegrationHistoryPaginateOption{
+		WithIntegrationHistoryOrder(orderBy),
+		WithIntegrationHistoryFilter(where.Filter),
+	}
+
+	client := NewIntegrationHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(integrationhistory.Ref(currRef.Ref)).
-			Order(integrationhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "IntegrationHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&IntegrationHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&IntegrationHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					integrationhistory.Ref(curr.Node.Ref),
+					integrationhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(integrationhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &IntegrationHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "IntegrationHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&IntegrationHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&IntegrationHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&IntegrationHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type internalpolicyhistoryref struct {
 	Ref string
 }
 
-func auditInternalPolicyHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []internalpolicyhistoryref
+func auditInternalPolicyHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *InternalPolicyHistoryOrder, where *InternalPolicyHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []InternalPolicyHistoryPaginateOption{
+		WithInternalPolicyHistoryOrder(orderBy),
+		WithInternalPolicyHistoryFilter(where.Filter),
+	}
+
 	client := NewInternalPolicyHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(internalpolicyhistory.ByRef()).
-		Select(internalpolicyhistory.FieldRef).
-		Scan(ctx, &refs)
 
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(internalpolicyhistory.Ref(currRef.Ref)).
-			Order(internalpolicyhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "InternalPolicyHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&InternalPolicyHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&InternalPolicyHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					internalpolicyhistory.Ref(curr.Node.Ref),
+					internalpolicyhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(internalpolicyhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &InternalPolicyHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "InternalPolicyHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&InternalPolicyHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&InternalPolicyHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&InternalPolicyHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
-}
 
-type jobrunnerhistoryref struct {
-	Ref string
-}
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
 
-func auditJobRunnerHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []jobrunnerhistoryref
-	client := NewJobRunnerHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(jobrunnerhistory.ByRef()).
-		Select(jobrunnerhistory.FieldRef).
-		Scan(ctx, &refs)
-
-	if err != nil {
-		return nil, err
-	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(jobrunnerhistory.Ref(currRef.Ref)).
-			Order(jobrunnerhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
-		}
-
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "JobRunnerHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&JobRunnerHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&JobRunnerHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&JobRunnerHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
-		}
-	}
-	return records, nil
+	return result, nil
 }
 
 type mappabledomainhistoryref struct {
 	Ref string
 }
 
-func auditMappableDomainHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []mappabledomainhistoryref
-	client := NewMappableDomainHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(mappabledomainhistory.ByRef()).
-		Select(mappabledomainhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditMappableDomainHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *MappableDomainHistoryOrder, where *MappableDomainHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []MappableDomainHistoryPaginateOption{
+		WithMappableDomainHistoryOrder(orderBy),
+		WithMappableDomainHistoryFilter(where.Filter),
+	}
+
+	client := NewMappableDomainHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(mappabledomainhistory.Ref(currRef.Ref)).
-			Order(mappabledomainhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "MappableDomainHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&MappableDomainHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&MappableDomainHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					mappabledomainhistory.Ref(curr.Node.Ref),
+					mappabledomainhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(mappabledomainhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &MappableDomainHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "MappableDomainHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&MappableDomainHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&MappableDomainHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&MappableDomainHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type mappedcontrolhistoryref struct {
 	Ref string
 }
 
-func auditMappedControlHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []mappedcontrolhistoryref
-	client := NewMappedControlHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(mappedcontrolhistory.ByRef()).
-		Select(mappedcontrolhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditMappedControlHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *MappedControlHistoryOrder, where *MappedControlHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []MappedControlHistoryPaginateOption{
+		WithMappedControlHistoryOrder(orderBy),
+		WithMappedControlHistoryFilter(where.Filter),
+	}
+
+	client := NewMappedControlHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(mappedcontrolhistory.Ref(currRef.Ref)).
-			Order(mappedcontrolhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "MappedControlHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&MappedControlHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&MappedControlHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					mappedcontrolhistory.Ref(curr.Node.Ref),
+					mappedcontrolhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(mappedcontrolhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &MappedControlHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "MappedControlHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&MappedControlHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&MappedControlHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&MappedControlHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type narrativehistoryref struct {
 	Ref string
 }
 
-func auditNarrativeHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []narrativehistoryref
-	client := NewNarrativeHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(narrativehistory.ByRef()).
-		Select(narrativehistory.FieldRef).
-		Scan(ctx, &refs)
+func auditNarrativeHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *NarrativeHistoryOrder, where *NarrativeHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []NarrativeHistoryPaginateOption{
+		WithNarrativeHistoryOrder(orderBy),
+		WithNarrativeHistoryFilter(where.Filter),
+	}
+
+	client := NewNarrativeHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(narrativehistory.Ref(currRef.Ref)).
-			Order(narrativehistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "NarrativeHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&NarrativeHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&NarrativeHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					narrativehistory.Ref(curr.Node.Ref),
+					narrativehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(narrativehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &NarrativeHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "NarrativeHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&NarrativeHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&NarrativeHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&NarrativeHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type notehistoryref struct {
 	Ref string
 }
 
-func auditNoteHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []notehistoryref
-	client := NewNoteHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(notehistory.ByRef()).
-		Select(notehistory.FieldRef).
-		Scan(ctx, &refs)
+func auditNoteHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *NoteHistoryOrder, where *NoteHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []NoteHistoryPaginateOption{
+		WithNoteHistoryOrder(orderBy),
+		WithNoteHistoryFilter(where.Filter),
+	}
+
+	client := NewNoteHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(notehistory.Ref(currRef.Ref)).
-			Order(notehistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "NoteHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&NoteHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&NoteHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					notehistory.Ref(curr.Node.Ref),
+					notehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(notehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &NoteHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "NoteHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&NoteHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&NoteHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&NoteHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type orgmembershiphistoryref struct {
 	Ref string
 }
 
-func auditOrgMembershipHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []orgmembershiphistoryref
-	client := NewOrgMembershipHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(orgmembershiphistory.ByRef()).
-		Select(orgmembershiphistory.FieldRef).
-		Scan(ctx, &refs)
+func auditOrgMembershipHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *OrgMembershipHistoryOrder, where *OrgMembershipHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []OrgMembershipHistoryPaginateOption{
+		WithOrgMembershipHistoryOrder(orderBy),
+		WithOrgMembershipHistoryFilter(where.Filter),
+	}
+
+	client := NewOrgMembershipHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(orgmembershiphistory.Ref(currRef.Ref)).
-			Order(orgmembershiphistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "OrgMembershipHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&OrgMembershipHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&OrgMembershipHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					orgmembershiphistory.Ref(curr.Node.Ref),
+					orgmembershiphistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(orgmembershiphistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &OrgMembershipHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "OrgMembershipHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&OrgMembershipHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&OrgMembershipHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&OrgMembershipHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type orgsubscriptionhistoryref struct {
 	Ref string
 }
 
-func auditOrgSubscriptionHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []orgsubscriptionhistoryref
-	client := NewOrgSubscriptionHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(orgsubscriptionhistory.ByRef()).
-		Select(orgsubscriptionhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditOrgSubscriptionHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *OrgSubscriptionHistoryOrder, where *OrgSubscriptionHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []OrgSubscriptionHistoryPaginateOption{
+		WithOrgSubscriptionHistoryOrder(orderBy),
+		WithOrgSubscriptionHistoryFilter(where.Filter),
+	}
+
+	client := NewOrgSubscriptionHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(orgsubscriptionhistory.Ref(currRef.Ref)).
-			Order(orgsubscriptionhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "OrgSubscriptionHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&OrgSubscriptionHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&OrgSubscriptionHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					orgsubscriptionhistory.Ref(curr.Node.Ref),
+					orgsubscriptionhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(orgsubscriptionhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &OrgSubscriptionHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "OrgSubscriptionHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&OrgSubscriptionHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&OrgSubscriptionHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&OrgSubscriptionHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type organizationhistoryref struct {
 	Ref string
 }
 
-func auditOrganizationHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []organizationhistoryref
-	client := NewOrganizationHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(organizationhistory.ByRef()).
-		Select(organizationhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditOrganizationHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *OrganizationHistoryOrder, where *OrganizationHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []OrganizationHistoryPaginateOption{
+		WithOrganizationHistoryOrder(orderBy),
+		WithOrganizationHistoryFilter(where.Filter),
+	}
+
+	client := NewOrganizationHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(organizationhistory.Ref(currRef.Ref)).
-			Order(organizationhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "OrganizationHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&OrganizationHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&OrganizationHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					organizationhistory.Ref(curr.Node.Ref),
+					organizationhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(organizationhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &OrganizationHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "OrganizationHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&OrganizationHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&OrganizationHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&OrganizationHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type organizationsettinghistoryref struct {
 	Ref string
 }
 
-func auditOrganizationSettingHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []organizationsettinghistoryref
-	client := NewOrganizationSettingHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(organizationsettinghistory.ByRef()).
-		Select(organizationsettinghistory.FieldRef).
-		Scan(ctx, &refs)
+func auditOrganizationSettingHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *OrganizationSettingHistoryOrder, where *OrganizationSettingHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []OrganizationSettingHistoryPaginateOption{
+		WithOrganizationSettingHistoryOrder(orderBy),
+		WithOrganizationSettingHistoryFilter(where.Filter),
+	}
+
+	client := NewOrganizationSettingHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(organizationsettinghistory.Ref(currRef.Ref)).
-			Order(organizationsettinghistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "OrganizationSettingHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&OrganizationSettingHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&OrganizationSettingHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					organizationsettinghistory.Ref(curr.Node.Ref),
+					organizationsettinghistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(organizationsettinghistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &OrganizationSettingHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "OrganizationSettingHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&OrganizationSettingHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&OrganizationSettingHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&OrganizationSettingHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type procedurehistoryref struct {
 	Ref string
 }
 
-func auditProcedureHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []procedurehistoryref
-	client := NewProcedureHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(procedurehistory.ByRef()).
-		Select(procedurehistory.FieldRef).
-		Scan(ctx, &refs)
+func auditProcedureHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ProcedureHistoryOrder, where *ProcedureHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ProcedureHistoryPaginateOption{
+		WithProcedureHistoryOrder(orderBy),
+		WithProcedureHistoryFilter(where.Filter),
+	}
+
+	client := NewProcedureHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(procedurehistory.Ref(currRef.Ref)).
-			Order(procedurehistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ProcedureHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ProcedureHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ProcedureHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					procedurehistory.Ref(curr.Node.Ref),
+					procedurehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(procedurehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ProcedureHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ProcedureHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ProcedureHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ProcedureHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ProcedureHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type programhistoryref struct {
 	Ref string
 }
 
-func auditProgramHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []programhistoryref
-	client := NewProgramHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(programhistory.ByRef()).
-		Select(programhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditProgramHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ProgramHistoryOrder, where *ProgramHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ProgramHistoryPaginateOption{
+		WithProgramHistoryOrder(orderBy),
+		WithProgramHistoryFilter(where.Filter),
+	}
+
+	client := NewProgramHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(programhistory.Ref(currRef.Ref)).
-			Order(programhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ProgramHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ProgramHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ProgramHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					programhistory.Ref(curr.Node.Ref),
+					programhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(programhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ProgramHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ProgramHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ProgramHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ProgramHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ProgramHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type programmembershiphistoryref struct {
 	Ref string
 }
 
-func auditProgramMembershipHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []programmembershiphistoryref
-	client := NewProgramMembershipHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(programmembershiphistory.ByRef()).
-		Select(programmembershiphistory.FieldRef).
-		Scan(ctx, &refs)
+func auditProgramMembershipHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ProgramMembershipHistoryOrder, where *ProgramMembershipHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ProgramMembershipHistoryPaginateOption{
+		WithProgramMembershipHistoryOrder(orderBy),
+		WithProgramMembershipHistoryFilter(where.Filter),
+	}
+
+	client := NewProgramMembershipHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(programmembershiphistory.Ref(currRef.Ref)).
-			Order(programmembershiphistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ProgramMembershipHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ProgramMembershipHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ProgramMembershipHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					programmembershiphistory.Ref(curr.Node.Ref),
+					programmembershiphistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(programmembershiphistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ProgramMembershipHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ProgramMembershipHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ProgramMembershipHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ProgramMembershipHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ProgramMembershipHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type riskhistoryref struct {
 	Ref string
 }
 
-func auditRiskHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []riskhistoryref
-	client := NewRiskHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(riskhistory.ByRef()).
-		Select(riskhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditRiskHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *RiskHistoryOrder, where *RiskHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []RiskHistoryPaginateOption{
+		WithRiskHistoryOrder(orderBy),
+		WithRiskHistoryFilter(where.Filter),
+	}
+
+	client := NewRiskHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(riskhistory.Ref(currRef.Ref)).
-			Order(riskhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "RiskHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&RiskHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&RiskHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					riskhistory.Ref(curr.Node.Ref),
+					riskhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(riskhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &RiskHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "RiskHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&RiskHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&RiskHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&RiskHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type scheduledjobhistoryref struct {
 	Ref string
 }
 
-func auditScheduledJobHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []scheduledjobhistoryref
-	client := NewScheduledJobHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(scheduledjobhistory.ByRef()).
-		Select(scheduledjobhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditScheduledJobHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ScheduledJobHistoryOrder, where *ScheduledJobHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []ScheduledJobHistoryPaginateOption{
+		WithScheduledJobHistoryOrder(orderBy),
+		WithScheduledJobHistoryFilter(where.Filter),
+	}
+
+	client := NewScheduledJobHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(scheduledjobhistory.Ref(currRef.Ref)).
-			Order(scheduledjobhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ScheduledJobHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ScheduledJobHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ScheduledJobHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					scheduledjobhistory.Ref(curr.Node.Ref),
+					scheduledjobhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(scheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ScheduledJobHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "ScheduledJobHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&ScheduledJobHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&ScheduledJobHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&ScheduledJobHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type standardhistoryref struct {
 	Ref string
 }
 
-func auditStandardHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []standardhistoryref
-	client := NewStandardHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(standardhistory.ByRef()).
-		Select(standardhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditStandardHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *StandardHistoryOrder, where *StandardHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []StandardHistoryPaginateOption{
+		WithStandardHistoryOrder(orderBy),
+		WithStandardHistoryFilter(where.Filter),
+	}
+
+	client := NewStandardHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(standardhistory.Ref(currRef.Ref)).
-			Order(standardhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "StandardHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&StandardHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&StandardHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					standardhistory.Ref(curr.Node.Ref),
+					standardhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(standardhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &StandardHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "StandardHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&StandardHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&StandardHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&StandardHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type subcontrolhistoryref struct {
 	Ref string
 }
 
-func auditSubcontrolHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []subcontrolhistoryref
-	client := NewSubcontrolHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(subcontrolhistory.ByRef()).
-		Select(subcontrolhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditSubcontrolHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *SubcontrolHistoryOrder, where *SubcontrolHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []SubcontrolHistoryPaginateOption{
+		WithSubcontrolHistoryOrder(orderBy),
+		WithSubcontrolHistoryFilter(where.Filter),
+	}
+
+	client := NewSubcontrolHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(subcontrolhistory.Ref(currRef.Ref)).
-			Order(subcontrolhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "SubcontrolHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&SubcontrolHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&SubcontrolHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					subcontrolhistory.Ref(curr.Node.Ref),
+					subcontrolhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(subcontrolhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &SubcontrolHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "SubcontrolHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&SubcontrolHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&SubcontrolHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&SubcontrolHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type taskhistoryref struct {
 	Ref string
 }
 
-func auditTaskHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []taskhistoryref
-	client := NewTaskHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(taskhistory.ByRef()).
-		Select(taskhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditTaskHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *TaskHistoryOrder, where *TaskHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []TaskHistoryPaginateOption{
+		WithTaskHistoryOrder(orderBy),
+		WithTaskHistoryFilter(where.Filter),
+	}
+
+	client := NewTaskHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(taskhistory.Ref(currRef.Ref)).
-			Order(taskhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "TaskHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&TaskHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&TaskHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					taskhistory.Ref(curr.Node.Ref),
+					taskhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(taskhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &TaskHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "TaskHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&TaskHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&TaskHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&TaskHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type templatehistoryref struct {
 	Ref string
 }
 
-func auditTemplateHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []templatehistoryref
-	client := NewTemplateHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(templatehistory.ByRef()).
-		Select(templatehistory.FieldRef).
-		Scan(ctx, &refs)
+func auditTemplateHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *TemplateHistoryOrder, where *TemplateHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []TemplateHistoryPaginateOption{
+		WithTemplateHistoryOrder(orderBy),
+		WithTemplateHistoryFilter(where.Filter),
+	}
+
+	client := NewTemplateHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(templatehistory.Ref(currRef.Ref)).
-			Order(templatehistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "TemplateHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&TemplateHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&TemplateHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					templatehistory.Ref(curr.Node.Ref),
+					templatehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(templatehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &TemplateHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "TemplateHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&TemplateHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&TemplateHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&TemplateHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type userhistoryref struct {
 	Ref string
 }
 
-func auditUserHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []userhistoryref
-	client := NewUserHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(userhistory.ByRef()).
-		Select(userhistory.FieldRef).
-		Scan(ctx, &refs)
+func auditUserHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *UserHistoryOrder, where *UserHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []UserHistoryPaginateOption{
+		WithUserHistoryOrder(orderBy),
+		WithUserHistoryFilter(where.Filter),
+	}
+
+	client := NewUserHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(userhistory.Ref(currRef.Ref)).
-			Order(userhistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "UserHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&UserHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&UserHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					userhistory.Ref(curr.Node.Ref),
+					userhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(userhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &UserHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "UserHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&UserHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&UserHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&UserHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }
 
 type usersettinghistoryref struct {
 	Ref string
 }
 
-func auditUserSettingHistory(ctx context.Context, config config) ([][]string, error) {
-	var records = [][]string{}
-	var refs []usersettinghistoryref
-	client := NewUserSettingHistoryClient(config)
-	err := client.Query().
-		Unique(true).
-		Order(usersettinghistory.ByRef()).
-		Select(usersettinghistory.FieldRef).
-		Scan(ctx, &refs)
+func auditUserSettingHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *UserSettingHistoryOrder, where *UserSettingHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
 
+	opts := []UserSettingHistoryPaginateOption{
+		WithUserSettingHistoryOrder(orderBy),
+		WithUserSettingHistoryFilter(where.Filter),
+	}
+
+	client := NewUserSettingHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
 	if err != nil {
 		return nil, err
 	}
-	for _, currRef := range refs {
-		histories, err := client.Query().
-			Where(usersettinghistory.Ref(currRef.Ref)).
-			Order(usersettinghistory.ByHistoryTime()).
-			All(ctx)
-		if err != nil {
-			return nil, err
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "UserSettingHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&UserSettingHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&UserSettingHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					usersettinghistory.Ref(curr.Node.Ref),
+					usersettinghistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(usersettinghistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &UserSettingHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
 		}
 
-		for i := 0; i < len(histories); i++ {
-			curr := histories[i]
-			record := record{
-				Table:       "UserSettingHistory",
-				RefId:       curr.Ref,
-				HistoryTime: curr.HistoryTime,
-				Operation:   curr.Operation,
-				UpdatedBy:   curr.UpdatedBy,
-			}
-			switch curr.Operation {
-			case history.OpTypeInsert:
-				record.Changes = (&UserSettingHistory{}).changes(curr)
-			case history.OpTypeDelete:
-				record.Changes = curr.changes(&UserSettingHistory{})
-			default:
-				if i == 0 {
-					record.Changes = (&UserSettingHistory{}).changes(curr)
-				} else {
-					record.Changes = histories[i-1].changes(curr)
-				}
-			}
-			records = append(records, record.toRow())
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
 		}
+
+		result.Edges = append(result.Edges, edge)
 	}
-	return records, nil
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
 }

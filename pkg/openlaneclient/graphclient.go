@@ -8,6 +8,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Yamashou/gqlgenc/clientv2"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
@@ -135,10 +136,8 @@ type OpenlaneGraphClient interface {
 	DeleteEvent(ctx context.Context, deleteEventID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEvent, error)
 	GetAllEvents(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEvents, error)
 	GetEventByID(ctx context.Context, eventID string, interceptors ...clientv2.RequestInterceptor) (*GetEventByID, error)
-	GetEvents(ctx context.Context, where *EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvents, error)
+	GetEvents(ctx context.Context, first *int64, last *int64, where *EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvents, error)
 	UpdateEvent(ctx context.Context, updateEventID string, input UpdateEventInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEvent, error)
-	GetAllEventHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEventHistories, error)
-	GetEventHistories(ctx context.Context, where *EventHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEventHistories, error)
 	CreateEvidence(ctx context.Context, input CreateEvidenceInput, evidenceFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateEvidence, error)
 	DeleteEvidence(ctx context.Context, deleteEvidenceID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEvidence, error)
 	GetAllEvidences(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEvidences, error)
@@ -224,8 +223,6 @@ type OpenlaneGraphClient interface {
 	GetJobRunnerByID(ctx context.Context, jobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerByID, error)
 	GetJobRunners(ctx context.Context, first *int64, last *int64, where *JobRunnerWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunners, error)
 	UpdateJobRunner(ctx context.Context, updateJobRunnerID string, input UpdateJobRunnerInput, interceptors ...clientv2.RequestInterceptor) (*UpdateJobRunner, error)
-	GetAllJobRunnerHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerHistories, error)
-	GetJobRunnerHistories(ctx context.Context, first *int64, last *int64, where *JobRunnerHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerHistories, error)
 	CreateJobRunnerRegistrationToken(ctx context.Context, input CreateJobRunnerRegistrationTokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateJobRunnerRegistrationToken, error)
 	DeleteJobRunnerRegistrationToken(ctx context.Context, deleteJobRunnerRegistrationTokenID string, interceptors ...clientv2.RequestInterceptor) (*DeleteJobRunnerRegistrationToken, error)
 	GetAllJobRunnerRegistrationTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerRegistrationTokens, error)
@@ -7892,15 +7889,15 @@ func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIT
 }
 
 type AuditLogs_AuditLogs_Edges_Node struct {
-	Changes   []string   "json:\"changes,omitempty\" graphql:\"changes\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Operation *string    "json:\"operation,omitempty\" graphql:\"operation\""
-	Table     *string    "json:\"table,omitempty\" graphql:\"table\""
-	Time      *time.Time "json:\"time,omitempty\" graphql:\"time\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Changes   []*generated.Change "json:\"changes,omitempty\" graphql:\"changes\""
+	ID        string              "json:\"id\" graphql:\"id\""
+	Operation *string             "json:\"operation,omitempty\" graphql:\"operation\""
+	Table     *string             "json:\"table,omitempty\" graphql:\"table\""
+	Time      *time.Time          "json:\"time,omitempty\" graphql:\"time\""
+	UpdatedBy *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *AuditLogs_AuditLogs_Edges_Node) GetChanges() []string {
+func (t *AuditLogs_AuditLogs_Edges_Node) GetChanges() []*generated.Change {
 	if t == nil {
 		t = &AuditLogs_AuditLogs_Edges_Node{}
 	}
@@ -23120,318 +23117,17 @@ func (t *GetEntityTypeHistories_EntityTypeHistories) GetEdges() []*GetEntityType
 	return t.Edges
 }
 
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges struct {
-	Node *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges) GetNode() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users struct {
-	Edges []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users) GetEdges() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users_Edges {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges struct {
-	Node *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges) GetNode() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups struct {
-	Edges []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups) GetEdges() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups_Edges {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges struct {
-	Node *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges) GetNode() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations struct {
-	Edges []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations) GetEdges() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations_Edges {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges struct {
-	Node *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges) GetNode() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations struct {
-	Edges []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations) GetEdges() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations_Edges {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges struct {
-	Node *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges) GetNode() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites struct {
-	Edges []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites) GetEdges() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites_Edges {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges struct {
-	Node *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges) GetNode() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens struct {
-	Edges []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens) GetEdges() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens_Edges {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges struct {
-	Node *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges) GetNode() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets struct {
-	Edges []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets) GetEdges() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets_Edges {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges struct {
-	Node *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges) GetNode() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships struct {
-	Edges []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships) GetEdges() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships_Edges {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges struct {
-	Node *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges) GetNode() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships struct {
-	Edges []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships) GetEdges() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships_Edges {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships{}
-	}
-	return t.Edges
-}
-
 type CreateBulkCSVEvent_CreateBulkCSVEvent_Events struct {
-	CorrelationID        *string                                                           "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventID              *string                                                           "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType            string                                                            "json:\"eventType\" graphql:\"eventType\""
-	Groupmemberships     CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships     "json:\"groupmemberships\" graphql:\"groupmemberships\""
-	Groups               CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups               "json:\"groups\" graphql:\"groups\""
-	ID                   string                                                            "json:\"id\" graphql:\"id\""
-	Integrations         CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations         "json:\"integrations\" graphql:\"integrations\""
-	Invites              CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites              "json:\"invites\" graphql:\"invites\""
-	Metadata             map[string]any                                                    "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Organizations        CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations        "json:\"organizations\" graphql:\"organizations\""
-	Orgmemberships       CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships       "json:\"orgmemberships\" graphql:\"orgmemberships\""
-	PersonalAccessTokens CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens "json:\"personalAccessTokens\" graphql:\"personalAccessTokens\""
-	Secrets              CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets              "json:\"secrets\" graphql:\"secrets\""
-	Users                CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users                "json:\"users\" graphql:\"users\""
+	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
+	EventType     string         "json:\"eventType\" graphql:\"eventType\""
+	ID            string         "json:\"id\" graphql:\"id\""
+	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetCorrelationID() *string {
@@ -23439,6 +23135,18 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetCorrelationID() *strin
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.CorrelationID
+}
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
+	}
+	return t.CreatedBy
 }
 func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventID() *string {
 	if t == nil {
@@ -23452,35 +23160,11 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventType() string {
 	}
 	return t.EventType
 }
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetGroupmemberships() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmemberships {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return &t.Groupmemberships
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetGroups() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groups {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return &t.Groups
-}
 func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetIntegrations() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integrations {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return &t.Integrations
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetInvites() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invites {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return &t.Invites
 }
 func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetMetadata() map[string]any {
 	if t == nil {
@@ -23488,35 +23172,23 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetMetadata() map[string]
 	}
 	return t.Metadata
 }
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetOrganizations() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organizations {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetTags() []string {
 	if t == nil {
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
-	return &t.Organizations
+	return t.Tags
 }
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetOrgmemberships() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmemberships {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
-	return &t.Orgmemberships
+	return t.UpdatedAt
 }
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetPersonalAccessTokens() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessTokens {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetUpdatedBy() *string {
 	if t == nil {
 		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
-	return &t.PersonalAccessTokens
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetSecrets() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Secrets {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return &t.Secrets
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetUsers() *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Users {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return &t.Users
+	return t.UpdatedBy
 }
 
 type CreateBulkCSVEvent_CreateBulkCSVEvent struct {
@@ -23530,318 +23202,17 @@ func (t *CreateBulkCSVEvent_CreateBulkCSVEvent) GetEvents() []*CreateBulkCSVEven
 	return t.Events
 }
 
-type CreateBulkEvent_CreateBulkEvent_Events_Users_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Users_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Users_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Users_Edges struct {
-	Node *CreateBulkEvent_CreateBulkEvent_Events_Users_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Users_Edges) GetNode() *CreateBulkEvent_CreateBulkEvent_Events_Users_Edges_Node {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Users_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Users struct {
-	Edges []*CreateBulkEvent_CreateBulkEvent_Events_Users_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Users) GetEdges() []*CreateBulkEvent_CreateBulkEvent_Events_Users_Edges {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Users{}
-	}
-	return t.Edges
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges struct {
-	Node *CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges) GetNode() *CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges_Node {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Groups struct {
-	Edges []*CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Groups) GetEdges() []*CreateBulkEvent_CreateBulkEvent_Events_Groups_Edges {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Groups{}
-	}
-	return t.Edges
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges struct {
-	Node *CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges) GetNode() *CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges_Node {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Integrations struct {
-	Edges []*CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Integrations) GetEdges() []*CreateBulkEvent_CreateBulkEvent_Events_Integrations_Edges {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Integrations{}
-	}
-	return t.Edges
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges struct {
-	Node *CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges) GetNode() *CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges_Node {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Organizations struct {
-	Edges []*CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Organizations) GetEdges() []*CreateBulkEvent_CreateBulkEvent_Events_Organizations_Edges {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Organizations{}
-	}
-	return t.Edges
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges struct {
-	Node *CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges) GetNode() *CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges_Node {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Invites struct {
-	Edges []*CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Invites) GetEdges() []*CreateBulkEvent_CreateBulkEvent_Events_Invites_Edges {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Invites{}
-	}
-	return t.Edges
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges struct {
-	Node *CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges) GetNode() *CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges_Node {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens struct {
-	Edges []*CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens) GetEdges() []*CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens_Edges {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens{}
-	}
-	return t.Edges
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges struct {
-	Node *CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges) GetNode() *CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges_Node {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Secrets struct {
-	Edges []*CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Secrets) GetEdges() []*CreateBulkEvent_CreateBulkEvent_Events_Secrets_Edges {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Secrets{}
-	}
-	return t.Edges
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges struct {
-	Node *CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges) GetNode() *CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges_Node {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships struct {
-	Edges []*CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships) GetEdges() []*CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships_Edges {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships{}
-	}
-	return t.Edges
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges struct {
-	Node *CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges) GetNode() *CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges_Node {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships struct {
-	Edges []*CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships) GetEdges() []*CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships_Edges {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships{}
-	}
-	return t.Edges
-}
-
 type CreateBulkEvent_CreateBulkEvent_Events struct {
-	CorrelationID        *string                                                     "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventID              *string                                                     "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType            string                                                      "json:\"eventType\" graphql:\"eventType\""
-	Groupmemberships     CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships     "json:\"groupmemberships\" graphql:\"groupmemberships\""
-	Groups               CreateBulkEvent_CreateBulkEvent_Events_Groups               "json:\"groups\" graphql:\"groups\""
-	ID                   string                                                      "json:\"id\" graphql:\"id\""
-	Integrations         CreateBulkEvent_CreateBulkEvent_Events_Integrations         "json:\"integrations\" graphql:\"integrations\""
-	Invites              CreateBulkEvent_CreateBulkEvent_Events_Invites              "json:\"invites\" graphql:\"invites\""
-	Metadata             map[string]any                                              "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Organizations        CreateBulkEvent_CreateBulkEvent_Events_Organizations        "json:\"organizations\" graphql:\"organizations\""
-	Orgmemberships       CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships       "json:\"orgmemberships\" graphql:\"orgmemberships\""
-	PersonalAccessTokens CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens "json:\"personalAccessTokens\" graphql:\"personalAccessTokens\""
-	Secrets              CreateBulkEvent_CreateBulkEvent_Events_Secrets              "json:\"secrets\" graphql:\"secrets\""
-	Users                CreateBulkEvent_CreateBulkEvent_Events_Users                "json:\"users\" graphql:\"users\""
+	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
+	EventType     string         "json:\"eventType\" graphql:\"eventType\""
+	ID            string         "json:\"id\" graphql:\"id\""
+	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkEvent_CreateBulkEvent_Events) GetCorrelationID() *string {
@@ -23849,6 +23220,18 @@ func (t *CreateBulkEvent_CreateBulkEvent_Events) GetCorrelationID() *string {
 		t = &CreateBulkEvent_CreateBulkEvent_Events{}
 	}
 	return t.CorrelationID
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.CreatedBy
 }
 func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventID() *string {
 	if t == nil {
@@ -23862,35 +23245,11 @@ func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventType() string {
 	}
 	return t.EventType
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetGroupmemberships() *CreateBulkEvent_CreateBulkEvent_Events_Groupmemberships {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return &t.Groupmemberships
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetGroups() *CreateBulkEvent_CreateBulkEvent_Events_Groups {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return &t.Groups
-}
 func (t *CreateBulkEvent_CreateBulkEvent_Events) GetID() string {
 	if t == nil {
 		t = &CreateBulkEvent_CreateBulkEvent_Events{}
 	}
 	return t.ID
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetIntegrations() *CreateBulkEvent_CreateBulkEvent_Events_Integrations {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return &t.Integrations
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetInvites() *CreateBulkEvent_CreateBulkEvent_Events_Invites {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return &t.Invites
 }
 func (t *CreateBulkEvent_CreateBulkEvent_Events) GetMetadata() map[string]any {
 	if t == nil {
@@ -23898,35 +23257,23 @@ func (t *CreateBulkEvent_CreateBulkEvent_Events) GetMetadata() map[string]any {
 	}
 	return t.Metadata
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetOrganizations() *CreateBulkEvent_CreateBulkEvent_Events_Organizations {
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetTags() []string {
 	if t == nil {
 		t = &CreateBulkEvent_CreateBulkEvent_Events{}
 	}
-	return &t.Organizations
+	return t.Tags
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetOrgmemberships() *CreateBulkEvent_CreateBulkEvent_Events_Orgmemberships {
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkEvent_CreateBulkEvent_Events{}
 	}
-	return &t.Orgmemberships
+	return t.UpdatedAt
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetPersonalAccessTokens() *CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessTokens {
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetUpdatedBy() *string {
 	if t == nil {
 		t = &CreateBulkEvent_CreateBulkEvent_Events{}
 	}
-	return &t.PersonalAccessTokens
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetSecrets() *CreateBulkEvent_CreateBulkEvent_Events_Secrets {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return &t.Secrets
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetUsers() *CreateBulkEvent_CreateBulkEvent_Events_Users {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return &t.Users
+	return t.UpdatedBy
 }
 
 type CreateBulkEvent_CreateBulkEvent struct {
@@ -23942,10 +23289,15 @@ func (t *CreateBulkEvent_CreateBulkEvent) GetEvents() []*CreateBulkEvent_CreateB
 
 type CreateEvent_CreateEvent_Event struct {
 	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
 	EventType     string         "json:\"eventType\" graphql:\"eventType\""
 	ID            string         "json:\"id\" graphql:\"id\""
 	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateEvent_CreateEvent_Event) GetCorrelationID() *string {
@@ -23953,6 +23305,18 @@ func (t *CreateEvent_CreateEvent_Event) GetCorrelationID() *string {
 		t = &CreateEvent_CreateEvent_Event{}
 	}
 	return t.CorrelationID
+}
+func (t *CreateEvent_CreateEvent_Event) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateEvent_CreateEvent_Event) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.CreatedBy
 }
 func (t *CreateEvent_CreateEvent_Event) GetEventID() *string {
 	if t == nil {
@@ -23978,6 +23342,24 @@ func (t *CreateEvent_CreateEvent_Event) GetMetadata() map[string]any {
 	}
 	return t.Metadata
 }
+func (t *CreateEvent_CreateEvent_Event) GetTags() []string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Tags
+}
+func (t *CreateEvent_CreateEvent_Event) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateEvent_CreateEvent_Event) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.UpdatedBy
+}
 
 type CreateEvent_CreateEvent struct {
 	Event CreateEvent_CreateEvent_Event "json:\"event\" graphql:\"event\""
@@ -24001,322 +23383,49 @@ func (t *DeleteEvent_DeleteEvent) GetDeletedID() string {
 	return t.DeletedID
 }
 
-type GetAllEvents_Events_Edges_Node_Users_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
+type GetAllEvents_Events_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
 }
 
-func (t *GetAllEvents_Events_Edges_Node_Users_Edges_Node) GetID() string {
+func (t *GetAllEvents_Events_PageInfo) GetEndCursor() *string {
 	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Users_Edges_Node{}
+		t = &GetAllEvents_Events_PageInfo{}
 	}
-	return t.ID
+	return t.EndCursor
 }
-
-type GetAllEvents_Events_Edges_Node_Users_Edges struct {
-	Node *GetAllEvents_Events_Edges_Node_Users_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Users_Edges) GetNode() *GetAllEvents_Events_Edges_Node_Users_Edges_Node {
+func (t *GetAllEvents_Events_PageInfo) GetHasNextPage() bool {
 	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Users_Edges{}
+		t = &GetAllEvents_Events_PageInfo{}
 	}
-	return t.Node
+	return t.HasNextPage
 }
-
-type GetAllEvents_Events_Edges_Node_Users struct {
-	Edges []*GetAllEvents_Events_Edges_Node_Users_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Users) GetEdges() []*GetAllEvents_Events_Edges_Node_Users_Edges {
+func (t *GetAllEvents_Events_PageInfo) GetHasPreviousPage() bool {
 	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Users{}
+		t = &GetAllEvents_Events_PageInfo{}
 	}
-	return t.Edges
+	return t.HasPreviousPage
 }
-
-type GetAllEvents_Events_Edges_Node_Groups_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Groups_Edges_Node) GetID() string {
+func (t *GetAllEvents_Events_PageInfo) GetStartCursor() *string {
 	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Groups_Edges_Node{}
+		t = &GetAllEvents_Events_PageInfo{}
 	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_Groups_Edges struct {
-	Node *GetAllEvents_Events_Edges_Node_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Groups_Edges) GetNode() *GetAllEvents_Events_Edges_Node_Groups_Edges_Node {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Groups_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllEvents_Events_Edges_Node_Groups struct {
-	Edges []*GetAllEvents_Events_Edges_Node_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Groups) GetEdges() []*GetAllEvents_Events_Edges_Node_Groups_Edges {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Groups{}
-	}
-	return t.Edges
-}
-
-type GetAllEvents_Events_Edges_Node_Integrations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Integrations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Integrations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_Integrations_Edges struct {
-	Node *GetAllEvents_Events_Edges_Node_Integrations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Integrations_Edges) GetNode() *GetAllEvents_Events_Edges_Node_Integrations_Edges_Node {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Integrations_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllEvents_Events_Edges_Node_Integrations struct {
-	Edges []*GetAllEvents_Events_Edges_Node_Integrations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Integrations) GetEdges() []*GetAllEvents_Events_Edges_Node_Integrations_Edges {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Integrations{}
-	}
-	return t.Edges
-}
-
-type GetAllEvents_Events_Edges_Node_Organizations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Organizations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Organizations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_Organizations_Edges struct {
-	Node *GetAllEvents_Events_Edges_Node_Organizations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Organizations_Edges) GetNode() *GetAllEvents_Events_Edges_Node_Organizations_Edges_Node {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Organizations_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllEvents_Events_Edges_Node_Organizations struct {
-	Edges []*GetAllEvents_Events_Edges_Node_Organizations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Organizations) GetEdges() []*GetAllEvents_Events_Edges_Node_Organizations_Edges {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Organizations{}
-	}
-	return t.Edges
-}
-
-type GetAllEvents_Events_Edges_Node_Invites_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Invites_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Invites_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_Invites_Edges struct {
-	Node *GetAllEvents_Events_Edges_Node_Invites_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Invites_Edges) GetNode() *GetAllEvents_Events_Edges_Node_Invites_Edges_Node {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Invites_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllEvents_Events_Edges_Node_Invites struct {
-	Edges []*GetAllEvents_Events_Edges_Node_Invites_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Invites) GetEdges() []*GetAllEvents_Events_Edges_Node_Invites_Edges {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Invites{}
-	}
-	return t.Edges
-}
-
-type GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges struct {
-	Node *GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges) GetNode() *GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges_Node {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllEvents_Events_Edges_Node_PersonalAccessTokens struct {
-	Edges []*GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_PersonalAccessTokens) GetEdges() []*GetAllEvents_Events_Edges_Node_PersonalAccessTokens_Edges {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_PersonalAccessTokens{}
-	}
-	return t.Edges
-}
-
-type GetAllEvents_Events_Edges_Node_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_Secrets_Edges struct {
-	Node *GetAllEvents_Events_Edges_Node_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Secrets_Edges) GetNode() *GetAllEvents_Events_Edges_Node_Secrets_Edges_Node {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllEvents_Events_Edges_Node_Secrets struct {
-	Edges []*GetAllEvents_Events_Edges_Node_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Secrets) GetEdges() []*GetAllEvents_Events_Edges_Node_Secrets_Edges {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Secrets{}
-	}
-	return t.Edges
-}
-
-type GetAllEvents_Events_Edges_Node_Orgmemberships_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Orgmemberships_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Orgmemberships_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_Orgmemberships_Edges struct {
-	Node *GetAllEvents_Events_Edges_Node_Orgmemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Orgmemberships_Edges) GetNode() *GetAllEvents_Events_Edges_Node_Orgmemberships_Edges_Node {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Orgmemberships_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllEvents_Events_Edges_Node_Orgmemberships struct {
-	Edges []*GetAllEvents_Events_Edges_Node_Orgmemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Orgmemberships) GetEdges() []*GetAllEvents_Events_Edges_Node_Orgmemberships_Edges {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Orgmemberships{}
-	}
-	return t.Edges
-}
-
-type GetAllEvents_Events_Edges_Node_Groupmemberships_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Groupmemberships_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Groupmemberships_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllEvents_Events_Edges_Node_Groupmemberships_Edges struct {
-	Node *GetAllEvents_Events_Edges_Node_Groupmemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Groupmemberships_Edges) GetNode() *GetAllEvents_Events_Edges_Node_Groupmemberships_Edges_Node {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Groupmemberships_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllEvents_Events_Edges_Node_Groupmemberships struct {
-	Edges []*GetAllEvents_Events_Edges_Node_Groupmemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEvents_Events_Edges_Node_Groupmemberships) GetEdges() []*GetAllEvents_Events_Edges_Node_Groupmemberships_Edges {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node_Groupmemberships{}
-	}
-	return t.Edges
+	return t.StartCursor
 }
 
 type GetAllEvents_Events_Edges_Node struct {
-	CorrelationID        *string                                             "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	CreatedAt            *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EventID              *string                                             "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType            string                                              "json:\"eventType\" graphql:\"eventType\""
-	Groupmemberships     GetAllEvents_Events_Edges_Node_Groupmemberships     "json:\"groupmemberships\" graphql:\"groupmemberships\""
-	Groups               GetAllEvents_Events_Edges_Node_Groups               "json:\"groups\" graphql:\"groups\""
-	ID                   string                                              "json:\"id\" graphql:\"id\""
-	Integrations         GetAllEvents_Events_Edges_Node_Integrations         "json:\"integrations\" graphql:\"integrations\""
-	Invites              GetAllEvents_Events_Edges_Node_Invites              "json:\"invites\" graphql:\"invites\""
-	Metadata             map[string]any                                      "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Organizations        GetAllEvents_Events_Edges_Node_Organizations        "json:\"organizations\" graphql:\"organizations\""
-	Orgmemberships       GetAllEvents_Events_Edges_Node_Orgmemberships       "json:\"orgmemberships\" graphql:\"orgmemberships\""
-	PersonalAccessTokens GetAllEvents_Events_Edges_Node_PersonalAccessTokens "json:\"personalAccessTokens\" graphql:\"personalAccessTokens\""
-	Secrets              GetAllEvents_Events_Edges_Node_Secrets              "json:\"secrets\" graphql:\"secrets\""
-	UpdatedAt            *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Users                GetAllEvents_Events_Edges_Node_Users                "json:\"users\" graphql:\"users\""
+	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
+	EventType     string         "json:\"eventType\" graphql:\"eventType\""
+	ID            string         "json:\"id\" graphql:\"id\""
+	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllEvents_Events_Edges_Node) GetCorrelationID() *string {
@@ -24349,35 +23458,11 @@ func (t *GetAllEvents_Events_Edges_Node) GetEventType() string {
 	}
 	return t.EventType
 }
-func (t *GetAllEvents_Events_Edges_Node) GetGroupmemberships() *GetAllEvents_Events_Edges_Node_Groupmemberships {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return &t.Groupmemberships
-}
-func (t *GetAllEvents_Events_Edges_Node) GetGroups() *GetAllEvents_Events_Edges_Node_Groups {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return &t.Groups
-}
 func (t *GetAllEvents_Events_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllEvents_Events_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllEvents_Events_Edges_Node) GetIntegrations() *GetAllEvents_Events_Edges_Node_Integrations {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return &t.Integrations
-}
-func (t *GetAllEvents_Events_Edges_Node) GetInvites() *GetAllEvents_Events_Edges_Node_Invites {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return &t.Invites
 }
 func (t *GetAllEvents_Events_Edges_Node) GetMetadata() map[string]any {
 	if t == nil {
@@ -24385,29 +23470,11 @@ func (t *GetAllEvents_Events_Edges_Node) GetMetadata() map[string]any {
 	}
 	return t.Metadata
 }
-func (t *GetAllEvents_Events_Edges_Node) GetOrganizations() *GetAllEvents_Events_Edges_Node_Organizations {
+func (t *GetAllEvents_Events_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &GetAllEvents_Events_Edges_Node{}
 	}
-	return &t.Organizations
-}
-func (t *GetAllEvents_Events_Edges_Node) GetOrgmemberships() *GetAllEvents_Events_Edges_Node_Orgmemberships {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return &t.Orgmemberships
-}
-func (t *GetAllEvents_Events_Edges_Node) GetPersonalAccessTokens() *GetAllEvents_Events_Edges_Node_PersonalAccessTokens {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return &t.PersonalAccessTokens
-}
-func (t *GetAllEvents_Events_Edges_Node) GetSecrets() *GetAllEvents_Events_Edges_Node_Secrets {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return &t.Secrets
+	return t.Tags
 }
 func (t *GetAllEvents_Events_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -24420,12 +23487,6 @@ func (t *GetAllEvents_Events_Edges_Node) GetUpdatedBy() *string {
 		t = &GetAllEvents_Events_Edges_Node{}
 	}
 	return t.UpdatedBy
-}
-func (t *GetAllEvents_Events_Edges_Node) GetUsers() *GetAllEvents_Events_Edges_Node_Users {
-	if t == nil {
-		t = &GetAllEvents_Events_Edges_Node{}
-	}
-	return &t.Users
 }
 
 type GetAllEvents_Events_Edges struct {
@@ -24440,7 +23501,9 @@ func (t *GetAllEvents_Events_Edges) GetNode() *GetAllEvents_Events_Edges_Node {
 }
 
 type GetAllEvents_Events struct {
-	Edges []*GetAllEvents_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllEvents_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllEvents_Events_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                        "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllEvents_Events) GetEdges() []*GetAllEvents_Events_Edges {
@@ -24449,323 +23512,30 @@ func (t *GetAllEvents_Events) GetEdges() []*GetAllEvents_Events_Edges {
 	}
 	return t.Edges
 }
-
-type GetEventByID_Event_Users_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Users_Edges_Node) GetID() string {
+func (t *GetAllEvents_Events) GetPageInfo() *GetAllEvents_Events_PageInfo {
 	if t == nil {
-		t = &GetEventByID_Event_Users_Edges_Node{}
+		t = &GetAllEvents_Events{}
 	}
-	return t.ID
+	return &t.PageInfo
 }
-
-type GetEventByID_Event_Users_Edges struct {
-	Node *GetEventByID_Event_Users_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventByID_Event_Users_Edges) GetNode() *GetEventByID_Event_Users_Edges_Node {
+func (t *GetAllEvents_Events) GetTotalCount() int64 {
 	if t == nil {
-		t = &GetEventByID_Event_Users_Edges{}
+		t = &GetAllEvents_Events{}
 	}
-	return t.Node
-}
-
-type GetEventByID_Event_Users struct {
-	Edges []*GetEventByID_Event_Users_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventByID_Event_Users) GetEdges() []*GetEventByID_Event_Users_Edges {
-	if t == nil {
-		t = &GetEventByID_Event_Users{}
-	}
-	return t.Edges
-}
-
-type GetEventByID_Event_Groups_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Groups_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Groups_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Groups_Edges struct {
-	Node *GetEventByID_Event_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventByID_Event_Groups_Edges) GetNode() *GetEventByID_Event_Groups_Edges_Node {
-	if t == nil {
-		t = &GetEventByID_Event_Groups_Edges{}
-	}
-	return t.Node
-}
-
-type GetEventByID_Event_Groups struct {
-	Edges []*GetEventByID_Event_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventByID_Event_Groups) GetEdges() []*GetEventByID_Event_Groups_Edges {
-	if t == nil {
-		t = &GetEventByID_Event_Groups{}
-	}
-	return t.Edges
-}
-
-type GetEventByID_Event_Integrations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Integrations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Integrations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Integrations_Edges struct {
-	Node *GetEventByID_Event_Integrations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventByID_Event_Integrations_Edges) GetNode() *GetEventByID_Event_Integrations_Edges_Node {
-	if t == nil {
-		t = &GetEventByID_Event_Integrations_Edges{}
-	}
-	return t.Node
-}
-
-type GetEventByID_Event_Integrations struct {
-	Edges []*GetEventByID_Event_Integrations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventByID_Event_Integrations) GetEdges() []*GetEventByID_Event_Integrations_Edges {
-	if t == nil {
-		t = &GetEventByID_Event_Integrations{}
-	}
-	return t.Edges
-}
-
-type GetEventByID_Event_Organizations_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Organizations_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Organizations_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Organizations_Edges struct {
-	Node *GetEventByID_Event_Organizations_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventByID_Event_Organizations_Edges) GetNode() *GetEventByID_Event_Organizations_Edges_Node {
-	if t == nil {
-		t = &GetEventByID_Event_Organizations_Edges{}
-	}
-	return t.Node
-}
-
-type GetEventByID_Event_Organizations struct {
-	Edges []*GetEventByID_Event_Organizations_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventByID_Event_Organizations) GetEdges() []*GetEventByID_Event_Organizations_Edges {
-	if t == nil {
-		t = &GetEventByID_Event_Organizations{}
-	}
-	return t.Edges
-}
-
-type GetEventByID_Event_Invites_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Invites_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Invites_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Invites_Edges struct {
-	Node *GetEventByID_Event_Invites_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventByID_Event_Invites_Edges) GetNode() *GetEventByID_Event_Invites_Edges_Node {
-	if t == nil {
-		t = &GetEventByID_Event_Invites_Edges{}
-	}
-	return t.Node
-}
-
-type GetEventByID_Event_Invites struct {
-	Edges []*GetEventByID_Event_Invites_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventByID_Event_Invites) GetEdges() []*GetEventByID_Event_Invites_Edges {
-	if t == nil {
-		t = &GetEventByID_Event_Invites{}
-	}
-	return t.Edges
-}
-
-type GetEventByID_Event_PersonalAccessTokens_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_PersonalAccessTokens_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_PersonalAccessTokens_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_PersonalAccessTokens_Edges struct {
-	Node *GetEventByID_Event_PersonalAccessTokens_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventByID_Event_PersonalAccessTokens_Edges) GetNode() *GetEventByID_Event_PersonalAccessTokens_Edges_Node {
-	if t == nil {
-		t = &GetEventByID_Event_PersonalAccessTokens_Edges{}
-	}
-	return t.Node
-}
-
-type GetEventByID_Event_PersonalAccessTokens struct {
-	Edges []*GetEventByID_Event_PersonalAccessTokens_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventByID_Event_PersonalAccessTokens) GetEdges() []*GetEventByID_Event_PersonalAccessTokens_Edges {
-	if t == nil {
-		t = &GetEventByID_Event_PersonalAccessTokens{}
-	}
-	return t.Edges
-}
-
-type GetEventByID_Event_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Secrets_Edges struct {
-	Node *GetEventByID_Event_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventByID_Event_Secrets_Edges) GetNode() *GetEventByID_Event_Secrets_Edges_Node {
-	if t == nil {
-		t = &GetEventByID_Event_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type GetEventByID_Event_Secrets struct {
-	Edges []*GetEventByID_Event_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventByID_Event_Secrets) GetEdges() []*GetEventByID_Event_Secrets_Edges {
-	if t == nil {
-		t = &GetEventByID_Event_Secrets{}
-	}
-	return t.Edges
-}
-
-type GetEventByID_Event_Orgmemberships_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Orgmemberships_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Orgmemberships_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Orgmemberships_Edges struct {
-	Node *GetEventByID_Event_Orgmemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventByID_Event_Orgmemberships_Edges) GetNode() *GetEventByID_Event_Orgmemberships_Edges_Node {
-	if t == nil {
-		t = &GetEventByID_Event_Orgmemberships_Edges{}
-	}
-	return t.Node
-}
-
-type GetEventByID_Event_Orgmemberships struct {
-	Edges []*GetEventByID_Event_Orgmemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventByID_Event_Orgmemberships) GetEdges() []*GetEventByID_Event_Orgmemberships_Edges {
-	if t == nil {
-		t = &GetEventByID_Event_Orgmemberships{}
-	}
-	return t.Edges
-}
-
-type GetEventByID_Event_Groupmemberships_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Groupmemberships_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Groupmemberships_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Groupmemberships_Edges struct {
-	Node *GetEventByID_Event_Groupmemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventByID_Event_Groupmemberships_Edges) GetNode() *GetEventByID_Event_Groupmemberships_Edges_Node {
-	if t == nil {
-		t = &GetEventByID_Event_Groupmemberships_Edges{}
-	}
-	return t.Node
-}
-
-type GetEventByID_Event_Groupmemberships struct {
-	Edges []*GetEventByID_Event_Groupmemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventByID_Event_Groupmemberships) GetEdges() []*GetEventByID_Event_Groupmemberships_Edges {
-	if t == nil {
-		t = &GetEventByID_Event_Groupmemberships{}
-	}
-	return t.Edges
+	return t.TotalCount
 }
 
 type GetEventByID_Event struct {
-	CorrelationID        *string                                 "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	CreatedAt            *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EventID              *string                                 "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType            string                                  "json:\"eventType\" graphql:\"eventType\""
-	Groupmemberships     GetEventByID_Event_Groupmemberships     "json:\"groupmemberships\" graphql:\"groupmemberships\""
-	Groups               GetEventByID_Event_Groups               "json:\"groups\" graphql:\"groups\""
-	ID                   string                                  "json:\"id\" graphql:\"id\""
-	Integrations         GetEventByID_Event_Integrations         "json:\"integrations\" graphql:\"integrations\""
-	Invites              GetEventByID_Event_Invites              "json:\"invites\" graphql:\"invites\""
-	Metadata             map[string]any                          "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Organizations        GetEventByID_Event_Organizations        "json:\"organizations\" graphql:\"organizations\""
-	Orgmemberships       GetEventByID_Event_Orgmemberships       "json:\"orgmemberships\" graphql:\"orgmemberships\""
-	PersonalAccessTokens GetEventByID_Event_PersonalAccessTokens "json:\"personalAccessTokens\" graphql:\"personalAccessTokens\""
-	Secrets              GetEventByID_Event_Secrets              "json:\"secrets\" graphql:\"secrets\""
-	UpdatedAt            *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Users                GetEventByID_Event_Users                "json:\"users\" graphql:\"users\""
+	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
+	EventType     string         "json:\"eventType\" graphql:\"eventType\""
+	ID            string         "json:\"id\" graphql:\"id\""
+	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetEventByID_Event) GetCorrelationID() *string {
@@ -24798,35 +23568,11 @@ func (t *GetEventByID_Event) GetEventType() string {
 	}
 	return t.EventType
 }
-func (t *GetEventByID_Event) GetGroupmemberships() *GetEventByID_Event_Groupmemberships {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return &t.Groupmemberships
-}
-func (t *GetEventByID_Event) GetGroups() *GetEventByID_Event_Groups {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return &t.Groups
-}
 func (t *GetEventByID_Event) GetID() string {
 	if t == nil {
 		t = &GetEventByID_Event{}
 	}
 	return t.ID
-}
-func (t *GetEventByID_Event) GetIntegrations() *GetEventByID_Event_Integrations {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return &t.Integrations
-}
-func (t *GetEventByID_Event) GetInvites() *GetEventByID_Event_Invites {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return &t.Invites
 }
 func (t *GetEventByID_Event) GetMetadata() map[string]any {
 	if t == nil {
@@ -24834,29 +23580,11 @@ func (t *GetEventByID_Event) GetMetadata() map[string]any {
 	}
 	return t.Metadata
 }
-func (t *GetEventByID_Event) GetOrganizations() *GetEventByID_Event_Organizations {
+func (t *GetEventByID_Event) GetTags() []string {
 	if t == nil {
 		t = &GetEventByID_Event{}
 	}
-	return &t.Organizations
-}
-func (t *GetEventByID_Event) GetOrgmemberships() *GetEventByID_Event_Orgmemberships {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return &t.Orgmemberships
-}
-func (t *GetEventByID_Event) GetPersonalAccessTokens() *GetEventByID_Event_PersonalAccessTokens {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return &t.PersonalAccessTokens
-}
-func (t *GetEventByID_Event) GetSecrets() *GetEventByID_Event_Secrets {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return &t.Secrets
+	return t.Tags
 }
 func (t *GetEventByID_Event) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -24870,19 +23598,50 @@ func (t *GetEventByID_Event) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetEventByID_Event) GetUsers() *GetEventByID_Event_Users {
+
+type GetEvents_Events_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetEvents_Events_PageInfo) GetEndCursor() *string {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &GetEvents_Events_PageInfo{}
 	}
-	return &t.Users
+	return t.EndCursor
+}
+func (t *GetEvents_Events_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetEvents_Events_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetEvents_Events_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetEvents_Events_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetEvents_Events_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetEvents_Events_PageInfo{}
+	}
+	return t.StartCursor
 }
 
 type GetEvents_Events_Edges_Node struct {
 	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
 	EventType     string         "json:\"eventType\" graphql:\"eventType\""
 	ID            string         "json:\"id\" graphql:\"id\""
 	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetEvents_Events_Edges_Node) GetCorrelationID() *string {
@@ -24890,6 +23649,18 @@ func (t *GetEvents_Events_Edges_Node) GetCorrelationID() *string {
 		t = &GetEvents_Events_Edges_Node{}
 	}
 	return t.CorrelationID
+}
+func (t *GetEvents_Events_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetEvents_Events_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetEvents_Events_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetEvents_Events_Edges_Node{}
+	}
+	return t.CreatedBy
 }
 func (t *GetEvents_Events_Edges_Node) GetEventID() *string {
 	if t == nil {
@@ -24915,6 +23686,24 @@ func (t *GetEvents_Events_Edges_Node) GetMetadata() map[string]any {
 	}
 	return t.Metadata
 }
+func (t *GetEvents_Events_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetEvents_Events_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetEvents_Events_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetEvents_Events_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetEvents_Events_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetEvents_Events_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
 
 type GetEvents_Events_Edges struct {
 	Node *GetEvents_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -24928,7 +23717,9 @@ func (t *GetEvents_Events_Edges) GetNode() *GetEvents_Events_Edges_Node {
 }
 
 type GetEvents_Events struct {
-	Edges []*GetEvents_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetEvents_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetEvents_Events_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                     "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetEvents_Events) GetEdges() []*GetEvents_Events_Edges {
@@ -24936,6 +23727,18 @@ func (t *GetEvents_Events) GetEdges() []*GetEvents_Events_Edges {
 		t = &GetEvents_Events{}
 	}
 	return t.Edges
+}
+func (t *GetEvents_Events) GetPageInfo() *GetEvents_Events_PageInfo {
+	if t == nil {
+		t = &GetEvents_Events{}
+	}
+	return &t.PageInfo
+}
+func (t *GetEvents_Events) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetEvents_Events{}
+	}
+	return t.TotalCount
 }
 
 type UpdateEvent_UpdateEvent_Event struct {
@@ -24946,6 +23749,7 @@ type UpdateEvent_UpdateEvent_Event struct {
 	EventType     string         "json:\"eventType\" graphql:\"eventType\""
 	ID            string         "json:\"id\" graphql:\"id\""
 	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -24992,6 +23796,12 @@ func (t *UpdateEvent_UpdateEvent_Event) GetMetadata() map[string]any {
 	}
 	return t.Metadata
 }
+func (t *UpdateEvent_UpdateEvent_Event) GetTags() []string {
+	if t == nil {
+		t = &UpdateEvent_UpdateEvent_Event{}
+	}
+	return t.Tags
+}
 func (t *UpdateEvent_UpdateEvent_Event) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateEvent_UpdateEvent_Event{}
@@ -25014,240 +23824,6 @@ func (t *UpdateEvent_UpdateEvent) GetEvent() *UpdateEvent_UpdateEvent_Event {
 		t = &UpdateEvent_UpdateEvent{}
 	}
 	return &t.Event
-}
-
-type GetAllEventHistories_EventHistories_Edges_Node struct {
-	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType     string         "json:\"eventType\" graphql:\"eventType\""
-	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID            string         "json:\"id\" graphql:\"id\""
-	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
-	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetCorrelationID() *string {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.CorrelationID
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.CreatedAt
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.CreatedBy
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetEventID() *string {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.EventID
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetEventType() string {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.EventType
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetHistoryTime() *time.Time {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return &t.HistoryTime
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetMetadata() map[string]any {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.Metadata
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetOperation() *history.OpType {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return &t.Operation
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetRef() *string {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.Ref
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.Tags
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.UpdatedBy
-}
-
-type GetAllEventHistories_EventHistories_Edges struct {
-	Node *GetAllEventHistories_EventHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllEventHistories_EventHistories_Edges) GetNode() *GetAllEventHistories_EventHistories_Edges_Node {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllEventHistories_EventHistories struct {
-	Edges []*GetAllEventHistories_EventHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllEventHistories_EventHistories) GetEdges() []*GetAllEventHistories_EventHistories_Edges {
-	if t == nil {
-		t = &GetAllEventHistories_EventHistories{}
-	}
-	return t.Edges
-}
-
-type GetEventHistories_EventHistories_Edges_Node struct {
-	CorrelationID *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EventID       *string        "json:\"eventID,omitempty\" graphql:\"eventID\""
-	EventType     string         "json:\"eventType\" graphql:\"eventType\""
-	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID            string         "json:\"id\" graphql:\"id\""
-	Metadata      map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
-	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *GetEventHistories_EventHistories_Edges_Node) GetCorrelationID() *string {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.CorrelationID
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.CreatedAt
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.CreatedBy
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetEventID() *string {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.EventID
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetEventType() string {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.EventType
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetHistoryTime() *time.Time {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return &t.HistoryTime
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetMetadata() map[string]any {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.Metadata
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetOperation() *history.OpType {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return &t.Operation
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetRef() *string {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.Ref
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.Tags
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetEventHistories_EventHistories_Edges_Node) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges_Node{}
-	}
-	return t.UpdatedBy
-}
-
-type GetEventHistories_EventHistories_Edges struct {
-	Node *GetEventHistories_EventHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEventHistories_EventHistories_Edges) GetNode() *GetEventHistories_EventHistories_Edges_Node {
-	if t == nil {
-		t = &GetEventHistories_EventHistories_Edges{}
-	}
-	return t.Node
-}
-
-type GetEventHistories_EventHistories struct {
-	Edges []*GetEventHistories_EventHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEventHistories_EventHistories) GetEdges() []*GetEventHistories_EventHistories_Edges {
-	if t == nil {
-		t = &GetEventHistories_EventHistories{}
-	}
-	return t.Edges
 }
 
 type CreateEvidence_CreateEvidence_Evidence_Files_Edges_Node struct {
@@ -32867,42 +31443,8 @@ func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations) GetEdges() []*
 	return t.Edges
 }
 
-type CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges struct {
-	Node *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges) GetNode() *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events struct {
-	Edges []*CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events) GetEdges() []*CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events_Edges {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events{}
-	}
-	return t.Edges
-}
-
 type CreateBulkCSVHush_CreateBulkCSVHush_Hushes struct {
 	Description  *string                                                 "json:\"description,omitempty\" graphql:\"description\""
-	Events       CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events       "json:\"events\" graphql:\"events\""
 	ID           string                                                  "json:\"id\" graphql:\"id\""
 	Integrations CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations "json:\"integrations\" graphql:\"integrations\""
 	Kind         *string                                                 "json:\"kind,omitempty\" graphql:\"kind\""
@@ -32916,12 +31458,6 @@ func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetDescription() *string {
 		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
 	}
 	return t.Description
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetEvents() *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Events {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return &t.Events
 }
 func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetID() string {
 	if t == nil {
@@ -33004,42 +31540,8 @@ func (t *CreateBulkHush_CreateBulkHush_Hushes_Integrations) GetEdges() []*Create
 	return t.Edges
 }
 
-type CreateBulkHush_CreateBulkHush_Hushes_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkHush_CreateBulkHush_Hushes_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkHush_CreateBulkHush_Hushes_Events_Edges struct {
-	Node *CreateBulkHush_CreateBulkHush_Hushes_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkHush_CreateBulkHush_Hushes_Events_Edges) GetNode() *CreateBulkHush_CreateBulkHush_Hushes_Events_Edges_Node {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes_Events_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkHush_CreateBulkHush_Hushes_Events struct {
-	Edges []*CreateBulkHush_CreateBulkHush_Hushes_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkHush_CreateBulkHush_Hushes_Events) GetEdges() []*CreateBulkHush_CreateBulkHush_Hushes_Events_Edges {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes_Events{}
-	}
-	return t.Edges
-}
-
 type CreateBulkHush_CreateBulkHush_Hushes struct {
 	Description  *string                                           "json:\"description,omitempty\" graphql:\"description\""
-	Events       CreateBulkHush_CreateBulkHush_Hushes_Events       "json:\"events\" graphql:\"events\""
 	ID           string                                            "json:\"id\" graphql:\"id\""
 	Integrations CreateBulkHush_CreateBulkHush_Hushes_Integrations "json:\"integrations\" graphql:\"integrations\""
 	Kind         *string                                           "json:\"kind,omitempty\" graphql:\"kind\""
@@ -33053,12 +31555,6 @@ func (t *CreateBulkHush_CreateBulkHush_Hushes) GetDescription() *string {
 		t = &CreateBulkHush_CreateBulkHush_Hushes{}
 	}
 	return t.Description
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetEvents() *CreateBulkHush_CreateBulkHush_Hushes_Events {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return &t.Events
 }
 func (t *CreateBulkHush_CreateBulkHush_Hushes) GetID() string {
 	if t == nil {
@@ -33141,42 +31637,8 @@ func (t *CreateHush_CreateHush_Hush_Integrations) GetEdges() []*CreateHush_Creat
 	return t.Edges
 }
 
-type CreateHush_CreateHush_Hush_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateHush_CreateHush_Hush_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateHush_CreateHush_Hush_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateHush_CreateHush_Hush_Events_Edges struct {
-	Node *CreateHush_CreateHush_Hush_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateHush_CreateHush_Hush_Events_Edges) GetNode() *CreateHush_CreateHush_Hush_Events_Edges_Node {
-	if t == nil {
-		t = &CreateHush_CreateHush_Hush_Events_Edges{}
-	}
-	return t.Node
-}
-
-type CreateHush_CreateHush_Hush_Events struct {
-	Edges []*CreateHush_CreateHush_Hush_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateHush_CreateHush_Hush_Events) GetEdges() []*CreateHush_CreateHush_Hush_Events_Edges {
-	if t == nil {
-		t = &CreateHush_CreateHush_Hush_Events{}
-	}
-	return t.Edges
-}
-
 type CreateHush_CreateHush_Hush struct {
 	Description  *string                                 "json:\"description,omitempty\" graphql:\"description\""
-	Events       CreateHush_CreateHush_Hush_Events       "json:\"events\" graphql:\"events\""
 	ID           string                                  "json:\"id\" graphql:\"id\""
 	Integrations CreateHush_CreateHush_Hush_Integrations "json:\"integrations\" graphql:\"integrations\""
 	Kind         *string                                 "json:\"kind,omitempty\" graphql:\"kind\""
@@ -33190,12 +31652,6 @@ func (t *CreateHush_CreateHush_Hush) GetDescription() *string {
 		t = &CreateHush_CreateHush_Hush{}
 	}
 	return t.Description
-}
-func (t *CreateHush_CreateHush_Hush) GetEvents() *CreateHush_CreateHush_Hush_Events {
-	if t == nil {
-		t = &CreateHush_CreateHush_Hush{}
-	}
-	return &t.Events
 }
 func (t *CreateHush_CreateHush_Hush) GetID() string {
 	if t == nil {
@@ -33278,44 +31734,10 @@ func (t *GetAllHushes_Hushes_Edges_Node_Integrations) GetEdges() []*GetAllHushes
 	return t.Edges
 }
 
-type GetAllHushes_Hushes_Edges_Node_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllHushes_Hushes_Edges_Node_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllHushes_Hushes_Edges_Node_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllHushes_Hushes_Edges_Node_Events_Edges struct {
-	Node *GetAllHushes_Hushes_Edges_Node_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllHushes_Hushes_Edges_Node_Events_Edges) GetNode() *GetAllHushes_Hushes_Edges_Node_Events_Edges_Node {
-	if t == nil {
-		t = &GetAllHushes_Hushes_Edges_Node_Events_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllHushes_Hushes_Edges_Node_Events struct {
-	Edges []*GetAllHushes_Hushes_Edges_Node_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllHushes_Hushes_Edges_Node_Events) GetEdges() []*GetAllHushes_Hushes_Edges_Node_Events_Edges {
-	if t == nil {
-		t = &GetAllHushes_Hushes_Edges_Node_Events{}
-	}
-	return t.Edges
-}
-
 type GetAllHushes_Hushes_Edges_Node struct {
 	CreatedAt    *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy    *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description  *string                                     "json:\"description,omitempty\" graphql:\"description\""
-	Events       GetAllHushes_Hushes_Edges_Node_Events       "json:\"events\" graphql:\"events\""
 	ID           string                                      "json:\"id\" graphql:\"id\""
 	Integrations GetAllHushes_Hushes_Edges_Node_Integrations "json:\"integrations\" graphql:\"integrations\""
 	Kind         *string                                     "json:\"kind,omitempty\" graphql:\"kind\""
@@ -33343,12 +31765,6 @@ func (t *GetAllHushes_Hushes_Edges_Node) GetDescription() *string {
 		t = &GetAllHushes_Hushes_Edges_Node{}
 	}
 	return t.Description
-}
-func (t *GetAllHushes_Hushes_Edges_Node) GetEvents() *GetAllHushes_Hushes_Edges_Node_Events {
-	if t == nil {
-		t = &GetAllHushes_Hushes_Edges_Node{}
-	}
-	return &t.Events
 }
 func (t *GetAllHushes_Hushes_Edges_Node) GetID() string {
 	if t == nil {
@@ -33454,44 +31870,10 @@ func (t *GetHushByID_Hush_Integrations) GetEdges() []*GetHushByID_Hush_Integrati
 	return t.Edges
 }
 
-type GetHushByID_Hush_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetHushByID_Hush_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetHushByID_Hush_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetHushByID_Hush_Events_Edges struct {
-	Node *GetHushByID_Hush_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetHushByID_Hush_Events_Edges) GetNode() *GetHushByID_Hush_Events_Edges_Node {
-	if t == nil {
-		t = &GetHushByID_Hush_Events_Edges{}
-	}
-	return t.Node
-}
-
-type GetHushByID_Hush_Events struct {
-	Edges []*GetHushByID_Hush_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetHushByID_Hush_Events) GetEdges() []*GetHushByID_Hush_Events_Edges {
-	if t == nil {
-		t = &GetHushByID_Hush_Events{}
-	}
-	return t.Edges
-}
-
 type GetHushByID_Hush struct {
 	CreatedAt    *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy    *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description  *string                       "json:\"description,omitempty\" graphql:\"description\""
-	Events       GetHushByID_Hush_Events       "json:\"events\" graphql:\"events\""
 	ID           string                        "json:\"id\" graphql:\"id\""
 	Integrations GetHushByID_Hush_Integrations "json:\"integrations\" graphql:\"integrations\""
 	Kind         *string                       "json:\"kind,omitempty\" graphql:\"kind\""
@@ -33519,12 +31901,6 @@ func (t *GetHushByID_Hush) GetDescription() *string {
 		t = &GetHushByID_Hush{}
 	}
 	return t.Description
-}
-func (t *GetHushByID_Hush) GetEvents() *GetHushByID_Hush_Events {
-	if t == nil {
-		t = &GetHushByID_Hush{}
-	}
-	return &t.Events
 }
 func (t *GetHushByID_Hush) GetID() string {
 	if t == nil {
@@ -33608,44 +31984,10 @@ func (t *GetHushes_Hushes_Edges_Node_Integrations) GetEdges() []*GetHushes_Hushe
 	return t.Edges
 }
 
-type GetHushes_Hushes_Edges_Node_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetHushes_Hushes_Edges_Node_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetHushes_Hushes_Edges_Node_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetHushes_Hushes_Edges_Node_Events_Edges struct {
-	Node *GetHushes_Hushes_Edges_Node_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetHushes_Hushes_Edges_Node_Events_Edges) GetNode() *GetHushes_Hushes_Edges_Node_Events_Edges_Node {
-	if t == nil {
-		t = &GetHushes_Hushes_Edges_Node_Events_Edges{}
-	}
-	return t.Node
-}
-
-type GetHushes_Hushes_Edges_Node_Events struct {
-	Edges []*GetHushes_Hushes_Edges_Node_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetHushes_Hushes_Edges_Node_Events) GetEdges() []*GetHushes_Hushes_Edges_Node_Events_Edges {
-	if t == nil {
-		t = &GetHushes_Hushes_Edges_Node_Events{}
-	}
-	return t.Edges
-}
-
 type GetHushes_Hushes_Edges_Node struct {
 	CreatedAt    *time.Time                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy    *string                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description  *string                                  "json:\"description,omitempty\" graphql:\"description\""
-	Events       GetHushes_Hushes_Edges_Node_Events       "json:\"events\" graphql:\"events\""
 	ID           string                                   "json:\"id\" graphql:\"id\""
 	Integrations GetHushes_Hushes_Edges_Node_Integrations "json:\"integrations\" graphql:\"integrations\""
 	Kind         *string                                  "json:\"kind,omitempty\" graphql:\"kind\""
@@ -33673,12 +32015,6 @@ func (t *GetHushes_Hushes_Edges_Node) GetDescription() *string {
 		t = &GetHushes_Hushes_Edges_Node{}
 	}
 	return t.Description
-}
-func (t *GetHushes_Hushes_Edges_Node) GetEvents() *GetHushes_Hushes_Edges_Node_Events {
-	if t == nil {
-		t = &GetHushes_Hushes_Edges_Node{}
-	}
-	return &t.Events
 }
 func (t *GetHushes_Hushes_Edges_Node) GetID() string {
 	if t == nil {
@@ -33784,42 +32120,8 @@ func (t *UpdateHush_UpdateHush_Hush_Integrations) GetEdges() []*UpdateHush_Updat
 	return t.Edges
 }
 
-type UpdateHush_UpdateHush_Hush_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateHush_UpdateHush_Hush_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateHush_UpdateHush_Hush_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type UpdateHush_UpdateHush_Hush_Events_Edges struct {
-	Node *UpdateHush_UpdateHush_Hush_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateHush_UpdateHush_Hush_Events_Edges) GetNode() *UpdateHush_UpdateHush_Hush_Events_Edges_Node {
-	if t == nil {
-		t = &UpdateHush_UpdateHush_Hush_Events_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateHush_UpdateHush_Hush_Events struct {
-	Edges []*UpdateHush_UpdateHush_Hush_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateHush_UpdateHush_Hush_Events) GetEdges() []*UpdateHush_UpdateHush_Hush_Events_Edges {
-	if t == nil {
-		t = &UpdateHush_UpdateHush_Hush_Events{}
-	}
-	return t.Edges
-}
-
 type UpdateHush_UpdateHush_Hush struct {
 	Description  *string                                 "json:\"description,omitempty\" graphql:\"description\""
-	Events       UpdateHush_UpdateHush_Hush_Events       "json:\"events\" graphql:\"events\""
 	ID           string                                  "json:\"id\" graphql:\"id\""
 	Integrations UpdateHush_UpdateHush_Hush_Integrations "json:\"integrations\" graphql:\"integrations\""
 	Kind         *string                                 "json:\"kind,omitempty\" graphql:\"kind\""
@@ -33833,12 +32135,6 @@ func (t *UpdateHush_UpdateHush_Hush) GetDescription() *string {
 		t = &UpdateHush_UpdateHush_Hush{}
 	}
 	return t.Description
-}
-func (t *UpdateHush_UpdateHush_Hush) GetEvents() *UpdateHush_UpdateHush_Hush_Events {
-	if t == nil {
-		t = &UpdateHush_UpdateHush_Hush{}
-	}
-	return &t.Events
 }
 func (t *UpdateHush_UpdateHush_Hush) GetID() string {
 	if t == nil {
@@ -34152,42 +32448,8 @@ func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets)
 	return t.Edges
 }
 
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges struct {
-	Node *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges) GetNode() *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events struct {
-	Edges []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events) GetEdges() []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events_Edges {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events{}
-	}
-	return t.Edges
-}
-
 type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations struct {
 	Description *string                                                                "json:\"description,omitempty\" graphql:\"description\""
-	Events      CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events  "json:\"events\" graphql:\"events\""
 	ID          string                                                                 "json:\"id\" graphql:\"id\""
 	Kind        *string                                                                "json:\"kind,omitempty\" graphql:\"kind\""
 	Name        string                                                                 "json:\"name\" graphql:\"name\""
@@ -34201,12 +32463,6 @@ func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetDesc
 		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
 	}
 	return t.Description
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetEvents() *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Events {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return &t.Events
 }
 func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetID() string {
 	if t == nil {
@@ -34300,42 +32556,8 @@ func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets) GetEd
 	return t.Edges
 }
 
-type CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges struct {
-	Node *CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges) GetNode() *CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges_Node {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkIntegration_CreateBulkIntegration_Integrations_Events struct {
-	Edges []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Events) GetEdges() []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Events_Edges {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Events{}
-	}
-	return t.Edges
-}
-
 type CreateBulkIntegration_CreateBulkIntegration_Integrations struct {
 	Description *string                                                          "json:\"description,omitempty\" graphql:\"description\""
-	Events      CreateBulkIntegration_CreateBulkIntegration_Integrations_Events  "json:\"events\" graphql:\"events\""
 	ID          string                                                           "json:\"id\" graphql:\"id\""
 	Kind        *string                                                          "json:\"kind,omitempty\" graphql:\"kind\""
 	Name        string                                                           "json:\"name\" graphql:\"name\""
@@ -34349,12 +32571,6 @@ func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetDescriptio
 		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
 	}
 	return t.Description
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetEvents() *CreateBulkIntegration_CreateBulkIntegration_Integrations_Events {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return &t.Events
 }
 func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetID() string {
 	if t == nil {
@@ -34448,42 +32664,8 @@ func (t *CreateIntegration_CreateIntegration_Integration_Secrets) GetEdges() []*
 	return t.Edges
 }
 
-type CreateIntegration_CreateIntegration_Integration_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateIntegration_CreateIntegration_Integration_Events_Edges struct {
-	Node *CreateIntegration_CreateIntegration_Integration_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration_Events_Edges) GetNode() *CreateIntegration_CreateIntegration_Integration_Events_Edges_Node {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Events_Edges{}
-	}
-	return t.Node
-}
-
-type CreateIntegration_CreateIntegration_Integration_Events struct {
-	Edges []*CreateIntegration_CreateIntegration_Integration_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration_Events) GetEdges() []*CreateIntegration_CreateIntegration_Integration_Events_Edges {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Events{}
-	}
-	return t.Edges
-}
-
 type CreateIntegration_CreateIntegration_Integration struct {
 	Description *string                                                 "json:\"description,omitempty\" graphql:\"description\""
-	Events      CreateIntegration_CreateIntegration_Integration_Events  "json:\"events\" graphql:\"events\""
 	ID          string                                                  "json:\"id\" graphql:\"id\""
 	Kind        *string                                                 "json:\"kind,omitempty\" graphql:\"kind\""
 	Name        string                                                  "json:\"name\" graphql:\"name\""
@@ -34497,12 +32679,6 @@ func (t *CreateIntegration_CreateIntegration_Integration) GetDescription() *stri
 		t = &CreateIntegration_CreateIntegration_Integration{}
 	}
 	return t.Description
-}
-func (t *CreateIntegration_CreateIntegration_Integration) GetEvents() *CreateIntegration_CreateIntegration_Integration_Events {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return &t.Events
 }
 func (t *CreateIntegration_CreateIntegration_Integration) GetID() string {
 	if t == nil {
@@ -34607,44 +32783,10 @@ func (t *GetAllIntegrations_Integrations_Edges_Node_Secrets) GetEdges() []*GetAl
 	return t.Edges
 }
 
-type GetAllIntegrations_Integrations_Edges_Node_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllIntegrations_Integrations_Edges_Node_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllIntegrations_Integrations_Edges_Node_Events_Edges struct {
-	Node *GetAllIntegrations_Integrations_Edges_Node_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllIntegrations_Integrations_Edges_Node_Events_Edges) GetNode() *GetAllIntegrations_Integrations_Edges_Node_Events_Edges_Node {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Events_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllIntegrations_Integrations_Edges_Node_Events struct {
-	Edges []*GetAllIntegrations_Integrations_Edges_Node_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllIntegrations_Integrations_Edges_Node_Events) GetEdges() []*GetAllIntegrations_Integrations_Edges_Node_Events_Edges {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Events{}
-	}
-	return t.Edges
-}
-
 type GetAllIntegrations_Integrations_Edges_Node struct {
 	CreatedAt   *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                                            "json:\"description,omitempty\" graphql:\"description\""
-	Events      GetAllIntegrations_Integrations_Edges_Node_Events  "json:\"events\" graphql:\"events\""
 	ID          string                                             "json:\"id\" graphql:\"id\""
 	Kind        *string                                            "json:\"kind,omitempty\" graphql:\"kind\""
 	Name        string                                             "json:\"name\" graphql:\"name\""
@@ -34672,12 +32814,6 @@ func (t *GetAllIntegrations_Integrations_Edges_Node) GetDescription() *string {
 		t = &GetAllIntegrations_Integrations_Edges_Node{}
 	}
 	return t.Description
-}
-func (t *GetAllIntegrations_Integrations_Edges_Node) GetEvents() *GetAllIntegrations_Integrations_Edges_Node_Events {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node{}
-	}
-	return &t.Events
 }
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetID() string {
 	if t == nil {
@@ -34794,44 +32930,10 @@ func (t *GetIntegrationByID_Integration_Secrets) GetEdges() []*GetIntegrationByI
 	return t.Edges
 }
 
-type GetIntegrationByID_Integration_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetIntegrationByID_Integration_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetIntegrationByID_Integration_Events_Edges struct {
-	Node *GetIntegrationByID_Integration_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetIntegrationByID_Integration_Events_Edges) GetNode() *GetIntegrationByID_Integration_Events_Edges_Node {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Events_Edges{}
-	}
-	return t.Node
-}
-
-type GetIntegrationByID_Integration_Events struct {
-	Edges []*GetIntegrationByID_Integration_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetIntegrationByID_Integration_Events) GetEdges() []*GetIntegrationByID_Integration_Events_Edges {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Events{}
-	}
-	return t.Edges
-}
-
 type GetIntegrationByID_Integration struct {
 	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                                "json:\"description,omitempty\" graphql:\"description\""
-	Events      GetIntegrationByID_Integration_Events  "json:\"events\" graphql:\"events\""
 	ID          string                                 "json:\"id\" graphql:\"id\""
 	Kind        *string                                "json:\"kind,omitempty\" graphql:\"kind\""
 	Name        string                                 "json:\"name\" graphql:\"name\""
@@ -34859,12 +32961,6 @@ func (t *GetIntegrationByID_Integration) GetDescription() *string {
 		t = &GetIntegrationByID_Integration{}
 	}
 	return t.Description
-}
-func (t *GetIntegrationByID_Integration) GetEvents() *GetIntegrationByID_Integration_Events {
-	if t == nil {
-		t = &GetIntegrationByID_Integration{}
-	}
-	return &t.Events
 }
 func (t *GetIntegrationByID_Integration) GetID() string {
 	if t == nil {
@@ -34959,44 +33055,10 @@ func (t *GetIntegrations_Integrations_Edges_Node_Secrets) GetEdges() []*GetInteg
 	return t.Edges
 }
 
-type GetIntegrations_Integrations_Edges_Node_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetIntegrations_Integrations_Edges_Node_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetIntegrations_Integrations_Edges_Node_Events_Edges struct {
-	Node *GetIntegrations_Integrations_Edges_Node_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetIntegrations_Integrations_Edges_Node_Events_Edges) GetNode() *GetIntegrations_Integrations_Edges_Node_Events_Edges_Node {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node_Events_Edges{}
-	}
-	return t.Node
-}
-
-type GetIntegrations_Integrations_Edges_Node_Events struct {
-	Edges []*GetIntegrations_Integrations_Edges_Node_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetIntegrations_Integrations_Edges_Node_Events) GetEdges() []*GetIntegrations_Integrations_Edges_Node_Events_Edges {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node_Events{}
-	}
-	return t.Edges
-}
-
 type GetIntegrations_Integrations_Edges_Node struct {
 	CreatedAt   *time.Time                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                                         "json:\"description,omitempty\" graphql:\"description\""
-	Events      GetIntegrations_Integrations_Edges_Node_Events  "json:\"events\" graphql:\"events\""
 	ID          string                                          "json:\"id\" graphql:\"id\""
 	Kind        *string                                         "json:\"kind,omitempty\" graphql:\"kind\""
 	Name        string                                          "json:\"name\" graphql:\"name\""
@@ -35024,12 +33086,6 @@ func (t *GetIntegrations_Integrations_Edges_Node) GetDescription() *string {
 		t = &GetIntegrations_Integrations_Edges_Node{}
 	}
 	return t.Description
-}
-func (t *GetIntegrations_Integrations_Edges_Node) GetEvents() *GetIntegrations_Integrations_Edges_Node_Events {
-	if t == nil {
-		t = &GetIntegrations_Integrations_Edges_Node{}
-	}
-	return &t.Events
 }
 func (t *GetIntegrations_Integrations_Edges_Node) GetID() string {
 	if t == nil {
@@ -35146,42 +33202,8 @@ func (t *UpdateIntegration_UpdateIntegration_Integration_Secrets) GetEdges() []*
 	return t.Edges
 }
 
-type UpdateIntegration_UpdateIntegration_Integration_Events_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration_Events_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Events_Edges_Node{}
-	}
-	return t.ID
-}
-
-type UpdateIntegration_UpdateIntegration_Integration_Events_Edges struct {
-	Node *UpdateIntegration_UpdateIntegration_Integration_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration_Events_Edges) GetNode() *UpdateIntegration_UpdateIntegration_Integration_Events_Edges_Node {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Events_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateIntegration_UpdateIntegration_Integration_Events struct {
-	Edges []*UpdateIntegration_UpdateIntegration_Integration_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration_Events) GetEdges() []*UpdateIntegration_UpdateIntegration_Integration_Events_Edges {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Events{}
-	}
-	return t.Edges
-}
-
 type UpdateIntegration_UpdateIntegration_Integration struct {
 	Description *string                                                 "json:\"description,omitempty\" graphql:\"description\""
-	Events      UpdateIntegration_UpdateIntegration_Integration_Events  "json:\"events\" graphql:\"events\""
 	ID          string                                                  "json:\"id\" graphql:\"id\""
 	Kind        *string                                                 "json:\"kind,omitempty\" graphql:\"kind\""
 	Name        string                                                  "json:\"name\" graphql:\"name\""
@@ -35195,12 +33217,6 @@ func (t *UpdateIntegration_UpdateIntegration_Integration) GetDescription() *stri
 		t = &UpdateIntegration_UpdateIntegration_Integration{}
 	}
 	return t.Description
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetEvents() *UpdateIntegration_UpdateIntegration_Integration_Events {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return &t.Events
 }
 func (t *UpdateIntegration_UpdateIntegration_Integration) GetID() string {
 	if t == nil {
@@ -38967,346 +36983,6 @@ func (t *UpdateJobRunner_UpdateJobRunner) GetJobRunner() *UpdateJobRunner_Update
 		t = &UpdateJobRunner_UpdateJobRunner{}
 	}
 	return &t.JobRunner
-}
-
-type GetAllJobRunnerHistories_JobRunnerHistories_PageInfo struct {
-	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
-	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
-	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
-	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
-}
-
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo) GetEndCursor() *string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_PageInfo{}
-	}
-	return t.EndCursor
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo) GetHasNextPage() bool {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_PageInfo{}
-	}
-	return t.HasNextPage
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo) GetHasPreviousPage() bool {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_PageInfo{}
-	}
-	return t.HasPreviousPage
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo) GetStartCursor() *string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_PageInfo{}
-	}
-	return t.StartCursor
-}
-
-type GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node struct {
-	CreatedAt   *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DisplayID   string                "json:\"displayID\" graphql:\"displayID\""
-	HistoryTime time.Time             "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string                "json:\"id\" graphql:\"id\""
-	IPAddress   string                "json:\"ipAddress\" graphql:\"ipAddress\""
-	Name        string                "json:\"name\" graphql:\"name\""
-	Operation   history.OpType        "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string               "json:\"ref,omitempty\" graphql:\"ref\""
-	Status      enums.JobRunnerStatus "json:\"status\" graphql:\"status\""
-	Tags        []string              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.CreatedAt
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.CreatedBy
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetHistoryTime() *time.Time {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return &t.HistoryTime
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetIPAddress() string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.IPAddress
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.Name
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetOperation() *history.OpType {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return &t.Operation
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetOwnerID() *string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.OwnerID
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetRef() *string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.Ref
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetStatus() *enums.JobRunnerStatus {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return &t.Status
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.Tags
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.UpdatedBy
-}
-
-type GetAllJobRunnerHistories_JobRunnerHistories_Edges struct {
-	Node *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllJobRunnerHistories_JobRunnerHistories_Edges) GetNode() *GetAllJobRunnerHistories_JobRunnerHistories_Edges_Node {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllJobRunnerHistories_JobRunnerHistories struct {
-	Edges      []*GetAllJobRunnerHistories_JobRunnerHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-	PageInfo   GetAllJobRunnerHistories_JobRunnerHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
-	TotalCount int64                                                "json:\"totalCount\" graphql:\"totalCount\""
-}
-
-func (t *GetAllJobRunnerHistories_JobRunnerHistories) GetEdges() []*GetAllJobRunnerHistories_JobRunnerHistories_Edges {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories{}
-	}
-	return t.Edges
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories) GetPageInfo() *GetAllJobRunnerHistories_JobRunnerHistories_PageInfo {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories{}
-	}
-	return &t.PageInfo
-}
-func (t *GetAllJobRunnerHistories_JobRunnerHistories) GetTotalCount() int64 {
-	if t == nil {
-		t = &GetAllJobRunnerHistories_JobRunnerHistories{}
-	}
-	return t.TotalCount
-}
-
-type GetJobRunnerHistories_JobRunnerHistories_PageInfo struct {
-	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
-	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
-	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
-	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
-}
-
-func (t *GetJobRunnerHistories_JobRunnerHistories_PageInfo) GetEndCursor() *string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_PageInfo{}
-	}
-	return t.EndCursor
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_PageInfo) GetHasNextPage() bool {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_PageInfo{}
-	}
-	return t.HasNextPage
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_PageInfo) GetHasPreviousPage() bool {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_PageInfo{}
-	}
-	return t.HasPreviousPage
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_PageInfo) GetStartCursor() *string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_PageInfo{}
-	}
-	return t.StartCursor
-}
-
-type GetJobRunnerHistories_JobRunnerHistories_Edges_Node struct {
-	CreatedAt   *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DisplayID   string                "json:\"displayID\" graphql:\"displayID\""
-	HistoryTime time.Time             "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string                "json:\"id\" graphql:\"id\""
-	IPAddress   string                "json:\"ipAddress\" graphql:\"ipAddress\""
-	Name        string                "json:\"name\" graphql:\"name\""
-	Operation   history.OpType        "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string               "json:\"ref,omitempty\" graphql:\"ref\""
-	Status      enums.JobRunnerStatus "json:\"status\" graphql:\"status\""
-	Tags        []string              "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.CreatedAt
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.CreatedBy
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetHistoryTime() *time.Time {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return &t.HistoryTime
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetIPAddress() string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.IPAddress
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.Name
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetOperation() *history.OpType {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return &t.Operation
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetOwnerID() *string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.OwnerID
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetRef() *string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.Ref
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetStatus() *enums.JobRunnerStatus {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return &t.Status
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.Tags
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges_Node) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges_Node{}
-	}
-	return t.UpdatedBy
-}
-
-type GetJobRunnerHistories_JobRunnerHistories_Edges struct {
-	Node *GetJobRunnerHistories_JobRunnerHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetJobRunnerHistories_JobRunnerHistories_Edges) GetNode() *GetJobRunnerHistories_JobRunnerHistories_Edges_Node {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories_Edges{}
-	}
-	return t.Node
-}
-
-type GetJobRunnerHistories_JobRunnerHistories struct {
-	Edges      []*GetJobRunnerHistories_JobRunnerHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-	PageInfo   GetJobRunnerHistories_JobRunnerHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
-	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
-}
-
-func (t *GetJobRunnerHistories_JobRunnerHistories) GetEdges() []*GetJobRunnerHistories_JobRunnerHistories_Edges {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories{}
-	}
-	return t.Edges
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories) GetPageInfo() *GetJobRunnerHistories_JobRunnerHistories_PageInfo {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories{}
-	}
-	return &t.PageInfo
-}
-func (t *GetJobRunnerHistories_JobRunnerHistories) GetTotalCount() int64 {
-	if t == nil {
-		t = &GetJobRunnerHistories_JobRunnerHistories{}
-	}
-	return t.TotalCount
 }
 
 type CreateJobRunnerRegistrationToken_CreateJobRunnerRegistrationToken_JobRunnerRegistrationToken struct {
@@ -81588,28 +79264,6 @@ func (t *UpdateEvent) GetUpdateEvent() *UpdateEvent_UpdateEvent {
 	return &t.UpdateEvent
 }
 
-type GetAllEventHistories struct {
-	EventHistories GetAllEventHistories_EventHistories "json:\"eventHistories\" graphql:\"eventHistories\""
-}
-
-func (t *GetAllEventHistories) GetEventHistories() *GetAllEventHistories_EventHistories {
-	if t == nil {
-		t = &GetAllEventHistories{}
-	}
-	return &t.EventHistories
-}
-
-type GetEventHistories struct {
-	EventHistories GetEventHistories_EventHistories "json:\"eventHistories\" graphql:\"eventHistories\""
-}
-
-func (t *GetEventHistories) GetEventHistories() *GetEventHistories_EventHistories {
-	if t == nil {
-		t = &GetEventHistories{}
-	}
-	return &t.EventHistories
-}
-
 type CreateEvidence struct {
 	CreateEvidence CreateEvidence_CreateEvidence "json:\"createEvidence\" graphql:\"createEvidence\""
 }
@@ -82543,28 +80197,6 @@ func (t *UpdateJobRunner) GetUpdateJobRunner() *UpdateJobRunner_UpdateJobRunner 
 		t = &UpdateJobRunner{}
 	}
 	return &t.UpdateJobRunner
-}
-
-type GetAllJobRunnerHistories struct {
-	JobRunnerHistories GetAllJobRunnerHistories_JobRunnerHistories "json:\"jobRunnerHistories\" graphql:\"jobRunnerHistories\""
-}
-
-func (t *GetAllJobRunnerHistories) GetJobRunnerHistories() *GetAllJobRunnerHistories_JobRunnerHistories {
-	if t == nil {
-		t = &GetAllJobRunnerHistories{}
-	}
-	return &t.JobRunnerHistories
-}
-
-type GetJobRunnerHistories struct {
-	JobRunnerHistories GetJobRunnerHistories_JobRunnerHistories "json:\"jobRunnerHistories\" graphql:\"jobRunnerHistories\""
-}
-
-func (t *GetJobRunnerHistories) GetJobRunnerHistories() *GetJobRunnerHistories_JobRunnerHistories {
-	if t == nil {
-		t = &GetJobRunnerHistories{}
-	}
-	return &t.JobRunnerHistories
 }
 
 type CreateJobRunnerRegistrationToken struct {
@@ -90876,74 +88508,16 @@ func (c *Client) GetEntityTypeHistories(ctx context.Context, where *EntityTypeHi
 const CreateBulkCSVEventDocument = `mutation CreateBulkCSVEvent ($input: Upload!) {
 	createBulkCSVEvent(input: $input) {
 		events {
-			id
-			eventID
 			correlationID
+			createdAt
+			createdBy
+			eventID
 			eventType
+			id
 			metadata
-			users {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			groups {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			integrations {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			organizations {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			invites {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			personalAccessTokens {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			secrets {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			orgmemberships {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			groupmemberships {
-				edges {
-					node {
-						id
-					}
-				}
-			}
+			tags
+			updatedAt
+			updatedBy
 		}
 	}
 }
@@ -90969,74 +88543,16 @@ func (c *Client) CreateBulkCSVEvent(ctx context.Context, input graphql.Upload, i
 const CreateBulkEventDocument = `mutation CreateBulkEvent ($input: [CreateEventInput!]) {
 	createBulkEvent(input: $input) {
 		events {
-			id
-			eventID
 			correlationID
+			createdAt
+			createdBy
+			eventID
 			eventType
+			id
 			metadata
-			users {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			groups {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			integrations {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			organizations {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			invites {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			personalAccessTokens {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			secrets {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			orgmemberships {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			groupmemberships {
-				edges {
-					node {
-						id
-					}
-				}
-			}
+			tags
+			updatedAt
+			updatedBy
 		}
 	}
 }
@@ -91062,11 +88578,16 @@ func (c *Client) CreateBulkEvent(ctx context.Context, input []*CreateEventInput,
 const CreateEventDocument = `mutation CreateEvent ($input: CreateEventInput!) {
 	createEvent(input: $input) {
 		event {
-			id
-			eventID
 			correlationID
+			createdAt
+			createdBy
+			eventID
 			eventType
+			id
 			metadata
+			tags
+			updatedAt
+			updatedBy
 		}
 	}
 }
@@ -91115,80 +88636,25 @@ func (c *Client) DeleteEvent(ctx context.Context, deleteEventID string, intercep
 
 const GetAllEventsDocument = `query GetAllEvents {
 	events {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
-				id
-				createdAt
-				updatedAt
-				createdBy
-				updatedBy
-				eventID
 				correlationID
+				createdAt
+				createdBy
+				eventID
 				eventType
+				id
 				metadata
-				users {
-					edges {
-						node {
-							id
-						}
-					}
-				}
-				groups {
-					edges {
-						node {
-							id
-						}
-					}
-				}
-				integrations {
-					edges {
-						node {
-							id
-						}
-					}
-				}
-				organizations {
-					edges {
-						node {
-							id
-						}
-					}
-				}
-				invites {
-					edges {
-						node {
-							id
-						}
-					}
-				}
-				personalAccessTokens {
-					edges {
-						node {
-							id
-						}
-					}
-				}
-				secrets {
-					edges {
-						node {
-							id
-						}
-					}
-				}
-				orgmemberships {
-					edges {
-						node {
-							id
-						}
-					}
-				}
-				groupmemberships {
-					edges {
-						node {
-							id
-						}
-					}
-				}
+				tags
+				updatedAt
+				updatedBy
 			}
 		}
 	}
@@ -91212,78 +88678,16 @@ func (c *Client) GetAllEvents(ctx context.Context, interceptors ...clientv2.Requ
 
 const GetEventByIDDocument = `query GetEventByID ($eventId: ID!) {
 	event(id: $eventId) {
-		id
-		createdAt
-		updatedAt
-		createdBy
-		updatedBy
-		eventID
 		correlationID
+		createdAt
+		createdBy
+		eventID
 		eventType
+		id
 		metadata
-		users {
-			edges {
-				node {
-					id
-				}
-			}
-		}
-		groups {
-			edges {
-				node {
-					id
-				}
-			}
-		}
-		integrations {
-			edges {
-				node {
-					id
-				}
-			}
-		}
-		organizations {
-			edges {
-				node {
-					id
-				}
-			}
-		}
-		invites {
-			edges {
-				node {
-					id
-				}
-			}
-		}
-		personalAccessTokens {
-			edges {
-				node {
-					id
-				}
-			}
-		}
-		secrets {
-			edges {
-				node {
-					id
-				}
-			}
-		}
-		orgmemberships {
-			edges {
-				node {
-					id
-				}
-			}
-		}
-		groupmemberships {
-			edges {
-				node {
-					id
-				}
-			}
-		}
+		tags
+		updatedAt
+		updatedBy
 	}
 }
 `
@@ -91305,23 +88709,37 @@ func (c *Client) GetEventByID(ctx context.Context, eventID string, interceptors 
 	return &res, nil
 }
 
-const GetEventsDocument = `query GetEvents ($where: EventWhereInput) {
-	events(where: $where) {
+const GetEventsDocument = `query GetEvents ($first: Int, $last: Int, $where: EventWhereInput) {
+	events(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
-				eventID
-				id
 				correlationID
+				createdAt
+				createdBy
+				eventID
 				eventType
+				id
 				metadata
+				tags
+				updatedAt
+				updatedBy
 			}
 		}
 	}
 }
 `
 
-func (c *Client) GetEvents(ctx context.Context, where *EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvents, error) {
+func (c *Client) GetEvents(ctx context.Context, first *int64, last *int64, where *EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvents, error) {
 	vars := map[string]any{
+		"first": first,
+		"last":  last,
 		"where": where,
 	}
 
@@ -91340,15 +88758,16 @@ func (c *Client) GetEvents(ctx context.Context, where *EventWhereInput, intercep
 const UpdateEventDocument = `mutation UpdateEvent ($updateEventId: ID!, $input: UpdateEventInput!) {
 	updateEvent(id: $updateEventId, input: $input) {
 		event {
-			id
-			createdAt
-			updatedAt
-			createdBy
-			updatedBy
-			eventID
 			correlationID
+			createdAt
+			createdBy
+			eventID
 			eventType
+			id
 			metadata
+			tags
+			updatedAt
+			updatedBy
 		}
 	}
 }
@@ -91362,84 +88781,6 @@ func (c *Client) UpdateEvent(ctx context.Context, updateEventID string, input Up
 
 	var res UpdateEvent
 	if err := c.Client.Post(ctx, "UpdateEvent", UpdateEventDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetAllEventHistoriesDocument = `query GetAllEventHistories {
-	eventHistories {
-		edges {
-			node {
-				correlationID
-				createdAt
-				createdBy
-				eventID
-				eventType
-				historyTime
-				id
-				metadata
-				operation
-				ref
-				tags
-				updatedAt
-				updatedBy
-			}
-		}
-	}
-}
-`
-
-func (c *Client) GetAllEventHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEventHistories, error) {
-	vars := map[string]any{}
-
-	var res GetAllEventHistories
-	if err := c.Client.Post(ctx, "GetAllEventHistories", GetAllEventHistoriesDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetEventHistoriesDocument = `query GetEventHistories ($where: EventHistoryWhereInput) {
-	eventHistories(where: $where) {
-		edges {
-			node {
-				correlationID
-				createdAt
-				createdBy
-				eventID
-				eventType
-				historyTime
-				id
-				metadata
-				operation
-				ref
-				tags
-				updatedAt
-				updatedBy
-			}
-		}
-	}
-}
-`
-
-func (c *Client) GetEventHistories(ctx context.Context, where *EventHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEventHistories, error) {
-	vars := map[string]any{
-		"where": where,
-	}
-
-	var res GetEventHistories
-	if err := c.Client.Post(ctx, "GetEventHistories", GetEventHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -93556,13 +90897,6 @@ const CreateBulkCSVHushDocument = `mutation CreateBulkCSVHush ($input: Upload!) 
 				}
 			}
 			ownerID
-			events {
-				edges {
-					node {
-						id
-					}
-				}
-			}
 		}
 	}
 }
@@ -93601,13 +90935,6 @@ const CreateBulkHushDocument = `mutation CreateBulkHush ($input: [CreateHushInpu
 				}
 			}
 			ownerID
-			events {
-				edges {
-					node {
-						id
-					}
-				}
-			}
 		}
 	}
 }
@@ -93646,13 +90973,6 @@ const CreateHushDocument = `mutation CreateHush ($input: CreateHushInput!) {
 				}
 			}
 			ownerID
-			events {
-				edges {
-					node {
-						id
-					}
-				}
-			}
 		}
 	}
 }
@@ -93692,13 +91012,6 @@ const GetAllHushesDocument = `query GetAllHushes {
 					}
 				}
 				ownerID
-				events {
-					edges {
-						node {
-							id
-						}
-					}
-				}
 				createdAt
 				updatedAt
 				createdBy
@@ -93739,13 +91052,6 @@ const GetHushByIDDocument = `query GetHushByID ($hushId: ID!) {
 			}
 		}
 		ownerID
-		events {
-			edges {
-				node {
-					id
-				}
-			}
-		}
 		createdAt
 		updatedAt
 		createdBy
@@ -93788,13 +91094,6 @@ const GetHushesDocument = `query GetHushes ($where: HushWhereInput) {
 					}
 				}
 				ownerID
-				events {
-					edges {
-						node {
-							id
-						}
-					}
-				}
 				createdAt
 				updatedAt
 				createdBy
@@ -93838,13 +91137,6 @@ const UpdateHushDocument = `mutation UpdateHush ($updateHushId: ID!, $input: Upd
 				}
 			}
 			ownerID
-			events {
-				edges {
-					node {
-						id
-					}
-				}
-			}
 		}
 	}
 }
@@ -93962,13 +91254,6 @@ const CreateBulkCSVIntegrationDocument = `mutation CreateBulkCSVIntegration ($in
 					}
 				}
 			}
-			events {
-				edges {
-					node {
-						id
-					}
-				}
-			}
 		}
 	}
 }
@@ -94009,13 +91294,6 @@ const CreateBulkIntegrationDocument = `mutation CreateBulkIntegration ($input: [
 					}
 				}
 			}
-			events {
-				edges {
-					node {
-						id
-					}
-				}
-			}
 		}
 	}
 }
@@ -94050,13 +91328,6 @@ const CreateIntegrationDocument = `mutation CreateIntegration ($input: CreateInt
 				id
 			}
 			secrets {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			events {
 				edges {
 					node {
 						id
@@ -94128,13 +91399,6 @@ const GetAllIntegrationsDocument = `query GetAllIntegrations {
 						}
 					}
 				}
-				events {
-					edges {
-						node {
-							id
-						}
-					}
-				}
 				createdAt
 				createdBy
 				updatedAt
@@ -94171,13 +91435,6 @@ const GetIntegrationByIDDocument = `query GetIntegrationByID ($integrationId: ID
 			id
 		}
 		secrets {
-			edges {
-				node {
-					id
-				}
-			}
-		}
-		events {
 			edges {
 				node {
 					id
@@ -94228,13 +91485,6 @@ const GetIntegrationsDocument = `query GetIntegrations ($where: IntegrationWhere
 						}
 					}
 				}
-				events {
-					edges {
-						node {
-							id
-						}
-					}
-				}
 				createdAt
 				createdBy
 				updatedAt
@@ -94274,13 +91524,6 @@ const UpdateIntegrationDocument = `mutation UpdateIntegration ($updateIntegratio
 				id
 			}
 			secrets {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-			events {
 				edges {
 					node {
 						id
@@ -95469,102 +92712,6 @@ func (c *Client) UpdateJobRunner(ctx context.Context, updateJobRunnerID string, 
 
 	var res UpdateJobRunner
 	if err := c.Client.Post(ctx, "UpdateJobRunner", UpdateJobRunnerDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetAllJobRunnerHistoriesDocument = `query GetAllJobRunnerHistories {
-	jobRunnerHistories {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				createdAt
-				createdBy
-				displayID
-				historyTime
-				id
-				ipAddress
-				name
-				operation
-				ownerID
-				ref
-				status
-				tags
-				updatedAt
-				updatedBy
-			}
-		}
-	}
-}
-`
-
-func (c *Client) GetAllJobRunnerHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllJobRunnerHistories, error) {
-	vars := map[string]any{}
-
-	var res GetAllJobRunnerHistories
-	if err := c.Client.Post(ctx, "GetAllJobRunnerHistories", GetAllJobRunnerHistoriesDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetJobRunnerHistoriesDocument = `query GetJobRunnerHistories ($first: Int, $last: Int, $where: JobRunnerHistoryWhereInput) {
-	jobRunnerHistories(first: $first, last: $last, where: $where) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				createdAt
-				createdBy
-				displayID
-				historyTime
-				id
-				ipAddress
-				name
-				operation
-				ownerID
-				ref
-				status
-				tags
-				updatedAt
-				updatedBy
-			}
-		}
-	}
-}
-`
-
-func (c *Client) GetJobRunnerHistories(ctx context.Context, first *int64, last *int64, where *JobRunnerHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetJobRunnerHistories, error) {
-	vars := map[string]any{
-		"first": first,
-		"last":  last,
-		"where": where,
-	}
-
-	var res GetJobRunnerHistories
-	if err := c.Client.Post(ctx, "GetJobRunnerHistories", GetJobRunnerHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -106634,8 +103781,6 @@ var DocumentOperationNames = map[string]string{
 	GetEventByIDDocument:                         "GetEventByID",
 	GetEventsDocument:                            "GetEvents",
 	UpdateEventDocument:                          "UpdateEvent",
-	GetAllEventHistoriesDocument:                 "GetAllEventHistories",
-	GetEventHistoriesDocument:                    "GetEventHistories",
 	CreateEvidenceDocument:                       "CreateEvidence",
 	DeleteEvidenceDocument:                       "DeleteEvidence",
 	GetAllEvidencesDocument:                      "GetAllEvidences",
@@ -106721,8 +103866,6 @@ var DocumentOperationNames = map[string]string{
 	GetJobRunnerByIDDocument:                     "GetJobRunnerByID",
 	GetJobRunnersDocument:                        "GetJobRunners",
 	UpdateJobRunnerDocument:                      "UpdateJobRunner",
-	GetAllJobRunnerHistoriesDocument:             "GetAllJobRunnerHistories",
-	GetJobRunnerHistoriesDocument:                "GetJobRunnerHistories",
 	CreateJobRunnerRegistrationTokenDocument:     "CreateJobRunnerRegistrationToken",
 	DeleteJobRunnerRegistrationTokenDocument:     "DeleteJobRunnerRegistrationToken",
 	GetAllJobRunnerRegistrationTokensDocument:    "GetAllJobRunnerRegistrationTokens",

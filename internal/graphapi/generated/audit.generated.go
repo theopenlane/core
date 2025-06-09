@@ -13,7 +13,8 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/entx/history"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -31,7 +32,7 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _AuditLog_table(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLog_table(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLog_table(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -54,9 +55,9 @@ func (ec *executionContext) _AuditLog_table(ctx context.Context, field graphql.C
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_table(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -72,7 +73,7 @@ func (ec *executionContext) fieldContext_AuditLog_table(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLog_time(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLog_time(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLog_time(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -86,7 +87,7 @@ func (ec *executionContext) _AuditLog_time(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Time, nil
+		return obj.HistoryTime, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -95,9 +96,9 @@ func (ec *executionContext) _AuditLog_time(ctx context.Context, field graphql.Co
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*time.Time)
+	res := resTmp.(time.Time)
 	fc.Result = res
-	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_time(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -113,7 +114,7 @@ func (ec *executionContext) fieldContext_AuditLog_time(_ context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLog_id(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLog_id(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLog_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -127,7 +128,7 @@ func (ec *executionContext) _AuditLog_id(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
+		return obj.RefID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -157,7 +158,7 @@ func (ec *executionContext) fieldContext_AuditLog_id(_ context.Context, field gr
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLog_operation(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLog_operation(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLog_operation(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -180,9 +181,9 @@ func (ec *executionContext) _AuditLog_operation(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(history.OpType)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_operation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -198,7 +199,7 @@ func (ec *executionContext) fieldContext_AuditLog_operation(_ context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLog_changes(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLog_changes(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLog_changes(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -221,9 +222,9 @@ func (ec *executionContext) _AuditLog_changes(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.([]generated.Change)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOChange2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐChangeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_changes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -233,13 +234,13 @@ func (ec *executionContext) fieldContext_AuditLog_changes(_ context.Context, fie
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Change does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLog_updatedBy(ctx context.Context, field graphql.CollectedField, obj *model.AuditLog) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLog_updatedBy(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLog) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLog_updatedBy(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -262,9 +263,9 @@ func (ec *executionContext) _AuditLog_updatedBy(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -280,7 +281,7 @@ func (ec *executionContext) fieldContext_AuditLog_updatedBy(_ context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLogConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.AuditLogConnection) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLogConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLogConnection_edges(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -303,9 +304,9 @@ func (ec *executionContext) _AuditLogConnection_edges(ctx context.Context, field
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*model.AuditLogEdge)
+	res := resTmp.([]*generated.AuditLogEdge)
 	fc.Result = res
-	return ec.marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAuditLogEdge(ctx, field.Selections, res)
+	return ec.marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuditLogConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -327,7 +328,7 @@ func (ec *executionContext) fieldContext_AuditLogConnection_edges(_ context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLogConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.AuditLogConnection) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLogConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLogConnection_pageInfo(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -353,9 +354,9 @@ func (ec *executionContext) _AuditLogConnection_pageInfo(ctx context.Context, fi
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*entgql.PageInfo[string])
+	res := resTmp.(entgql.PageInfo[string])
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuditLogConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -381,7 +382,7 @@ func (ec *executionContext) fieldContext_AuditLogConnection_pageInfo(_ context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLogConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.AuditLogConnection) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLogConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLogConnection_totalCount(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -425,7 +426,7 @@ func (ec *executionContext) fieldContext_AuditLogConnection_totalCount(_ context
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLogEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.AuditLogEdge) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLogEdge_node(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogEdge) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLogEdge_node(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -448,9 +449,9 @@ func (ec *executionContext) _AuditLogEdge_node(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.AuditLog)
+	res := resTmp.(*generated.AuditLog)
 	fc.Result = res
-	return ec.marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAuditLog(ctx, field.Selections, res)
+	return ec.marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLog(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuditLogEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -480,7 +481,7 @@ func (ec *executionContext) fieldContext_AuditLogEdge_node(_ context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _AuditLogEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.AuditLogEdge) (ret graphql.Marshaler) {
+func (ec *executionContext) _AuditLogEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *generated.AuditLogEdge) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AuditLogEdge_cursor(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -528,8 +529,46 @@ func (ec *executionContext) fieldContext_AuditLogEdge_cursor(_ context.Context, 
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputAuditLogWhereInput(ctx context.Context, obj any) (model.AuditLogWhereInput, error) {
-	var it model.AuditLogWhereInput
+func (ec *executionContext) unmarshalInputAuditLogOrder(ctx context.Context, obj any) (generated.AuditLogOrder, error) {
+	var it generated.AuditLogOrder
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAuditLogWhereInput(ctx context.Context, obj any) (generated.AuditLogWhereInput, error) {
+	var it generated.AuditLogWhereInput
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -558,14 +597,14 @@ func (ec *executionContext) unmarshalInputAuditLogWhereInput(ctx context.Context
 			it.UpdatedBy = data
 		case "operation":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operation"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Operation = data
 		case "table":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("table"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -600,7 +639,7 @@ func (ec *executionContext) unmarshalInputAuditLogWhereInput(ctx context.Context
 
 var auditLogImplementors = []string{"AuditLog", "Node"}
 
-func (ec *executionContext) _AuditLog(ctx context.Context, sel ast.SelectionSet, obj *model.AuditLog) graphql.Marshaler {
+func (ec *executionContext) _AuditLog(ctx context.Context, sel ast.SelectionSet, obj *generated.AuditLog) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, auditLogImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -649,7 +688,7 @@ func (ec *executionContext) _AuditLog(ctx context.Context, sel ast.SelectionSet,
 
 var auditLogConnectionImplementors = []string{"AuditLogConnection"}
 
-func (ec *executionContext) _AuditLogConnection(ctx context.Context, sel ast.SelectionSet, obj *model.AuditLogConnection) graphql.Marshaler {
+func (ec *executionContext) _AuditLogConnection(ctx context.Context, sel ast.SelectionSet, obj *generated.AuditLogConnection) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, auditLogConnectionImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -695,7 +734,7 @@ func (ec *executionContext) _AuditLogConnection(ctx context.Context, sel ast.Sel
 
 var auditLogEdgeImplementors = []string{"AuditLogEdge"}
 
-func (ec *executionContext) _AuditLogEdge(ctx context.Context, sel ast.SelectionSet, obj *model.AuditLogEdge) graphql.Marshaler {
+func (ec *executionContext) _AuditLogEdge(ctx context.Context, sel ast.SelectionSet, obj *generated.AuditLogEdge) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, auditLogEdgeImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -738,11 +777,11 @@ func (ec *executionContext) _AuditLogEdge(ctx context.Context, sel ast.Selection
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAuditLogConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAuditLogConnection(ctx context.Context, sel ast.SelectionSet, v model.AuditLogConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNAuditLogConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogConnection(ctx context.Context, sel ast.SelectionSet, v generated.AuditLogConnection) graphql.Marshaler {
 	return ec._AuditLogConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAuditLogConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAuditLogConnection(ctx context.Context, sel ast.SelectionSet, v *model.AuditLogConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNAuditLogConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -752,14 +791,35 @@ func (ec *executionContext) marshalNAuditLogConnection2ᚖgithubᚗcomᚋtheopen
 	return ec._AuditLogConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAuditLog(ctx context.Context, sel ast.SelectionSet, v *model.AuditLog) graphql.Marshaler {
+func (ec *executionContext) unmarshalNAuditLogOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrder(ctx context.Context, v any) (*generated.AuditLogOrder, error) {
+	res, err := ec.unmarshalInputAuditLogOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderField(ctx context.Context, v any) (*generated.AuditLogOrderField, error) {
+	var res = new(generated.AuditLogOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderField(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogOrderField) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLog(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLog) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AuditLog(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAuditLogEdge(ctx context.Context, sel ast.SelectionSet, v []*model.AuditLogEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge(ctx context.Context, sel ast.SelectionSet, v []*generated.AuditLogEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -786,7 +846,7 @@ func (ec *executionContext) marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlan
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAuditLogEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAuditLogEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalOAuditLogEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -800,14 +860,32 @@ func (ec *executionContext) marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlan
 	return ret
 }
 
-func (ec *executionContext) marshalOAuditLogEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAuditLogEdge(ctx context.Context, sel ast.SelectionSet, v *model.AuditLogEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOAuditLogEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AuditLogEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOAuditLogWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAuditLogWhereInput(ctx context.Context, v any) (*model.AuditLogWhereInput, error) {
+func (ec *executionContext) unmarshalOAuditLogOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderᚄ(ctx context.Context, v any) ([]*generated.AuditLogOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.AuditLogOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAuditLogOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAuditLogWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogWhereInput(ctx context.Context, v any) (*generated.AuditLogWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}

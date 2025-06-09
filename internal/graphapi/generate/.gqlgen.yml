@@ -116,3 +116,7 @@ models:
     model: github.com/theopenlane/core/pkg/models.JobConfiguration
   JobCadence:
     model: github.com/theopenlane/core/pkg/models.JobCadence
+  Change:
+    model: github.com/theopenlane/core/internal/ent/generated.Change
+  AuditLogOrderField:
+    model: github.com/theopenlane/core/internal/ent/generated.AuditLogOrderField

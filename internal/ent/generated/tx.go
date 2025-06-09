@@ -62,8 +62,6 @@ type Tx struct {
 	EntityTypeHistory *EntityTypeHistoryClient
 	// Event is the client for interacting with the Event builders.
 	Event *EventClient
-	// EventHistory is the client for interacting with the EventHistory builders.
-	EventHistory *EventHistoryClient
 	// Evidence is the client for interacting with the Evidence builders.
 	Evidence *EvidenceClient
 	// EvidenceHistory is the client for interacting with the EvidenceHistory builders.
@@ -102,8 +100,6 @@ type Tx struct {
 	JobResult *JobResultClient
 	// JobRunner is the client for interacting with the JobRunner builders.
 	JobRunner *JobRunnerClient
-	// JobRunnerHistory is the client for interacting with the JobRunnerHistory builders.
-	JobRunnerHistory *JobRunnerHistoryClient
 	// JobRunnerRegistrationToken is the client for interacting with the JobRunnerRegistrationToken builders.
 	JobRunnerRegistrationToken *JobRunnerRegistrationTokenClient
 	// JobRunnerToken is the client for interacting with the JobRunnerToken builders.
@@ -354,7 +350,6 @@ func (tx *Tx) init() {
 	tx.EntityType = NewEntityTypeClient(tx.config)
 	tx.EntityTypeHistory = NewEntityTypeHistoryClient(tx.config)
 	tx.Event = NewEventClient(tx.config)
-	tx.EventHistory = NewEventHistoryClient(tx.config)
 	tx.Evidence = NewEvidenceClient(tx.config)
 	tx.EvidenceHistory = NewEvidenceHistoryClient(tx.config)
 	tx.File = NewFileClient(tx.config)
@@ -374,7 +369,6 @@ func (tx *Tx) init() {
 	tx.Invite = NewInviteClient(tx.config)
 	tx.JobResult = NewJobResultClient(tx.config)
 	tx.JobRunner = NewJobRunnerClient(tx.config)
-	tx.JobRunnerHistory = NewJobRunnerHistoryClient(tx.config)
 	tx.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(tx.config)
 	tx.JobRunnerToken = NewJobRunnerTokenClient(tx.config)
 	tx.MappableDomain = NewMappableDomainClient(tx.config)

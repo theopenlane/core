@@ -14724,83 +14724,6 @@ func (_c *MockOpenlaneGraphClient_GetAllEntityTypes_Call) RunAndReturn(run func(
 	return _c
 }
 
-// GetAllEventHistories provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetAllEventHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllEventHistories, error) {
-	var tmpRet mock.Arguments
-	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, interceptors)
-	} else {
-		tmpRet = _mock.Called(ctx)
-	}
-	ret := tmpRet
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetAllEventHistories")
-	}
-
-	var r0 *openlaneclient.GetAllEventHistories
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllEventHistories, error)); ok {
-		return returnFunc(ctx, interceptors...)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllEventHistories); ok {
-		r0 = returnFunc(ctx, interceptors...)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*openlaneclient.GetAllEventHistories)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, interceptors...)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockOpenlaneGraphClient_GetAllEventHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllEventHistories'
-type MockOpenlaneGraphClient_GetAllEventHistories_Call struct {
-	*mock.Call
-}
-
-// GetAllEventHistories is a helper method to define mock.On call
-//   - ctx context.Context
-//   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetAllEventHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllEventHistories_Call {
-	return &MockOpenlaneGraphClient_GetAllEventHistories_Call{Call: _e.mock.On("GetAllEventHistories",
-		append([]interface{}{ctx}, interceptors...)...)}
-}
-
-func (_c *MockOpenlaneGraphClient_GetAllEventHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllEventHistories_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 1 {
-			variadicArgs = args[1].([]clientv2.RequestInterceptor)
-		}
-		arg1 = variadicArgs
-		run(
-			arg0,
-			arg1...,
-		)
-	})
-	return _c
-}
-
-func (_c *MockOpenlaneGraphClient_GetAllEventHistories_Call) Return(getAllEventHistories *openlaneclient.GetAllEventHistories, err error) *MockOpenlaneGraphClient_GetAllEventHistories_Call {
-	_c.Call.Return(getAllEventHistories, err)
-	return _c
-}
-
-func (_c *MockOpenlaneGraphClient_GetAllEventHistories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllEventHistories, error)) *MockOpenlaneGraphClient_GetAllEventHistories_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
 // GetAllEvents provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) GetAllEvents(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllEvents, error) {
 	var tmpRet mock.Arguments
@@ -16183,83 +16106,6 @@ func (_c *MockOpenlaneGraphClient_GetAllJobResults_Call) Return(getAllJobResults
 }
 
 func (_c *MockOpenlaneGraphClient_GetAllJobResults_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllJobResults, error)) *MockOpenlaneGraphClient_GetAllJobResults_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// GetAllJobRunnerHistories provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetAllJobRunnerHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllJobRunnerHistories, error) {
-	var tmpRet mock.Arguments
-	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, interceptors)
-	} else {
-		tmpRet = _mock.Called(ctx)
-	}
-	ret := tmpRet
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetAllJobRunnerHistories")
-	}
-
-	var r0 *openlaneclient.GetAllJobRunnerHistories
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllJobRunnerHistories, error)); ok {
-		return returnFunc(ctx, interceptors...)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllJobRunnerHistories); ok {
-		r0 = returnFunc(ctx, interceptors...)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*openlaneclient.GetAllJobRunnerHistories)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, interceptors...)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllJobRunnerHistories'
-type MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call struct {
-	*mock.Call
-}
-
-// GetAllJobRunnerHistories is a helper method to define mock.On call
-//   - ctx context.Context
-//   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetAllJobRunnerHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call {
-	return &MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call{Call: _e.mock.On("GetAllJobRunnerHistories",
-		append([]interface{}{ctx}, interceptors...)...)}
-}
-
-func (_c *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 1 {
-			variadicArgs = args[1].([]clientv2.RequestInterceptor)
-		}
-		arg1 = variadicArgs
-		run(
-			arg0,
-			arg1...,
-		)
-	})
-	return _c
-}
-
-func (_c *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call) Return(getAllJobRunnerHistories *openlaneclient.GetAllJobRunnerHistories, err error) *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call {
-	_c.Call.Return(getAllJobRunnerHistories, err)
-	return _c
-}
-
-func (_c *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllJobRunnerHistories, error)) *MockOpenlaneGraphClient_GetAllJobRunnerHistories_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -22226,96 +22072,13 @@ func (_c *MockOpenlaneGraphClient_GetEventByID_Call) RunAndReturn(run func(ctx c
 	return _c
 }
 
-// GetEventHistories provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetEventHistories(ctx context.Context, where *openlaneclient.EventHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetEventHistories, error) {
-	var tmpRet mock.Arguments
-	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, where, interceptors)
-	} else {
-		tmpRet = _mock.Called(ctx, where)
-	}
-	ret := tmpRet
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetEventHistories")
-	}
-
-	var r0 *openlaneclient.GetEventHistories
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.EventHistoryWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetEventHistories, error)); ok {
-		return returnFunc(ctx, where, interceptors...)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.EventHistoryWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetEventHistories); ok {
-		r0 = returnFunc(ctx, where, interceptors...)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*openlaneclient.GetEventHistories)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *openlaneclient.EventHistoryWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, where, interceptors...)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockOpenlaneGraphClient_GetEventHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetEventHistories'
-type MockOpenlaneGraphClient_GetEventHistories_Call struct {
-	*mock.Call
-}
-
-// GetEventHistories is a helper method to define mock.On call
-//   - ctx context.Context
-//   - where *openlaneclient.EventHistoryWhereInput
-//   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetEventHistories(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEventHistories_Call {
-	return &MockOpenlaneGraphClient_GetEventHistories_Call{Call: _e.mock.On("GetEventHistories",
-		append([]interface{}{ctx, where}, interceptors...)...)}
-}
-
-func (_c *MockOpenlaneGraphClient_GetEventHistories_Call) Run(run func(ctx context.Context, where *openlaneclient.EventHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEventHistories_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 *openlaneclient.EventHistoryWhereInput
-		if args[1] != nil {
-			arg1 = args[1].(*openlaneclient.EventHistoryWhereInput)
-		}
-		var arg2 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 2 {
-			variadicArgs = args[2].([]clientv2.RequestInterceptor)
-		}
-		arg2 = variadicArgs
-		run(
-			arg0,
-			arg1,
-			arg2...,
-		)
-	})
-	return _c
-}
-
-func (_c *MockOpenlaneGraphClient_GetEventHistories_Call) Return(getEventHistories *openlaneclient.GetEventHistories, err error) *MockOpenlaneGraphClient_GetEventHistories_Call {
-	_c.Call.Return(getEventHistories, err)
-	return _c
-}
-
-func (_c *MockOpenlaneGraphClient_GetEventHistories_Call) RunAndReturn(run func(ctx context.Context, where *openlaneclient.EventHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetEventHistories, error)) *MockOpenlaneGraphClient_GetEventHistories_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
 // GetEvents provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetEvents(ctx context.Context, where *openlaneclient.EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetEvents, error) {
+func (_mock *MockOpenlaneGraphClient) GetEvents(ctx context.Context, first *int64, last *int64, where *openlaneclient.EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetEvents, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, where, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, where)
+		tmpRet = _mock.Called(ctx, first, last, where)
 	}
 	ret := tmpRet
 
@@ -22325,18 +22088,18 @@ func (_mock *MockOpenlaneGraphClient) GetEvents(ctx context.Context, where *open
 
 	var r0 *openlaneclient.GetEvents
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.EventWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetEvents, error)); ok {
-		return returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.EventWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetEvents, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.EventWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetEvents); ok {
-		r0 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.EventWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetEvents); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetEvents)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *openlaneclient.EventWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.EventWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -22350,33 +22113,45 @@ type MockOpenlaneGraphClient_GetEvents_Call struct {
 
 // GetEvents is a helper method to define mock.On call
 //   - ctx context.Context
+//   - first *int64
+//   - last *int64
 //   - where *openlaneclient.EventWhereInput
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetEvents(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEvents_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetEvents(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetEvents_Call {
 	return &MockOpenlaneGraphClient_GetEvents_Call{Call: _e.mock.On("GetEvents",
-		append([]interface{}{ctx, where}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetEvents_Call) Run(run func(ctx context.Context, where *openlaneclient.EventWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEvents_Call {
+func (_c *MockOpenlaneGraphClient_GetEvents_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.EventWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetEvents_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 *openlaneclient.EventWhereInput
+		var arg1 *int64
 		if args[1] != nil {
-			arg1 = args[1].(*openlaneclient.EventWhereInput)
+			arg1 = args[1].(*int64)
 		}
-		var arg2 []clientv2.RequestInterceptor
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.EventWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.EventWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
 		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 2 {
-			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
 		}
-		arg2 = variadicArgs
+		arg4 = variadicArgs
 		run(
 			arg0,
 			arg1,
-			arg2...,
+			arg2,
+			arg3,
+			arg4...,
 		)
 	})
 	return _c
@@ -22387,7 +22162,7 @@ func (_c *MockOpenlaneGraphClient_GetEvents_Call) Return(getEvents *openlaneclie
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetEvents_Call) RunAndReturn(run func(ctx context.Context, where *openlaneclient.EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetEvents, error)) *MockOpenlaneGraphClient_GetEvents_Call {
+func (_c *MockOpenlaneGraphClient_GetEvents_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetEvents, error)) *MockOpenlaneGraphClient_GetEvents_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -24724,101 +24499,6 @@ func (_c *MockOpenlaneGraphClient_GetJobRunnerByID_Call) Return(getJobRunnerByID
 }
 
 func (_c *MockOpenlaneGraphClient_GetJobRunnerByID_Call) RunAndReturn(run func(ctx context.Context, jobRunnerID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetJobRunnerByID, error)) *MockOpenlaneGraphClient_GetJobRunnerByID_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// GetJobRunnerHistories provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetJobRunnerHistories(ctx context.Context, first *int64, last *int64, where *openlaneclient.JobRunnerHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetJobRunnerHistories, error) {
-	var tmpRet mock.Arguments
-	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
-	} else {
-		tmpRet = _mock.Called(ctx, first, last, where)
-	}
-	ret := tmpRet
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetJobRunnerHistories")
-	}
-
-	var r0 *openlaneclient.GetJobRunnerHistories
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.JobRunnerHistoryWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetJobRunnerHistories, error)); ok {
-		return returnFunc(ctx, first, last, where, interceptors...)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.JobRunnerHistoryWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetJobRunnerHistories); ok {
-		r0 = returnFunc(ctx, first, last, where, interceptors...)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*openlaneclient.GetJobRunnerHistories)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.JobRunnerHistoryWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, first, last, where, interceptors...)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockOpenlaneGraphClient_GetJobRunnerHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetJobRunnerHistories'
-type MockOpenlaneGraphClient_GetJobRunnerHistories_Call struct {
-	*mock.Call
-}
-
-// GetJobRunnerHistories is a helper method to define mock.On call
-//   - ctx context.Context
-//   - first *int64
-//   - last *int64
-//   - where *openlaneclient.JobRunnerHistoryWhereInput
-//   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetJobRunnerHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetJobRunnerHistories_Call {
-	return &MockOpenlaneGraphClient_GetJobRunnerHistories_Call{Call: _e.mock.On("GetJobRunnerHistories",
-		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
-}
-
-func (_c *MockOpenlaneGraphClient_GetJobRunnerHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.JobRunnerHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetJobRunnerHistories_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 *int64
-		if args[1] != nil {
-			arg1 = args[1].(*int64)
-		}
-		var arg2 *int64
-		if args[2] != nil {
-			arg2 = args[2].(*int64)
-		}
-		var arg3 *openlaneclient.JobRunnerHistoryWhereInput
-		if args[3] != nil {
-			arg3 = args[3].(*openlaneclient.JobRunnerHistoryWhereInput)
-		}
-		var arg4 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 4 {
-			variadicArgs = args[4].([]clientv2.RequestInterceptor)
-		}
-		arg4 = variadicArgs
-		run(
-			arg0,
-			arg1,
-			arg2,
-			arg3,
-			arg4...,
-		)
-	})
-	return _c
-}
-
-func (_c *MockOpenlaneGraphClient_GetJobRunnerHistories_Call) Return(getJobRunnerHistories *openlaneclient.GetJobRunnerHistories, err error) *MockOpenlaneGraphClient_GetJobRunnerHistories_Call {
-	_c.Call.Return(getJobRunnerHistories, err)
-	return _c
-}
-
-func (_c *MockOpenlaneGraphClient_GetJobRunnerHistories_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.JobRunnerHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetJobRunnerHistories, error)) *MockOpenlaneGraphClient_GetJobRunnerHistories_Call {
 	_c.Call.Return(run)
 	return _c
 }

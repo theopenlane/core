@@ -56,7 +56,6 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/documentdatahistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entityhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitytypehistory"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/eventhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/evidencehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/filehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/grouphistory"

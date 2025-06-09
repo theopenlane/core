@@ -6,6 +6,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -73,6 +74,16 @@ func (ec *executionContext) unmarshalNAssessmentObjective2githubᚗcomᚋtheopen
 }
 
 func (ec *executionContext) marshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx context.Context, sel ast.SelectionSet, v models.AssessmentObjective) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNChange2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐChange(ctx context.Context, v any) (generated.Change, error) {
+	var res generated.Change
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNChange2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐChange(ctx context.Context, sel ast.SelectionSet, v generated.Change) graphql.Marshaler {
 	return v
 }
 
@@ -251,6 +262,42 @@ func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheope
 	ret := make(graphql.Array, len(v))
 	for i := range v {
 		ret[i] = ec.marshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOChange2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐChangeᚄ(ctx context.Context, v any) ([]generated.Change, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]generated.Change, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNChange2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐChange(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOChange2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐChangeᚄ(ctx context.Context, sel ast.SelectionSet, v []generated.Change) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNChange2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐChange(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {

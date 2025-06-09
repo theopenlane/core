@@ -40,6 +40,9 @@ func (OrgSubscriptionHistory) Annotations() []schema.Annotation {
 func (OrgSubscriptionHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
+			Annotations(
+				entgql.OrderField("history_time"),
+			).
 			Default(time.Now).
 			Immutable(),
 		field.String("ref").
