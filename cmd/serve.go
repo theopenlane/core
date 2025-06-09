@@ -61,7 +61,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithKeyDirOption(),
 		serveropts.WithSecretManagerKeysOption(),
 		serveropts.WithCSRF(),
-
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
