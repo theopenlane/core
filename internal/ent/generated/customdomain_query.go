@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -17,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -24,16 +26,18 @@ import (
 // CustomDomainQuery is the builder for querying CustomDomain entities.
 type CustomDomainQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []customdomain.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.CustomDomain
-	withOwner           *OrganizationQuery
-	withMappableDomain  *MappableDomainQuery
-	withDNSVerification *DNSVerificationQuery
-	withFKs             bool
-	loadTotal           []func(context.Context, []*CustomDomain) error
-	modifiers           []func(*sql.Selector)
+	ctx                   *QueryContext
+	order                 []customdomain.OrderOption
+	inters                []Interceptor
+	predicates            []predicate.CustomDomain
+	withOwner             *OrganizationQuery
+	withMappableDomain    *MappableDomainQuery
+	withDNSVerification   *DNSVerificationQuery
+	withTrustCenters      *TrustCenterQuery
+	withFKs               bool
+	loadTotal             []func(context.Context, []*CustomDomain) error
+	modifiers             []func(*sql.Selector)
+	withNamedTrustCenters map[string]*TrustCenterQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -139,6 +143,31 @@ func (cdq *CustomDomainQuery) QueryDNSVerification() *DNSVerificationQuery {
 		schemaConfig := cdq.schemaConfig
 		step.To.Schema = schemaConfig.DNSVerification
 		step.Edge.Schema = schemaConfig.CustomDomain
+		fromU = sqlgraph.SetNeighbors(cdq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustCenters chains the current query on the "trust_centers" edge.
+func (cdq *CustomDomainQuery) QueryTrustCenters() *TrustCenterQuery {
+	query := (&TrustCenterClient{config: cdq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cdq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cdq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customdomain.Table, customdomain.FieldID, selector),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customdomain.TrustCentersTable, customdomain.TrustCentersColumn),
+		)
+		schemaConfig := cdq.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(cdq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -340,6 +369,7 @@ func (cdq *CustomDomainQuery) Clone() *CustomDomainQuery {
 		withOwner:           cdq.withOwner.Clone(),
 		withMappableDomain:  cdq.withMappableDomain.Clone(),
 		withDNSVerification: cdq.withDNSVerification.Clone(),
+		withTrustCenters:    cdq.withTrustCenters.Clone(),
 		// clone intermediate query.
 		sql:       cdq.sql.Clone(),
 		path:      cdq.path,
@@ -377,6 +407,17 @@ func (cdq *CustomDomainQuery) WithDNSVerification(opts ...func(*DNSVerificationQ
 		opt(query)
 	}
 	cdq.withDNSVerification = query
+	return cdq
+}
+
+// WithTrustCenters tells the query-builder to eager-load the nodes that are connected to
+// the "trust_centers" edge. The optional arguments are used to configure the query builder of the edge.
+func (cdq *CustomDomainQuery) WithTrustCenters(opts ...func(*TrustCenterQuery)) *CustomDomainQuery {
+	query := (&TrustCenterClient{config: cdq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cdq.withTrustCenters = query
 	return cdq
 }
 
@@ -465,10 +506,11 @@ func (cdq *CustomDomainQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		nodes       = []*CustomDomain{}
 		withFKs     = cdq.withFKs
 		_spec       = cdq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			cdq.withOwner != nil,
 			cdq.withMappableDomain != nil,
 			cdq.withDNSVerification != nil,
+			cdq.withTrustCenters != nil,
 		}
 	)
 	if withFKs {
@@ -512,6 +554,20 @@ func (cdq *CustomDomainQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	if query := cdq.withDNSVerification; query != nil {
 		if err := cdq.loadDNSVerification(ctx, query, nodes, nil,
 			func(n *CustomDomain, e *DNSVerification) { n.Edges.DNSVerification = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cdq.withTrustCenters; query != nil {
+		if err := cdq.loadTrustCenters(ctx, query, nodes,
+			func(n *CustomDomain) { n.Edges.TrustCenters = []*TrustCenter{} },
+			func(n *CustomDomain, e *TrustCenter) { n.Edges.TrustCenters = append(n.Edges.TrustCenters, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cdq.withNamedTrustCenters {
+		if err := cdq.loadTrustCenters(ctx, query, nodes,
+			func(n *CustomDomain) { n.appendNamedTrustCenters(name) },
+			func(n *CustomDomain, e *TrustCenter) { n.appendNamedTrustCenters(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -607,6 +663,37 @@ func (cdq *CustomDomainQuery) loadDNSVerification(ctx context.Context, query *DN
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (cdq *CustomDomainQuery) loadTrustCenters(ctx context.Context, query *TrustCenterQuery, nodes []*CustomDomain, init func(*CustomDomain), assign func(*CustomDomain, *TrustCenter)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*CustomDomain)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.TrustCenter(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(customdomain.TrustCentersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.custom_domain_trust_centers
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "custom_domain_trust_centers" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "custom_domain_trust_centers" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -716,6 +803,20 @@ func (cdq *CustomDomainQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (cdq *CustomDomainQuery) Modify(modifiers ...func(s *sql.Selector)) *CustomDomainSelect {
 	cdq.modifiers = append(cdq.modifiers, modifiers...)
 	return cdq.Select()
+}
+
+// WithNamedTrustCenters tells the query-builder to eager-load the nodes that are connected to the "trust_centers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cdq *CustomDomainQuery) WithNamedTrustCenters(name string, opts ...func(*TrustCenterQuery)) *CustomDomainQuery {
+	query := (&TrustCenterClient{config: cdq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cdq.withNamedTrustCenters == nil {
+		cdq.withNamedTrustCenters = make(map[string]*TrustCenterQuery)
+	}
+	cdq.withNamedTrustCenters[name] = query
+	return cdq
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs

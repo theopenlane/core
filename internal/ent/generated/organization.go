@@ -176,13 +176,17 @@ type OrganizationEdges struct {
 	JobResults []*JobResult `json:"job_results,omitempty"`
 	// ScheduledJobRuns holds the value of the scheduled_job_runs edge.
 	ScheduledJobRuns []*ScheduledJobRun `json:"scheduled_job_runs,omitempty"`
+	// TrustCenters holds the value of the trust_centers edge.
+	TrustCenters []*TrustCenter `json:"trust_centers,omitempty"`
+	// TrustCenterSettings holds the value of the trust_center_settings edge.
+	TrustCenterSettings []*TrustCenterSetting `json:"trust_center_settings,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [59]bool
+	loadedTypes [61]bool
 	// totalCount holds the count of the edges above.
-	totalCount [59]map[string]int
+	totalCount [61]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -239,6 +243,8 @@ type OrganizationEdges struct {
 	namedScheduledJobs                 map[string][]*ControlScheduledJob
 	namedJobResults                    map[string][]*JobResult
 	namedScheduledJobRuns              map[string][]*ScheduledJobRun
+	namedTrustCenters                  map[string][]*TrustCenter
+	namedTrustCenterSettings           map[string][]*TrustCenterSetting
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -770,10 +776,28 @@ func (e OrganizationEdges) ScheduledJobRunsOrErr() ([]*ScheduledJobRun, error) {
 	return nil, &NotLoadedError{edge: "scheduled_job_runs"}
 }
 
+// TrustCentersOrErr returns the TrustCenters value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) TrustCentersOrErr() ([]*TrustCenter, error) {
+	if e.loadedTypes[58] {
+		return e.TrustCenters, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_centers"}
+}
+
+// TrustCenterSettingsOrErr returns the TrustCenterSettings value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) TrustCenterSettingsOrErr() ([]*TrustCenterSetting, error) {
+	if e.loadedTypes[59] {
+		return e.TrustCenterSettings, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_settings"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[58] {
+	if e.loadedTypes[60] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1215,6 +1239,16 @@ func (o *Organization) QueryJobResults() *JobResultQuery {
 // QueryScheduledJobRuns queries the "scheduled_job_runs" edge of the Organization entity.
 func (o *Organization) QueryScheduledJobRuns() *ScheduledJobRunQuery {
 	return NewOrganizationClient(o.config).QueryScheduledJobRuns(o)
+}
+
+// QueryTrustCenters queries the "trust_centers" edge of the Organization entity.
+func (o *Organization) QueryTrustCenters() *TrustCenterQuery {
+	return NewOrganizationClient(o.config).QueryTrustCenters(o)
+}
+
+// QueryTrustCenterSettings queries the "trust_center_settings" edge of the Organization entity.
+func (o *Organization) QueryTrustCenterSettings() *TrustCenterSettingQuery {
+	return NewOrganizationClient(o.config).QueryTrustCenterSettings(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2619,6 +2653,54 @@ func (o *Organization) appendNamedScheduledJobRuns(name string, edges ...*Schedu
 		o.Edges.namedScheduledJobRuns[name] = []*ScheduledJobRun{}
 	} else {
 		o.Edges.namedScheduledJobRuns[name] = append(o.Edges.namedScheduledJobRuns[name], edges...)
+	}
+}
+
+// NamedTrustCenters returns the TrustCenters named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedTrustCenters(name string) ([]*TrustCenter, error) {
+	if o.Edges.namedTrustCenters == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedTrustCenters[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedTrustCenters(name string, edges ...*TrustCenter) {
+	if o.Edges.namedTrustCenters == nil {
+		o.Edges.namedTrustCenters = make(map[string][]*TrustCenter)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedTrustCenters[name] = []*TrustCenter{}
+	} else {
+		o.Edges.namedTrustCenters[name] = append(o.Edges.namedTrustCenters[name], edges...)
+	}
+}
+
+// NamedTrustCenterSettings returns the TrustCenterSettings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedTrustCenterSettings(name string) ([]*TrustCenterSetting, error) {
+	if o.Edges.namedTrustCenterSettings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedTrustCenterSettings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedTrustCenterSettings(name string, edges ...*TrustCenterSetting) {
+	if o.Edges.namedTrustCenterSettings == nil {
+		o.Edges.namedTrustCenterSettings = make(map[string][]*TrustCenterSetting)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedTrustCenterSettings[name] = []*TrustCenterSetting{}
+	} else {
+		o.Edges.namedTrustCenterSettings[name] = append(o.Edges.namedTrustCenterSettings[name], edges...)
 	}
 }
 

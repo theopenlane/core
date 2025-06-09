@@ -209,6 +209,10 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_jobResults(ctx, field)
 			case "scheduledJobRuns":
 				return ec.fieldContext_Organization_scheduledJobRuns(ctx, field)
+			case "trustCenters":
+				return ec.fieldContext_Organization_trustCenters(ctx, field)
+			case "trustCenterSettings":
+				return ec.fieldContext_Organization_trustCenterSettings(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -401,6 +405,10 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_jobResults(ctx, field)
 			case "scheduledJobRuns":
 				return ec.fieldContext_Organization_scheduledJobRuns(ctx, field)
+			case "trustCenters":
+				return ec.fieldContext_Organization_trustCenters(ctx, field)
+			case "trustCenterSettings":
+				return ec.fieldContext_Organization_trustCenterSettings(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -637,6 +645,10 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_jobResults(ctx, field)
 			case "scheduledJobRuns":
 				return ec.fieldContext_Organization_scheduledJobRuns(ctx, field)
+			case "trustCenters":
+				return ec.fieldContext_Organization_trustCenters(ctx, field)
+			case "trustCenterSettings":
+				return ec.fieldContext_Organization_trustCenterSettings(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}

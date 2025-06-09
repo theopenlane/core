@@ -91,6 +91,8 @@ func (ec *executionContext) fieldContext_CustomDomainBulkCreatePayload_customDom
 				return ec.fieldContext_CustomDomain_mappableDomain(ctx, field)
 			case "dnsVerification":
 				return ec.fieldContext_CustomDomain_dnsVerification(ctx, field)
+			case "trustCenters":
+				return ec.fieldContext_CustomDomain_trustCenters(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomDomain", field.Name)
 		},
@@ -163,6 +165,8 @@ func (ec *executionContext) fieldContext_CustomDomainCreatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_mappableDomain(ctx, field)
 			case "dnsVerification":
 				return ec.fieldContext_CustomDomain_dnsVerification(ctx, field)
+			case "trustCenters":
+				return ec.fieldContext_CustomDomain_trustCenters(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomDomain", field.Name)
 		},
@@ -279,6 +283,8 @@ func (ec *executionContext) fieldContext_CustomDomainUpdatePayload_customDomain(
 				return ec.fieldContext_CustomDomain_mappableDomain(ctx, field)
 			case "dnsVerification":
 				return ec.fieldContext_CustomDomain_dnsVerification(ctx, field)
+			case "trustCenters":
+				return ec.fieldContext_CustomDomain_trustCenters(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomDomain", field.Name)
 		},

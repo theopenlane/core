@@ -163,6 +163,10 @@ const (
 	EdgeJobResults = "job_results"
 	// EdgeScheduledJobRuns holds the string denoting the scheduled_job_runs edge name in mutations.
 	EdgeScheduledJobRuns = "scheduled_job_runs"
+	// EdgeTrustCenters holds the string denoting the trust_centers edge name in mutations.
+	EdgeTrustCenters = "trust_centers"
+	// EdgeTrustCenterSettings holds the string denoting the trust_center_settings edge name in mutations.
+	EdgeTrustCenterSettings = "trust_center_settings"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -559,6 +563,20 @@ const (
 	ScheduledJobRunsInverseTable = "scheduled_job_runs"
 	// ScheduledJobRunsColumn is the table column denoting the scheduled_job_runs relation/edge.
 	ScheduledJobRunsColumn = "owner_id"
+	// TrustCentersTable is the table that holds the trust_centers relation/edge.
+	TrustCentersTable = "trust_centers"
+	// TrustCentersInverseTable is the table name for the TrustCenter entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
+	TrustCentersInverseTable = "trust_centers"
+	// TrustCentersColumn is the table column denoting the trust_centers relation/edge.
+	TrustCentersColumn = "owner_id"
+	// TrustCenterSettingsTable is the table that holds the trust_center_settings relation/edge.
+	TrustCenterSettingsTable = "trust_center_settings"
+	// TrustCenterSettingsInverseTable is the table name for the TrustCenterSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
+	TrustCenterSettingsInverseTable = "trust_center_settings"
+	// TrustCenterSettingsColumn is the table column denoting the trust_center_settings relation/edge.
+	TrustCenterSettingsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1525,6 +1543,34 @@ func ByScheduledJobRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByTrustCentersCount orders the results by trust_centers count.
+func ByTrustCentersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCentersStep(), opts...)
+	}
+}
+
+// ByTrustCenters orders the results by trust_centers terms.
+func ByTrustCenters(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCentersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTrustCenterSettingsCount orders the results by trust_center_settings count.
+func ByTrustCenterSettingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSettingsStep(), opts...)
+	}
+}
+
+// ByTrustCenterSettings orders the results by trust_center_settings terms.
+func ByTrustCenterSettings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSettingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1942,6 +1988,20 @@ func newScheduledJobRunsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScheduledJobRunsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobRunsTable, ScheduledJobRunsColumn),
+	)
+}
+func newTrustCentersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCentersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCentersTable, TrustCentersColumn),
+	)
+}
+func newTrustCenterSettingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterSettingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSettingsTable, TrustCenterSettingsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

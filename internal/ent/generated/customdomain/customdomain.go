@@ -43,6 +43,8 @@ const (
 	EdgeMappableDomain = "mappable_domain"
 	// EdgeDNSVerification holds the string denoting the dns_verification edge name in mutations.
 	EdgeDNSVerification = "dns_verification"
+	// EdgeTrustCenters holds the string denoting the trust_centers edge name in mutations.
+	EdgeTrustCenters = "trust_centers"
 	// Table holds the table name of the customdomain in the database.
 	Table = "custom_domains"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -66,6 +68,13 @@ const (
 	DNSVerificationInverseTable = "dns_verifications"
 	// DNSVerificationColumn is the table column denoting the dns_verification relation/edge.
 	DNSVerificationColumn = "dns_verification_id"
+	// TrustCentersTable is the table that holds the trust_centers relation/edge.
+	TrustCentersTable = "trust_centers"
+	// TrustCentersInverseTable is the table name for the TrustCenter entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
+	TrustCentersInverseTable = "trust_centers"
+	// TrustCentersColumn is the table column denoting the trust_centers relation/edge.
+	TrustCentersColumn = "custom_domain_trust_centers"
 )
 
 // Columns holds all SQL columns for customdomain fields.
@@ -209,6 +218,20 @@ func ByDNSVerificationField(field string, opts ...sql.OrderTermOption) OrderOpti
 		sqlgraph.OrderByNeighborTerms(s, newDNSVerificationStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByTrustCentersCount orders the results by trust_centers count.
+func ByTrustCentersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCentersStep(), opts...)
+	}
+}
+
+// ByTrustCenters orders the results by trust_centers terms.
+func ByTrustCenters(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCentersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -228,5 +251,12 @@ func newDNSVerificationStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DNSVerificationInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DNSVerificationTable, DNSVerificationColumn),
+	)
+}
+func newTrustCentersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCentersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCentersTable, TrustCentersColumn),
 	)
 }

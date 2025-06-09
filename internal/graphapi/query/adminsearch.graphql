@@ -792,6 +792,46 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    trustCenters {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          slug
+          customDomainID
+        }
+      }
+    }
+    trustCenterSettings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          trustCenterID
+          title
+          overview
+          logoURL
+          faviconURL
+          primaryColor
+        }
+      }
+    }
     users {
       totalCount
       pageInfo {

@@ -1,0 +1,63 @@
+query GetAllTrustCenterSettingHistories {
+  trustCenterSettingHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        faviconURL
+        historyTime
+        id
+        logoURL
+        operation
+        overview
+        ownerID
+        primaryColor
+        ref
+        tags
+        title
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetTrustCenterSettingHistories($first: Int, $last: Int, $where: TrustCenterSettingHistoryWhereInput) {
+  trustCenterSettingHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        faviconURL
+        historyTime
+        id
+        logoURL
+        operation
+        overview
+        ownerID
+        primaryColor
+        ref
+        tags
+        title
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
