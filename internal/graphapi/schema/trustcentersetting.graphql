@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up trustCenterSetting by ID
+    """
+     trustCenterSetting(
+        """
+        ID of the trustCenterSetting
+        """
+        id: ID!
+    ):  TrustCenterSetting!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterSetting
+    """
+    createTrustCenterSetting(
+        """
+        values of the trustCenterSetting
+        """
+        input: CreateTrustCenterSettingInput!
+    ): TrustCenterSettingCreatePayload!
+    """
+    Create multiple new trustCenterSettings
+    """
+    createBulkTrustCenterSetting(
+        """
+        values of the trustCenterSetting
+        """
+        input: [CreateTrustCenterSettingInput!]
+    ): TrustCenterSettingBulkCreatePayload!
+    """
+    Create multiple new trustCenterSettings via file upload
+    """
+    createBulkCSVTrustCenterSetting(
+        """
+        csv file containing values of the trustCenterSetting
+        """
+        input: Upload!
+    ): TrustCenterSettingBulkCreatePayload!
+    """
+    Update an existing trustCenterSetting
+    """
+    updateTrustCenterSetting(
+        """
+        ID of the trustCenterSetting
+        """
+        id: ID!
+        """
+        New values for the trustCenterSetting
+        """
+        input: UpdateTrustCenterSettingInput!
+    ): TrustCenterSettingUpdatePayload!
+    """
+    Delete an existing trustCenterSetting
+    """
+    deleteTrustCenterSetting(
+        """
+        ID of the trustCenterSetting
+        """
+        id: ID!
+    ): TrustCenterSettingDeletePayload!
+}
+
+"""
+Return response for createTrustCenterSetting mutation
+"""
+type TrustCenterSettingCreatePayload {
+    """
+    Created trustCenterSetting
+    """
+    trustCenterSetting: TrustCenterSetting!
+}
+
+"""
+Return response for updateTrustCenterSetting mutation
+"""
+type TrustCenterSettingUpdatePayload {
+    """
+    Updated trustCenterSetting
+    """
+    trustCenterSetting: TrustCenterSetting!
+}
+
+"""
+Return response for deleteTrustCenterSetting mutation
+"""
+type TrustCenterSettingDeletePayload {
+    """
+    Deleted trustCenterSetting ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterSetting mutation
+"""
+type TrustCenterSettingBulkCreatePayload {
+    """
+    Created trustCenterSettings
+    """
+    trustCenterSettings: [TrustCenterSetting!]
+}

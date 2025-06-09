@@ -615,6 +615,21 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    trustCenters {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
     users {
       totalCount
       pageInfo {
