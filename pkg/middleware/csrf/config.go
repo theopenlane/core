@@ -38,7 +38,8 @@ func NewConfig() *Config {
 // csrfSkipperFunc is the function that determines if the csrf token check should be skipped
 // due to the request being a PAT or API Token auth request
 var csrfSkipperFunc = func(c echo.Context) bool {
-	return auth.GetAuthTypeFromEchoContext(c) != auth.JWTAuthentication
+	return auth.GetAuthTypeFromEchoContext(c) == auth.APITokenAuthentication ||
+		auth.GetAuthTypeFromEchoContext(c) == auth.PATAuthentication
 }
 
 // Middleware creates the CSRF middleware from the provided config.
