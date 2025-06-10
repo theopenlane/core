@@ -34,7 +34,7 @@ type OpenlaneRestClient interface {
 // New creates a new API v1 client that implements the Openlane Client interface
 func NewRestClient(config Config, opts ...ClientOption) (_ OpenlaneRestClient, err error) {
 	c := &APIv1{
-		Config: config,
+		Config: &config,
 	}
 
 	// create the HTTP sling requester if it is not set with the default client

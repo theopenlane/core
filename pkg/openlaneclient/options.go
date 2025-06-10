@@ -77,16 +77,9 @@ func WithTransport(transport http.RoundTripper) ClientOption {
 // WithCSRFToken sets the CSRF token header on the client for all requests
 func WithCSRFToken(token string) ClientOption {
 	return func(c *APIv1) error {
-		if token == "" {
-			return nil
-		}
+		c.Config.Interceptors = append(c.Config.Interceptors, WithCSRFTokenInterceptor(token))
 
-		if c.Requester.Header == nil {
-			c.Requester.Header = make(http.Header)
-		}
-
-		c.Requester.Header.Set(csrfHeader, token)
-
-		return nil
+		// set the CSRF token header on the HTTPSling client for REST requests
+		return c.Requester.Apply(httpsling.Header(csrfHeader, token))
 	}
 }

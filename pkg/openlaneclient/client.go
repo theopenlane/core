@@ -68,13 +68,13 @@ func New(config Config, opts ...ClientOption) (*OpenlaneClient, error) {
 // APIv1 implements the Client interface and provides methods to interact with the API
 type APIv1 struct {
 	// Config is the configuration for the APIv1 client
-	Config Config
+	Config *Config
 	// Requester is the HTTP client for the APIv1 client
 	Requester *httpsling.Requester
 }
 
 // Config is the configuration for the APIv1 client
-func (c *OpenlaneClient) Config() Config {
+func (c *OpenlaneClient) Config() *Config {
 	api := c.OpenlaneRestClient.(*APIv1)
 
 	return api.Config

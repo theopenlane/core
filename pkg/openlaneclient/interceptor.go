@@ -27,6 +27,23 @@ func (a Authorization) WithAuthorization() clientv2.RequestInterceptor {
 	}
 }
 
+func WithCSRFTokenInterceptor(token string) clientv2.RequestInterceptor {
+	return func(
+		ctx context.Context,
+		req *http.Request,
+		gqlInfo *clientv2.GQLRequestInfo,
+		res interface{},
+		next clientv2.RequestInterceptorFunc,
+	) error {
+		// set the CSRF token in the request header if it is not empty
+		if token != "" {
+			req.Header.Set(csrfHeader, token)
+		}
+
+		return next(ctx, req, gqlInfo, res)
+	}
+}
+
 // WithLoggingInterceptor adds a http debug logging interceptor
 func WithLoggingInterceptor() clientv2.RequestInterceptor {
 	return func(ctx context.Context, req *http.Request, gqlInfo *clientv2.GQLRequestInfo, res interface{}, next clientv2.RequestInterceptorFunc) error {

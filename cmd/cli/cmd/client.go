@@ -91,12 +91,47 @@ func SetupClientWithAuth(ctx context.Context) (*openlaneclient.OpenlaneClient, e
 		return nil, err
 	}
 
-	// initialize csrf token for subsequent requests
-	if err := client.InitCSRF(ctx); err != nil {
+	return clientWithCSRFToken(ctx, client, opts...)
+}
+
+// cloneClientWithCookies creates a new OpenlaneClient instance
+// with with the same config and cookies from the original client.
+func cloneClientWithCookies(client *openlaneclient.OpenlaneClient, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+	// grab the original client's configuration
+	config := client.Config()
+
+	// Create a new client with the same configuration and options
+	newClient, err := openlaneclient.New(*config, opts...)
+	if err != nil {
 		return nil, err
 	}
 
-	return client, nil
+	// Copy cookies from the original client to the new one
+	cookies, err := client.Cookies()
+	if err != nil {
+		return nil, err
+	}
+
+	u := newClient.Config().BaseURL.ResolveReference(&url.URL{Path: "/"})
+	newClient.HTTPSlingRequester().CookieJar().SetCookies(u, cookies)
+
+	return newClient, nil
+}
+
+// clientWithCSRFToken initializes a new OpenlaneClient with a CSRF token
+// for subsequent requests. It first fetches the CSRF token and then
+// clones the client to ensure cookies are preserved and sets
+// the CSRF token in the options for future requests in the header
+func clientWithCSRFToken(ctx context.Context, client *openlaneclient.OpenlaneClient, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+	// initialize csrf token for subsequent requests
+	csrfToken, err := client.InitCSRF(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	opts = append(opts, openlaneclient.WithCSRFToken(csrfToken))
+
+	return cloneClientWithCookies(client, opts...)
 }
 
 // SetupClient will setup the client without the Authorization header
@@ -112,11 +147,7 @@ func SetupClient(ctx context.Context) (*openlaneclient.OpenlaneClient, error) {
 		return nil, err
 	}
 
-	if err := client.InitCSRF(ctx); err != nil {
-		return nil, err
-	}
-
-	return client, nil
+	return clientWithCSRFToken(ctx, client, opts...)
 }
 
 // configureDefaultOpts will setup the default options for the client
