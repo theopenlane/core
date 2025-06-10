@@ -114,7 +114,7 @@ type Server struct {
 	// MaxResultLimit sets the maximum number of results allowed for a query
 	MaxResultLimit int `json:"maxResultLimit" koanf:"maxResultLimit" default:"100"`
 	// CSRFProtection enables CSRF protection for the server
-	CSRFProtection csrf.Config `json:"csrfProtection" koanf:"csrfProtection" default:"true"`
+	CSRFProtection csrf.Config `json:"csrfProtection" koanf:"csrfProtection"`
 	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
 	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:""`
 }

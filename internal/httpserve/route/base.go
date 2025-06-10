@@ -12,9 +12,10 @@ func registerLivenessHandler(router *Router) (err error) {
 	method := http.MethodGet
 
 	route := echo.Route{
-		Name:   "Livez",
-		Method: method,
-		Path:   path,
+		Name:        "Livez",
+		Method:      method,
+		Path:        path,
+		Middlewares: mw,
 		Handler: func(c echo.Context) error {
 			return c.JSON(http.StatusOK, echo.Map{
 				"status": "UP",
@@ -35,9 +36,10 @@ func registerReadinessHandler(router *Router) (err error) {
 	method := http.MethodGet
 
 	route := echo.Route{
-		Name:   "Ready",
-		Method: method,
-		Path:   path,
+		Name:        "Ready",
+		Method:      method,
+		Path:        path,
+		Middlewares: mw,
 		Handler: func(c echo.Context) error {
 			return router.Handler.ReadyChecks.ReadyHandler(c)
 		},

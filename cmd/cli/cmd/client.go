@@ -91,6 +91,11 @@ func SetupClientWithAuth(ctx context.Context) (*openlaneclient.OpenlaneClient, e
 		return nil, err
 	}
 
+	if Config.Bool("disable-csrf") {
+		// If CSRF is disabled, return the client without CSRF token
+		return client, nil
+	}
+
 	return client.ClientWithCSRFToken(ctx, opts...)
 }
 
@@ -105,6 +110,11 @@ func SetupClient(ctx context.Context) (*openlaneclient.OpenlaneClient, error) {
 	client, err := openlaneclient.New(config, opts...)
 	if err != nil {
 		return nil, err
+	}
+
+	if Config.Bool("disable-csrf") {
+		// If CSRF is disabled, return the client without CSRF token
+		return client, nil
 	}
 
 	return client.ClientWithCSRFToken(ctx, opts...)
