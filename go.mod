@@ -1,6 +1,6 @@
 module github.com/theopenlane/core
 
-go 1.24.3
+go 1.24.4
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
@@ -75,7 +75,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.3
-	github.com/theopenlane/entx v0.7.2
+	github.com/theopenlane/entx v0.8.0
 	github.com/theopenlane/gqlgen-plugins v0.6.1
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.12.7
@@ -452,7 +452,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
-	github.com/XSAM/otelsql v0.38.0 // indirect
+	github.com/XSAM/otelsql v0.39.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect

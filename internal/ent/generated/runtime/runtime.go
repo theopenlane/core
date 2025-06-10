@@ -31,7 +31,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -51,7 +50,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
@@ -1483,30 +1481,6 @@ func init() {
 	eventDescID := eventMixinFields1[0].Descriptor()
 	// event.DefaultID holds the default value on creation for the id field.
 	event.DefaultID = eventDescID.Default.(func() string)
-	eventhistoryFields := schema.EventHistory{}.Fields()
-	_ = eventhistoryFields
-	// eventhistoryDescHistoryTime is the schema descriptor for history_time field.
-	eventhistoryDescHistoryTime := eventhistoryFields[0].Descriptor()
-	// eventhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	eventhistory.DefaultHistoryTime = eventhistoryDescHistoryTime.Default.(func() time.Time)
-	// eventhistoryDescCreatedAt is the schema descriptor for created_at field.
-	eventhistoryDescCreatedAt := eventhistoryFields[3].Descriptor()
-	// eventhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
-	eventhistory.DefaultCreatedAt = eventhistoryDescCreatedAt.Default.(func() time.Time)
-	// eventhistoryDescUpdatedAt is the schema descriptor for updated_at field.
-	eventhistoryDescUpdatedAt := eventhistoryFields[4].Descriptor()
-	// eventhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	eventhistory.DefaultUpdatedAt = eventhistoryDescUpdatedAt.Default.(func() time.Time)
-	// eventhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	eventhistory.UpdateDefaultUpdatedAt = eventhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// eventhistoryDescTags is the schema descriptor for tags field.
-	eventhistoryDescTags := eventhistoryFields[8].Descriptor()
-	// eventhistory.DefaultTags holds the default value on creation for the tags field.
-	eventhistory.DefaultTags = eventhistoryDescTags.Default.([]string)
-	// eventhistoryDescID is the schema descriptor for id field.
-	eventhistoryDescID := eventhistoryFields[7].Descriptor()
-	// eventhistory.DefaultID holds the default value on creation for the id field.
-	eventhistory.DefaultID = eventhistoryDescID.Default.(func() string)
 	evidenceMixin := schema.Evidence{}.Mixin()
 	evidence.Policy = privacy.NewPolicies(schema.Evidence{})
 	evidence.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -2525,36 +2499,6 @@ func init() {
 	jobrunnerDescID := jobrunnerMixinFields2[0].Descriptor()
 	// jobrunner.DefaultID holds the default value on creation for the id field.
 	jobrunner.DefaultID = jobrunnerDescID.Default.(func() string)
-	jobrunnerhistoryInters := schema.JobRunnerHistory{}.Interceptors()
-	jobrunnerhistory.Interceptors[0] = jobrunnerhistoryInters[0]
-	jobrunnerhistoryFields := schema.JobRunnerHistory{}.Fields()
-	_ = jobrunnerhistoryFields
-	// jobrunnerhistoryDescHistoryTime is the schema descriptor for history_time field.
-	jobrunnerhistoryDescHistoryTime := jobrunnerhistoryFields[0].Descriptor()
-	// jobrunnerhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	jobrunnerhistory.DefaultHistoryTime = jobrunnerhistoryDescHistoryTime.Default.(func() time.Time)
-	// jobrunnerhistoryDescCreatedAt is the schema descriptor for created_at field.
-	jobrunnerhistoryDescCreatedAt := jobrunnerhistoryFields[3].Descriptor()
-	// jobrunnerhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
-	jobrunnerhistory.DefaultCreatedAt = jobrunnerhistoryDescCreatedAt.Default.(func() time.Time)
-	// jobrunnerhistoryDescUpdatedAt is the schema descriptor for updated_at field.
-	jobrunnerhistoryDescUpdatedAt := jobrunnerhistoryFields[4].Descriptor()
-	// jobrunnerhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	jobrunnerhistory.DefaultUpdatedAt = jobrunnerhistoryDescUpdatedAt.Default.(func() time.Time)
-	// jobrunnerhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	jobrunnerhistory.UpdateDefaultUpdatedAt = jobrunnerhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// jobrunnerhistoryDescTags is the schema descriptor for tags field.
-	jobrunnerhistoryDescTags := jobrunnerhistoryFields[11].Descriptor()
-	// jobrunnerhistory.DefaultTags holds the default value on creation for the tags field.
-	jobrunnerhistory.DefaultTags = jobrunnerhistoryDescTags.Default.([]string)
-	// jobrunnerhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	jobrunnerhistoryDescSystemOwned := jobrunnerhistoryFields[13].Descriptor()
-	// jobrunnerhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
-	jobrunnerhistory.DefaultSystemOwned = jobrunnerhistoryDescSystemOwned.Default.(bool)
-	// jobrunnerhistoryDescID is the schema descriptor for id field.
-	jobrunnerhistoryDescID := jobrunnerhistoryFields[9].Descriptor()
-	// jobrunnerhistory.DefaultID holds the default value on creation for the id field.
-	jobrunnerhistory.DefaultID = jobrunnerhistoryDescID.Default.(func() string)
 	jobrunnerregistrationtokenMixin := schema.JobRunnerRegistrationToken{}.Mixin()
 	jobrunnerregistrationtoken.Policy = privacy.NewPolicies(schema.JobRunnerRegistrationToken{})
 	jobrunnerregistrationtoken.Hooks[0] = func(next ent.Mutator) ent.Mutator {

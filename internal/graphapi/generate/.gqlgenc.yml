@@ -46,6 +46,10 @@ models:
     model: github.com/theopenlane/core/pkg/models.JobConfiguration
   JobCadence:
     model: github.com/theopenlane/core/pkg/models.JobCadence
+  Change:
+    model: github.com/theopenlane/core/pkg/models.Change
+  AuditLogOrderField:
+    model: github.com/theopenlane/core/pkg/models.AuditLogOrderField
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

@@ -35,6 +35,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	AuditLog() AuditLogResolver
 	Group() GroupResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
@@ -204,12 +205,12 @@ type ComplexityRoot struct {
 	}
 
 	AuditLog struct {
-		Changes   func(childComplexity int) int
-		ID        func(childComplexity int) int
-		Operation func(childComplexity int) int
-		Table     func(childComplexity int) int
-		Time      func(childComplexity int) int
-		UpdatedBy func(childComplexity int) int
+		Changes     func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		RefID       func(childComplexity int) int
+		Table       func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
 	}
 
 	AuditLogConnection struct {
@@ -1079,33 +1080,6 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
-	EventHistory struct {
-		CorrelationID func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		EventID       func(childComplexity int) int
-		EventType     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Metadata      func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-	}
-
-	EventHistoryConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	EventHistoryEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
 	EventUpdatePayload struct {
 		Event func(childComplexity int) int
 	}
@@ -1883,35 +1857,6 @@ type ComplexityRoot struct {
 	}
 
 	JobRunnerEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	JobRunnerHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		DisplayID   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		IPAddress   func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Status      func(childComplexity int) int
-		SystemOwned func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
-	}
-
-	JobRunnerHistoryConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	JobRunnerHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -3225,7 +3170,7 @@ type ComplexityRoot struct {
 		AdminUserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminWebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AuditLogs                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *model.AuditLogWhereInput) int
+		AuditLogs                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy *generated.AuditLogOrder) int
 		Contact                               func(childComplexity int, id string) int
 		ContactHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) int
 		ContactSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3266,7 +3211,6 @@ type ComplexityRoot struct {
 		EntityTypeSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		EntityTypes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
 		Event                                 func(childComplexity int, id string) int
-		EventHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EventHistoryOrder, where *generated.EventHistoryWhereInput) int
 		EventSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Events                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Evidence                              func(childComplexity int, id string) int
@@ -3304,7 +3248,6 @@ type ComplexityRoot struct {
 		JobResult                             func(childComplexity int, id string) int
 		JobResults                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
 		JobRunner                             func(childComplexity int, id string) int
-		JobRunnerHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.JobRunnerHistoryOrder, where *generated.JobRunnerHistoryWhereInput) int
 		JobRunnerRegistrationToken            func(childComplexity int, id string) int
 		JobRunnerRegistrationTokenSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		JobRunnerRegistrationTokens           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
@@ -5018,12 +4961,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AuditLog.Changes(childComplexity), true
 
-	case "AuditLog.id":
-		if e.complexity.AuditLog.ID == nil {
+	case "AuditLog.time":
+		if e.complexity.AuditLog.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.AuditLog.ID(childComplexity), true
+		return e.complexity.AuditLog.HistoryTime(childComplexity), true
 
 	case "AuditLog.operation":
 		if e.complexity.AuditLog.Operation == nil {
@@ -5032,19 +4975,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AuditLog.Operation(childComplexity), true
 
+	case "AuditLog.id":
+		if e.complexity.AuditLog.RefID == nil {
+			break
+		}
+
+		return e.complexity.AuditLog.RefID(childComplexity), true
+
 	case "AuditLog.table":
 		if e.complexity.AuditLog.Table == nil {
 			break
 		}
 
 		return e.complexity.AuditLog.Table(childComplexity), true
-
-	case "AuditLog.time":
-		if e.complexity.AuditLog.Time == nil {
-			break
-		}
-
-		return e.complexity.AuditLog.Time(childComplexity), true
 
 	case "AuditLog.updatedBy":
 		if e.complexity.AuditLog.UpdatedBy == nil {
@@ -9129,132 +9072,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EventEdge.Node(childComplexity), true
 
-	case "EventHistory.correlationID":
-		if e.complexity.EventHistory.CorrelationID == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.CorrelationID(childComplexity), true
-
-	case "EventHistory.createdAt":
-		if e.complexity.EventHistory.CreatedAt == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.CreatedAt(childComplexity), true
-
-	case "EventHistory.createdBy":
-		if e.complexity.EventHistory.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.CreatedBy(childComplexity), true
-
-	case "EventHistory.eventID":
-		if e.complexity.EventHistory.EventID == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.EventID(childComplexity), true
-
-	case "EventHistory.eventType":
-		if e.complexity.EventHistory.EventType == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.EventType(childComplexity), true
-
-	case "EventHistory.historyTime":
-		if e.complexity.EventHistory.HistoryTime == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.HistoryTime(childComplexity), true
-
-	case "EventHistory.id":
-		if e.complexity.EventHistory.ID == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.ID(childComplexity), true
-
-	case "EventHistory.metadata":
-		if e.complexity.EventHistory.Metadata == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.Metadata(childComplexity), true
-
-	case "EventHistory.operation":
-		if e.complexity.EventHistory.Operation == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.Operation(childComplexity), true
-
-	case "EventHistory.ref":
-		if e.complexity.EventHistory.Ref == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.Ref(childComplexity), true
-
-	case "EventHistory.tags":
-		if e.complexity.EventHistory.Tags == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.Tags(childComplexity), true
-
-	case "EventHistory.updatedAt":
-		if e.complexity.EventHistory.UpdatedAt == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.UpdatedAt(childComplexity), true
-
-	case "EventHistory.updatedBy":
-		if e.complexity.EventHistory.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.EventHistory.UpdatedBy(childComplexity), true
-
-	case "EventHistoryConnection.edges":
-		if e.complexity.EventHistoryConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.EventHistoryConnection.Edges(childComplexity), true
-
-	case "EventHistoryConnection.pageInfo":
-		if e.complexity.EventHistoryConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.EventHistoryConnection.PageInfo(childComplexity), true
-
-	case "EventHistoryConnection.totalCount":
-		if e.complexity.EventHistoryConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.EventHistoryConnection.TotalCount(childComplexity), true
-
-	case "EventHistoryEdge.cursor":
-		if e.complexity.EventHistoryEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.EventHistoryEdge.Cursor(childComplexity), true
-
-	case "EventHistoryEdge.node":
-		if e.complexity.EventHistoryEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.EventHistoryEdge.Node(childComplexity), true
-
 	case "EventUpdatePayload.event":
 		if e.complexity.EventUpdatePayload.Event == nil {
 			break
@@ -13001,146 +12818,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunnerEdge.Node(childComplexity), true
-
-	case "JobRunnerHistory.createdAt":
-		if e.complexity.JobRunnerHistory.CreatedAt == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.CreatedAt(childComplexity), true
-
-	case "JobRunnerHistory.createdBy":
-		if e.complexity.JobRunnerHistory.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.CreatedBy(childComplexity), true
-
-	case "JobRunnerHistory.displayID":
-		if e.complexity.JobRunnerHistory.DisplayID == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.DisplayID(childComplexity), true
-
-	case "JobRunnerHistory.historyTime":
-		if e.complexity.JobRunnerHistory.HistoryTime == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.HistoryTime(childComplexity), true
-
-	case "JobRunnerHistory.id":
-		if e.complexity.JobRunnerHistory.ID == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.ID(childComplexity), true
-
-	case "JobRunnerHistory.ipAddress":
-		if e.complexity.JobRunnerHistory.IPAddress == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.IPAddress(childComplexity), true
-
-	case "JobRunnerHistory.name":
-		if e.complexity.JobRunnerHistory.Name == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.Name(childComplexity), true
-
-	case "JobRunnerHistory.operation":
-		if e.complexity.JobRunnerHistory.Operation == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.Operation(childComplexity), true
-
-	case "JobRunnerHistory.ownerID":
-		if e.complexity.JobRunnerHistory.OwnerID == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.OwnerID(childComplexity), true
-
-	case "JobRunnerHistory.ref":
-		if e.complexity.JobRunnerHistory.Ref == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.Ref(childComplexity), true
-
-	case "JobRunnerHistory.status":
-		if e.complexity.JobRunnerHistory.Status == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.Status(childComplexity), true
-
-	case "JobRunnerHistory.systemOwned":
-		if e.complexity.JobRunnerHistory.SystemOwned == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.SystemOwned(childComplexity), true
-
-	case "JobRunnerHistory.tags":
-		if e.complexity.JobRunnerHistory.Tags == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.Tags(childComplexity), true
-
-	case "JobRunnerHistory.updatedAt":
-		if e.complexity.JobRunnerHistory.UpdatedAt == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.UpdatedAt(childComplexity), true
-
-	case "JobRunnerHistory.updatedBy":
-		if e.complexity.JobRunnerHistory.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistory.UpdatedBy(childComplexity), true
-
-	case "JobRunnerHistoryConnection.edges":
-		if e.complexity.JobRunnerHistoryConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistoryConnection.Edges(childComplexity), true
-
-	case "JobRunnerHistoryConnection.pageInfo":
-		if e.complexity.JobRunnerHistoryConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistoryConnection.PageInfo(childComplexity), true
-
-	case "JobRunnerHistoryConnection.totalCount":
-		if e.complexity.JobRunnerHistoryConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistoryConnection.TotalCount(childComplexity), true
-
-	case "JobRunnerHistoryEdge.cursor":
-		if e.complexity.JobRunnerHistoryEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistoryEdge.Cursor(childComplexity), true
-
-	case "JobRunnerHistoryEdge.node":
-		if e.complexity.JobRunnerHistoryEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.JobRunnerHistoryEdge.Node(childComplexity), true
 
 	case "JobRunnerRegistrationToken.createdAt":
 		if e.complexity.JobRunnerRegistrationToken.CreatedAt == nil {
@@ -21452,7 +21129,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.AuditLogs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*model.AuditLogWhereInput)), true
+		return e.complexity.Query.AuditLogs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.AuditLogWhereInput), args["orderBy"].(*generated.AuditLogOrder)), true
 
 	case "Query.contact":
 		if e.complexity.Query.Contact == nil {
@@ -21934,18 +21611,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Event(childComplexity, args["id"].(string)), true
 
-	case "Query.eventHistories":
-		if e.complexity.Query.EventHistories == nil {
-			break
-		}
-
-		args, err := ec.field_Query_eventHistories_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.EventHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.EventHistoryOrder), args["where"].(*generated.EventHistoryWhereInput)), true
-
 	case "Query.eventSearch":
 		if e.complexity.Query.EventSearch == nil {
 			break
@@ -22389,18 +22054,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.JobRunner(childComplexity, args["id"].(string)), true
-
-	case "Query.jobRunnerHistories":
-		if e.complexity.Query.JobRunnerHistories == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunnerHistories_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.JobRunnerHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.JobRunnerHistoryOrder), args["where"].(*generated.JobRunnerHistoryWhereInput)), true
 
 	case "Query.jobRunnerRegistrationToken":
 		if e.complexity.Query.JobRunnerRegistrationToken == nil {
@@ -28159,6 +27812,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputActionPlanOrder,
 		ec.unmarshalInputActionPlanWhereInput,
 		ec.unmarshalInputAddProgramMembershipInput,
+		ec.unmarshalInputAuditLogOrder,
 		ec.unmarshalInputAuditLogWhereInput,
 		ec.unmarshalInputCloneControlInput,
 		ec.unmarshalInputContactHistoryOrder,
@@ -28254,8 +27908,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputEntityTypeOrder,
 		ec.unmarshalInputEntityTypeWhereInput,
 		ec.unmarshalInputEntityWhereInput,
-		ec.unmarshalInputEventHistoryOrder,
-		ec.unmarshalInputEventHistoryWhereInput,
 		ec.unmarshalInputEventOrder,
 		ec.unmarshalInputEventWhereInput,
 		ec.unmarshalInputEvidenceHistoryOrder,
@@ -28297,8 +27949,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputInviteWhereInput,
 		ec.unmarshalInputJobResultOrder,
 		ec.unmarshalInputJobResultWhereInput,
-		ec.unmarshalInputJobRunnerHistoryOrder,
-		ec.unmarshalInputJobRunnerHistoryWhereInput,
 		ec.unmarshalInputJobRunnerOrder,
 		ec.unmarshalInputJobRunnerRegistrationTokenOrder,
 		ec.unmarshalInputJobRunnerRegistrationTokenWhereInput,
@@ -29772,6 +29422,10 @@ type APITokenBulkCreatePayload {
     Filtering options for AuditLogs returned from the connection.
     """
     where: AuditLogWhereInput
+    """
+    Ordering options for AuditLogs returned from the connection.
+    """
+    orderBy: AuditLogOrder
   ): AuditLogConnection!
 }
 
@@ -29812,17 +29466,56 @@ type AuditLog implements Node {
     time: Time
     id: ID!
     operation: String
-    changes: [String!]
+    changes: [Change!]
     updatedBy: ID
 }
 
 extend input AuditLogWhereInput {
+  """
+  reference ID from the main object table unique ID
+  """
   refID: ID
+  """
+  User or service ID that made the update
+  """
   updatedBy: ID
+  """
+  Operation of the entry, INSERT, DELETE, or UPDATE
+  """
   operation: String
-  table: ID
+  """
+  Table (Object) that was updated. Required.
+  """
+  table: String!
+  """
+  Before time to look for results
+  """
   before: Time
+  """
+  After time to look for results
+  """
   after: Time
+}
+
+"""
+Ordering options for AuditLog connections
+"""
+input AuditLogOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order AuditLogs.
+	"""
+	field: AuditLogOrderField!
+}
+
+"""
+Properties by which AuditLog connections can be ordered.
+"""
+enum AuditLogOrderField {
+	history_time
 }`, BuiltIn: false},
 	{Name: "../schema/contact.graphql", Input: `extend type Query {
     """
@@ -31371,6 +31064,7 @@ input ActionPlanHistoryOrder {
 Properties by which ActionPlanHistory connections can be ordered.
 """
 enum ActionPlanHistoryOrderField {
+  history_time
   created_at
   updated_at
   revision
@@ -32308,6 +32002,7 @@ input ContactHistoryOrder {
 Properties by which ContactHistory connections can be ordered.
 """
 enum ContactHistoryOrderField {
+  history_time
   created_at
   updated_at
   full_name
@@ -33638,6 +33333,7 @@ input ControlHistoryOrder {
 Properties by which ControlHistory connections can be ordered.
 """
 enum ControlHistoryOrderField {
+  history_time
   created_at
   updated_at
   STATUS
@@ -34358,6 +34054,7 @@ input ControlImplementationHistoryOrder {
 Properties by which ControlImplementationHistory connections can be ordered.
 """
 enum ControlImplementationHistoryOrderField {
+  history_time
   created_at
   updated_at
   STATUS
@@ -35368,6 +35065,7 @@ input ControlObjectiveHistoryOrder {
 Properties by which ControlObjectiveHistory connections can be ordered.
 """
 enum ControlObjectiveHistoryOrderField {
+  history_time
   created_at
   updated_at
   revision
@@ -36239,6 +35937,7 @@ input ControlScheduledJobHistoryOrder {
 Properties by which ControlScheduledJobHistory connections can be ordered.
 """
 enum ControlScheduledJobHistoryOrderField {
+  history_time
   created_at
   updated_at
 }
@@ -39072,6 +38771,7 @@ input CustomDomainHistoryOrder {
 Properties by which CustomDomainHistory connections can be ordered.
 """
 enum CustomDomainHistoryOrderField {
+  history_time
   created_at
   updated_at
   cname_record
@@ -39716,6 +39416,7 @@ input DNSVerificationHistoryOrder {
 Properties by which DNSVerificationHistory connections can be ordered.
 """
 enum DNSVerificationHistoryOrderField {
+  history_time
   created_at
   updated_at
 }
@@ -40507,6 +40208,7 @@ input DocumentDataHistoryOrder {
 Properties by which DocumentDataHistory connections can be ordered.
 """
 enum DocumentDataHistoryOrderField {
+  history_time
   created_at
   updated_at
 }
@@ -41114,6 +40816,7 @@ input EntityHistoryOrder {
 Properties by which EntityHistory connections can be ordered.
 """
 enum EntityHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -41511,6 +41214,7 @@ input EntityTypeHistoryOrder {
 Properties by which EntityTypeHistory connections can be ordered.
 """
 enum EntityTypeHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -42439,254 +42143,6 @@ type EventEdge {
   """
   cursor: Cursor!
 }
-type EventHistory implements Node {
-  id: ID!
-  historyTime: Time!
-  ref: String
-  operation: EventHistoryOpType!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  eventID: String
-  correlationID: String
-  eventType: String!
-  metadata: Map
-}
-"""
-A connection to a list of items.
-"""
-type EventHistoryConnection {
-  """
-  A list of edges.
-  """
-  edges: [EventHistoryEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type EventHistoryEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: EventHistory
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-EventHistoryOpType is enum for the field operation
-"""
-enum EventHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
-  INSERT
-  UPDATE
-  DELETE
-}
-"""
-Ordering options for EventHistory connections
-"""
-input EventHistoryOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order EventHistories.
-  """
-  field: EventHistoryOrderField!
-}
-"""
-Properties by which EventHistory connections can be ordered.
-"""
-enum EventHistoryOrderField {
-  created_at
-  updated_at
-}
-"""
-EventHistoryWhereInput is used for filtering EventHistory objects.
-Input was generated by ent.
-"""
-input EventHistoryWhereInput {
-  not: EventHistoryWhereInput
-  and: [EventHistoryWhereInput!]
-  or: [EventHistoryWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  history_time field predicates
-  """
-  historyTime: Time
-  historyTimeNEQ: Time
-  historyTimeIn: [Time!]
-  historyTimeNotIn: [Time!]
-  historyTimeGT: Time
-  historyTimeGTE: Time
-  historyTimeLT: Time
-  historyTimeLTE: Time
-  """
-  ref field predicates
-  """
-  ref: String
-  refNEQ: String
-  refIn: [String!]
-  refNotIn: [String!]
-  refGT: String
-  refGTE: String
-  refLT: String
-  refLTE: String
-  refContains: String
-  refHasPrefix: String
-  refHasSuffix: String
-  refIsNil: Boolean
-  refNotNil: Boolean
-  refEqualFold: String
-  refContainsFold: String
-  """
-  operation field predicates
-  """
-  operation: EventHistoryOpType
-  operationNEQ: EventHistoryOpType
-  operationIn: [EventHistoryOpType!]
-  operationNotIn: [EventHistoryOpType!]
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  event_id field predicates
-  """
-  eventID: String
-  eventIDNEQ: String
-  eventIDIn: [String!]
-  eventIDNotIn: [String!]
-  eventIDGT: String
-  eventIDGTE: String
-  eventIDLT: String
-  eventIDLTE: String
-  eventIDContains: String
-  eventIDHasPrefix: String
-  eventIDHasSuffix: String
-  eventIDIsNil: Boolean
-  eventIDNotNil: Boolean
-  eventIDEqualFold: String
-  eventIDContainsFold: String
-  """
-  correlation_id field predicates
-  """
-  correlationID: String
-  correlationIDNEQ: String
-  correlationIDIn: [String!]
-  correlationIDNotIn: [String!]
-  correlationIDGT: String
-  correlationIDGTE: String
-  correlationIDLT: String
-  correlationIDLTE: String
-  correlationIDContains: String
-  correlationIDHasPrefix: String
-  correlationIDHasSuffix: String
-  correlationIDIsNil: Boolean
-  correlationIDNotNil: Boolean
-  correlationIDEqualFold: String
-  correlationIDContainsFold: String
-  """
-  event_type field predicates
-  """
-  eventType: String
-  eventTypeNEQ: String
-  eventTypeIn: [String!]
-  eventTypeNotIn: [String!]
-  eventTypeGT: String
-  eventTypeGTE: String
-  eventTypeLT: String
-  eventTypeLTE: String
-  eventTypeContains: String
-  eventTypeHasPrefix: String
-  eventTypeHasSuffix: String
-  eventTypeEqualFold: String
-  eventTypeContainsFold: String
-}
 """
 Ordering options for Event connections
 """
@@ -43308,6 +42764,7 @@ input EvidenceHistoryOrder {
 Properties by which EvidenceHistory connections can be ordered.
 """
 enum EvidenceHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -44182,6 +43639,7 @@ input FileHistoryOrder {
 Properties by which FileHistory connections can be ordered.
 """
 enum FileHistoryOrderField {
+  history_time
   created_at
   updated_at
 }
@@ -45980,6 +45438,7 @@ input GroupHistoryOrder {
 Properties by which GroupHistory connections can be ordered.
 """
 enum GroupHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -46319,6 +45778,7 @@ input GroupMembershipHistoryOrder {
 Properties by which GroupMembershipHistory connections can be ordered.
 """
 enum GroupMembershipHistoryOrderField {
+  history_time
   created_at
   updated_at
   ROLE
@@ -46782,6 +46242,7 @@ input GroupSettingHistoryOrder {
 Properties by which GroupSettingHistory connections can be ordered.
 """
 enum GroupSettingHistoryOrderField {
+  history_time
   created_at
   updated_at
 }
@@ -47646,6 +47107,7 @@ input HushHistoryOrder {
 Properties by which HushHistory connections can be ordered.
 """
 enum HushHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -48231,6 +47693,7 @@ input IntegrationHistoryOrder {
 Properties by which IntegrationHistory connections can be ordered.
 """
 enum IntegrationHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -49146,6 +48609,7 @@ input InternalPolicyHistoryOrder {
 Properties by which InternalPolicyHistory connections can be ordered.
 """
 enum InternalPolicyHistoryOrderField {
+  history_time
   created_at
   updated_at
   revision
@@ -50509,310 +49973,6 @@ type JobRunnerEdge {
   """
   cursor: Cursor!
 }
-type JobRunnerHistory implements Node {
-  id: ID!
-  historyTime: Time!
-  ref: String
-  operation: JobRunnerHistoryOpType!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  a shortened prefixed id field to use as a human readable identifier
-  """
-  displayID: String!
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the organization id that owns the object
-  """
-  ownerID: String
-  """
-  indicates if the record is owned by the the openlane system and not by an organization
-  """
-  systemOwned: Boolean
-  """
-  the name of the runner
-  """
-  name: String!
-  """
-  the status of this runner
-  """
-  status: JobRunnerHistoryJobRunnerStatus!
-  """
-  the IP address of this runner
-  """
-  ipAddress: String!
-}
-"""
-A connection to a list of items.
-"""
-type JobRunnerHistoryConnection {
-  """
-  A list of edges.
-  """
-  edges: [JobRunnerHistoryEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type JobRunnerHistoryEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: JobRunnerHistory
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-JobRunnerHistoryJobRunnerStatus is enum for the field status
-"""
-enum JobRunnerHistoryJobRunnerStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.JobRunnerStatus") {
-  ONLINE
-  OFFLINE
-}
-"""
-JobRunnerHistoryOpType is enum for the field operation
-"""
-enum JobRunnerHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
-  INSERT
-  UPDATE
-  DELETE
-}
-"""
-Ordering options for JobRunnerHistory connections
-"""
-input JobRunnerHistoryOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order JobRunnerHistories.
-  """
-  field: JobRunnerHistoryOrderField!
-}
-"""
-Properties by which JobRunnerHistory connections can be ordered.
-"""
-enum JobRunnerHistoryOrderField {
-  created_at
-  updated_at
-  name
-}
-"""
-JobRunnerHistoryWhereInput is used for filtering JobRunnerHistory objects.
-Input was generated by ent.
-"""
-input JobRunnerHistoryWhereInput {
-  not: JobRunnerHistoryWhereInput
-  and: [JobRunnerHistoryWhereInput!]
-  or: [JobRunnerHistoryWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  history_time field predicates
-  """
-  historyTime: Time
-  historyTimeNEQ: Time
-  historyTimeIn: [Time!]
-  historyTimeNotIn: [Time!]
-  historyTimeGT: Time
-  historyTimeGTE: Time
-  historyTimeLT: Time
-  historyTimeLTE: Time
-  """
-  ref field predicates
-  """
-  ref: String
-  refNEQ: String
-  refIn: [String!]
-  refNotIn: [String!]
-  refGT: String
-  refGTE: String
-  refLT: String
-  refLTE: String
-  refContains: String
-  refHasPrefix: String
-  refHasSuffix: String
-  refIsNil: Boolean
-  refNotNil: Boolean
-  refEqualFold: String
-  refContainsFold: String
-  """
-  operation field predicates
-  """
-  operation: JobRunnerHistoryOpType
-  operationNEQ: JobRunnerHistoryOpType
-  operationIn: [JobRunnerHistoryOpType!]
-  operationNotIn: [JobRunnerHistoryOpType!]
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  status field predicates
-  """
-  status: JobRunnerHistoryJobRunnerStatus
-  statusNEQ: JobRunnerHistoryJobRunnerStatus
-  statusIn: [JobRunnerHistoryJobRunnerStatus!]
-  statusNotIn: [JobRunnerHistoryJobRunnerStatus!]
-  """
-  ip_address field predicates
-  """
-  ipAddress: String
-  ipAddressNEQ: String
-  ipAddressIn: [String!]
-  ipAddressNotIn: [String!]
-  ipAddressGT: String
-  ipAddressGTE: String
-  ipAddressLT: String
-  ipAddressLTE: String
-  ipAddressContains: String
-  ipAddressHasPrefix: String
-  ipAddressHasSuffix: String
-  ipAddressEqualFold: String
-  ipAddressContainsFold: String
-}
 """
 JobRunnerJobRunnerStatus is enum for the field status
 """
@@ -51712,6 +50872,7 @@ input MappableDomainHistoryOrder {
 Properties by which MappableDomainHistory connections can be ordered.
 """
 enum MappableDomainHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -52365,6 +51526,7 @@ input MappedControlHistoryOrder {
 Properties by which MappedControlHistory connections can be ordered.
 """
 enum MappedControlHistoryOrderField {
+  history_time
   created_at
   updated_at
   MAPPING_TYPE
@@ -53147,6 +52309,7 @@ input NarrativeHistoryOrder {
 Properties by which NarrativeHistory connections can be ordered.
 """
 enum NarrativeHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -53757,6 +52920,7 @@ input NoteHistoryOrder {
 Properties by which NoteHistory connections can be ordered.
 """
 enum NoteHistoryOrderField {
+  history_time
   created_at
   updated_at
 }
@@ -54339,6 +53503,7 @@ input OrgMembershipHistoryOrder {
 Properties by which OrgMembershipHistory connections can be ordered.
 """
 enum OrgMembershipHistoryOrderField {
+  history_time
   created_at
   updated_at
   ROLE
@@ -54884,6 +54049,7 @@ input OrgSubscriptionHistoryOrder {
 Properties by which OrgSubscriptionHistory connections can be ordered.
 """
 enum OrgSubscriptionHistoryOrderField {
+  history_time
   created_at
   updated_at
   product_tier
@@ -57344,6 +56510,7 @@ input OrganizationHistoryOrder {
 Properties by which OrganizationHistory connections can be ordered.
 """
 enum OrganizationHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -57803,6 +56970,7 @@ input OrganizationSettingHistoryOrder {
 Properties by which OrganizationSettingHistory connections can be ordered.
 """
 enum OrganizationSettingHistoryOrderField {
+  history_time
   created_at
   updated_at
 }
@@ -59645,6 +58813,7 @@ input ProcedureHistoryOrder {
 Properties by which ProcedureHistory connections can be ordered.
 """
 enum ProcedureHistoryOrderField {
+  history_time
   created_at
   updated_at
   revision
@@ -61056,6 +60225,7 @@ input ProgramHistoryOrder {
 Properties by which ProgramHistory connections can be ordered.
 """
 enum ProgramHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -61509,6 +60679,7 @@ input ProgramMembershipHistoryOrder {
 Properties by which ProgramMembershipHistory connections can be ordered.
 """
 enum ProgramMembershipHistoryOrderField {
+  history_time
   created_at
   updated_at
   ROLE
@@ -62975,37 +62146,6 @@ type Query {
     """
     where: EventWhereInput
   ): EventConnection!
-  eventHistories(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EventHistories returned from the connection.
-    """
-    orderBy: EventHistoryOrder
-
-    """
-    Filtering options for EventHistories returned from the connection.
-    """
-    where: EventHistoryWhereInput
-  ): EventHistoryConnection!
   evidences(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -63595,37 +62735,6 @@ type Query {
     """
     where: JobRunnerWhereInput
   ): JobRunnerConnection!
-  jobRunnerHistories(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobRunnerHistories returned from the connection.
-    """
-    orderBy: JobRunnerHistoryOrder
-
-    """
-    Filtering options for JobRunnerHistories returned from the connection.
-    """
-    where: JobRunnerHistoryWhereInput
-  ): JobRunnerHistoryConnection!
   jobRunnerRegistrationTokens(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -65563,6 +64672,7 @@ input RiskHistoryOrder {
 Properties by which RiskHistory connections can be ordered.
 """
 enum RiskHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -66554,6 +65664,7 @@ input ScheduledJobHistoryOrder {
 Properties by which ScheduledJobHistory connections can be ordered.
 """
 enum ScheduledJobHistoryOrderField {
+  history_time
   created_at
   updated_at
   title
@@ -67506,6 +66617,7 @@ input StandardHistoryOrder {
 Properties by which StandardHistory connections can be ordered.
 """
 enum StandardHistoryOrderField {
+  history_time
   created_at
   updated_at
   revision
@@ -68897,6 +68009,7 @@ input SubcontrolHistoryOrder {
 Properties by which SubcontrolHistory connections can be ordered.
 """
 enum SubcontrolHistoryOrderField {
+  history_time
   created_at
   updated_at
   STATUS
@@ -70692,6 +69805,7 @@ input TaskHistoryOrder {
 Properties by which TaskHistory connections can be ordered.
 """
 enum TaskHistoryOrderField {
+  history_time
   created_at
   updated_at
   title
@@ -71559,6 +70673,7 @@ input TemplateHistoryOrder {
 Properties by which TemplateHistory connections can be ordered.
 """
 enum TemplateHistoryOrderField {
+  history_time
   created_at
   updated_at
   name
@@ -75272,6 +74387,7 @@ input UserHistoryOrder {
 Properties by which UserHistory connections can be ordered.
 """
 enum UserHistoryOrderField {
+  history_time
   created_at
   updated_at
   first_name
@@ -75830,6 +74946,7 @@ input UserSettingHistoryOrder {
 Properties by which UserSettingHistory connections can be ordered.
 """
 enum UserSettingHistoryOrderField {
+  history_time
   created_at
   updated_at
 }
@@ -79720,12 +78837,23 @@ scalar VersionBump
 DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z )
 """
 scalar DateTime
-
+"""
+AAGUID (Authenticator Attestation Global Unique Identifier) is a 128-bit identifier used in the WebAuthn and FIDO2 protocols to uniquely identify the model of an authenticator device
+"""
 scalar AAGUID
-
+"""
+JobConfiguration is the configuration for an automated job
+"""
 scalar JobConfiguration
-
+"""
+JobCadence is when a job should be scheduled to run
+"""
 scalar JobCadence
+"""
+Change is a difference between two updates to an object used by
+the audit history resolvers
+"""
+scalar Change
 `, BuiltIn: false},
 	{Name: "../schema/scheduledjob.graphql", Input: `extend type Query {
     """

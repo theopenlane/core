@@ -218,12 +218,6 @@ func EventEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func EventHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup eventhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func EvidenceEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidence edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -348,12 +342,6 @@ func JobResultEdgeCleanup(ctx context.Context, id string) error {
 
 func JobRunnerEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunner edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func JobRunnerHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunnerhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

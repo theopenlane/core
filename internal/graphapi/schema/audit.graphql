@@ -24,6 +24,10 @@ extend type Query {
     Filtering options for AuditLogs returned from the connection.
     """
     where: AuditLogWhereInput
+    """
+    Ordering options for AuditLogs returned from the connection.
+    """
+    orderBy: AuditLogOrder
   ): AuditLogConnection!
 }
 
@@ -64,15 +68,54 @@ type AuditLog implements Node {
     time: Time
     id: ID!
     operation: String
-    changes: [String!]
+    changes: [Change!]
     updatedBy: ID
 }
 
 extend input AuditLogWhereInput {
+  """
+  reference ID from the main object table unique ID
+  """
   refID: ID
+  """
+  User or service ID that made the update
+  """
   updatedBy: ID
+  """
+  Operation of the entry, INSERT, DELETE, or UPDATE
+  """
   operation: String
-  table: ID
+  """
+  Table (Object) that was updated. Required.
+  """
+  table: String!
+  """
+  Before time to look for results
+  """
   before: Time
+  """
+  After time to look for results
+  """
   after: Time
+}
+
+"""
+Ordering options for AuditLog connections
+"""
+input AuditLogOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order AuditLogs.
+	"""
+	field: AuditLogOrderField!
+}
+
+"""
+Properties by which AuditLog connections can be ordered.
+"""
+enum AuditLogOrderField {
+	history_time
 }

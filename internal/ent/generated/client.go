@@ -44,7 +44,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -64,7 +63,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
@@ -184,8 +182,6 @@ type Client struct {
 	EntityTypeHistory *EntityTypeHistoryClient
 	// Event is the client for interacting with the Event builders.
 	Event *EventClient
-	// EventHistory is the client for interacting with the EventHistory builders.
-	EventHistory *EventHistoryClient
 	// Evidence is the client for interacting with the Evidence builders.
 	Evidence *EvidenceClient
 	// EvidenceHistory is the client for interacting with the EvidenceHistory builders.
@@ -224,8 +220,6 @@ type Client struct {
 	JobResult *JobResultClient
 	// JobRunner is the client for interacting with the JobRunner builders.
 	JobRunner *JobRunnerClient
-	// JobRunnerHistory is the client for interacting with the JobRunnerHistory builders.
-	JobRunnerHistory *JobRunnerHistoryClient
 	// JobRunnerRegistrationToken is the client for interacting with the JobRunnerRegistrationToken builders.
 	JobRunnerRegistrationToken *JobRunnerRegistrationTokenClient
 	// JobRunnerToken is the client for interacting with the JobRunnerToken builders.
@@ -365,7 +359,6 @@ func (c *Client) init() {
 	c.EntityType = NewEntityTypeClient(c.config)
 	c.EntityTypeHistory = NewEntityTypeHistoryClient(c.config)
 	c.Event = NewEventClient(c.config)
-	c.EventHistory = NewEventHistoryClient(c.config)
 	c.Evidence = NewEvidenceClient(c.config)
 	c.EvidenceHistory = NewEvidenceHistoryClient(c.config)
 	c.File = NewFileClient(c.config)
@@ -385,7 +378,6 @@ func (c *Client) init() {
 	c.Invite = NewInviteClient(c.config)
 	c.JobResult = NewJobResultClient(c.config)
 	c.JobRunner = NewJobRunnerClient(c.config)
-	c.JobRunnerHistory = NewJobRunnerHistoryClient(c.config)
 	c.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(c.config)
 	c.JobRunnerToken = NewJobRunnerTokenClient(c.config)
 	c.MappableDomain = NewMappableDomainClient(c.config)
@@ -635,7 +627,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		EntityType:                   NewEntityTypeClient(cfg),
 		EntityTypeHistory:            NewEntityTypeHistoryClient(cfg),
 		Event:                        NewEventClient(cfg),
-		EventHistory:                 NewEventHistoryClient(cfg),
 		Evidence:                     NewEvidenceClient(cfg),
 		EvidenceHistory:              NewEvidenceHistoryClient(cfg),
 		File:                         NewFileClient(cfg),
@@ -655,7 +646,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Invite:                       NewInviteClient(cfg),
 		JobResult:                    NewJobResultClient(cfg),
 		JobRunner:                    NewJobRunnerClient(cfg),
-		JobRunnerHistory:             NewJobRunnerHistoryClient(cfg),
 		JobRunnerRegistrationToken:   NewJobRunnerRegistrationTokenClient(cfg),
 		JobRunnerToken:               NewJobRunnerTokenClient(cfg),
 		MappableDomain:               NewMappableDomainClient(cfg),
@@ -747,7 +737,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		EntityType:                   NewEntityTypeClient(cfg),
 		EntityTypeHistory:            NewEntityTypeHistoryClient(cfg),
 		Event:                        NewEventClient(cfg),
-		EventHistory:                 NewEventHistoryClient(cfg),
 		Evidence:                     NewEvidenceClient(cfg),
 		EvidenceHistory:              NewEvidenceHistoryClient(cfg),
 		File:                         NewFileClient(cfg),
@@ -767,7 +756,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Invite:                       NewInviteClient(cfg),
 		JobResult:                    NewJobResultClient(cfg),
 		JobRunner:                    NewJobRunnerClient(cfg),
-		JobRunnerHistory:             NewJobRunnerHistoryClient(cfg),
 		JobRunnerRegistrationToken:   NewJobRunnerRegistrationTokenClient(cfg),
 		JobRunnerToken:               NewJobRunnerTokenClient(cfg),
 		MappableDomain:               NewMappableDomainClient(cfg),
@@ -850,13 +838,13 @@ func (c *Client) Use(hooks ...Hook) {
 		c.ControlScheduledJob, c.ControlScheduledJobHistory, c.CustomDomain,
 		c.CustomDomainHistory, c.DNSVerification, c.DNSVerificationHistory,
 		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
-		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
-		c.Evidence, c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
+		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence,
+		c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
 		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.JobResult, c.JobRunner, c.JobRunnerHistory, c.JobRunnerRegistrationToken,
-		c.JobRunnerToken, c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
+		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
+		c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
 		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
 		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
 		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
@@ -882,13 +870,13 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.ControlScheduledJob, c.ControlScheduledJobHistory, c.CustomDomain,
 		c.CustomDomainHistory, c.DNSVerification, c.DNSVerificationHistory,
 		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
-		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
-		c.Evidence, c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
+		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence,
+		c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
 		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
 		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.JobResult, c.JobRunner, c.JobRunnerHistory, c.JobRunnerRegistrationToken,
-		c.JobRunnerToken, c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
+		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
+		c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
 		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
 		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
 		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
@@ -1029,8 +1017,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.EntityTypeHistory.mutate(ctx, m)
 	case *EventMutation:
 		return c.Event.mutate(ctx, m)
-	case *EventHistoryMutation:
-		return c.EventHistory.mutate(ctx, m)
 	case *EvidenceMutation:
 		return c.Evidence.mutate(ctx, m)
 	case *EvidenceHistoryMutation:
@@ -1069,8 +1055,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.JobResult.mutate(ctx, m)
 	case *JobRunnerMutation:
 		return c.JobRunner.mutate(ctx, m)
-	case *JobRunnerHistoryMutation:
-		return c.JobRunnerHistory.mutate(ctx, m)
 	case *JobRunnerRegistrationTokenMutation:
 		return c.JobRunnerRegistrationToken.mutate(ctx, m)
 	case *JobRunnerTokenMutation:
@@ -6148,139 +6132,6 @@ func (c *EventClient) mutate(ctx context.Context, m *EventMutation) (Value, erro
 	}
 }
 
-// EventHistoryClient is a client for the EventHistory schema.
-type EventHistoryClient struct {
-	config
-}
-
-// NewEventHistoryClient returns a client for the EventHistory from the given config.
-func NewEventHistoryClient(c config) *EventHistoryClient {
-	return &EventHistoryClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `eventhistory.Hooks(f(g(h())))`.
-func (c *EventHistoryClient) Use(hooks ...Hook) {
-	c.hooks.EventHistory = append(c.hooks.EventHistory, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `eventhistory.Intercept(f(g(h())))`.
-func (c *EventHistoryClient) Intercept(interceptors ...Interceptor) {
-	c.inters.EventHistory = append(c.inters.EventHistory, interceptors...)
-}
-
-// Create returns a builder for creating a EventHistory entity.
-func (c *EventHistoryClient) Create() *EventHistoryCreate {
-	mutation := newEventHistoryMutation(c.config, OpCreate)
-	return &EventHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of EventHistory entities.
-func (c *EventHistoryClient) CreateBulk(builders ...*EventHistoryCreate) *EventHistoryCreateBulk {
-	return &EventHistoryCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *EventHistoryClient) MapCreateBulk(slice any, setFunc func(*EventHistoryCreate, int)) *EventHistoryCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &EventHistoryCreateBulk{err: fmt.Errorf("calling to EventHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*EventHistoryCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &EventHistoryCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for EventHistory.
-func (c *EventHistoryClient) Update() *EventHistoryUpdate {
-	mutation := newEventHistoryMutation(c.config, OpUpdate)
-	return &EventHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *EventHistoryClient) UpdateOne(eh *EventHistory) *EventHistoryUpdateOne {
-	mutation := newEventHistoryMutation(c.config, OpUpdateOne, withEventHistory(eh))
-	return &EventHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *EventHistoryClient) UpdateOneID(id string) *EventHistoryUpdateOne {
-	mutation := newEventHistoryMutation(c.config, OpUpdateOne, withEventHistoryID(id))
-	return &EventHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for EventHistory.
-func (c *EventHistoryClient) Delete() *EventHistoryDelete {
-	mutation := newEventHistoryMutation(c.config, OpDelete)
-	return &EventHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *EventHistoryClient) DeleteOne(eh *EventHistory) *EventHistoryDeleteOne {
-	return c.DeleteOneID(eh.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *EventHistoryClient) DeleteOneID(id string) *EventHistoryDeleteOne {
-	builder := c.Delete().Where(eventhistory.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &EventHistoryDeleteOne{builder}
-}
-
-// Query returns a query builder for EventHistory.
-func (c *EventHistoryClient) Query() *EventHistoryQuery {
-	return &EventHistoryQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeEventHistory},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a EventHistory entity by its id.
-func (c *EventHistoryClient) Get(ctx context.Context, id string) (*EventHistory, error) {
-	return c.Query().Where(eventhistory.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *EventHistoryClient) GetX(ctx context.Context, id string) *EventHistory {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *EventHistoryClient) Hooks() []Hook {
-	return c.hooks.EventHistory
-}
-
-// Interceptors returns the client interceptors.
-func (c *EventHistoryClient) Interceptors() []Interceptor {
-	return c.inters.EventHistory
-}
-
-func (c *EventHistoryClient) mutate(ctx context.Context, m *EventHistoryMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&EventHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&EventHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&EventHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&EventHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown EventHistory mutation op: %q", m.Op())
-	}
-}
-
 // EvidenceClient is a client for the Evidence schema.
 type EvidenceClient struct {
 	config
@@ -10373,140 +10224,6 @@ func (c *JobRunnerClient) mutate(ctx context.Context, m *JobRunnerMutation) (Val
 		return (&JobRunnerDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown JobRunner mutation op: %q", m.Op())
-	}
-}
-
-// JobRunnerHistoryClient is a client for the JobRunnerHistory schema.
-type JobRunnerHistoryClient struct {
-	config
-}
-
-// NewJobRunnerHistoryClient returns a client for the JobRunnerHistory from the given config.
-func NewJobRunnerHistoryClient(c config) *JobRunnerHistoryClient {
-	return &JobRunnerHistoryClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `jobrunnerhistory.Hooks(f(g(h())))`.
-func (c *JobRunnerHistoryClient) Use(hooks ...Hook) {
-	c.hooks.JobRunnerHistory = append(c.hooks.JobRunnerHistory, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `jobrunnerhistory.Intercept(f(g(h())))`.
-func (c *JobRunnerHistoryClient) Intercept(interceptors ...Interceptor) {
-	c.inters.JobRunnerHistory = append(c.inters.JobRunnerHistory, interceptors...)
-}
-
-// Create returns a builder for creating a JobRunnerHistory entity.
-func (c *JobRunnerHistoryClient) Create() *JobRunnerHistoryCreate {
-	mutation := newJobRunnerHistoryMutation(c.config, OpCreate)
-	return &JobRunnerHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of JobRunnerHistory entities.
-func (c *JobRunnerHistoryClient) CreateBulk(builders ...*JobRunnerHistoryCreate) *JobRunnerHistoryCreateBulk {
-	return &JobRunnerHistoryCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *JobRunnerHistoryClient) MapCreateBulk(slice any, setFunc func(*JobRunnerHistoryCreate, int)) *JobRunnerHistoryCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &JobRunnerHistoryCreateBulk{err: fmt.Errorf("calling to JobRunnerHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*JobRunnerHistoryCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &JobRunnerHistoryCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for JobRunnerHistory.
-func (c *JobRunnerHistoryClient) Update() *JobRunnerHistoryUpdate {
-	mutation := newJobRunnerHistoryMutation(c.config, OpUpdate)
-	return &JobRunnerHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *JobRunnerHistoryClient) UpdateOne(jrh *JobRunnerHistory) *JobRunnerHistoryUpdateOne {
-	mutation := newJobRunnerHistoryMutation(c.config, OpUpdateOne, withJobRunnerHistory(jrh))
-	return &JobRunnerHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *JobRunnerHistoryClient) UpdateOneID(id string) *JobRunnerHistoryUpdateOne {
-	mutation := newJobRunnerHistoryMutation(c.config, OpUpdateOne, withJobRunnerHistoryID(id))
-	return &JobRunnerHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for JobRunnerHistory.
-func (c *JobRunnerHistoryClient) Delete() *JobRunnerHistoryDelete {
-	mutation := newJobRunnerHistoryMutation(c.config, OpDelete)
-	return &JobRunnerHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *JobRunnerHistoryClient) DeleteOne(jrh *JobRunnerHistory) *JobRunnerHistoryDeleteOne {
-	return c.DeleteOneID(jrh.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *JobRunnerHistoryClient) DeleteOneID(id string) *JobRunnerHistoryDeleteOne {
-	builder := c.Delete().Where(jobrunnerhistory.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &JobRunnerHistoryDeleteOne{builder}
-}
-
-// Query returns a query builder for JobRunnerHistory.
-func (c *JobRunnerHistoryClient) Query() *JobRunnerHistoryQuery {
-	return &JobRunnerHistoryQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeJobRunnerHistory},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a JobRunnerHistory entity by its id.
-func (c *JobRunnerHistoryClient) Get(ctx context.Context, id string) (*JobRunnerHistory, error) {
-	return c.Query().Where(jobrunnerhistory.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *JobRunnerHistoryClient) GetX(ctx context.Context, id string) *JobRunnerHistory {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *JobRunnerHistoryClient) Hooks() []Hook {
-	return c.hooks.JobRunnerHistory
-}
-
-// Interceptors returns the client interceptors.
-func (c *JobRunnerHistoryClient) Interceptors() []Interceptor {
-	inters := c.inters.JobRunnerHistory
-	return append(inters[:len(inters):len(inters)], jobrunnerhistory.Interceptors[:]...)
-}
-
-func (c *JobRunnerHistoryClient) mutate(ctx context.Context, m *JobRunnerHistoryMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&JobRunnerHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&JobRunnerHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&JobRunnerHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&JobRunnerHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown JobRunnerHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -20720,11 +20437,11 @@ type (
 		ControlScheduledJobHistory, CustomDomain, CustomDomainHistory, DNSVerification,
 		DNSVerificationHistory, DocumentData, DocumentDataHistory,
 		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
-		Event, EventHistory, Evidence, EvidenceHistory, File, FileHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
-		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
-		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
-		JobRunnerHistory, JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
+		Event, Evidence, EvidenceHistory, File, FileHistory, Group, GroupHistory,
+		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
+		Hush, HushHistory, Integration, IntegrationHistory, InternalPolicy,
+		InternalPolicyHistory, Invite, JobResult, JobRunner,
+		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
 		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
 		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
 		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
@@ -20743,11 +20460,11 @@ type (
 		ControlScheduledJobHistory, CustomDomain, CustomDomainHistory, DNSVerification,
 		DNSVerificationHistory, DocumentData, DocumentDataHistory,
 		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
-		Event, EventHistory, Evidence, EvidenceHistory, File, FileHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
-		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
-		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
-		JobRunnerHistory, JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
+		Event, Evidence, EvidenceHistory, File, FileHistory, Group, GroupHistory,
+		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
+		Hush, HushHistory, Integration, IntegrationHistory, InternalPolicy,
+		InternalPolicyHistory, Invite, JobResult, JobRunner,
+		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
 		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
 		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
 		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,

@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
-	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
@@ -28,7 +27,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
@@ -556,52 +554,6 @@ func (ethq *EntityTypeHistoryQuery) AsOf(ctx context.Context, time time.Time) (*
 		First(ctx)
 }
 
-func (e *Event) History() *EventHistoryQuery {
-	historyClient := NewEventHistoryClient(e.config)
-	return historyClient.Query().Where(eventhistory.Ref(e.ID))
-}
-
-func (eh *EventHistory) Next(ctx context.Context) (*EventHistory, error) {
-	client := NewEventHistoryClient(eh.config)
-	return client.Query().
-		Where(
-			eventhistory.Ref(eh.Ref),
-			eventhistory.HistoryTimeGT(eh.HistoryTime),
-		).
-		Order(eventhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (eh *EventHistory) Prev(ctx context.Context) (*EventHistory, error) {
-	client := NewEventHistoryClient(eh.config)
-	return client.Query().
-		Where(
-			eventhistory.Ref(eh.Ref),
-			eventhistory.HistoryTimeLT(eh.HistoryTime),
-		).
-		Order(eventhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (ehq *EventHistoryQuery) Earliest(ctx context.Context) (*EventHistory, error) {
-	return ehq.
-		Order(eventhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (ehq *EventHistoryQuery) Latest(ctx context.Context) (*EventHistory, error) {
-	return ehq.
-		Order(eventhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (ehq *EventHistoryQuery) AsOf(ctx context.Context, time time.Time) (*EventHistory, error) {
-	return ehq.
-		Where(eventhistory.HistoryTimeLTE(time)).
-		Order(eventhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
 func (e *Evidence) History() *EvidenceHistoryQuery {
 	historyClient := NewEvidenceHistoryClient(e.config)
 	return historyClient.Query().Where(evidencehistory.Ref(e.ID))
@@ -967,52 +919,6 @@ func (iphq *InternalPolicyHistoryQuery) AsOf(ctx context.Context, time time.Time
 	return iphq.
 		Where(internalpolicyhistory.HistoryTimeLTE(time)).
 		Order(internalpolicyhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (jr *JobRunner) History() *JobRunnerHistoryQuery {
-	historyClient := NewJobRunnerHistoryClient(jr.config)
-	return historyClient.Query().Where(jobrunnerhistory.Ref(jr.ID))
-}
-
-func (jrh *JobRunnerHistory) Next(ctx context.Context) (*JobRunnerHistory, error) {
-	client := NewJobRunnerHistoryClient(jrh.config)
-	return client.Query().
-		Where(
-			jobrunnerhistory.Ref(jrh.Ref),
-			jobrunnerhistory.HistoryTimeGT(jrh.HistoryTime),
-		).
-		Order(jobrunnerhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (jrh *JobRunnerHistory) Prev(ctx context.Context) (*JobRunnerHistory, error) {
-	client := NewJobRunnerHistoryClient(jrh.config)
-	return client.Query().
-		Where(
-			jobrunnerhistory.Ref(jrh.Ref),
-			jobrunnerhistory.HistoryTimeLT(jrh.HistoryTime),
-		).
-		Order(jobrunnerhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (jrhq *JobRunnerHistoryQuery) Earliest(ctx context.Context) (*JobRunnerHistory, error) {
-	return jrhq.
-		Order(jobrunnerhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (jrhq *JobRunnerHistoryQuery) Latest(ctx context.Context) (*JobRunnerHistory, error) {
-	return jrhq.
-		Order(jobrunnerhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (jrhq *JobRunnerHistoryQuery) AsOf(ctx context.Context, time time.Time) (*JobRunnerHistory, error) {
-	return jrhq.
-		Where(jobrunnerhistory.HistoryTimeLTE(time)).
-		Order(jobrunnerhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

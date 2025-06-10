@@ -41,9 +41,20 @@ scalar VersionBump
 DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z )
 """
 scalar DateTime
-
+"""
+AAGUID (Authenticator Attestation Global Unique Identifier) is a 128-bit identifier used in the WebAuthn and FIDO2 protocols to uniquely identify the model of an authenticator device
+"""
 scalar AAGUID
-
+"""
+JobConfiguration is the configuration for an automated job
+"""
 scalar JobConfiguration
-
+"""
+JobCadence is when a job should be scheduled to run
+"""
 scalar JobCadence
+"""
+Change is a difference between two updates to an object used by
+the audit history resolvers
+"""
+scalar Change

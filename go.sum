@@ -128,8 +128,8 @@ github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2 h1:ZBbLwSJqkH
 github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2/go.mod h1:VSw57q4QFiWDbRnjdX8Cb3Ow0SFncRw+bA/ofY6Q83w=
 github.com/VividCortex/ewma v1.2.0 h1:f58SaIzcDXrSy3kWaHNvuJgJ3Nmz59Zji6XoJR/q1ow=
 github.com/VividCortex/ewma v1.2.0/go.mod h1:nz4BbCtbLyFDeC9SUHbtcT5644juEuWfUAUnGx7j5l4=
-github.com/XSAM/otelsql v0.38.0 h1:zWU0/YM9cJhPE71zJcQ2EBHwQDp+G4AX2tPpljslaB8=
-github.com/XSAM/otelsql v0.38.0/go.mod h1:5ePOgcLEkWvZtN9H3GV4BUlPeM3p3pzLDCnRG73X8h8=
+github.com/XSAM/otelsql v0.39.0 h1:4o374mEIMweaeevL7fd8Q3C710Xi2Jh/c8G4Qy9bvCY=
+github.com/XSAM/otelsql v0.39.0/go.mod h1:uMOXLUX+wkuAuP0AR3B45NXX7E9lJS2mERa8gqdU8R0=
 github.com/Yamashou/gqlgenc v0.32.1 h1:EHs9//xQxXlyltkSFXM+fhO2rTXcWNw6FPKRJ6t+iQQ=
 github.com/Yamashou/gqlgenc v0.32.1/go.mod h1:o5SxKt9d3+oUZ2i0V3CW8lHFyunfLR+KcKHubS4zf5E=
 github.com/Yiling-J/theine-go v0.6.1 h1:njE/rBBviU/Sq2G7PJKdLdwXg8j1azvZQulIjmshD+o=
@@ -1231,8 +1231,8 @@ github.com/theopenlane/echox v0.2.4 h1:bocz1Dfs7d2fkNa8foQqdmeTtkMTQNwe1v20bIGID
 github.com/theopenlane/echox v0.2.4/go.mod h1:0cPOHe4SSQHmqP0/n2LsIEzRSogkxSX653bE+PIOVZ8=
 github.com/theopenlane/emailtemplates v0.2.3 h1:SUj2LNeFWZCjm37vjZCxNUGAicnw64XQ9nwTSFWdisc=
 github.com/theopenlane/emailtemplates v0.2.3/go.mod h1:Ee3twHeJKb2RWR2yDXHeVzqn7APdCkfOjSl2DnV1HDw=
-github.com/theopenlane/entx v0.7.2 h1:SojOMjFH34x+FH+IxlH+oE3MCECy5icWlT4IhG9yROQ=
-github.com/theopenlane/entx v0.7.2/go.mod h1:JXr0QBSOOPHjLKk7yN3G0BcrxyUwN+n1vRoeVZU+BLQ=
+github.com/theopenlane/entx v0.8.0 h1:Sz02kWM5dw00t9D4JE+VmgvUyRMERzCmuezOmEhPw9w=
+github.com/theopenlane/entx v0.8.0/go.mod h1:W2AJ9ZJCZ0o1GPVWqoGlDNXv1HEwaABrt0OrPy9vZ9E=
 github.com/theopenlane/gqlgen-plugins v0.6.1 h1:GkHpkQQTESfB9OjOqRPlmLh+6oa6BPepkECNIFc1ZDQ=
 github.com/theopenlane/gqlgen-plugins v0.6.1/go.mod h1:LukCNObOqiDUs3HtSz+1lvNxufS9VRNbD+lA/WBw150=
 github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52zUWyi0=
@@ -1439,8 +1439,8 @@ go.opentelemetry.io/otel/metric v1.36.0 h1:MoWPKVhQvJ+eeXWHFBOPoBOi20jh6Iq2CcCRE
 go.opentelemetry.io/otel/metric v1.36.0/go.mod h1:zC7Ks+yeyJt4xig9DEw9kuUFe5C3zLbVjV2PzT6qzbs=
 go.opentelemetry.io/otel/sdk v1.36.0 h1:b6SYIuLRs88ztox4EyrvRti80uXIFy+Sqzoh9kFULbs=
 go.opentelemetry.io/otel/sdk v1.36.0/go.mod h1:+lC+mTgD+MUWfjJubi2vvXWcVxyr9rmlshZni72pXeY=
-go.opentelemetry.io/otel/sdk/metric v1.35.0 h1:1RriWBmCKgkeHEhM7a2uMjMUfP7MsOF5JpUCaEqEI9o=
-go.opentelemetry.io/otel/sdk/metric v1.35.0/go.mod h1:is6XYCUMpcKi+ZsOvfluY5YstFnhW0BidkR+gL+qN+w=
+go.opentelemetry.io/otel/sdk/metric v1.36.0 h1:r0ntwwGosWGaa0CrSt8cuNuTcccMXERFwHX4dThiPis=
+go.opentelemetry.io/otel/sdk/metric v1.36.0/go.mod h1:qTNOhFDfKRwX0yXOqJYegL5WRaW376QbB7P4Pb0qva4=
 go.opentelemetry.io/otel/trace v1.36.0 h1:ahxWNuqZjpdiFAyrIoQ4GIiAIhxAunQR6MUoKrsNd4w=
 go.opentelemetry.io/otel/trace v1.36.0/go.mod h1:gQ+OnDZzrybY4k4seLzPAWNwVBBVlF2szhehOBB/tGA=
 go.opentelemetry.io/proto/otlp v1.6.0 h1:jQjP+AQyTf+Fe7OKj/MfkDrmK4MNVtw2NpXsf9fefDI=

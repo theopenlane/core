@@ -37,7 +37,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -57,7 +56,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
@@ -190,7 +188,6 @@ func checkColumn(table, column string) error {
 			entitytype.Table:                   entitytype.ValidColumn,
 			entitytypehistory.Table:            entitytypehistory.ValidColumn,
 			event.Table:                        event.ValidColumn,
-			eventhistory.Table:                 eventhistory.ValidColumn,
 			evidence.Table:                     evidence.ValidColumn,
 			evidencehistory.Table:              evidencehistory.ValidColumn,
 			file.Table:                         file.ValidColumn,
@@ -210,7 +207,6 @@ func checkColumn(table, column string) error {
 			invite.Table:                       invite.ValidColumn,
 			jobresult.Table:                    jobresult.ValidColumn,
 			jobrunner.Table:                    jobrunner.ValidColumn,
-			jobrunnerhistory.Table:             jobrunnerhistory.ValidColumn,
 			jobrunnerregistrationtoken.Table:   jobrunnerregistrationtoken.ValidColumn,
 			jobrunnertoken.Table:               jobrunnertoken.ValidColumn,
 			mappabledomain.Table:               mappabledomain.ValidColumn,

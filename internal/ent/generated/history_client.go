@@ -41,9 +41,6 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*EntityTypeMutation]() {
 		c.EntityType.Use(hook)
 	}
-	for _, hook := range history.Hooks[*EventMutation]() {
-		c.Event.Use(hook)
-	}
 	for _, hook := range history.Hooks[*EvidenceMutation]() {
 		c.Evidence.Use(hook)
 	}
@@ -67,9 +64,6 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*InternalPolicyMutation]() {
 		c.InternalPolicy.Use(hook)
-	}
-	for _, hook := range history.Hooks[*JobRunnerMutation]() {
-		c.JobRunner.Use(hook)
 	}
 	for _, hook := range history.Hooks[*MappableDomainMutation]() {
 		c.MappableDomain.Use(hook)

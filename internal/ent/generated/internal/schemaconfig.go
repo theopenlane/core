@@ -55,7 +55,6 @@ type SchemaConfig struct {
 	EntityType                         string // EntityType table.
 	EntityTypeHistory                  string // EntityTypeHistory table.
 	Event                              string // Event table.
-	EventHistory                       string // EventHistory table.
 	Evidence                           string // Evidence table.
 	EvidenceControlObjectives          string // Evidence-control_objectives->ControlObjective table.
 	EvidenceControls                   string // Evidence-controls->Control table.
@@ -98,7 +97,6 @@ type SchemaConfig struct {
 	JobResult                          string // JobResult table.
 	JobRunner                          string // JobRunner table.
 	JobRunnerJobRunnerTokens           string // JobRunner-job_runner_tokens->JobRunnerToken table.
-	JobRunnerHistory                   string // JobRunnerHistory table.
 	JobRunnerRegistrationToken         string // JobRunnerRegistrationToken table.
 	JobRunnerToken                     string // JobRunnerToken table.
 	MappableDomain                     string // MappableDomain table.
