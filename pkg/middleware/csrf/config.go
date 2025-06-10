@@ -44,11 +44,17 @@ func Middleware(conf *Config) echo.MiddlewareFunc {
 		return nil
 	}
 
+	// skip if CSRF is not enabled
+	csrfSkipper := func(c echo.Context) bool {
+		return conf.Enabled
+	}
+
 	csrfConf := middleware.CSRFConfig{
 		TokenLookup:    "header:" + conf.Header,
 		CookieName:     conf.Cookie,
 		CookieSecure:   conf.Secure,
 		CookieSameSite: parseSameSite(conf.SameSite),
+		Skipper:        csrfSkipper,
 	}
 
 	return middleware.CSRFWithConfig(csrfConf)
