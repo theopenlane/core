@@ -13,7 +13,7 @@ import (
 )
 
 // AuditLogs is the resolver for the auditLogs field.
-func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy []*generated.AuditLogOrder) (*generated.AuditLogConnection, error) {
+func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy *generated.AuditLogOrder) (*generated.AuditLogConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 

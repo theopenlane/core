@@ -38671,7 +38671,7 @@ type Query {
 		"""
 		Ordering options for Risks returned from the connection.
 		"""
-		orderBy: [AuditLogOrder!]
+		orderBy: AuditLogOrder
 	): AuditLogConnection!
 	"""
 	Look up contact by ID

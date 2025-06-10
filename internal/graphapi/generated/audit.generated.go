@@ -791,11 +791,6 @@ func (ec *executionContext) marshalNAuditLogConnection2ᚖgithubᚗcomᚋtheopen
 	return ec._AuditLogConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNAuditLogOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrder(ctx context.Context, v any) (*generated.AuditLogOrder, error) {
-	res, err := ec.unmarshalInputAuditLogOrder(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderField(ctx context.Context, v any) (*generated.AuditLogOrderField, error) {
 	var res = new(generated.AuditLogOrderField)
 	err := res.UnmarshalGQL(v)
@@ -867,22 +862,12 @@ func (ec *executionContext) marshalOAuditLogEdge2ᚖgithubᚗcomᚋtheopenlane�
 	return ec._AuditLogEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOAuditLogOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderᚄ(ctx context.Context, v any) ([]*generated.AuditLogOrder, error) {
+func (ec *executionContext) unmarshalOAuditLogOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrder(ctx context.Context, v any) (*generated.AuditLogOrder, error) {
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]*generated.AuditLogOrder, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNAuditLogOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrder(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
+	res, err := ec.unmarshalInputAuditLogOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOAuditLogWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogWhereInput(ctx context.Context, v any) (*generated.AuditLogWhereInput, error) {

@@ -32,7 +32,7 @@ type OpenlaneGraphClient interface {
 	GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error)
 	GetAPITokens(ctx context.Context, where *APITokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAPITokens, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
-	AuditLogs(ctx context.Context, first *int64, last *int64, after *string, before *string, where *AuditLogWhereInput, orderBy []*AuditLogOrder, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error)
+	AuditLogs(ctx context.Context, first *int64, last *int64, after *string, before *string, where *AuditLogWhereInput, orderBy *AuditLogOrder, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
 	CreateContact(ctx context.Context, input CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateContact, error)
@@ -7888,6 +7888,38 @@ func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIT
 	return &t.APIToken
 }
 
+type AuditLogs_AuditLogs_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AuditLogs_AuditLogs_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AuditLogs_AuditLogs_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AuditLogs_AuditLogs_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AuditLogs_AuditLogs_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AuditLogs_AuditLogs_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type AuditLogs_AuditLogs_Edges_Node struct {
 	Changes   []*generated.Change "json:\"changes,omitempty\" graphql:\"changes\""
 	ID        string              "json:\"id\" graphql:\"id\""
@@ -7946,7 +7978,9 @@ func (t *AuditLogs_AuditLogs_Edges) GetNode() *AuditLogs_AuditLogs_Edges_Node {
 }
 
 type AuditLogs_AuditLogs struct {
-	Edges []*AuditLogs_AuditLogs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*AuditLogs_AuditLogs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AuditLogs_AuditLogs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                        "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *AuditLogs_AuditLogs) GetEdges() []*AuditLogs_AuditLogs_Edges {
@@ -7954,6 +7988,18 @@ func (t *AuditLogs_AuditLogs) GetEdges() []*AuditLogs_AuditLogs_Edges {
 		t = &AuditLogs_AuditLogs{}
 	}
 	return t.Edges
+}
+func (t *AuditLogs_AuditLogs) GetPageInfo() *AuditLogs_AuditLogs_PageInfo {
+	if t == nil {
+		t = &AuditLogs_AuditLogs{}
+	}
+	return &t.PageInfo
+}
+func (t *AuditLogs_AuditLogs) GetTotalCount() int64 {
+	if t == nil {
+		t = &AuditLogs_AuditLogs{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkContact_CreateBulkContact_Contacts struct {
@@ -83994,23 +84040,30 @@ func (c *Client) UpdateAPIToken(ctx context.Context, updateAPITokenID string, in
 	return &res, nil
 }
 
-const AuditLogsDocument = `query AuditLogs ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: AuditLogWhereInput, $orderBy: [AuditLogOrder!]) {
+const AuditLogsDocument = `query AuditLogs ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: AuditLogWhereInput, $orderBy: AuditLogOrder) {
 	auditLogs(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				id
 				table
 				time
 				operation
-				changes
 				updatedBy
+				changes
 			}
 		}
 	}
 }
 `
 
-func (c *Client) AuditLogs(ctx context.Context, first *int64, last *int64, after *string, before *string, where *AuditLogWhereInput, orderBy []*AuditLogOrder, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error) {
+func (c *Client) AuditLogs(ctx context.Context, first *int64, last *int64, after *string, before *string, where *AuditLogWhereInput, orderBy *AuditLogOrder, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error) {
 	vars := map[string]any{
 		"first":   first,
 		"last":    last,

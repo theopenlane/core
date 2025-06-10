@@ -27,7 +27,7 @@ extend type Query {
     """
     Ordering options for Risks returned from the connection.
     """
-    orderBy: [AuditLogOrder!]
+    orderBy: AuditLogOrder
   ): AuditLogConnection!
 }
 

@@ -3169,7 +3169,7 @@ type ComplexityRoot struct {
 		AdminUserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminWebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AuditLogs                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy []*generated.AuditLogOrder) int
+		AuditLogs                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy *generated.AuditLogOrder) int
 		Contact                               func(childComplexity int, id string) int
 		ContactHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) int
 		ContactSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -21128,7 +21128,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.AuditLogs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.AuditLogWhereInput), args["orderBy"].([]*generated.AuditLogOrder)), true
+		return e.complexity.Query.AuditLogs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["where"].(*generated.AuditLogWhereInput), args["orderBy"].(*generated.AuditLogOrder)), true
 
 	case "Query.contact":
 		if e.complexity.Query.Contact == nil {
@@ -29424,7 +29424,7 @@ type APITokenBulkCreatePayload {
     """
     Ordering options for Risks returned from the connection.
     """
-    orderBy: [AuditLogOrder!]
+    orderBy: AuditLogOrder
   ): AuditLogConnection!
 }
 

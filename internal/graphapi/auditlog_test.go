@@ -2,73 +2,184 @@ package graphapi_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/entx/history"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestAuditLogList(t *testing.T) {
+	t.Parallel()
+
+	// create another user for this test
+	// so it doesn't interfere with the other tests
+	orgUser := suite.userBuilder(context.Background(), t)
+
+	reqCtx := orgUser.UserCtx
+
+	otherUser := suite.userBuilder(context.Background(), t)
+	otherUserCtx := otherUser.UserCtx
+
+	// create a program to test that it is returned in the audit logs
+	program1 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(reqCtx, t)
+
+	// Update the program to ensure that the update is logged
+	_, err := suite.client.api.UpdateProgram(reqCtx, program1.ID,
+		openlaneclient.UpdateProgramInput{
+			Name:        lo.ToPtr("Updated Program"),
+			Description: lo.ToPtr("Updated description"),
+		})
+	assert.NilError(t, err)
+
+	numControls := 22
+	for range numControls {
+		(&ControlBuilder{client: suite.client}).MustNew(reqCtx, t)
+	}
+
+	afterCursor := ""
+
 	testCases := []struct {
-		name     string
-		queryID  string
-		first    *int64
-		last     *int64
-		after    *string
-		before   *string
-		where    *openlaneclient.AuditLogWhereInput
-		order    []*openlaneclient.AuditLogOrder
-		client   *openlaneclient.OpenlaneClient
-		ctx      context.Context
-		errorMsg string
+		name          string
+		queryID       string
+		first         *int64
+		last          *int64
+		after         *string
+		before        *string
+		where         *openlaneclient.AuditLogWhereInput
+		order         *openlaneclient.AuditLogOrder
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		expectedCount int
+		totalCount    int
+		hasNext       bool
+		hasPrevious   bool
+		setAfter      bool
+		errorMsg      string
 	}{
 		{
 			name: "happy path, table with no history",
 			where: &openlaneclient.AuditLogWhereInput{
 				Table: "APIToken",
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 0, // No history for APIToken
 		},
 		{
 			name: "happy path, user",
 			where: &openlaneclient.AuditLogWhereInput{
 				Table: "User",
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 2, // user creation should be logged and update after the user is created
 		},
 		{
 			name: "happy path, user setting",
 			where: &openlaneclient.AuditLogWhereInput{
 				Table: "UserSetting",
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 2, // user setting creation should be logged and update after the user setting is updated
 		},
 		{
 			name: "happy path, program",
 			where: &openlaneclient.AuditLogWhereInput{
 				Table: "Program",
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 2, //program creation and update should be logged
 		},
-		// figure out why the json unmarshal is failing for this one
-		// {
-		// 	name: "happy path, group",
-		// 	where: &openlaneclient.AuditLogWhereInput{
-		// 		Table: "Group",
-		// 	},
-		// 	client: suite.client.api,
-		// 	ctx:    testUser1.UserCtx,
-		// },
+		{
+			name: "happy path, procedure",
+			where: &openlaneclient.AuditLogWhereInput{
+				Table: "Procedure",
+			},
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 1, // procedure creation should be logged with program creation
+		},
+		{
+			name: "happy path, policy",
+			where: &openlaneclient.AuditLogWhereInput{
+				Table: "InternalPolicy",
+			},
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 1, // policy creation should be logged with program creation
+		},
+		{
+			name: "happy path, control",
+			where: &openlaneclient.AuditLogWhereInput{
+				Table: "Control",
+			},
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 10,          // default pagination in tests is 10
+			totalCount:    numControls, // we created 22 tasks
+			hasNext:       true,        // there are more tasks than the default pagination
+			hasPrevious:   false,
+			setAfter:      true,
+		},
+		{
+			name: "happy path, control page 2",
+			where: &openlaneclient.AuditLogWhereInput{
+				Table: "Control",
+			},
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 10,          // default pagination in tests is 10
+			totalCount:    numControls, // we created 22 tasks
+			hasNext:       true,        // there are more tasks than the default pagination
+			hasPrevious:   true,
+			after:         &afterCursor,
+			setAfter:      true,
+		},
+		{
+			name: "happy path, control page 3",
+			where: &openlaneclient.AuditLogWhereInput{
+				Table: "Control",
+			},
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 2,
+			totalCount:    numControls, // we created 22 tasks
+			hasNext:       false,       // page 3 is the last page
+			hasPrevious:   true,
+			after:         &afterCursor,
+		},
+		{
+			name:   "missing table parameter",
+			where:  &openlaneclient.AuditLogWhereInput{},
+			client: suite.client.api,
+			ctx:    reqCtx,
+		},
+		{
+			name:   "nil where input",
+			where:  nil,
+			client: suite.client.api,
+			ctx:    reqCtx,
+		},
+		{
+			name: "happy path, another user shouldn't see these procedure audit logs",
+			where: &openlaneclient.AuditLogWhereInput{
+				Table: "Procedure",
+			},
+			client:        suite.client.api,
+			ctx:           otherUserCtx,
+			expectedCount: 0, // procedure creation should be logged with program creation
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Audit Logs "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.AuditLogs(testUser1.UserCtx, tc.first, tc.last, tc.after, tc.before, tc.where, tc.order)
+			resp, err := tc.client.AuditLogs(tc.ctx, tc.first, tc.last, tc.after, tc.before, tc.where, tc.order)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -79,6 +190,39 @@ func TestAuditLogList(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.AuditLogs.Edges, tc.expectedCount), "expected %d audit logs, got %d", tc.expectedCount, len(resp.AuditLogs.Edges))
+
+			// if the expected count is less than the default pagination,
+			// then we should have the total count equal to the expected count
+			if tc.expectedCount < 10 && tc.totalCount == 0 {
+				tc.totalCount = tc.expectedCount
+			}
+
+			// check the pagination info
+			assert.Check(t, is.Equal(resp.AuditLogs.TotalCount, int64(tc.totalCount)))
+			assert.Check(t, is.Equal(resp.AuditLogs.PageInfo.HasNextPage, tc.hasNext))
+			assert.Check(t, is.Equal(resp.AuditLogs.PageInfo.HasPreviousPage, tc.hasPrevious))
+
+			if len(resp.AuditLogs.Edges) > 0 {
+				// check that the oldest edge is the `INSERT` operation when doing the default sort
+				// this is off when they are submitted at the same ms, e.g. via an automated update such as user creation
+
+				if !strings.Contains(tc.where.Table, "User") {
+					assert.Check(t, is.Equal(*resp.AuditLogs.Edges[len(resp.AuditLogs.Edges)-1].Node.Operation, history.OpTypeInsert.String()))
+				} else {
+					if tc.expectedCount == 2 {
+						// this is wrong, I'm guessing its sorting by the time to the second and not considering the milliseconds
+						// TODO (sfunk): fix this
+						assert.Check(t, resp.AuditLogs.Edges[1].Node.Time.Before(*resp.AuditLogs.Edges[0].Node.Time))
+					}
+				}
+			}
+
+			if tc.setAfter {
+				// set the after cursor for the next page
+				afterCursor = *resp.AuditLogs.PageInfo.EndCursor
+			}
 		})
 	}
 }
