@@ -21,7 +21,7 @@ type Config struct {
 }
 
 // graphRequestPath returns the full URL path for the GraphQL endpoint
-func graphRequestPath(config Config) string {
+func graphRequestPath(config *Config) string {
 	baseurl := config.BaseURL.String()
 
 	return baseurl + config.GraphQLPath

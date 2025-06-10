@@ -68,13 +68,13 @@ func New(config Config, opts ...ClientOption) (*OpenlaneClient, error) {
 // APIv1 implements the Client interface and provides methods to interact with the API
 type APIv1 struct {
 	// Config is the configuration for the APIv1 client
-	Config Config
+	Config *Config
 	// Requester is the HTTP client for the APIv1 client
 	Requester *httpsling.Requester
 }
 
 // Config is the configuration for the APIv1 client
-func (c *OpenlaneClient) Config() Config {
+func (c *OpenlaneClient) Config() *Config {
 	api := c.OpenlaneRestClient.(*APIv1)
 
 	return api.Config
@@ -85,6 +85,46 @@ func (c *OpenlaneClient) HTTPSlingRequester() *httpsling.Requester {
 	api := c.OpenlaneRestClient.(*APIv1)
 
 	return api.Requester
+}
+
+// CloneClientWithCookies creates a new OpenlaneClient instance
+// with with the same config and cookies from the original client.
+func (c *OpenlaneClient) CloneClientWithCookies(opts ...ClientOption) (*OpenlaneClient, error) {
+	// grab the original client's configuration
+	config := c.Config()
+
+	// Create a new client with the same configuration and options
+	newClient, err := New(*config, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	// Copy cookies from the original client to the new one
+	cookies, err := c.Cookies()
+	if err != nil {
+		return nil, err
+	}
+
+	u := newClient.Config().BaseURL.ResolveReference(&url.URL{Path: "/"})
+	newClient.HTTPSlingRequester().CookieJar().SetCookies(u, cookies)
+
+	return newClient, nil
+}
+
+// ClientWithCSRFToken initializes a new OpenlaneClient with a CSRF token
+// for subsequent requests. It first fetches the CSRF token and then
+// clones the client to ensure cookies are preserved and sets
+// the CSRF token in the options for future requests in the header
+func (c *OpenlaneClient) ClientWithCSRFToken(ctx context.Context, opts ...ClientOption) (*OpenlaneClient, error) {
+	// initialize csrf token for subsequent requests
+	csrfToken, err := c.InitCSRF(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	opts = append(opts, WithCSRFToken(csrfToken))
+
+	return c.CloneClientWithCookies(opts...)
 }
 
 // AccessToken returns the access token cached on the client or an error if it is not
