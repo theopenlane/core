@@ -29423,7 +29423,7 @@ type APITokenBulkCreatePayload {
     """
     where: AuditLogWhereInput
     """
-    Ordering options for Risks returned from the connection.
+    Ordering options for AuditLogs returned from the connection.
     """
     orderBy: AuditLogOrder
   ): AuditLogConnection!
