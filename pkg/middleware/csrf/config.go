@@ -27,7 +27,7 @@ type Config struct {
 // NewConfig returns a Config populated with default values.
 func NewConfig() *Config {
 	return &Config{
-		Enabled:  true,
+		Enabled:  false,
 		Header:   "X-CSRF-Token",
 		Cookie:   "csrf_token",
 		Secure:   true,
@@ -38,8 +38,10 @@ func NewConfig() *Config {
 // csrfSkipperFunc is the function that determines if the csrf token check should be skipped
 // due to the request being a PAT or API Token auth request
 var csrfSkipperFunc = func(c echo.Context) bool {
-	return auth.GetAuthTypeFromEchoContext(c) == auth.APITokenAuthentication ||
-		auth.GetAuthTypeFromEchoContext(c) == auth.PATAuthentication
+	ac := auth.GetAuthTypeFromEchoContext(c)
+
+	// only skip CSRF checks for API Token or PAT authentication
+	return ac == auth.APITokenAuthentication || ac == auth.PATAuthentication
 }
 
 // Middleware creates the CSRF middleware from the provided config.

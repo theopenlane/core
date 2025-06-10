@@ -60,7 +60,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithSummarizer(),
 		serveropts.WithKeyDirOption(),
 		serveropts.WithSecretManagerKeysOption(),
-		serveropts.WithCSRF(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
@@ -155,6 +154,11 @@ func serve(ctx context.Context) error {
 	// add session manager
 	so.AddServerOptions(
 		serveropts.WithSessionMiddleware(),
+	)
+
+	// add csrf protection after auth and session middleware
+	so.AddServerOptions(
+		serveropts.WithCSRF(),
 	)
 
 	srv, err := server.NewServer(so.Config)

@@ -45,6 +45,9 @@ type Handler struct {
 	OauthProvider OauthProviderConfig
 	// AuthMiddleware contains the middleware to be used for authenticated endpoints
 	AuthMiddleware []echo.MiddlewareFunc
+	// AdditionalMiddleware contains the additional middleware to be used for all endpoints
+	// it is separate so it can be applied after any auth middleware if needed
+	AdditionalMiddleware []echo.MiddlewareFunc
 	// WebAuthn contains the configuration settings for the webauthn provider
 	WebAuthn *webauthn.WebAuthn
 	// OTPManager contains the configuration settings for the OTP provider

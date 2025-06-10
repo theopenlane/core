@@ -528,13 +528,12 @@ func WithSecretManagerKeysOption() ServerOption {
 func WithCSRF() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Server.CSRFProtection.Enabled {
-			cfg := csrf.NewConfig()
-			cfg.Enabled = s.Config.Settings.Server.CSRFProtection.Enabled
-			cfg.Header = s.Config.Settings.Server.CSRFProtection.Header
-			cfg.Cookie = s.Config.Settings.Server.CSRFProtection.Cookie
-			cfg.Secure = s.Config.Settings.Server.CSRFProtection.Secure
-			cfg.SameSite = s.Config.Settings.Server.CSRFProtection.SameSite
-			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, csrf.Middleware(cfg))
+			cfg := &s.Config.Settings.Server.CSRFProtection
+
+			// add the CSRF middleware for all requests, but we need to skip for certain
+			// requests post authentication so it needs to be added after any auth middleware
+			s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, csrf.Middleware(cfg))
+			s.Config.Handler.AdditionalMiddleware = append(s.Config.Handler.AdditionalMiddleware, csrf.Middleware(cfg))
 		}
 	})
 }

@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	mw     = []echo.MiddlewareFunc{middleware.Recover()}
+	mw     = []echo.MiddlewareFunc{}
 	authMW = []echo.MiddlewareFunc{}
 
 	restrictedRateLimit   = &ratelimit.Config{RateLimit: 10, BurstLimit: 10, ExpiresIn: 15 * time.Minute} //nolint:mnd
@@ -155,20 +155,12 @@ func (r *Router) Base() *echo.Group {
 
 // RegisterRoutes with the echo routers - Router is defined within openapi.go
 func RegisterRoutes(router *Router) error {
-	// add transaction middleware
-	transactionConfig := transaction.Client{
-		EntDBClient: router.Handler.DBClient,
-	}
-
-	mw = append(mw, transactionConfig.Middleware)
-
 	// Middleware for restricted endpoints
-	restrictedEndpointsMW = append(restrictedEndpointsMW, mw...)
-	restrictedEndpointsMW = append(restrictedEndpointsMW, ratelimit.RateLimiterWithConfig(restrictedRateLimit)) // add restricted ratelimit middleware
-
+	restrictedEndpointsMW = restrictedMiddleware(router)
 	// Middleware for authenticated endpoints
-	authMW = append(authMW, mw...)
-	authMW = append(authMW, router.Handler.AuthMiddleware...)
+	authMW = authMiddleware(router)
+	// Default middleware for other routes
+	mw = defaultMiddleware(router)
 
 	// routeHandlers that take the router and handler as input
 	routeHandlers := []interface{}{
@@ -227,4 +219,49 @@ func RegisterRoutes(router *Router) error {
 	}
 
 	return nil
+}
+
+// baseMiddleware returns the base middleware for the router, which includes the transaction middleware
+// this isn't used directly in the router register, instead its combined with other middleware functions below
+// to include the additional middleware
+func baseMiddleware(router *Router) []echo.MiddlewareFunc {
+	// add transaction middleware
+	transactionConfig := transaction.Client{
+		EntDBClient: router.Handler.DBClient,
+	}
+
+	return append(mw, middleware.Recover(), transactionConfig.Middleware)
+}
+
+// restrictedMiddleware returns the middleware for the router that is used on restricted routes
+// it includes the base middleware, the rate limiter, and any additional middleware
+func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
+	mw := baseMiddleware(router)
+
+	// add the restricted endpoints middleware
+	mw = append(mw, router.Handler.AdditionalMiddleware...)
+
+	return append(mw, ratelimit.RateLimiterWithConfig(restrictedRateLimit))
+}
+
+// authMiddleware returns the middleware for the router that is used on authenticated routes
+// it includes the transaction middleware, the auth middleware, and any additional middleware
+// after the auth middleware
+func authMiddleware(router *Router) []echo.MiddlewareFunc {
+	mw := baseMiddleware(router)
+
+	// add the auth middleware
+	mw = append(mw, router.Handler.AuthMiddleware...)
+	// append any additional middleware after the auth middleware
+	mw = append(mw, router.Handler.AdditionalMiddleware...)
+
+	return mw
+}
+
+// defaultMiddleware returns the default middleware for the router to be used
+// on all unauthenticated + unrestricted routes
+func defaultMiddleware(router *Router) []echo.MiddlewareFunc {
+	// this is the default middleware that is applied to all routes
+	// it includes the transaction middleware and any additional middleware
+	return append(baseMiddleware(router), router.Handler.AdditionalMiddleware...)
 }
