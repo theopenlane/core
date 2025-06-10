@@ -8,7 +8,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Yamashou/gqlgenc/clientv2"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
@@ -7921,15 +7920,15 @@ func (t *AuditLogs_AuditLogs_PageInfo) GetStartCursor() *string {
 }
 
 type AuditLogs_AuditLogs_Edges_Node struct {
-	Changes   []*generated.Change "json:\"changes,omitempty\" graphql:\"changes\""
-	ID        string              "json:\"id\" graphql:\"id\""
-	Operation *string             "json:\"operation,omitempty\" graphql:\"operation\""
-	Table     *string             "json:\"table,omitempty\" graphql:\"table\""
-	Time      *time.Time          "json:\"time,omitempty\" graphql:\"time\""
-	UpdatedBy *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Changes   []*models.Change "json:\"changes,omitempty\" graphql:\"changes\""
+	ID        string           "json:\"id\" graphql:\"id\""
+	Operation *string          "json:\"operation,omitempty\" graphql:\"operation\""
+	Table     *string          "json:\"table,omitempty\" graphql:\"table\""
+	Time      *time.Time       "json:\"time,omitempty\" graphql:\"time\""
+	UpdatedBy *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *AuditLogs_AuditLogs_Edges_Node) GetChanges() []*generated.Change {
+func (t *AuditLogs_AuditLogs_Edges_Node) GetChanges() []*models.Change {
 	if t == nil {
 		t = &AuditLogs_AuditLogs_Edges_Node{}
 	}

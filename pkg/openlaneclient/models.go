@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
@@ -995,12 +994,12 @@ type AddProgramMembershipInput struct {
 }
 
 type AuditLog struct {
-	Table     *string             `json:"table,omitempty"`
-	Time      *time.Time          `json:"time,omitempty"`
-	ID        string              `json:"id"`
-	Operation *string             `json:"operation,omitempty"`
-	Changes   []*generated.Change `json:"changes,omitempty"`
-	UpdatedBy *string             `json:"updatedBy,omitempty"`
+	Table     *string          `json:"table,omitempty"`
+	Time      *time.Time       `json:"time,omitempty"`
+	ID        string           `json:"id"`
+	Operation *string          `json:"operation,omitempty"`
+	Changes   []*models.Change `json:"changes,omitempty"`
+	UpdatedBy *string          `json:"updatedBy,omitempty"`
 }
 
 func (AuditLog) IsNode() {}
@@ -1028,7 +1027,7 @@ type AuditLogOrder struct {
 	// The ordering direction.
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order AuditLogs.
-	Field generated.AuditLogOrderField `json:"field"`
+	Field models.AuditLogOrderField `json:"field"`
 }
 
 type AuditLogWhereInput struct {

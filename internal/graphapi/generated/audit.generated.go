@@ -14,11 +14,16 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // region    ************************** generated!.gotpl **************************
+
+type AuditLogResolver interface {
+	Changes(ctx context.Context, obj *generated.AuditLog) ([]*models.Change, error)
+}
 
 // endregion ************************** generated!.gotpl **************************
 
@@ -213,7 +218,7 @@ func (ec *executionContext) _AuditLog_changes(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Changes, nil
+		return ec.resolvers.AuditLog().Changes(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -222,17 +227,17 @@ func (ec *executionContext) _AuditLog_changes(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]generated.Change)
+	res := resTmp.([]*models.Change)
 	fc.Result = res
-	return ec.marshalOChange2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐChangeᚄ(ctx, field.Selections, res)
+	return ec.marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChangeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuditLog_changes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "AuditLog",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Change does not have child fields")
 		},
@@ -655,12 +660,43 @@ func (ec *executionContext) _AuditLog(ctx context.Context, sel ast.SelectionSet,
 		case "id":
 			out.Values[i] = ec._AuditLog_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "operation":
 			out.Values[i] = ec._AuditLog_operation(ctx, field, obj)
 		case "changes":
-			out.Values[i] = ec._AuditLog_changes(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._AuditLog_changes(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "updatedBy":
 			out.Values[i] = ec._AuditLog_updatedBy(ctx, field, obj)
 		default:

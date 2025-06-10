@@ -9,8 +9,26 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
+
+// Changes is the resolver for the changes field.
+func (r *auditLogResolver) Changes(ctx context.Context, obj *generated.AuditLog) ([]*models.Change, error) {
+	changes := []*models.Change{}
+
+	for _, change := range obj.Changes {
+		// Convert the change to the models.Change type
+		changes = append(changes, &models.Change{
+			FieldName: change.FieldName,
+			Old:       change.Old,
+			New:       change.New,
+		})
+	}
+
+	return changes, nil
+}
 
 // AuditLogs is the resolver for the auditLogs field.
 func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy *generated.AuditLogOrder) (*generated.AuditLogConnection, error) {
@@ -41,3 +59,8 @@ func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[stri
 
 	return auditLogs, nil
 }
+
+// AuditLog returns gqlgenerated.AuditLogResolver implementation.
+func (r *Resolver) AuditLog() gqlgenerated.AuditLogResolver { return &auditLogResolver{r} }
+
+type auditLogResolver struct{ *Resolver }

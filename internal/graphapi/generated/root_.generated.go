@@ -35,6 +35,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	AuditLog() AuditLogResolver
 	Group() GroupResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
