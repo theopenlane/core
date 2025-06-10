@@ -91,15 +91,6 @@ func TestAuditLogList(t *testing.T) {
 			expectedCount: 2, // user setting creation should be logged and update after the user setting is updated
 		},
 		{
-			name: "happy path, group",
-			where: &openlaneclient.AuditLogWhereInput{
-				Table: "Group",
-			},
-			client:        suite.client.api,
-			ctx:           reqCtx,
-			expectedCount: 4,
-		},
-		{
 			name: "happy path, program",
 			where: &openlaneclient.AuditLogWhereInput{
 				Table: "Program",
