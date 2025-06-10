@@ -35,9 +35,9 @@ func NewConfig() *Config {
 	}
 }
 
-// CSRFSkipperFunc is the function that determines if the csrf token check should be skipped
+// csrfSkipperFunc is the function that determines if the csrf token check should be skipped
 // due to the request being a PAT or API Token auth request
-var CSRFSkipperFunc = func(c echo.Context) bool {
+var csrfSkipperFunc = func(c echo.Context) bool {
 	return auth.GetAuthTypeFromEchoContext(c) != auth.JWTAuthentication
 }
 
@@ -56,8 +56,7 @@ func Middleware(conf *Config) echo.MiddlewareFunc {
 		CookieName:     conf.Cookie,
 		CookieSecure:   conf.Secure,
 		CookieSameSite: parseSameSite(conf.SameSite),
-		// only apply to JWT auth requests
-		Skipper: CSRFSkipperFunc,
+		Skipper:        csrfSkipperFunc,
 	}
 
 	return middleware.CSRFWithConfig(csrfConf)

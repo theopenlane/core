@@ -77,7 +77,7 @@ func init() {
 	RootCmd.PersistentFlags().String("host", defaultRootHost, "api host url")
 
 	// CSRF flags
-	RootCmd.PersistentFlags().Bool("disable-csrf", false, "disable CSRF client, can bed used if the server has disabled CSRF protection")
+	RootCmd.PersistentFlags().Bool("disable-csrf", false, "disable CSRF client, can only be used if the server has disabled CSRF protection, not recommended for production use")
 
 	// Token flags
 	RootCmd.PersistentFlags().String("token", "", "api token used for authentication, takes precedence over other auth methods")
