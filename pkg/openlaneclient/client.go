@@ -87,6 +87,46 @@ func (c *OpenlaneClient) HTTPSlingRequester() *httpsling.Requester {
 	return api.Requester
 }
 
+// CloneClientWithCookies creates a new OpenlaneClient instance
+// with with the same config and cookies from the original client.
+func (c *OpenlaneClient) CloneClientWithCookies(opts ...ClientOption) (*OpenlaneClient, error) {
+	// grab the original client's configuration
+	config := c.Config()
+
+	// Create a new client with the same configuration and options
+	newClient, err := New(*config, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	// Copy cookies from the original client to the new one
+	cookies, err := c.Cookies()
+	if err != nil {
+		return nil, err
+	}
+
+	u := newClient.Config().BaseURL.ResolveReference(&url.URL{Path: "/"})
+	newClient.HTTPSlingRequester().CookieJar().SetCookies(u, cookies)
+
+	return newClient, nil
+}
+
+// ClientWithCSRFToken initializes a new OpenlaneClient with a CSRF token
+// for subsequent requests. It first fetches the CSRF token and then
+// clones the client to ensure cookies are preserved and sets
+// the CSRF token in the options for future requests in the header
+func (c *OpenlaneClient) ClientWithCSRFToken(ctx context.Context, opts ...ClientOption) (*OpenlaneClient, error) {
+	// initialize csrf token for subsequent requests
+	csrfToken, err := c.InitCSRF(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	opts = append(opts, WithCSRFToken(csrfToken))
+
+	return c.CloneClientWithCookies(opts...)
+}
+
 // AccessToken returns the access token cached on the client or an error if it is not
 // available. This method is primarily used for testing but can be used to fetch the
 // access token for debugging or inspection if necessary.

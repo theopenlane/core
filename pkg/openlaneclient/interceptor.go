@@ -27,6 +27,8 @@ func (a Authorization) WithAuthorization() clientv2.RequestInterceptor {
 	}
 }
 
+// WithCSRFTokenInterceptor adds a CSRF token interceptor to the client request
+// in the header
 func WithCSRFTokenInterceptor(token string) clientv2.RequestInterceptor {
 	return func(
 		ctx context.Context,
