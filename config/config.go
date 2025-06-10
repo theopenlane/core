@@ -180,8 +180,7 @@ func Load(cfgFile *string) (*Config, error) {
 
 	if _, err := os.Stat(*cfgFile); err != nil {
 		if os.IsNotExist(err) {
-			log.Error().Err(err).Msg("config file not found")
-			return nil, err
+			log.Warn().Err(err).Msg("config file not found, proceeding with default configuration")
 		}
 	}
 
@@ -191,14 +190,12 @@ func Load(cfgFile *string) (*Config, error) {
 
 	// parse yaml config
 	if err := k.Load(file.Provider(*cfgFile), yaml.Parser()); err != nil {
-		log.Error().Err(err).Msg("failed to load config file - ensure the .config.yaml is present and valid")
-		panic(err)
+		log.Warn().Err(err).Msg("failed to load config file - ensure the .config.yaml is present and valid or use environment variables to set the configuration")
 	}
 
 	// unmarshal the config
 	if err := k.Unmarshal("", &conf); err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal config file")
-		panic(err)
+		log.Fatal().Err(err).Msg("failed to unmarshal config file")
 	}
 
 	// load env vars
@@ -211,14 +208,12 @@ func Load(cfgFile *string) (*Config, error) {
 
 		return key, v
 	}), nil); err != nil {
-		log.Error().Err(err).Msg("failed to load env vars")
-		panic(err)
+		log.Warn().Err(err).Msg("failed to load env vars, some settings may not be applied")
 	}
 
 	// unmarshal the env vars
 	if err := k.Unmarshal("", &conf); err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal env vars")
-		panic(err)
+		log.Fatal().Err(err).Msg("failed to unmarshal env vars")
 	}
 
 	return conf, nil
