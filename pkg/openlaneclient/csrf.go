@@ -57,7 +57,9 @@ func (c *OpenlaneClient) FetchCSRFToken(ctx context.Context) (string, error) {
 		}
 	}
 
-	return "", ErrCSRFCookieNotFound
+	// do not return an error, if CSRF protection is not enabled
+	// there may not be a CSRF cookie set
+	return "", nil
 }
 
 // SetCSRFToken sets the CSRF header on the client for all subsequent requests.
