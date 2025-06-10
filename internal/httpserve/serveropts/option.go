@@ -530,8 +530,9 @@ func WithCSRF() ServerOption {
 		if s.Config.Settings.Server.CSRFProtection.Enabled {
 			cfg := &s.Config.Settings.Server.CSRFProtection
 
-			// add the CSRF middleware for all requests, but we need to skip for certain
-			// requests post authentication so it needs to be added after any auth middleware
+			// add the CSRF middleware for all requests, using the graph middleware and
+			// additional middleware for REST requests
+			// this ensures it can be applied after any auth middleware
 			s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, csrf.Middleware(cfg))
 			s.Config.Handler.AdditionalMiddleware = append(s.Config.Handler.AdditionalMiddleware, csrf.Middleware(cfg))
 		}
