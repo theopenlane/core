@@ -6,106 +6,61 @@ package graphapi
 
 import (
 	"context"
-	"strings"
-	"time"
 
 	"entgo.io/contrib/entgql"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/ent/generated"
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
+// Changes is the resolver for the changes field.
+func (r *auditLogResolver) Changes(ctx context.Context, obj *generated.AuditLog) ([]*models.Change, error) {
+	changes := []*models.Change{}
+
+	for _, change := range obj.Changes {
+		// Convert the change to the models.Change type
+		changes = append(changes, &models.Change{
+			FieldName: change.FieldName,
+			Old:       change.Old,
+			New:       change.New,
+		})
+	}
+
+	return changes, nil
+}
+
 // AuditLogs is the resolver for the auditLogs field.
-func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *model.AuditLogWhereInput) (*model.AuditLogConnection, error) {
+func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy *generated.AuditLogOrder) (*generated.AuditLogConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
 	var (
-		auditLogs [][]string
+		auditLogs *generated.AuditLogConnection
 		err       error
 	)
 
-	if where != nil && where.Table != nil {
-		auditLogs, err = withTransactionalMutation(ctx).AuditWithFilter(ctx, *where.Table)
-		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
-		}
-	} else {
-		auditLogs, err = withTransactionalMutation(ctx).Audit(ctx)
-		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
+	// prevent nil pointer dereference
+	if where == nil {
+		where = &generated.AuditLogWhereInput{}
+	}
+
+	auditLogs, err = withTransactionalMutation(ctx).AuditWithFilter(ctx, after, first, before, last, where, nil)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
+	}
+
+	if auditLogs == nil {
+		auditLogs = &generated.AuditLogConnection{
+			TotalCount: 0,
+			Edges:      []*generated.AuditLogEdge{},
 		}
 	}
 
-	count := len(auditLogs) - 1
-
-	logs := &model.AuditLogConnection{
-		Edges:      []*model.AuditLogEdge{},
-		TotalCount: count,
-	}
-
-	for i, auditLog := range auditLogs {
-		// skip the header
-		if i == 0 {
-			continue
-		}
-
-		// Response format:
-		// Table RefId HistoryTime Operation Changes UpdatedBy
-		// [0]   [1]   [2]         [3]       [4]      [5]
-		tableName := strings.TrimSuffix(auditLog[0], "History")
-		objectID := auditLog[1]
-
-		// Thu Jul 18 17:30:19 2024
-		ts, err := time.Parse(time.ANSIC, auditLog[2])
-		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
-		}
-
-		op := auditLog[3]
-		changes := strings.Split(auditLog[4], "\n")
-		updatedBy := auditLog[5]
-
-		// filter the response back
-		if where != nil {
-			// filter by operation
-			if where.Operation != nil && !strings.EqualFold(*where.Operation, op) {
-				continue
-			}
-
-			// filter by updated by
-			if where.UpdatedBy != nil && *where.UpdatedBy != updatedBy {
-				continue
-			}
-
-			// filter by object ID
-			if where.RefID != nil && *where.RefID != objectID {
-				continue
-			}
-
-			// filter by time
-			if where.After != nil {
-				after := *where.After
-				if !after.Before(ts) {
-					continue
-				}
-			}
-
-			if where.Before != nil {
-				if !where.Before.After(ts) {
-					continue
-				}
-			}
-		}
-
-		edge := model.AuditLogEdge{
-			Node: &model.AuditLog{
-				Table:     &tableName,
-				ID:        objectID,
-				Time:      &ts,
-				Operation: &op,
-				Changes:   changes,
-				UpdatedBy: &updatedBy,
-			},
-		}
-
-		logs.Edges = append(logs.Edges, &edge)
-	}
-
-	return logs, nil
+	return auditLogs, nil
 }
+
+// AuditLog returns gqlgenerated.AuditLogResolver implementation.
+func (r *Resolver) AuditLog() gqlgenerated.AuditLogResolver { return &auditLogResolver{r} }
+
+type auditLogResolver struct{ *Resolver }

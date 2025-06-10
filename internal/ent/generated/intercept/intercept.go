@@ -33,7 +33,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -53,7 +52,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
@@ -835,33 +833,6 @@ func (f TraverseEvent) Traverse(ctx context.Context, q generated.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *generated.EventQuery", q)
 }
 
-// The EventHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type EventHistoryFunc func(context.Context, *generated.EventHistoryQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f EventHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.EventHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EventHistoryQuery", q)
-}
-
-// The TraverseEventHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseEventHistory func(context.Context, *generated.EventHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseEventHistory) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseEventHistory) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EventHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.EventHistoryQuery", q)
-}
-
 // The EvidenceFunc type is an adapter to allow the use of ordinary function as a Querier.
 type EvidenceFunc func(context.Context, *generated.EvidenceQuery) (generated.Value, error)
 
@@ -1373,33 +1344,6 @@ func (f TraverseJobRunner) Traverse(ctx context.Context, q generated.Query) erro
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.JobRunnerQuery", q)
-}
-
-// The JobRunnerHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type JobRunnerHistoryFunc func(context.Context, *generated.JobRunnerHistoryQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f JobRunnerHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.JobRunnerHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.JobRunnerHistoryQuery", q)
-}
-
-// The TraverseJobRunnerHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseJobRunnerHistory func(context.Context, *generated.JobRunnerHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseJobRunnerHistory) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseJobRunnerHistory) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.JobRunnerHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.JobRunnerHistoryQuery", q)
 }
 
 // The JobRunnerRegistrationTokenFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2724,8 +2668,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.EntityTypeHistoryQuery, predicate.EntityTypeHistory, entitytypehistory.OrderOption]{typ: generated.TypeEntityTypeHistory, tq: q}, nil
 	case *generated.EventQuery:
 		return &query[*generated.EventQuery, predicate.Event, event.OrderOption]{typ: generated.TypeEvent, tq: q}, nil
-	case *generated.EventHistoryQuery:
-		return &query[*generated.EventHistoryQuery, predicate.EventHistory, eventhistory.OrderOption]{typ: generated.TypeEventHistory, tq: q}, nil
 	case *generated.EvidenceQuery:
 		return &query[*generated.EvidenceQuery, predicate.Evidence, evidence.OrderOption]{typ: generated.TypeEvidence, tq: q}, nil
 	case *generated.EvidenceHistoryQuery:
@@ -2764,8 +2706,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.JobResultQuery, predicate.JobResult, jobresult.OrderOption]{typ: generated.TypeJobResult, tq: q}, nil
 	case *generated.JobRunnerQuery:
 		return &query[*generated.JobRunnerQuery, predicate.JobRunner, jobrunner.OrderOption]{typ: generated.TypeJobRunner, tq: q}, nil
-	case *generated.JobRunnerHistoryQuery:
-		return &query[*generated.JobRunnerHistoryQuery, predicate.JobRunnerHistory, jobrunnerhistory.OrderOption]{typ: generated.TypeJobRunnerHistory, tq: q}, nil
 	case *generated.JobRunnerRegistrationTokenQuery:
 		return &query[*generated.JobRunnerRegistrationTokenQuery, predicate.JobRunnerRegistrationToken, jobrunnerregistrationtoken.OrderOption]{typ: generated.TypeJobRunnerRegistrationToken, tq: q}, nil
 	case *generated.JobRunnerTokenQuery:

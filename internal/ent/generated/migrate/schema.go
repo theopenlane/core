@@ -1114,35 +1114,6 @@ var (
 			},
 		},
 	}
-	// EventHistoryColumns holds the columns for the "event_history" table.
-	EventHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "event_id", Type: field.TypeString, Nullable: true},
-		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
-		{Name: "event_type", Type: field.TypeString},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-	}
-	// EventHistoryTable holds the schema information for the "event_history" table.
-	EventHistoryTable = &schema.Table{
-		Name:       "event_history",
-		Columns:    EventHistoryColumns,
-		PrimaryKey: []*schema.Column{EventHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "eventhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{EventHistoryColumns[1]},
-			},
-		},
-	}
 	// EvidencesColumns holds the columns for the "evidences" table.
 	EvidencesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2030,39 +2001,6 @@ var (
 				Name:    "jobrunner_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[13]},
-			},
-		},
-	}
-	// JobRunnerHistoryColumns holds the columns for the "job_runner_history" table.
-	JobRunnerHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"ONLINE", "OFFLINE"}, Default: "OFFLINE"},
-		{Name: "ip_address", Type: field.TypeString},
-	}
-	// JobRunnerHistoryTable holds the schema information for the "job_runner_history" table.
-	JobRunnerHistoryTable = &schema.Table{
-		Name:       "job_runner_history",
-		Columns:    JobRunnerHistoryColumns,
-		PrimaryKey: []*schema.Column{JobRunnerHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "jobrunnerhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{JobRunnerHistoryColumns[1]},
 			},
 		},
 	}
@@ -6624,7 +6562,6 @@ var (
 		EntityTypesTable,
 		EntityTypeHistoryTable,
 		EventsTable,
-		EventHistoryTable,
 		EvidencesTable,
 		EvidenceHistoryTable,
 		FilesTable,
@@ -6644,7 +6581,6 @@ var (
 		InvitesTable,
 		JobResultsTable,
 		JobRunnersTable,
-		JobRunnerHistoryTable,
 		JobRunnerRegistrationTokensTable,
 		JobRunnerTokensTable,
 		MappableDomainsTable,
@@ -6854,9 +6790,6 @@ func init() {
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
-	EventHistoryTable.Annotation = &entsql.Annotation{
-		Table: "event_history",
-	}
 	EvidencesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EvidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "evidence_history",
@@ -6913,9 +6846,6 @@ func init() {
 	JobResultsTable.ForeignKeys[1].RefTable = FilesTable
 	JobResultsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	JobRunnersTable.ForeignKeys[0].RefTable = OrganizationsTable
-	JobRunnerHistoryTable.Annotation = &entsql.Annotation{
-		Table: "job_runner_history",
-	}
 	JobRunnerRegistrationTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
 	JobRunnerRegistrationTokensTable.ForeignKeys[1].RefTable = OrganizationsTable
 	JobRunnerTokensTable.ForeignKeys[0].RefTable = OrganizationsTable

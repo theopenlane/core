@@ -81,9 +81,6 @@ type EntityTypeHistory func(*sql.Selector)
 // Event is the predicate function for event builders.
 type Event func(*sql.Selector)
 
-// EventHistory is the predicate function for eventhistory builders.
-type EventHistory func(*sql.Selector)
-
 // Evidence is the predicate function for evidence builders.
 type Evidence func(*sql.Selector)
 
@@ -140,9 +137,6 @@ type JobResult func(*sql.Selector)
 
 // JobRunner is the predicate function for jobrunner builders.
 type JobRunner func(*sql.Selector)
-
-// JobRunnerHistory is the predicate function for jobrunnerhistory builders.
-type JobRunnerHistory func(*sql.Selector)
 
 // JobRunnerRegistrationToken is the predicate function for jobrunnerregistrationtoken builders.
 type JobRunnerRegistrationToken func(*sql.Selector)

@@ -16,13 +16,6 @@ mutation CreateBulkCSVIntegration($input: Upload!) {
           }
         }
       }
-      events {
-        edges {
-          node {
-            id
-          }
-        }
-      }
     }
   }
 }
@@ -45,13 +38,6 @@ mutation CreateBulkIntegration($input: [CreateIntegrationInput!]) {
           }
         }
       }
-      events {
-        edges {
-          node {
-            id
-          }
-        }
-      }
     }
   }
 }
@@ -68,13 +54,6 @@ mutation CreateIntegration($input: CreateIntegrationInput!) {
         id
       }
       secrets {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      events {
         edges {
           node {
             id
@@ -110,13 +89,6 @@ query GetAllIntegrations {
             }
           }
         }
-        events {
-          edges {
-            node {
-              id
-            }
-          }
-        }
         createdAt
         createdBy
         updatedAt
@@ -137,13 +109,6 @@ query GetIntegrationByID($integrationId: ID!) {
       id
     }
     secrets {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-    events {
       edges {
         node {
           id
@@ -176,13 +141,6 @@ query GetIntegrations($where: IntegrationWhereInput) {
             }
           }
         }
-        events {
-          edges {
-            node {
-              id
-            }
-          }
-        }
         createdAt
         createdBy
         updatedAt
@@ -204,13 +162,6 @@ mutation UpdateIntegration($updateIntegrationId: ID!, $input: UpdateIntegrationI
         id
       }
       secrets {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      events {
         edges {
           node {
             id

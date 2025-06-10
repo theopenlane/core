@@ -811,38 +811,6 @@ func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string]
 	return res, err
 }
 
-// EventHistories is the resolver for the eventHistories field.
-func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EventHistoryOrder, where *generated.EventHistoryWhereInput) (*generated.EventHistoryConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = &generated.EventHistoryOrder{
-			Field:     generated.EventHistoryOrderFieldCreatedAt,
-			Direction: entgql.OrderDirectionDesc,
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).EventHistory.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "eventhistory"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithEventHistoryOrder(orderBy),
-		generated.WithEventHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "eventhistory"})
-	}
-
-	return res, err
-}
-
 // Evidences is the resolver for the evidences field.
 func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) (*generated.EvidenceConnection, error) {
 	// set page limit if nothing was set
@@ -1468,38 +1436,6 @@ func (r *queryResolver) JobRunners(ctx context.Context, after *entgql.Cursor[str
 		generated.WithJobRunnerFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunner"})
-	}
-
-	return res, err
-}
-
-// JobRunnerHistories is the resolver for the jobRunnerHistories field.
-func (r *queryResolver) JobRunnerHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.JobRunnerHistoryOrder, where *generated.JobRunnerHistoryWhereInput) (*generated.JobRunnerHistoryConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = &generated.JobRunnerHistoryOrder{
-			Field:     generated.JobRunnerHistoryOrderFieldCreatedAt,
-			Direction: entgql.OrderDirectionDesc,
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).JobRunnerHistory.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerhistory"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithJobRunnerHistoryOrder(orderBy),
-		generated.WithJobRunnerHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerhistory"})
 	}
 
 	return res, err

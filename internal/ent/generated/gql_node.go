@@ -33,7 +33,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/eventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -53,7 +52,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerhistory"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
@@ -227,11 +225,6 @@ var eventImplementors = []string{"Event", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Event) IsNode() {}
 
-var eventhistoryImplementors = []string{"EventHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*EventHistory) IsNode() {}
-
 var evidenceImplementors = []string{"Evidence", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -326,11 +319,6 @@ var jobrunnerImplementors = []string{"JobRunner", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*JobRunner) IsNode() {}
-
-var jobrunnerhistoryImplementors = []string{"JobRunnerHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*JobRunnerHistory) IsNode() {}
 
 var jobrunnerregistrationtokenImplementors = []string{"JobRunnerRegistrationToken", "Node"}
 
@@ -836,15 +824,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
-	case eventhistory.Table:
-		query := c.EventHistory.Query().
-			Where(eventhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, eventhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
 	case evidence.Table:
 		query := c.Evidence.Query().
 			Where(evidence.ID(id))
@@ -1012,15 +991,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(jobrunner.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobrunnerImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case jobrunnerhistory.Table:
-		query := c.JobRunnerHistory.Query().
-			Where(jobrunnerhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobrunnerhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1896,22 +1866,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
-	case eventhistory.Table:
-		query := c.EventHistory.Query().
-			Where(eventhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, eventhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case evidence.Table:
 		query := c.Evidence.Query().
 			Where(evidence.IDIn(ids...))
@@ -2204,22 +2158,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.JobRunner.Query().
 			Where(jobrunner.IDIn(ids...))
 		query, err := query.CollectFields(ctx, jobrunnerImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case jobrunnerhistory.Table:
-		query := c.JobRunnerHistory.Query().
-			Where(jobrunnerhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, jobrunnerhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

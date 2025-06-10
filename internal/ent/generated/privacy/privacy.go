@@ -711,30 +711,6 @@ func (f EventMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mut
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.EventMutation", m)
 }
 
-// The EventHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type EventHistoryQueryRuleFunc func(context.Context, *generated.EventHistoryQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f EventHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EventHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("generated/privacy: unexpected query type %T, expect *generated.EventHistoryQuery", q)
-}
-
-// The EventHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type EventHistoryMutationRuleFunc func(context.Context, *generated.EventHistoryMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f EventHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
-	if m, ok := m.(*generated.EventHistoryMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.EventHistoryMutation", m)
-}
-
 // The EvidenceQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type EvidenceQueryRuleFunc func(context.Context, *generated.EvidenceQuery) error
@@ -1189,30 +1165,6 @@ func (f JobRunnerMutationRuleFunc) EvalMutation(ctx context.Context, m generated
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.JobRunnerMutation", m)
-}
-
-// The JobRunnerHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type JobRunnerHistoryQueryRuleFunc func(context.Context, *generated.JobRunnerHistoryQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f JobRunnerHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.JobRunnerHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("generated/privacy: unexpected query type %T, expect *generated.JobRunnerHistoryQuery", q)
-}
-
-// The JobRunnerHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type JobRunnerHistoryMutationRuleFunc func(context.Context, *generated.JobRunnerHistoryMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f JobRunnerHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
-	if m, ok := m.(*generated.JobRunnerHistoryMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.JobRunnerHistoryMutation", m)
 }
 
 // The JobRunnerRegistrationTokenQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -2428,8 +2380,6 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.EventQuery:
 		return q.Filter(), nil
-	case *generated.EventHistoryQuery:
-		return q.Filter(), nil
 	case *generated.EvidenceQuery:
 		return q.Filter(), nil
 	case *generated.EvidenceHistoryQuery:
@@ -2467,8 +2417,6 @@ func queryFilter(q generated.Query) (Filter, error) {
 	case *generated.JobResultQuery:
 		return q.Filter(), nil
 	case *generated.JobRunnerQuery:
-		return q.Filter(), nil
-	case *generated.JobRunnerHistoryQuery:
 		return q.Filter(), nil
 	case *generated.JobRunnerRegistrationTokenQuery:
 		return q.Filter(), nil
@@ -2621,8 +2569,6 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.EventMutation:
 		return m.Filter(), nil
-	case *generated.EventHistoryMutation:
-		return m.Filter(), nil
 	case *generated.EvidenceMutation:
 		return m.Filter(), nil
 	case *generated.EvidenceHistoryMutation:
@@ -2660,8 +2606,6 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.JobResultMutation:
 		return m.Filter(), nil
 	case *generated.JobRunnerMutation:
-		return m.Filter(), nil
-	case *generated.JobRunnerHistoryMutation:
 		return m.Filter(), nil
 	case *generated.JobRunnerRegistrationTokenMutation:
 		return m.Filter(), nil

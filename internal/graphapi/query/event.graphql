@@ -1,74 +1,16 @@
 mutation CreateBulkCSVEvent($input: Upload!) {
   createBulkCSVEvent(input: $input) {
     events {
-      id
-      eventID
       correlationID
+      createdAt
+      createdBy
+      eventID
       eventType
+      id
       metadata
-      users {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      groups {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      integrations {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      organizations {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      invites {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      personalAccessTokens {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      secrets {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      orgmemberships {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      groupmemberships {
-        edges {
-          node {
-            id
-          }
-        }
-      }
+      tags
+      updatedAt
+      updatedBy
     }
   }
 }
@@ -76,74 +18,16 @@ mutation CreateBulkCSVEvent($input: Upload!) {
 mutation CreateBulkEvent($input: [CreateEventInput!]) {
   createBulkEvent(input: $input) {
     events {
-      id
-      eventID
       correlationID
+      createdAt
+      createdBy
+      eventID
       eventType
+      id
       metadata
-      users {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      groups {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      integrations {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      organizations {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      invites {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      personalAccessTokens {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      secrets {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      orgmemberships {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-      groupmemberships {
-        edges {
-          node {
-            id
-          }
-        }
-      }
+      tags
+      updatedAt
+      updatedBy
     }
   }
 }
@@ -151,11 +35,16 @@ mutation CreateBulkEvent($input: [CreateEventInput!]) {
 mutation CreateEvent($input: CreateEventInput!) {
   createEvent(input: $input) {
     event {
-      id
-      eventID
       correlationID
+      createdAt
+      createdBy
+      eventID
       eventType
+      id
       metadata
+      tags
+      updatedAt
+      updatedBy
     }
   }
 }
@@ -168,80 +57,25 @@ mutation DeleteEvent($deleteEventId: ID!) {
 
 query GetAllEvents {
   events {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
-        id
-        createdAt
-        updatedAt
-        createdBy
-        updatedBy
-        eventID
         correlationID
+        createdAt
+        createdBy
+        eventID
         eventType
+        id
         metadata
-        users {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-        groups {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-        integrations {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-        organizations {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-        invites {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-        personalAccessTokens {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-        secrets {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-        orgmemberships {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-        groupmemberships {
-          edges {
-            node {
-              id
-            }
-          }
-        }
+        tags
+        updatedAt
+        updatedBy
       }
     }
   }
@@ -249,90 +83,40 @@ query GetAllEvents {
 
 query GetEventByID($eventId: ID!) {
   event(id: $eventId) {
-    id
-    createdAt
-    updatedAt
-    createdBy
-    updatedBy
-    eventID
     correlationID
+    createdAt
+    createdBy
+    eventID
     eventType
+    id
     metadata
-    users {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-    groups {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-    integrations {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-    organizations {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-    invites {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-    personalAccessTokens {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-    secrets {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-    orgmemberships {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-    groupmemberships {
-      edges {
-        node {
-          id
-        }
-      }
-    }
+    tags
+    updatedAt
+    updatedBy
   }
 }
 
-query GetEvents($where: EventWhereInput) {
-  events(where: $where) {
+query GetEvents($first: Int, $last: Int, $where: EventWhereInput) {
+  events(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
-        eventID
-        id
         correlationID
+        createdAt
+        createdBy
+        eventID
         eventType
+        id
         metadata
+        tags
+        updatedAt
+        updatedBy
       }
     }
   }
@@ -341,15 +125,16 @@ query GetEvents($where: EventWhereInput) {
 mutation UpdateEvent($updateEventId: ID!, $input: UpdateEventInput!) {
   updateEvent(id: $updateEventId, input: $input) {
     event {
-      id
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      eventID
       correlationID
+      createdAt
+      createdBy
+      eventID
       eventType
+      id
       metadata
+      tags
+      updatedAt
+      updatedBy
     }
   }
 }

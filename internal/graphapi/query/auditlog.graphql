@@ -1,13 +1,27 @@
-query AuditLogs {
-  auditLogs {
+query AuditLogs($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: AuditLogWhereInput, $orderBy: AuditLogOrder) {
+  auditLogs(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         id
         table
         time
         operation
-        changes
         updatedBy
+        changes
       }
     }
   }

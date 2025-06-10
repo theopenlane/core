@@ -47,6 +47,9 @@ func (SubcontrolHistory) Annotations() []schema.Annotation {
 func (SubcontrolHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
+			Annotations(
+				entgql.OrderField("history_time"),
+			).
 			Default(time.Now).
 			Immutable(),
 		field.String("ref").
