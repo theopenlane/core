@@ -41,11 +41,7 @@ var AllAuditLogOrderField = []AuditLogOrderField{
 
 // IsValid checks if the AuditLogOrderField is valid.
 func (e AuditLogOrderField) IsValid() bool {
-	if e == AuditLogOrderFieldHistoryTime {
-		return true
-	}
-
-	return false
+	return e == AuditLogOrderFieldHistoryTime
 }
 
 // String returns the string representation of the AuditLogOrderField.
