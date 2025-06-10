@@ -46,7 +46,7 @@ func Middleware(conf *Config) echo.MiddlewareFunc {
 
 	// skip if CSRF is not enabled
 	csrfSkipper := func(c echo.Context) bool {
-		return conf.Enabled
+		return !conf.Enabled
 	}
 
 	csrfConf := middleware.CSRFConfig{
