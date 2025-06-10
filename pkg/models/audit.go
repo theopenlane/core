@@ -41,10 +41,10 @@ var AllAuditLogOrderField = []AuditLogOrderField{
 
 // IsValid checks if the AuditLogOrderField is valid.
 func (e AuditLogOrderField) IsValid() bool {
-	switch e {
-	case AuditLogOrderFieldHistoryTime:
+	if e == AuditLogOrderFieldHistoryTime {
 		return true
 	}
+
 	return false
 }
 
@@ -57,13 +57,14 @@ func (e AuditLogOrderField) String() string {
 func (e *AuditLogOrderField) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("enums must be strings")
+		return fmt.Errorf("enums must be strings") //nolint:err113
 	}
 
 	*e = AuditLogOrderField(str)
 	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid AuditLogOrderField", str)
+		return fmt.Errorf("%s is not a valid AuditLogOrderField", str) //nolint:err113
 	}
+
 	return nil
 }
 
@@ -78,12 +79,15 @@ func (e *AuditLogOrderField) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
+
 	return e.UnmarshalGQL(s)
 }
 
 // MarshalJSON implements the json.Marshaler interface for AuditLogOrderField.
 func (e AuditLogOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
+
 	e.MarshalGQL(&buf)
+
 	return buf.Bytes(), nil
 }
