@@ -2,7 +2,6 @@ package graphapi_test
 
 import (
 	"context"
-	"strings"
 	"testing"
 
 	"github.com/samber/lo"
@@ -41,6 +40,8 @@ func TestAuditLogList(t *testing.T) {
 	}
 
 	afterCursor := ""
+	updateOp := history.OpTypeUpdate.String()
+	createOp := history.OpTypeInsert.String()
 
 	testCases := []struct {
 		name          string
@@ -57,6 +58,7 @@ func TestAuditLogList(t *testing.T) {
 		totalCount    int
 		hasNext       bool
 		hasPrevious   bool
+		checkForID    string
 		setAfter      bool
 		errorMsg      string
 	}{
@@ -77,6 +79,7 @@ func TestAuditLogList(t *testing.T) {
 			client:        suite.client.api,
 			ctx:           reqCtx,
 			expectedCount: 2, // user creation should be logged and update after the user is created
+			checkForID:    orgUser.ID,
 		},
 		{
 			name: "happy path, user setting",
@@ -94,7 +97,30 @@ func TestAuditLogList(t *testing.T) {
 			},
 			client:        suite.client.api,
 			ctx:           reqCtx,
-			expectedCount: 2, //program creation and update should be logged
+			expectedCount: 2, //program creation, update should be logged
+			checkForID:    program1.ID,
+		},
+		{
+			name: "happy path, program update",
+			where: &openlaneclient.AuditLogWhereInput{
+				Table:     "Program",
+				Operation: &updateOp,
+			},
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 1,
+			checkForID:    program1.ID,
+		},
+		{
+			name: "happy path, program create",
+			where: &openlaneclient.AuditLogWhereInput{
+				Table:     "Program",
+				Operation: &createOp,
+			},
+			client:        suite.client.api,
+			ctx:           reqCtx,
+			expectedCount: 1,
+			checkForID:    program1.ID,
 		},
 		{
 			name: "happy path, procedure",
@@ -204,18 +230,10 @@ func TestAuditLogList(t *testing.T) {
 			assert.Check(t, is.Equal(resp.AuditLogs.PageInfo.HasNextPage, tc.hasNext))
 			assert.Check(t, is.Equal(resp.AuditLogs.PageInfo.HasPreviousPage, tc.hasPrevious))
 
-			if len(resp.AuditLogs.Edges) > 0 {
-				// check that the oldest edge is the `INSERT` operation when doing the default sort
-				// this is off when they are submitted at the same ms, e.g. via an automated update such as user creation
-
-				if !strings.Contains(tc.where.Table, "User") {
-					assert.Check(t, is.Equal(*resp.AuditLogs.Edges[len(resp.AuditLogs.Edges)-1].Node.Operation, history.OpTypeInsert.String()))
-				} else {
-					if tc.expectedCount == 2 {
-						// this is wrong, I'm guessing its sorting by the time to the second and not considering the milliseconds
-						// TODO (sfunk): fix this
-						assert.Check(t, resp.AuditLogs.Edges[1].Node.Time.Before(*resp.AuditLogs.Edges[0].Node.Time))
-					}
+			if tc.checkForID != "" {
+				// check that the audit logs contain the expected IDs
+				for _, node := range resp.AuditLogs.Edges {
+					assert.Check(t, is.Equal(node.Node.ID, tc.checkForID))
 				}
 			}
 
