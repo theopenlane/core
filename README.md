@@ -127,15 +127,14 @@ See the [README](/config/README.md) in the `config` directory.
 
 The server enforces CSRF protection on all mutating requests. Clients must
 include a valid token in the `X-CSRF-Token` header. Existing client code can
-either supply the token directly using the `WithCSRFToken` option when
-creating a new client:
+create a client with the CSRF Token using the following function. This function
+will grab a valid CSRF token from the `/livez` endpoint  and send it for subsequent requests.
 
 ```go
-client, err := openlaneclient.New(config,
-    openlaneclient.WithCSRFToken(myToken))
+ client.ClientWithCSRFToken(ctx, opts...)
 ```
 
-or call `InitCSRF` on the client which automatically fetches the token from the server's `/livez` endpoint and applies it to subsequent requests:
+You can also manually call `InitCSRF` on the client:
 
 ```go
 ctx := context.Background()
@@ -144,7 +143,7 @@ if err := client.InitCSRF(ctx); err != nil {
 }
 ```
 
-The CLI has been updated to call `InitCSRF` automatically, but other custom clients will need to adopt one of the approaches.
+The CLI has been updated to call `ClientWithCSRFToken` automatically, but other custom clients will need to adopt one of the approaches.
 
 NOTE: Because the CSRF middleware stores the token only in the client’s cookie and not on the server, restarting the core server (or core server running in Kubernetes pods) does not invalidate the token. When the middleware receives a request, it checks the token in the `csrf_token` cookie against the `X-CSRF-Token` header. If the cookie is already present, that same token is used — no new token is generated. The token cookie persists until it expires (default 24h), so clients will continue to send the same value even if the server has restarted.
 

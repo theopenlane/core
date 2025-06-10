@@ -76,6 +76,9 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/."+appName+".yaml)")
 	RootCmd.PersistentFlags().String("host", defaultRootHost, "api host url")
 
+	// CSRF flags
+	RootCmd.PersistentFlags().Bool("disable-csrf", false, "disable CSRF client, can bed used if the server has disabled CSRF protection")
+
 	// Token flags
 	RootCmd.PersistentFlags().String("token", "", "api token used for authentication, takes precedence over other auth methods")
 	RootCmd.PersistentFlags().String("pat", "", "personal access token used for authentication")

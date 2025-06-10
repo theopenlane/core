@@ -6,6 +6,7 @@ import (
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
+	"github.com/theopenlane/iam/auth"
 )
 
 // Config defines configuration for the CSRF middleware wrapper.
@@ -34,6 +35,12 @@ func NewConfig() *Config {
 	}
 }
 
+// CSRFSkipperFunc is the function that determines if the csrf token check should be skipped
+// due to the request being a PAT or API Token auth request
+var CSRFSkipperFunc = func(c echo.Context) bool {
+	return auth.GetAuthTypeFromEchoContext(c) != auth.JWTAuthentication
+}
+
 // Middleware creates the CSRF middleware from the provided config.
 func Middleware(conf *Config) echo.MiddlewareFunc {
 	if conf == nil {
@@ -49,6 +56,8 @@ func Middleware(conf *Config) echo.MiddlewareFunc {
 		CookieName:     conf.Cookie,
 		CookieSecure:   conf.Secure,
 		CookieSameSite: parseSameSite(conf.SameSite),
+		// only apply to JWT auth requests
+		Skipper: CSRFSkipperFunc,
 	}
 
 	return middleware.CSRFWithConfig(csrfConf)
