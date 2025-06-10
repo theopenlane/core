@@ -14,8 +14,6 @@ linters:
     - mnd
     - noctx
     - revive
-    - whitespace
-    - wsl
   exclusions:
     generated: lax
     warn-unused: true
