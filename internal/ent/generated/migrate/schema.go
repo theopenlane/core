@@ -1225,6 +1225,7 @@ var (
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
 		{Name: "note_files", Type: field.TypeString, Nullable: true},
+		{Name: "organization_files", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
 	FilesTable = &schema.Table{
@@ -1236,6 +1237,12 @@ var (
 				Symbol:     "files_notes_files",
 				Columns:    []*schema.Column{FilesColumns[22]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_organizations_files",
+				Columns:    []*schema.Column{FilesColumns[23]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -5560,31 +5567,6 @@ var (
 			},
 		},
 	}
-	// OrganizationFilesColumns holds the columns for the "organization_files" table.
-	OrganizationFilesColumns = []*schema.Column{
-		{Name: "organization_id", Type: field.TypeString},
-		{Name: "file_id", Type: field.TypeString},
-	}
-	// OrganizationFilesTable holds the schema information for the "organization_files" table.
-	OrganizationFilesTable = &schema.Table{
-		Name:       "organization_files",
-		Columns:    OrganizationFilesColumns,
-		PrimaryKey: []*schema.Column{OrganizationFilesColumns[0], OrganizationFilesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "organization_files_organization_id",
-				Columns:    []*schema.Column{OrganizationFilesColumns[0]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "organization_files_file_id",
-				Columns:    []*schema.Column{OrganizationFilesColumns[1]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// OrganizationEventsColumns holds the columns for the "organization_events" table.
 	OrganizationEventsColumns = []*schema.Column{
 		{Name: "organization_id", Type: field.TypeString},
@@ -6686,7 +6668,6 @@ var (
 		OrgMembershipEventsTable,
 		OrgSubscriptionEventsTable,
 		OrganizationPersonalAccessTokensTable,
-		OrganizationFilesTable,
 		OrganizationEventsTable,
 		OrganizationSettingFilesTable,
 		PersonalAccessTokenEventsTable,
@@ -6795,6 +6776,7 @@ func init() {
 		Table: "evidence_history",
 	}
 	FilesTable.ForeignKeys[0].RefTable = NotesTable
+	FilesTable.ForeignKeys[1].RefTable = OrganizationsTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
@@ -7072,8 +7054,6 @@ func init() {
 	OrgSubscriptionEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrganizationPersonalAccessTokensTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationPersonalAccessTokensTable.ForeignKeys[1].RefTable = PersonalAccessTokensTable
-	OrganizationFilesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	OrganizationFilesTable.ForeignKeys[1].RefTable = FilesTable
 	OrganizationEventsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrganizationSettingFilesTable.ForeignKeys[0].RefTable = OrganizationSettingsTable

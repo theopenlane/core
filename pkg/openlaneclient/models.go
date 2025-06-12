@@ -4412,7 +4412,6 @@ type CreateFileInput struct {
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
 	StoragePath            *string  `json:"storagePath,omitempty"`
 	UserIDs                []string `json:"userIDs,omitempty"`
-	OrganizationIDs        []string `json:"organizationIDs,omitempty"`
 	GroupIDs               []string `json:"groupIDs,omitempty"`
 	ContactIDs             []string `json:"contactIDs,omitempty"`
 	EntityIDs              []string `json:"entityIDs,omitempty"`
@@ -4423,6 +4422,7 @@ type CreateFileInput struct {
 	ProgramIDs             []string `json:"programIDs,omitempty"`
 	EvidenceIDs            []string `json:"evidenceIDs,omitempty"`
 	EventIDs               []string `json:"eventIDs,omitempty"`
+	OrganizationID         *string  `json:"organizationID,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -8405,7 +8405,6 @@ type File struct {
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
 	StoragePath         *string                `json:"storagePath,omitempty"`
 	User                []*User                `json:"user,omitempty"`
-	Organization        []*Organization        `json:"organization,omitempty"`
 	Groups              *GroupConnection       `json:"groups"`
 	Contact             []*Contact             `json:"contact,omitempty"`
 	Entity              []*Entity              `json:"entity,omitempty"`
@@ -8416,6 +8415,7 @@ type File struct {
 	Program             []*Program             `json:"program,omitempty"`
 	Evidence            []*Evidence            `json:"evidence,omitempty"`
 	Events              *EventConnection       `json:"events"`
+	Organization        *Organization          `json:"organization,omitempty"`
 	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
@@ -9080,9 +9080,6 @@ type FileWhereInput struct {
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
-	// organization edge predicates
-	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
-	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
 	// groups edge predicates
 	HasGroups     *bool              `json:"hasGroups,omitempty"`
 	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
@@ -9113,6 +9110,9 @@ type FileWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// organization edge predicates
+	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
+	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
 }
 
 type Group struct {
@@ -24114,9 +24114,6 @@ type UpdateFileInput struct {
 	AddUserIDs                   []string `json:"addUserIDs,omitempty"`
 	RemoveUserIDs                []string `json:"removeUserIDs,omitempty"`
 	ClearUser                    *bool    `json:"clearUser,omitempty"`
-	AddOrganizationIDs           []string `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs        []string `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganization            *bool    `json:"clearOrganization,omitempty"`
 	AddGroupIDs                  []string `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs               []string `json:"removeGroupIDs,omitempty"`
 	ClearGroups                  *bool    `json:"clearGroups,omitempty"`
@@ -24147,6 +24144,8 @@ type UpdateFileInput struct {
 	AddEventIDs                  []string `json:"addEventIDs,omitempty"`
 	RemoveEventIDs               []string `json:"removeEventIDs,omitempty"`
 	ClearEvents                  *bool    `json:"clearEvents,omitempty"`
+	OrganizationID               *string  `json:"organizationID,omitempty"`
+	ClearOrganization            *bool    `json:"clearOrganization,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.

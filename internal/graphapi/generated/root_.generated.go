@@ -37349,7 +37349,6 @@ input CreateFileInput {
   """
   storagePath: String
   userIDs: [ID!]
-  organizationIDs: [ID!]
   groupIDs: [ID!]
   contactIDs: [ID!]
   entityIDs: [ID!]
@@ -37360,6 +37359,7 @@ input CreateFileInput {
   programIDs: [ID!]
   evidenceIDs: [ID!]
   eventIDs: [ID!]
+  organizationID: ID
 }
 """
 CreateGroupInput is used for create Group object.
@@ -43419,7 +43419,6 @@ type File implements Node {
   """
   storagePath: String
   user: [User!]
-  organization: [Organization!]
   groups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -43490,6 +43489,7 @@ type File implements Node {
     """
     where: EventWhereInput
   ): EventConnection!
+  organization: Organization
 }
 """
 A connection to a list of items.
@@ -44308,11 +44308,6 @@ input FileWhereInput {
   hasUser: Boolean
   hasUserWith: [UserWhereInput!]
   """
-  organization edge predicates
-  """
-  hasOrganization: Boolean
-  hasOrganizationWith: [OrganizationWhereInput!]
-  """
   groups edge predicates
   """
   hasGroups: Boolean
@@ -44362,6 +44357,11 @@ input FileWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  organization edge predicates
+  """
+  hasOrganization: Boolean
+  hasOrganizationWith: [OrganizationWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -71915,9 +71915,6 @@ input UpdateFileInput {
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUser: Boolean
-  addOrganizationIDs: [ID!]
-  removeOrganizationIDs: [ID!]
-  clearOrganization: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
@@ -71948,6 +71945,8 @@ input UpdateFileInput {
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
+  organizationID: ID
+  clearOrganization: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.

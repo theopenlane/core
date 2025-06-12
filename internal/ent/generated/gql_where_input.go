@@ -22640,10 +22640,6 @@ type FileWhereInput struct {
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
 
-	// "organization" edge predicates.
-	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
-	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
-
 	// "groups" edge predicates.
 	HasGroups     *bool              `json:"hasGroups,omitempty"`
 	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
@@ -22683,6 +22679,10 @@ type FileWhereInput struct {
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+
+	// "organization" edge predicates.
+	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
+	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -23492,24 +23492,6 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		}
 		predicates = append(predicates, file.HasUserWith(with...))
 	}
-	if i.HasOrganization != nil {
-		p := file.HasOrganization()
-		if !*i.HasOrganization {
-			p = file.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasOrganizationWith) > 0 {
-		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
-		for _, w := range i.HasOrganizationWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOrganizationWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, file.HasOrganizationWith(with...))
-	}
 	if i.HasGroups != nil {
 		p := file.HasGroups()
 		if !*i.HasGroups {
@@ -23689,6 +23671,24 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, file.HasEventsWith(with...))
+	}
+	if i.HasOrganization != nil {
+		p := file.HasOrganization()
+		if !*i.HasOrganization {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOrganizationWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
+		for _, w := range i.HasOrganizationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOrganizationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasOrganizationWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

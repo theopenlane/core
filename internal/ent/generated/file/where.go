@@ -1526,35 +1526,6 @@ func HasUserWith(preds ...predicate.User) predicate.File {
 	})
 }
 
-// HasOrganization applies the HasEdge predicate on the "organization" edge.
-func HasOrganization() predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, OrganizationTable, OrganizationPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationFiles
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasOrganizationWith applies the HasEdge predicate on the "organization" edge with a given conditions (other predicates).
-func HasOrganizationWith(preds ...predicate.Organization) predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := newOrganizationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationFiles
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasGroups applies the HasEdge predicate on the "groups" edge.
 func HasGroups() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
@@ -1837,6 +1808,35 @@ func HasEventsWith(preds ...predicate.Event) predicate.File {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.FileEvents
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOrganization applies the HasEdge predicate on the "organization" edge.
+func HasOrganization() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OrganizationTable, OrganizationColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrganizationWith applies the HasEdge predicate on the "organization" edge with a given conditions (other predicates).
+func HasOrganizationWith(preds ...predicate.Organization) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newOrganizationStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

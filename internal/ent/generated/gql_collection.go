@@ -10726,19 +10726,6 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "organization":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&OrganizationClient{config: f.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
-				return err
-			}
-			f.WithNamedOrganization(alias, func(wq *OrganizationQuery) {
-				*wq = *query
-			})
-
 		case "groups":
 			var (
 				alias = field.Alias
@@ -10786,10 +10773,10 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -10797,10 +10784,10 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 					f.loadTotal = append(f.loadTotal, func(_ context.Context, nodes []*File) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Groups)
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -10983,10 +10970,10 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[11] == nil {
-								nodes[i].Edges.totalCount[11] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[11][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -10994,10 +10981,10 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 					f.loadTotal = append(f.loadTotal, func(_ context.Context, nodes []*File) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
-							if nodes[i].Edges.totalCount[11] == nil {
-								nodes[i].Edges.totalCount[11] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[11][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -11028,6 +11015,17 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			f.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
+
+		case "organization":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			f.withOrganization = query
 		case "createdAt":
 			if _, ok := fieldSeen[file.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, file.FieldCreatedAt)
@@ -23714,17 +23712,13 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"organization_id"`
+							NodeID string `sql:"organization_files"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(organization.FilesTable)
-							s.Join(joinT).On(s.C(file.FieldID), joinT.C(organization.FilesPrimaryKey[1]))
-							s.Where(sql.InValues(joinT.C(organization.FilesPrimaryKey[0]), ids...))
-							s.Select(joinT.C(organization.FilesPrimaryKey[0]), sql.Count("*"))
-							s.GroupBy(joinT.C(organization.FilesPrimaryKey[0]))
+							s.Where(sql.InValues(s.C(organization.FilesColumn), ids...))
 						})
-						if err := query.Select().Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(organization.FilesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -23769,7 +23763,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(organization.FilesPrimaryKey[0], limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(organization.FilesColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {

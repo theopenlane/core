@@ -6661,25 +6661,6 @@ func (c *FileClient) QueryUser(f *File) *UserQuery {
 	return query
 }
 
-// QueryOrganization queries the organization edge of a File.
-func (c *FileClient) QueryOrganization(f *File) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(file.Table, file.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.OrganizationTable, file.OrganizationPrimaryKey...),
-		)
-		schemaConfig := f.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationFiles
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryGroups queries the groups edge of a File.
 func (c *FileClient) QueryGroups(f *File) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -6864,6 +6845,25 @@ func (c *FileClient) QueryEvents(f *File) *EventQuery {
 		schemaConfig := f.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.FileEvents
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrganization queries the organization edge of a File.
+func (c *FileClient) QueryOrganization(f *File) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, file.OrganizationTable, file.OrganizationColumn),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.File
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13292,11 +13292,11 @@ func (c *OrganizationClient) QueryFiles(o *Organization) *FileQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.FilesTable, organization.FilesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.FilesTable, organization.FilesColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.OrganizationFiles
+		step.Edge.Schema = schemaConfig.File
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}

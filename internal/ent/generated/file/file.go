@@ -59,8 +59,6 @@ const (
 	FieldFileContents = "file_contents"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
-	// EdgeOrganization holds the string denoting the organization edge name in mutations.
-	EdgeOrganization = "organization"
 	// EdgeGroups holds the string denoting the groups edge name in mutations.
 	EdgeGroups = "groups"
 	// EdgeContact holds the string denoting the contact edge name in mutations.
@@ -81,6 +79,8 @@ const (
 	EdgeEvidence = "evidence"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
+	// EdgeOrganization holds the string denoting the organization edge name in mutations.
+	EdgeOrganization = "organization"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
@@ -88,11 +88,6 @@ const (
 	// UserInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UserInverseTable = "users"
-	// OrganizationTable is the table that holds the organization relation/edge. The primary key declared below.
-	OrganizationTable = "organization_files"
-	// OrganizationInverseTable is the table name for the Organization entity.
-	// It exists in this package in order to avoid circular dependency with the "organization" package.
-	OrganizationInverseTable = "organizations"
 	// GroupsTable is the table that holds the groups relation/edge. The primary key declared below.
 	GroupsTable = "group_files"
 	// GroupsInverseTable is the table name for the Group entity.
@@ -143,6 +138,13 @@ const (
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
+	// OrganizationTable is the table that holds the organization relation/edge.
+	OrganizationTable = "files"
+	// OrganizationInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OrganizationInverseTable = "organizations"
+	// OrganizationColumn is the table column denoting the organization relation/edge.
+	OrganizationColumn = "organization_files"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -175,15 +177,13 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"note_files",
+	"organization_files",
 }
 
 var (
 	// UserPrimaryKey and UserColumn2 are the table columns denoting the
 	// primary key for the user relation (M2M).
 	UserPrimaryKey = []string{"user_id", "file_id"}
-	// OrganizationPrimaryKey and OrganizationColumn2 are the table columns denoting the
-	// primary key for the organization relation (M2M).
-	OrganizationPrimaryKey = []string{"organization_id", "file_id"}
 	// GroupsPrimaryKey and GroupsColumn2 are the table columns denoting the
 	// primary key for the groups relation (M2M).
 	GroupsPrimaryKey = []string{"group_id", "file_id"}
@@ -373,20 +373,6 @@ func ByUser(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByOrganizationCount orders the results by organization count.
-func ByOrganizationCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newOrganizationStep(), opts...)
-	}
-}
-
-// ByOrganization orders the results by organization terms.
-func ByOrganization(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrganizationStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByGroupsCount orders the results by groups count.
 func ByGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -526,18 +512,18 @@ func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByOrganizationField orders the results by organization field.
+func ByOrganizationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrganizationStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
-	)
-}
-func newOrganizationStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrganizationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, OrganizationTable, OrganizationPrimaryKey...),
 	)
 }
 func newGroupsStep() *sqlgraph.Step {
@@ -608,5 +594,12 @@ func newEventsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
+	)
+}
+func newOrganizationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrganizationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OrganizationTable, OrganizationColumn),
 	)
 }

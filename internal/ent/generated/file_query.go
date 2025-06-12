@@ -39,7 +39,6 @@ type FileQuery struct {
 	inters                       []Interceptor
 	predicates                   []predicate.File
 	withUser                     *UserQuery
-	withOrganization             *OrganizationQuery
 	withGroups                   *GroupQuery
 	withContact                  *ContactQuery
 	withEntity                   *EntityQuery
@@ -50,11 +49,11 @@ type FileQuery struct {
 	withProgram                  *ProgramQuery
 	withEvidence                 *EvidenceQuery
 	withEvents                   *EventQuery
+	withOrganization             *OrganizationQuery
 	withFKs                      bool
 	loadTotal                    []func(context.Context, []*File) error
 	modifiers                    []func(*sql.Selector)
 	withNamedUser                map[string]*UserQuery
-	withNamedOrganization        map[string]*OrganizationQuery
 	withNamedGroups              map[string]*GroupQuery
 	withNamedContact             map[string]*ContactQuery
 	withNamedEntity              map[string]*EntityQuery
@@ -120,31 +119,6 @@ func (fq *FileQuery) QueryUser() *UserQuery {
 		schemaConfig := fq.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserFiles
-		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryOrganization chains the current query on the "organization" edge.
-func (fq *FileQuery) QueryOrganization() *OrganizationQuery {
-	query := (&OrganizationClient{config: fq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := fq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := fq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(file.Table, file.FieldID, selector),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.OrganizationTable, file.OrganizationPrimaryKey...),
-		)
-		schemaConfig := fq.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationFiles
 		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -401,6 +375,31 @@ func (fq *FileQuery) QueryEvents() *EventQuery {
 	return query
 }
 
+// QueryOrganization chains the current query on the "organization" edge.
+func (fq *FileQuery) QueryOrganization() *OrganizationQuery {
+	query := (&OrganizationClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, file.OrganizationTable, file.OrganizationColumn),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.File
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first File entity from the query.
 // Returns a *NotFoundError when no File was found.
 func (fq *FileQuery) First(ctx context.Context) (*File, error) {
@@ -594,7 +593,6 @@ func (fq *FileQuery) Clone() *FileQuery {
 		inters:                  append([]Interceptor{}, fq.inters...),
 		predicates:              append([]predicate.File{}, fq.predicates...),
 		withUser:                fq.withUser.Clone(),
-		withOrganization:        fq.withOrganization.Clone(),
 		withGroups:              fq.withGroups.Clone(),
 		withContact:             fq.withContact.Clone(),
 		withEntity:              fq.withEntity.Clone(),
@@ -605,6 +603,7 @@ func (fq *FileQuery) Clone() *FileQuery {
 		withProgram:             fq.withProgram.Clone(),
 		withEvidence:            fq.withEvidence.Clone(),
 		withEvents:              fq.withEvents.Clone(),
+		withOrganization:        fq.withOrganization.Clone(),
 		// clone intermediate query.
 		sql:       fq.sql.Clone(),
 		path:      fq.path,
@@ -620,17 +619,6 @@ func (fq *FileQuery) WithUser(opts ...func(*UserQuery)) *FileQuery {
 		opt(query)
 	}
 	fq.withUser = query
-	return fq
-}
-
-// WithOrganization tells the query-builder to eager-load the nodes that are connected to
-// the "organization" edge. The optional arguments are used to configure the query builder of the edge.
-func (fq *FileQuery) WithOrganization(opts ...func(*OrganizationQuery)) *FileQuery {
-	query := (&OrganizationClient{config: fq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	fq.withOrganization = query
 	return fq
 }
 
@@ -744,6 +732,17 @@ func (fq *FileQuery) WithEvents(opts ...func(*EventQuery)) *FileQuery {
 	return fq
 }
 
+// WithOrganization tells the query-builder to eager-load the nodes that are connected to
+// the "organization" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithOrganization(opts ...func(*OrganizationQuery)) *FileQuery {
+	query := (&OrganizationClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withOrganization = query
+	return fq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -831,7 +830,6 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		_spec       = fq.querySpec()
 		loadedTypes = [12]bool{
 			fq.withUser != nil,
-			fq.withOrganization != nil,
 			fq.withGroups != nil,
 			fq.withContact != nil,
 			fq.withEntity != nil,
@@ -842,8 +840,12 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			fq.withProgram != nil,
 			fq.withEvidence != nil,
 			fq.withEvents != nil,
+			fq.withOrganization != nil,
 		}
 	)
+	if fq.withOrganization != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, file.ForeignKeys...)
 	}
@@ -874,13 +876,6 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := fq.loadUser(ctx, query, nodes,
 			func(n *File) { n.Edges.User = []*User{} },
 			func(n *File, e *User) { n.Edges.User = append(n.Edges.User, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := fq.withOrganization; query != nil {
-		if err := fq.loadOrganization(ctx, query, nodes,
-			func(n *File) { n.Edges.Organization = []*Organization{} },
-			func(n *File, e *Organization) { n.Edges.Organization = append(n.Edges.Organization, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -956,17 +951,16 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	if query := fq.withOrganization; query != nil {
+		if err := fq.loadOrganization(ctx, query, nodes, nil,
+			func(n *File, e *Organization) { n.Edges.Organization = e }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range fq.withNamedUser {
 		if err := fq.loadUser(ctx, query, nodes,
 			func(n *File) { n.appendNamedUser(name) },
 			func(n *File, e *User) { n.appendNamedUser(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range fq.withNamedOrganization {
-		if err := fq.loadOrganization(ctx, query, nodes,
-			func(n *File) { n.appendNamedOrganization(name) },
-			func(n *File, e *Organization) { n.appendNamedOrganization(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1103,68 +1097,6 @@ func (fq *FileQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Fi
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "user" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (fq *FileQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*File, init func(*File), assign func(*File, *Organization)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*File)
-	nids := make(map[string]map[*File]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(file.OrganizationTable)
-		joinT.Schema(fq.schemaConfig.OrganizationFiles)
-		s.Join(joinT).On(s.C(organization.FieldID), joinT.C(file.OrganizationPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(file.OrganizationPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(file.OrganizationPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Organization](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "organization" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1792,6 +1724,38 @@ func (fq *FileQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	}
 	return nil
 }
+func (fq *FileQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*File, init func(*File), assign func(*File, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*File)
+	for i := range nodes {
+		if nodes[i].organization_files == nil {
+			continue
+		}
+		fk := *nodes[i].organization_files
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "organization_files" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (fq *FileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := fq.querySpec()
@@ -1902,20 +1866,6 @@ func (fq *FileQuery) WithNamedUser(name string, opts ...func(*UserQuery)) *FileQ
 		fq.withNamedUser = make(map[string]*UserQuery)
 	}
 	fq.withNamedUser[name] = query
-	return fq
-}
-
-// WithNamedOrganization tells the query-builder to eager-load the nodes that are connected to the "organization"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (fq *FileQuery) WithNamedOrganization(name string, opts ...func(*OrganizationQuery)) *FileQuery {
-	query := (&OrganizationClient{config: fq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if fq.withNamedOrganization == nil {
-		fq.withNamedOrganization = make(map[string]*OrganizationQuery)
-	}
-	fq.withNamedOrganization[name] = query
 	return fq
 }
 

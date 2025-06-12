@@ -88,7 +88,6 @@ func (File) Fields() []ent.Field {
 func (f File) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFrom(f, User{}),
-		defaultEdgeFrom(f, Organization{}),
 		defaultEdgeFromWithPagination(f, Group{}),
 		defaultEdgeFrom(f, Contact{}),
 		defaultEdgeFrom(f, Entity{}),
@@ -99,6 +98,11 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, Program{}),
 		defaultEdgeFrom(f, Evidence{}),
 		defaultEdgeToWithPagination(f, Event{}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: Organization{},
+			required:   false,
+		}),
 	}
 }
 

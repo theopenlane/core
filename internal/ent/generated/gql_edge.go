@@ -1577,18 +1577,6 @@ func (f *File) User(ctx context.Context) (result []*User, err error) {
 	return result, err
 }
 
-func (f *File) Organization(ctx context.Context) (result []*Organization, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = f.NamedOrganization(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = f.Edges.OrganizationOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = f.QueryOrganization().All(ctx)
-	}
-	return result, err
-}
-
 func (f *File) Groups(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {
@@ -1597,7 +1585,7 @@ func (f *File) Groups(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := f.Edges.totalCount[2][alias]
+	totalCount, hasTotalCount := f.Edges.totalCount[1][alias]
 	if nodes, err := f.NamedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -1714,7 +1702,7 @@ func (f *File) Events(
 		WithEventFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := f.Edges.totalCount[11][alias]
+	totalCount, hasTotalCount := f.Edges.totalCount[10][alias]
 	if nodes, err := f.NamedEvents(alias); err == nil || hasTotalCount {
 		pager, err := newEventPager(opts, last != nil)
 		if err != nil {
@@ -1725,6 +1713,14 @@ func (f *File) Events(
 		return conn, nil
 	}
 	return f.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (f *File) Organization(ctx context.Context) (*Organization, error) {
+	result, err := f.Edges.OrganizationOrErr()
+	if IsNotLoaded(err) {
+		result, err = f.QueryOrganization().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (gr *Group) Owner(ctx context.Context) (*Organization, error) {

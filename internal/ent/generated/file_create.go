@@ -315,21 +315,6 @@ func (fc *FileCreate) AddUser(u ...*User) *FileCreate {
 	return fc.AddUserIDs(ids...)
 }
 
-// AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
-func (fc *FileCreate) AddOrganizationIDs(ids ...string) *FileCreate {
-	fc.mutation.AddOrganizationIDs(ids...)
-	return fc
-}
-
-// AddOrganization adds the "organization" edges to the Organization entity.
-func (fc *FileCreate) AddOrganization(o ...*Organization) *FileCreate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return fc.AddOrganizationIDs(ids...)
-}
-
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
 func (fc *FileCreate) AddGroupIDs(ids ...string) *FileCreate {
 	fc.mutation.AddGroupIDs(ids...)
@@ -478,6 +463,25 @@ func (fc *FileCreate) AddEvents(e ...*Event) *FileCreate {
 		ids[i] = e[i].ID
 	}
 	return fc.AddEventIDs(ids...)
+}
+
+// SetOrganizationID sets the "organization" edge to the Organization entity by ID.
+func (fc *FileCreate) SetOrganizationID(id string) *FileCreate {
+	fc.mutation.SetOrganizationID(id)
+	return fc
+}
+
+// SetNillableOrganizationID sets the "organization" edge to the Organization entity by ID if the given value is not nil.
+func (fc *FileCreate) SetNillableOrganizationID(id *string) *FileCreate {
+	if id != nil {
+		fc = fc.SetOrganizationID(*id)
+	}
+	return fc
+}
+
+// SetOrganization sets the "organization" edge to the Organization entity.
+func (fc *FileCreate) SetOrganization(o *Organization) *FileCreate {
+	return fc.SetOrganizationID(o.ID)
 }
 
 // Mutation returns the FileMutation object of the builder.
@@ -703,23 +707,6 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.OrganizationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.OrganizationTable,
-			Columns: file.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fc.schemaConfig.OrganizationFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := fc.mutation.GroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -888,6 +875,24 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.OrganizationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   file.OrganizationTable,
+			Columns: []string{file.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.organization_files = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

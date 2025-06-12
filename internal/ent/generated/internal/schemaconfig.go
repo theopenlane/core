@@ -125,7 +125,6 @@ type SchemaConfig struct {
 	OrgSubscriptionHistory             string // OrgSubscriptionHistory table.
 	Organization                       string // Organization table.
 	OrganizationPersonalAccessTokens   string // Organization-personal_access_tokens->PersonalAccessToken table.
-	OrganizationFiles                  string // Organization-files->File table.
 	OrganizationEvents                 string // Organization-events->Event table.
 	OrganizationHistory                string // OrganizationHistory table.
 	OrganizationSetting                string // OrganizationSetting table.
