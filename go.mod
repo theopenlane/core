@@ -84,7 +84,7 @@ require (
 	github.com/theopenlane/utils v0.4.6
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.27
-	github.com/vektra/mockery/v3 v3.3.5
+	github.com/vektra/mockery/v3 v3.3.6
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.41.0
