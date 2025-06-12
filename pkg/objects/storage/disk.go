@@ -110,3 +110,8 @@ func (d *Disk) ListBuckets() ([]string, error) {
 
 	return []string{d.Opts.Bucket}, nil
 }
+
+// Delete removes a file from disk
+func (d *Disk) Delete(_ context.Context, key string) error {
+	return os.Remove(filepath.Join(d.Opts.Bucket, key))
+}

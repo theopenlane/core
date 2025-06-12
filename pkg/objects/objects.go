@@ -21,6 +21,8 @@ type Storage interface {
 	GetPresignedURL(string, time.Duration) (string, error)
 	// GetScheme returns the scheme of the storage backend
 	GetScheme() *string
+	// Delete is used to delete a file from the storage backend
+	Delete(context.Context, string) error
 	// ListBuckets is used to list the buckets in the storage backend
 	ListBuckets() ([]string, error)
 	io.Closer
