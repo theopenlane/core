@@ -46,7 +46,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 		expectedErrMessage string
 		expectedErrorCode  rout.ErrorCode
 		expectedStatus     int
-		from               string
+		invitationType     string
 	}{
 		{
 			name:           "happy path",
@@ -122,17 +122,87 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			expectedStatus:    http.StatusConflict,
 			expectedErrorCode: handlers.UserExistsErrCode,
 		},
+		{
+			name:           "happy path with valid invitation token",
+			email:          "invitee@theopenlane.io",
+			firstName:      "Invited",
+			lastName:       "User",
+			password:       bonkers,
+			emailExpected:  true,
+			expectedStatus: http.StatusCreated,
+			invitationType: "invitation",
+		},
+		{
+			name:           "happy path with invitation token, no first/last name",
+			email:          "invitee2@theopenlane.io",
+			password:       bonkers,
+			emailExpected:  true,
+			expectedStatus: http.StatusCreated,
+			invitationType: "invitation",
+		},
+		{
+			name:               "invalid invitation token",
+			email:              "invitee3@theopenlane.io",
+			firstName:          "Invalid",
+			lastName:           "Token",
+			password:           bonkers,
+			emailExpected:      true,
+			expectedStatus:     http.StatusBadRequest,
+			expectedErrMessage: "invite not found",
+			invitationType:     "invalid_invitation",
+		},
+		{
+			name:               "email mismatch with invitation token",
+			email:              "wrongemail@theopenlane.io",
+			firstName:          "Wrong",
+			lastName:           "Email",
+			password:           bonkers,
+			emailExpected:      true,
+			expectedErrMessage: "could not verify email",
+			expectedStatus:     http.StatusBadRequest,
+			invitationType:     "email_mismatch_invitation",
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			suite.ClearTestData()
 
+			var inviteToken *string
+
+			if tc.invitationType == "invitation" {
+				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+				invite := suite.db.Invite.Create().
+					SetRecipient(tc.email).
+					SetRole(enums.RoleMember).
+					SaveX(ctx)
+				inviteToken = &invite.Token
+			} else if tc.invitationType == "invalid_invitation" {
+
+				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+				_ = suite.db.Invite.Create().
+					SetRecipient(tc.email).
+					SetRole(enums.RoleMember).
+					SaveX(ctx)
+
+				// create token still but use another one
+				invalidToken := "invalid-token-123"
+				inviteToken = &invalidToken
+			} else if tc.invitationType == "email_mismatch_invitation" {
+				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+				invite := suite.db.Invite.Create().
+					SetRecipient("correctemail@theopenlane.io").
+					SetRole(enums.RoleMember).
+					SaveX(ctx)
+				inviteToken = &invite.Token
+			}
+
 			registerJSON := models.RegisterRequest{
 				FirstName: tc.firstName,
 				LastName:  tc.lastName,
 				Email:     tc.email,
 				Password:  tc.password,
+				Token:     inviteToken,
 			}
 
 			body, err := json.Marshal(registerJSON)
@@ -181,16 +251,42 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				assert.NotEmpty(t, u.Edges.DefaultOrg)
 				require.NotEmpty(t, u.Edges.DefaultOrg.ID)
 
-				// setup context
-				ctx = auth.NewTestContextWithOrgID(out.ID, u.Edges.DefaultOrg.ID)
+				if tc.invitationType == "invitation" {
+					// The user should be added to the organization that sent the invite (testUser1's org)
+					assert.Equal(t, testUser1.OrganizationID, u.Edges.DefaultOrg.ID)
 
-				// make sure user is an owner of their personal org
-				orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &openlaneclient.OrgMembershipWhereInput{
-					OrganizationID: &u.Edges.DefaultOrg.ID,
-				})
-				require.NoError(t, err)
-				require.Len(t, orgMemberships.OrgMemberships.Edges, 1)
-				assert.Equal(t, orgMemberships.OrgMemberships.Edges[0].Node.Role, enums.RoleOwner)
+					// setup context with the joined org
+					ctx = auth.NewTestContextWithOrgID(out.ID, testUser1.OrganizationID)
+
+					// make sure user is a member of the organization they were invited to
+					orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &openlaneclient.OrgMembershipWhereInput{
+						OrganizationID: &testUser1.OrganizationID,
+					})
+					require.NoError(t, err)
+
+					// find the membership for this user
+					found := false
+					for _, edge := range orgMemberships.OrgMemberships.Edges {
+						if edge.Node.UserID == out.ID {
+							assert.Equal(t, enums.RoleMember, edge.Node.Role)
+							found = true
+							break
+						}
+					}
+					assert.True(t, found, "user should be a member of the invited organization")
+				} else {
+
+					// for regular registration, setup context with user's personal org
+					ctx = auth.NewTestContextWithOrgID(out.ID, u.Edges.DefaultOrg.ID)
+
+					// make sure user is an owner of their personal org
+					orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &openlaneclient.OrgMembershipWhereInput{
+						OrganizationID: &u.Edges.DefaultOrg.ID,
+					})
+					require.NoError(t, err)
+					require.Len(t, orgMemberships.OrgMemberships.Edges, 1)
+					assert.Equal(t, orgMemberships.OrgMemberships.Edges[0].Node.Role, enums.RoleOwner)
+				}
 
 				// get user to test display name
 				user, err := suite.db.User.Get(ctx, out.ID)
@@ -208,32 +304,61 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 
 			// wait for messages
 			if tc.emailExpected {
-				job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-					[]rivertest.ExpectedJob{
-						{
-							Args: jobs.EmailArgs{
-								Message: *newman.NewEmailMessageWithOptions(
-									newman.WithSubject("Please verify your email address to login to Meow Inc."),
-									newman.WithTo([]string{tc.email}),
-								),
+				if tc.invitationType == "invitation" {
+					// the actual invite email
+					// user registration email
+					// user invite acceptance email
+					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+						[]rivertest.ExpectedJob{
+							{
+								Args: jobs.EmailArgs{},
 							},
-						},
-						{
-							Args: jobs.EmailArgs{
-								Message: *newman.NewEmailMessageWithOptions(
-									newman.WithSubject("Welcome to Meow Inc.!"),
-									newman.WithTo([]string{tc.email}),
-								),
+							{
+								Args: jobs.EmailArgs{},
 							},
-						},
-					})
-				require.NotNil(t, job)
+							{
+								Args: jobs.EmailArgs{},
+							},
+						})
+					require.NotNil(t, job)
+
+				} else if strings.Contains(tc.invitationType, "invitation") {
+					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+						[]rivertest.ExpectedJob{
+							{
+								Args: jobs.EmailArgs{},
+							},
+							{
+								Args: jobs.EmailArgs{},
+							},
+						})
+					require.NotNil(t, job)
+
+				} else {
+					// For regular registration, expect both verification and welcome emails
+					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+						[]rivertest.ExpectedJob{
+							{
+								Args: jobs.EmailArgs{
+									Message: *newman.NewEmailMessageWithOptions(
+										newman.WithSubject("Please verify your email address to login to Meow Inc."),
+										newman.WithTo([]string{tc.email}),
+									),
+								},
+							},
+							{
+								Args: jobs.EmailArgs{
+									Message: *newman.NewEmailMessageWithOptions(
+										newman.WithSubject("Welcome to Meow Inc.!"),
+										newman.WithTo([]string{tc.email}),
+									),
+								},
+							},
+						})
+					require.NotNil(t, job)
+				}
 			} else {
-				rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
-					Message: *newman.NewEmailMessageWithOptions(
-						newman.WithSubject("Please verify your email address to login to Meow Inc"),
-					),
-				}, nil)
+				rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
 			}
 		})
 	}

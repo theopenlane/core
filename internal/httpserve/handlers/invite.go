@@ -62,102 +62,8 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	inv := &Invite{
-		Token: in.Token,
-	}
-
-	// ensure the user that is logged in, matches the invited user
-	if err := inv.validateInviteRequest(); err != nil {
-		return h.BadRequest(ctx, err)
-	}
-
-	// set the initial context based on the token
-	ctxWithToken := token.NewContextWithOrgInviteToken(reqCtx, inv.Token)
-
-	// fetch the recipient and org owner based on token
-	invitedUser, err := h.getUserByInviteToken(ctxWithToken, inv.Token)
+	ctxWithToken, user, invitedUser, err := h.processInvitation(ctx, in.Token, userID)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return h.BadRequest(ctx, err)
-		}
-
-		log.Error().Err(err).Msg("error retrieving invite token")
-
-		return h.InternalServerError(ctx, nil)
-	}
-
-	// add email to the invite
-	inv.Email = invitedUser.Recipient
-
-	// get user details for logged in user
-	user, err := h.getUserDetailsByID(reqCtx, userID)
-	if err != nil {
-		log.Error().Err(err).Msg("unable to get user for request")
-
-		return h.Unauthorized(ctx, err)
-	}
-
-	// ensure the user that is logged in, matches the invited user
-	if err := inv.validateUser(user.Email); err != nil {
-		return h.BadRequest(ctx, err)
-	}
-
-	// string to ulid so we can match the token input
-	oid, err := ulid.Parse(invitedUser.OwnerID)
-	if err != nil {
-		return h.BadRequest(ctx, err)
-	}
-
-	// string to ulid so we can match the token input
-	uid, err := ulid.Parse(userID)
-	if err != nil {
-		return h.BadRequest(ctx, err)
-	}
-
-	// construct the invite details but set email to the original recipient, and the joining organization ID as the current owner of the invitation
-	invite := &Invite{
-		Email:     invitedUser.Recipient,
-		UserID:    uid,
-		DestOrgID: oid,
-		Role:      invitedUser.Role,
-	}
-
-	// set tokens for request
-	if err := invite.setOrgInviteTokens(invitedUser, inv.Token); err != nil {
-		log.Error().Err(err).Msg("unable to set invite token for request")
-
-		return h.BadRequest(ctx, err)
-	}
-
-	// reconstruct the token based on recipient & owning organization so we can compare it to the one were receiving
-	t := &tokens.OrgInviteToken{
-		Email: invitedUser.Recipient,
-		OrgID: oid,
-	}
-
-	// check and ensure the token has not expired
-	if t.ExpiresAt, err = invite.GetInviteExpires(); err != nil {
-		log.Error().Err(err).Msg("unable to parse expiration")
-
-		return h.InternalServerError(ctx, err)
-	}
-
-	// Verify the token is valid with the stored secret
-	if err = t.Verify(invite.GetInviteToken(), invite.Secret); err != nil {
-		if errors.Is(err, tokens.ErrTokenExpired) {
-			if err := updateInviteStatusExpired(ctxWithToken, invitedUser); err != nil {
-				return err
-			}
-
-			return h.BadRequest(ctx, ErrExpiredToken)
-		}
-
-		return h.BadRequest(ctx, err)
-	}
-
-	if err := updateInviteStatusAccepted(ctxWithToken, invitedUser); err != nil {
-		log.Error().Err(err).Msg("unable to update invite status")
-
 		return h.BadRequest(ctx, err)
 	}
 
@@ -181,6 +87,113 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	}
 
 	return h.Created(ctx, out)
+}
+
+func (h *Handler) processInvitation(
+	ctx echo.Context, invitationToken, userID string,
+) (context.Context, *generated.User, *generated.Invite, error) {
+
+	inv := &Invite{
+		Token: invitationToken,
+	}
+
+	// ensure the user that is logged in, matches the invited user
+	if err := inv.validateInviteRequest(); err != nil {
+		return nil, nil, nil, err
+	}
+
+	reqCtx := ctx.Request().Context()
+
+	// set the initial context based on the token
+	ctxWithToken := token.NewContextWithOrgInviteToken(reqCtx, inv.Token)
+
+	// fetch the recipient and org owner based on token
+	invitedUser, err := h.getUserByInviteToken(ctxWithToken, inv.Token)
+	if err != nil {
+		if generated.IsNotFound(err) {
+			return nil, nil, nil, err
+		}
+
+		log.Error().Err(err).Msg("error retrieving invite token")
+		return nil, nil, nil, err
+	}
+
+	// add email to the invite
+	inv.Email = invitedUser.Recipient
+
+	// get user details for logged in user
+	user, err := h.getUserDetailsByID(reqCtx, userID)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get user for request")
+
+		return nil, nil, nil, err
+	}
+
+	// ensure the user that is logged in, matches the invited user
+	if err := inv.validateUser(user.Email); err != nil {
+		return nil, nil, nil, err
+	}
+
+	// string to ulid so we can match the token input
+	oid, err := ulid.Parse(invitedUser.OwnerID)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	// string to ulid so we can match the token input
+	uid, err := ulid.Parse(userID)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	// construct the invite details but set email to the original recipient, and the joining organization ID as the current owner of the invitation
+	invite := &Invite{
+		Email:     invitedUser.Recipient,
+		UserID:    uid,
+		DestOrgID: oid,
+		Role:      invitedUser.Role,
+	}
+
+	// set tokens for request
+	if err := invite.setOrgInviteTokens(invitedUser, inv.Token); err != nil {
+		log.Error().Err(err).Msg("unable to set invite token for request")
+
+		return nil, nil, nil, err
+	}
+
+	// reconstruct the token based on recipient & owning organization so we can compare it to the one were receiving
+	t := &tokens.OrgInviteToken{
+		Email: invitedUser.Recipient,
+		OrgID: oid,
+	}
+
+	// check and ensure the token has not expired
+	if t.ExpiresAt, err = invite.GetInviteExpires(); err != nil {
+		log.Error().Err(err).Msg("unable to parse expiration")
+
+		return nil, nil, nil, err
+	}
+
+	// Verify the token is valid with the stored secret
+	if err = t.Verify(invite.GetInviteToken(), invite.Secret); err != nil {
+		if errors.Is(err, tokens.ErrTokenExpired) {
+			if err := updateInviteStatusExpired(ctxWithToken, invitedUser); err != nil {
+				return nil, nil, nil, err
+			}
+
+			return nil, nil, nil, tokens.ErrTokenExpired
+		}
+
+		return nil, nil, nil, err
+	}
+
+	if err := updateInviteStatusAccepted(ctxWithToken, invitedUser); err != nil {
+		log.Error().Err(err).Msg("unable to update invite status")
+
+		return nil, nil, nil, err
+	}
+
+	return ctxWithToken, user, invitedUser, nil
 }
 
 // validateInviteRequest is a helper function that validates the required fields are set in the user request
