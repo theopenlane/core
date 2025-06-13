@@ -59,6 +59,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		subscriberResults                 *generated.SubscriberConnection
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
+		trustcenterResults                *generated.TrustCenterConnection
 		userResults                       *generated.UserConnection
 		usersettingResults                *generated.UserSettingConnection
 		webauthnResults                   *generated.WebauthnConnection
@@ -326,6 +327,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			trustcenterResults, err = searchTrustCenters(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			userResults, err = searchUsers(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -540,6 +548,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Templates = templateResults
 
 		res.TotalCount += templateResults.TotalCount
+	}
+	if trustcenterResults != nil && len(trustcenterResults.Edges) > 0 {
+		res.TrustCenters = trustcenterResults
+
+		res.TotalCount += trustcenterResults.TotalCount
 	}
 	if userResults != nil && len(userResults.Edges) > 0 {
 		res.Users = userResults
@@ -928,6 +941,16 @@ func (r *queryResolver) TemplateSearch(ctx context.Context, query string, after 
 
 	// return the results
 	return templateResults, nil
+}
+func (r *queryResolver) TrustCenterSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterConnection, error) {
+	trustcenterResults, err := searchTrustCenters(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return trustcenterResults, nil
 }
 func (r *queryResolver) UserSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
 	userResults, err := searchUsers(ctx, query, after, first, before, last)
