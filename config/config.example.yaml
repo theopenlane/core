@@ -188,7 +188,7 @@ redis:
     maxIdleConns: 0
     maxRetries: 3
     minIdleConns: 0
-    name: openlane
+    name: ""
     password: ""
     readTimeout: 0
     username: ""

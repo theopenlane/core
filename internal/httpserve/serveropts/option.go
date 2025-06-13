@@ -1,6 +1,7 @@
 package serveropts
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -8,6 +9,8 @@ import (
 	"fmt"
 	"os"
 	"slices"
+
+	"google.golang.org/api/option"
 
 	"github.com/redis/go-redis/v9"
 
@@ -418,6 +421,33 @@ func WithObjectStorage() ServerOption {
 				store, err = storage.NewS3FromConfig(opts)
 				if err != nil {
 					log.Panic().Err(err).Msg("error creating S3 store")
+				}
+
+				bucks, err := store.ListBuckets()
+				if err != nil {
+					log.Panic().Err(err).Msg("error listing buckets")
+				}
+
+				if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
+					log.Panic().Msg("default bucket not found")
+				}
+			case storage.ProviderGCS:
+				gcsOpts := []storage.GCSOption{
+					storage.WithGCSBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+				}
+
+				if s.Config.Settings.ObjectStorage.CredentialsJSON != "" {
+					gcsOpts = append(gcsOpts, storage.WithGCSClientOptions(option.WithCredentialsJSON([]byte(s.Config.Settings.ObjectStorage.CredentialsJSON))))
+				}
+
+				// reuse region field to hold project ID for now
+				if s.Config.Settings.ObjectStorage.Region != "" {
+					gcsOpts = append(gcsOpts, storage.WithGCSProjectID(s.Config.Settings.ObjectStorage.Region))
+				}
+
+				store, err = storage.NewGCSFromConfig(context.Background(), storage.NewGCSOptions(gcsOpts...))
+				if err != nil {
+					log.Panic().Err(err).Msg("error creating GCS store")
 				}
 
 				bucks, err := store.ListBuckets()

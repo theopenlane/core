@@ -133,7 +133,7 @@ data:
   CORE_JOBQUEUE_RUNMIGRATIONS: {{ .Values.core.jobQueue.runMigrations | default false }}
   CORE_REDIS_ENABLED: {{ .Values.core.redis.enabled | default true }}
   CORE_REDIS_ADDRESS: {{ .Values.core.redis.address | default "localhost:6379" }}
-  CORE_REDIS_NAME: {{ .Values.core.redis.name | default "openlane" }}
+  CORE_REDIS_NAME: {{ .Values.core.redis.name }}
   CORE_REDIS_USERNAME: {{ .Values.core.redis.username }}
   CORE_REDIS_PASSWORD: {{ .Values.core.redis.password }}
   CORE_REDIS_DB: {{ .Values.core.redis.db | default 0 }}

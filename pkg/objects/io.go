@@ -2,9 +2,6 @@ package objects
 
 import (
 	"bytes"
-	// #nosec: G501
-	//nolint:gosec  // MD5 is used for checksums, not for hashing passwords
-
 	"fmt"
 	"io"
 	"net/http"
