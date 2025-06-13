@@ -390,6 +390,26 @@ func (fhu *FileHistoryUpdate) ClearFileContents() *FileHistoryUpdate {
 	return fhu
 }
 
+// SetOrganizationID sets the "organization_id" field.
+func (fhu *FileHistoryUpdate) SetOrganizationID(s string) *FileHistoryUpdate {
+	fhu.mutation.SetOrganizationID(s)
+	return fhu
+}
+
+// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableOrganizationID(s *string) *FileHistoryUpdate {
+	if s != nil {
+		fhu.SetOrganizationID(*s)
+	}
+	return fhu
+}
+
+// ClearOrganizationID clears the value of the "organization_id" field.
+func (fhu *FileHistoryUpdate) ClearOrganizationID() *FileHistoryUpdate {
+	fhu.mutation.ClearOrganizationID()
+	return fhu
+}
+
 // Mutation returns the FileHistoryMutation object of the builder.
 func (fhu *FileHistoryUpdate) Mutation() *FileHistoryMutation {
 	return fhu.mutation
@@ -570,6 +590,12 @@ func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if fhu.mutation.FileContentsCleared() {
 		_spec.ClearField(filehistory.FieldFileContents, field.TypeBytes)
+	}
+	if value, ok := fhu.mutation.OrganizationID(); ok {
+		_spec.SetField(filehistory.FieldOrganizationID, field.TypeString, value)
+	}
+	if fhu.mutation.OrganizationIDCleared() {
+		_spec.ClearField(filehistory.FieldOrganizationID, field.TypeString)
 	}
 	_spec.Node.Schema = fhu.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhu.schemaConfig)
@@ -953,6 +979,26 @@ func (fhuo *FileHistoryUpdateOne) ClearFileContents() *FileHistoryUpdateOne {
 	return fhuo
 }
 
+// SetOrganizationID sets the "organization_id" field.
+func (fhuo *FileHistoryUpdateOne) SetOrganizationID(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetOrganizationID(s)
+	return fhuo
+}
+
+// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableOrganizationID(s *string) *FileHistoryUpdateOne {
+	if s != nil {
+		fhuo.SetOrganizationID(*s)
+	}
+	return fhuo
+}
+
+// ClearOrganizationID clears the value of the "organization_id" field.
+func (fhuo *FileHistoryUpdateOne) ClearOrganizationID() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearOrganizationID()
+	return fhuo
+}
+
 // Mutation returns the FileHistoryMutation object of the builder.
 func (fhuo *FileHistoryUpdateOne) Mutation() *FileHistoryMutation {
 	return fhuo.mutation
@@ -1163,6 +1209,12 @@ func (fhuo *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHisto
 	}
 	if fhuo.mutation.FileContentsCleared() {
 		_spec.ClearField(filehistory.FieldFileContents, field.TypeBytes)
+	}
+	if value, ok := fhuo.mutation.OrganizationID(); ok {
+		_spec.SetField(filehistory.FieldOrganizationID, field.TypeString, value)
+	}
+	if fhuo.mutation.OrganizationIDCleared() {
+		_spec.ClearField(filehistory.FieldOrganizationID, field.TypeString)
 	}
 	_spec.Node.Schema = fhuo.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhuo.schemaConfig)

@@ -65,6 +65,8 @@ const (
 	FieldStoragePath = "storage_path"
 	// FieldFileContents holds the string denoting the file_contents field in the database.
 	FieldFileContents = "file_contents"
+	// FieldOrganizationID holds the string denoting the organization_id field in the database.
+	FieldOrganizationID = "organization_id"
 	// Table holds the table name of the filehistory in the database.
 	Table = "file_history"
 )
@@ -96,6 +98,7 @@ var Columns = []string{
 	FieldStorageVolume,
 	FieldStoragePath,
 	FieldFileContents,
+	FieldOrganizationID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -255,6 +258,11 @@ func ByStorageVolume(opts ...sql.OrderTermOption) OrderOption {
 // ByStoragePath orders the results by the storage_path field.
 func ByStoragePath(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStoragePath, opts...).ToFunc()
+}
+
+// ByOrganizationID orders the results by the organization_id field.
+func ByOrganizationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrganizationID, opts...).ToFunc()
 }
 
 var (

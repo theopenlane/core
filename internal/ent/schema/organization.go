@@ -408,6 +408,7 @@ func (Organization) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.HasOrgMutationAccess(), // Requires edit for Update, and delete for Delete mutations
 			privacy.AlwaysAllowRule(),   // Allow all other users (e.g. a user with a JWT should be able to create a new org)
+
 		),
 	)
 }

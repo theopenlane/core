@@ -44,6 +44,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/usagehistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 )
@@ -1701,6 +1702,52 @@ func (thq *TemplateHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Tem
 	return thq.
 		Where(templatehistory.HistoryTimeLTE(time)).
 		Order(templatehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (u *Usage) History() *UsageHistoryQuery {
+	historyClient := NewUsageHistoryClient(u.config)
+	return historyClient.Query().Where(usagehistory.Ref(u.ID))
+}
+
+func (uh *UsageHistory) Next(ctx context.Context) (*UsageHistory, error) {
+	client := NewUsageHistoryClient(uh.config)
+	return client.Query().
+		Where(
+			usagehistory.Ref(uh.Ref),
+			usagehistory.HistoryTimeGT(uh.HistoryTime),
+		).
+		Order(usagehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (uh *UsageHistory) Prev(ctx context.Context) (*UsageHistory, error) {
+	client := NewUsageHistoryClient(uh.config)
+	return client.Query().
+		Where(
+			usagehistory.Ref(uh.Ref),
+			usagehistory.HistoryTimeLT(uh.HistoryTime),
+		).
+		Order(usagehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (uhq *UsageHistoryQuery) Earliest(ctx context.Context) (*UsageHistory, error) {
+	return uhq.
+		Order(usagehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (uhq *UsageHistoryQuery) Latest(ctx context.Context) (*UsageHistory, error) {
+	return uhq.
+		Order(usagehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (uhq *UsageHistoryQuery) AsOf(ctx context.Context, time time.Time) (*UsageHistory, error) {
+	return uhq.
+		Where(usagehistory.HistoryTimeLTE(time)).
+		Order(usagehistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

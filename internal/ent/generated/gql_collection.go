@@ -94,6 +94,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/generated/usage"
+	"github.com/theopenlane/core/internal/ent/generated/usagehistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -10726,19 +10728,6 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "organization":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&OrganizationClient{config: f.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
-				return err
-			}
-			f.WithNamedOrganization(alias, func(wq *OrganizationQuery) {
-				*wq = *query
-			})
-
 		case "groups":
 			var (
 				alias = field.Alias
@@ -10786,10 +10775,10 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -10797,10 +10786,10 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 					f.loadTotal = append(f.loadTotal, func(_ context.Context, nodes []*File) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Groups)
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -10983,10 +10972,10 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[11] == nil {
-								nodes[i].Edges.totalCount[11] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[11][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -10994,10 +10983,10 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 					f.loadTotal = append(f.loadTotal, func(_ context.Context, nodes []*File) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
-							if nodes[i].Edges.totalCount[11] == nil {
-								nodes[i].Edges.totalCount[11] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[11][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -11028,6 +11017,21 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			f.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
+
+		case "organization":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			f.withOrganization = query
+			if _, ok := fieldSeen[file.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, file.FieldOrganizationID)
+				fieldSeen[file.FieldOrganizationID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[file.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, file.FieldCreatedAt)
@@ -11117,6 +11121,11 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[file.FieldStoragePath]; !ok {
 				selectedFields = append(selectedFields, file.FieldStoragePath)
 				fieldSeen[file.FieldStoragePath] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[file.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, file.FieldOrganizationID)
+				fieldSeen[file.FieldOrganizationID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -11312,6 +11321,11 @@ func (fh *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[filehistory.FieldStoragePath]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldStoragePath)
 				fieldSeen[filehistory.FieldStoragePath] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[filehistory.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldOrganizationID)
+				fieldSeen[filehistory.FieldOrganizationID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -23718,13 +23732,9 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(organization.FilesTable)
-							s.Join(joinT).On(s.C(file.FieldID), joinT.C(organization.FilesPrimaryKey[1]))
-							s.Where(sql.InValues(joinT.C(organization.FilesPrimaryKey[0]), ids...))
-							s.Select(joinT.C(organization.FilesPrimaryKey[0]), sql.Count("*"))
-							s.GroupBy(joinT.C(organization.FilesPrimaryKey[0]))
+							s.Where(sql.InValues(s.C(organization.FilesColumn), ids...))
 						})
-						if err := query.Select().Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(organization.FilesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -23769,7 +23779,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(organization.FilesPrimaryKey[0], limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(organization.FilesColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
@@ -37685,6 +37695,279 @@ func newTemplateHistoryPaginateArgs(rv map[string]any) *templatehistoryPaginateA
 	}
 	if v, ok := rv[whereField].(*TemplateHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithTemplateHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (u *UsageQuery) CollectFields(ctx context.Context, satisfies ...string) (*UsageQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return u, nil
+	}
+	if err := u.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return u, nil
+}
+
+func (u *UsageQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(usage.Columns))
+		selectedFields = []string{usage.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[usage.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, usage.FieldCreatedAt)
+				fieldSeen[usage.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[usage.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, usage.FieldUpdatedAt)
+				fieldSeen[usage.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[usage.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, usage.FieldCreatedBy)
+				fieldSeen[usage.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[usage.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, usage.FieldUpdatedBy)
+				fieldSeen[usage.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[usage.FieldTags]; !ok {
+				selectedFields = append(selectedFields, usage.FieldTags)
+				fieldSeen[usage.FieldTags] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[usage.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, usage.FieldOrganizationID)
+				fieldSeen[usage.FieldOrganizationID] = struct{}{}
+			}
+		case "resourceType":
+			if _, ok := fieldSeen[usage.FieldResourceType]; !ok {
+				selectedFields = append(selectedFields, usage.FieldResourceType)
+				fieldSeen[usage.FieldResourceType] = struct{}{}
+			}
+		case "used":
+			if _, ok := fieldSeen[usage.FieldUsed]; !ok {
+				selectedFields = append(selectedFields, usage.FieldUsed)
+				fieldSeen[usage.FieldUsed] = struct{}{}
+			}
+		case "limit":
+			if _, ok := fieldSeen[usage.FieldLimit]; !ok {
+				selectedFields = append(selectedFields, usage.FieldLimit)
+				fieldSeen[usage.FieldLimit] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		u.Select(selectedFields...)
+	}
+	return nil
+}
+
+type usagePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []UsagePaginateOption
+}
+
+func newUsagePaginateArgs(rv map[string]any) *usagePaginateArgs {
+	args := &usagePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &UsageOrder{Field: &UsageOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithUsageOrder(order))
+			}
+		case *UsageOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithUsageOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*UsageWhereInput); ok {
+		args.opts = append(args.opts, WithUsageFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (uh *UsageHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*UsageHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return uh, nil
+	}
+	if err := uh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return uh, nil
+}
+
+func (uh *UsageHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(usagehistory.Columns))
+		selectedFields = []string{usagehistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[usagehistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldHistoryTime)
+				fieldSeen[usagehistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[usagehistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldRef)
+				fieldSeen[usagehistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[usagehistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldOperation)
+				fieldSeen[usagehistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[usagehistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldCreatedAt)
+				fieldSeen[usagehistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[usagehistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldUpdatedAt)
+				fieldSeen[usagehistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[usagehistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldCreatedBy)
+				fieldSeen[usagehistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[usagehistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldUpdatedBy)
+				fieldSeen[usagehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[usagehistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldTags)
+				fieldSeen[usagehistory.FieldTags] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[usagehistory.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldOrganizationID)
+				fieldSeen[usagehistory.FieldOrganizationID] = struct{}{}
+			}
+		case "resourceType":
+			if _, ok := fieldSeen[usagehistory.FieldResourceType]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldResourceType)
+				fieldSeen[usagehistory.FieldResourceType] = struct{}{}
+			}
+		case "used":
+			if _, ok := fieldSeen[usagehistory.FieldUsed]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldUsed)
+				fieldSeen[usagehistory.FieldUsed] = struct{}{}
+			}
+		case "limit":
+			if _, ok := fieldSeen[usagehistory.FieldLimit]; !ok {
+				selectedFields = append(selectedFields, usagehistory.FieldLimit)
+				fieldSeen[usagehistory.FieldLimit] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		uh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type usagehistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []UsageHistoryPaginateOption
+}
+
+func newUsageHistoryPaginateArgs(rv map[string]any) *usagehistoryPaginateArgs {
+	args := &usagehistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &UsageHistoryOrder{Field: &UsageHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithUsageHistoryOrder(order))
+			}
+		case *UsageHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithUsageHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*UsageHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithUsageHistoryFilter(v.Filter))
 	}
 	return args
 }

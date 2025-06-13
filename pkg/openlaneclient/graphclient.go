@@ -412,6 +412,11 @@ type OpenlaneGraphClient interface {
 	GetAllTFASettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTFASettings, error)
 	GetTFASetting(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetTFASetting, error)
 	UpdateTFASetting(ctx context.Context, input UpdateTFASettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTFASetting, error)
+	GetAllUsages(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsages, error)
+	GetUsageByID(ctx context.Context, usageID string, interceptors ...clientv2.RequestInterceptor) (*GetUsageByID, error)
+	GetUsages(ctx context.Context, first *int64, last *int64, where *UsageWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetUsages, error)
+	GetAllUsageHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsageHistories, error)
+	GetUsageHistories(ctx context.Context, first *int64, last *int64, where *UsageHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetUsageHistories, error)
 	CreateUser(ctx context.Context, input CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
 	DeleteUser(ctx context.Context, deleteUserID string, interceptors ...clientv2.RequestInterceptor) (*DeleteUser, error)
 	GetAllUsers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsers, error)
@@ -3482,6 +3487,7 @@ type AdminSearch_AdminSearch_Files_Edges_Node struct {
 	DetectedMimeType      *string  "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
 	ID                    string   "json:\"id\" graphql:\"id\""
 	Md5Hash               *string  "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	OrganizationID        *string  "json:\"organizationID,omitempty\" graphql:\"organizationID\""
 	ProvidedFileExtension string   "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
 	ProvidedFileName      string   "json:\"providedFileName\" graphql:\"providedFileName\""
 	StoragePath           *string  "json:\"storagePath,omitempty\" graphql:\"storagePath\""
@@ -3521,6 +3527,12 @@ func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetMd5Hash() *string {
 		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
 	}
 	return t.Md5Hash
+}
+func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetOrganizationID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Files_Edges_Node{}
+	}
+	return t.OrganizationID
 }
 func (t *AdminSearch_AdminSearch_Files_Edges_Node) GetProvidedFileExtension() string {
 	if t == nil {
@@ -6565,6 +6577,99 @@ func (t *AdminSearch_AdminSearch_Templates) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_Usages_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Usages_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Usages_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Usages_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Usages_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Usages_Edges_Node struct {
+	ID             string   "json:\"id\" graphql:\"id\""
+	OrganizationID string   "json:\"organizationID\" graphql:\"organizationID\""
+	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_Usages_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Usages_Edges_Node) GetOrganizationID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages_Edges_Node{}
+	}
+	return t.OrganizationID
+}
+func (t *AdminSearch_AdminSearch_Usages_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_Usages_Edges struct {
+	Node *AdminSearch_AdminSearch_Usages_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_Usages_Edges) GetNode() *AdminSearch_AdminSearch_Usages_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_Usages struct {
+	Edges      []*AdminSearch_AdminSearch_Usages_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Usages_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Usages) GetEdges() []*AdminSearch_AdminSearch_Usages_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Usages) GetPageInfo() *AdminSearch_AdminSearch_Usages_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Usages) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Usages{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -6925,6 +7030,7 @@ type AdminSearch_AdminSearch struct {
 	Tasks                       *AdminSearch_AdminSearch_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *AdminSearch_AdminSearch_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                                "json:\"totalCount\" graphql:\"totalCount\""
+	Usages                      *AdminSearch_AdminSearch_Usages                      "json:\"usages,omitempty\" graphql:\"usages\""
 	UserSettings                *AdminSearch_AdminSearch_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *AdminSearch_AdminSearch_Users                       "json:\"users,omitempty\" graphql:\"users\""
 	Webauthns                   *AdminSearch_AdminSearch_Webauthns                   "json:\"webauthns,omitempty\" graphql:\"webauthns\""
@@ -7157,6 +7263,12 @@ func (t *AdminSearch_AdminSearch) GetTotalCount() int64 {
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.TotalCount
+}
+func (t *AdminSearch_AdminSearch) GetUsages() *AdminSearch_AdminSearch_Usages {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Usages
 }
 func (t *AdminSearch_AdminSearch) GetUserSettings() *AdminSearch_AdminSearch_UserSettings {
 	if t == nil {
@@ -66155,6 +66267,92 @@ func (t *GlobalSearch_Search_Templates) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_Usages_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Usages_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Usages_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Usages_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Usages_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Usages_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Usages_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Usages_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Usages_Edges struct {
+	Node *GlobalSearch_Search_Usages_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_Usages_Edges) GetNode() *GlobalSearch_Search_Usages_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_Usages struct {
+	Edges      []*GlobalSearch_Search_Usages_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Usages_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Usages) GetEdges() []*GlobalSearch_Search_Usages_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Usages) GetPageInfo() *GlobalSearch_Search_Usages_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Usages) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Usages{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -66459,6 +66657,7 @@ type GlobalSearch_Search struct {
 	Tasks                       *GlobalSearch_Search_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *GlobalSearch_Search_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                            "json:\"totalCount\" graphql:\"totalCount\""
+	Usages                      *GlobalSearch_Search_Usages                      "json:\"usages,omitempty\" graphql:\"usages\""
 	UserSettings                *GlobalSearch_Search_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *GlobalSearch_Search_Users                       "json:\"users,omitempty\" graphql:\"users\""
 	Webauthns                   *GlobalSearch_Search_Webauthns                   "json:\"webauthns,omitempty\" graphql:\"webauthns\""
@@ -66691,6 +66890,12 @@ func (t *GlobalSearch_Search) GetTotalCount() int64 {
 		t = &GlobalSearch_Search{}
 	}
 	return t.TotalCount
+}
+func (t *GlobalSearch_Search) GetUsages() *GlobalSearch_Search_Usages {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Usages
 }
 func (t *GlobalSearch_Search) GetUserSettings() *GlobalSearch_Search_UserSettings {
 	if t == nil {
@@ -74926,6 +75131,690 @@ func (t *UpdateTFASetting_UpdateTFASetting) GetTfaSetting() *UpdateTFASetting_Up
 	return &t.TfaSetting
 }
 
+type GetAllUsages_Usages_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllUsages_Usages_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllUsages_Usages_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllUsages_Usages_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllUsages_Usages_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllUsages_Usages_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllUsages_Usages_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllUsages_Usages_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllUsages_Usages_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllUsages_Usages_Edges_Node struct {
+	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string          "json:\"id\" graphql:\"id\""
+	Limit          int64           "json:\"limit\" graphql:\"limit\""
+	OrganizationID string          "json:\"organizationID\" graphql:\"organizationID\""
+	ResourceType   enums.UsageType "json:\"resourceType\" graphql:\"resourceType\""
+	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Used           int64           "json:\"used\" graphql:\"used\""
+}
+
+func (t *GetAllUsages_Usages_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllUsages_Usages_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllUsages_Usages_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllUsages_Usages_Edges_Node) GetLimit() int64 {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return t.Limit
+}
+func (t *GetAllUsages_Usages_Edges_Node) GetOrganizationID() string {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return t.OrganizationID
+}
+func (t *GetAllUsages_Usages_Edges_Node) GetResourceType() *enums.UsageType {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return &t.ResourceType
+}
+func (t *GetAllUsages_Usages_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllUsages_Usages_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllUsages_Usages_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllUsages_Usages_Edges_Node) GetUsed() int64 {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges_Node{}
+	}
+	return t.Used
+}
+
+type GetAllUsages_Usages_Edges struct {
+	Node *GetAllUsages_Usages_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllUsages_Usages_Edges) GetNode() *GetAllUsages_Usages_Edges_Node {
+	if t == nil {
+		t = &GetAllUsages_Usages_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllUsages_Usages struct {
+	Edges      []*GetAllUsages_Usages_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllUsages_Usages_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllUsages_Usages) GetEdges() []*GetAllUsages_Usages_Edges {
+	if t == nil {
+		t = &GetAllUsages_Usages{}
+	}
+	return t.Edges
+}
+func (t *GetAllUsages_Usages) GetPageInfo() *GetAllUsages_Usages_PageInfo {
+	if t == nil {
+		t = &GetAllUsages_Usages{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllUsages_Usages) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllUsages_Usages{}
+	}
+	return t.TotalCount
+}
+
+type GetUsageByID_Usage struct {
+	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string          "json:\"id\" graphql:\"id\""
+	Limit          int64           "json:\"limit\" graphql:\"limit\""
+	OrganizationID string          "json:\"organizationID\" graphql:\"organizationID\""
+	ResourceType   enums.UsageType "json:\"resourceType\" graphql:\"resourceType\""
+	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Used           int64           "json:\"used\" graphql:\"used\""
+}
+
+func (t *GetUsageByID_Usage) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return t.CreatedAt
+}
+func (t *GetUsageByID_Usage) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return t.CreatedBy
+}
+func (t *GetUsageByID_Usage) GetID() string {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return t.ID
+}
+func (t *GetUsageByID_Usage) GetLimit() int64 {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return t.Limit
+}
+func (t *GetUsageByID_Usage) GetOrganizationID() string {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return t.OrganizationID
+}
+func (t *GetUsageByID_Usage) GetResourceType() *enums.UsageType {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return &t.ResourceType
+}
+func (t *GetUsageByID_Usage) GetTags() []string {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return t.Tags
+}
+func (t *GetUsageByID_Usage) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetUsageByID_Usage) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetUsageByID_Usage) GetUsed() int64 {
+	if t == nil {
+		t = &GetUsageByID_Usage{}
+	}
+	return t.Used
+}
+
+type GetUsages_Usages_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetUsages_Usages_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetUsages_Usages_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetUsages_Usages_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetUsages_Usages_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetUsages_Usages_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetUsages_Usages_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetUsages_Usages_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetUsages_Usages_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetUsages_Usages_Edges_Node struct {
+	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string          "json:\"id\" graphql:\"id\""
+	Limit          int64           "json:\"limit\" graphql:\"limit\""
+	OrganizationID string          "json:\"organizationID\" graphql:\"organizationID\""
+	ResourceType   enums.UsageType "json:\"resourceType\" graphql:\"resourceType\""
+	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Used           int64           "json:\"used\" graphql:\"used\""
+}
+
+func (t *GetUsages_Usages_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetUsages_Usages_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetUsages_Usages_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetUsages_Usages_Edges_Node) GetLimit() int64 {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return t.Limit
+}
+func (t *GetUsages_Usages_Edges_Node) GetOrganizationID() string {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return t.OrganizationID
+}
+func (t *GetUsages_Usages_Edges_Node) GetResourceType() *enums.UsageType {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return &t.ResourceType
+}
+func (t *GetUsages_Usages_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetUsages_Usages_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetUsages_Usages_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetUsages_Usages_Edges_Node) GetUsed() int64 {
+	if t == nil {
+		t = &GetUsages_Usages_Edges_Node{}
+	}
+	return t.Used
+}
+
+type GetUsages_Usages_Edges struct {
+	Node *GetUsages_Usages_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetUsages_Usages_Edges) GetNode() *GetUsages_Usages_Edges_Node {
+	if t == nil {
+		t = &GetUsages_Usages_Edges{}
+	}
+	return t.Node
+}
+
+type GetUsages_Usages struct {
+	Edges      []*GetUsages_Usages_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetUsages_Usages_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetUsages_Usages) GetEdges() []*GetUsages_Usages_Edges {
+	if t == nil {
+		t = &GetUsages_Usages{}
+	}
+	return t.Edges
+}
+func (t *GetUsages_Usages) GetPageInfo() *GetUsages_Usages_PageInfo {
+	if t == nil {
+		t = &GetUsages_Usages{}
+	}
+	return &t.PageInfo
+}
+func (t *GetUsages_Usages) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetUsages_Usages{}
+	}
+	return t.TotalCount
+}
+
+type GetAllUsageHistories_UsageHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllUsageHistories_UsageHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllUsageHistories_UsageHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllUsageHistories_UsageHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllUsageHistories_UsageHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllUsageHistories_UsageHistories_Edges_Node struct {
+	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime    time.Time       "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string          "json:\"id\" graphql:\"id\""
+	Limit          int64           "json:\"limit\" graphql:\"limit\""
+	Operation      history.OpType  "json:\"operation\" graphql:\"operation\""
+	OrganizationID string          "json:\"organizationID\" graphql:\"organizationID\""
+	Ref            *string         "json:\"ref,omitempty\" graphql:\"ref\""
+	ResourceType   enums.UsageType "json:\"resourceType\" graphql:\"resourceType\""
+	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Used           int64           "json:\"used\" graphql:\"used\""
+}
+
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetLimit() int64 {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.Limit
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetOrganizationID() string {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.OrganizationID
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetResourceType() *enums.UsageType {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return &t.ResourceType
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllUsageHistories_UsageHistories_Edges_Node) GetUsed() int64 {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.Used
+}
+
+type GetAllUsageHistories_UsageHistories_Edges struct {
+	Node *GetAllUsageHistories_UsageHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllUsageHistories_UsageHistories_Edges) GetNode() *GetAllUsageHistories_UsageHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllUsageHistories_UsageHistories struct {
+	Edges      []*GetAllUsageHistories_UsageHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllUsageHistories_UsageHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllUsageHistories_UsageHistories) GetEdges() []*GetAllUsageHistories_UsageHistories_Edges {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllUsageHistories_UsageHistories) GetPageInfo() *GetAllUsageHistories_UsageHistories_PageInfo {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllUsageHistories_UsageHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllUsageHistories_UsageHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetUsageHistories_UsageHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetUsageHistories_UsageHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetUsageHistories_UsageHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetUsageHistories_UsageHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetUsageHistories_UsageHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetUsageHistories_UsageHistories_Edges_Node struct {
+	CreatedAt      *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime    time.Time       "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string          "json:\"id\" graphql:\"id\""
+	Limit          int64           "json:\"limit\" graphql:\"limit\""
+	Operation      history.OpType  "json:\"operation\" graphql:\"operation\""
+	OrganizationID string          "json:\"organizationID\" graphql:\"organizationID\""
+	Ref            *string         "json:\"ref,omitempty\" graphql:\"ref\""
+	ResourceType   enums.UsageType "json:\"resourceType\" graphql:\"resourceType\""
+	Tags           []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Used           int64           "json:\"used\" graphql:\"used\""
+}
+
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetLimit() int64 {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.Limit
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetOrganizationID() string {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.OrganizationID
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetResourceType() *enums.UsageType {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return &t.ResourceType
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetUsageHistories_UsageHistories_Edges_Node) GetUsed() int64 {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges_Node{}
+	}
+	return t.Used
+}
+
+type GetUsageHistories_UsageHistories_Edges struct {
+	Node *GetUsageHistories_UsageHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetUsageHistories_UsageHistories_Edges) GetNode() *GetUsageHistories_UsageHistories_Edges_Node {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetUsageHistories_UsageHistories struct {
+	Edges      []*GetUsageHistories_UsageHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetUsageHistories_UsageHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetUsageHistories_UsageHistories) GetEdges() []*GetUsageHistories_UsageHistories_Edges {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories{}
+	}
+	return t.Edges
+}
+func (t *GetUsageHistories_UsageHistories) GetPageInfo() *GetUsageHistories_UsageHistories_PageInfo {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetUsageHistories_UsageHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetUsageHistories_UsageHistories{}
+	}
+	return t.TotalCount
+}
+
 type CreateUser_CreateUser_User_AvatarFile struct {
 	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
@@ -82334,6 +83223,61 @@ func (t *UpdateTFASetting) GetUpdateTFASetting() *UpdateTFASetting_UpdateTFASett
 	return &t.UpdateTFASetting
 }
 
+type GetAllUsages struct {
+	Usages GetAllUsages_Usages "json:\"usages\" graphql:\"usages\""
+}
+
+func (t *GetAllUsages) GetUsages() *GetAllUsages_Usages {
+	if t == nil {
+		t = &GetAllUsages{}
+	}
+	return &t.Usages
+}
+
+type GetUsageByID struct {
+	Usage GetUsageByID_Usage "json:\"usage\" graphql:\"usage\""
+}
+
+func (t *GetUsageByID) GetUsage() *GetUsageByID_Usage {
+	if t == nil {
+		t = &GetUsageByID{}
+	}
+	return &t.Usage
+}
+
+type GetUsages struct {
+	Usages GetUsages_Usages "json:\"usages\" graphql:\"usages\""
+}
+
+func (t *GetUsages) GetUsages() *GetUsages_Usages {
+	if t == nil {
+		t = &GetUsages{}
+	}
+	return &t.Usages
+}
+
+type GetAllUsageHistories struct {
+	UsageHistories GetAllUsageHistories_UsageHistories "json:\"usageHistories\" graphql:\"usageHistories\""
+}
+
+func (t *GetAllUsageHistories) GetUsageHistories() *GetAllUsageHistories_UsageHistories {
+	if t == nil {
+		t = &GetAllUsageHistories{}
+	}
+	return &t.UsageHistories
+}
+
+type GetUsageHistories struct {
+	UsageHistories GetUsageHistories_UsageHistories "json:\"usageHistories\" graphql:\"usageHistories\""
+}
+
+func (t *GetUsageHistories) GetUsageHistories() *GetUsageHistories_UsageHistories {
+	if t == nil {
+		t = &GetUsageHistories{}
+	}
+	return &t.UsageHistories
+}
+
 type CreateUser struct {
 	CreateUser CreateUser_CreateUser "json:\"createUser\" graphql:\"createUser\""
 }
@@ -83238,6 +84182,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					storageScheme
 					storageVolume
 					storagePath
+					organizationID
 				}
 			}
 		}
@@ -83723,6 +84668,22 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					description
 					jsonconfig
 					uischema
+				}
+			}
+		}
+		usages {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+					organizationID
 				}
 			}
 		}
@@ -100480,6 +101441,21 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		usages {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
 		users {
 			totalCount
 			pageInfo {
@@ -102882,6 +103858,221 @@ func (c *Client) UpdateTFASetting(ctx context.Context, input UpdateTFASettingInp
 	return &res, nil
 }
 
+const GetAllUsagesDocument = `query GetAllUsages {
+	usages {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				limit
+				organizationID
+				resourceType
+				tags
+				updatedAt
+				updatedBy
+				used
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllUsages(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsages, error) {
+	vars := map[string]any{}
+
+	var res GetAllUsages
+	if err := c.Client.Post(ctx, "GetAllUsages", GetAllUsagesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetUsageByIDDocument = `query GetUsageByID ($usageId: ID!) {
+	usage(id: $usageId) {
+		createdAt
+		createdBy
+		id
+		limit
+		organizationID
+		resourceType
+		tags
+		updatedAt
+		updatedBy
+		used
+	}
+}
+`
+
+func (c *Client) GetUsageByID(ctx context.Context, usageID string, interceptors ...clientv2.RequestInterceptor) (*GetUsageByID, error) {
+	vars := map[string]any{
+		"usageId": usageID,
+	}
+
+	var res GetUsageByID
+	if err := c.Client.Post(ctx, "GetUsageByID", GetUsageByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetUsagesDocument = `query GetUsages ($first: Int, $last: Int, $where: UsageWhereInput) {
+	usages(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				limit
+				organizationID
+				resourceType
+				tags
+				updatedAt
+				updatedBy
+				used
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetUsages(ctx context.Context, first *int64, last *int64, where *UsageWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetUsages, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetUsages
+	if err := c.Client.Post(ctx, "GetUsages", GetUsagesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllUsageHistoriesDocument = `query GetAllUsageHistories {
+	usageHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				limit
+				operation
+				organizationID
+				ref
+				resourceType
+				tags
+				updatedAt
+				updatedBy
+				used
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllUsageHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsageHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllUsageHistories
+	if err := c.Client.Post(ctx, "GetAllUsageHistories", GetAllUsageHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetUsageHistoriesDocument = `query GetUsageHistories ($first: Int, $last: Int, $where: UsageHistoryWhereInput) {
+	usageHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				limit
+				operation
+				organizationID
+				ref
+				resourceType
+				tags
+				updatedAt
+				updatedBy
+				used
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetUsageHistories(ctx context.Context, first *int64, last *int64, where *UsageHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetUsageHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetUsageHistories
+	if err := c.Client.Post(ctx, "GetUsageHistories", GetUsageHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!, $avatarFile: Upload) {
 	createUser(input: $input, avatarFile: $avatarFile) {
 		user {
@@ -104115,6 +105306,11 @@ var DocumentOperationNames = map[string]string{
 	GetAllTFASettingsDocument:                    "GetAllTFASettings",
 	GetTFASettingDocument:                        "GetTFASetting",
 	UpdateTFASettingDocument:                     "UpdateTFASetting",
+	GetAllUsagesDocument:                         "GetAllUsages",
+	GetUsageByIDDocument:                         "GetUsageByID",
+	GetUsagesDocument:                            "GetUsages",
+	GetAllUsageHistoriesDocument:                 "GetAllUsageHistories",
+	GetUsageHistoriesDocument:                    "GetUsageHistories",
 	CreateUserDocument:                           "CreateUser",
 	DeleteUserDocument:                           "DeleteUser",
 	GetAllUsersDocument:                          "GetAllUsers",

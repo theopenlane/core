@@ -266,6 +266,7 @@ subscription:
     stripeWebhookSecret: ""
     stripeWebhookURL: https://api.openlane.com/v1/stripe/webhook
     trialSubscriptionPriceID: price_1QKLyeBvxky1R7SvaZYGWyQb
+    usageLimits: null
 totp:
     codeLength: 6
     enabled: true

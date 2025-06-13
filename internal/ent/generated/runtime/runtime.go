@@ -92,6 +92,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/generated/usage"
+	"github.com/theopenlane/core/internal/ent/generated/usagehistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -1621,10 +1623,13 @@ func init() {
 	}
 	fileMixinHooks0 := fileMixin[0].Hooks()
 	fileMixinHooks1 := fileMixin[1].Hooks()
+	fileHooks := schema.File{}.Hooks()
 
 	file.Hooks[1] = fileMixinHooks0[0]
 
 	file.Hooks[2] = fileMixinHooks1[0]
+
+	file.Hooks[3] = fileHooks[0]
 	fileMixinInters1 := fileMixin[1].Interceptors()
 	fileMixinInters5 := fileMixin[5].Interceptors()
 	fileInters := schema.File{}.Interceptors()
@@ -3078,6 +3083,8 @@ func init() {
 	orgmembership.Hooks[4] = orgmembershipHooks[2]
 
 	orgmembership.Hooks[5] = orgmembershipHooks[3]
+
+	orgmembership.Hooks[6] = orgmembershipHooks[4]
 	orgmembershipInters := schema.OrgMembership{}.Interceptors()
 	orgmembership.Interceptors[0] = orgmembershipInters[0]
 	orgmembership.Interceptors[1] = orgmembershipInters[1]
@@ -3796,6 +3803,8 @@ func init() {
 	program.Hooks[7] = programMixinHooks6[2]
 
 	program.Hooks[8] = programHooks[0]
+
+	program.Hooks[9] = programHooks[1]
 	programMixinInters1 := programMixin[1].Interceptors()
 	programMixinInters5 := programMixin[5].Interceptors()
 	programInters := schema.Program{}.Interceptors()
@@ -4842,6 +4851,96 @@ func init() {
 	templatehistoryDescID := templatehistoryFields[9].Descriptor()
 	// templatehistory.DefaultID holds the default value on creation for the id field.
 	templatehistory.DefaultID = templatehistoryDescID.Default.(func() string)
+	usageMixin := schema.Usage{}.Mixin()
+	usage.Policy = privacy.NewPolicies(schema.Usage{})
+	usage.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := usage.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	usageMixinHooks0 := usageMixin[0].Hooks()
+	usageMixinHooks1 := usageMixin[1].Hooks()
+
+	usage.Hooks[1] = usageMixinHooks0[0]
+
+	usage.Hooks[2] = usageMixinHooks1[0]
+	usageMixinInters1 := usageMixin[1].Interceptors()
+	usage.Interceptors[0] = usageMixinInters1[0]
+	usageMixinFields0 := usageMixin[0].Fields()
+	_ = usageMixinFields0
+	usageMixinFields2 := usageMixin[2].Fields()
+	_ = usageMixinFields2
+	usageMixinFields3 := usageMixin[3].Fields()
+	_ = usageMixinFields3
+	usageFields := schema.Usage{}.Fields()
+	_ = usageFields
+	// usageDescCreatedAt is the schema descriptor for created_at field.
+	usageDescCreatedAt := usageMixinFields0[0].Descriptor()
+	// usage.DefaultCreatedAt holds the default value on creation for the created_at field.
+	usage.DefaultCreatedAt = usageDescCreatedAt.Default.(func() time.Time)
+	// usageDescUpdatedAt is the schema descriptor for updated_at field.
+	usageDescUpdatedAt := usageMixinFields0[1].Descriptor()
+	// usage.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	usage.DefaultUpdatedAt = usageDescUpdatedAt.Default.(func() time.Time)
+	// usage.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	usage.UpdateDefaultUpdatedAt = usageDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// usageDescTags is the schema descriptor for tags field.
+	usageDescTags := usageMixinFields3[0].Descriptor()
+	// usage.DefaultTags holds the default value on creation for the tags field.
+	usage.DefaultTags = usageDescTags.Default.([]string)
+	// usageDescUsed is the schema descriptor for used field.
+	usageDescUsed := usageFields[2].Descriptor()
+	// usage.DefaultUsed holds the default value on creation for the used field.
+	usage.DefaultUsed = usageDescUsed.Default.(int64)
+	// usage.UsedValidator is a validator for the "used" field. It is called by the builders before save.
+	usage.UsedValidator = usageDescUsed.Validators[0].(func(int64) error)
+	// usageDescLimit is the schema descriptor for limit field.
+	usageDescLimit := usageFields[3].Descriptor()
+	// usage.DefaultLimit holds the default value on creation for the limit field.
+	usage.DefaultLimit = usageDescLimit.Default.(int64)
+	// usage.LimitValidator is a validator for the "limit" field. It is called by the builders before save.
+	usage.LimitValidator = usageDescLimit.Validators[0].(func(int64) error)
+	// usageDescID is the schema descriptor for id field.
+	usageDescID := usageMixinFields2[0].Descriptor()
+	// usage.DefaultID holds the default value on creation for the id field.
+	usage.DefaultID = usageDescID.Default.(func() string)
+	usagehistoryInters := schema.UsageHistory{}.Interceptors()
+	usagehistory.Interceptors[0] = usagehistoryInters[0]
+	usagehistoryFields := schema.UsageHistory{}.Fields()
+	_ = usagehistoryFields
+	// usagehistoryDescHistoryTime is the schema descriptor for history_time field.
+	usagehistoryDescHistoryTime := usagehistoryFields[0].Descriptor()
+	// usagehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	usagehistory.DefaultHistoryTime = usagehistoryDescHistoryTime.Default.(func() time.Time)
+	// usagehistoryDescCreatedAt is the schema descriptor for created_at field.
+	usagehistoryDescCreatedAt := usagehistoryFields[3].Descriptor()
+	// usagehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	usagehistory.DefaultCreatedAt = usagehistoryDescCreatedAt.Default.(func() time.Time)
+	// usagehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	usagehistoryDescUpdatedAt := usagehistoryFields[4].Descriptor()
+	// usagehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	usagehistory.DefaultUpdatedAt = usagehistoryDescUpdatedAt.Default.(func() time.Time)
+	// usagehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	usagehistory.UpdateDefaultUpdatedAt = usagehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// usagehistoryDescTags is the schema descriptor for tags field.
+	usagehistoryDescTags := usagehistoryFields[10].Descriptor()
+	// usagehistory.DefaultTags holds the default value on creation for the tags field.
+	usagehistory.DefaultTags = usagehistoryDescTags.Default.([]string)
+	// usagehistoryDescUsed is the schema descriptor for used field.
+	usagehistoryDescUsed := usagehistoryFields[13].Descriptor()
+	// usagehistory.DefaultUsed holds the default value on creation for the used field.
+	usagehistory.DefaultUsed = usagehistoryDescUsed.Default.(int64)
+	// usagehistoryDescLimit is the schema descriptor for limit field.
+	usagehistoryDescLimit := usagehistoryFields[14].Descriptor()
+	// usagehistory.DefaultLimit holds the default value on creation for the limit field.
+	usagehistory.DefaultLimit = usagehistoryDescLimit.Default.(int64)
+	// usagehistoryDescID is the schema descriptor for id field.
+	usagehistoryDescID := usagehistoryFields[9].Descriptor()
+	// usagehistory.DefaultID holds the default value on creation for the id field.
+	usagehistory.DefaultID = usagehistoryDescID.Default.(func() string)
 	userMixin := schema.User{}.Mixin()
 	user.Policy = privacy.NewPolicies(schema.User{})
 	user.Hooks[0] = func(next ent.Mutator) ent.Mutator {

@@ -139,3 +139,8 @@ objectStorage:
 
 subscription:
     enabled: false
+    usageLimits:
+        STORAGE: 10737418240
+        RECORDS: 1000
+        USERS: 50
+        PROGRAMS: 5

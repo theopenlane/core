@@ -208,6 +208,7 @@ data:
   CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.core.subscription.stripeCancellationReturnURL | default "https://console.theopenlane.io/organization-settings/billing/subscription_canceled" }}
   CORE_SUBSCRIPTION_SAASPRICINGTIERS: {{ .Values.core.subscription.saasPricingTiers }}
   CORE_SUBSCRIPTION_FEATURES: {{ .Values.core.subscription.features }}
+  CORE_SUBSCRIPTION_USAGELIMITS: {{ .Values.core.subscription.usageLimits }}
   CORE_KEYWATCHER_ENABLED: {{ .Values.core.keywatcher.enabled | default false }}
   CORE_KEYWATCHER_KEYDIR: {{ .Values.core.keywatcher.keyDir | default "./keys" }}
   CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.core.keywatcher.externalSecretsIntegration | default false }}

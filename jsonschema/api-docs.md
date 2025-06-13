@@ -889,6 +889,7 @@ Config is the configuration for the object store
 |**stripeCancellationReturnURL**|`string`|||
 |[**saasPricingTiers**](#subscriptionsaaspricingtiers)|`array`|||
 |[**features**](#subscriptionfeatures)|`array`|||
+|[**usageLimits**](#subscriptionusagelimits)|`object`|||
 
 **Additional Properties:** not allowed  
 <a name="subscriptionsaaspricingtiers"></a>
@@ -900,6 +901,15 @@ Config is the configuration for the object store
 ### subscription\.features: array
 
 **Items**
+
+<a name="subscriptionusagelimits"></a>
+### subscription\.usageLimits: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Additional Properties**|`integer`|||
 
 <a name="keywatcher"></a>
 ## keywatcher: object

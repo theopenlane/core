@@ -4412,7 +4412,6 @@ type CreateFileInput struct {
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
 	StoragePath            *string  `json:"storagePath,omitempty"`
 	UserIDs                []string `json:"userIDs,omitempty"`
-	OrganizationIDs        []string `json:"organizationIDs,omitempty"`
 	GroupIDs               []string `json:"groupIDs,omitempty"`
 	ContactIDs             []string `json:"contactIDs,omitempty"`
 	EntityIDs              []string `json:"entityIDs,omitempty"`
@@ -4423,6 +4422,7 @@ type CreateFileInput struct {
 	ProgramIDs             []string `json:"programIDs,omitempty"`
 	EvidenceIDs            []string `json:"evidenceIDs,omitempty"`
 	EventIDs               []string `json:"eventIDs,omitempty"`
+	OrganizationID         *string  `json:"organizationID,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -8403,9 +8403,10 @@ type File struct {
 	// the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
 	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
-	StoragePath         *string                `json:"storagePath,omitempty"`
+	StoragePath *string `json:"storagePath,omitempty"`
+	// the ID of the organization the file belong to
+	OrganizationID      *string                `json:"organizationID,omitempty"`
 	User                []*User                `json:"user,omitempty"`
-	Organization        []*Organization        `json:"organization,omitempty"`
 	Groups              *GroupConnection       `json:"groups"`
 	Contact             []*Contact             `json:"contact,omitempty"`
 	Entity              []*Entity              `json:"entity,omitempty"`
@@ -8416,6 +8417,7 @@ type File struct {
 	Program             []*Program             `json:"program,omitempty"`
 	Evidence            []*Evidence            `json:"evidence,omitempty"`
 	Events              *EventConnection       `json:"events"`
+	Organization        *Organization          `json:"organization,omitempty"`
 	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
@@ -8481,6 +8483,8 @@ type FileHistory struct {
 	StorageVolume *string `json:"storageVolume,omitempty"`
 	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
 	StoragePath *string `json:"storagePath,omitempty"`
+	// the ID of the organization the file belong to
+	OrganizationID *string `json:"organizationID,omitempty"`
 }
 
 func (FileHistory) IsNode() {}
@@ -8804,6 +8808,22 @@ type FileHistoryWhereInput struct {
 	StoragePathNotNil       *bool    `json:"storagePathNotNil,omitempty"`
 	StoragePathEqualFold    *string  `json:"storagePathEqualFold,omitempty"`
 	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
+	// organization_id field predicates
+	OrganizationID             *string  `json:"organizationID,omitempty"`
+	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
+	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
+	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
+	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
+	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
+	OrganizationIDIsNil        *bool    `json:"organizationIDIsNil,omitempty"`
+	OrganizationIDNotNil       *bool    `json:"organizationIDNotNil,omitempty"`
+	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
+	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 }
 
 // Ordering options for File connections
@@ -9077,12 +9097,25 @@ type FileWhereInput struct {
 	StoragePathNotNil       *bool    `json:"storagePathNotNil,omitempty"`
 	StoragePathEqualFold    *string  `json:"storagePathEqualFold,omitempty"`
 	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
+	// organization_id field predicates
+	OrganizationID             *string  `json:"organizationID,omitempty"`
+	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
+	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
+	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
+	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
+	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
+	OrganizationIDIsNil        *bool    `json:"organizationIDIsNil,omitempty"`
+	OrganizationIDNotNil       *bool    `json:"organizationIDNotNil,omitempty"`
+	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
+	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
-	// organization edge predicates
-	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
-	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
 	// groups edge predicates
 	HasGroups     *bool              `json:"hasGroups,omitempty"`
 	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
@@ -9113,6 +9146,9 @@ type FileWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// organization edge predicates
+	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
+	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
 }
 
 type Group struct {
@@ -20421,6 +20457,7 @@ type SearchResults struct {
 	Subscribers                 *SubscriberConnection                 `json:"subscribers,omitempty"`
 	Tasks                       *TaskConnection                       `json:"tasks,omitempty"`
 	Templates                   *TemplateConnection                   `json:"templates,omitempty"`
+	Usages                      *UsageConnection                      `json:"usages,omitempty"`
 	Users                       *UserConnection                       `json:"users,omitempty"`
 	UserSettings                *UserSettingConnection                `json:"userSettings,omitempty"`
 	Webauthns                   *WebauthnConnection                   `json:"webauthns,omitempty"`
@@ -24114,9 +24151,6 @@ type UpdateFileInput struct {
 	AddUserIDs                   []string `json:"addUserIDs,omitempty"`
 	RemoveUserIDs                []string `json:"removeUserIDs,omitempty"`
 	ClearUser                    *bool    `json:"clearUser,omitempty"`
-	AddOrganizationIDs           []string `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs        []string `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganization            *bool    `json:"clearOrganization,omitempty"`
 	AddGroupIDs                  []string `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs               []string `json:"removeGroupIDs,omitempty"`
 	ClearGroups                  *bool    `json:"clearGroups,omitempty"`
@@ -24147,6 +24181,8 @@ type UpdateFileInput struct {
 	AddEventIDs                  []string `json:"addEventIDs,omitempty"`
 	RemoveEventIDs               []string `json:"removeEventIDs,omitempty"`
 	ClearEvents                  *bool    `json:"clearEvents,omitempty"`
+	OrganizationID               *string  `json:"organizationID,omitempty"`
+	ClearOrganization            *bool    `json:"clearOrganization,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.
@@ -25529,6 +25565,351 @@ type UpdateUserSettingInput struct {
 	AddFileIDs        []string `json:"addFileIDs,omitempty"`
 	RemoveFileIDs     []string `json:"removeFileIDs,omitempty"`
 	ClearFiles        *bool    `json:"clearFiles,omitempty"`
+}
+
+type Usage struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// owner organization
+	OrganizationID string `json:"organizationID"`
+	// the type of resource this usage is for
+	ResourceType enums.UsageType `json:"resourceType"`
+	// the amount of resource used
+	Used int64 `json:"used"`
+	// the limit for the resource type
+	Limit int64 `json:"limit"`
+}
+
+func (Usage) IsNode() {}
+
+// A connection to a list of items.
+type UsageConnection struct {
+	// A list of edges.
+	Edges []*UsageEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type UsageEdge struct {
+	// The item at the end of the edge.
+	Node *Usage `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type UsageHistory struct {
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// owner organization
+	OrganizationID string `json:"organizationID"`
+	// the type of resource this usage is for
+	ResourceType enums.UsageType `json:"resourceType"`
+	// the amount of resource used
+	Used int64 `json:"used"`
+	// the limit for the resource type
+	Limit int64 `json:"limit"`
+}
+
+func (UsageHistory) IsNode() {}
+
+// A connection to a list of items.
+type UsageHistoryConnection struct {
+	// A list of edges.
+	Edges []*UsageHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type UsageHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *UsageHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for UsageHistory connections
+type UsageHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order UsageHistories.
+	Field UsageHistoryOrderField `json:"field"`
+}
+
+// UsageHistoryWhereInput is used for filtering UsageHistory objects.
+// Input was generated by ent.
+type UsageHistoryWhereInput struct {
+	Not *UsageHistoryWhereInput   `json:"not,omitempty"`
+	And []*UsageHistoryWhereInput `json:"and,omitempty"`
+	Or  []*UsageHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// organization_id field predicates
+	OrganizationID             *string  `json:"organizationID,omitempty"`
+	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
+	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
+	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
+	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
+	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
+	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
+	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+	// resource_type field predicates
+	ResourceType      *enums.UsageType  `json:"resourceType,omitempty"`
+	ResourceTypeNeq   *enums.UsageType  `json:"resourceTypeNEQ,omitempty"`
+	ResourceTypeIn    []enums.UsageType `json:"resourceTypeIn,omitempty"`
+	ResourceTypeNotIn []enums.UsageType `json:"resourceTypeNotIn,omitempty"`
+	// used field predicates
+	Used      *int64  `json:"used,omitempty"`
+	UsedNeq   *int64  `json:"usedNEQ,omitempty"`
+	UsedIn    []int64 `json:"usedIn,omitempty"`
+	UsedNotIn []int64 `json:"usedNotIn,omitempty"`
+	UsedGt    *int64  `json:"usedGT,omitempty"`
+	UsedGte   *int64  `json:"usedGTE,omitempty"`
+	UsedLt    *int64  `json:"usedLT,omitempty"`
+	UsedLte   *int64  `json:"usedLTE,omitempty"`
+	// limit field predicates
+	Limit      *int64  `json:"limit,omitempty"`
+	LimitNeq   *int64  `json:"limitNEQ,omitempty"`
+	LimitIn    []int64 `json:"limitIn,omitempty"`
+	LimitNotIn []int64 `json:"limitNotIn,omitempty"`
+	LimitGt    *int64  `json:"limitGT,omitempty"`
+	LimitGte   *int64  `json:"limitGTE,omitempty"`
+	LimitLt    *int64  `json:"limitLT,omitempty"`
+	LimitLte   *int64  `json:"limitLTE,omitempty"`
+}
+
+// Ordering options for Usage connections
+type UsageOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Usages.
+	Field UsageOrderField `json:"field"`
+}
+
+// UsageWhereInput is used for filtering Usage objects.
+// Input was generated by ent.
+type UsageWhereInput struct {
+	Not *UsageWhereInput   `json:"not,omitempty"`
+	And []*UsageWhereInput `json:"and,omitempty"`
+	Or  []*UsageWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// organization_id field predicates
+	OrganizationID             *string  `json:"organizationID,omitempty"`
+	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
+	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
+	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
+	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
+	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
+	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
+	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+	// resource_type field predicates
+	ResourceType      *enums.UsageType  `json:"resourceType,omitempty"`
+	ResourceTypeNeq   *enums.UsageType  `json:"resourceTypeNEQ,omitempty"`
+	ResourceTypeIn    []enums.UsageType `json:"resourceTypeIn,omitempty"`
+	ResourceTypeNotIn []enums.UsageType `json:"resourceTypeNotIn,omitempty"`
+	// used field predicates
+	Used      *int64  `json:"used,omitempty"`
+	UsedNeq   *int64  `json:"usedNEQ,omitempty"`
+	UsedIn    []int64 `json:"usedIn,omitempty"`
+	UsedNotIn []int64 `json:"usedNotIn,omitempty"`
+	UsedGt    *int64  `json:"usedGT,omitempty"`
+	UsedGte   *int64  `json:"usedGTE,omitempty"`
+	UsedLt    *int64  `json:"usedLT,omitempty"`
+	UsedLte   *int64  `json:"usedLTE,omitempty"`
+	// limit field predicates
+	Limit      *int64  `json:"limit,omitempty"`
+	LimitNeq   *int64  `json:"limitNEQ,omitempty"`
+	LimitIn    []int64 `json:"limitIn,omitempty"`
+	LimitNotIn []int64 `json:"limitNotIn,omitempty"`
+	LimitGt    *int64  `json:"limitGT,omitempty"`
+	LimitGte   *int64  `json:"limitGTE,omitempty"`
+	LimitLt    *int64  `json:"limitLT,omitempty"`
+	LimitLte   *int64  `json:"limitLTE,omitempty"`
 }
 
 type User struct {
@@ -32102,6 +32483,120 @@ func (e *TemplateOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e TemplateOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which UsageHistory connections can be ordered.
+type UsageHistoryOrderField string
+
+const (
+	UsageHistoryOrderFieldHistoryTime UsageHistoryOrderField = "history_time"
+	UsageHistoryOrderFieldCreatedAt   UsageHistoryOrderField = "created_at"
+	UsageHistoryOrderFieldUpdatedAt   UsageHistoryOrderField = "updated_at"
+)
+
+var AllUsageHistoryOrderField = []UsageHistoryOrderField{
+	UsageHistoryOrderFieldHistoryTime,
+	UsageHistoryOrderFieldCreatedAt,
+	UsageHistoryOrderFieldUpdatedAt,
+}
+
+func (e UsageHistoryOrderField) IsValid() bool {
+	switch e {
+	case UsageHistoryOrderFieldHistoryTime, UsageHistoryOrderFieldCreatedAt, UsageHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e UsageHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *UsageHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UsageHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid UsageHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e UsageHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *UsageHistoryOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e UsageHistoryOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which Usage connections can be ordered.
+type UsageOrderField string
+
+const (
+	UsageOrderFieldCreatedAt UsageOrderField = "created_at"
+	UsageOrderFieldUpdatedAt UsageOrderField = "updated_at"
+)
+
+var AllUsageOrderField = []UsageOrderField{
+	UsageOrderFieldCreatedAt,
+	UsageOrderFieldUpdatedAt,
+}
+
+func (e UsageOrderField) IsValid() bool {
+	switch e {
+	case UsageOrderFieldCreatedAt, UsageOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e UsageOrderField) String() string {
+	return string(e)
+}
+
+func (e *UsageOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UsageOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid UsageOrderField", str)
+	}
+	return nil
+}
+
+func (e UsageOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *UsageOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e UsageOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

@@ -93,6 +93,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/generated/usage"
+	"github.com/theopenlane/core/internal/ent/generated/usagehistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -524,6 +526,16 @@ var templatehistoryImplementors = []string{"TemplateHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TemplateHistory) IsNode() {}
+
+var usageImplementors = []string{"Usage", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Usage) IsNode() {}
+
+var usagehistoryImplementors = []string{"UsageHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*UsageHistory) IsNode() {}
 
 var userImplementors = []string{"User", "Node"}
 
@@ -1360,6 +1372,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(templatehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, templatehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case usage.Table:
+		query := c.Usage.Query().
+			Where(usage.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, usageImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case usagehistory.Table:
+		query := c.UsageHistory.Query().
+			Where(usagehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, usagehistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2814,6 +2844,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TemplateHistory.Query().
 			Where(templatehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, templatehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case usage.Table:
+		query := c.Usage.Query().
+			Where(usage.IDIn(ids...))
+		query, err := query.CollectFields(ctx, usageImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case usagehistory.Table:
+		query := c.UsageHistory.Query().
+			Where(usagehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, usagehistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -81,6 +82,9 @@ func (File) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(), // Don't return file content in GraphQL queries
 			),
+		field.String("organization_id").
+			Comment("the ID of the organization the file belong to").
+			Optional(),
 	}
 }
 
@@ -88,7 +92,6 @@ func (File) Fields() []ent.Field {
 func (f File) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFrom(f, User{}),
-		defaultEdgeFrom(f, Organization{}),
 		defaultEdgeFromWithPagination(f, Group{}),
 		defaultEdgeFrom(f, Contact{}),
 		defaultEdgeFrom(f, Entity{}),
@@ -99,6 +102,12 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, Program{}),
 		defaultEdgeFrom(f, Evidence{}),
 		defaultEdgeToWithPagination(f, Event{}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: Organization{},
+			required:   false,
+			field:      "organization_id",
+		}),
 	}
 }
 
@@ -127,6 +136,13 @@ func (File) Annotations() []schema.Annotation {
 func (File) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorPresignedURL(),
+	}
+}
+
+// Hooks of the File
+func (File) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookUsageStorage(),
 	}
 }
 

@@ -309,6 +309,20 @@ func (fhc *FileHistoryCreate) SetFileContents(b []byte) *FileHistoryCreate {
 	return fhc
 }
 
+// SetOrganizationID sets the "organization_id" field.
+func (fhc *FileHistoryCreate) SetOrganizationID(s string) *FileHistoryCreate {
+	fhc.mutation.SetOrganizationID(s)
+	return fhc
+}
+
+// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableOrganizationID(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetOrganizationID(*s)
+	}
+	return fhc
+}
+
 // SetID sets the "id" field.
 func (fhc *FileHistoryCreate) SetID(s string) *FileHistoryCreate {
 	fhc.mutation.SetID(s)
@@ -533,6 +547,10 @@ func (fhc *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) 
 	if value, ok := fhc.mutation.FileContents(); ok {
 		_spec.SetField(filehistory.FieldFileContents, field.TypeBytes, value)
 		_node.FileContents = value
+	}
+	if value, ok := fhc.mutation.OrganizationID(); ok {
+		_spec.SetField(filehistory.FieldOrganizationID, field.TypeString, value)
+		_node.OrganizationID = value
 	}
 	return _node, _spec
 }

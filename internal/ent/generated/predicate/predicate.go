@@ -264,6 +264,12 @@ type Template func(*sql.Selector)
 // TemplateHistory is the predicate function for templatehistory builders.
 type TemplateHistory func(*sql.Selector)
 
+// Usage is the predicate function for usage builders.
+type Usage func(*sql.Selector)
+
+// UsageHistory is the predicate function for usagehistory builders.
+type UsageHistory func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
 

@@ -95,6 +95,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/generated/usage"
+	"github.com/theopenlane/core/internal/ent/generated/usagehistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -2480,6 +2482,60 @@ func (f TraverseTemplateHistory) Traverse(ctx context.Context, q generated.Query
 	return fmt.Errorf("unexpected query type %T. expect *generated.TemplateHistoryQuery", q)
 }
 
+// The UsageFunc type is an adapter to allow the use of ordinary function as a Querier.
+type UsageFunc func(context.Context, *generated.UsageQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f UsageFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.UsageQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.UsageQuery", q)
+}
+
+// The TraverseUsage type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseUsage func(context.Context, *generated.UsageQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseUsage) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseUsage) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.UsageQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.UsageQuery", q)
+}
+
+// The UsageHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type UsageHistoryFunc func(context.Context, *generated.UsageHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f UsageHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.UsageHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.UsageHistoryQuery", q)
+}
+
+// The TraverseUsageHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseUsageHistory func(context.Context, *generated.UsageHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseUsageHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseUsageHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.UsageHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.UsageHistoryQuery", q)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary function as a Querier.
 type UserFunc func(context.Context, *generated.UserQuery) (generated.Value, error)
 
@@ -2790,6 +2846,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.TemplateQuery, predicate.Template, template.OrderOption]{typ: generated.TypeTemplate, tq: q}, nil
 	case *generated.TemplateHistoryQuery:
 		return &query[*generated.TemplateHistoryQuery, predicate.TemplateHistory, templatehistory.OrderOption]{typ: generated.TypeTemplateHistory, tq: q}, nil
+	case *generated.UsageQuery:
+		return &query[*generated.UsageQuery, predicate.Usage, usage.OrderOption]{typ: generated.TypeUsage, tq: q}, nil
+	case *generated.UsageHistoryQuery:
+		return &query[*generated.UsageHistoryQuery, predicate.UsageHistory, usagehistory.OrderOption]{typ: generated.TypeUsageHistory, tq: q}, nil
 	case *generated.UserQuery:
 		return &query[*generated.UserQuery, predicate.User, user.OrderOption]{typ: generated.TypeUser, tq: q}, nil
 	case *generated.UserHistoryQuery:

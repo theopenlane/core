@@ -105,6 +105,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/generated/usage"
+	"github.com/theopenlane/core/internal/ent/generated/usagehistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -304,6 +306,10 @@ type Client struct {
 	Template *TemplateClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
 	TemplateHistory *TemplateHistoryClient
+	// Usage is the client for interacting with the Usage builders.
+	Usage *UsageClient
+	// UsageHistory is the client for interacting with the UsageHistory builders.
+	UsageHistory *UsageHistoryClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// UserHistory is the client for interacting with the UserHistory builders.
@@ -420,6 +426,8 @@ func (c *Client) init() {
 	c.TaskHistory = NewTaskHistoryClient(c.config)
 	c.Template = NewTemplateClient(c.config)
 	c.TemplateHistory = NewTemplateHistoryClient(c.config)
+	c.Usage = NewUsageClient(c.config)
+	c.UsageHistory = NewUsageHistoryClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.UserHistory = NewUserHistoryClient(c.config)
 	c.UserSetting = NewUserSettingClient(c.config)
@@ -688,6 +696,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TaskHistory:                  NewTaskHistoryClient(cfg),
 		Template:                     NewTemplateClient(cfg),
 		TemplateHistory:              NewTemplateHistoryClient(cfg),
+		Usage:                        NewUsageClient(cfg),
+		UsageHistory:                 NewUsageHistoryClient(cfg),
 		User:                         NewUserClient(cfg),
 		UserHistory:                  NewUserHistoryClient(cfg),
 		UserSetting:                  NewUserSettingClient(cfg),
@@ -798,6 +808,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TaskHistory:                  NewTaskHistoryClient(cfg),
 		Template:                     NewTemplateClient(cfg),
 		TemplateHistory:              NewTemplateHistoryClient(cfg),
+		Usage:                        NewUsageClient(cfg),
+		UsageHistory:                 NewUsageHistoryClient(cfg),
 		User:                         NewUserClient(cfg),
 		UserHistory:                  NewUserHistoryClient(cfg),
 		UserSetting:                  NewUserSettingClient(cfg),
@@ -853,8 +865,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
 		c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory, c.ScheduledJobRun,
 		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.Usage,
+		c.UsageHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
+		c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -885,8 +898,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
 		c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory, c.ScheduledJobRun,
 		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.Usage,
+		c.UsageHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
+		c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1139,6 +1153,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Template.mutate(ctx, m)
 	case *TemplateHistoryMutation:
 		return c.TemplateHistory.mutate(ctx, m)
+	case *UsageMutation:
+		return c.Usage.mutate(ctx, m)
+	case *UsageHistoryMutation:
+		return c.UsageHistory.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	case *UserHistoryMutation:
@@ -6661,25 +6679,6 @@ func (c *FileClient) QueryUser(f *File) *UserQuery {
 	return query
 }
 
-// QueryOrganization queries the organization edge of a File.
-func (c *FileClient) QueryOrganization(f *File) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(file.Table, file.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.OrganizationTable, file.OrganizationPrimaryKey...),
-		)
-		schemaConfig := f.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationFiles
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryGroups queries the groups edge of a File.
 func (c *FileClient) QueryGroups(f *File) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -6864,6 +6863,25 @@ func (c *FileClient) QueryEvents(f *File) *EventQuery {
 		schemaConfig := f.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.FileEvents
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrganization queries the organization edge of a File.
+func (c *FileClient) QueryOrganization(f *File) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, file.OrganizationTable, file.OrganizationColumn),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.File
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13292,11 +13310,11 @@ func (c *OrganizationClient) QueryFiles(o *Organization) *FileQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, organization.FilesTable, organization.FilesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.FilesTable, organization.FilesColumn),
 		)
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.OrganizationFiles
+		step.Edge.Schema = schemaConfig.File
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -19318,6 +19336,275 @@ func (c *TemplateHistoryClient) mutate(ctx context.Context, m *TemplateHistoryMu
 	}
 }
 
+// UsageClient is a client for the Usage schema.
+type UsageClient struct {
+	config
+}
+
+// NewUsageClient returns a client for the Usage from the given config.
+func NewUsageClient(c config) *UsageClient {
+	return &UsageClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `usage.Hooks(f(g(h())))`.
+func (c *UsageClient) Use(hooks ...Hook) {
+	c.hooks.Usage = append(c.hooks.Usage, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `usage.Intercept(f(g(h())))`.
+func (c *UsageClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Usage = append(c.inters.Usage, interceptors...)
+}
+
+// Create returns a builder for creating a Usage entity.
+func (c *UsageClient) Create() *UsageCreate {
+	mutation := newUsageMutation(c.config, OpCreate)
+	return &UsageCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Usage entities.
+func (c *UsageClient) CreateBulk(builders ...*UsageCreate) *UsageCreateBulk {
+	return &UsageCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *UsageClient) MapCreateBulk(slice any, setFunc func(*UsageCreate, int)) *UsageCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &UsageCreateBulk{err: fmt.Errorf("calling to UsageClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*UsageCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &UsageCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Usage.
+func (c *UsageClient) Update() *UsageUpdate {
+	mutation := newUsageMutation(c.config, OpUpdate)
+	return &UsageUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UsageClient) UpdateOne(u *Usage) *UsageUpdateOne {
+	mutation := newUsageMutation(c.config, OpUpdateOne, withUsage(u))
+	return &UsageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UsageClient) UpdateOneID(id string) *UsageUpdateOne {
+	mutation := newUsageMutation(c.config, OpUpdateOne, withUsageID(id))
+	return &UsageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Usage.
+func (c *UsageClient) Delete() *UsageDelete {
+	mutation := newUsageMutation(c.config, OpDelete)
+	return &UsageDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UsageClient) DeleteOne(u *Usage) *UsageDeleteOne {
+	return c.DeleteOneID(u.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *UsageClient) DeleteOneID(id string) *UsageDeleteOne {
+	builder := c.Delete().Where(usage.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UsageDeleteOne{builder}
+}
+
+// Query returns a query builder for Usage.
+func (c *UsageClient) Query() *UsageQuery {
+	return &UsageQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeUsage},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Usage entity by its id.
+func (c *UsageClient) Get(ctx context.Context, id string) (*Usage, error) {
+	return c.Query().Where(usage.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UsageClient) GetX(ctx context.Context, id string) *Usage {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *UsageClient) Hooks() []Hook {
+	hooks := c.hooks.Usage
+	return append(hooks[:len(hooks):len(hooks)], usage.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *UsageClient) Interceptors() []Interceptor {
+	inters := c.inters.Usage
+	return append(inters[:len(inters):len(inters)], usage.Interceptors[:]...)
+}
+
+func (c *UsageClient) mutate(ctx context.Context, m *UsageMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UsageCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UsageUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UsageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UsageDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Usage mutation op: %q", m.Op())
+	}
+}
+
+// UsageHistoryClient is a client for the UsageHistory schema.
+type UsageHistoryClient struct {
+	config
+}
+
+// NewUsageHistoryClient returns a client for the UsageHistory from the given config.
+func NewUsageHistoryClient(c config) *UsageHistoryClient {
+	return &UsageHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `usagehistory.Hooks(f(g(h())))`.
+func (c *UsageHistoryClient) Use(hooks ...Hook) {
+	c.hooks.UsageHistory = append(c.hooks.UsageHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `usagehistory.Intercept(f(g(h())))`.
+func (c *UsageHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.UsageHistory = append(c.inters.UsageHistory, interceptors...)
+}
+
+// Create returns a builder for creating a UsageHistory entity.
+func (c *UsageHistoryClient) Create() *UsageHistoryCreate {
+	mutation := newUsageHistoryMutation(c.config, OpCreate)
+	return &UsageHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UsageHistory entities.
+func (c *UsageHistoryClient) CreateBulk(builders ...*UsageHistoryCreate) *UsageHistoryCreateBulk {
+	return &UsageHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *UsageHistoryClient) MapCreateBulk(slice any, setFunc func(*UsageHistoryCreate, int)) *UsageHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &UsageHistoryCreateBulk{err: fmt.Errorf("calling to UsageHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*UsageHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &UsageHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UsageHistory.
+func (c *UsageHistoryClient) Update() *UsageHistoryUpdate {
+	mutation := newUsageHistoryMutation(c.config, OpUpdate)
+	return &UsageHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UsageHistoryClient) UpdateOne(uh *UsageHistory) *UsageHistoryUpdateOne {
+	mutation := newUsageHistoryMutation(c.config, OpUpdateOne, withUsageHistory(uh))
+	return &UsageHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UsageHistoryClient) UpdateOneID(id string) *UsageHistoryUpdateOne {
+	mutation := newUsageHistoryMutation(c.config, OpUpdateOne, withUsageHistoryID(id))
+	return &UsageHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UsageHistory.
+func (c *UsageHistoryClient) Delete() *UsageHistoryDelete {
+	mutation := newUsageHistoryMutation(c.config, OpDelete)
+	return &UsageHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UsageHistoryClient) DeleteOne(uh *UsageHistory) *UsageHistoryDeleteOne {
+	return c.DeleteOneID(uh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *UsageHistoryClient) DeleteOneID(id string) *UsageHistoryDeleteOne {
+	builder := c.Delete().Where(usagehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UsageHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for UsageHistory.
+func (c *UsageHistoryClient) Query() *UsageHistoryQuery {
+	return &UsageHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeUsageHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a UsageHistory entity by its id.
+func (c *UsageHistoryClient) Get(ctx context.Context, id string) (*UsageHistory, error) {
+	return c.Query().Where(usagehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UsageHistoryClient) GetX(ctx context.Context, id string) *UsageHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *UsageHistoryClient) Hooks() []Hook {
+	return c.hooks.UsageHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *UsageHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.UsageHistory
+	return append(inters[:len(inters):len(inters)], usagehistory.Interceptors[:]...)
+}
+
+func (c *UsageHistoryClient) mutate(ctx context.Context, m *UsageHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UsageHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UsageHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UsageHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UsageHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown UsageHistory mutation op: %q", m.Op())
+	}
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -20450,8 +20737,8 @@ type (
 		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
 		ScheduledJob, ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory,
 		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Hook
+		Template, TemplateHistory, Usage, UsageHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
@@ -20473,8 +20760,8 @@ type (
 		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
 		ScheduledJob, ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory,
 		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Interceptor
+		Template, TemplateHistory, Usage, UsageHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

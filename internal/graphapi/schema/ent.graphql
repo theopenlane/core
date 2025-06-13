@@ -6986,7 +6986,6 @@ input CreateFileInput {
   """
   storagePath: String
   userIDs: [ID!]
-  organizationIDs: [ID!]
   groupIDs: [ID!]
   contactIDs: [ID!]
   entityIDs: [ID!]
@@ -6997,6 +6996,7 @@ input CreateFileInput {
   programIDs: [ID!]
   evidenceIDs: [ID!]
   eventIDs: [ID!]
+  organizationID: ID
 }
 """
 CreateGroupInput is used for create Group object.
@@ -13055,8 +13055,11 @@ type File implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  the ID of the organization the file belong to
+  """
+  organizationID: ID
   user: [User!]
-  organization: [Organization!]
   groups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -13127,6 +13130,7 @@ type File implements Node {
     """
     where: EventWhereInput
   ): EventConnection!
+  organization: Organization
 }
 """
 A connection to a list of items.
@@ -13220,6 +13224,10 @@ type FileHistory implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  the ID of the organization the file belong to
+  """
+  organizationID: String
 }
 """
 A connection to a list of items.
@@ -13617,6 +13625,24 @@ input FileHistoryWhereInput {
   storagePathNotNil: Boolean
   storagePathEqualFold: String
   storagePathContainsFold: String
+  """
+  organization_id field predicates
+  """
+  organizationID: String
+  organizationIDNEQ: String
+  organizationIDIn: [String!]
+  organizationIDNotIn: [String!]
+  organizationIDGT: String
+  organizationIDGTE: String
+  organizationIDLT: String
+  organizationIDLTE: String
+  organizationIDContains: String
+  organizationIDHasPrefix: String
+  organizationIDHasSuffix: String
+  organizationIDIsNil: Boolean
+  organizationIDNotNil: Boolean
+  organizationIDEqualFold: String
+  organizationIDContainsFold: String
 }
 """
 Ordering options for File connections
@@ -13940,15 +13966,28 @@ input FileWhereInput {
   storagePathEqualFold: String
   storagePathContainsFold: String
   """
+  organization_id field predicates
+  """
+  organizationID: ID
+  organizationIDNEQ: ID
+  organizationIDIn: [ID!]
+  organizationIDNotIn: [ID!]
+  organizationIDGT: ID
+  organizationIDGTE: ID
+  organizationIDLT: ID
+  organizationIDLTE: ID
+  organizationIDContains: ID
+  organizationIDHasPrefix: ID
+  organizationIDHasSuffix: ID
+  organizationIDIsNil: Boolean
+  organizationIDNotNil: Boolean
+  organizationIDEqualFold: ID
+  organizationIDContainsFold: ID
+  """
   user edge predicates
   """
   hasUser: Boolean
   hasUserWith: [UserWhereInput!]
-  """
-  organization edge predicates
-  """
-  hasOrganization: Boolean
-  hasOrganizationWith: [OrganizationWhereInput!]
   """
   groups edge predicates
   """
@@ -13999,6 +14038,11 @@ input FileWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  organization edge predicates
+  """
+  hasOrganization: Boolean
+  hasOrganizationWith: [OrganizationWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -33612,6 +33656,68 @@ type Query {
     """
     where: TemplateHistoryWhereInput
   ): TemplateHistoryConnection!
+  usages(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Usages returned from the connection.
+    """
+    orderBy: UsageOrder
+
+    """
+    Filtering options for Usages returned from the connection.
+    """
+    where: UsageWhereInput
+  ): UsageConnection!
+  usageHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for UsageHistories returned from the connection.
+    """
+    orderBy: UsageHistoryOrder
+
+    """
+    Filtering options for UsageHistories returned from the connection.
+    """
+    where: UsageHistoryWhereInput
+  ): UsageHistoryConnection!
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -41552,9 +41658,6 @@ input UpdateFileInput {
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUser: Boolean
-  addOrganizationIDs: [ID!]
-  removeOrganizationIDs: [ID!]
-  clearOrganization: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
@@ -41585,6 +41688,8 @@ input UpdateFileInput {
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
+  organizationID: ID
+  clearOrganization: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -43342,6 +43447,484 @@ input UpdateUserSettingInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+}
+type Usage implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  owner organization
+  """
+  organizationID: String!
+  """
+  the type of resource this usage is for
+  """
+  resourceType: UsageUsageType!
+  """
+  the amount of resource used
+  """
+  used: Int!
+  """
+  the limit for the resource type
+  """
+  limit: Int!
+}
+"""
+A connection to a list of items.
+"""
+type UsageConnection {
+  """
+  A list of edges.
+  """
+  edges: [UsageEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type UsageEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Usage
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type UsageHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: UsageHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  owner organization
+  """
+  organizationID: String!
+  """
+  the type of resource this usage is for
+  """
+  resourceType: UsageHistoryUsageType!
+  """
+  the amount of resource used
+  """
+  used: Int!
+  """
+  the limit for the resource type
+  """
+  limit: Int!
+}
+"""
+A connection to a list of items.
+"""
+type UsageHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [UsageHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type UsageHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: UsageHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+UsageHistoryOpType is enum for the field operation
+"""
+enum UsageHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for UsageHistory connections
+"""
+input UsageHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order UsageHistories.
+  """
+  field: UsageHistoryOrderField!
+}
+"""
+Properties by which UsageHistory connections can be ordered.
+"""
+enum UsageHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+UsageHistoryUsageType is enum for the field resource_type
+"""
+enum UsageHistoryUsageType @goModel(model: "github.com/theopenlane/core/pkg/enums.UsageType") {
+  STORAGE
+  RECORDS
+  USERS
+  PROGRAMS
+}
+"""
+UsageHistoryWhereInput is used for filtering UsageHistory objects.
+Input was generated by ent.
+"""
+input UsageHistoryWhereInput {
+  not: UsageHistoryWhereInput
+  and: [UsageHistoryWhereInput!]
+  or: [UsageHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: UsageHistoryOpType
+  operationNEQ: UsageHistoryOpType
+  operationIn: [UsageHistoryOpType!]
+  operationNotIn: [UsageHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  organization_id field predicates
+  """
+  organizationID: String
+  organizationIDNEQ: String
+  organizationIDIn: [String!]
+  organizationIDNotIn: [String!]
+  organizationIDGT: String
+  organizationIDGTE: String
+  organizationIDLT: String
+  organizationIDLTE: String
+  organizationIDContains: String
+  organizationIDHasPrefix: String
+  organizationIDHasSuffix: String
+  organizationIDEqualFold: String
+  organizationIDContainsFold: String
+  """
+  resource_type field predicates
+  """
+  resourceType: UsageHistoryUsageType
+  resourceTypeNEQ: UsageHistoryUsageType
+  resourceTypeIn: [UsageHistoryUsageType!]
+  resourceTypeNotIn: [UsageHistoryUsageType!]
+  """
+  used field predicates
+  """
+  used: Int
+  usedNEQ: Int
+  usedIn: [Int!]
+  usedNotIn: [Int!]
+  usedGT: Int
+  usedGTE: Int
+  usedLT: Int
+  usedLTE: Int
+  """
+  limit field predicates
+  """
+  limit: Int
+  limitNEQ: Int
+  limitIn: [Int!]
+  limitNotIn: [Int!]
+  limitGT: Int
+  limitGTE: Int
+  limitLT: Int
+  limitLTE: Int
+}
+"""
+Ordering options for Usage connections
+"""
+input UsageOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Usages.
+  """
+  field: UsageOrderField!
+}
+"""
+Properties by which Usage connections can be ordered.
+"""
+enum UsageOrderField {
+  created_at
+  updated_at
+}
+"""
+UsageUsageType is enum for the field resource_type
+"""
+enum UsageUsageType @goModel(model: "github.com/theopenlane/core/pkg/enums.UsageType") {
+  STORAGE
+  RECORDS
+  USERS
+  PROGRAMS
+}
+"""
+UsageWhereInput is used for filtering Usage objects.
+Input was generated by ent.
+"""
+input UsageWhereInput {
+  not: UsageWhereInput
+  and: [UsageWhereInput!]
+  or: [UsageWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  organization_id field predicates
+  """
+  organizationID: String
+  organizationIDNEQ: String
+  organizationIDIn: [String!]
+  organizationIDNotIn: [String!]
+  organizationIDGT: String
+  organizationIDGTE: String
+  organizationIDLT: String
+  organizationIDLTE: String
+  organizationIDContains: String
+  organizationIDHasPrefix: String
+  organizationIDHasSuffix: String
+  organizationIDEqualFold: String
+  organizationIDContainsFold: String
+  """
+  resource_type field predicates
+  """
+  resourceType: UsageUsageType
+  resourceTypeNEQ: UsageUsageType
+  resourceTypeIn: [UsageUsageType!]
+  resourceTypeNotIn: [UsageUsageType!]
+  """
+  used field predicates
+  """
+  used: Int
+  usedNEQ: Int
+  usedIn: [Int!]
+  usedNotIn: [Int!]
+  usedGT: Int
+  usedGTE: Int
+  usedLT: Int
+  usedLTE: Int
+  """
+  limit field predicates
+  """
+  limit: Int
+  limitNEQ: Int
+  limitIn: [Int!]
+  limitNotIn: [Int!]
+  limitGT: Int
+  limitGTE: Int
+  limitLT: Int
+  limitLTE: Int
 }
 type User implements Node {
   id: ID!

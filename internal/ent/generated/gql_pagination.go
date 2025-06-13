@@ -98,6 +98,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/generated/usage"
+	"github.com/theopenlane/core/internal/ent/generated/usagehistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -33403,6 +33405,652 @@ func (th *TemplateHistory) ToEdge(order *TemplateHistoryOrder) *TemplateHistoryE
 	return &TemplateHistoryEdge{
 		Node:   th,
 		Cursor: order.Field.toCursor(th),
+	}
+}
+
+// UsageEdge is the edge representation of Usage.
+type UsageEdge struct {
+	Node   *Usage `json:"node"`
+	Cursor Cursor `json:"cursor"`
+}
+
+// UsageConnection is the connection containing edges to Usage.
+type UsageConnection struct {
+	Edges      []*UsageEdge `json:"edges"`
+	PageInfo   PageInfo     `json:"pageInfo"`
+	TotalCount int          `json:"totalCount"`
+}
+
+func (c *UsageConnection) build(nodes []*Usage, pager *usagePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *Usage
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Usage {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Usage {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*UsageEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &UsageEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// UsagePaginateOption enables pagination customization.
+type UsagePaginateOption func(*usagePager) error
+
+// WithUsageOrder configures pagination ordering.
+func WithUsageOrder(order *UsageOrder) UsagePaginateOption {
+	if order == nil {
+		order = DefaultUsageOrder
+	}
+	o := *order
+	return func(pager *usagePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultUsageOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithUsageFilter configures pagination filter.
+func WithUsageFilter(filter func(*UsageQuery) (*UsageQuery, error)) UsagePaginateOption {
+	return func(pager *usagePager) error {
+		if filter == nil {
+			return errors.New("UsageQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type usagePager struct {
+	reverse bool
+	order   *UsageOrder
+	filter  func(*UsageQuery) (*UsageQuery, error)
+}
+
+func newUsagePager(opts []UsagePaginateOption, reverse bool) (*usagePager, error) {
+	pager := &usagePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultUsageOrder
+	}
+	return pager, nil
+}
+
+func (p *usagePager) applyFilter(query *UsageQuery) (*UsageQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *usagePager) toCursor(u *Usage) Cursor {
+	return p.order.Field.toCursor(u)
+}
+
+func (p *usagePager) applyCursors(query *UsageQuery, after, before *Cursor) (*UsageQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultUsageOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *usagePager) applyOrder(query *UsageQuery) *UsageQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultUsageOrder.Field {
+		query = query.Order(DefaultUsageOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *usagePager) orderExpr(query *UsageQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultUsageOrder.Field {
+			b.Comma().Ident(DefaultUsageOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Usage.
+func (u *UsageQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...UsagePaginateOption,
+) (*UsageConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newUsagePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if u, err = pager.applyFilter(u); err != nil {
+		return nil, err
+	}
+	conn := &UsageConnection{Edges: []*UsageEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := u.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if u, err = pager.applyCursors(u, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		u.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := u.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	u = pager.applyOrder(u)
+	nodes, err := u.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// UsageOrderFieldCreatedAt orders Usage by created_at.
+	UsageOrderFieldCreatedAt = &UsageOrderField{
+		Value: func(u *Usage) (ent.Value, error) {
+			return u.CreatedAt, nil
+		},
+		column: usage.FieldCreatedAt,
+		toTerm: usage.ByCreatedAt,
+		toCursor: func(u *Usage) Cursor {
+			return Cursor{
+				ID:    u.ID,
+				Value: u.CreatedAt,
+			}
+		},
+	}
+	// UsageOrderFieldUpdatedAt orders Usage by updated_at.
+	UsageOrderFieldUpdatedAt = &UsageOrderField{
+		Value: func(u *Usage) (ent.Value, error) {
+			return u.UpdatedAt, nil
+		},
+		column: usage.FieldUpdatedAt,
+		toTerm: usage.ByUpdatedAt,
+		toCursor: func(u *Usage) Cursor {
+			return Cursor{
+				ID:    u.ID,
+				Value: u.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f UsageOrderField) String() string {
+	var str string
+	switch f.column {
+	case UsageOrderFieldCreatedAt.column:
+		str = "created_at"
+	case UsageOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f UsageOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *UsageOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("UsageOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *UsageOrderFieldCreatedAt
+	case "updated_at":
+		*f = *UsageOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid UsageOrderField", str)
+	}
+	return nil
+}
+
+// UsageOrderField defines the ordering field of Usage.
+type UsageOrderField struct {
+	// Value extracts the ordering value from the given Usage.
+	Value    func(*Usage) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) usage.OrderOption
+	toCursor func(*Usage) Cursor
+}
+
+// UsageOrder defines the ordering of Usage.
+type UsageOrder struct {
+	Direction OrderDirection   `json:"direction"`
+	Field     *UsageOrderField `json:"field"`
+}
+
+// DefaultUsageOrder is the default ordering of Usage.
+var DefaultUsageOrder = &UsageOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &UsageOrderField{
+		Value: func(u *Usage) (ent.Value, error) {
+			return u.ID, nil
+		},
+		column: usage.FieldID,
+		toTerm: usage.ByID,
+		toCursor: func(u *Usage) Cursor {
+			return Cursor{ID: u.ID}
+		},
+	},
+}
+
+// ToEdge converts Usage into UsageEdge.
+func (u *Usage) ToEdge(order *UsageOrder) *UsageEdge {
+	if order == nil {
+		order = DefaultUsageOrder
+	}
+	return &UsageEdge{
+		Node:   u,
+		Cursor: order.Field.toCursor(u),
+	}
+}
+
+// UsageHistoryEdge is the edge representation of UsageHistory.
+type UsageHistoryEdge struct {
+	Node   *UsageHistory `json:"node"`
+	Cursor Cursor        `json:"cursor"`
+}
+
+// UsageHistoryConnection is the connection containing edges to UsageHistory.
+type UsageHistoryConnection struct {
+	Edges      []*UsageHistoryEdge `json:"edges"`
+	PageInfo   PageInfo            `json:"pageInfo"`
+	TotalCount int                 `json:"totalCount"`
+}
+
+func (c *UsageHistoryConnection) build(nodes []*UsageHistory, pager *usagehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *UsageHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *UsageHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *UsageHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*UsageHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &UsageHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// UsageHistoryPaginateOption enables pagination customization.
+type UsageHistoryPaginateOption func(*usagehistoryPager) error
+
+// WithUsageHistoryOrder configures pagination ordering.
+func WithUsageHistoryOrder(order *UsageHistoryOrder) UsageHistoryPaginateOption {
+	if order == nil {
+		order = DefaultUsageHistoryOrder
+	}
+	o := *order
+	return func(pager *usagehistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultUsageHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithUsageHistoryFilter configures pagination filter.
+func WithUsageHistoryFilter(filter func(*UsageHistoryQuery) (*UsageHistoryQuery, error)) UsageHistoryPaginateOption {
+	return func(pager *usagehistoryPager) error {
+		if filter == nil {
+			return errors.New("UsageHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type usagehistoryPager struct {
+	reverse bool
+	order   *UsageHistoryOrder
+	filter  func(*UsageHistoryQuery) (*UsageHistoryQuery, error)
+}
+
+func newUsageHistoryPager(opts []UsageHistoryPaginateOption, reverse bool) (*usagehistoryPager, error) {
+	pager := &usagehistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultUsageHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *usagehistoryPager) applyFilter(query *UsageHistoryQuery) (*UsageHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *usagehistoryPager) toCursor(uh *UsageHistory) Cursor {
+	return p.order.Field.toCursor(uh)
+}
+
+func (p *usagehistoryPager) applyCursors(query *UsageHistoryQuery, after, before *Cursor) (*UsageHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultUsageHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *usagehistoryPager) applyOrder(query *UsageHistoryQuery) *UsageHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultUsageHistoryOrder.Field {
+		query = query.Order(DefaultUsageHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *usagehistoryPager) orderExpr(query *UsageHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultUsageHistoryOrder.Field {
+			b.Comma().Ident(DefaultUsageHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to UsageHistory.
+func (uh *UsageHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...UsageHistoryPaginateOption,
+) (*UsageHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newUsageHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if uh, err = pager.applyFilter(uh); err != nil {
+		return nil, err
+	}
+	conn := &UsageHistoryConnection{Edges: []*UsageHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := uh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if uh, err = pager.applyCursors(uh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		uh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := uh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	uh = pager.applyOrder(uh)
+	nodes, err := uh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// UsageHistoryOrderFieldHistoryTime orders UsageHistory by history_time.
+	UsageHistoryOrderFieldHistoryTime = &UsageHistoryOrderField{
+		Value: func(uh *UsageHistory) (ent.Value, error) {
+			return uh.HistoryTime, nil
+		},
+		column: usagehistory.FieldHistoryTime,
+		toTerm: usagehistory.ByHistoryTime,
+		toCursor: func(uh *UsageHistory) Cursor {
+			return Cursor{
+				ID:    uh.ID,
+				Value: uh.HistoryTime,
+			}
+		},
+	}
+	// UsageHistoryOrderFieldCreatedAt orders UsageHistory by created_at.
+	UsageHistoryOrderFieldCreatedAt = &UsageHistoryOrderField{
+		Value: func(uh *UsageHistory) (ent.Value, error) {
+			return uh.CreatedAt, nil
+		},
+		column: usagehistory.FieldCreatedAt,
+		toTerm: usagehistory.ByCreatedAt,
+		toCursor: func(uh *UsageHistory) Cursor {
+			return Cursor{
+				ID:    uh.ID,
+				Value: uh.CreatedAt,
+			}
+		},
+	}
+	// UsageHistoryOrderFieldUpdatedAt orders UsageHistory by updated_at.
+	UsageHistoryOrderFieldUpdatedAt = &UsageHistoryOrderField{
+		Value: func(uh *UsageHistory) (ent.Value, error) {
+			return uh.UpdatedAt, nil
+		},
+		column: usagehistory.FieldUpdatedAt,
+		toTerm: usagehistory.ByUpdatedAt,
+		toCursor: func(uh *UsageHistory) Cursor {
+			return Cursor{
+				ID:    uh.ID,
+				Value: uh.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f UsageHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case UsageHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case UsageHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case UsageHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f UsageHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *UsageHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("UsageHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *UsageHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *UsageHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *UsageHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid UsageHistoryOrderField", str)
+	}
+	return nil
+}
+
+// UsageHistoryOrderField defines the ordering field of UsageHistory.
+type UsageHistoryOrderField struct {
+	// Value extracts the ordering value from the given UsageHistory.
+	Value    func(*UsageHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) usagehistory.OrderOption
+	toCursor func(*UsageHistory) Cursor
+}
+
+// UsageHistoryOrder defines the ordering of UsageHistory.
+type UsageHistoryOrder struct {
+	Direction OrderDirection          `json:"direction"`
+	Field     *UsageHistoryOrderField `json:"field"`
+}
+
+// DefaultUsageHistoryOrder is the default ordering of UsageHistory.
+var DefaultUsageHistoryOrder = &UsageHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &UsageHistoryOrderField{
+		Value: func(uh *UsageHistory) (ent.Value, error) {
+			return uh.ID, nil
+		},
+		column: usagehistory.FieldID,
+		toTerm: usagehistory.ByID,
+		toCursor: func(uh *UsageHistory) Cursor {
+			return Cursor{ID: uh.ID}
+		},
+	},
+}
+
+// ToEdge converts UsageHistory into UsageHistoryEdge.
+func (uh *UsageHistory) ToEdge(order *UsageHistoryOrder) *UsageHistoryEdge {
+	if order == nil {
+		order = DefaultUsageHistoryOrder
+	}
+	return &UsageHistoryEdge{
+		Node:   uh,
+		Cursor: order.Field.toCursor(uh),
 	}
 }
 

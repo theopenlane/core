@@ -304,6 +304,7 @@ query AdminSearch($query: String!) {
           storageScheme
           storageVolume
           storagePath
+          organizationID
         }
       }
     }
@@ -789,6 +790,22 @@ query AdminSearch($query: String!) {
           description
           jsonconfig
           uischema
+        }
+      }
+    }
+    usages {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          organizationID
         }
       }
     }

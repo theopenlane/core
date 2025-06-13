@@ -1,5 +1,7 @@
 package entitlements
 
+import "github.com/theopenlane/core/pkg/enums"
+
 type Config struct {
 	// Enabled determines if the entitlements service is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
@@ -23,6 +25,9 @@ type Config struct {
 	SaaSPricingTiers []PricingTier `json:"saasPricingTiers" koanf:"saasPricingTiers"`
 	// Features are the features for the SaaS product
 	Features []Feature `json:"features" koanf:"features"`
+	// UsageLimits defines default usage caps per resource type
+	// that new organizations should start with
+	UsageLimits map[enums.UsageType]int64 `json:"usageLimits" koanf:"usageLimits"`
 }
 
 type ConfigOpts func(*Config)
@@ -87,6 +92,13 @@ func WithPersonalOrgSubscriptionPriceID(personalOrgSubscriptionPriceID string) C
 func WithStripeCancellationReturnURL(stripeCancellationReturnURL string) ConfigOpts {
 	return func(c *Config) {
 		c.StripeCancellationReturnURL = stripeCancellationReturnURL
+	}
+}
+
+// WithUsageLimits sets the default usage limits for new organizations
+func WithUsageLimits(limits map[enums.UsageType]int64) ConfigOpts {
+	return func(c *Config) {
+		c.UsageLimits = limits
 	}
 }
 
