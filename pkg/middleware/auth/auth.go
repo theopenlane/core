@@ -86,10 +86,24 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					return unauthorized(c, err)
 				}
 
-				// Add claims to context for use in downstream processing and continue handlers
-				au, err = createAuthenticatedUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
-				if err != nil {
-					return unauthorized(c, err)
+				if strings.HasPrefix(claims.UserID, "anon:") {
+					if !conf.AllowAnonymous {
+						return unauthorized(c, fmt.Errorf("anonymous access not allowed"))
+					}
+					an, err := createAnonymousTrustCenterUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
+					if err != nil {
+						return unauthorized(c, err)
+					}
+
+					auth.SetAnonymousTrustCenterUserContext(c, an)
+
+					return next(c)
+				} else {
+					// Add claims to context for use in downstream processing and continue handlers
+					au, err = createAuthenticatedUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
+					if err != nil {
+						return unauthorized(c, err)
+					}
 				}
 
 				auth.SetRefreshToken(c, bearerToken)
@@ -213,6 +227,17 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 		OrganizationName:   org.Name,
 		OrganizationIDs:    []string{org.ID},
 		AuthenticationType: authType,
+	}, nil
+}
+
+func createAnonymousTrustCenterUserFromClaims(ctx context.Context, dbClient *ent.Client, claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousTrustCenterUser, error) {
+
+	return &auth.AnonymousTrustCenterUser{
+		SubjectID:          claims.UserID,
+		SubjectName:        "Anonymous User",
+		OrganizationID:     claims.OrgID,
+		AuthenticationType: authType,
+		TrustCenterID:      claims.TrustCenterID,
 	}, nil
 }
 

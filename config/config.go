@@ -117,6 +117,8 @@ type Server struct {
 	CSRFProtection csrf.Config `json:"csrfProtection" koanf:"csrfProtection"`
 	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
 	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:""`
+	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
+	DefaultTrustCenterDomain string `json:"defaultTrustCenterDomain" koanf:"defaultTrustCenterDomain" default:""`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys

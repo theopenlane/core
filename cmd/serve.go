@@ -141,6 +141,11 @@ func serve(ctx context.Context) error {
 	// set dev flag
 	so.Config.Handler.IsDev = so.Config.Settings.Server.Dev
 
+	// add default trust center domain
+	so.AddServerOptions(
+		serveropts.WithDefaultTrustCenterDomain(),
+	)
+
 	// add ready checks
 	so.AddServerOptions(
 		serveropts.WithReadyChecks(dbClient.Config, fgaClient, redisClient, dbClient.Job),

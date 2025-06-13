@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -612,4 +613,154 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTrustCenter.DeletedID))
 		})
 	}
+}
+
+// createAnonymousTrustCenterContext creates a context for an anonymous trust center user
+func createAnonymousTrustCenterContext(trustCenterID, organizationID string) context.Context {
+	anonUserID := fmt.Sprintf("anon:%s", gofakeit.UUID())
+
+	anonUser := &auth.AnonymousTrustCenterUser{
+		SubjectID:          anonUserID,
+		SubjectName:        "Anonymous User",
+		OrganizationID:     organizationID,
+		AuthenticationType: auth.JWTAuthentication,
+		TrustCenterID:      trustCenterID,
+	}
+
+	ctx := context.Background()
+	return auth.WithAnonymousTrustCenterUser(ctx, anonUser)
+}
+
+func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
+	// Create a trust center for testing
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// Create another trust center that the anonymous user should NOT have access to
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		queryID        string
+		trustCenterID  string
+		organizationID string
+		client         *openlaneclient.OpenlaneClient
+		expectedErr    string
+		shouldSucceed  bool
+	}{
+		{
+			name:           "happy path - anonymous user can query their trust center by ID",
+			queryID:        trustCenter.ID,
+			trustCenterID:  trustCenter.ID,
+			organizationID: testUser1.OrganizationID,
+			client:         suite.client.api,
+			shouldSucceed:  true,
+		},
+		{
+			name:           "anonymous user cannot query different trust center",
+			queryID:        trustCenter2.ID,
+			trustCenterID:  trustCenter.ID, // Anonymous user has access to trustCenter, not trustCenter2
+			organizationID: testUser1.OrganizationID,
+			client:         suite.client.api,
+			expectedErr:    notFoundErrorMsg,
+			shouldSucceed:  false,
+		},
+		{
+			name:           "anonymous user cannot query non-existent trust center",
+			queryID:        "non-existent-id",
+			trustCenterID:  trustCenter.ID,
+			organizationID: testUser1.OrganizationID,
+			client:         suite.client.api,
+			expectedErr:    notFoundErrorMsg,
+			shouldSucceed:  false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Create anonymous trust center context
+			anonCtx := createAnonymousTrustCenterContext(tc.trustCenterID, tc.organizationID)
+
+			resp, err := tc.client.GetTrustCenterByID(anonCtx, tc.queryID)
+
+			if !tc.shouldSucceed {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.queryID, resp.TrustCenter.ID))
+			assert.Check(t, resp.TrustCenter.Slug != nil)
+			assert.Check(t, resp.TrustCenter.OwnerID != nil)
+			assert.Check(t, is.Equal(tc.organizationID, *resp.TrustCenter.OwnerID))
+
+			setting := resp.TrustCenter.GetSetting()
+			assert.Check(t, setting != nil)
+			assert.Check(t, setting.Title != nil)
+			assert.Check(t, setting.Overview != nil)
+			assert.Check(t, setting.LogoURL != nil)
+			assert.Check(t, setting.FaviconURL != nil)
+			assert.Check(t, setting.PrimaryColor != nil)
+		})
+	}
+
+	// Clean up
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+}
+
+func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
+	// Create a trust center for testing
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// Create another trust center that the anonymous user should NOT have access to
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		trustCenterID  string
+		organizationID string
+		client         *openlaneclient.OpenlaneClient
+		expectedCount  int
+	}{
+		{
+			name:           "anonymous user can only see their trust center in list query",
+			trustCenterID:  trustCenter.ID,
+			organizationID: testUser1.OrganizationID,
+			client:         suite.client.api,
+			expectedCount:  1, // Should only see the one trust center they have access to
+		},
+		{
+			name:           "anonymous user with different trust center sees only their trust center",
+			trustCenterID:  trustCenter2.ID,
+			organizationID: testUser2.OrganizationID,
+			client:         suite.client.api,
+			expectedCount:  1, // Should only see the one trust center they have access to
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Create anonymous trust center context
+			anonCtx := createAnonymousTrustCenterContext(tc.trustCenterID, tc.organizationID)
+
+			resp, err := tc.client.GetAllTrustCenters(anonCtx)
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.expectedCount, len(resp.TrustCenters.Edges)))
+
+			if len(resp.TrustCenters.Edges) > 0 {
+				// Verify that the returned trust center is the one the anonymous user has access to
+				returnedTrustCenter := resp.TrustCenters.Edges[0].Node
+				assert.Check(t, is.Equal(tc.trustCenterID, returnedTrustCenter.ID))
+				assert.Check(t, is.Equal(tc.organizationID, *returnedTrustCenter.OwnerID))
+			}
+		})
+	}
+
+	// Clean up
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
 }

@@ -42,7 +42,8 @@ type Options struct {
 	// Skipper defines a function to skip middleware
 	Skipper middleware.Skipper
 	// BeforeFunc  defines a function which is executed just before the middleware
-	BeforeFunc middleware.BeforeFunc
+	BeforeFunc     middleware.BeforeFunc
+	AllowAnonymous bool
 
 	// Used to check other auth types like personal access tokens
 	DBClient *ent.Client
@@ -159,6 +160,12 @@ func WithAuthOptions(opts Options) Option {
 		if opts.Context != nil {
 			conf.Context = opts.Context
 		}
+	}
+}
+
+func WithAllowAnonymous(allow bool) Option {
+	return func(opts *Options) {
+		opts.AllowAnonymous = allow
 	}
 }
 

@@ -85,11 +85,18 @@ func (a *Client) GenerateUserAuthSession(ctx context.Context, w http.ResponseWri
 	return a.GenerateUserAuthSessionWithOrg(ctx, w, user, "")
 }
 
-func (a *Client) GenerateAnonymousAuthSession(ctx context.Context, w http.ResponseWriter, targetOrgID string) (*models.AuthData, error) {
-	anonUserID := fmt.Sprintf("anon_%s", uuid.New().String())
+func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetTrustCenterID string) (*models.AuthData, error) {
+	anonUserID := fmt.Sprintf("anon:%s", uuid.New().String())
 
 	// create new claims for the user
-	newClaims := createClaimsWithOrg(&generated.User{ID: anonUserID}, targetOrgID)
+	newClaims := &tokens.Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: anonUserID,
+		},
+		UserID:        anonUserID,
+		OrgID:         targetOrgID,
+		TrustCenterID: targetTrustCenterID,
+	}
 
 	// create a new token pair for the user
 	access, refresh, err := a.db.TokenManager.CreateTokenPair(newClaims)

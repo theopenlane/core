@@ -1,7 +1,6 @@
 package route
 
 import (
-	"fmt"
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
@@ -18,7 +17,6 @@ func registerTrustCenterAnonymousJWTHandler(router *Router) (err error) {
 		Method: method,
 		Path:   path,
 		Handler: func(c echo.Context) error {
-			fmt.Println("WTF")
 			return router.Handler.CreateTrustCenterAnonymousJWT(c)
 		},
 	}

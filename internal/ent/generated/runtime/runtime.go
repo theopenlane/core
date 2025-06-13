@@ -4870,8 +4870,10 @@ func init() {
 	trustcenter.Hooks[4] = trustcenterHooks[0]
 	trustcenterMixinInters1 := trustcenterMixin[1].Interceptors()
 	trustcenterMixinInters5 := trustcenterMixin[5].Interceptors()
+	trustcenterInters := schema.TrustCenter{}.Interceptors()
 	trustcenter.Interceptors[0] = trustcenterMixinInters1[0]
 	trustcenter.Interceptors[1] = trustcenterMixinInters5[0]
+	trustcenter.Interceptors[2] = trustcenterInters[0]
 	trustcenterMixinFields0 := trustcenterMixin[0].Fields()
 	_ = trustcenterMixinFields0
 	trustcenterMixinFields2 := trustcenterMixin[2].Fields()

@@ -124,7 +124,7 @@ func tableOutput(out []openlaneclient.GetAllTrustCenters_TrustCenters_Edges_Node
 			updatedAt = i.UpdatedAt.Format("2006-01-02 15:04:05")
 		}
 
-		writer.AddRow(i.ID, i.Slug, customDomainID, ownerID, strings.Join(i.Tags, ","), createdAt, updatedAt)
+		writer.AddRow(i.ID, *i.Slug, customDomainID, ownerID, strings.Join(i.Tags, ","), createdAt, updatedAt)
 	}
 
 	writer.Render()
