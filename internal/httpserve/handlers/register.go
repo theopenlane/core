@@ -63,19 +63,17 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 	// setup user context
 	userCtx := setAuthenticatedContext(ctxWithToken, meowuser)
 
-	// create email verification token
-	user := &User{
-		FirstName: in.FirstName,
-		LastName:  in.LastName,
-		Email:     in.Email,
-		ID:        meowuser.ID,
-	}
+	if in.Token != nil {
+		ctx.SetRequest(ctx.Request().WithContext(userCtx))
 
-	meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
-	if err != nil {
-		log.Error().Err(err).Msg("error storing email verification token")
+		_, _, _, err := h.processInvitation(ctx, *in.Token, meowuser.ID)
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
 
-		return h.InternalServerError(ctx, err)
+		if err := h.setEmailConfirmed(userCtx, meowuser); err != nil {
+			return h.BadRequest(ctx, err)
+		}
 	}
 
 	out := &models.RegisterReply{
@@ -85,9 +83,26 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		Message: "Welcome to Openlane!",
 	}
 
-	// only return the token in development
-	if h.IsDev {
-		out.Token = meowtoken.Token
+	if in.Token == nil {
+		// create email verification token
+		user := &User{
+			FirstName: in.FirstName,
+			LastName:  in.LastName,
+			Email:     in.Email,
+			ID:        meowuser.ID,
+		}
+
+		meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
+		if err != nil {
+			log.Error().Err(err).Msg("error storing email verification token")
+
+			return h.InternalServerError(ctx, err)
+		}
+
+		// only return the token in development
+		if h.IsDev {
+			out.Token = meowtoken.Token
+		}
 	}
 
 	return h.Created(ctx, out)
