@@ -1187,6 +1187,7 @@ type ComplexityRoot struct {
 		ID                    func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
 		Organization          func(childComplexity int) int
+		OrganizationID        func(childComplexity int) int
 		OrganizationSetting   func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
 		PresignedURL          func(childComplexity int) int
@@ -1232,6 +1233,7 @@ type ComplexityRoot struct {
 		ID                    func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
 		Operation             func(childComplexity int) int
+		OrganizationID        func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
 		ProvidedFileExtension func(childComplexity int) int
 		ProvidedFileName      func(childComplexity int) int
@@ -3167,6 +3169,7 @@ type ComplexityRoot struct {
 		AdminSubscriberSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTaskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTemplateSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminUsageSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminWebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3335,6 +3338,10 @@ type ComplexityRoot struct {
 		Templates                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TfaSetting                            func(childComplexity int, id *string) int
 		TfaSettings                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) int
+		Usage                                 func(childComplexity int, id string) int
+		UsageHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UsageHistoryOrder, where *generated.UsageHistoryWhereInput) int
+		UsageSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Usages                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UsageOrder, where *generated.UsageWhereInput) int
 		User                                  func(childComplexity int, id string) int
 		UserHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) int
 		UserSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3595,6 +3602,7 @@ type ComplexityRoot struct {
 		Tasks                       func(childComplexity int) int
 		Templates                   func(childComplexity int) int
 		TotalCount                  func(childComplexity int) int
+		Usages                      func(childComplexity int) int
 		UserSettings                func(childComplexity int) int
 		Users                       func(childComplexity int) int
 		Webauthns                   func(childComplexity int) int
@@ -4057,6 +4065,57 @@ type ComplexityRoot struct {
 
 	TemplateUpdatePayload struct {
 		Template func(childComplexity int) int
+	}
+
+	Usage struct {
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Limit          func(childComplexity int) int
+		OrganizationID func(childComplexity int) int
+		ResourceType   func(childComplexity int) int
+		Tags           func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
+		Used           func(childComplexity int) int
+	}
+
+	UsageConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	UsageEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	UsageHistory struct {
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		HistoryTime    func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Limit          func(childComplexity int) int
+		Operation      func(childComplexity int) int
+		OrganizationID func(childComplexity int) int
+		Ref            func(childComplexity int) int
+		ResourceType   func(childComplexity int) int
+		Tags           func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
+		Used           func(childComplexity int) int
+	}
+
+	UsageHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	UsageHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	User struct {
@@ -9623,6 +9682,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.Organization(childComplexity), true
 
+	case "File.organizationID":
+		if e.complexity.File.OrganizationID == nil {
+			break
+		}
+
+		return e.complexity.File.OrganizationID(childComplexity), true
+
 	case "File.organizationSetting":
 		if e.complexity.File.OrganizationSetting == nil {
 			break
@@ -9853,6 +9919,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.FileHistory.Operation(childComplexity), true
+
+	case "FileHistory.organizationID":
+		if e.complexity.FileHistory.OrganizationID == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.OrganizationID(childComplexity), true
 
 	case "FileHistory.persistedFileSize":
 		if e.complexity.FileHistory.PersistedFileSize == nil {
@@ -21083,6 +21156,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminTemplateSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminUsageSearch":
+		if e.complexity.Query.AdminUsageSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminUsageSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminUsageSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminUserSearch":
 		if e.complexity.Query.AdminUserSearch == nil {
 			break
@@ -23094,6 +23179,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TfaSettings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TFASettingOrder), args["where"].(*generated.TFASettingWhereInput)), true
 
+	case "Query.usage":
+		if e.complexity.Query.Usage == nil {
+			break
+		}
+
+		args, err := ec.field_Query_usage_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Usage(childComplexity, args["id"].(string)), true
+
+	case "Query.usageHistories":
+		if e.complexity.Query.UsageHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_usageHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.UsageHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.UsageHistoryOrder), args["where"].(*generated.UsageHistoryWhereInput)), true
+
+	case "Query.usageSearch":
+		if e.complexity.Query.UsageSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_usageSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.UsageSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.usages":
+		if e.complexity.Query.Usages == nil {
+			break
+		}
+
+		args, err := ec.field_Query_usages_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Usages(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.UsageOrder), args["where"].(*generated.UsageWhereInput)), true
+
 	case "Query.user":
 		if e.complexity.Query.User == nil {
 			break
@@ -24509,6 +24642,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.TotalCount(childComplexity), true
+
+	case "SearchResults.usages":
+		if e.complexity.SearchResults.Usages == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Usages(childComplexity), true
 
 	case "SearchResults.userSettings":
 		if e.complexity.SearchResults.UserSettings == nil {
@@ -26772,6 +26912,237 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TemplateUpdatePayload.Template(childComplexity), true
 
+	case "Usage.createdAt":
+		if e.complexity.Usage.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Usage.CreatedAt(childComplexity), true
+
+	case "Usage.createdBy":
+		if e.complexity.Usage.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Usage.CreatedBy(childComplexity), true
+
+	case "Usage.id":
+		if e.complexity.Usage.ID == nil {
+			break
+		}
+
+		return e.complexity.Usage.ID(childComplexity), true
+
+	case "Usage.limit":
+		if e.complexity.Usage.Limit == nil {
+			break
+		}
+
+		return e.complexity.Usage.Limit(childComplexity), true
+
+	case "Usage.organizationID":
+		if e.complexity.Usage.OrganizationID == nil {
+			break
+		}
+
+		return e.complexity.Usage.OrganizationID(childComplexity), true
+
+	case "Usage.resourceType":
+		if e.complexity.Usage.ResourceType == nil {
+			break
+		}
+
+		return e.complexity.Usage.ResourceType(childComplexity), true
+
+	case "Usage.tags":
+		if e.complexity.Usage.Tags == nil {
+			break
+		}
+
+		return e.complexity.Usage.Tags(childComplexity), true
+
+	case "Usage.updatedAt":
+		if e.complexity.Usage.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Usage.UpdatedAt(childComplexity), true
+
+	case "Usage.updatedBy":
+		if e.complexity.Usage.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Usage.UpdatedBy(childComplexity), true
+
+	case "Usage.used":
+		if e.complexity.Usage.Used == nil {
+			break
+		}
+
+		return e.complexity.Usage.Used(childComplexity), true
+
+	case "UsageConnection.edges":
+		if e.complexity.UsageConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.UsageConnection.Edges(childComplexity), true
+
+	case "UsageConnection.pageInfo":
+		if e.complexity.UsageConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.UsageConnection.PageInfo(childComplexity), true
+
+	case "UsageConnection.totalCount":
+		if e.complexity.UsageConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.UsageConnection.TotalCount(childComplexity), true
+
+	case "UsageEdge.cursor":
+		if e.complexity.UsageEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.UsageEdge.Cursor(childComplexity), true
+
+	case "UsageEdge.node":
+		if e.complexity.UsageEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.UsageEdge.Node(childComplexity), true
+
+	case "UsageHistory.createdAt":
+		if e.complexity.UsageHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.CreatedAt(childComplexity), true
+
+	case "UsageHistory.createdBy":
+		if e.complexity.UsageHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.CreatedBy(childComplexity), true
+
+	case "UsageHistory.historyTime":
+		if e.complexity.UsageHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.HistoryTime(childComplexity), true
+
+	case "UsageHistory.id":
+		if e.complexity.UsageHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.ID(childComplexity), true
+
+	case "UsageHistory.limit":
+		if e.complexity.UsageHistory.Limit == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.Limit(childComplexity), true
+
+	case "UsageHistory.operation":
+		if e.complexity.UsageHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.Operation(childComplexity), true
+
+	case "UsageHistory.organizationID":
+		if e.complexity.UsageHistory.OrganizationID == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.OrganizationID(childComplexity), true
+
+	case "UsageHistory.ref":
+		if e.complexity.UsageHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.Ref(childComplexity), true
+
+	case "UsageHistory.resourceType":
+		if e.complexity.UsageHistory.ResourceType == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.ResourceType(childComplexity), true
+
+	case "UsageHistory.tags":
+		if e.complexity.UsageHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.Tags(childComplexity), true
+
+	case "UsageHistory.updatedAt":
+		if e.complexity.UsageHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.UpdatedAt(childComplexity), true
+
+	case "UsageHistory.updatedBy":
+		if e.complexity.UsageHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.UpdatedBy(childComplexity), true
+
+	case "UsageHistory.used":
+		if e.complexity.UsageHistory.Used == nil {
+			break
+		}
+
+		return e.complexity.UsageHistory.Used(childComplexity), true
+
+	case "UsageHistoryConnection.edges":
+		if e.complexity.UsageHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.UsageHistoryConnection.Edges(childComplexity), true
+
+	case "UsageHistoryConnection.pageInfo":
+		if e.complexity.UsageHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.UsageHistoryConnection.PageInfo(childComplexity), true
+
+	case "UsageHistoryConnection.totalCount":
+		if e.complexity.UsageHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.UsageHistoryConnection.TotalCount(childComplexity), true
+
+	case "UsageHistoryEdge.cursor":
+		if e.complexity.UsageHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.UsageHistoryEdge.Cursor(childComplexity), true
+
+	case "UsageHistoryEdge.node":
+		if e.complexity.UsageHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.UsageHistoryEdge.Node(childComplexity), true
+
 	case "User.actionPlans":
 		if e.complexity.User.ActionPlans == nil {
 			break
@@ -28081,6 +28452,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateTemplateInput,
 		ec.unmarshalInputUpdateUserInput,
 		ec.unmarshalInputUpdateUserSettingInput,
+		ec.unmarshalInputUsageHistoryOrder,
+		ec.unmarshalInputUsageHistoryWhereInput,
+		ec.unmarshalInputUsageOrder,
+		ec.unmarshalInputUsageWhereInput,
 		ec.unmarshalInputUserHistoryOrder,
 		ec.unmarshalInputUserHistoryWhereInput,
 		ec.unmarshalInputUserOrder,
@@ -29217,6 +29592,31 @@ type ActionPlanBulkCreatePayload {
         """
         last: Int
     ): TemplateConnection
+    """
+    Search across Usage objects
+    """
+    adminUsageSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): UsageConnection
     """
     Search across User objects
     """
@@ -37349,7 +37749,6 @@ input CreateFileInput {
   """
   storagePath: String
   userIDs: [ID!]
-  organizationIDs: [ID!]
   groupIDs: [ID!]
   contactIDs: [ID!]
   entityIDs: [ID!]
@@ -37360,6 +37759,7 @@ input CreateFileInput {
   programIDs: [ID!]
   evidenceIDs: [ID!]
   eventIDs: [ID!]
+  organizationID: ID
 }
 """
 CreateGroupInput is used for create Group object.
@@ -43418,8 +43818,11 @@ type File implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  the ID of the organization the file belong to
+  """
+  organizationID: ID
   user: [User!]
-  organization: [Organization!]
   groups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -43490,6 +43893,7 @@ type File implements Node {
     """
     where: EventWhereInput
   ): EventConnection!
+  organization: Organization
 }
 """
 A connection to a list of items.
@@ -43583,6 +43987,10 @@ type FileHistory implements Node {
   the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
   """
   storagePath: String
+  """
+  the ID of the organization the file belong to
+  """
+  organizationID: String
 }
 """
 A connection to a list of items.
@@ -43980,6 +44388,24 @@ input FileHistoryWhereInput {
   storagePathNotNil: Boolean
   storagePathEqualFold: String
   storagePathContainsFold: String
+  """
+  organization_id field predicates
+  """
+  organizationID: String
+  organizationIDNEQ: String
+  organizationIDIn: [String!]
+  organizationIDNotIn: [String!]
+  organizationIDGT: String
+  organizationIDGTE: String
+  organizationIDLT: String
+  organizationIDLTE: String
+  organizationIDContains: String
+  organizationIDHasPrefix: String
+  organizationIDHasSuffix: String
+  organizationIDIsNil: Boolean
+  organizationIDNotNil: Boolean
+  organizationIDEqualFold: String
+  organizationIDContainsFold: String
 }
 """
 Ordering options for File connections
@@ -44303,15 +44729,28 @@ input FileWhereInput {
   storagePathEqualFold: String
   storagePathContainsFold: String
   """
+  organization_id field predicates
+  """
+  organizationID: ID
+  organizationIDNEQ: ID
+  organizationIDIn: [ID!]
+  organizationIDNotIn: [ID!]
+  organizationIDGT: ID
+  organizationIDGTE: ID
+  organizationIDLT: ID
+  organizationIDLTE: ID
+  organizationIDContains: ID
+  organizationIDHasPrefix: ID
+  organizationIDHasSuffix: ID
+  organizationIDIsNil: Boolean
+  organizationIDNotNil: Boolean
+  organizationIDEqualFold: ID
+  organizationIDContainsFold: ID
+  """
   user edge predicates
   """
   hasUser: Boolean
   hasUserWith: [UserWhereInput!]
-  """
-  organization edge predicates
-  """
-  hasOrganization: Boolean
-  hasOrganizationWith: [OrganizationWhereInput!]
   """
   groups edge predicates
   """
@@ -44362,6 +44801,11 @@ input FileWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  organization edge predicates
+  """
+  hasOrganization: Boolean
+  hasOrganizationWith: [OrganizationWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -63975,6 +64419,68 @@ type Query {
     """
     where: TemplateHistoryWhereInput
   ): TemplateHistoryConnection!
+  usages(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Usages returned from the connection.
+    """
+    orderBy: UsageOrder
+
+    """
+    Filtering options for Usages returned from the connection.
+    """
+    where: UsageWhereInput
+  ): UsageConnection!
+  usageHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for UsageHistories returned from the connection.
+    """
+    orderBy: UsageHistoryOrder
+
+    """
+    Filtering options for UsageHistories returned from the connection.
+    """
+    where: UsageHistoryWhereInput
+  ): UsageHistoryConnection!
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -71915,9 +72421,6 @@ input UpdateFileInput {
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUser: Boolean
-  addOrganizationIDs: [ID!]
-  removeOrganizationIDs: [ID!]
-  clearOrganization: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
@@ -71948,6 +72451,8 @@ input UpdateFileInput {
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
+  organizationID: ID
+  clearOrganization: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -73705,6 +74210,484 @@ input UpdateUserSettingInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+}
+type Usage implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  owner organization
+  """
+  organizationID: String!
+  """
+  the type of resource this usage is for
+  """
+  resourceType: UsageUsageType!
+  """
+  the amount of resource used
+  """
+  used: Int!
+  """
+  the limit for the resource type
+  """
+  limit: Int!
+}
+"""
+A connection to a list of items.
+"""
+type UsageConnection {
+  """
+  A list of edges.
+  """
+  edges: [UsageEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type UsageEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Usage
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type UsageHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: UsageHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  owner organization
+  """
+  organizationID: String!
+  """
+  the type of resource this usage is for
+  """
+  resourceType: UsageHistoryUsageType!
+  """
+  the amount of resource used
+  """
+  used: Int!
+  """
+  the limit for the resource type
+  """
+  limit: Int!
+}
+"""
+A connection to a list of items.
+"""
+type UsageHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [UsageHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type UsageHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: UsageHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+UsageHistoryOpType is enum for the field operation
+"""
+enum UsageHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for UsageHistory connections
+"""
+input UsageHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order UsageHistories.
+  """
+  field: UsageHistoryOrderField!
+}
+"""
+Properties by which UsageHistory connections can be ordered.
+"""
+enum UsageHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+UsageHistoryUsageType is enum for the field resource_type
+"""
+enum UsageHistoryUsageType @goModel(model: "github.com/theopenlane/core/pkg/enums.UsageType") {
+  STORAGE
+  RECORDS
+  USERS
+  PROGRAMS
+}
+"""
+UsageHistoryWhereInput is used for filtering UsageHistory objects.
+Input was generated by ent.
+"""
+input UsageHistoryWhereInput {
+  not: UsageHistoryWhereInput
+  and: [UsageHistoryWhereInput!]
+  or: [UsageHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: UsageHistoryOpType
+  operationNEQ: UsageHistoryOpType
+  operationIn: [UsageHistoryOpType!]
+  operationNotIn: [UsageHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  organization_id field predicates
+  """
+  organizationID: String
+  organizationIDNEQ: String
+  organizationIDIn: [String!]
+  organizationIDNotIn: [String!]
+  organizationIDGT: String
+  organizationIDGTE: String
+  organizationIDLT: String
+  organizationIDLTE: String
+  organizationIDContains: String
+  organizationIDHasPrefix: String
+  organizationIDHasSuffix: String
+  organizationIDEqualFold: String
+  organizationIDContainsFold: String
+  """
+  resource_type field predicates
+  """
+  resourceType: UsageHistoryUsageType
+  resourceTypeNEQ: UsageHistoryUsageType
+  resourceTypeIn: [UsageHistoryUsageType!]
+  resourceTypeNotIn: [UsageHistoryUsageType!]
+  """
+  used field predicates
+  """
+  used: Int
+  usedNEQ: Int
+  usedIn: [Int!]
+  usedNotIn: [Int!]
+  usedGT: Int
+  usedGTE: Int
+  usedLT: Int
+  usedLTE: Int
+  """
+  limit field predicates
+  """
+  limit: Int
+  limitNEQ: Int
+  limitIn: [Int!]
+  limitNotIn: [Int!]
+  limitGT: Int
+  limitGTE: Int
+  limitLT: Int
+  limitLTE: Int
+}
+"""
+Ordering options for Usage connections
+"""
+input UsageOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Usages.
+  """
+  field: UsageOrderField!
+}
+"""
+Properties by which Usage connections can be ordered.
+"""
+enum UsageOrderField {
+  created_at
+  updated_at
+}
+"""
+UsageUsageType is enum for the field resource_type
+"""
+enum UsageUsageType @goModel(model: "github.com/theopenlane/core/pkg/enums.UsageType") {
+  STORAGE
+  RECORDS
+  USERS
+  PROGRAMS
+}
+"""
+UsageWhereInput is used for filtering Usage objects.
+Input was generated by ent.
+"""
+input UsageWhereInput {
+  not: UsageWhereInput
+  and: [UsageWhereInput!]
+  or: [UsageWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  organization_id field predicates
+  """
+  organizationID: String
+  organizationIDNEQ: String
+  organizationIDIn: [String!]
+  organizationIDNotIn: [String!]
+  organizationIDGT: String
+  organizationIDGTE: String
+  organizationIDLT: String
+  organizationIDLTE: String
+  organizationIDContains: String
+  organizationIDHasPrefix: String
+  organizationIDHasSuffix: String
+  organizationIDEqualFold: String
+  organizationIDContainsFold: String
+  """
+  resource_type field predicates
+  """
+  resourceType: UsageUsageType
+  resourceTypeNEQ: UsageUsageType
+  resourceTypeIn: [UsageUsageType!]
+  resourceTypeNotIn: [UsageUsageType!]
+  """
+  used field predicates
+  """
+  used: Int
+  usedNEQ: Int
+  usedIn: [Int!]
+  usedNotIn: [Int!]
+  usedGT: Int
+  usedGTE: Int
+  usedLT: Int
+  usedLTE: Int
+  """
+  limit field predicates
+  """
+  limit: Int
+  limitNEQ: Int
+  limitIn: [Int!]
+  limitNotIn: [Int!]
+  limitGT: Int
+  limitGTE: Int
+  limitLT: Int
+  limitLTE: Int
 }
 type User implements Node {
   id: ID!
@@ -79899,6 +80882,31 @@ type ScheduledJobBulkCreatePayload {
         last: Int
     ): TemplateConnection
     """
+    Search across Usage objects
+    """
+    usageSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): UsageConnection
+    """
     Search across User objects
     """
     userSearch(
@@ -80020,6 +81028,7 @@ type SearchResults{
   subscribers: SubscriberConnection
   tasks: TaskConnection
   templates: TemplateConnection
+  usages: UsageConnection
   users: UserConnection
   userSettings: UserSettingConnection
   webauthns: WebauthnConnection
@@ -80650,6 +81659,18 @@ extend input UpdateTFASettingInput {
     """
     regenBackupCodes: Boolean
 }`, BuiltIn: false},
+	{Name: "../schema/usage.graphql", Input: `extend type Query {
+    """
+    Look up usage by ID
+    """
+     usage(
+        """
+        ID of the usage
+        """
+        id: ID!
+    ):  Usage!
+}
+`, BuiltIn: false},
 	{Name: "../schema/user.graphql", Input: `extend type Query {
     """
     Look up user by ID

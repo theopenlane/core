@@ -1,0 +1,11 @@
+extend type Query {
+    """
+    Look up usage by ID
+    """
+     usage(
+        """
+        ID of the usage
+        """
+        id: ID!
+    ):  Usage!
+}

@@ -655,6 +655,9 @@
         },
         "features": {
           "$ref": "#/$defs/[]entitlements.Feature"
+        },
+        "usageLimits": {
+          "$ref": "#/$defs/map[enums.UsageType]int64"
         }
       },
       "additionalProperties": false,
@@ -893,6 +896,12 @@
       "additionalProperties": false,
       "type": "object",
       "description": "OauthProviderConfig represents the configuration for OAuth providers such as Github and Google"
+    },
+    "map[enums.UsageType]int64": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "type": "object"
     },
     "map[string][]string": {
       "additionalProperties": {

@@ -1058,6 +1058,7 @@ type SearchResults struct {
 	Subscribers                 *generated.SubscriberConnection                 `json:"subscribers,omitempty"`
 	Tasks                       *generated.TaskConnection                       `json:"tasks,omitempty"`
 	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
+	Usages                      *generated.UsageConnection                      `json:"usages,omitempty"`
 	Users                       *generated.UserConnection                       `json:"users,omitempty"`
 	UserSettings                *generated.UserSettingConnection                `json:"userSettings,omitempty"`
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`

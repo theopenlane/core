@@ -116,6 +116,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*TemplateMutation]() {
 		c.Template.Use(hook)
 	}
+	for _, hook := range history.Hooks[*UsageMutation]() {
+		c.Usage.Use(hook)
+	}
 	for _, hook := range history.Hooks[*UserMutation]() {
 		c.User.Use(hook)
 	}

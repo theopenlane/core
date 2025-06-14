@@ -125,7 +125,6 @@ type SchemaConfig struct {
 	OrgSubscriptionHistory             string // OrgSubscriptionHistory table.
 	Organization                       string // Organization table.
 	OrganizationPersonalAccessTokens   string // Organization-personal_access_tokens->PersonalAccessToken table.
-	OrganizationFiles                  string // Organization-files->File table.
 	OrganizationEvents                 string // Organization-events->Event table.
 	OrganizationHistory                string // OrganizationHistory table.
 	OrganizationSetting                string // OrganizationSetting table.
@@ -186,6 +185,8 @@ type SchemaConfig struct {
 	Template                           string // Template table.
 	TemplateFiles                      string // Template-files->File table.
 	TemplateHistory                    string // TemplateHistory table.
+	Usage                              string // Usage table.
+	UsageHistory                       string // UsageHistory table.
 	User                               string // User table.
 	UserFiles                          string // User-files->File table.
 	UserEvents                         string // User-events->Event table.

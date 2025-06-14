@@ -47,6 +47,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/usage"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -655,6 +656,7 @@ func adminSearchFiles(ctx context.Context, query string, after *entgql.Cursor[st
 				file.StorageSchemeContainsFold(query),         // search by StorageScheme
 				file.StorageVolumeContainsFold(query),         // search by StorageVolume
 				file.StoragePathContainsFold(query),           // search by StoragePath
+				file.OrganizationIDContainsFold(query),        // search by OrganizationID
 			),
 		)
 
@@ -1633,6 +1635,39 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(uischema)::text LIKE $7", likeQuery)) // search by Uischema
 				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchUsage searches for Usage based on the query string looking for matches
+func searchUsages(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UsageConnection, error) {
+	request := withTransactionalMutation(ctx).Usage.Query().
+		Where(
+			usage.Or(
+				usage.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchUsage searches for Usage based on the query string looking for matches
+func adminSearchUsages(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UsageConnection, error) {
+	request := withTransactionalMutation(ctx).Usage.Query().
+		Where(
+			usage.Or(
+				usage.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				usage.OrganizationIDContainsFold(query), // search by OrganizationID
 			),
 		)
 

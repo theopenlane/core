@@ -65,6 +65,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		subscriberResults                 *generated.SubscriberConnection
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
+		usageResults                      *generated.UsageConnection
 		userResults                       *generated.UserConnection
 		usersettingResults                *generated.UserSettingConnection
 		webauthnResults                   *generated.WebauthnConnection
@@ -332,6 +333,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
+			usageResults, err = searchUsages(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			userResults, err = searchUsers(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -546,6 +554,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.Templates = templateResults
 
 		res.TotalCount += templateResults.TotalCount
+	}
+	if usageResults != nil && len(usageResults.Edges) > 0 {
+		res.Usages = usageResults
+
+		res.TotalCount += usageResults.TotalCount
 	}
 	if userResults != nil && len(userResults.Edges) > 0 {
 		res.Users = userResults
@@ -1230,6 +1243,24 @@ func (r *queryResolver) AdminTemplateSearch(ctx context.Context, query string, a
 
 	// return the results
 	return templateResults, nil
+}
+func (r *queryResolver) AdminUsageSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UsageConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	usageResults, err := adminSearchUsages(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return usageResults, nil
 }
 func (r *queryResolver) AdminUserSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
 	// ensure the user is a system admin

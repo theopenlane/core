@@ -55,6 +55,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/usagehistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 )
@@ -1171,6 +1172,9 @@ func (fh *FileHistory) changes(new *FileHistory) []Change {
 	}
 	if !reflect.DeepEqual(fh.FileContents, new.FileContents) {
 		changes = append(changes, NewChange(filehistory.FieldFileContents, fh.FileContents, new.FileContents))
+	}
+	if !reflect.DeepEqual(fh.OrganizationID, new.OrganizationID) {
+		changes = append(changes, NewChange(filehistory.FieldOrganizationID, fh.OrganizationID, new.OrganizationID))
 	}
 	return changes
 }
@@ -2868,6 +2872,66 @@ func (th *TemplateHistory) Diff(history *TemplateHistory) (*HistoryDiff[Template
 	return nil, ErrIdenticalHistory
 }
 
+func (uh *UsageHistory) changes(new *UsageHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(uh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(usagehistory.FieldCreatedAt, uh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(uh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(usagehistory.FieldUpdatedAt, uh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(uh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(usagehistory.FieldCreatedBy, uh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(uh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(usagehistory.FieldDeletedAt, uh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(uh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(usagehistory.FieldDeletedBy, uh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(uh.Tags, new.Tags) {
+		changes = append(changes, NewChange(usagehistory.FieldTags, uh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(uh.OrganizationID, new.OrganizationID) {
+		changes = append(changes, NewChange(usagehistory.FieldOrganizationID, uh.OrganizationID, new.OrganizationID))
+	}
+	if !reflect.DeepEqual(uh.ResourceType, new.ResourceType) {
+		changes = append(changes, NewChange(usagehistory.FieldResourceType, uh.ResourceType, new.ResourceType))
+	}
+	if !reflect.DeepEqual(uh.Used, new.Used) {
+		changes = append(changes, NewChange(usagehistory.FieldUsed, uh.Used, new.Used))
+	}
+	if !reflect.DeepEqual(uh.Limit, new.Limit) {
+		changes = append(changes, NewChange(usagehistory.FieldLimit, uh.Limit, new.Limit))
+	}
+	return changes
+}
+
+func (uh *UsageHistory) Diff(history *UsageHistory) (*HistoryDiff[UsageHistory], error) {
+	if uh.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	uhUnix, historyUnix := uh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	uhOlder := uhUnix < historyUnix || (uhUnix == historyUnix && uh.ID < history.ID)
+	historyOlder := uhUnix > historyUnix || (uhUnix == historyUnix && uh.ID > history.ID)
+
+	if uhOlder {
+		return &HistoryDiff[UsageHistory]{
+			Old:     uh,
+			New:     history,
+			Changes: uh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[UsageHistory]{
+			Old:     history,
+			New:     uh,
+			Changes: history.changes(uh),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
 func (uh *UserHistory) changes(new *UserHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(uh.CreatedAt, new.CreatedAt) {
@@ -3276,6 +3340,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	result.Edges = append(result.Edges, record.Edges...)
 
 	record, err = auditTemplateHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditUsageHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -4767,6 +4837,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditTemplateHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("UsageHistory", "History") {
+		// map AuditLogWhereInput to UsageHistoryWhereInput
+		whereInput := &UsageHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to UsageHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &UsageHistoryOrder{
+			Field:     UsageHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditUsageHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -7487,6 +7598,79 @@ func auditTemplateHistory(ctx context.Context, config config, after *Cursor, fir
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &TemplateHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type usagehistoryref struct {
+	Ref string
+}
+
+func auditUsageHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *UsageHistoryOrder, where *UsageHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []UsageHistoryPaginateOption{
+		WithUsageHistoryOrder(orderBy),
+		WithUsageHistoryFilter(where.Filter),
+	}
+
+	client := NewUsageHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "UsageHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&UsageHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&UsageHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					usagehistory.Ref(curr.Node.Ref),
+					usagehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(usagehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &UsageHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
 
 // File is the model entity for the File schema.
@@ -60,6 +61,8 @@ type File struct {
 	StoragePath string `json:"storage_path,omitempty"`
 	// the contents of the file
 	FileContents []byte `json:"file_contents,omitempty"`
+	// the ID of the organization the file belong to
+	OrganizationID string `json:"organization_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
 	Edges        FileEdges `json:"edges"`
@@ -74,8 +77,6 @@ type File struct {
 type FileEdges struct {
 	// User holds the value of the user edge.
 	User []*User `json:"user,omitempty"`
-	// Organization holds the value of the organization edge.
-	Organization []*Organization `json:"organization,omitempty"`
 	// Groups holds the value of the groups edge.
 	Groups []*Group `json:"groups,omitempty"`
 	// Contact holds the value of the contact edge.
@@ -96,6 +97,8 @@ type FileEdges struct {
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
+	// Organization holds the value of the organization edge.
+	Organization *Organization `json:"organization,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [12]bool
@@ -103,7 +106,6 @@ type FileEdges struct {
 	totalCount [12]map[string]int
 
 	namedUser                map[string][]*User
-	namedOrganization        map[string][]*Organization
 	namedGroups              map[string][]*Group
 	namedContact             map[string][]*Contact
 	namedEntity              map[string][]*Entity
@@ -125,19 +127,10 @@ func (e FileEdges) UserOrErr() ([]*User, error) {
 	return nil, &NotLoadedError{edge: "user"}
 }
 
-// OrganizationOrErr returns the Organization value or an error if the edge
-// was not loaded in eager-loading.
-func (e FileEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[1] {
-		return e.Organization, nil
-	}
-	return nil, &NotLoadedError{edge: "organization"}
-}
-
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[1] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -146,7 +139,7 @@ func (e FileEdges) GroupsOrErr() ([]*Group, error) {
 // ContactOrErr returns the Contact value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ContactOrErr() ([]*Contact, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.Contact, nil
 	}
 	return nil, &NotLoadedError{edge: "contact"}
@@ -155,7 +148,7 @@ func (e FileEdges) ContactOrErr() ([]*Contact, error) {
 // EntityOrErr returns the Entity value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EntityOrErr() ([]*Entity, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		return e.Entity, nil
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -164,7 +157,7 @@ func (e FileEdges) EntityOrErr() ([]*Entity, error) {
 // UserSettingOrErr returns the UserSetting value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) UserSettingOrErr() ([]*UserSetting, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[4] {
 		return e.UserSetting, nil
 	}
 	return nil, &NotLoadedError{edge: "user_setting"}
@@ -173,7 +166,7 @@ func (e FileEdges) UserSettingOrErr() ([]*UserSetting, error) {
 // OrganizationSettingOrErr returns the OrganizationSetting value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OrganizationSettingOrErr() ([]*OrganizationSetting, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[5] {
 		return e.OrganizationSetting, nil
 	}
 	return nil, &NotLoadedError{edge: "organization_setting"}
@@ -182,7 +175,7 @@ func (e FileEdges) OrganizationSettingOrErr() ([]*OrganizationSetting, error) {
 // TemplateOrErr returns the Template value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TemplateOrErr() ([]*Template, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[6] {
 		return e.Template, nil
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -191,7 +184,7 @@ func (e FileEdges) TemplateOrErr() ([]*Template, error) {
 // DocumentOrErr returns the Document value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) DocumentOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[7] {
 		return e.Document, nil
 	}
 	return nil, &NotLoadedError{edge: "document"}
@@ -200,7 +193,7 @@ func (e FileEdges) DocumentOrErr() ([]*DocumentData, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[8] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -209,7 +202,7 @@ func (e FileEdges) ProgramOrErr() ([]*Program, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[9] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -218,10 +211,21 @@ func (e FileEdges) EvidenceOrErr() ([]*Evidence, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[10] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
+}
+
+// OrganizationOrErr returns the Organization value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FileEdges) OrganizationOrErr() (*Organization, error) {
+	if e.Organization != nil {
+		return e.Organization, nil
+	} else if e.loadedTypes[11] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "organization"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -233,7 +237,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldOrganizationID:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -388,6 +392,12 @@ func (f *File) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				f.FileContents = *value
 			}
+		case file.FieldOrganizationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
+			} else if value.Valid {
+				f.OrganizationID = value.String
+			}
 		case file.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note_files", values[i])
@@ -411,11 +421,6 @@ func (f *File) Value(name string) (ent.Value, error) {
 // QueryUser queries the "user" edge of the File entity.
 func (f *File) QueryUser() *UserQuery {
 	return NewFileClient(f.config).QueryUser(f)
-}
-
-// QueryOrganization queries the "organization" edge of the File entity.
-func (f *File) QueryOrganization() *OrganizationQuery {
-	return NewFileClient(f.config).QueryOrganization(f)
 }
 
 // QueryGroups queries the "groups" edge of the File entity.
@@ -466,6 +471,11 @@ func (f *File) QueryEvidence() *EvidenceQuery {
 // QueryEvents queries the "events" edge of the File entity.
 func (f *File) QueryEvents() *EventQuery {
 	return NewFileClient(f.config).QueryEvents(f)
+}
+
+// QueryOrganization queries the "organization" edge of the File entity.
+func (f *File) QueryOrganization() *OrganizationQuery {
+	return NewFileClient(f.config).QueryOrganization(f)
 }
 
 // Update returns a builder for updating this File.
@@ -553,6 +563,9 @@ func (f *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("file_contents=")
 	builder.WriteString(fmt.Sprintf("%v", f.FileContents))
+	builder.WriteString(", ")
+	builder.WriteString("organization_id=")
+	builder.WriteString(f.OrganizationID)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -578,30 +591,6 @@ func (f *File) appendNamedUser(name string, edges ...*User) {
 		f.Edges.namedUser[name] = []*User{}
 	} else {
 		f.Edges.namedUser[name] = append(f.Edges.namedUser[name], edges...)
-	}
-}
-
-// NamedOrganization returns the Organization named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (f *File) NamedOrganization(name string) ([]*Organization, error) {
-	if f.Edges.namedOrganization == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := f.Edges.namedOrganization[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (f *File) appendNamedOrganization(name string, edges ...*Organization) {
-	if f.Edges.namedOrganization == nil {
-		f.Edges.namedOrganization = make(map[string][]*Organization)
-	}
-	if len(edges) == 0 {
-		f.Edges.namedOrganization[name] = []*Organization{}
-	} else {
-		f.Edges.namedOrganization[name] = append(f.Edges.namedOrganization[name], edges...)
 	}
 }
 

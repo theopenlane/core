@@ -402,6 +402,26 @@ func (fu *FileUpdate) ClearFileContents() *FileUpdate {
 	return fu
 }
 
+// SetOrganizationID sets the "organization_id" field.
+func (fu *FileUpdate) SetOrganizationID(s string) *FileUpdate {
+	fu.mutation.SetOrganizationID(s)
+	return fu
+}
+
+// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableOrganizationID(s *string) *FileUpdate {
+	if s != nil {
+		fu.SetOrganizationID(*s)
+	}
+	return fu
+}
+
+// ClearOrganizationID clears the value of the "organization_id" field.
+func (fu *FileUpdate) ClearOrganizationID() *FileUpdate {
+	fu.mutation.ClearOrganizationID()
+	return fu
+}
+
 // AddUserIDs adds the "user" edge to the User entity by IDs.
 func (fu *FileUpdate) AddUserIDs(ids ...string) *FileUpdate {
 	fu.mutation.AddUserIDs(ids...)
@@ -415,21 +435,6 @@ func (fu *FileUpdate) AddUser(u ...*User) *FileUpdate {
 		ids[i] = u[i].ID
 	}
 	return fu.AddUserIDs(ids...)
-}
-
-// AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
-func (fu *FileUpdate) AddOrganizationIDs(ids ...string) *FileUpdate {
-	fu.mutation.AddOrganizationIDs(ids...)
-	return fu
-}
-
-// AddOrganization adds the "organization" edges to the Organization entity.
-func (fu *FileUpdate) AddOrganization(o ...*Organization) *FileUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return fu.AddOrganizationIDs(ids...)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
@@ -582,6 +587,11 @@ func (fu *FileUpdate) AddEvents(e ...*Event) *FileUpdate {
 	return fu.AddEventIDs(ids...)
 }
 
+// SetOrganization sets the "organization" edge to the Organization entity.
+func (fu *FileUpdate) SetOrganization(o *Organization) *FileUpdate {
+	return fu.SetOrganizationID(o.ID)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fu *FileUpdate) Mutation() *FileMutation {
 	return fu.mutation
@@ -606,27 +616,6 @@ func (fu *FileUpdate) RemoveUser(u ...*User) *FileUpdate {
 		ids[i] = u[i].ID
 	}
 	return fu.RemoveUserIDs(ids...)
-}
-
-// ClearOrganization clears all "organization" edges to the Organization entity.
-func (fu *FileUpdate) ClearOrganization() *FileUpdate {
-	fu.mutation.ClearOrganization()
-	return fu
-}
-
-// RemoveOrganizationIDs removes the "organization" edge to Organization entities by IDs.
-func (fu *FileUpdate) RemoveOrganizationIDs(ids ...string) *FileUpdate {
-	fu.mutation.RemoveOrganizationIDs(ids...)
-	return fu
-}
-
-// RemoveOrganization removes "organization" edges to Organization entities.
-func (fu *FileUpdate) RemoveOrganization(o ...*Organization) *FileUpdate {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return fu.RemoveOrganizationIDs(ids...)
 }
 
 // ClearGroups clears all "groups" edges to the Group entity.
@@ -837,6 +826,12 @@ func (fu *FileUpdate) RemoveEvents(e ...*Event) *FileUpdate {
 		ids[i] = e[i].ID
 	}
 	return fu.RemoveEventIDs(ids...)
+}
+
+// ClearOrganization clears the "organization" edge to the Organization entity.
+func (fu *FileUpdate) ClearOrganization() *FileUpdate {
+	fu.mutation.ClearOrganization()
+	return fu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1079,54 +1074,6 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = fu.schemaConfig.UserFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if fu.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.OrganizationTable,
-			Columns: file.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fu.schemaConfig.OrganizationFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fu.mutation.RemovedOrganizationIDs(); len(nodes) > 0 && !fu.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.OrganizationTable,
-			Columns: file.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fu.schemaConfig.OrganizationFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fu.mutation.OrganizationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.OrganizationTable,
-			Columns: file.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fu.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1612,6 +1559,37 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if fu.mutation.OrganizationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   file.OrganizationTable,
+			Columns: []string{file.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.OrganizationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   file.OrganizationTable,
+			Columns: []string{file.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = fu.schemaConfig.File
 	ctx = internal.NewSchemaConfigContext(ctx, fu.schemaConfig)
 	_spec.AddModifiers(fu.modifiers...)
@@ -1994,6 +1972,26 @@ func (fuo *FileUpdateOne) ClearFileContents() *FileUpdateOne {
 	return fuo
 }
 
+// SetOrganizationID sets the "organization_id" field.
+func (fuo *FileUpdateOne) SetOrganizationID(s string) *FileUpdateOne {
+	fuo.mutation.SetOrganizationID(s)
+	return fuo
+}
+
+// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableOrganizationID(s *string) *FileUpdateOne {
+	if s != nil {
+		fuo.SetOrganizationID(*s)
+	}
+	return fuo
+}
+
+// ClearOrganizationID clears the value of the "organization_id" field.
+func (fuo *FileUpdateOne) ClearOrganizationID() *FileUpdateOne {
+	fuo.mutation.ClearOrganizationID()
+	return fuo
+}
+
 // AddUserIDs adds the "user" edge to the User entity by IDs.
 func (fuo *FileUpdateOne) AddUserIDs(ids ...string) *FileUpdateOne {
 	fuo.mutation.AddUserIDs(ids...)
@@ -2007,21 +2005,6 @@ func (fuo *FileUpdateOne) AddUser(u ...*User) *FileUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return fuo.AddUserIDs(ids...)
-}
-
-// AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
-func (fuo *FileUpdateOne) AddOrganizationIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.AddOrganizationIDs(ids...)
-	return fuo
-}
-
-// AddOrganization adds the "organization" edges to the Organization entity.
-func (fuo *FileUpdateOne) AddOrganization(o ...*Organization) *FileUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return fuo.AddOrganizationIDs(ids...)
 }
 
 // AddGroupIDs adds the "groups" edge to the Group entity by IDs.
@@ -2174,6 +2157,11 @@ func (fuo *FileUpdateOne) AddEvents(e ...*Event) *FileUpdateOne {
 	return fuo.AddEventIDs(ids...)
 }
 
+// SetOrganization sets the "organization" edge to the Organization entity.
+func (fuo *FileUpdateOne) SetOrganization(o *Organization) *FileUpdateOne {
+	return fuo.SetOrganizationID(o.ID)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fuo *FileUpdateOne) Mutation() *FileMutation {
 	return fuo.mutation
@@ -2198,27 +2186,6 @@ func (fuo *FileUpdateOne) RemoveUser(u ...*User) *FileUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return fuo.RemoveUserIDs(ids...)
-}
-
-// ClearOrganization clears all "organization" edges to the Organization entity.
-func (fuo *FileUpdateOne) ClearOrganization() *FileUpdateOne {
-	fuo.mutation.ClearOrganization()
-	return fuo
-}
-
-// RemoveOrganizationIDs removes the "organization" edge to Organization entities by IDs.
-func (fuo *FileUpdateOne) RemoveOrganizationIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.RemoveOrganizationIDs(ids...)
-	return fuo
-}
-
-// RemoveOrganization removes "organization" edges to Organization entities.
-func (fuo *FileUpdateOne) RemoveOrganization(o ...*Organization) *FileUpdateOne {
-	ids := make([]string, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
-	}
-	return fuo.RemoveOrganizationIDs(ids...)
 }
 
 // ClearGroups clears all "groups" edges to the Group entity.
@@ -2429,6 +2396,12 @@ func (fuo *FileUpdateOne) RemoveEvents(e ...*Event) *FileUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return fuo.RemoveEventIDs(ids...)
+}
+
+// ClearOrganization clears the "organization" edge to the Organization entity.
+func (fuo *FileUpdateOne) ClearOrganization() *FileUpdateOne {
+	fuo.mutation.ClearOrganization()
+	return fuo
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -2701,54 +2674,6 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 			},
 		}
 		edge.Schema = fuo.schemaConfig.UserFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if fuo.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.OrganizationTable,
-			Columns: file.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fuo.schemaConfig.OrganizationFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fuo.mutation.RemovedOrganizationIDs(); len(nodes) > 0 && !fuo.mutation.OrganizationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.OrganizationTable,
-			Columns: file.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fuo.schemaConfig.OrganizationFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fuo.mutation.OrganizationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.OrganizationTable,
-			Columns: file.OrganizationPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = fuo.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3229,6 +3154,37 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 			},
 		}
 		edge.Schema = fuo.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.OrganizationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   file.OrganizationTable,
+			Columns: []string{file.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.OrganizationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   file.OrganizationTable,
+			Columns: []string{file.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

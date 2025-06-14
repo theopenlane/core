@@ -3229,6 +3229,10 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetFileContents(fileContents)
 	}
 
+	if organizationID, exists := m.OrganizationID(); exists {
+		create = create.SetOrganizationID(organizationID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -3385,6 +3389,12 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetFileContents(file.FileContents)
 		}
 
+		if organizationID, exists := m.OrganizationID(); exists {
+			create = create.SetOrganizationID(organizationID)
+		} else {
+			create = create.SetOrganizationID(file.OrganizationID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -3438,6 +3448,7 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStorageVolume(file.StorageVolume).
 			SetStoragePath(file.StoragePath).
 			SetFileContents(file.FileContents).
+			SetOrganizationID(file.OrganizationID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -9255,6 +9266,213 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDescription(template.Description).
 			SetJsonconfig(template.Jsonconfig).
 			SetUischema(template.Uischema).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *UsageMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.UsageHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if organizationID, exists := m.OrganizationID(); exists {
+		create = create.SetOrganizationID(organizationID)
+	}
+
+	if resourceType, exists := m.ResourceType(); exists {
+		create = create.SetResourceType(resourceType)
+	}
+
+	if used, exists := m.Used(); exists {
+		create = create.SetUsed(used)
+	}
+
+	if limit, exists := m.Limit(); exists {
+		create = create.SetLimit(limit)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *UsageMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		usage, err := client.Usage.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.UsageHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(usage.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(usage.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(usage.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(usage.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(usage.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(usage.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(usage.Tags)
+		}
+
+		if organizationID, exists := m.OrganizationID(); exists {
+			create = create.SetOrganizationID(organizationID)
+		} else {
+			create = create.SetOrganizationID(usage.OrganizationID)
+		}
+
+		if resourceType, exists := m.ResourceType(); exists {
+			create = create.SetResourceType(resourceType)
+		} else {
+			create = create.SetResourceType(usage.ResourceType)
+		}
+
+		if used, exists := m.Used(); exists {
+			create = create.SetUsed(used)
+		} else {
+			create = create.SetUsed(usage.Used)
+		}
+
+		if limit, exists := m.Limit(); exists {
+			create = create.SetLimit(limit)
+		} else {
+			create = create.SetLimit(usage.Limit)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *UsageMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		usage, err := client.Usage.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.UsageHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(usage.CreatedAt).
+			SetUpdatedAt(usage.UpdatedAt).
+			SetCreatedBy(usage.CreatedBy).
+			SetUpdatedBy(usage.UpdatedBy).
+			SetDeletedAt(usage.DeletedAt).
+			SetDeletedBy(usage.DeletedBy).
+			SetTags(usage.Tags).
+			SetOrganizationID(usage.OrganizationID).
+			SetResourceType(usage.ResourceType).
+			SetUsed(usage.Used).
+			SetLimit(usage.Limit).
 			Save(ctx)
 		if err != nil {
 			return err

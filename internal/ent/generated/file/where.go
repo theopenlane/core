@@ -167,6 +167,11 @@ func FileContents(v []byte) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldFileContents, v))
 }
 
+// OrganizationID applies equality check predicate on the "organization_id" field. It's identical to OrganizationIDEQ.
+func OrganizationID(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOrganizationID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldCreatedAt, v))
@@ -1497,6 +1502,81 @@ func FileContentsNotNil() predicate.File {
 	return predicate.File(sql.FieldNotNull(FieldFileContents))
 }
 
+// OrganizationIDEQ applies the EQ predicate on the "organization_id" field.
+func OrganizationIDEQ(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldOrganizationID, v))
+}
+
+// OrganizationIDNEQ applies the NEQ predicate on the "organization_id" field.
+func OrganizationIDNEQ(v string) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldOrganizationID, v))
+}
+
+// OrganizationIDIn applies the In predicate on the "organization_id" field.
+func OrganizationIDIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldIn(FieldOrganizationID, vs...))
+}
+
+// OrganizationIDNotIn applies the NotIn predicate on the "organization_id" field.
+func OrganizationIDNotIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldOrganizationID, vs...))
+}
+
+// OrganizationIDGT applies the GT predicate on the "organization_id" field.
+func OrganizationIDGT(v string) predicate.File {
+	return predicate.File(sql.FieldGT(FieldOrganizationID, v))
+}
+
+// OrganizationIDGTE applies the GTE predicate on the "organization_id" field.
+func OrganizationIDGTE(v string) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldOrganizationID, v))
+}
+
+// OrganizationIDLT applies the LT predicate on the "organization_id" field.
+func OrganizationIDLT(v string) predicate.File {
+	return predicate.File(sql.FieldLT(FieldOrganizationID, v))
+}
+
+// OrganizationIDLTE applies the LTE predicate on the "organization_id" field.
+func OrganizationIDLTE(v string) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldOrganizationID, v))
+}
+
+// OrganizationIDContains applies the Contains predicate on the "organization_id" field.
+func OrganizationIDContains(v string) predicate.File {
+	return predicate.File(sql.FieldContains(FieldOrganizationID, v))
+}
+
+// OrganizationIDHasPrefix applies the HasPrefix predicate on the "organization_id" field.
+func OrganizationIDHasPrefix(v string) predicate.File {
+	return predicate.File(sql.FieldHasPrefix(FieldOrganizationID, v))
+}
+
+// OrganizationIDHasSuffix applies the HasSuffix predicate on the "organization_id" field.
+func OrganizationIDHasSuffix(v string) predicate.File {
+	return predicate.File(sql.FieldHasSuffix(FieldOrganizationID, v))
+}
+
+// OrganizationIDIsNil applies the IsNil predicate on the "organization_id" field.
+func OrganizationIDIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldOrganizationID))
+}
+
+// OrganizationIDNotNil applies the NotNil predicate on the "organization_id" field.
+func OrganizationIDNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldOrganizationID))
+}
+
+// OrganizationIDEqualFold applies the EqualFold predicate on the "organization_id" field.
+func OrganizationIDEqualFold(v string) predicate.File {
+	return predicate.File(sql.FieldEqualFold(FieldOrganizationID, v))
+}
+
+// OrganizationIDContainsFold applies the ContainsFold predicate on the "organization_id" field.
+func OrganizationIDContainsFold(v string) predicate.File {
+	return predicate.File(sql.FieldContainsFold(FieldOrganizationID, v))
+}
+
 // HasUser applies the HasEdge predicate on the "user" edge.
 func HasUser() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
@@ -1518,35 +1598,6 @@ func HasUserWith(preds ...predicate.User) predicate.File {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserFiles
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasOrganization applies the HasEdge predicate on the "organization" edge.
-func HasOrganization() predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, OrganizationTable, OrganizationPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationFiles
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasOrganizationWith applies the HasEdge predicate on the "organization" edge with a given conditions (other predicates).
-func HasOrganizationWith(preds ...predicate.Organization) predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := newOrganizationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationFiles
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1837,6 +1888,35 @@ func HasEventsWith(preds ...predicate.Event) predicate.File {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.FileEvents
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOrganization applies the HasEdge predicate on the "organization" edge.
+func HasOrganization() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OrganizationTable, OrganizationColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrganizationWith applies the HasEdge predicate on the "organization" edge with a given conditions (other predicates).
+func HasOrganizationWith(preds ...predicate.Organization) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newOrganizationStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

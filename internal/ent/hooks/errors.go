@@ -71,6 +71,12 @@ var (
 	// ErrFutureTimeNotAllowed is returned when you try to set a time into the future.
 	// future being any second/minute past the current time of validation
 	ErrFutureTimeNotAllowed = errors.New("time cannot be in the future")
+	// ErrMissingFileID is returned when a file ID is required but not provided
+	ErrMissingFileID = errors.New("missing file id")
+
+	ErrCannotCreateNegativeUsage = errors.New("cannot create usage record with negative delta")
+
+	ErrFailedToQueryUsage = errors.New("failed to query usage record")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

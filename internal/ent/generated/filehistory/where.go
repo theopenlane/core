@@ -175,6 +175,11 @@ func FileContents(v []byte) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldFileContents, v))
 }
 
+// OrganizationID applies equality check predicate on the "organization_id" field. It's identical to OrganizationIDEQ.
+func OrganizationID(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldOrganizationID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1638,6 +1643,81 @@ func FileContentsIsNil() predicate.FileHistory {
 // FileContentsNotNil applies the NotNil predicate on the "file_contents" field.
 func FileContentsNotNil() predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldNotNull(FieldFileContents))
+}
+
+// OrganizationIDEQ applies the EQ predicate on the "organization_id" field.
+func OrganizationIDEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldOrganizationID, v))
+}
+
+// OrganizationIDNEQ applies the NEQ predicate on the "organization_id" field.
+func OrganizationIDNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldOrganizationID, v))
+}
+
+// OrganizationIDIn applies the In predicate on the "organization_id" field.
+func OrganizationIDIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldOrganizationID, vs...))
+}
+
+// OrganizationIDNotIn applies the NotIn predicate on the "organization_id" field.
+func OrganizationIDNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldOrganizationID, vs...))
+}
+
+// OrganizationIDGT applies the GT predicate on the "organization_id" field.
+func OrganizationIDGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldOrganizationID, v))
+}
+
+// OrganizationIDGTE applies the GTE predicate on the "organization_id" field.
+func OrganizationIDGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldOrganizationID, v))
+}
+
+// OrganizationIDLT applies the LT predicate on the "organization_id" field.
+func OrganizationIDLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldOrganizationID, v))
+}
+
+// OrganizationIDLTE applies the LTE predicate on the "organization_id" field.
+func OrganizationIDLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldOrganizationID, v))
+}
+
+// OrganizationIDContains applies the Contains predicate on the "organization_id" field.
+func OrganizationIDContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldOrganizationID, v))
+}
+
+// OrganizationIDHasPrefix applies the HasPrefix predicate on the "organization_id" field.
+func OrganizationIDHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldOrganizationID, v))
+}
+
+// OrganizationIDHasSuffix applies the HasSuffix predicate on the "organization_id" field.
+func OrganizationIDHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldOrganizationID, v))
+}
+
+// OrganizationIDIsNil applies the IsNil predicate on the "organization_id" field.
+func OrganizationIDIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldOrganizationID))
+}
+
+// OrganizationIDNotNil applies the NotNil predicate on the "organization_id" field.
+func OrganizationIDNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldOrganizationID))
+}
+
+// OrganizationIDEqualFold applies the EqualFold predicate on the "organization_id" field.
+func OrganizationIDEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldOrganizationID, v))
+}
+
+// OrganizationIDContainsFold applies the ContainsFold predicate on the "organization_id" field.
+func OrganizationIDContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldOrganizationID, v))
 }
 
 // And groups predicates with the AND operator between them.

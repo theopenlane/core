@@ -2765,6 +2765,70 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// Usages is the resolver for the usages field.
+func (r *queryResolver) Usages(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UsageOrder, where *generated.UsageWhereInput) (*generated.UsageConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.UsageOrder{
+			Field:     generated.UsageOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Usage.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "usage"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithUsageOrder(orderBy),
+		generated.WithUsageFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "usage"})
+	}
+
+	return res, err
+}
+
+// UsageHistories is the resolver for the usageHistories field.
+func (r *queryResolver) UsageHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UsageHistoryOrder, where *generated.UsageHistoryWhereInput) (*generated.UsageHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.UsageHistoryOrder{
+			Field:     generated.UsageHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).UsageHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "usagehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithUsageHistoryOrder(orderBy),
+		generated.WithUsageHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "usagehistory"})
+	}
+
+	return res, err
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
 	// set page limit if nothing was set

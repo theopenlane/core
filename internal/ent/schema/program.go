@@ -194,6 +194,7 @@ func (Program) Annotations() []schema.Annotation {
 func (Program) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookProgramAuthz(),
+		hooks.HookUsagePrograms(),
 	}
 }
 

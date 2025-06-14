@@ -67,7 +67,9 @@ type FileHistory struct {
 	StoragePath string `json:"storage_path,omitempty"`
 	// the contents of the file
 	FileContents []byte `json:"file_contents,omitempty"`
-	selectValues sql.SelectValues
+	// the ID of the organization the file belong to
+	OrganizationID string `json:"organization_id,omitempty"`
+	selectValues   sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -81,7 +83,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case filehistory.FieldProvidedFileSize, filehistory.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath:
+		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldOrganizationID:
 			values[i] = new(sql.NullString)
 		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -252,6 +254,12 @@ func (fh *FileHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				fh.FileContents = *value
 			}
+		case filehistory.FieldOrganizationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
+			} else if value.Valid {
+				fh.OrganizationID = value.String
+			}
 		default:
 			fh.selectValues.Set(columns[i], values[i])
 		}
@@ -359,6 +367,9 @@ func (fh *FileHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("file_contents=")
 	builder.WriteString(fmt.Sprintf("%v", fh.FileContents))
+	builder.WriteString(", ")
+	builder.WriteString("organization_id=")
+	builder.WriteString(fh.OrganizationID)
 	builder.WriteByte(')')
 	return builder.String()
 }

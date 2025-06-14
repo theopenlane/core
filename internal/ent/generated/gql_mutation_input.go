@@ -2954,7 +2954,6 @@ type CreateFileInput struct {
 	StorageVolume          *string
 	StoragePath            *string
 	UserIDs                []string
-	OrganizationIDs        []string
 	GroupIDs               []string
 	ContactIDs             []string
 	EntityIDs              []string
@@ -2965,6 +2964,7 @@ type CreateFileInput struct {
 	ProgramIDs             []string
 	EvidenceIDs            []string
 	EventIDs               []string
+	OrganizationID         *string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -3008,9 +3008,6 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
 	}
-	if v := i.OrganizationIDs; len(v) > 0 {
-		m.AddOrganizationIDs(v...)
-	}
 	if v := i.GroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
 	}
@@ -3040,6 +3037,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
+	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
 	}
 }
 
@@ -3080,9 +3080,6 @@ type UpdateFileInput struct {
 	ClearUser                    bool
 	AddUserIDs                   []string
 	RemoveUserIDs                []string
-	ClearOrganization            bool
-	AddOrganizationIDs           []string
-	RemoveOrganizationIDs        []string
 	ClearGroups                  bool
 	AddGroupIDs                  []string
 	RemoveGroupIDs               []string
@@ -3113,6 +3110,8 @@ type UpdateFileInput struct {
 	ClearEvents                  bool
 	AddEventIDs                  []string
 	RemoveEventIDs               []string
+	ClearOrganization            bool
+	OrganizationID               *string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -3204,15 +3203,6 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveUserIDs; len(v) > 0 {
 		m.RemoveUserIDs(v...)
 	}
-	if i.ClearOrganization {
-		m.ClearOrganization()
-	}
-	if v := i.AddOrganizationIDs; len(v) > 0 {
-		m.AddOrganizationIDs(v...)
-	}
-	if v := i.RemoveOrganizationIDs; len(v) > 0 {
-		m.RemoveOrganizationIDs(v...)
-	}
 	if i.ClearGroups {
 		m.ClearGroups()
 	}
@@ -3302,6 +3292,12 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
+	}
+	if i.ClearOrganization {
+		m.ClearOrganization()
+	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
 	}
 }
 

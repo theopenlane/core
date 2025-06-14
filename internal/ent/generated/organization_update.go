@@ -3425,30 +3425,30 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.FilesTable,
-			Columns: organization.FilesPrimaryKey,
+			Columns: []string{organization.FilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationFiles
+		edge.Schema = ou.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.RemovedFilesIDs(); len(nodes) > 0 && !ou.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.FilesTable,
-			Columns: organization.FilesPrimaryKey,
+			Columns: []string{organization.FilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationFiles
+		edge.Schema = ou.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3456,16 +3456,16 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := ou.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.FilesTable,
-			Columns: organization.FilesPrimaryKey,
+			Columns: []string{organization.FilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.OrganizationFiles
+		edge.Schema = ou.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8683,30 +8683,30 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.FilesTable,
-			Columns: organization.FilesPrimaryKey,
+			Columns: []string{organization.FilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationFiles
+		edge.Schema = ouo.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !ouo.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.FilesTable,
-			Columns: organization.FilesPrimaryKey,
+			Columns: []string{organization.FilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationFiles
+		edge.Schema = ouo.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8714,16 +8714,16 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if nodes := ouo.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.FilesTable,
-			Columns: organization.FilesPrimaryKey,
+			Columns: []string{organization.FilesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.OrganizationFiles
+		edge.Schema = ouo.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
