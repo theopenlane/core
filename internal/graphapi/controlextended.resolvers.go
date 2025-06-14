@@ -24,20 +24,21 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 
 	existingControls, err := withTransactionalMutation(ctx).Control.Query().
 		Where(control.IDIn(input.ControlIDs...)).
-		// WithMappedControls(). // TODO(adelowo:): uncomment once mapped controls are implemented
+		// WithMappedControls(). // TODO(sfunk): update the clone to include mapped controls
 		WithSubcontrols().
+		WithStandard().
 		All(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control1"})
 	}
 
 	if len(existingControls) == 0 {
-		return nil, parseRequestError(generated.ErrPermissionDenied, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(generated.ErrPermissionDenied, action{action: ActionCreate, object: "control2"})
 	}
 
-	createdControls, err := r.cloneControls(ctx, existingControls, input.ProgramID, false)
+	createdControls, err := r.cloneControls(ctx, existingControls, input.ProgramID)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control3"})
 	}
 
 	return &model.ControlBulkCreatePayload{

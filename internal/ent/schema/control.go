@@ -114,6 +114,16 @@ func (Control) Indexes() []ent.Index {
 			Unique().Annotations(
 			entsql.IndexWhere("deleted_at is NULL AND owner_id is NULL"),
 		),
+		// ref_code and standard id should be unique within the organization
+		index.Fields("standard_id", "ref_code", "owner_id").
+			Unique().Annotations(
+			entsql.IndexWhere("deleted_at is NULL AND owner_id is not NULL and standard_id is not NULL"),
+		),
+		// ref_code should be unique for controls inside an organization that are not associated with a standard
+		index.Fields("ref_code", "owner_id").
+			Unique().Annotations(
+			entsql.IndexWhere("deleted_at is NULL AND owner_id is not NULL and standard_id is NULL"),
+		),
 	}
 }
 

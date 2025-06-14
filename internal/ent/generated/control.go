@@ -49,8 +49,8 @@ type Control struct {
 	Status enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
-	// the reference framework for the control if it came from a standard
-	ReferenceFramework string `json:"reference_framework,omitempty"`
+	// the reference framework for the control if it came from a standard, empty if no associated with a standard
+	ReferenceFramework *string `json:"reference_framework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType enums.ControlType `json:"control_type,omitempty"`
 	// category of the control
@@ -459,7 +459,8 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reference_framework", values[i])
 			} else if value.Valid {
-				c.ReferenceFramework = value.String
+				c.ReferenceFramework = new(string)
+				*c.ReferenceFramework = value.String
 			}
 		case control.FieldControlType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -746,8 +747,10 @@ func (c *Control) String() string {
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", c.Source))
 	builder.WriteString(", ")
-	builder.WriteString("reference_framework=")
-	builder.WriteString(c.ReferenceFramework)
+	if v := c.ReferenceFramework; v != nil {
+		builder.WriteString("reference_framework=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("control_type=")
 	builder.WriteString(fmt.Sprintf("%v", c.ControlType))

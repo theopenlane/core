@@ -1,6 +1,7 @@
 package graphapi_test
 
 import (
+	"cmp"
 	"context"
 	"slices"
 	"testing"
@@ -81,7 +82,7 @@ func TestQueryControl(t *testing.T) {
 			if tc.queryID == "" {
 				resp, err := suite.client.api.CreateControl(testUser1.UserCtx,
 					openlaneclient.CreateControlInput{
-						RefCode:    "CC-1.1",
+						RefCode:    "CTL-" + ulids.New().String(), // ensure unique ref code
 						ProgramIDs: []string{program.ID},
 					})
 
@@ -286,16 +287,17 @@ func TestMutationCreateControl(t *testing.T) {
 		{
 			name: "happy path, all input",
 			request: openlaneclient.CreateControlInput{
-				RefCode:          "A-2",
-				Description:      lo.ToPtr("A description of the Control"),
-				Status:           &enums.ControlStatusPreparing,
-				Tags:             []string{"tag1", "tag2"},
-				ControlType:      &enums.ControlTypeDetective,
-				Category:         lo.ToPtr("Availability"),
-				CategoryID:       lo.ToPtr("A"),
-				Subcategory:      lo.ToPtr("Additional Criteria for Availability"),
-				MappedCategories: []string{"Govern", "Protect"},
-				ControlQuestions: []string{"What is the control question?"},
+				RefCode:            "A-2",
+				Description:        lo.ToPtr("A description of the Control"),
+				Status:             &enums.ControlStatusPreparing,
+				Tags:               []string{"tag1", "tag2"},
+				ControlType:        &enums.ControlTypeDetective,
+				Category:           lo.ToPtr("Availability"),
+				CategoryID:         lo.ToPtr("A"),
+				Subcategory:        lo.ToPtr("Additional Criteria for Availability"),
+				MappedCategories:   []string{"Govern", "Protect"},
+				ControlQuestions:   []string{"What is the control question?"},
+				ReferenceFramework: lo.ToPtr("MITBenchmark"),
 				AssessmentObjectives: []*models.AssessmentObjective{
 					{
 						Class:     "class",
@@ -578,6 +580,12 @@ func TestMutationCreateControl(t *testing.T) {
 				assert.Assert(t, is.Len(resp.CreateControl.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs)))
 			}
 
+			if tc.request.ReferenceFramework != nil {
+				assert.Check(t, is.Equal(*tc.request.ReferenceFramework, *resp.CreateControl.Control.ReferenceFramework))
+			} else {
+				assert.Check(t, resp.CreateControl.Control.ReferenceFramework == nil)
+			}
+
 			// ensure the org owner has access to the control that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetControlByID(testUser1.UserCtx, resp.CreateControl.Control.ID)
@@ -617,10 +625,16 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	numControls := int64(20)
 	controls := []*generated.Control{}
 	controlIDs := make([]string, 0, numControls)
+	subcontrols := []*generated.Subcontrol{}
+	subcontrolIDs := []string{}
 	for range numControls {
 		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
 		controls = append(controls, control)
 		controlIDs = append(controlIDs, control.ID)
+		// give them all a subcontrol
+		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(systemAdminUser.UserCtx, t)
+		subcontrols = append(subcontrols, subcontrol)
+		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
 	}
 
 	// ensure the standard exists and has the correct number of controls for the non-system admin user
@@ -629,33 +643,44 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	assert.Assert(t, standard != nil)
 	assert.Equal(t, standard.Standard.Controls.TotalCount, numControls)
 
-	// create org owned control
-	orgOwnedControl := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	// create org owned control in custom standard
+	orgStandard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	orgOwnedControl := (&ControlBuilder{client: suite.client, AllFields: true, StandardID: orgStandard.ID}).MustNew(testUser1.UserCtx, t)
 
+	// sort controls so they are consistent
+	slices.SortFunc(controls, func(a, b *generated.Control) int {
+		return cmp.Compare(a.RefCode, b.RefCode)
+	})
+
+	controlIDsToDelete := []string{}
+	subcontrolIDsToDelete := []string{}
 	testCases := []struct {
-		name                 string
-		request              openlaneclient.CloneControlInput
-		expectedControls     []*generated.Control
-		client               *openlaneclient.OpenlaneClient
-		ctx                  context.Context
-		expectNoAccessViewer bool
-		expectedErr          string
+		name               string
+		request            openlaneclient.CloneControlInput
+		expectedControls   []*generated.Control
+		client             *openlaneclient.OpenlaneClient
+		ctx                context.Context
+		expectedStandard   *string
+		expectedNumProgram int
+		expectedErr        string
 	}{
-		{
-			name: "happy path, clone single control",
-			request: openlaneclient.CloneControlInput{
-				ControlIDs: []string{controlIDs[0]},
-			},
-			expectedControls: controls[:1],
-			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
-		},
 		{
 			name: "happy path, all controls under standard",
 			request: openlaneclient.CloneControlInput{
 				ControlIDs: controlIDs,
 			},
+			expectedStandard: lo.ToPtr(publicStandard.ShortName),
 			expectedControls: controls,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+		},
+		{
+			name: "happy path, clone single control, should  be a no-op. because the control already exists",
+			request: openlaneclient.CloneControlInput{
+				ControlIDs: []string{controls[7].ID},
+			},
+			expectedControls: []*generated.Control{controls[7]},
+			expectedStandard: lo.ToPtr(publicStandard.ShortName),
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
 		},
@@ -665,9 +690,11 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: controlIDs,
 				ProgramID:  &program.ID,
 			},
-			expectedControls: controls,
-			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			expectedControls:   controls,
+			expectedStandard:   lo.ToPtr(publicStandard.ShortName),
+			expectedNumProgram: 1,
+			client:             suite.client.api,
+			ctx:                testUser1.UserCtx,
 		},
 		{
 			name: "all controls under standard with program no access",
@@ -676,6 +703,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ProgramID:  &programAnotherOrg.ID,
 			},
 			expectedControls: controls,
+			expectedStandard: lo.ToPtr(publicStandard.ShortName),
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
 			expectedErr:      notAuthorizedErrorMsg,
@@ -686,10 +714,9 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{orgOwnedControl.ID},
 			},
 			expectedControls: []*generated.Control{orgOwnedControl},
+			expectedStandard: nil,
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
-			// created directly under organization with no program, view only user should have access
-			expectNoAccessViewer: false,
 		},
 		{
 			name: "happy path, clone control under org with program",
@@ -697,25 +724,30 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{orgOwnedControl.ID},
 				ProgramID:  &program.ID,
 			},
-			expectedControls: []*generated.Control{orgOwnedControl},
-			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			expectedStandard:   nil,
+			expectedControls:   []*generated.Control{orgOwnedControl},
+			expectedNumProgram: 1,
+			client:             suite.client.api,
+			ctx:                testUser1.UserCtx,
 		},
 		{
 			name: "happy path, clone single control using personal access token",
 			request: openlaneclient.CloneControlInput{
-				ControlIDs: []string{controlIDs[0]},
+				ControlIDs: []string{controls[:1][0].ID},
 				OwnerID:    &testUser1.OrganizationID,
 			},
-			expectedControls: controls[:1],
-			client:           suite.client.apiWithPAT,
-			ctx:              context.Background(),
+			expectedStandard:   lo.ToPtr(publicStandard.ShortName),
+			expectedControls:   controls[:1],
+			expectedNumProgram: 1, // control was cloned, so the previous program will still be here
+			client:             suite.client.apiWithPAT,
+			ctx:                context.Background(),
 		},
 		{
 			name: "clone single control using personal access token, missing owner id",
 			request: openlaneclient.CloneControlInput{
-				ControlIDs: []string{controlIDs[0]},
+				ControlIDs: []string{controls[:1][0].ID},
 			},
+			expectedStandard: lo.ToPtr(publicStandard.ShortName),
 			expectedControls: controls[:1],
 			client:           suite.client.apiWithPAT,
 			ctx:              context.Background(),
@@ -724,17 +756,20 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		{
 			name: "happy path, clone single control using api token",
 			request: openlaneclient.CloneControlInput{
-				ControlIDs: []string{controlIDs[0]},
+				ControlIDs: []string{controls[:1][0].ID},
 			},
-			expectedControls: controls[:1],
-			client:           suite.client.apiWithToken,
-			ctx:              context.Background(),
+			expectedStandard:   lo.ToPtr(publicStandard.ShortName),
+			expectedControls:   controls[:1],
+			expectedNumProgram: 0, // api token has no program access
+			client:             suite.client.apiWithToken,
+			ctx:                context.Background(),
 		},
 		{
 			name: "clone control under org, no access to control",
 			request: openlaneclient.CloneControlInput{
 				ControlIDs: []string{orgOwnedControl.ID},
 			},
+			expectedStandard: lo.ToPtr("Custom"),
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
 			ctx:              testUser2.UserCtx,
@@ -743,6 +778,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		{
 			name:             "clone control under org, empty request",
 			request:          openlaneclient.CloneControlInput{},
+			expectedStandard: lo.ToPtr("Custom"),
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
 			ctx:              testUser2.UserCtx,
@@ -770,6 +806,13 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Check(t, resp != nil)
 
+			assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, len(tc.request.ControlIDs)))
+
+			// sort controls so they are consistent
+			slices.SortFunc(resp.CreateControlsByClone.Controls, func(a, b *openlaneclient.CreateControlsByClone_CreateControlsByClone_Controls) int {
+				return cmp.Compare(a.RefCode, b.RefCode)
+			})
+
 			for i, control := range resp.CreateControlsByClone.Controls {
 				// check required fields
 				assert.Check(t, len(control.ID) != 0)
@@ -783,7 +826,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 					assert.Check(t, is.Len(control.Programs.Edges, 1))
 					assert.Equal(t, *tc.request.ProgramID, control.Programs.Edges[0].Node.ID)
 				} else {
-					assert.Check(t, is.Len(control.Programs.Edges, 0))
+					assert.Check(t, is.Len(control.Programs.Edges, tc.expectedNumProgram))
 				}
 
 				// check the cloned control fields are set and match the original control
@@ -799,6 +842,12 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				assert.Check(t, is.Equal(tc.expectedControls[i].ControlType, *control.ControlType))
 				assert.Check(t, is.Equal(tc.expectedControls[i].Source, *control.Source))
 				assert.Check(t, is.Equal(tc.expectedControls[i].StandardID, *control.StandardID))
+
+				if tc.expectedStandard != nil {
+					assert.Check(t, is.Equal(*tc.expectedStandard, *control.ReferenceFramework))
+				} else {
+					assert.Check(t, control.ReferenceFramework == nil)
+				}
 
 				for j, ao := range control.AssessmentObjectives {
 					assert.Check(t, is.DeepEqual(tc.expectedControls[i].AssessmentObjectives[j], *ao))
@@ -830,14 +879,9 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 
 				// ensure view only user can see the control created by the admin user
 				res, err := suite.client.api.GetControlByID(viewOnlyUser.UserCtx, control.ID)
-				if tc.expectNoAccessViewer {
-					assert.ErrorContains(t, err, notFoundErrorMsg)
-					assert.Check(t, is.Nil(res))
-				} else {
-					assert.NilError(t, err)
-					assert.Check(t, res != nil)
-					assert.Check(t, is.Equal(control.ID, res.Control.ID))
-				}
+				assert.NilError(t, err)
+				assert.Check(t, res != nil)
+				assert.Check(t, is.Equal(control.ID, res.Control.ID))
 
 				// ensure a user outside my organization cannot get the control
 				res, err = suite.client.api.GetControlByID(testUser2.UserCtx, control.ID)
@@ -850,15 +894,25 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 					tc.ctx = testUser1.UserCtx
 				}
 
-				(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(tc.ctx, t)
+				// keep track of controls to delete, sometimes we clone existing controls that were created
+				// so we don't want a duplicate delete
+				if !slices.Contains(controlIDsToDelete, control.ID) {
+					controlIDsToDelete = append(controlIDsToDelete, control.ID)
+					if len(control.Subcontrols.Edges) > 0 && !slices.Contains(subcontrolIDsToDelete, control.Subcontrols.Edges[0].Node.ID) {
+						subcontrolIDsToDelete = append(subcontrolIDsToDelete, control.Subcontrols.Edges[0].Node.ID)
+					}
+				}
 			}
 		})
 	}
 
 	// cleanup created controls and standards
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgStandard.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: orgOwnedControl.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
