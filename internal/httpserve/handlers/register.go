@@ -3,6 +3,8 @@ package handlers
 import (
 	"context"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
@@ -45,6 +47,24 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 	// set viewer context
 	ctxWithToken := token.NewContextWithSignUpToken(ctx.Request().Context(), in.Email)
 
+	if in.Token != nil {
+		ctxWithToken = token.NewContextWithOrgInviteToken(ctxWithToken, *in.Token)
+
+		invitedUser, err := h.getUserByInviteToken(ctxWithToken, *in.Token)
+		if err != nil {
+			log.Error().Err(err).Msg("error retrieving invite token")
+			return h.BadRequest(ctx, err)
+		}
+
+		if !strings.EqualFold(invitedUser.Recipient, input.Email) {
+			return h.BadRequest(ctx, ErrUnableToVerifyEmail)
+		}
+
+		if invitedUser.Expires.Before(time.Now()) {
+			return h.BadRequest(ctx, ErrExpiredToken)
+		}
+	}
+
 	meowuser, err := h.createUser(ctxWithToken, input)
 	if err != nil {
 		log.Error().Err(err).Msg("error creating new user")
@@ -66,7 +86,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 	if in.Token != nil {
 		ctx.SetRequest(ctx.Request().WithContext(userCtx))
 
-		_, _, _, err := h.processInvitation(ctx, *in.Token, meowuser.ID)
+		_, _, _, err := h.processInvitation(ctx, *in.Token, meowuser.Email)
 		if err != nil {
 			return h.BadRequest(ctx, err)
 		}

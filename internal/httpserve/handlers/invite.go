@@ -62,7 +62,12 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	ctxWithToken, user, invitedUser, err := h.processInvitation(ctx, in.Token, userID)
+	user, err := h.getUserDetailsByID(reqCtx, userID)
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+
+	ctxWithToken, user, invitedUser, err := h.processInvitation(ctx, in.Token, user.Email)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
@@ -90,7 +95,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 }
 
 func (h *Handler) processInvitation(
-	ctx echo.Context, invitationToken, userID string,
+	ctx echo.Context, invitationToken, userEmail string,
 ) (context.Context, *generated.User, *generated.Invite, error) {
 
 	inv := &Invite{
@@ -122,7 +127,7 @@ func (h *Handler) processInvitation(
 	inv.Email = invitedUser.Recipient
 
 	// get user details for logged in user
-	user, err := h.getUserDetailsByID(reqCtx, userID)
+	user, err := h.getUserByEmail(reqCtx, userEmail)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get user for request")
 
@@ -140,8 +145,7 @@ func (h *Handler) processInvitation(
 		return nil, nil, nil, err
 	}
 
-	// string to ulid so we can match the token input
-	uid, err := ulid.Parse(userID)
+	uid, err := ulid.Parse(user.ID)
 	if err != nil {
 		return nil, nil, nil, err
 	}
