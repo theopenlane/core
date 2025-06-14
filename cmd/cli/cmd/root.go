@@ -1,4 +1,3 @@
-// Package cmd is the cobra cli implementation for the core server
 package cmd
 
 import (
@@ -82,6 +81,7 @@ func init() {
 	// Token flags
 	RootCmd.PersistentFlags().String("token", "", "api token used for authentication, takes precedence over other auth methods")
 	RootCmd.PersistentFlags().String("pat", "", "personal access token used for authentication")
+	RootCmd.PersistentFlags().String("jwt", "", "jwt used for authentication")
 
 	// Logging flags
 	RootCmd.PersistentFlags().Bool("debug", false, "enable debug logging")

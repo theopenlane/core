@@ -212,6 +212,15 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			}
 		}
 
+		if o.AllowAnonymousTrustCenterAccess {
+			if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
+				if anon.TrustCenterID != "" && anon.OrganizationID != "" {
+					o.PWithField(q, ownerFieldName, []string{anon.OrganizationID})
+					return nil
+				}
+			}
+		}
+
 		// add owner id(s) to the query
 		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 		if err != nil {
@@ -272,6 +281,11 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 
 	// skip the interceptor if the context has the acme solver context key
 	if _, acmeSolver := contextx.From[auth.AcmeSolverContextKey](ctx); acmeSolver {
+		return true
+	}
+
+	// skip the interceptor if the context has the trust center anonymous auth context key
+	if _, trustCenterAnonAuth := contextx.From[auth.TrustCenterContextKey](ctx); trustCenterAnonAuth {
 		return true
 	}
 

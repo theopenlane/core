@@ -50,6 +50,8 @@ type ObjectOwnedMixin struct {
 	// InterceptorFunc is the interceptor function for the object owned mixin
 	// that will be called on all queries
 	InterceptorFuncs []InterceptorFunc
+	// AllowAnonymousTrustCenterAccess allows anonymous users from the trust center to access the object
+	AllowAnonymousTrustCenterAccess bool
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -108,6 +110,12 @@ func withHookFuncs(hookFuncs ...HookFunc) objectOwnedOption {
 func withSkipForSystemAdmin(allow bool) objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.AllowEmptyForSystemAdmin = allow
+	}
+}
+
+func withAllowAnonymousTrustCenterAccess(allow bool) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.AllowAnonymousTrustCenterAccess = allow
 	}
 }
 
