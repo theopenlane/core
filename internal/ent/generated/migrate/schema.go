@@ -324,6 +324,22 @@ var (
 					Where: "deleted_at is NULL AND owner_id is NULL",
 				},
 			},
+			{
+				Name:    "control_standard_id_ref_code_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ControlsColumns[30], ControlsColumns[26], ControlsColumns[29]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is not NULL",
+				},
+			},
+			{
+				Name:    "control_ref_code_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ControlsColumns[26], ControlsColumns[29]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is NULL",
+				},
+			},
 		},
 	}
 	// ControlHistoryColumns holds the columns for the "control_history" table.

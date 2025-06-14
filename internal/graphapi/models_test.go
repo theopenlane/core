@@ -1146,8 +1146,7 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 	standard, err := s.client.db.Standard.Create().
 		SetName(s.Name).
 		SetFramework(s.Framework).
-		SetIsPublic(s.IsPublic).
-		Save(ctx)
+		SetIsPublic(s.IsPublic).Save(ctx)
 	assert.NilError(t, err)
 
 	return standard

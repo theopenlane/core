@@ -124,7 +124,8 @@ var controlFields = []ent.Field{
 		Default(enums.ControlSourceUserDefined.String()).
 		Comment("source of the control, e.g. framework, template, custom, etc."),
 	field.String("reference_framework").
-		Comment("the reference framework for the control if it came from a standard").
+		Comment("the reference framework for the control if it came from a standard, empty if not associated with a standard").
+		Nillable().
 		Optional(),
 	field.Enum("control_type").
 		GoType(enums.ControlType("")).

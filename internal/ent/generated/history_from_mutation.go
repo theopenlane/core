@@ -677,7 +677,7 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	}
 
 	if referenceFramework, exists := m.ReferenceFramework(); exists {
-		create = create.SetReferenceFramework(referenceFramework)
+		create = create.SetNillableReferenceFramework(&referenceFramework)
 	}
 
 	if controlType, exists := m.ControlType(); exists {
@@ -853,9 +853,9 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		}
 
 		if referenceFramework, exists := m.ReferenceFramework(); exists {
-			create = create.SetReferenceFramework(referenceFramework)
+			create = create.SetNillableReferenceFramework(&referenceFramework)
 		} else {
-			create = create.SetReferenceFramework(control.ReferenceFramework)
+			create = create.SetNillableReferenceFramework(control.ReferenceFramework)
 		}
 
 		if controlType, exists := m.ControlType(); exists {
@@ -999,7 +999,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAuditorReferenceID(control.AuditorReferenceID).
 			SetStatus(control.Status).
 			SetSource(control.Source).
-			SetReferenceFramework(control.ReferenceFramework).
+			SetNillableReferenceFramework(control.ReferenceFramework).
 			SetControlType(control.ControlType).
 			SetCategory(control.Category).
 			SetCategoryID(control.CategoryID).
@@ -8414,7 +8414,7 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 	}
 
 	if referenceFramework, exists := m.ReferenceFramework(); exists {
-		create = create.SetReferenceFramework(referenceFramework)
+		create = create.SetNillableReferenceFramework(&referenceFramework)
 	}
 
 	if controlType, exists := m.ControlType(); exists {
@@ -8590,9 +8590,9 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 		}
 
 		if referenceFramework, exists := m.ReferenceFramework(); exists {
-			create = create.SetReferenceFramework(referenceFramework)
+			create = create.SetNillableReferenceFramework(&referenceFramework)
 		} else {
-			create = create.SetReferenceFramework(subcontrol.ReferenceFramework)
+			create = create.SetNillableReferenceFramework(subcontrol.ReferenceFramework)
 		}
 
 		if controlType, exists := m.ControlType(); exists {
@@ -8736,7 +8736,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetAuditorReferenceID(subcontrol.AuditorReferenceID).
 			SetStatus(subcontrol.Status).
 			SetSource(subcontrol.Source).
-			SetReferenceFramework(subcontrol.ReferenceFramework).
+			SetNillableReferenceFramework(subcontrol.ReferenceFramework).
 			SetControlType(subcontrol.ControlType).
 			SetCategory(subcontrol.Category).
 			SetCategoryID(subcontrol.CategoryID).
