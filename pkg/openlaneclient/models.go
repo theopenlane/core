@@ -1626,7 +1626,7 @@ type Control struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if no associated with a standard
+	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
@@ -1743,7 +1743,7 @@ type ControlHistory struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if no associated with a standard
+	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
@@ -4140,7 +4140,7 @@ type CreateControlInput struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if no associated with a standard
+	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
@@ -5096,7 +5096,7 @@ type CreateSubcontrolInput struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if no associated with a standard
+	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
@@ -21189,7 +21189,7 @@ type Subcontrol struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if no associated with a standard
+	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
@@ -21302,7 +21302,7 @@ type SubcontrolHistory struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if no associated with a standard
+	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
@@ -23660,7 +23660,7 @@ type UpdateControlInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if no associated with a standard
+	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework      *string `json:"referenceFramework,omitempty"`
 	ClearReferenceFramework *bool   `json:"clearReferenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
@@ -25211,7 +25211,7 @@ type UpdateSubcontrolInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if no associated with a standard
+	// the reference framework for the control if it came from a standard, empty if not associated with a standard
 	ReferenceFramework      *string `json:"referenceFramework,omitempty"`
 	ClearReferenceFramework *bool   `json:"clearReferenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
