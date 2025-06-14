@@ -56,7 +56,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 			return h.BadRequest(ctx, err)
 		}
 
-		if !strings.EqualFold(strings.ToLower(invitedUser.Recipient), strings.ToLower(input.Email)) {
+		if !strings.EqualFold(invitedUser.Recipient, input.Email) {
 			return h.BadRequest(ctx, ErrUnableToVerifyEmail)
 		}
 
