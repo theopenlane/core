@@ -7,6 +7,7 @@ import (
 	"net/http/pprof"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
@@ -110,7 +111,24 @@ func New(port string) *Metrics {
 func (m *Metrics) Start(ctx context.Context) error {
 	zerolog.Ctx(ctx).Info().Msg("starting metrics server")
 
-	if err := m.e.Start(m.port); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	srv := &http.Server{ // nolint:gosec
+		Addr:    m.port,
+		Handler: m.e,
+	}
+
+	go func() {
+		<-ctx.Done()
+
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second) // nolint: mnd
+
+		defer cancel()
+
+		if err := srv.Shutdown(shutdownCtx); err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to shutdown metrics server")
+		}
+	}()
+
+	if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return err
 	}
 
