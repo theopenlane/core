@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/theopenlane/core/internal/entdb"
 	echo "github.com/theopenlane/echox"
 )
 
@@ -33,6 +34,10 @@ func (h *Handler) AddReadinessCheck(name string, f CheckFunc) {
 }
 
 func (c *Checks) ReadyHandler(ctx echo.Context) error {
+	if entdb.IsShuttingDown() {
+		return ctx.JSON(http.StatusServiceUnavailable, echo.Map{"status": "shutting down"})
+	}
+
 	failed := false
 	status := map[string]string{}
 

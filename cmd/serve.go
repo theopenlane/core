@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"time"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -18,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
+	"github.com/theopenlane/core/pkg/events/soiree"
 )
 
 var serveCmd = &cobra.Command{
@@ -89,6 +91,15 @@ func serve(ctx context.Context) error {
 
 	// Setup Redis connection
 	redisClient := cache.New(so.Config.Settings.Redis)
+
+	go func() {
+		<-ctx.Done()
+
+		if err := redisClient.Close(); err != nil {
+			log.Ctx(ctx).Error().Err(err).Msg("error closing redis")
+		}
+	}()
+
 	defer redisClient.Close()
 
 	// add session manager
@@ -127,7 +138,19 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
-	defer dbClient.CloseAll() // nolint: errcheck
+	go func() {
+		<-ctx.Done()
+
+		if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
+			log.Ctx(ctx).Error().Err(err).Msg("error closing database")
+		}
+
+		if err := soiree.ShutdownAll(); err != nil {
+			log.Ctx(ctx).Error().Err(err).Msg("error shutting down event pools")
+		}
+	}()
+
+	defer entdb.GracefulClose(context.Background(), dbClient, time.Second)
 
 	// add auth session manager
 	so.Config.Handler.AuthManager = authmanager.New(dbClient)

@@ -45,6 +45,17 @@ var (
 		Help: "The length of time taken for a task to be processed in seconds",
 	}, []string{"task"})
 
+	GraphQLOperationTotal = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "graphql_operations_total",
+		Help: "The number of GraphQL operations processed",
+	}, []string{"operation", "success"})
+
+	GraphQLOperationDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "graphql_operation_duration_seconds",
+		Help:    "Duration of GraphQL operations in seconds",
+		Buckets: prometheus.DefBuckets,
+	}, []string{"operation"})
+
 	APIMetrics = []prometheus.Collector{
 		WorkerExecutions,
 		WorkerExecutionErrors,
@@ -52,6 +63,8 @@ var (
 		Registrations,
 		QueueTasksPushed,
 		QueueTasksPushFailures,
+		GraphQLOperationTotal,
+		GraphQLOperationDuration,
 	}
 
 	QueueConsumerMetrics = []prometheus.Collector{

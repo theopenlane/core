@@ -109,6 +109,11 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 		}
 	}
 
+	drvPrimary = blockDriver(drvPrimary)
+	if drvSecondary != nil {
+		drvSecondary = blockDriver(drvSecondary)
+	}
+
 	// add the option to the client for the drivers
 	if drvSecondary != nil {
 		cOpts = []ent.Option{ent.Driver(&entx.MultiWriteDriver{Wp: drvPrimary, Ws: drvSecondary})}
@@ -144,6 +149,7 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	}
 
 	db.Intercept(interceptors.QueryLogger())
+	db.Intercept(BlockInterceptor())
 
 	// add event emission for mutations
 	eventer := hooks.NewEventerPool(db)
@@ -154,6 +160,7 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	}
 
 	db.Use(hooks.MetricsHook())
+	db.Use(BlockHook())
 
 	return db, nil
 }
@@ -224,7 +231,7 @@ func (c *client) runGooseMigrations() error {
 func (c *client) runAtlasMigrations(ctx context.Context) error {
 	// Run the automatic migration tool to create all schema resources.
 	if err := c.pc.Schema.Create(ctx,
-		EnablePostgresOption(c.pc.DB())); err != nil {
+		EnablePostgresOption(SQLDB(c.pc))); err != nil {
 		log.Error().Err(err).Msg("failed creating schema resources")
 
 		return err
