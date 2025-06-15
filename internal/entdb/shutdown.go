@@ -227,8 +227,7 @@ func GracefulCloseWithFlag(ctx context.Context, c *ent.Client, interval time.Dur
 
 	defer ticker.Stop()
 
-	// enter db connection pool stats check loop
-	// it waits until there are no active connections indicating all queries have returned
+wait:
 	for {
 		stats := db.Stats()
 		if stats.InUse == 0 {
@@ -239,12 +238,11 @@ func GracefulCloseWithFlag(ctx context.Context, c *ent.Client, interval time.Dur
 		case <-ctx.Done():
 			// context canceled before all queries completed
 			// proceed to close the connection
-			break
+			break wait
 		case <-ticker.C:
 		}
 	}
 
-	// check if client has Job component and attempt to gracefully close it
 	if c.Job != nil {
 		if err := c.Job.Close(); err != nil {
 			return err

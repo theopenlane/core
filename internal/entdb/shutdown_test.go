@@ -102,3 +102,44 @@ func TestBlockNewQueries(t *testing.T) {
 	_, err = client.Tx(ctx)
 	require.ErrorIs(t, err, ErrShuttingDown)
 }
+
+// TestGracefulCloseContextCancel verifies that GracefulClose returns when the context is canceled
+func TestGracefulCloseContextCancel(t *testing.T) {
+	flag := newShutdownFlag()
+	t.Cleanup(flag.Reset)
+	tf := NewTestFixture()
+	defer testutils.TeardownFixture(tf)
+
+	db, err := sql.Open("postgres", tf.URI)
+	require.NoError(t, err)
+	defer db.Close()
+
+	client := enttest.Open(t, dialect.Postgres, tf.URI,
+		enttest.WithMigrateOptions(EnablePostgresOption(db)))
+	defer func() { require.NoError(t, client.Close()) }()
+
+	txCtx := context.Background()
+	done := make(chan struct{})
+	go func() {
+		tx, err := client.Tx(txCtx)
+		require.NoError(t, err)
+		time.Sleep(500 * time.Millisecond)
+		_ = tx.Rollback()
+		close(done)
+	}()
+
+	time.Sleep(50 * time.Millisecond)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+
+	start := time.Now()
+	require.NoError(t, GracefulCloseWithFlag(ctx, client, 10*time.Millisecond, flag))
+	elapsed := time.Since(start)
+
+	if elapsed > 200*time.Millisecond {
+		t.Fatalf("GracefulClose did not return on context cancel: %v", elapsed)
+	}
+
+	<-done
+}
