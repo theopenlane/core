@@ -323,11 +323,9 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 					require.NotNil(t, job)
 
 				} else if strings.Contains(tc.invitationType, "invitation") {
+					// only the invitation email is sent
 					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
 						[]rivertest.ExpectedJob{
-							{
-								Args: jobs.EmailArgs{},
-							},
 							{
 								Args: jobs.EmailArgs{},
 							},
