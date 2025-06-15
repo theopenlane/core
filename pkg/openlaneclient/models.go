@@ -1048,9 +1048,14 @@ type AuditLogWhereInput struct {
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {
+	// controlIDs are the ids of the control to clone. If standardID is passed, this is ignored
 	ControlIDs []string `json:"controlIDs,omitempty"`
-	OwnerID    *string  `json:"ownerID,omitempty"`
-	ProgramID  *string  `json:"programID,omitempty"`
+	// standardID to clone all controls from into the organization
+	StandardID *string `json:"standardID,omitempty"`
+	// organization ID that the controls will be under
+	OwnerID *string `json:"ownerID,omitempty"`
+	// optional program ID to associate to the controls
+	ProgramID *string `json:"programID,omitempty"`
 }
 
 type Contact struct {

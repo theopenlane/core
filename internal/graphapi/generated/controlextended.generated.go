@@ -34,7 +34,7 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"controlIDs", "ownerID", "programID"}
+	fieldsInOrder := [...]string{"controlIDs", "standardID", "ownerID", "programID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -48,6 +48,13 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 				return it, err
 			}
 			it.ControlIDs = data
+		case "standardID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("standardID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StandardID = data
 		case "ownerID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
