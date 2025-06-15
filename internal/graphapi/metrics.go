@@ -14,9 +14,8 @@ import (
 func WithMetrics(h *handler.Server) {
 	h.AroundOperations(func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
 		opCtx := graphql.GetOperationContext(ctx)
-		opName := "unknown"
 
-		opName = opCtx.OperationName
+		opName := opCtx.OperationName
 		if opName == "" && opCtx.Operation != nil {
 			opName = string(opCtx.Operation.Operation)
 		}
