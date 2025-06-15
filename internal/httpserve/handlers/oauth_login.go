@@ -21,6 +21,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -138,6 +139,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 			return
 		}
 
+		metrics.Logins.WithLabelValues("true").Inc()
 		// remove cookie
 		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
 
@@ -204,6 +206,8 @@ func (h *Handler) issueGitHubSession() http.Handler {
 
 			return
 		}
+
+		metrics.Logins.WithLabelValues("true").Inc()
 
 		// remove cookie now that its in the context
 		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)

@@ -43,6 +43,8 @@ func NewEventPool(opts ...EventPoolOption) *EventPool {
 		opt(m)
 	}
 
+	register(m)
+
 	return m
 }
 
@@ -233,6 +235,8 @@ func (m *EventPool) Close() error {
 	if m.pool != nil {
 		m.pool.Release()
 	}
+
+	deregister(m)
 
 	return nil
 }

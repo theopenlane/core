@@ -3,6 +3,7 @@ package route
 import (
 	"net/http"
 
+	"github.com/theopenlane/core/internal/entdb"
 	echo "github.com/theopenlane/echox"
 )
 
@@ -17,6 +18,10 @@ func registerLivenessHandler(router *Router) (err error) {
 		Path:        path,
 		Middlewares: mw,
 		Handler: func(c echo.Context) error {
+			if entdb.IsShuttingDown() {
+				return c.JSON(http.StatusServiceUnavailable, echo.Map{"status": "shutting down"})
+			}
+
 			return c.JSON(http.StatusOK, echo.Map{
 				"status": "UP",
 			})

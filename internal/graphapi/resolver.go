@@ -164,6 +164,8 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	// add max result limits to fields in requests
 	WithResultLimit(srv, r.maxResultLimit)
 
+	WithMetrics(srv)
+
 	srv.Use(otelgqlgen.Middleware())
 
 	h := &Handler{

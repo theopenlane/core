@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/utils/passwd"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -22,10 +23,12 @@ import (
 func (h *Handler) LoginHandler(ctx echo.Context) error {
 	var in models.LoginRequest
 	if err := ctx.Bind(&in); err != nil {
+		metrics.Logins.WithLabelValues("false").Inc()
 		return h.InvalidInput(ctx, err)
 	}
 
 	if err := in.Validate(); err != nil {
+		metrics.Logins.WithLabelValues("false").Inc()
 		return h.InvalidInput(ctx, err)
 	}
 
@@ -34,24 +37,29 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	// check user in the database, username == email and ensure only one record is returned
 	user, err := h.getUserByEmail(reqCtx, in.Username)
 	if err != nil {
+		metrics.Logins.WithLabelValues("false").Inc()
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
 	if user.Edges.Setting.Status != enums.UserStatusActive {
+		metrics.Logins.WithLabelValues("false").Inc()
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
 	if user.Password == nil {
+		metrics.Logins.WithLabelValues("false").Inc()
 		return h.BadRequest(ctx, rout.ErrInvalidCredentials)
 	}
 
 	// verify the password is correct
 	valid, err := passwd.VerifyDerivedKey(*user.Password, in.Password)
 	if err != nil || !valid {
+		metrics.Logins.WithLabelValues("false").Inc()
 		return h.BadRequest(ctx, rout.ErrInvalidCredentials)
 	}
 
 	if !user.Edges.Setting.EmailConfirmed {
+		metrics.Logins.WithLabelValues("false").Inc()
 		return h.BadRequest(ctx, auth.ErrUnverifiedUser)
 	}
 
@@ -78,6 +86,8 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		Message:    "success",
 		AuthData:   *auth,
 	}
+
+	metrics.Logins.WithLabelValues("true").Inc()
 
 	return h.Success(ctx, out)
 }

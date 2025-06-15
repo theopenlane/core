@@ -150,6 +150,11 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 	}
 
 	newMetrics := metrics.New(s.config.Settings.Server.MetricsPort)
+
+	if err := newMetrics.Register(metrics.APIMetrics); err != nil {
+		log.Error().Err(err).Msg("failed to register metrics")
+	}
+
 	go func() {
 		if err := newMetrics.Start(ctx); err != nil {
 			log.Error().Err(err).Msg("metrics server failed to start")
