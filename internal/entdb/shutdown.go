@@ -3,7 +3,6 @@ package entdb
 import (
 	"context"
 	stdsql "database/sql"
-	"errors"
 	"fmt"
 	"sync/atomic"
 	"time"
@@ -151,7 +150,7 @@ func (d *blockingDriver) BeginTx(ctx context.Context, opts *stdsql.TxOptions) (d
 		return drv.BeginTx(ctx, opts)
 	}
 
-	return nil, errors.New("driver does not support BeginTx")
+	return nil, ErrDriverLackingBeginTx
 }
 
 // BlockHook returns an ent.Hook that prevents mutations after shutdown begins
@@ -190,7 +189,7 @@ func BlockInterceptor() ent.Interceptor {
 // if the flag is NOT set, it allows the query to proceed
 // this is useful for preventing new queries from being executed while the system is shutting down
 func BlockInterceptorWithFlag(f *ShutdownFlag) ent.Interceptor {
-	return intercept.Func(func(ctx context.Context, _ intercept.Query) error {
+	return intercept.Func(func(_ context.Context, _ intercept.Query) error {
 		if f.IsSet() {
 			return ErrShuttingDown
 		}
@@ -220,7 +219,7 @@ func GracefulCloseWithFlag(ctx context.Context, c *ent.Client, interval time.Dur
 	// determines how frequently we re-check connection pool for active queries
 	// you can pass interval, but if not set or non-positive, default to 100ms
 	if interval <= 0 {
-		interval = 100 * time.Millisecond
+		interval = 100 * time.Millisecond // nolint: mnd
 	}
 
 	ticker := time.NewTicker(interval)
@@ -251,8 +250,3 @@ wait:
 
 	return c.Close()
 }
-
-var (
-	// ErrShuttingDown is returned when operations are attempted during shutdown
-	ErrShuttingDown = errors.New("database shutting down")
-)
