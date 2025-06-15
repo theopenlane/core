@@ -15,11 +15,10 @@ func WithMetrics(h *handler.Server) {
 	h.AroundOperations(func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
 		opCtx := graphql.GetOperationContext(ctx)
 		opName := "unknown"
-		if opCtx != nil {
-			opName = opCtx.OperationName
-			if opName == "" && opCtx.Operation != nil {
-				opName = string(opCtx.Operation.Operation)
-			}
+
+		opName = opCtx.OperationName
+		if opName == "" && opCtx.Operation != nil {
+			opName = string(opCtx.Operation.Operation)
 		}
 
 		start := time.Now()
