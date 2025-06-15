@@ -9,16 +9,17 @@ import (
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/utils/testutils"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/enttest"
+	"github.com/theopenlane/utils/testutils"
 )
 
 // TestGracefulCloseWaits verifies that GracefulClose waits for in-flight
-// queries before closing the database connection.
+// queries before closing the database connection
 func TestGracefulCloseWaits(t *testing.T) {
-	shuttingDown.Store(false)
+	flag := newShutdownFlag()
+	t.Cleanup(flag.Reset)
 	tf := NewTestFixture()
 	defer testutils.TeardownFixture(tf)
 
@@ -54,7 +55,7 @@ func TestGracefulCloseWaits(t *testing.T) {
 
 	start := time.Now()
 	// GracefulClose should wait until the tx completes
-	require.NoError(t, GracefulClose(ctx, client, 10*time.Millisecond))
+	require.NoError(t, GracefulCloseWithFlag(ctx, client, 10*time.Millisecond, flag))
 	elapsed := time.Since(start)
 
 	// ensure goroutine finished
@@ -72,7 +73,8 @@ func TestGracefulCloseWaits(t *testing.T) {
 
 // TestBlockNewQueries verifies that new operations are rejected after shutdown begins
 func TestBlockNewQueries(t *testing.T) {
-	shuttingDown.Store(false)
+	flag := newShutdownFlag()
+	t.Cleanup(flag.Reset)
 	tf := NewTestFixture()
 	defer testutils.TeardownFixture(tf)
 
@@ -80,16 +82,14 @@ func TestBlockNewQueries(t *testing.T) {
 	require.NoError(t, err)
 	defer db.Close()
 
-	drv := blockDriver(entsql.OpenDB(dialect.Postgres, db))
+	drv := blockDriverWithFlag(entsql.OpenDB(dialect.Postgres, db), flag)
 	client := enttest.NewClient(t,
 		enttest.WithOptions(ent.Driver(drv)),
 		enttest.WithMigrateOptions(EnablePostgresOption(db)))
-	defer func() {
-		require.NoError(t, client.Close())
-	}()
+	defer func() { require.NoError(t, client.Close()) }()
 
-	client.Intercept(BlockInterceptor())
-	client.Use(BlockHook())
+	client.Intercept(BlockInterceptorWithFlag(flag))
+	client.Use(BlockHookWithFlag(flag))
 
 	ctx := context.Background()
 
@@ -97,7 +97,7 @@ func TestBlockNewQueries(t *testing.T) {
 	_, err = client.Tx(ctx)
 	require.NoError(t, err)
 
-	markShuttingDown()
+	flag.Begin()
 
 	_, err = client.Tx(ctx)
 	require.ErrorIs(t, err, ErrShuttingDown)

@@ -231,7 +231,7 @@ func (c *client) runGooseMigrations() error {
 func (c *client) runAtlasMigrations(ctx context.Context) error {
 	// Run the automatic migration tool to create all schema resources.
 	if err := c.pc.Schema.Create(ctx,
-		EnablePostgresOption(c.pc.DB())); err != nil {
+		EnablePostgresOption(SQLDB(c.pc))); err != nil {
 		log.Error().Err(err).Msg("failed creating schema resources")
 
 		return err
