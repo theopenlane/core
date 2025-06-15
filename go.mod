@@ -83,7 +83,7 @@ require (
 	github.com/theopenlane/riverboat v0.1.3
 	github.com/theopenlane/utils v0.4.7
 	github.com/tmc/langchaingo v0.1.13
-	github.com/vektah/gqlparser/v2 v2.5.27
+	github.com/vektah/gqlparser/v2 v2.5.28
 	github.com/vektra/mockery/v3 v3.3.6
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
