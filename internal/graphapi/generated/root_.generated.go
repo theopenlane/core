@@ -29728,8 +29728,21 @@ CloneControlInput is used to clone controls and their subcontrols
 under an organization (ownerID)
 """
 input CloneControlInput {
+    """
+    controlIDs are the ids of the control to clone. If standardID is passed, this is ignored
+    """
     controlIDs: [ID!]
+    """
+    standardID to clone all controls from into the organization
+    """
+    standardID: ID
+    """
+    organization ID that the controls will be under
+    """
     ownerID: ID
+    """
+    optional program ID to associate to the controls
+    """
     programID: ID
 }
 

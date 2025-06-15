@@ -665,6 +665,16 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		expectedErr        string
 	}{
 		{
+			name: "happy path, all controls under standard using standard id",
+			request: openlaneclient.CloneControlInput{
+				StandardID: &publicStandard.ID,
+			},
+			expectedStandard: lo.ToPtr(publicStandard.ShortName),
+			expectedControls: controls,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+		},
+		{
 			name: "happy path, all controls under standard",
 			request: openlaneclient.CloneControlInput{
 				ControlIDs: controlIDs,
@@ -806,7 +816,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Check(t, resp != nil)
 
-			assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, len(tc.request.ControlIDs)))
+			assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, len(tc.expectedControls)))
 
 			// sort controls so they are consistent
 			slices.SortFunc(resp.CreateControlsByClone.Controls, func(a, b *openlaneclient.CreateControlsByClone_CreateControlsByClone_Controls) int {
