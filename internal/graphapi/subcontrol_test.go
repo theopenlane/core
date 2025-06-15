@@ -75,7 +75,7 @@ func TestQuerySubcontrol(t *testing.T) {
 				// create the control first
 				control, err := suite.client.api.CreateControl(testUser1.UserCtx,
 					openlaneclient.CreateControlInput{
-						RefCode:    "SC-1",
+						RefCode:    "SC-" + ulids.New().String(),
 						ProgramIDs: []string{program.ID},
 					})
 
@@ -86,7 +86,7 @@ func TestQuerySubcontrol(t *testing.T) {
 
 				resp, err := suite.client.api.CreateSubcontrol(testUser1.UserCtx,
 					openlaneclient.CreateSubcontrolInput{
-						RefCode:   "SC-1",
+						RefCode:   "SC-1" + ulids.New().String(),
 						ControlID: control.CreateControl.Control.ID,
 					})
 

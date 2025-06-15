@@ -18,6 +18,7 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
       ownerID
       refCode
       references
+      referenceFramework
       source
       standardID
       status
@@ -49,6 +50,7 @@ mutation CreateBulkCSVControl($input: Upload!) {
       ownerID
       refCode
       references
+      referenceFramework
       source
       standardID
       status
@@ -80,6 +82,7 @@ mutation CreateControl($input: CreateControlInput!) {
       ownerID
       refCode
       references
+      referenceFramework
       source
       standardID
       status
@@ -167,6 +170,7 @@ query GetAllControls {
         ownerID
         refCode
         references
+        referenceFramework
         source
         standardID
         status
@@ -246,6 +250,7 @@ query GetControlByID($controlId: ID!) {
     ownerID
     refCode
     references
+    referenceFramework
     source
     standardID
     status
@@ -332,6 +337,7 @@ query GetControls($first: Int, $last: Int, $where: ControlWhereInput) {
         ownerID
         refCode
         references
+        referenceFramework
         source
         standardID
         status
@@ -412,6 +418,7 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       ownerID
       refCode
       references
+      referenceFramework
       source
       standardID
       status

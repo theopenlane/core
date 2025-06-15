@@ -172,10 +172,11 @@ var ExampleRefreshSuccessResponse = RefreshReply{
 
 // RegisterRequest holds the fields that should be included on a request to the `/register` endpoint
 type RegisterRequest struct {
-	FirstName string `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
-	LastName  string `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
-	Email     string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
-	Password  string `json:"password" description:"The password to be used for authentication after registration" example:"Wint3rIsC0ming123!"`
+	FirstName string  `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
+	LastName  string  `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
+	Email     string  `json:"email,omitempty" description:"The email address of the user" example:"jsnow@example.com"`
+	Password  string  `json:"password,omitempty" description:"The password to be used for authentication after registration" example:"Wint3rIsC0ming123!"`
+	Token     *string `json:"token" description:"A newly invited user can use this to join a org as at the same time they are creating their account"`
 }
 
 // RegisterReply holds the fields that are sent on a response to the `/register` endpoint
@@ -193,6 +194,11 @@ func (r *RegisterRequest) Validate() error {
 	r.LastName = strings.TrimSpace(r.LastName)
 	r.Email = strings.TrimSpace(r.Email)
 	r.Password = strings.TrimSpace(r.Password)
+
+	if r.Token != nil {
+		invitationToken := strings.TrimSpace(*r.Token)
+		r.Token = &invitationToken
+	}
 
 	// Required for all requests
 	switch {

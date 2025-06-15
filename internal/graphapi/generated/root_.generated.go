@@ -32572,7 +32572,7 @@ type Control implements Node {
   """
   source: ControlControlSource
   """
-  the reference framework for the control if it came from a standard
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
   referenceFramework: String
   """
@@ -33181,7 +33181,7 @@ type ControlHistory implements Node {
   """
   source: ControlHistoryControlSource
   """
-  the reference framework for the control if it came from a standard
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
   referenceFramework: String
   """
@@ -36934,7 +36934,7 @@ input CreateControlInput {
   """
   source: ControlControlSource
   """
-  the reference framework for the control if it came from a standard
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
   referenceFramework: String
   """
@@ -38343,7 +38343,7 @@ input CreateSubcontrolInput {
   """
   source: SubcontrolControlSource
   """
-  the reference framework for the control if it came from a standard
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
   referenceFramework: String
   """
@@ -67372,7 +67372,7 @@ type Subcontrol implements Node {
   """
   source: SubcontrolControlSource
   """
-  the reference framework for the control if it came from a standard
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
   referenceFramework: String
   """
@@ -67857,7 +67857,7 @@ type SubcontrolHistory implements Node {
   """
   source: SubcontrolHistoryControlSource
   """
-  the reference framework for the control if it came from a standard
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
   referenceFramework: String
   """
@@ -71316,7 +71316,7 @@ input UpdateControlInput {
   source: ControlControlSource
   clearSource: Boolean
   """
-  the reference framework for the control if it came from a standard
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
   referenceFramework: String
   clearReferenceFramework: Boolean
@@ -73288,7 +73288,7 @@ input UpdateSubcontrolInput {
   source: SubcontrolControlSource
   clearSource: Boolean
   """
-  the reference framework for the control if it came from a standard
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
   """
   referenceFramework: String
   clearReferenceFramework: Boolean

@@ -857,7 +857,7 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := cc.mutation.ReferenceFramework(); ok {
 		_spec.SetField(control.FieldReferenceFramework, field.TypeString, value)
-		_node.ReferenceFramework = value
+		_node.ReferenceFramework = &value
 	}
 	if value, ok := cc.mutation.ControlType(); ok {
 		_spec.SetField(control.FieldControlType, field.TypeEnum, value)

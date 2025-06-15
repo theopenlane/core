@@ -616,7 +616,7 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 	}
 	if value, ok := chc.mutation.ReferenceFramework(); ok {
 		_spec.SetField(controlhistory.FieldReferenceFramework, field.TypeString, value)
-		_node.ReferenceFramework = value
+		_node.ReferenceFramework = &value
 	}
 	if value, ok := chc.mutation.ControlType(); ok {
 		_spec.SetField(controlhistory.FieldControlType, field.TypeEnum, value)
