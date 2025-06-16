@@ -25,7 +25,7 @@ require (
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.132.0
-	github.com/go-viper/mapstructure/v2 v2.2.1
+	github.com/go-viper/mapstructure/v2 v2.3.0
 	github.com/go-webauthn/webauthn v0.13.0
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/golang-jwt/jwt/v5 v5.2.2
@@ -75,7 +75,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.3
-	github.com/theopenlane/entx v0.8.0
+	github.com/theopenlane/entx v0.8.1
 	github.com/theopenlane/gqlgen-plugins v0.6.1
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.12.7
@@ -84,7 +84,7 @@ require (
 	github.com/theopenlane/utils v0.4.7
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.28
-	github.com/vektra/mockery/v3 v3.3.6
+	github.com/vektra/mockery/v3 v3.4.0
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.41.0

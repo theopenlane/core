@@ -515,8 +515,8 @@ github.com/go-toolsmith/strparse v1.1.0 h1:GAioeZUK9TGxnLS+qfdqNbA4z0SSm5zVNtCQi
 github.com/go-toolsmith/strparse v1.1.0/go.mod h1:7ksGy58fsaQkGQlY8WVoBFNyEPMGuJin1rfoPS4lBSQ=
 github.com/go-toolsmith/typep v1.1.0 h1:fIRYDyF+JywLfqzyhdiHzRop/GQDxxNhLGQ6gFUNHus=
 github.com/go-toolsmith/typep v1.1.0/go.mod h1:fVIw+7zjdsMxDA3ITWnH1yOiw1rnTQKCsF/sk2H/qig=
-github.com/go-viper/mapstructure/v2 v2.2.1 h1:ZAaOCxANMuZx5RCeg0mBdEZk7DZasvvZIxtHqx8aGss=
-github.com/go-viper/mapstructure/v2 v2.2.1/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlndYOZ6rGS0BRZIxGhM=
+github.com/go-viper/mapstructure/v2 v2.3.0 h1:27XbWsHIqhbdR5TIC911OfYvgSaW93HM+dX7970Q7jk=
+github.com/go-viper/mapstructure/v2 v2.3.0/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlndYOZ6rGS0BRZIxGhM=
 github.com/go-webauthn/webauthn v0.13.0 h1:cJIL1/1l+22UekVhipziAaSgESJxokYkowUqAIsWs0Y=
 github.com/go-webauthn/webauthn v0.13.0/go.mod h1:Oy9o2o79dbLKRPZWWgRIOdtBGAhKnDIaBp2PFkICRHs=
 github.com/go-webauthn/x v0.1.21 h1:nFbckQxudvHEJn2uy1VEi713MeSpApoAv9eRqsb9AdQ=
@@ -1285,8 +1285,8 @@ github.com/theopenlane/echox v0.2.4 h1:bocz1Dfs7d2fkNa8foQqdmeTtkMTQNwe1v20bIGID
 github.com/theopenlane/echox v0.2.4/go.mod h1:0cPOHe4SSQHmqP0/n2LsIEzRSogkxSX653bE+PIOVZ8=
 github.com/theopenlane/emailtemplates v0.2.3 h1:SUj2LNeFWZCjm37vjZCxNUGAicnw64XQ9nwTSFWdisc=
 github.com/theopenlane/emailtemplates v0.2.3/go.mod h1:Ee3twHeJKb2RWR2yDXHeVzqn7APdCkfOjSl2DnV1HDw=
-github.com/theopenlane/entx v0.8.0 h1:Sz02kWM5dw00t9D4JE+VmgvUyRMERzCmuezOmEhPw9w=
-github.com/theopenlane/entx v0.8.0/go.mod h1:W2AJ9ZJCZ0o1GPVWqoGlDNXv1HEwaABrt0OrPy9vZ9E=
+github.com/theopenlane/entx v0.8.1 h1:NMW20hu/aWyy6d72SDQiXCJ0Xm2ZCVOUBHtpydQTZFs=
+github.com/theopenlane/entx v0.8.1/go.mod h1:GDmZO37OmkIrL6JyiYLyXqN7rj6QMR+80x41jhaxf+o=
 github.com/theopenlane/gqlgen-plugins v0.6.1 h1:GkHpkQQTESfB9OjOqRPlmLh+6oa6BPepkECNIFc1ZDQ=
 github.com/theopenlane/gqlgen-plugins v0.6.1/go.mod h1:LukCNObOqiDUs3HtSz+1lvNxufS9VRNbD+lA/WBw150=
 github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52zUWyi0=
@@ -1365,8 +1365,8 @@ github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQ
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/vektah/gqlparser/v2 v2.5.28 h1:bIulcl3LF69ba6EiZVGD88y4MkM+Jxrf3P2MX8xLRkY=
 github.com/vektah/gqlparser/v2 v2.5.28/go.mod h1:D1/VCZtV3LPnQrcPBeR/q5jkSQIPti0uYCP/RI0gIeo=
-github.com/vektra/mockery/v3 v3.3.6 h1:fLw0Cqk7LjZueAitMP0jhmJ144VpkGWNpf5/qndMPIM=
-github.com/vektra/mockery/v3 v3.3.6/go.mod h1:nHEhwwFt+3/CD3XdeklPWnRpDL96KNZgRiGuMPZNjN8=
+github.com/vektra/mockery/v3 v3.4.0 h1:PqaVrJASwCeW+zuLIIrTD1ripo7SZlUqOi+uVtU4RLw=
+github.com/vektra/mockery/v3 v3.4.0/go.mod h1:nHEhwwFt+3/CD3XdeklPWnRpDL96KNZgRiGuMPZNjN8=
 github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IUPn0Bjt8=
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
