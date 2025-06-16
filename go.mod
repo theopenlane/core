@@ -19,7 +19,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.80.2
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.2.1
-	github.com/cloudflare/cloudflare-go/v4 v4.4.0
+	github.com/cloudflare/cloudflare-go/v4 v4.5.1
 	github.com/danielgtaylor/huma/v2 v2.32.0
 	github.com/didasy/tldr v0.6.1-0.20240327032308-66fe9230b70e
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
