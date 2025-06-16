@@ -138,6 +138,9 @@ func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
 
 	graphapi.WithTransactions(srv, c)
 
+	// add metrics middleware to the server
+	graphapi.WithMetrics(srv)
+
 	// add the file uploader middleware to the server
 	if u != nil {
 		graphapi.WithFileUploader(srv, u)

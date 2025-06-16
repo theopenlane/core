@@ -12,28 +12,28 @@ import (
 
 // WithMetrics adds Prometheus instrumentation around GraphQL operations.
 func WithMetrics(h *handler.Server) {
-	h.AroundOperations(func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
+	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+		// call the next middleware to get the response
+		resp := next(ctx)
+
+		// get the operation context
 		opCtx := graphql.GetOperationContext(ctx)
 
 		opName := opCtx.OperationName
 		if opName == "" && opCtx.Operation != nil {
-			opName = string(opCtx.Operation.Operation)
+			opName = opCtx.Operation.Name
 		}
 
-		start := time.Now()
+		start := opCtx.Stats.OperationStart
 
-		return func(ctx context.Context) *graphql.Response {
-			resp := next(ctx)(ctx)
-
-			success := "true"
-			if resp != nil && len(resp.Errors) > 0 {
-				success = "false"
-			}
-
-			metrics.GraphQLOperationTotal.WithLabelValues(opName, success).Inc()
-			metrics.GraphQLOperationDuration.WithLabelValues(opName).Observe(time.Since(start).Seconds())
-
-			return resp
+		success := "false"
+		if resp != nil && len(resp.Errors) == 0 {
+			success = "true"
 		}
+
+		metrics.GraphQLOperationTotal.WithLabelValues(opName, success).Inc()
+		metrics.GraphQLOperationDuration.WithLabelValues(opName).Observe(time.Since(start).Seconds())
+
+		return resp
 	})
 }
