@@ -19,6 +19,7 @@ mutation CreateBulkCSVSubcontrol($input: Upload!) {
       ownerID
       refCode
       references
+      referenceFramework
       source
       status
       subcategory
@@ -58,6 +59,7 @@ mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
       ownerID
       refCode
       references
+      referenceFramework
       source
       status
       subcategory
@@ -97,6 +99,7 @@ mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
       ownerID
       refCode
       references
+      referenceFramework
       source
       status
       subcategory
@@ -143,6 +146,7 @@ query GetAllSubcontrols {
         ownerID
         refCode
         references
+        referenceFramework
         source
         status
         subcategory
@@ -188,6 +192,7 @@ query GetSubcontrolByID($subcontrolId: ID!) {
     ownerID
     refCode
     references
+    referenceFramework
     source
     status
     subcategory
@@ -233,6 +238,7 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
         ownerID
         refCode
         references
+        referenceFramework
         source
         status
         subcategory
@@ -279,6 +285,7 @@ mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInpu
       ownerID
       refCode
       references
+      referenceFramework
       source
       status
       subcategory

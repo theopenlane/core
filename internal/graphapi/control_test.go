@@ -269,6 +269,8 @@ func TestMutationCreateControl(t *testing.T) {
 	// create control implementation to be associated with the control
 	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateControlInput
@@ -287,17 +289,17 @@ func TestMutationCreateControl(t *testing.T) {
 		{
 			name: "happy path, all input",
 			request: openlaneclient.CreateControlInput{
-				RefCode:            "A-2",
-				Description:        lo.ToPtr("A description of the Control"),
-				Status:             &enums.ControlStatusPreparing,
-				Tags:               []string{"tag1", "tag2"},
-				ControlType:        &enums.ControlTypeDetective,
-				Category:           lo.ToPtr("Availability"),
-				CategoryID:         lo.ToPtr("A"),
-				Subcategory:        lo.ToPtr("Additional Criteria for Availability"),
-				MappedCategories:   []string{"Govern", "Protect"},
-				ControlQuestions:   []string{"What is the control question?"},
-				ReferenceFramework: lo.ToPtr("MITBenchmark"),
+				RefCode:          "A-2",
+				Description:      lo.ToPtr("A description of the Control"),
+				Status:           &enums.ControlStatusPreparing,
+				Tags:             []string{"tag1", "tag2"},
+				ControlType:      &enums.ControlTypeDetective,
+				Category:         lo.ToPtr("Availability"),
+				CategoryID:       lo.ToPtr("A"),
+				Subcategory:      lo.ToPtr("Additional Criteria for Availability"),
+				MappedCategories: []string{"Govern", "Protect"},
+				ControlQuestions: []string{"What is the control question?"},
+				StandardID:       &standard.ID,
 				AssessmentObjectives: []*models.AssessmentObjective{
 					{
 						Class:     "class",
@@ -580,8 +582,8 @@ func TestMutationCreateControl(t *testing.T) {
 				assert.Assert(t, is.Len(resp.CreateControl.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs)))
 			}
 
-			if tc.request.ReferenceFramework != nil {
-				assert.Check(t, is.Equal(*tc.request.ReferenceFramework, *resp.CreateControl.Control.ReferenceFramework))
+			if tc.request.StandardID != nil {
+				assert.Equal(t, standard.ShortName, *resp.CreateControl.Control.ReferenceFramework)
 			} else {
 				assert.Check(t, resp.CreateControl.Control.ReferenceFramework == nil)
 			}
@@ -610,6 +612,7 @@ func TestMutationCreateControl(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, blockedGroup.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateControlsByClone(t *testing.T) {
@@ -679,7 +682,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: openlaneclient.CloneControlInput{
 				ControlIDs: controlIDs,
 			},
-			expectedStandard: lo.ToPtr(publicStandard.ShortName),
+			expectedStandard: &publicStandard.ShortName,
 			expectedControls: controls,
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
@@ -690,7 +693,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{controls[7].ID},
 			},
 			expectedControls: []*generated.Control{controls[7]},
-			expectedStandard: lo.ToPtr(publicStandard.ShortName),
+			expectedStandard: &publicStandard.ShortName,
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
 		},
@@ -701,7 +704,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ProgramID:  &program.ID,
 			},
 			expectedControls:   controls,
-			expectedStandard:   lo.ToPtr(publicStandard.ShortName),
+			expectedStandard:   &publicStandard.ShortName,
 			expectedNumProgram: 1,
 			client:             suite.client.api,
 			ctx:                testUser1.UserCtx,
@@ -713,7 +716,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ProgramID:  &programAnotherOrg.ID,
 			},
 			expectedControls: controls,
-			expectedStandard: lo.ToPtr(publicStandard.ShortName),
+			expectedStandard: &publicStandard.ShortName,
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
 			expectedErr:      notAuthorizedErrorMsg,
@@ -724,7 +727,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{orgOwnedControl.ID},
 			},
 			expectedControls: []*generated.Control{orgOwnedControl},
-			expectedStandard: nil,
+			expectedStandard: &orgStandard.Name,
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
 		},
@@ -734,7 +737,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{orgOwnedControl.ID},
 				ProgramID:  &program.ID,
 			},
-			expectedStandard:   nil,
+			expectedStandard:   &orgStandard.Name,
 			expectedControls:   []*generated.Control{orgOwnedControl},
 			expectedNumProgram: 1,
 			client:             suite.client.api,
@@ -746,7 +749,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{controls[:1][0].ID},
 				OwnerID:    &testUser1.OrganizationID,
 			},
-			expectedStandard:   lo.ToPtr(publicStandard.ShortName),
+			expectedStandard:   &publicStandard.ShortName,
 			expectedControls:   controls[:1],
 			expectedNumProgram: 1, // control was cloned, so the previous program will still be here
 			client:             suite.client.apiWithPAT,
@@ -757,7 +760,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: openlaneclient.CloneControlInput{
 				ControlIDs: []string{controls[:1][0].ID},
 			},
-			expectedStandard: lo.ToPtr(publicStandard.ShortName),
+			expectedStandard: &publicStandard.ShortName,
 			expectedControls: controls[:1],
 			client:           suite.client.apiWithPAT,
 			ctx:              context.Background(),
@@ -768,7 +771,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: openlaneclient.CloneControlInput{
 				ControlIDs: []string{controls[:1][0].ID},
 			},
-			expectedStandard:   lo.ToPtr(publicStandard.ShortName),
+			expectedStandard:   &publicStandard.ShortName,
 			expectedControls:   controls[:1],
 			expectedNumProgram: 0, // api token has no program access
 			client:             suite.client.apiWithToken,
@@ -955,11 +958,12 @@ func TestMutationUpdateControl(t *testing.T) {
 	assert.Assert(t, is.Nil(res))
 
 	testCases := []struct {
-		name        string
-		request     openlaneclient.UpdateControlInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name                 string
+		request              openlaneclient.UpdateControlInput
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedRefFramework *string
+		expectedErr          string
 	}{
 		{
 			name: "happy path, update field",
@@ -1033,8 +1037,9 @@ func TestMutationUpdateControl(t *testing.T) {
 				ClearReferences:       lo.ToPtr(true),
 				ClearMappedCategories: lo.ToPtr(true),
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client:               suite.client.apiWithPAT,
+			ctx:                  context.Background(),
+			expectedRefFramework: nil,
 		},
 		{
 			name: "update ref code to empty",
@@ -1168,6 +1173,14 @@ func TestMutationUpdateControl(t *testing.T) {
 			if tc.request.AddControlImplementationIDs != nil {
 				assert.Assert(t, is.Len(resp.UpdateControl.Control.ControlImplementations.Edges, len(tc.request.AddControlImplementationIDs)))
 			}
+
+			// if tc.request.StandardID != nil {
+			// 	assert.Check(t, is.Equal(*tc.expectedRefFramework, *resp.UpdateControl.Control.ReferenceFramework))
+			// }
+
+			// if tc.request.ClearStandard != nil && *tc.request.ClearStandard {
+			// 	assert.Check(t, resp.UpdateControl.Control.ReferenceFramework == nil)
+			// }
 
 			// ensure the program is set
 			if len(tc.request.AddProgramIDs) > 0 {

@@ -40,16 +40,16 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		WithStandard().
 		All(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control1"})
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
 	}
 
 	if len(existingControls) == 0 {
-		return nil, parseRequestError(generated.ErrPermissionDenied, action{action: ActionCreate, object: "control2"})
+		return nil, parseRequestError(generated.ErrPermissionDenied, action{action: ActionCreate, object: "control"})
 	}
 
 	createdControls, err := r.cloneControls(ctx, existingControls, input.ProgramID)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control3"})
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
 	}
 
 	return &model.ControlBulkCreatePayload{

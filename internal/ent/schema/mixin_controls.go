@@ -126,6 +126,10 @@ var controlFields = []ent.Field{
 	field.String("reference_framework").
 		Comment("the reference framework for the control if it came from a standard, empty if not associated with a standard").
 		Nillable().
+		Annotations(
+			entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
+			entgql.OrderField("REFERENCE_FRAMEWORK"),
+		).
 		Optional(),
 	field.Enum("control_type").
 		GoType(enums.ControlType("")).

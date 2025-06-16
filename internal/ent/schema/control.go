@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -147,6 +148,12 @@ func (c Control) Mixin() []ent.Mixin {
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins()
+}
+
+func (Control) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookControlReferenceFramework(),
+	}
 }
 
 // Policy of the Control

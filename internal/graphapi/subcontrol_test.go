@@ -204,12 +204,13 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 		ControlOwnerID: ownerGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name                string
-		request             openlaneclient.CreateSubcontrolInput
-		createParentControl bool
-		client              *openlaneclient.OpenlaneClient
-		ctx                 context.Context
-		expectedErr         string
+		name                 string
+		request              openlaneclient.CreateSubcontrolInput
+		createParentControl  bool
+		client               *openlaneclient.OpenlaneClient
+		ctx                  context.Context
+		expectedRefFramework *string
+		expectedErr          string
 	}{
 		{
 			name: "missing required ref code",
@@ -227,8 +228,9 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 				RefCode:   "SC-1",
 				ControlID: control1.ID,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:               suite.client.api,
+			expectedRefFramework: control1.ReferenceFramework,
+			ctx:                  testUser1.UserCtx,
 		},
 		{
 			name: "happy path, parent control has owner",
@@ -236,8 +238,9 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 				RefCode:   "SC-2-1",
 				ControlID: controlWithOwner.ID,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:               suite.client.api,
+			expectedRefFramework: controlWithOwner.ReferenceFramework,
+			ctx:                  testUser1.UserCtx,
 		},
 		{
 			name: "happy path, parent control has owner, subcontrol should override it",
@@ -246,8 +249,9 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 				ControlID:      controlWithOwner.ID,
 				ControlOwnerID: &anotherOwnerGroup.ID,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedRefFramework: controlWithOwner.ReferenceFramework,
 		},
 		{
 			name: "happy path, all input",
@@ -301,8 +305,9 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 				DelegateID:     &delegateGroup.ID,
 				ControlOwnerID: &ownerGroup.ID,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedRefFramework: control2.ReferenceFramework,
 		},
 		{
 			name: "happy path, using pat",
@@ -311,8 +316,9 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 				ControlID: control1.ID,
 				OwnerID:   &testUser1.OrganizationID,
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client:               suite.client.apiWithPAT,
+			ctx:                  context.Background(),
+			expectedRefFramework: control1.ReferenceFramework,
 		},
 		{
 			name: "using pat, missing owner ID",
@@ -340,9 +346,10 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 				RefCode:   "SC-1",
 				ControlID: control1.ID,
 			},
-			createParentControl: true, // create the parent control first
-			client:              suite.client.api,
-			ctx:                 adminUser.UserCtx,
+			createParentControl:  true, // create the parent control first
+			client:               suite.client.api,
+			ctx:                  adminUser.UserCtx,
+			expectedRefFramework: control1.ReferenceFramework,
 		},
 		{
 			name: "user not authorized to edit one of the controls",
@@ -397,6 +404,8 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateSubcontrol.Subcontrol.RefCode))
 			assert.Check(t, is.Contains(resp.CreateSubcontrol.Subcontrol.DisplayID, "SCL-"))
 			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateSubcontrol.Subcontrol.RefCode))
+
+			assert.Equal(t, tc.expectedRefFramework, resp.CreateSubcontrol.Subcontrol.ReferenceFramework)
 
 			// ensure the control is set
 			assert.Check(t, is.Equal(tc.request.ControlID, resp.CreateSubcontrol.Subcontrol.ControlID))
