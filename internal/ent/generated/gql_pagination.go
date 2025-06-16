@@ -2782,6 +2782,33 @@ var (
 			}
 		},
 	}
+	// ControlOrderFieldReferenceFramework orders Control by reference_framework.
+	ControlOrderFieldReferenceFramework = &ControlOrderField{
+		Value: func(c *Control) (ent.Value, error) {
+			// allow for nil values for fields
+			if c.ReferenceFramework == nil {
+				return nil, nil
+			}
+			return c.ReferenceFramework, nil
+		},
+		column: control.FieldReferenceFramework,
+		toTerm: func(opts ...sql.OrderTermOption) control.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return control.ByReferenceFramework(opts...)
+		},
+		toCursor: func(c *Control) Cursor {
+			if c.ReferenceFramework == nil {
+				return Cursor{
+					ID:    c.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    c.ID,
+				Value: c.ReferenceFramework,
+			}
+		},
+	}
 	// ControlOrderFieldControlType orders Control by control_type.
 	ControlOrderFieldControlType = &ControlOrderField{
 		Value: func(c *Control) (ent.Value, error) {
@@ -2852,6 +2879,8 @@ func (f ControlOrderField) String() string {
 		str = "STATUS"
 	case ControlOrderFieldSource.column:
 		str = "SOURCE"
+	case ControlOrderFieldReferenceFramework.column:
+		str = "REFERENCE_FRAMEWORK"
 	case ControlOrderFieldControlType.column:
 		str = "CONTROL_TYPE"
 	case ControlOrderFieldCategory.column:
@@ -2884,6 +2913,8 @@ func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlOrderFieldStatus
 	case "SOURCE":
 		*f = *ControlOrderFieldSource
+	case "REFERENCE_FRAMEWORK":
+		*f = *ControlOrderFieldReferenceFramework
 	case "CONTROL_TYPE":
 		*f = *ControlOrderFieldControlType
 	case "category":
@@ -3218,6 +3249,33 @@ var (
 			}
 		},
 	}
+	// ControlHistoryOrderFieldReferenceFramework orders ControlHistory by reference_framework.
+	ControlHistoryOrderFieldReferenceFramework = &ControlHistoryOrderField{
+		Value: func(ch *ControlHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if ch.ReferenceFramework == nil {
+				return nil, nil
+			}
+			return ch.ReferenceFramework, nil
+		},
+		column: controlhistory.FieldReferenceFramework,
+		toTerm: func(opts ...sql.OrderTermOption) controlhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return controlhistory.ByReferenceFramework(opts...)
+		},
+		toCursor: func(ch *ControlHistory) Cursor {
+			if ch.ReferenceFramework == nil {
+				return Cursor{
+					ID:    ch.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    ch.ID,
+				Value: ch.ReferenceFramework,
+			}
+		},
+	}
 	// ControlHistoryOrderFieldControlType orders ControlHistory by control_type.
 	ControlHistoryOrderFieldControlType = &ControlHistoryOrderField{
 		Value: func(ch *ControlHistory) (ent.Value, error) {
@@ -3290,6 +3348,8 @@ func (f ControlHistoryOrderField) String() string {
 		str = "STATUS"
 	case ControlHistoryOrderFieldSource.column:
 		str = "SOURCE"
+	case ControlHistoryOrderFieldReferenceFramework.column:
+		str = "REFERENCE_FRAMEWORK"
 	case ControlHistoryOrderFieldControlType.column:
 		str = "CONTROL_TYPE"
 	case ControlHistoryOrderFieldCategory.column:
@@ -3324,6 +3384,8 @@ func (f *ControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlHistoryOrderFieldStatus
 	case "SOURCE":
 		*f = *ControlHistoryOrderFieldSource
+	case "REFERENCE_FRAMEWORK":
+		*f = *ControlHistoryOrderFieldReferenceFramework
 	case "CONTROL_TYPE":
 		*f = *ControlHistoryOrderFieldControlType
 	case "category":
@@ -30357,6 +30419,33 @@ var (
 			}
 		},
 	}
+	// SubcontrolOrderFieldReferenceFramework orders Subcontrol by reference_framework.
+	SubcontrolOrderFieldReferenceFramework = &SubcontrolOrderField{
+		Value: func(s *Subcontrol) (ent.Value, error) {
+			// allow for nil values for fields
+			if s.ReferenceFramework == nil {
+				return nil, nil
+			}
+			return s.ReferenceFramework, nil
+		},
+		column: subcontrol.FieldReferenceFramework,
+		toTerm: func(opts ...sql.OrderTermOption) subcontrol.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return subcontrol.ByReferenceFramework(opts...)
+		},
+		toCursor: func(s *Subcontrol) Cursor {
+			if s.ReferenceFramework == nil {
+				return Cursor{
+					ID:    s.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    s.ID,
+				Value: s.ReferenceFramework,
+			}
+		},
+	}
 	// SubcontrolOrderFieldControlType orders Subcontrol by control_type.
 	SubcontrolOrderFieldControlType = &SubcontrolOrderField{
 		Value: func(s *Subcontrol) (ent.Value, error) {
@@ -30427,6 +30516,8 @@ func (f SubcontrolOrderField) String() string {
 		str = "STATUS"
 	case SubcontrolOrderFieldSource.column:
 		str = "SOURCE"
+	case SubcontrolOrderFieldReferenceFramework.column:
+		str = "REFERENCE_FRAMEWORK"
 	case SubcontrolOrderFieldControlType.column:
 		str = "CONTROL_TYPE"
 	case SubcontrolOrderFieldCategory.column:
@@ -30459,6 +30550,8 @@ func (f *SubcontrolOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolOrderFieldStatus
 	case "SOURCE":
 		*f = *SubcontrolOrderFieldSource
+	case "REFERENCE_FRAMEWORK":
+		*f = *SubcontrolOrderFieldReferenceFramework
 	case "CONTROL_TYPE":
 		*f = *SubcontrolOrderFieldControlType
 	case "category":
@@ -30793,6 +30886,33 @@ var (
 			}
 		},
 	}
+	// SubcontrolHistoryOrderFieldReferenceFramework orders SubcontrolHistory by reference_framework.
+	SubcontrolHistoryOrderFieldReferenceFramework = &SubcontrolHistoryOrderField{
+		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if sh.ReferenceFramework == nil {
+				return nil, nil
+			}
+			return sh.ReferenceFramework, nil
+		},
+		column: subcontrolhistory.FieldReferenceFramework,
+		toTerm: func(opts ...sql.OrderTermOption) subcontrolhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return subcontrolhistory.ByReferenceFramework(opts...)
+		},
+		toCursor: func(sh *SubcontrolHistory) Cursor {
+			if sh.ReferenceFramework == nil {
+				return Cursor{
+					ID:    sh.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.ReferenceFramework,
+			}
+		},
+	}
 	// SubcontrolHistoryOrderFieldControlType orders SubcontrolHistory by control_type.
 	SubcontrolHistoryOrderFieldControlType = &SubcontrolHistoryOrderField{
 		Value: func(sh *SubcontrolHistory) (ent.Value, error) {
@@ -30865,6 +30985,8 @@ func (f SubcontrolHistoryOrderField) String() string {
 		str = "STATUS"
 	case SubcontrolHistoryOrderFieldSource.column:
 		str = "SOURCE"
+	case SubcontrolHistoryOrderFieldReferenceFramework.column:
+		str = "REFERENCE_FRAMEWORK"
 	case SubcontrolHistoryOrderFieldControlType.column:
 		str = "CONTROL_TYPE"
 	case SubcontrolHistoryOrderFieldCategory.column:
@@ -30899,6 +31021,8 @@ func (f *SubcontrolHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolHistoryOrderFieldStatus
 	case "SOURCE":
 		*f = *SubcontrolHistoryOrderFieldSource
+	case "REFERENCE_FRAMEWORK":
+		*f = *SubcontrolHistoryOrderFieldReferenceFramework
 	case "CONTROL_TYPE":
 		*f = *SubcontrolHistoryOrderFieldControlType
 	case "category":

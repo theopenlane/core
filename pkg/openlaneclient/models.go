@@ -4145,8 +4145,6 @@ type CreateControlInput struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if not associated with a standard
-	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -5101,8 +5099,6 @@ type CreateSubcontrolInput struct {
 	Status *enums.ControlStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source *enums.ControlSource `json:"source,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if not associated with a standard
-	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
@@ -23665,9 +23661,6 @@ type UpdateControlInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if not associated with a standard
-	ReferenceFramework      *string `json:"referenceFramework,omitempty"`
-	ClearReferenceFramework *bool   `json:"clearReferenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType      *enums.ControlType `json:"controlType,omitempty"`
 	ClearControlType *bool              `json:"clearControlType,omitempty"`
@@ -25216,9 +25209,6 @@ type UpdateSubcontrolInput struct {
 	// source of the control, e.g. framework, template, custom, etc.
 	Source      *enums.ControlSource `json:"source,omitempty"`
 	ClearSource *bool                `json:"clearSource,omitempty"`
-	// the reference framework for the control if it came from a standard, empty if not associated with a standard
-	ReferenceFramework      *string `json:"referenceFramework,omitempty"`
-	ClearReferenceFramework *bool   `json:"clearReferenceFramework,omitempty"`
 	// type of the control e.g. preventive, detective, corrective, or deterrent.
 	ControlType      *enums.ControlType `json:"controlType,omitempty"`
 	ClearControlType *bool              `json:"clearControlType,omitempty"`
@@ -27154,15 +27144,16 @@ func (e ContactOrderField) MarshalJSON() ([]byte, error) {
 type ControlHistoryOrderField string
 
 const (
-	ControlHistoryOrderFieldHistoryTime ControlHistoryOrderField = "history_time"
-	ControlHistoryOrderFieldCreatedAt   ControlHistoryOrderField = "created_at"
-	ControlHistoryOrderFieldUpdatedAt   ControlHistoryOrderField = "updated_at"
-	ControlHistoryOrderFieldStatus      ControlHistoryOrderField = "STATUS"
-	ControlHistoryOrderFieldSource      ControlHistoryOrderField = "SOURCE"
-	ControlHistoryOrderFieldControlType ControlHistoryOrderField = "CONTROL_TYPE"
-	ControlHistoryOrderFieldCategory    ControlHistoryOrderField = "category"
-	ControlHistoryOrderFieldSubcategory ControlHistoryOrderField = "subcategory"
-	ControlHistoryOrderFieldRefCode     ControlHistoryOrderField = "ref_code"
+	ControlHistoryOrderFieldHistoryTime        ControlHistoryOrderField = "history_time"
+	ControlHistoryOrderFieldCreatedAt          ControlHistoryOrderField = "created_at"
+	ControlHistoryOrderFieldUpdatedAt          ControlHistoryOrderField = "updated_at"
+	ControlHistoryOrderFieldStatus             ControlHistoryOrderField = "STATUS"
+	ControlHistoryOrderFieldSource             ControlHistoryOrderField = "SOURCE"
+	ControlHistoryOrderFieldReferenceFramework ControlHistoryOrderField = "REFERENCE_FRAMEWORK"
+	ControlHistoryOrderFieldControlType        ControlHistoryOrderField = "CONTROL_TYPE"
+	ControlHistoryOrderFieldCategory           ControlHistoryOrderField = "category"
+	ControlHistoryOrderFieldSubcategory        ControlHistoryOrderField = "subcategory"
+	ControlHistoryOrderFieldRefCode            ControlHistoryOrderField = "ref_code"
 )
 
 var AllControlHistoryOrderField = []ControlHistoryOrderField{
@@ -27171,6 +27162,7 @@ var AllControlHistoryOrderField = []ControlHistoryOrderField{
 	ControlHistoryOrderFieldUpdatedAt,
 	ControlHistoryOrderFieldStatus,
 	ControlHistoryOrderFieldSource,
+	ControlHistoryOrderFieldReferenceFramework,
 	ControlHistoryOrderFieldControlType,
 	ControlHistoryOrderFieldCategory,
 	ControlHistoryOrderFieldSubcategory,
@@ -27179,7 +27171,7 @@ var AllControlHistoryOrderField = []ControlHistoryOrderField{
 
 func (e ControlHistoryOrderField) IsValid() bool {
 	switch e {
-	case ControlHistoryOrderFieldHistoryTime, ControlHistoryOrderFieldCreatedAt, ControlHistoryOrderFieldUpdatedAt, ControlHistoryOrderFieldStatus, ControlHistoryOrderFieldSource, ControlHistoryOrderFieldControlType, ControlHistoryOrderFieldCategory, ControlHistoryOrderFieldSubcategory, ControlHistoryOrderFieldRefCode:
+	case ControlHistoryOrderFieldHistoryTime, ControlHistoryOrderFieldCreatedAt, ControlHistoryOrderFieldUpdatedAt, ControlHistoryOrderFieldStatus, ControlHistoryOrderFieldSource, ControlHistoryOrderFieldReferenceFramework, ControlHistoryOrderFieldControlType, ControlHistoryOrderFieldCategory, ControlHistoryOrderFieldSubcategory, ControlHistoryOrderFieldRefCode:
 		return true
 	}
 	return false
@@ -27496,14 +27488,15 @@ func (e ControlObjectiveOrderField) MarshalJSON() ([]byte, error) {
 type ControlOrderField string
 
 const (
-	ControlOrderFieldCreatedAt   ControlOrderField = "created_at"
-	ControlOrderFieldUpdatedAt   ControlOrderField = "updated_at"
-	ControlOrderFieldStatus      ControlOrderField = "STATUS"
-	ControlOrderFieldSource      ControlOrderField = "SOURCE"
-	ControlOrderFieldControlType ControlOrderField = "CONTROL_TYPE"
-	ControlOrderFieldCategory    ControlOrderField = "category"
-	ControlOrderFieldSubcategory ControlOrderField = "subcategory"
-	ControlOrderFieldRefCode     ControlOrderField = "ref_code"
+	ControlOrderFieldCreatedAt          ControlOrderField = "created_at"
+	ControlOrderFieldUpdatedAt          ControlOrderField = "updated_at"
+	ControlOrderFieldStatus             ControlOrderField = "STATUS"
+	ControlOrderFieldSource             ControlOrderField = "SOURCE"
+	ControlOrderFieldReferenceFramework ControlOrderField = "REFERENCE_FRAMEWORK"
+	ControlOrderFieldControlType        ControlOrderField = "CONTROL_TYPE"
+	ControlOrderFieldCategory           ControlOrderField = "category"
+	ControlOrderFieldSubcategory        ControlOrderField = "subcategory"
+	ControlOrderFieldRefCode            ControlOrderField = "ref_code"
 )
 
 var AllControlOrderField = []ControlOrderField{
@@ -27511,6 +27504,7 @@ var AllControlOrderField = []ControlOrderField{
 	ControlOrderFieldUpdatedAt,
 	ControlOrderFieldStatus,
 	ControlOrderFieldSource,
+	ControlOrderFieldReferenceFramework,
 	ControlOrderFieldControlType,
 	ControlOrderFieldCategory,
 	ControlOrderFieldSubcategory,
@@ -27519,7 +27513,7 @@ var AllControlOrderField = []ControlOrderField{
 
 func (e ControlOrderField) IsValid() bool {
 	switch e {
-	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode:
+	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode:
 		return true
 	}
 	return false
@@ -31602,15 +31596,16 @@ func (e StandardOrderField) MarshalJSON() ([]byte, error) {
 type SubcontrolHistoryOrderField string
 
 const (
-	SubcontrolHistoryOrderFieldHistoryTime SubcontrolHistoryOrderField = "history_time"
-	SubcontrolHistoryOrderFieldCreatedAt   SubcontrolHistoryOrderField = "created_at"
-	SubcontrolHistoryOrderFieldUpdatedAt   SubcontrolHistoryOrderField = "updated_at"
-	SubcontrolHistoryOrderFieldStatus      SubcontrolHistoryOrderField = "STATUS"
-	SubcontrolHistoryOrderFieldSource      SubcontrolHistoryOrderField = "SOURCE"
-	SubcontrolHistoryOrderFieldControlType SubcontrolHistoryOrderField = "CONTROL_TYPE"
-	SubcontrolHistoryOrderFieldCategory    SubcontrolHistoryOrderField = "category"
-	SubcontrolHistoryOrderFieldSubcategory SubcontrolHistoryOrderField = "subcategory"
-	SubcontrolHistoryOrderFieldRefCode     SubcontrolHistoryOrderField = "ref_code"
+	SubcontrolHistoryOrderFieldHistoryTime        SubcontrolHistoryOrderField = "history_time"
+	SubcontrolHistoryOrderFieldCreatedAt          SubcontrolHistoryOrderField = "created_at"
+	SubcontrolHistoryOrderFieldUpdatedAt          SubcontrolHistoryOrderField = "updated_at"
+	SubcontrolHistoryOrderFieldStatus             SubcontrolHistoryOrderField = "STATUS"
+	SubcontrolHistoryOrderFieldSource             SubcontrolHistoryOrderField = "SOURCE"
+	SubcontrolHistoryOrderFieldReferenceFramework SubcontrolHistoryOrderField = "REFERENCE_FRAMEWORK"
+	SubcontrolHistoryOrderFieldControlType        SubcontrolHistoryOrderField = "CONTROL_TYPE"
+	SubcontrolHistoryOrderFieldCategory           SubcontrolHistoryOrderField = "category"
+	SubcontrolHistoryOrderFieldSubcategory        SubcontrolHistoryOrderField = "subcategory"
+	SubcontrolHistoryOrderFieldRefCode            SubcontrolHistoryOrderField = "ref_code"
 )
 
 var AllSubcontrolHistoryOrderField = []SubcontrolHistoryOrderField{
@@ -31619,6 +31614,7 @@ var AllSubcontrolHistoryOrderField = []SubcontrolHistoryOrderField{
 	SubcontrolHistoryOrderFieldUpdatedAt,
 	SubcontrolHistoryOrderFieldStatus,
 	SubcontrolHistoryOrderFieldSource,
+	SubcontrolHistoryOrderFieldReferenceFramework,
 	SubcontrolHistoryOrderFieldControlType,
 	SubcontrolHistoryOrderFieldCategory,
 	SubcontrolHistoryOrderFieldSubcategory,
@@ -31627,7 +31623,7 @@ var AllSubcontrolHistoryOrderField = []SubcontrolHistoryOrderField{
 
 func (e SubcontrolHistoryOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolHistoryOrderFieldHistoryTime, SubcontrolHistoryOrderFieldCreatedAt, SubcontrolHistoryOrderFieldUpdatedAt, SubcontrolHistoryOrderFieldStatus, SubcontrolHistoryOrderFieldSource, SubcontrolHistoryOrderFieldControlType, SubcontrolHistoryOrderFieldCategory, SubcontrolHistoryOrderFieldSubcategory, SubcontrolHistoryOrderFieldRefCode:
+	case SubcontrolHistoryOrderFieldHistoryTime, SubcontrolHistoryOrderFieldCreatedAt, SubcontrolHistoryOrderFieldUpdatedAt, SubcontrolHistoryOrderFieldStatus, SubcontrolHistoryOrderFieldSource, SubcontrolHistoryOrderFieldReferenceFramework, SubcontrolHistoryOrderFieldControlType, SubcontrolHistoryOrderFieldCategory, SubcontrolHistoryOrderFieldSubcategory, SubcontrolHistoryOrderFieldRefCode:
 		return true
 	}
 	return false
@@ -31672,14 +31668,15 @@ func (e SubcontrolHistoryOrderField) MarshalJSON() ([]byte, error) {
 type SubcontrolOrderField string
 
 const (
-	SubcontrolOrderFieldCreatedAt   SubcontrolOrderField = "created_at"
-	SubcontrolOrderFieldUpdatedAt   SubcontrolOrderField = "updated_at"
-	SubcontrolOrderFieldStatus      SubcontrolOrderField = "STATUS"
-	SubcontrolOrderFieldSource      SubcontrolOrderField = "SOURCE"
-	SubcontrolOrderFieldControlType SubcontrolOrderField = "CONTROL_TYPE"
-	SubcontrolOrderFieldCategory    SubcontrolOrderField = "category"
-	SubcontrolOrderFieldSubcategory SubcontrolOrderField = "subcategory"
-	SubcontrolOrderFieldRefCode     SubcontrolOrderField = "ref_code"
+	SubcontrolOrderFieldCreatedAt          SubcontrolOrderField = "created_at"
+	SubcontrolOrderFieldUpdatedAt          SubcontrolOrderField = "updated_at"
+	SubcontrolOrderFieldStatus             SubcontrolOrderField = "STATUS"
+	SubcontrolOrderFieldSource             SubcontrolOrderField = "SOURCE"
+	SubcontrolOrderFieldReferenceFramework SubcontrolOrderField = "REFERENCE_FRAMEWORK"
+	SubcontrolOrderFieldControlType        SubcontrolOrderField = "CONTROL_TYPE"
+	SubcontrolOrderFieldCategory           SubcontrolOrderField = "category"
+	SubcontrolOrderFieldSubcategory        SubcontrolOrderField = "subcategory"
+	SubcontrolOrderFieldRefCode            SubcontrolOrderField = "ref_code"
 )
 
 var AllSubcontrolOrderField = []SubcontrolOrderField{
@@ -31687,6 +31684,7 @@ var AllSubcontrolOrderField = []SubcontrolOrderField{
 	SubcontrolOrderFieldUpdatedAt,
 	SubcontrolOrderFieldStatus,
 	SubcontrolOrderFieldSource,
+	SubcontrolOrderFieldReferenceFramework,
 	SubcontrolOrderFieldControlType,
 	SubcontrolOrderFieldCategory,
 	SubcontrolOrderFieldSubcategory,
@@ -31695,7 +31693,7 @@ var AllSubcontrolOrderField = []SubcontrolOrderField{
 
 func (e SubcontrolOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode:
+	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode:
 		return true
 	}
 	return false

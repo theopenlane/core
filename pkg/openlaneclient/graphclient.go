@@ -68717,6 +68717,7 @@ type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	MappedCategories       []string                                                                  "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                *string                                                                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RefCode                string                                                                    "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework     *string                                                                   "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
 	References             []*models.Reference                                                       "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                                      "json:\"source,omitempty\" graphql:\"source\""
 	Status                 *enums.ControlStatus                                                      "json:\"status,omitempty\" graphql:\"status\""
@@ -68840,6 +68841,12 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetRefCode
 	}
 	return t.RefCode
 }
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetReferenceFramework() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
+	}
+	return t.ReferenceFramework
+}
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetReferences() []*models.Reference {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
@@ -68950,6 +68957,7 @@ type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	MappedCategories       []string                                                            "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RefCode                string                                                              "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework     *string                                                             "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
 	References             []*models.Reference                                                 "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                                "json:\"source,omitempty\" graphql:\"source\""
 	Status                 *enums.ControlStatus                                                "json:\"status,omitempty\" graphql:\"status\""
@@ -69073,6 +69081,12 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetRefCode() str
 	}
 	return t.RefCode
 }
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetReferenceFramework() *string {
+	if t == nil {
+		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
+	}
+	return t.ReferenceFramework
+}
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetReferences() []*models.Reference {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
@@ -69183,6 +69197,7 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	MappedCategories       []string                                                   "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RefCode                string                                                     "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework     *string                                                    "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
 	References             []*models.Reference                                        "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                       "json:\"source,omitempty\" graphql:\"source\""
 	Status                 *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
@@ -69305,6 +69320,12 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetRefCode() string {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
 	return t.RefCode
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetReferenceFramework() *string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.ReferenceFramework
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetReferences() []*models.Reference {
 	if t == nil {
@@ -69460,6 +69481,7 @@ type GetAllSubcontrols_Subcontrols_Edges_Node struct {
 	MappedCategories       []string                                               "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                *string                                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RefCode                string                                                 "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework     *string                                                "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
 	References             []*models.Reference                                    "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                   "json:\"source,omitempty\" graphql:\"source\""
 	Status                 *enums.ControlStatus                                   "json:\"status,omitempty\" graphql:\"status\""
@@ -69588,6 +69610,12 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetRefCode() string {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.RefCode
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.ReferenceFramework
 }
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetReferences() []*models.Reference {
 	if t == nil {
@@ -69743,6 +69771,7 @@ type GetSubcontrolByID_Subcontrol struct {
 	MappedCategories       []string                                   "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                *string                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RefCode                string                                     "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework     *string                                    "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
 	References             []*models.Reference                        "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                       "json:\"source,omitempty\" graphql:\"source\""
 	Status                 *enums.ControlStatus                       "json:\"status,omitempty\" graphql:\"status\""
@@ -69871,6 +69900,12 @@ func (t *GetSubcontrolByID_Subcontrol) GetRefCode() string {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
 	return t.RefCode
+}
+func (t *GetSubcontrolByID_Subcontrol) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.ReferenceFramework
 }
 func (t *GetSubcontrolByID_Subcontrol) GetReferences() []*models.Reference {
 	if t == nil {
@@ -70004,6 +70039,7 @@ type GetSubcontrols_Subcontrols_Edges_Node struct {
 	MappedCategories       []string                                            "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                *string                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RefCode                string                                              "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework     *string                                             "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
 	References             []*models.Reference                                 "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                "json:\"source,omitempty\" graphql:\"source\""
 	Status                 *enums.ControlStatus                                "json:\"status,omitempty\" graphql:\"status\""
@@ -70132,6 +70168,12 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetRefCode() string {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.RefCode
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.ReferenceFramework
 }
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetReferences() []*models.Reference {
 	if t == nil {
@@ -70287,6 +70329,7 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	MappedCategories       []string                                                   "json:\"mappedCategories,omitempty\" graphql:\"mappedCategories\""
 	OwnerID                *string                                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RefCode                string                                                     "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework     *string                                                    "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
 	References             []*models.Reference                                        "json:\"references,omitempty\" graphql:\"references\""
 	Source                 *enums.ControlSource                                       "json:\"source,omitempty\" graphql:\"source\""
 	Status                 *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
@@ -70415,6 +70458,12 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetRefCode() string {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.RefCode
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetReferenceFramework() *string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.ReferenceFramework
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetReferences() []*models.Reference {
 	if t == nil {
@@ -101143,6 +101192,7 @@ const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($inpu
 			ownerID
 			refCode
 			references
+			referenceFramework
 			source
 			status
 			subcategory
@@ -101200,6 +101250,7 @@ const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [Cr
 			ownerID
 			refCode
 			references
+			referenceFramework
 			source
 			status
 			subcategory
@@ -101257,6 +101308,7 @@ const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubco
 			ownerID
 			refCode
 			references
+			referenceFramework
 			source
 			status
 			subcategory
@@ -101339,6 +101391,7 @@ const GetAllSubcontrolsDocument = `query GetAllSubcontrols {
 				ownerID
 				refCode
 				references
+				referenceFramework
 				source
 				status
 				subcategory
@@ -101400,6 +101453,7 @@ const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) 
 		ownerID
 		refCode
 		references
+		referenceFramework
 		source
 		status
 		subcategory
@@ -101463,6 +101517,7 @@ const GetSubcontrolsDocument = `query GetSubcontrols ($where: SubcontrolWhereInp
 				ownerID
 				refCode
 				references
+				referenceFramework
 				source
 				status
 				subcategory
@@ -101527,6 +101582,7 @@ const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId
 			ownerID
 			refCode
 			references
+			referenceFramework
 			source
 			status
 			subcategory
