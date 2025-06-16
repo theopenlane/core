@@ -9,7 +9,7 @@ require (
 	dario.cat/mergo v1.0.2
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.4
-	github.com/99designs/gqlgen v0.17.74
+	github.com/99designs/gqlgen v0.17.75
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.32.1
 	github.com/alicebob/miniredis/v2 v2.35.0
@@ -44,7 +44,7 @@ require (
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/lestrrat-go/httprc/v3 v3.0.0
-	github.com/lestrrat-go/jwx/v3 v3.0.6
+	github.com/lestrrat-go/jwx/v3 v3.0.7
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/miekg/dns v1.1.66
@@ -80,7 +80,7 @@ require (
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.12.7
 	github.com/theopenlane/newman v0.1.6
-	github.com/theopenlane/riverboat v0.1.3
+	github.com/theopenlane/riverboat v0.1.6
 	github.com/theopenlane/utils v0.4.7
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.28
@@ -120,7 +120,7 @@ require (
 	github.com/Antonboom/nilnil v1.0.1 // indirect
 	github.com/Antonboom/testifylint v1.5.2 // indirect
 	github.com/BishopFox/jsluice v0.0.0-20240110145140-0ddfab153e06 // indirect
-	github.com/BurntSushi/toml v1.4.1-0.20241028111116-b7406c026f5a // indirect
+	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/Crocmagnon/fatcontext v0.7.1 // indirect
 	github.com/Djarvur/go-err113 v0.0.0-20210108212216-aea10b59be24 // indirect
 	github.com/GaijinEntertainment/go-exhaustruct/v3 v3.3.1 // indirect
@@ -487,7 +487,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/containerd/continuity v0.4.5 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
@@ -595,7 +595,7 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
-	github.com/urfave/cli/v2 v2.27.6 // indirect
+	github.com/urfave/cli/v2 v2.27.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
