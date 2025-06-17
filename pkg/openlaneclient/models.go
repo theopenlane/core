@@ -4793,9 +4793,6 @@ type CreateOrganizationInput struct {
 	IntegrationIDs                  []string                        `json:"integrationIDs,omitempty"`
 	DocumentIDs                     []string                        `json:"documentIDs,omitempty"`
 	OrgSubscriptionIDs              []string                        `json:"orgSubscriptionIDs,omitempty"`
-	OrgProductIDs                   []string                        `json:"orgProductIDs,omitempty"`
-	OrgPriceIDs                     []string                        `json:"orgPriceIDs,omitempty"`
-	OrgModuleIDs                    []string                        `json:"orgModuleIDs,omitempty"`
 	InviteIDs                       []string                        `json:"inviteIDs,omitempty"`
 	SubscriberIDs                   []string                        `json:"subscriberIDs,omitempty"`
 	EntityIDs                       []string                        `json:"entityIDs,omitempty"`
@@ -24695,15 +24692,6 @@ type UpdateOrganizationInput struct {
 	AddOrgSubscriptionIDs                 []string                        `json:"addOrgSubscriptionIDs,omitempty"`
 	RemoveOrgSubscriptionIDs              []string                        `json:"removeOrgSubscriptionIDs,omitempty"`
 	ClearOrgSubscriptions                 *bool                           `json:"clearOrgSubscriptions,omitempty"`
-	AddOrgProductIDs                      []string                        `json:"addOrgProductIDs,omitempty"`
-	RemoveOrgProductIDs                   []string                        `json:"removeOrgProductIDs,omitempty"`
-	ClearOrgProducts                      *bool                           `json:"clearOrgProducts,omitempty"`
-	AddOrgPriceIDs                        []string                        `json:"addOrgPriceIDs,omitempty"`
-	RemoveOrgPriceIDs                     []string                        `json:"removeOrgPriceIDs,omitempty"`
-	ClearOrgPrices                        *bool                           `json:"clearOrgPrices,omitempty"`
-	AddOrgModuleIDs                       []string                        `json:"addOrgModuleIDs,omitempty"`
-	RemoveOrgModuleIDs                    []string                        `json:"removeOrgModuleIDs,omitempty"`
-	ClearOrgModules                       *bool                           `json:"clearOrgModules,omitempty"`
 	AddInviteIDs                          []string                        `json:"addInviteIDs,omitempty"`
 	RemoveInviteIDs                       []string                        `json:"removeInviteIDs,omitempty"`
 	ClearInvites                          *bool                           `json:"clearInvites,omitempty"`
