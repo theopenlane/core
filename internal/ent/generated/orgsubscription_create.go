@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -327,6 +329,36 @@ func (osc *OrgSubscriptionCreate) AddEvents(e ...*Event) *OrgSubscriptionCreate 
 	return osc.AddEventIDs(ids...)
 }
 
+// AddModuleIDs adds the "modules" edge to the OrgModule entity by IDs.
+func (osc *OrgSubscriptionCreate) AddModuleIDs(ids ...string) *OrgSubscriptionCreate {
+	osc.mutation.AddModuleIDs(ids...)
+	return osc
+}
+
+// AddModules adds the "modules" edges to the OrgModule entity.
+func (osc *OrgSubscriptionCreate) AddModules(o ...*OrgModule) *OrgSubscriptionCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osc.AddModuleIDs(ids...)
+}
+
+// AddProductIDs adds the "products" edge to the OrgProduct entity by IDs.
+func (osc *OrgSubscriptionCreate) AddProductIDs(ids ...string) *OrgSubscriptionCreate {
+	osc.mutation.AddProductIDs(ids...)
+	return osc
+}
+
+// AddProducts adds the "products" edges to the OrgProduct entity.
+func (osc *OrgSubscriptionCreate) AddProducts(o ...*OrgProduct) *OrgSubscriptionCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osc.AddProductIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osc *OrgSubscriptionCreate) Mutation() *OrgSubscriptionMutation {
 	return osc.mutation
@@ -552,6 +584,40 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 			},
 		}
 		edge.Schema = osc.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.ModulesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ModulesTable,
+			Columns: []string{orgsubscription.ModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrgModule
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ProductsTable,
+			Columns: []string{orgsubscription.ProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

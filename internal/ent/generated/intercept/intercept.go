@@ -69,6 +69,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -1697,6 +1700,87 @@ func (f TraverseOrgMembershipHistory) Traverse(ctx context.Context, q generated.
 	return fmt.Errorf("unexpected query type %T. expect *generated.OrgMembershipHistoryQuery", q)
 }
 
+// The OrgModuleFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OrgModuleFunc func(context.Context, *generated.OrgModuleQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OrgModuleFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.OrgModuleQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OrgModuleQuery", q)
+}
+
+// The TraverseOrgModule type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOrgModule func(context.Context, *generated.OrgModuleQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOrgModule) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOrgModule) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgModuleQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.OrgModuleQuery", q)
+}
+
+// The OrgPriceFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OrgPriceFunc func(context.Context, *generated.OrgPriceQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OrgPriceFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.OrgPriceQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OrgPriceQuery", q)
+}
+
+// The TraverseOrgPrice type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOrgPrice func(context.Context, *generated.OrgPriceQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOrgPrice) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOrgPrice) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgPriceQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.OrgPriceQuery", q)
+}
+
+// The OrgProductFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OrgProductFunc func(context.Context, *generated.OrgProductQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OrgProductFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.OrgProductQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OrgProductQuery", q)
+}
+
+// The TraverseOrgProduct type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOrgProduct func(context.Context, *generated.OrgProductQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOrgProduct) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOrgProduct) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgProductQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.OrgProductQuery", q)
+}
+
 // The OrgSubscriptionFunc type is an adapter to allow the use of ordinary function as a Querier.
 type OrgSubscriptionFunc func(context.Context, *generated.OrgSubscriptionQuery) (generated.Value, error)
 
@@ -2732,6 +2816,12 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.OrgMembershipQuery, predicate.OrgMembership, orgmembership.OrderOption]{typ: generated.TypeOrgMembership, tq: q}, nil
 	case *generated.OrgMembershipHistoryQuery:
 		return &query[*generated.OrgMembershipHistoryQuery, predicate.OrgMembershipHistory, orgmembershiphistory.OrderOption]{typ: generated.TypeOrgMembershipHistory, tq: q}, nil
+	case *generated.OrgModuleQuery:
+		return &query[*generated.OrgModuleQuery, predicate.OrgModule, orgmodule.OrderOption]{typ: generated.TypeOrgModule, tq: q}, nil
+	case *generated.OrgPriceQuery:
+		return &query[*generated.OrgPriceQuery, predicate.OrgPrice, orgprice.OrderOption]{typ: generated.TypeOrgPrice, tq: q}, nil
+	case *generated.OrgProductQuery:
+		return &query[*generated.OrgProductQuery, predicate.OrgProduct, orgproduct.OrderOption]{typ: generated.TypeOrgProduct, tq: q}, nil
 	case *generated.OrgSubscriptionQuery:
 		return &query[*generated.OrgSubscriptionQuery, predicate.OrgSubscription, orgsubscription.OrderOption]{typ: generated.TypeOrgSubscription, tq: q}, nil
 	case *generated.OrgSubscriptionHistoryQuery:

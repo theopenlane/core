@@ -67,6 +67,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -3126,6 +3129,147 @@ func init() {
 	orgmembershiphistoryDescID := orgmembershiphistoryFields[7].Descriptor()
 	// orgmembershiphistory.DefaultID holds the default value on creation for the id field.
 	orgmembershiphistory.DefaultID = orgmembershiphistoryDescID.Default.(func() string)
+	orgmoduleMixin := schema.OrgModule{}.Mixin()
+	orgmoduleMixinHooks0 := orgmoduleMixin[0].Hooks()
+	orgmoduleMixinHooks1 := orgmoduleMixin[1].Hooks()
+	orgmoduleMixinHooks4 := orgmoduleMixin[4].Hooks()
+	orgmodule.Hooks[0] = orgmoduleMixinHooks0[0]
+	orgmodule.Hooks[1] = orgmoduleMixinHooks1[0]
+	orgmodule.Hooks[2] = orgmoduleMixinHooks4[0]
+	orgmoduleMixinInters1 := orgmoduleMixin[1].Interceptors()
+	orgmoduleMixinInters4 := orgmoduleMixin[4].Interceptors()
+	orgmodule.Interceptors[0] = orgmoduleMixinInters1[0]
+	orgmodule.Interceptors[1] = orgmoduleMixinInters4[0]
+	orgmoduleMixinFields0 := orgmoduleMixin[0].Fields()
+	_ = orgmoduleMixinFields0
+	orgmoduleMixinFields2 := orgmoduleMixin[2].Fields()
+	_ = orgmoduleMixinFields2
+	orgmoduleMixinFields3 := orgmoduleMixin[3].Fields()
+	_ = orgmoduleMixinFields3
+	orgmoduleMixinFields4 := orgmoduleMixin[4].Fields()
+	_ = orgmoduleMixinFields4
+	orgmoduleFields := schema.OrgModule{}.Fields()
+	_ = orgmoduleFields
+	// orgmoduleDescCreatedAt is the schema descriptor for created_at field.
+	orgmoduleDescCreatedAt := orgmoduleMixinFields0[0].Descriptor()
+	// orgmodule.DefaultCreatedAt holds the default value on creation for the created_at field.
+	orgmodule.DefaultCreatedAt = orgmoduleDescCreatedAt.Default.(func() time.Time)
+	// orgmoduleDescUpdatedAt is the schema descriptor for updated_at field.
+	orgmoduleDescUpdatedAt := orgmoduleMixinFields0[1].Descriptor()
+	// orgmodule.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	orgmodule.DefaultUpdatedAt = orgmoduleDescUpdatedAt.Default.(func() time.Time)
+	// orgmodule.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	orgmodule.UpdateDefaultUpdatedAt = orgmoduleDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// orgmoduleDescTags is the schema descriptor for tags field.
+	orgmoduleDescTags := orgmoduleMixinFields3[0].Descriptor()
+	// orgmodule.DefaultTags holds the default value on creation for the tags field.
+	orgmodule.DefaultTags = orgmoduleDescTags.Default.([]string)
+	// orgmoduleDescOwnerID is the schema descriptor for owner_id field.
+	orgmoduleDescOwnerID := orgmoduleMixinFields4[0].Descriptor()
+	// orgmodule.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	orgmodule.OwnerIDValidator = orgmoduleDescOwnerID.Validators[0].(func(string) error)
+	// orgmoduleDescActive is the schema descriptor for active field.
+	orgmoduleDescActive := orgmoduleFields[4].Descriptor()
+	// orgmodule.DefaultActive holds the default value on creation for the active field.
+	orgmodule.DefaultActive = orgmoduleDescActive.Default.(bool)
+	// orgmoduleDescID is the schema descriptor for id field.
+	orgmoduleDescID := orgmoduleMixinFields2[0].Descriptor()
+	// orgmodule.DefaultID holds the default value on creation for the id field.
+	orgmodule.DefaultID = orgmoduleDescID.Default.(func() string)
+	orgpriceMixin := schema.OrgPrice{}.Mixin()
+	orgpriceMixinHooks0 := orgpriceMixin[0].Hooks()
+	orgpriceMixinHooks1 := orgpriceMixin[1].Hooks()
+	orgpriceMixinHooks4 := orgpriceMixin[4].Hooks()
+	orgprice.Hooks[0] = orgpriceMixinHooks0[0]
+	orgprice.Hooks[1] = orgpriceMixinHooks1[0]
+	orgprice.Hooks[2] = orgpriceMixinHooks4[0]
+	orgpriceMixinInters1 := orgpriceMixin[1].Interceptors()
+	orgpriceMixinInters4 := orgpriceMixin[4].Interceptors()
+	orgprice.Interceptors[0] = orgpriceMixinInters1[0]
+	orgprice.Interceptors[1] = orgpriceMixinInters4[0]
+	orgpriceMixinFields0 := orgpriceMixin[0].Fields()
+	_ = orgpriceMixinFields0
+	orgpriceMixinFields2 := orgpriceMixin[2].Fields()
+	_ = orgpriceMixinFields2
+	orgpriceMixinFields3 := orgpriceMixin[3].Fields()
+	_ = orgpriceMixinFields3
+	orgpriceMixinFields4 := orgpriceMixin[4].Fields()
+	_ = orgpriceMixinFields4
+	orgpriceFields := schema.OrgPrice{}.Fields()
+	_ = orgpriceFields
+	// orgpriceDescCreatedAt is the schema descriptor for created_at field.
+	orgpriceDescCreatedAt := orgpriceMixinFields0[0].Descriptor()
+	// orgprice.DefaultCreatedAt holds the default value on creation for the created_at field.
+	orgprice.DefaultCreatedAt = orgpriceDescCreatedAt.Default.(func() time.Time)
+	// orgpriceDescUpdatedAt is the schema descriptor for updated_at field.
+	orgpriceDescUpdatedAt := orgpriceMixinFields0[1].Descriptor()
+	// orgprice.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	orgprice.DefaultUpdatedAt = orgpriceDescUpdatedAt.Default.(func() time.Time)
+	// orgprice.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	orgprice.UpdateDefaultUpdatedAt = orgpriceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// orgpriceDescTags is the schema descriptor for tags field.
+	orgpriceDescTags := orgpriceMixinFields3[0].Descriptor()
+	// orgprice.DefaultTags holds the default value on creation for the tags field.
+	orgprice.DefaultTags = orgpriceDescTags.Default.([]string)
+	// orgpriceDescOwnerID is the schema descriptor for owner_id field.
+	orgpriceDescOwnerID := orgpriceMixinFields4[0].Descriptor()
+	// orgprice.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	orgprice.OwnerIDValidator = orgpriceDescOwnerID.Validators[0].(func(string) error)
+	// orgpriceDescActive is the schema descriptor for active field.
+	orgpriceDescActive := orgpriceFields[3].Descriptor()
+	// orgprice.DefaultActive holds the default value on creation for the active field.
+	orgprice.DefaultActive = orgpriceDescActive.Default.(bool)
+	// orgpriceDescID is the schema descriptor for id field.
+	orgpriceDescID := orgpriceMixinFields2[0].Descriptor()
+	// orgprice.DefaultID holds the default value on creation for the id field.
+	orgprice.DefaultID = orgpriceDescID.Default.(func() string)
+	orgproductMixin := schema.OrgProduct{}.Mixin()
+	orgproductMixinHooks0 := orgproductMixin[0].Hooks()
+	orgproductMixinHooks1 := orgproductMixin[1].Hooks()
+	orgproductMixinHooks4 := orgproductMixin[4].Hooks()
+	orgproduct.Hooks[0] = orgproductMixinHooks0[0]
+	orgproduct.Hooks[1] = orgproductMixinHooks1[0]
+	orgproduct.Hooks[2] = orgproductMixinHooks4[0]
+	orgproductMixinInters1 := orgproductMixin[1].Interceptors()
+	orgproductMixinInters4 := orgproductMixin[4].Interceptors()
+	orgproduct.Interceptors[0] = orgproductMixinInters1[0]
+	orgproduct.Interceptors[1] = orgproductMixinInters4[0]
+	orgproductMixinFields0 := orgproductMixin[0].Fields()
+	_ = orgproductMixinFields0
+	orgproductMixinFields2 := orgproductMixin[2].Fields()
+	_ = orgproductMixinFields2
+	orgproductMixinFields3 := orgproductMixin[3].Fields()
+	_ = orgproductMixinFields3
+	orgproductMixinFields4 := orgproductMixin[4].Fields()
+	_ = orgproductMixinFields4
+	orgproductFields := schema.OrgProduct{}.Fields()
+	_ = orgproductFields
+	// orgproductDescCreatedAt is the schema descriptor for created_at field.
+	orgproductDescCreatedAt := orgproductMixinFields0[0].Descriptor()
+	// orgproduct.DefaultCreatedAt holds the default value on creation for the created_at field.
+	orgproduct.DefaultCreatedAt = orgproductDescCreatedAt.Default.(func() time.Time)
+	// orgproductDescUpdatedAt is the schema descriptor for updated_at field.
+	orgproductDescUpdatedAt := orgproductMixinFields0[1].Descriptor()
+	// orgproduct.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	orgproduct.DefaultUpdatedAt = orgproductDescUpdatedAt.Default.(func() time.Time)
+	// orgproduct.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	orgproduct.UpdateDefaultUpdatedAt = orgproductDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// orgproductDescTags is the schema descriptor for tags field.
+	orgproductDescTags := orgproductMixinFields3[0].Descriptor()
+	// orgproduct.DefaultTags holds the default value on creation for the tags field.
+	orgproduct.DefaultTags = orgproductDescTags.Default.([]string)
+	// orgproductDescOwnerID is the schema descriptor for owner_id field.
+	orgproductDescOwnerID := orgproductMixinFields4[0].Descriptor()
+	// orgproduct.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	orgproduct.OwnerIDValidator = orgproductDescOwnerID.Validators[0].(func(string) error)
+	// orgproductDescActive is the schema descriptor for active field.
+	orgproductDescActive := orgproductFields[3].Descriptor()
+	// orgproduct.DefaultActive holds the default value on creation for the active field.
+	orgproduct.DefaultActive = orgproductDescActive.Default.(bool)
+	// orgproductDescID is the schema descriptor for id field.
+	orgproductDescID := orgproductMixinFields2[0].Descriptor()
+	// orgproduct.DefaultID holds the default value on creation for the id field.
+	orgproduct.DefaultID = orgproductDescID.Default.(func() string)
 	orgsubscriptionMixin := schema.OrgSubscription{}.Mixin()
 	orgsubscriptionMixinHooks0 := orgsubscriptionMixin[0].Hooks()
 	orgsubscriptionMixinHooks1 := orgsubscriptionMixin[1].Hooks()

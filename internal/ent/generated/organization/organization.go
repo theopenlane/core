@@ -105,6 +105,12 @@ const (
 	EdgeDocuments = "documents"
 	// EdgeOrgSubscriptions holds the string denoting the org_subscriptions edge name in mutations.
 	EdgeOrgSubscriptions = "org_subscriptions"
+	// EdgeOrgProducts holds the string denoting the org_products edge name in mutations.
+	EdgeOrgProducts = "org_products"
+	// EdgeOrgPrices holds the string denoting the org_prices edge name in mutations.
+	EdgeOrgPrices = "org_prices"
+	// EdgeOrgModules holds the string denoting the org_modules edge name in mutations.
+	EdgeOrgModules = "org_modules"
 	// EdgeInvites holds the string denoting the invites edge name in mutations.
 	EdgeInvites = "invites"
 	// EdgeSubscribers holds the string denoting the subscribers edge name in mutations.
@@ -356,6 +362,27 @@ const (
 	OrgSubscriptionsInverseTable = "org_subscriptions"
 	// OrgSubscriptionsColumn is the table column denoting the org_subscriptions relation/edge.
 	OrgSubscriptionsColumn = "owner_id"
+	// OrgProductsTable is the table that holds the org_products relation/edge.
+	OrgProductsTable = "org_products"
+	// OrgProductsInverseTable is the table name for the OrgProduct entity.
+	// It exists in this package in order to avoid circular dependency with the "orgproduct" package.
+	OrgProductsInverseTable = "org_products"
+	// OrgProductsColumn is the table column denoting the org_products relation/edge.
+	OrgProductsColumn = "owner_id"
+	// OrgPricesTable is the table that holds the org_prices relation/edge.
+	OrgPricesTable = "org_prices"
+	// OrgPricesInverseTable is the table name for the OrgPrice entity.
+	// It exists in this package in order to avoid circular dependency with the "orgprice" package.
+	OrgPricesInverseTable = "org_prices"
+	// OrgPricesColumn is the table column denoting the org_prices relation/edge.
+	OrgPricesColumn = "owner_id"
+	// OrgModulesTable is the table that holds the org_modules relation/edge.
+	OrgModulesTable = "org_modules"
+	// OrgModulesInverseTable is the table name for the OrgModule entity.
+	// It exists in this package in order to avoid circular dependency with the "orgmodule" package.
+	OrgModulesInverseTable = "org_modules"
+	// OrgModulesColumn is the table column denoting the org_modules relation/edge.
+	OrgModulesColumn = "owner_id"
 	// InvitesTable is the table that holds the invites relation/edge.
 	InvitesTable = "invites"
 	// InvitesInverseTable is the table name for the Invite entity.
@@ -1119,6 +1146,48 @@ func ByOrgSubscriptions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByOrgProductsCount orders the results by org_products count.
+func ByOrgProductsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrgProductsStep(), opts...)
+	}
+}
+
+// ByOrgProducts orders the results by org_products terms.
+func ByOrgProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOrgPricesCount orders the results by org_prices count.
+func ByOrgPricesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrgPricesStep(), opts...)
+	}
+}
+
+// ByOrgPrices orders the results by org_prices terms.
+func ByOrgPrices(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgPricesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOrgModulesCount orders the results by org_modules count.
+func ByOrgModulesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrgModulesStep(), opts...)
+	}
+}
+
+// ByOrgModules orders the results by org_modules terms.
+func ByOrgModules(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgModulesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByInvitesCount orders the results by invites count.
 func ByInvitesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1739,6 +1808,27 @@ func newOrgSubscriptionsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OrgSubscriptionsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, OrgSubscriptionsTable, OrgSubscriptionsColumn),
+	)
+}
+func newOrgProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgProductsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OrgProductsTable, OrgProductsColumn),
+	)
+}
+func newOrgPricesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgPricesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OrgPricesTable, OrgPricesColumn),
+	)
+}
+func newOrgModulesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgModulesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OrgModulesTable, OrgModulesColumn),
 	)
 }
 func newInvitesStep() *sqlgraph.Step {

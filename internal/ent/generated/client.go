@@ -80,6 +80,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -246,6 +249,12 @@ type Client struct {
 	OrgMembership *OrgMembershipClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
+	// OrgModule is the client for interacting with the OrgModule builders.
+	OrgModule *OrgModuleClient
+	// OrgPrice is the client for interacting with the OrgPrice builders.
+	OrgPrice *OrgPriceClient
+	// OrgProduct is the client for interacting with the OrgProduct builders.
+	OrgProduct *OrgProductClient
 	// OrgSubscription is the client for interacting with the OrgSubscription builders.
 	OrgSubscription *OrgSubscriptionClient
 	// OrgSubscriptionHistory is the client for interacting with the OrgSubscriptionHistory builders.
@@ -391,6 +400,9 @@ func (c *Client) init() {
 	c.Onboarding = NewOnboardingClient(c.config)
 	c.OrgMembership = NewOrgMembershipClient(c.config)
 	c.OrgMembershipHistory = NewOrgMembershipHistoryClient(c.config)
+	c.OrgModule = NewOrgModuleClient(c.config)
+	c.OrgPrice = NewOrgPriceClient(c.config)
+	c.OrgProduct = NewOrgProductClient(c.config)
 	c.OrgSubscription = NewOrgSubscriptionClient(c.config)
 	c.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
@@ -659,6 +671,9 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Onboarding:                   NewOnboardingClient(cfg),
 		OrgMembership:                NewOrgMembershipClient(cfg),
 		OrgMembershipHistory:         NewOrgMembershipHistoryClient(cfg),
+		OrgModule:                    NewOrgModuleClient(cfg),
+		OrgPrice:                     NewOrgPriceClient(cfg),
+		OrgProduct:                   NewOrgProductClient(cfg),
 		OrgSubscription:              NewOrgSubscriptionClient(cfg),
 		OrgSubscriptionHistory:       NewOrgSubscriptionHistoryClient(cfg),
 		Organization:                 NewOrganizationClient(cfg),
@@ -769,6 +784,9 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Onboarding:                   NewOnboardingClient(cfg),
 		OrgMembership:                NewOrgMembershipClient(cfg),
 		OrgMembershipHistory:         NewOrgMembershipHistoryClient(cfg),
+		OrgModule:                    NewOrgModuleClient(cfg),
+		OrgPrice:                     NewOrgPriceClient(cfg),
+		OrgProduct:                   NewOrgProductClient(cfg),
 		OrgSubscription:              NewOrgSubscriptionClient(cfg),
 		OrgSubscriptionHistory:       NewOrgSubscriptionHistoryClient(cfg),
 		Organization:                 NewOrganizationClient(cfg),
@@ -846,15 +864,16 @@ func (c *Client) Use(hooks ...Hook) {
 		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
 		c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
 		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
-		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory, c.ScheduledJobRun,
-		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgModule, c.OrgPrice,
+		c.OrgProduct, c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
+		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
+		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
+		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
+		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
+		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -878,15 +897,16 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
 		c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
 		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
-		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
-		c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory, c.ScheduledJobRun,
-		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgModule, c.OrgPrice,
+		c.OrgProduct, c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
+		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
+		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
+		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
+		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
+		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1081,6 +1101,12 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.OrgMembership.mutate(ctx, m)
 	case *OrgMembershipHistoryMutation:
 		return c.OrgMembershipHistory.mutate(ctx, m)
+	case *OrgModuleMutation:
+		return c.OrgModule.mutate(ctx, m)
+	case *OrgPriceMutation:
+		return c.OrgPrice.mutate(ctx, m)
+	case *OrgProductMutation:
+		return c.OrgProduct.mutate(ctx, m)
 	case *OrgSubscriptionMutation:
 		return c.OrgSubscription.mutate(ctx, m)
 	case *OrgSubscriptionHistoryMutation:
@@ -12490,6 +12516,544 @@ func (c *OrgMembershipHistoryClient) mutate(ctx context.Context, m *OrgMembershi
 	}
 }
 
+// OrgModuleClient is a client for the OrgModule schema.
+type OrgModuleClient struct {
+	config
+}
+
+// NewOrgModuleClient returns a client for the OrgModule from the given config.
+func NewOrgModuleClient(c config) *OrgModuleClient {
+	return &OrgModuleClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `orgmodule.Hooks(f(g(h())))`.
+func (c *OrgModuleClient) Use(hooks ...Hook) {
+	c.hooks.OrgModule = append(c.hooks.OrgModule, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `orgmodule.Intercept(f(g(h())))`.
+func (c *OrgModuleClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OrgModule = append(c.inters.OrgModule, interceptors...)
+}
+
+// Create returns a builder for creating a OrgModule entity.
+func (c *OrgModuleClient) Create() *OrgModuleCreate {
+	mutation := newOrgModuleMutation(c.config, OpCreate)
+	return &OrgModuleCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OrgModule entities.
+func (c *OrgModuleClient) CreateBulk(builders ...*OrgModuleCreate) *OrgModuleCreateBulk {
+	return &OrgModuleCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OrgModuleClient) MapCreateBulk(slice any, setFunc func(*OrgModuleCreate, int)) *OrgModuleCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OrgModuleCreateBulk{err: fmt.Errorf("calling to OrgModuleClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OrgModuleCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OrgModuleCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OrgModule.
+func (c *OrgModuleClient) Update() *OrgModuleUpdate {
+	mutation := newOrgModuleMutation(c.config, OpUpdate)
+	return &OrgModuleUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OrgModuleClient) UpdateOne(om *OrgModule) *OrgModuleUpdateOne {
+	mutation := newOrgModuleMutation(c.config, OpUpdateOne, withOrgModule(om))
+	return &OrgModuleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OrgModuleClient) UpdateOneID(id string) *OrgModuleUpdateOne {
+	mutation := newOrgModuleMutation(c.config, OpUpdateOne, withOrgModuleID(id))
+	return &OrgModuleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OrgModule.
+func (c *OrgModuleClient) Delete() *OrgModuleDelete {
+	mutation := newOrgModuleMutation(c.config, OpDelete)
+	return &OrgModuleDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OrgModuleClient) DeleteOne(om *OrgModule) *OrgModuleDeleteOne {
+	return c.DeleteOneID(om.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OrgModuleClient) DeleteOneID(id string) *OrgModuleDeleteOne {
+	builder := c.Delete().Where(orgmodule.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OrgModuleDeleteOne{builder}
+}
+
+// Query returns a query builder for OrgModule.
+func (c *OrgModuleClient) Query() *OrgModuleQuery {
+	return &OrgModuleQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOrgModule},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OrgModule entity by its id.
+func (c *OrgModuleClient) Get(ctx context.Context, id string) (*OrgModule, error) {
+	return c.Query().Where(orgmodule.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OrgModuleClient) GetX(ctx context.Context, id string) *OrgModule {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a OrgModule.
+func (c *OrgModuleClient) QueryOwner(om *OrgModule) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := om.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmodule.Table, orgmodule.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgmodule.OwnerTable, orgmodule.OwnerColumn),
+		)
+		schemaConfig := om.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.OrgModule
+		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgSubscription queries the org_subscription edge of a OrgModule.
+func (c *OrgModuleClient) QueryOrgSubscription(om *OrgModule) *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := om.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmodule.Table, orgmodule.FieldID, id),
+			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgmodule.OrgSubscriptionTable, orgmodule.OrgSubscriptionColumn),
+		)
+		schemaConfig := om.schemaConfig
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgModule
+		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OrgModuleClient) Hooks() []Hook {
+	hooks := c.hooks.OrgModule
+	return append(hooks[:len(hooks):len(hooks)], orgmodule.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *OrgModuleClient) Interceptors() []Interceptor {
+	inters := c.inters.OrgModule
+	return append(inters[:len(inters):len(inters)], orgmodule.Interceptors[:]...)
+}
+
+func (c *OrgModuleClient) mutate(ctx context.Context, m *OrgModuleMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OrgModuleCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OrgModuleUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OrgModuleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OrgModuleDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown OrgModule mutation op: %q", m.Op())
+	}
+}
+
+// OrgPriceClient is a client for the OrgPrice schema.
+type OrgPriceClient struct {
+	config
+}
+
+// NewOrgPriceClient returns a client for the OrgPrice from the given config.
+func NewOrgPriceClient(c config) *OrgPriceClient {
+	return &OrgPriceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `orgprice.Hooks(f(g(h())))`.
+func (c *OrgPriceClient) Use(hooks ...Hook) {
+	c.hooks.OrgPrice = append(c.hooks.OrgPrice, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `orgprice.Intercept(f(g(h())))`.
+func (c *OrgPriceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OrgPrice = append(c.inters.OrgPrice, interceptors...)
+}
+
+// Create returns a builder for creating a OrgPrice entity.
+func (c *OrgPriceClient) Create() *OrgPriceCreate {
+	mutation := newOrgPriceMutation(c.config, OpCreate)
+	return &OrgPriceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OrgPrice entities.
+func (c *OrgPriceClient) CreateBulk(builders ...*OrgPriceCreate) *OrgPriceCreateBulk {
+	return &OrgPriceCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OrgPriceClient) MapCreateBulk(slice any, setFunc func(*OrgPriceCreate, int)) *OrgPriceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OrgPriceCreateBulk{err: fmt.Errorf("calling to OrgPriceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OrgPriceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OrgPriceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OrgPrice.
+func (c *OrgPriceClient) Update() *OrgPriceUpdate {
+	mutation := newOrgPriceMutation(c.config, OpUpdate)
+	return &OrgPriceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OrgPriceClient) UpdateOne(op *OrgPrice) *OrgPriceUpdateOne {
+	mutation := newOrgPriceMutation(c.config, OpUpdateOne, withOrgPrice(op))
+	return &OrgPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OrgPriceClient) UpdateOneID(id string) *OrgPriceUpdateOne {
+	mutation := newOrgPriceMutation(c.config, OpUpdateOne, withOrgPriceID(id))
+	return &OrgPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OrgPrice.
+func (c *OrgPriceClient) Delete() *OrgPriceDelete {
+	mutation := newOrgPriceMutation(c.config, OpDelete)
+	return &OrgPriceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OrgPriceClient) DeleteOne(op *OrgPrice) *OrgPriceDeleteOne {
+	return c.DeleteOneID(op.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OrgPriceClient) DeleteOneID(id string) *OrgPriceDeleteOne {
+	builder := c.Delete().Where(orgprice.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OrgPriceDeleteOne{builder}
+}
+
+// Query returns a query builder for OrgPrice.
+func (c *OrgPriceClient) Query() *OrgPriceQuery {
+	return &OrgPriceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOrgPrice},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OrgPrice entity by its id.
+func (c *OrgPriceClient) Get(ctx context.Context, id string) (*OrgPrice, error) {
+	return c.Query().Where(orgprice.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OrgPriceClient) GetX(ctx context.Context, id string) *OrgPrice {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a OrgPrice.
+func (c *OrgPriceClient) QueryOwner(op *OrgPrice) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := op.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgprice.Table, orgprice.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgprice.OwnerTable, orgprice.OwnerColumn),
+		)
+		schemaConfig := op.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.OrgPrice
+		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgProduct queries the org_product edge of a OrgPrice.
+func (c *OrgPriceClient) QueryOrgProduct(op *OrgPrice) *OrgProductQuery {
+	query := (&OrgProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := op.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgprice.Table, orgprice.FieldID, id),
+			sqlgraph.To(orgproduct.Table, orgproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgprice.OrgProductTable, orgprice.OrgProductColumn),
+		)
+		schemaConfig := op.schemaConfig
+		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgPrice
+		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OrgPriceClient) Hooks() []Hook {
+	hooks := c.hooks.OrgPrice
+	return append(hooks[:len(hooks):len(hooks)], orgprice.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *OrgPriceClient) Interceptors() []Interceptor {
+	inters := c.inters.OrgPrice
+	return append(inters[:len(inters):len(inters)], orgprice.Interceptors[:]...)
+}
+
+func (c *OrgPriceClient) mutate(ctx context.Context, m *OrgPriceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OrgPriceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OrgPriceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OrgPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OrgPriceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown OrgPrice mutation op: %q", m.Op())
+	}
+}
+
+// OrgProductClient is a client for the OrgProduct schema.
+type OrgProductClient struct {
+	config
+}
+
+// NewOrgProductClient returns a client for the OrgProduct from the given config.
+func NewOrgProductClient(c config) *OrgProductClient {
+	return &OrgProductClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `orgproduct.Hooks(f(g(h())))`.
+func (c *OrgProductClient) Use(hooks ...Hook) {
+	c.hooks.OrgProduct = append(c.hooks.OrgProduct, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `orgproduct.Intercept(f(g(h())))`.
+func (c *OrgProductClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OrgProduct = append(c.inters.OrgProduct, interceptors...)
+}
+
+// Create returns a builder for creating a OrgProduct entity.
+func (c *OrgProductClient) Create() *OrgProductCreate {
+	mutation := newOrgProductMutation(c.config, OpCreate)
+	return &OrgProductCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OrgProduct entities.
+func (c *OrgProductClient) CreateBulk(builders ...*OrgProductCreate) *OrgProductCreateBulk {
+	return &OrgProductCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OrgProductClient) MapCreateBulk(slice any, setFunc func(*OrgProductCreate, int)) *OrgProductCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OrgProductCreateBulk{err: fmt.Errorf("calling to OrgProductClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OrgProductCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OrgProductCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OrgProduct.
+func (c *OrgProductClient) Update() *OrgProductUpdate {
+	mutation := newOrgProductMutation(c.config, OpUpdate)
+	return &OrgProductUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OrgProductClient) UpdateOne(op *OrgProduct) *OrgProductUpdateOne {
+	mutation := newOrgProductMutation(c.config, OpUpdateOne, withOrgProduct(op))
+	return &OrgProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OrgProductClient) UpdateOneID(id string) *OrgProductUpdateOne {
+	mutation := newOrgProductMutation(c.config, OpUpdateOne, withOrgProductID(id))
+	return &OrgProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OrgProduct.
+func (c *OrgProductClient) Delete() *OrgProductDelete {
+	mutation := newOrgProductMutation(c.config, OpDelete)
+	return &OrgProductDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OrgProductClient) DeleteOne(op *OrgProduct) *OrgProductDeleteOne {
+	return c.DeleteOneID(op.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OrgProductClient) DeleteOneID(id string) *OrgProductDeleteOne {
+	builder := c.Delete().Where(orgproduct.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OrgProductDeleteOne{builder}
+}
+
+// Query returns a query builder for OrgProduct.
+func (c *OrgProductClient) Query() *OrgProductQuery {
+	return &OrgProductQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOrgProduct},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OrgProduct entity by its id.
+func (c *OrgProductClient) Get(ctx context.Context, id string) (*OrgProduct, error) {
+	return c.Query().Where(orgproduct.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OrgProductClient) GetX(ctx context.Context, id string) *OrgProduct {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a OrgProduct.
+func (c *OrgProductClient) QueryOwner(op *OrgProduct) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := op.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgproduct.Table, orgproduct.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgproduct.OwnerTable, orgproduct.OwnerColumn),
+		)
+		schemaConfig := op.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.OrgProduct
+		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgSubscription queries the org_subscription edge of a OrgProduct.
+func (c *OrgProductClient) QueryOrgSubscription(op *OrgProduct) *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := op.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgproduct.Table, orgproduct.FieldID, id),
+			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgproduct.OrgSubscriptionTable, orgproduct.OrgSubscriptionColumn),
+		)
+		schemaConfig := op.schemaConfig
+		step.To.Schema = schemaConfig.OrgSubscription
+		step.Edge.Schema = schemaConfig.OrgProduct
+		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrices queries the prices edge of a OrgProduct.
+func (c *OrgProductClient) QueryPrices(op *OrgProduct) *OrgPriceQuery {
+	query := (&OrgPriceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := op.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgproduct.Table, orgproduct.FieldID, id),
+			sqlgraph.To(orgprice.Table, orgprice.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgproduct.PricesTable, orgproduct.PricesColumn),
+		)
+		schemaConfig := op.schemaConfig
+		step.To.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgPrice
+		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OrgProductClient) Hooks() []Hook {
+	hooks := c.hooks.OrgProduct
+	return append(hooks[:len(hooks):len(hooks)], orgproduct.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *OrgProductClient) Interceptors() []Interceptor {
+	inters := c.inters.OrgProduct
+	return append(inters[:len(inters):len(inters)], orgproduct.Interceptors[:]...)
+}
+
+func (c *OrgProductClient) mutate(ctx context.Context, m *OrgProductMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OrgProductCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OrgProductUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OrgProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OrgProductDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown OrgProduct mutation op: %q", m.Op())
+	}
+}
+
 // OrgSubscriptionClient is a client for the OrgSubscription schema.
 type OrgSubscriptionClient struct {
 	config
@@ -12630,6 +13194,44 @@ func (c *OrgSubscriptionClient) QueryEvents(os *OrgSubscription) *EventQuery {
 		schemaConfig := os.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryModules queries the modules edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryModules(os *OrgSubscription) *OrgModuleQuery {
+	query := (&OrgModuleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
+			sqlgraph.To(orgmodule.Table, orgmodule.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.ModulesTable, orgsubscription.ModulesColumn),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.OrgModule
+		step.Edge.Schema = schemaConfig.OrgModule
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProducts queries the products edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryProducts(os *OrgSubscription) *OrgProductQuery {
+	query := (&OrgProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
+			sqlgraph.To(orgproduct.Table, orgproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.ProductsTable, orgsubscription.ProductsColumn),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgProduct
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13449,6 +14051,63 @@ func (c *OrganizationClient) QueryOrgSubscriptions(o *Organization) *OrgSubscrip
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.OrgSubscription
 		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgProducts queries the org_products edge of a Organization.
+func (c *OrganizationClient) QueryOrgProducts(o *Organization) *OrgProductQuery {
+	query := (&OrgProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(orgproduct.Table, orgproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgProductsTable, organization.OrgProductsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgProduct
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgPrices queries the org_prices edge of a Organization.
+func (c *OrganizationClient) QueryOrgPrices(o *Organization) *OrgPriceQuery {
+	query := (&OrgPriceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(orgprice.Table, orgprice.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgPricesTable, organization.OrgPricesColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgPrice
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgModules queries the org_modules edge of a Organization.
+func (c *OrganizationClient) QueryOrgModules(o *Organization) *OrgModuleQuery {
+	query := (&OrgModuleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(orgmodule.Table, orgmodule.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgModulesTable, organization.OrgModulesColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.OrgModule
+		step.Edge.Schema = schemaConfig.OrgModule
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -20444,14 +21103,14 @@ type (
 		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
 		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
 		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
-		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
-		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
-		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
-		ScheduledJob, ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory,
-		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Hook
+		OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
+		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
+		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
+		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
+		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
+		ScheduledJobRun, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
@@ -20467,14 +21126,14 @@ type (
 		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
 		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
 		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
-		OrgMembershipHistory, OrgSubscription, OrgSubscriptionHistory, Organization,
-		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
-		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
-		ScheduledJob, ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory,
-		Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory,
-		Template, TemplateHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Interceptor
+		OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
+		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
+		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
+		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
+		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
+		ScheduledJobRun, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

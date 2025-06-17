@@ -1479,6 +1479,78 @@ func (f OrgMembershipHistoryMutationRuleFunc) EvalMutation(ctx context.Context, 
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrgMembershipHistoryMutation", m)
 }
 
+// The OrgModuleQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OrgModuleQueryRuleFunc func(context.Context, *generated.OrgModuleQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OrgModuleQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgModuleQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OrgModuleQuery", q)
+}
+
+// The OrgModuleMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OrgModuleMutationRuleFunc func(context.Context, *generated.OrgModuleMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OrgModuleMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OrgModuleMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrgModuleMutation", m)
+}
+
+// The OrgPriceQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OrgPriceQueryRuleFunc func(context.Context, *generated.OrgPriceQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OrgPriceQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgPriceQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OrgPriceQuery", q)
+}
+
+// The OrgPriceMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OrgPriceMutationRuleFunc func(context.Context, *generated.OrgPriceMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OrgPriceMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OrgPriceMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrgPriceMutation", m)
+}
+
+// The OrgProductQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OrgProductQueryRuleFunc func(context.Context, *generated.OrgProductQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OrgProductQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrgProductQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OrgProductQuery", q)
+}
+
+// The OrgProductMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OrgProductMutationRuleFunc func(context.Context, *generated.OrgProductMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OrgProductMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OrgProductMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrgProductMutation", m)
+}
+
 // The OrgSubscriptionQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type OrgSubscriptionQueryRuleFunc func(context.Context, *generated.OrgSubscriptionQuery) error
@@ -2444,6 +2516,12 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.OrgMembershipHistoryQuery:
 		return q.Filter(), nil
+	case *generated.OrgModuleQuery:
+		return q.Filter(), nil
+	case *generated.OrgPriceQuery:
+		return q.Filter(), nil
+	case *generated.OrgProductQuery:
+		return q.Filter(), nil
 	case *generated.OrgSubscriptionQuery:
 		return q.Filter(), nil
 	case *generated.OrgSubscriptionHistoryQuery:
@@ -2632,6 +2710,12 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.OrgMembershipMutation:
 		return m.Filter(), nil
 	case *generated.OrgMembershipHistoryMutation:
+		return m.Filter(), nil
+	case *generated.OrgModuleMutation:
+		return m.Filter(), nil
+	case *generated.OrgPriceMutation:
+		return m.Filter(), nil
+	case *generated.OrgProductMutation:
 		return m.Filter(), nil
 	case *generated.OrgSubscriptionMutation:
 		return m.Filter(), nil

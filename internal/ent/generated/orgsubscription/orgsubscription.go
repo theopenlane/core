@@ -61,6 +61,10 @@ const (
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
+	// EdgeModules holds the string denoting the modules edge name in mutations.
+	EdgeModules = "modules"
+	// EdgeProducts holds the string denoting the products edge name in mutations.
+	EdgeProducts = "products"
 	// Table holds the table name of the orgsubscription in the database.
 	Table = "org_subscriptions"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -75,6 +79,20 @@ const (
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
+	// ModulesTable is the table that holds the modules relation/edge.
+	ModulesTable = "org_modules"
+	// ModulesInverseTable is the table name for the OrgModule entity.
+	// It exists in this package in order to avoid circular dependency with the "orgmodule" package.
+	ModulesInverseTable = "org_modules"
+	// ModulesColumn is the table column denoting the modules relation/edge.
+	ModulesColumn = "subscription_id"
+	// ProductsTable is the table that holds the products relation/edge.
+	ProductsTable = "org_products"
+	// ProductsInverseTable is the table name for the OrgProduct entity.
+	// It exists in this package in order to avoid circular dependency with the "orgproduct" package.
+	ProductsInverseTable = "org_products"
+	// ProductsColumn is the table column denoting the products relation/edge.
+	ProductsColumn = "subscription_id"
 )
 
 // Columns holds all SQL columns for orgsubscription fields.
@@ -256,6 +274,34 @@ func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByModulesCount orders the results by modules count.
+func ByModulesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newModulesStep(), opts...)
+	}
+}
+
+// ByModules orders the results by modules terms.
+func ByModules(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newModulesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProductsCount orders the results by products count.
+func ByProductsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProductsStep(), opts...)
+	}
+}
+
+// ByProducts orders the results by products terms.
+func ByProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -268,5 +314,19 @@ func newEventsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
+	)
+}
+func newModulesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ModulesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ModulesTable, ModulesColumn),
+	)
+}
+func newProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProductsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProductsTable, ProductsColumn),
 	)
 }
