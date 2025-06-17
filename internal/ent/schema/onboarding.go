@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
@@ -90,6 +91,7 @@ func (o Onboarding) Edges() []ent.Edge {
 // Annotations of the Onboarding
 func (Onboarding) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		entgql.Mutations(entgql.MutationCreate()),
 		// don't store the history of the onboarding
 		history.Annotations{

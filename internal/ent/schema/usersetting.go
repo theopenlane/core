@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx"
 )
 
 // UserSetting holds the schema definition for the User entity.
@@ -111,7 +112,9 @@ func (u UserSetting) Edges() []ent.Edge {
 
 // Annotations of the UserSetting
 func (UserSetting) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
+	return []schema.Annotation{
+		entx.Features("base"),
+	}
 }
 
 // Hooks of the UserSetting.

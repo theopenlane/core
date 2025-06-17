@@ -9,6 +9,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
@@ -134,6 +135,7 @@ func (Webauthn) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
+		entx.Features("base"),
 	}
 }
 

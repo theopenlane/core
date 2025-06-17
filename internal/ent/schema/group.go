@@ -156,6 +156,7 @@ func (Group) Indexes() []ent.Index {
 // Annotations of the Group
 func (Group) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

@@ -215,6 +215,21 @@ func (o Organization) Edges() []ent.Edge {
 			),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
+			edgeSchema:         OrgProduct{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         OrgPrice{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         OrgModule{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
 			edgeSchema:         Invite{},
 			cascadeDeleteOwner: true,
 		}),
@@ -374,6 +389,7 @@ func (Organization) Indexes() []ent.Index {
 // Annotations of the Organization
 func (Organization) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		// Delete org members when orgs are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

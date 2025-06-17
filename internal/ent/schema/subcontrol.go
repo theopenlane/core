@@ -153,3 +153,10 @@ func (Subcontrol) Policy() ent.Policy {
 		),
 	)
 }
+
+// Annotations of the Standard
+func (Subcontrol) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("compliance"),
+	}
+}

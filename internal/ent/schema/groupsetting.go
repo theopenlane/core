@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -77,6 +78,7 @@ func (g GroupSetting) Edges() []ent.Edge {
 // Annotations of the GroupSetting
 func (GroupSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		entfga.SettingsChecks("group"),
 	}
 }

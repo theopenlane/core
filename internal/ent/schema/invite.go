@@ -137,6 +137,7 @@ func (i Invite) Edges() []ent.Edge {
 // Annotations of the Invite
 func (Invite) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		history.Annotations{
 			Exclude: true,
 		},

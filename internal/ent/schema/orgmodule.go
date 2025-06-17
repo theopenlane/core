@@ -1,0 +1,102 @@
+package schema
+
+import (
+	"entgo.io/contrib/entgql"
+	"entgo.io/ent"
+	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/field"
+	"github.com/gertd/go-pluralize"
+
+	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
+)
+
+// OrgModule holds module subscription info for an organization
+// each enabled module is stored as a separate row
+type OrgModule struct {
+	SchemaFuncs
+
+	ent.Schema
+}
+
+const SchemaOrgModule = "org_module"
+
+// Name returns the name of the OrgModule schema
+func (OrgModule) Name() string {
+	return SchemaOrgModule
+}
+
+// GetType returns the type of the OrgModule schema
+func (OrgModule) GetType() any {
+	return OrgModule.Type
+}
+
+// PluralName returns the plural name of the OrgModule schema
+func (OrgModule) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaOrgModule)
+}
+
+// Fields of the OrgModule
+func (OrgModule) Fields() []ent.Field {
+	return []ent.Field{
+		field.String("module").
+			Comment("module key this record represents"),
+		field.JSON("price", models.Price{}).
+			Optional(),
+		field.String("stripe_price_id").
+			Optional(),
+		field.String("status").
+			Optional(),
+		field.Bool("active").
+			Default(true),
+		field.Time("trial_expires_at").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("trial_expires_at"),
+			),
+		field.Time("expires_at").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("expires_at"),
+			),
+		field.String("subscription_id").Optional(),
+	}
+}
+
+// Edges of the OrgModule
+func (o OrgModule) Edges() []ent.Edge {
+	return []ent.Edge{
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: o,
+			t:          OrgSubscription.Type,
+			edgeSchema: OrgSubscription{},
+			field:      "subscription_id",
+			ref:        "modules",
+		}),
+	}
+}
+
+// Mixin returns the mixins for the OrgModule schema
+func (o OrgModule) Mixin() []ent.Mixin {
+	return mixinConfig{
+		excludeAnnotations: true,
+		additionalMixins: []ent.Mixin{
+			newOrgOwnedMixin(o),
+		},
+	}.getMixins()
+}
+
+// Annotations returns the annotations for the OrgModule schema
+func (OrgModule) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entgql.Skip(entgql.SkipAll),
+		entx.SchemaGenSkip(true),
+		entx.QueryGenSkip(true),
+		history.Annotations{
+			Exclude: true,
+		},
+	}
+}

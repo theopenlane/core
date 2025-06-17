@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -13,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/entx"
 )
 
 const (
@@ -96,4 +98,11 @@ func (EntityType) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+// Annotations of the EntityType
+func (EntityType) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("entity-management"),
+	}
 }

@@ -186,6 +186,7 @@ func (r Risk) Mixin() []ent.Mixin {
 // Annotations of the Risk
 func (Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }

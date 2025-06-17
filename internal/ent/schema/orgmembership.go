@@ -81,6 +81,7 @@ func (o OrgMembership) Edges() []ent.Edge {
 // Annotations of the OrgMembership
 func (OrgMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		entfga.MembershipChecks("organization"),
 		// Delete groups + program members when orgmembership is deleted
 		entx.CascadeThroughAnnotationField(

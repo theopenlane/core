@@ -5,6 +5,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
@@ -135,4 +136,11 @@ func (Contact) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+// Annotations of the Contact
+func (Contact) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("entity-management"),
+	}
 }

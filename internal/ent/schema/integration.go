@@ -3,12 +3,14 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/entx"
 )
 
 // Integration maps configured integrations (github, slack, etc.) to organizations
@@ -90,4 +92,11 @@ func (Integration) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+// Annotations of the Integration
+func (Integration) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("base"),
+	}
 }

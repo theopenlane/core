@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -112,6 +113,7 @@ func (m MappedControl) Mixin() []ent.Mixin {
 // Annotations of the MappedControl
 func (MappedControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance"),
 		entfga.SelfAccessChecks(),
 	}
 }

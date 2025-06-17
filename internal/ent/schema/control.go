@@ -169,3 +169,11 @@ func (Control) Policy() ent.Policy {
 		),
 	)
 }
+
+// Annotations of the Control
+func (Control) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("compliance", "continuous-compliance-automation"),
+		entfga.SelfAccessChecks(),
+	}
+}

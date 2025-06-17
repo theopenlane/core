@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -106,6 +107,7 @@ func (ScheduledJobRun) Indexes() []ent.Index {
 // Annotations of the ScheduledJobRun
 func (ScheduledJobRun) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},

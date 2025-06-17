@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -12,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx"
 )
 
 // DNSVerification holds the schema definition for the DNSVerification
@@ -130,4 +132,11 @@ func (DNSVerification) Policy() ent.Policy {
 func (DNSVerification) Hooks() []ent.Hook {
 	// TODO(acookin): delete hook to remove the record from cloudflare
 	return []ent.Hook{}
+}
+
+// Annotations of the DNSVerification
+func (DNSVerification) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("trust-center"),
+	}
 }

@@ -45,6 +45,7 @@ const (
 	graphQueryDir  = graphDir + "query/"
 	schemaPath     = "./internal/ent/schema"
 	templateDir    = "./internal/ent/generate/templates/ent"
+	featureMapDir  = "./internal/features/"
 )
 
 func main() {
@@ -86,6 +87,7 @@ func main() {
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
 			genhooks.GenSearchSchema(graphSchemaDir, graphQueryDir),
+			genhooks.GenFeatureMap(featureMapDir),
 		},
 		Package: "github.com/theopenlane/core/internal/ent/generated",
 		Features: []gen.Feature{

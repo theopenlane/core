@@ -256,6 +256,7 @@ func (User) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.Features("base"),
 	}
 }
 

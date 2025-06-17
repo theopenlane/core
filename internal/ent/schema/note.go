@@ -77,6 +77,7 @@ func (n Note) Edges() []ent.Edge {
 // Annotations of the Note
 func (Note) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		entfga.SelfAccessChecks(),
 		// skip generating the schema for this type, this schema is used through extended types
 		entx.SchemaGenSkip(true),

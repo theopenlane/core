@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx"
 )
 
 // ControlScheduledJob holds the schema definition for the ControlScheduledJob entity
@@ -111,7 +112,7 @@ func (ControlScheduledJob) Indexes() []ent.Index {
 // Annotations of the ControlScheduledJob
 func (ControlScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		// entfga.SelfAccessChecks(),
+		entx.Features("compliance", "continuous-compliance-automation"),
 	}
 }
 
