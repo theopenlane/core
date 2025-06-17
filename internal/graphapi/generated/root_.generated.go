@@ -33378,6 +33378,7 @@ enum ControlHistoryOrderField {
   updated_at
   STATUS
   SOURCE
+  REFERENCE_FRAMEWORK
   CONTROL_TYPE
   category
   subcategory
@@ -35757,6 +35758,7 @@ enum ControlOrderField {
   updated_at
   STATUS
   SOURCE
+  REFERENCE_FRAMEWORK
   CONTROL_TYPE
   category
   subcategory
@@ -36973,10 +36975,6 @@ input CreateControlInput {
   source of the control, e.g. framework, template, custom, etc.
   """
   source: ControlControlSource
-  """
-  the reference framework for the control if it came from a standard, empty if not associated with a standard
-  """
-  referenceFramework: String
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -38382,10 +38380,6 @@ input CreateSubcontrolInput {
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource
-  """
-  the reference framework for the control if it came from a standard, empty if not associated with a standard
-  """
-  referenceFramework: String
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
@@ -68054,6 +68048,7 @@ enum SubcontrolHistoryOrderField {
   updated_at
   STATUS
   SOURCE
+  REFERENCE_FRAMEWORK
   CONTROL_TYPE
   category
   subcategory
@@ -68455,6 +68450,7 @@ enum SubcontrolOrderField {
   updated_at
   STATUS
   SOURCE
+  REFERENCE_FRAMEWORK
   CONTROL_TYPE
   category
   subcategory
@@ -71356,11 +71352,6 @@ input UpdateControlInput {
   source: ControlControlSource
   clearSource: Boolean
   """
-  the reference framework for the control if it came from a standard, empty if not associated with a standard
-  """
-  referenceFramework: String
-  clearReferenceFramework: Boolean
-  """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
   controlType: ControlControlType
@@ -73327,11 +73318,6 @@ input UpdateSubcontrolInput {
   """
   source: SubcontrolControlSource
   clearSource: Boolean
-  """
-  the reference framework for the control if it came from a standard, empty if not associated with a standard
-  """
-  referenceFramework: String
-  clearReferenceFramework: Boolean
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """

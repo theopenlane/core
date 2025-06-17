@@ -100,7 +100,7 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 		req.Relation = fgax.CanViewAuditLog
 	}
 
-	zerolog.Ctx(ctx).Info().Interface("req", req).Msg("getting authorized object ids")
+	zerolog.Ctx(ctx).Debug().Interface("req", req).Msg("getting authorized object ids")
 
 	resp, err := utils.AuthzClientFromContext(ctx).ListObjectsRequest(ctx, req)
 	if err != nil {

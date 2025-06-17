@@ -162,7 +162,6 @@ func createCloneControlInput(c *generated.Control, programID *string) (generated
 	// set the standard information
 	var standardID string
 	if c.Edges.Standard != nil {
-		controlInput.ReferenceFramework = &c.Edges.Standard.ShortName
 		standardID = c.Edges.Standard.ID
 	}
 
@@ -231,7 +230,6 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, c *generated.Co
 			ImplementationGuidance: subcontrol.ImplementationGuidance,
 			ExampleEvidence:        subcontrol.ExampleEvidence,
 			References:             subcontrol.References,
-			ReferenceFramework:     subcontrol.ReferenceFramework,
 			Status:                 &enums.ControlStatusNotImplemented,
 		}
 	}

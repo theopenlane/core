@@ -69,13 +69,19 @@ func HookSubcontrolCreate() ent.Hook {
 					return nil, err
 				}
 
-				// if the control has an owner, assign it to the subcontrol
-				if control.ControlOwnerID != "" {
-					m.SetControlOwnerID(control.ControlOwnerID)
+				if m.Op().Is(ent.OpCreate) {
+					// if the control has an owner, assign it to the subcontrol
+					if control.ControlOwnerID != "" {
+						m.SetControlOwnerID(control.ControlOwnerID)
+					}
+				}
+
+				if control.ReferenceFramework != nil {
+					m.SetReferenceFramework(*control.ReferenceFramework)
 				}
 			}
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpCreate)
+	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
 }
