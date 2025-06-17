@@ -3,11 +3,14 @@ package schema
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/rs/zerolog/log"
@@ -143,6 +146,19 @@ func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
 		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
 		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
 	}
+}
+
+// Indexes of the ObjectOwnedMixin
+func (o ObjectOwnedMixin) Indexes() []ent.Index {
+	// add the organization owner index if the flag is set or the field name is included
+	if o.IncludeOrganizationOwner || slices.Contains(o.FieldNames, ownerFieldName) {
+		return []ent.Index{
+			index.Fields(ownerFieldName).
+				Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		}
+	}
+
+	return []ent.Index{}
 }
 
 // Fields of the ObjectOwnedMixin

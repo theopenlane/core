@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
 )
@@ -60,58 +61,79 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 
 // ControlCategories is the resolver for the controlCategories field.
 func (r *queryResolver) ControlCategories(ctx context.Context) ([]string, error) {
-	query, err := withTransactionalMutation(ctx).Control.Query().Select(control.FieldCategory).
-		WithSubcontrols().
-		All(ctx)
+	categories, err := withTransactionalMutation(ctx).Control.Query().Select(control.FieldCategory).
+		Where(control.CategoryNEQ("")).
+		Unique(true).
+		GroupBy(control.FieldCategory).
+		Strings(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "string"})
+		return nil, parseRequestError(err, action{action: ActionGet, object: "categories"})
 	}
 
-	categories := []string{}
+	subcontrolCategories, err := withTransactionalMutation(ctx).Subcontrol.Query().Select(control.FieldCategory).
+		Where(subcontrol.CategoryNEQ("")).
+		Unique(true).
+		GroupBy(control.FieldCategory).
+		Strings(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "categories"})
+	}
 
-	for _, c := range query {
-		if !slices.Contains(categories, c.Category) && c.Category != "" {
-			categories = append(categories, c.Category)
-		}
-
-		for _, sc := range c.Edges.Subcontrols {
-			if !slices.Contains(categories, sc.Category) && sc.Category != "" {
-				categories = append(categories, sc.Category)
-			}
+	for _, subcontrolCategory := range subcontrolCategories {
+		// check if the subcontrol category already exists in the main categories
+		if !slices.Contains(categories, subcontrolCategory) {
+			// if not, append it to the main categories
+			categories = append(categories, subcontrolCategory)
 		}
 	}
 
 	// sort the categories to ensure consistent order
 	slices.Sort(categories)
 
+	if categories == nil {
+		// if no subcategories are found, return an empty slice
+		categories = []string{}
+	}
+
 	return categories, nil
 }
 
 // ControlSubcategories is the resolver for the controlSubcategories field.
 func (r *queryResolver) ControlSubcategories(ctx context.Context) ([]string, error) {
-	query, err := withTransactionalMutation(ctx).Control.Query().Select(control.FieldSubcategory).
-		WithSubcontrols().
-		All(ctx)
+	subcategories, err := withTransactionalMutation(ctx).Control.Query().Select(control.FieldSubcategory).
+		Where(control.SubcategoryNEQ("")).
+		Unique(true).
+		GroupBy(control.FieldSubcategory).
+		Strings(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "string"})
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subcategories"})
 	}
 
-	subcategories := []string{}
+	subcontrolCategories, err := withTransactionalMutation(ctx).Subcontrol.Query().Select(control.FieldSubcategory).
+		Where(subcontrol.SubcategoryNEQ("")).
+		Unique(true).
+		GroupBy(control.FieldSubcategory).
+		Strings(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subcategories"})
+	}
 
-	for _, c := range query {
-		if !slices.Contains(subcategories, c.Subcategory) && c.Subcategory != "" {
-			subcategories = append(subcategories, c.Subcategory)
-		}
-
-		for _, sc := range c.Edges.Subcontrols {
-			if !slices.Contains(subcategories, sc.Subcategory) && sc.Subcategory != "" {
-				subcategories = append(subcategories, sc.Subcategory)
-			}
+	// append the subcontrol categories to the main categories
+	for _, subcontrolCategory := range subcontrolCategories {
+		// check if the subcontrol category already exists in the main subcategories
+		if !slices.Contains(subcategories, subcontrolCategory) {
+			// if not, append it to the main subcategories
+			subcategories = append(subcategories, subcontrolCategory)
 		}
 	}
 
 	// sort the subcategories to ensure consistent order
 	slices.Sort(subcategories)
+
+	if subcategories == nil {
+		// if no subcategories are found, return an empty slice
+		subcategories = []string{}
+	}
 
 	return subcategories, nil
 }
