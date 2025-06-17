@@ -101,7 +101,7 @@ func (MappableDomain) Hooks() []ent.Hook {
 	return []ent.Hook{}
 }
 
-// Annotations of the Invite
+// Annotations of the MappableDomain
 func (MappableDomain) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("trust-center"),
