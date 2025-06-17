@@ -10037,6 +10037,53 @@ func (t *GetAllControls_Controls_Edges_Node_Standard) GetShortName() *string {
 	return t.ShortName
 }
 
+type GetAllControls_Controls_Edges_Node_Subcontrols_Edges_Node struct {
+	ID                 string  "json:\"id\" graphql:\"id\""
+	RefCode            string  "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework *string "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllControls_Controls_Edges_Node_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+func (t *GetAllControls_Controls_Edges_Node_Subcontrols_Edges_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.ReferenceFramework
+}
+
+type GetAllControls_Controls_Edges_Node_Subcontrols_Edges struct {
+	Node *GetAllControls_Controls_Edges_Node_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_Subcontrols_Edges) GetNode() *GetAllControls_Controls_Edges_Node_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllControls_Controls_Edges_Node_Subcontrols struct {
+	Edges []*GetAllControls_Controls_Edges_Node_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_Subcontrols) GetEdges() []*GetAllControls_Controls_Edges_Node_Subcontrols_Edges {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Subcontrols{}
+	}
+	return t.Edges
+}
+
 type GetAllControls_Controls_Edges_Node_ControlImplementations_Edges_Node struct {
 	Details *string               "json:\"details,omitempty\" graphql:\"details\""
 	ID      string                "json:\"id\" graphql:\"id\""
@@ -10241,6 +10288,7 @@ type GetAllControls_Controls_Edges_Node struct {
 	StandardID             *string                                                   "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                 *enums.ControlStatus                                      "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                                   "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Subcontrols            GetAllControls_Controls_Edges_Node_Subcontrols            "json:\"subcontrols\" graphql:\"subcontrols\""
 	Tags                   []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -10420,6 +10468,12 @@ func (t *GetAllControls_Controls_Edges_Node) GetSubcategory() *string {
 	}
 	return t.Subcategory
 }
+func (t *GetAllControls_Controls_Edges_Node) GetSubcontrols() *GetAllControls_Controls_Edges_Node_Subcontrols {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return &t.Subcontrols
+}
 func (t *GetAllControls_Controls_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node{}
@@ -10541,6 +10595,53 @@ func (t *GetControlByID_Control_Standard) GetShortName() *string {
 		t = &GetControlByID_Control_Standard{}
 	}
 	return t.ShortName
+}
+
+type GetControlByID_Control_Subcontrols_Edges_Node struct {
+	ID                 string  "json:\"id\" graphql:\"id\""
+	RefCode            string  "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework *string "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+}
+
+func (t *GetControlByID_Control_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlByID_Control_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlByID_Control_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetControlByID_Control_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+func (t *GetControlByID_Control_Subcontrols_Edges_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetControlByID_Control_Subcontrols_Edges_Node{}
+	}
+	return t.ReferenceFramework
+}
+
+type GetControlByID_Control_Subcontrols_Edges struct {
+	Node *GetControlByID_Control_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlByID_Control_Subcontrols_Edges) GetNode() *GetControlByID_Control_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &GetControlByID_Control_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlByID_Control_Subcontrols struct {
+	Edges []*GetControlByID_Control_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetControlByID_Control_Subcontrols) GetEdges() []*GetControlByID_Control_Subcontrols_Edges {
+	if t == nil {
+		t = &GetControlByID_Control_Subcontrols{}
+	}
+	return t.Edges
 }
 
 type GetControlByID_Control_ControlImplementations_Edges_Node struct {
@@ -10747,6 +10848,7 @@ type GetControlByID_Control struct {
 	StandardID             *string                                       "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                 *enums.ControlStatus                          "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                       "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Subcontrols            GetControlByID_Control_Subcontrols            "json:\"subcontrols\" graphql:\"subcontrols\""
 	Tags                   []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -10926,6 +11028,12 @@ func (t *GetControlByID_Control) GetSubcategory() *string {
 	}
 	return t.Subcategory
 }
+func (t *GetControlByID_Control) GetSubcontrols() *GetControlByID_Control_Subcontrols {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return &t.Subcontrols
+}
 func (t *GetControlByID_Control) GetTags() []string {
 	if t == nil {
 		t = &GetControlByID_Control{}
@@ -11043,6 +11151,53 @@ func (t *GetControls_Controls_Edges_Node_Standard) GetShortName() *string {
 		t = &GetControls_Controls_Edges_Node_Standard{}
 	}
 	return t.ShortName
+}
+
+type GetControls_Controls_Edges_Node_Subcontrols_Edges_Node struct {
+	ID                 string  "json:\"id\" graphql:\"id\""
+	RefCode            string  "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework *string "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+}
+
+func (t *GetControls_Controls_Edges_Node_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControls_Controls_Edges_Node_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+func (t *GetControls_Controls_Edges_Node_Subcontrols_Edges_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Subcontrols_Edges_Node{}
+	}
+	return t.ReferenceFramework
+}
+
+type GetControls_Controls_Edges_Node_Subcontrols_Edges struct {
+	Node *GetControls_Controls_Edges_Node_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControls_Controls_Edges_Node_Subcontrols_Edges) GetNode() *GetControls_Controls_Edges_Node_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type GetControls_Controls_Edges_Node_Subcontrols struct {
+	Edges []*GetControls_Controls_Edges_Node_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetControls_Controls_Edges_Node_Subcontrols) GetEdges() []*GetControls_Controls_Edges_Node_Subcontrols_Edges {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Subcontrols{}
+	}
+	return t.Edges
 }
 
 type GetControls_Controls_Edges_Node_ControlImplementations_Edges_Node struct {
@@ -11249,6 +11404,7 @@ type GetControls_Controls_Edges_Node struct {
 	StandardID             *string                                                "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                 *enums.ControlStatus                                   "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                                "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Subcontrols            GetControls_Controls_Edges_Node_Subcontrols            "json:\"subcontrols\" graphql:\"subcontrols\""
 	Tags                   []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -11428,6 +11584,12 @@ func (t *GetControls_Controls_Edges_Node) GetSubcategory() *string {
 	}
 	return t.Subcategory
 }
+func (t *GetControls_Controls_Edges_Node) GetSubcontrols() *GetControls_Controls_Edges_Node_Subcontrols {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return &t.Subcontrols
+}
 func (t *GetControls_Controls_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node{}
@@ -11549,6 +11711,53 @@ func (t *UpdateControl_UpdateControl_Control_Standard) GetShortName() *string {
 		t = &UpdateControl_UpdateControl_Control_Standard{}
 	}
 	return t.ShortName
+}
+
+type UpdateControl_UpdateControl_Control_Subcontrols_Edges_Node struct {
+	ID                 string  "json:\"id\" graphql:\"id\""
+	RefCode            string  "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework *string "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_Subcontrols_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Subcontrols_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateControl_UpdateControl_Control_Subcontrols_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Subcontrols_Edges_Node{}
+	}
+	return t.RefCode
+}
+func (t *UpdateControl_UpdateControl_Control_Subcontrols_Edges_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Subcontrols_Edges_Node{}
+	}
+	return t.ReferenceFramework
+}
+
+type UpdateControl_UpdateControl_Control_Subcontrols_Edges struct {
+	Node *UpdateControl_UpdateControl_Control_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_Subcontrols_Edges) GetNode() *UpdateControl_UpdateControl_Control_Subcontrols_Edges_Node {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Subcontrols_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateControl_UpdateControl_Control_Subcontrols struct {
+	Edges []*UpdateControl_UpdateControl_Control_Subcontrols_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_Subcontrols) GetEdges() []*UpdateControl_UpdateControl_Control_Subcontrols_Edges {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Subcontrols{}
+	}
+	return t.Edges
 }
 
 type UpdateControl_UpdateControl_Control_ControlImplementations_Edges_Node struct {
@@ -11755,6 +11964,7 @@ type UpdateControl_UpdateControl_Control struct {
 	StandardID             *string                                                    "json:\"standardID,omitempty\" graphql:\"standardID\""
 	Status                 *enums.ControlStatus                                       "json:\"status,omitempty\" graphql:\"status\""
 	Subcategory            *string                                                    "json:\"subcategory,omitempty\" graphql:\"subcategory\""
+	Subcontrols            UpdateControl_UpdateControl_Control_Subcontrols            "json:\"subcontrols\" graphql:\"subcontrols\""
 	Tags                   []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt              *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy              *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -11933,6 +12143,12 @@ func (t *UpdateControl_UpdateControl_Control) GetSubcategory() *string {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.Subcategory
+}
+func (t *UpdateControl_UpdateControl_Control) GetSubcontrols() *UpdateControl_UpdateControl_Control_Subcontrols {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return &t.Subcontrols
 }
 func (t *UpdateControl_UpdateControl_Control) GetTags() []string {
 	if t == nil {
@@ -84886,6 +85102,15 @@ const GetAllControlsDocument = `query GetAllControls {
 					shortName
 					governingBody
 				}
+				subcontrols {
+					edges {
+						node {
+							id
+							refCode
+							referenceFramework
+						}
+					}
+				}
 				controlImplementations {
 					edges {
 						node {
@@ -84981,6 +85206,15 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 			name
 			shortName
 			governingBody
+		}
+		subcontrols {
+			edges {
+				node {
+					id
+					refCode
+					referenceFramework
+				}
+			}
 		}
 		controlImplementations {
 			edges {
@@ -85087,6 +85321,15 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where:
 					shortName
 					governingBody
 				}
+				subcontrols {
+					edges {
+						node {
+							id
+							refCode
+							referenceFramework
+						}
+					}
+				}
 				controlImplementations {
 					edges {
 						node {
@@ -85187,6 +85430,15 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 				name
 				shortName
 				governingBody
+			}
+			subcontrols {
+				edges {
+					node {
+						id
+						refCode
+						referenceFramework
+					}
+				}
 			}
 			controlImplementations {
 				edges {

@@ -192,6 +192,15 @@ query GetAllControls {
           shortName
           governingBody
         }
+        subcontrols {
+          edges {
+            node {
+              id
+              refCode
+              referenceFramework
+            }
+          }
+        }
         controlImplementations {
           edges {
             node {
@@ -271,6 +280,15 @@ query GetControlByID($controlId: ID!) {
       name
       shortName
       governingBody
+    }
+    subcontrols {
+      edges {
+        node {
+          id
+          refCode
+          referenceFramework
+        }
+      }
     }
     controlImplementations {
       edges {
@@ -359,6 +377,15 @@ query GetControls($first: Int, $last: Int, $where: ControlWhereInput) {
           shortName
           governingBody
         }
+        subcontrols {
+          edges {
+            node {
+              id
+              refCode
+              referenceFramework
+            }
+          }
+        }
         controlImplementations {
           edges {
             node {
@@ -439,6 +466,15 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
         name
         shortName
         governingBody
+      }
+      subcontrols {
+        edges {
+          node {
+            id
+            refCode
+            referenceFramework
+          }
+        }
       }
       controlImplementations {
         edges {

@@ -6,8 +6,8 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 )
 
@@ -16,36 +16,48 @@ import (
 func HookControlReferenceFramework() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ControlFunc(func(ctx context.Context, m *generated.ControlMutation) (generated.Value, error) {
+			shortName := ""
+
 			stdCleared := m.StandardIDCleared()
 			if stdCleared {
 				m.ClearReferenceFramework()
-
-				return next.Mutate(ctx, m)
-			}
-
-			standardID, ok := m.StandardID()
-			if ok {
-				std, err := m.Client().Standard.Get(ctx, standardID)
-				if err != nil {
-					return nil, err
-				}
-
-				m.SetReferenceFramework(std.ShortName)
-
-				if m.Op().Is(ent.OpUpdateOne) {
-					id, ok := m.ID()
-					if !ok {
-						return next.Mutate(ctx, m)
-					}
-
-					// set the reference framework on all subcontrols as well
-					err = m.Client().Subcontrol.Update().
-						Where(subcontrol.HasControlWith(control.ID(id))).
-						SetReferenceFramework(std.ShortName).
-						Exec(ctx)
+			} else {
+				standardID, ok := m.StandardID()
+				if ok {
+					std, err := m.Client().Standard.Get(ctx, standardID)
 					if err != nil {
 						return nil, err
 					}
+
+					m.SetReferenceFramework(std.ShortName)
+					shortName = std.ShortName
+				}
+			}
+
+			// if this is an update and the standard was cleared or the standard was set,
+			// we need to update the subcontrols as well
+			// this is because the subcontrols inherit the reference framework from the control
+			if m.Op().Is(ent.OpUpdateOne) && (stdCleared || shortName != "") {
+				id, ok := m.ID()
+				if !ok {
+					return next.Mutate(ctx, m)
+				}
+
+				// allow the subcontrol mutation to run
+				// if a user can edit the control, they can edit the subcontrols
+				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+				mut := m.Client().Subcontrol.Update().
+					Where(subcontrol.ControlID(id))
+
+				if stdCleared {
+					mut.ClearReferenceFramework()
+				} else {
+					mut.SetReferenceFramework(shortName)
+				}
+				// set the reference framework on all subcontrols as well
+				if err := mut.Exec(allowCtx); err != nil {
+					return nil, err
 				}
 			}
 

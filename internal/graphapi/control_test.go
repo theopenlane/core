@@ -105,7 +105,7 @@ func TestQueryControl(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Check(t, resp != nil)
 
-			assert.Equal(t, tc.queryID, resp.Control.ID)
+			assert.Check(t, is.Equal(tc.queryID, resp.Control.ID))
 			assert.Check(t, len(resp.Control.RefCode) != 0)
 
 			if tc.programAccess {
@@ -241,7 +241,7 @@ func TestQueryControls(t *testing.T) {
 				assert.Check(t, resp.Controls.PageInfo.HasNextPage)
 			} else {
 				assert.Check(t, is.Len(resp.Controls.Edges, 0))
-				assert.Equal(t, int64(0), resp.Controls.TotalCount)
+				assert.Check(t, is.Equal(int64(0), resp.Controls.TotalCount))
 				assert.Check(t, !resp.Controls.PageInfo.HasNextPage)
 			}
 		})
@@ -444,122 +444,122 @@ func TestMutationCreateControl(t *testing.T) {
 
 			// check required fields
 			assert.Check(t, len(resp.CreateControl.Control.ID) != 0)
-			assert.Equal(t, tc.request.RefCode, resp.CreateControl.Control.RefCode)
+			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateControl.Control.RefCode))
 
 			assert.Check(t, len(resp.CreateControl.Control.DisplayID) != 0)
 			assert.Check(t, is.Contains(resp.CreateControl.Control.DisplayID, "CTL-"))
 
 			assert.Check(t, len(resp.CreateControl.Control.RefCode) != 0)
-			assert.Equal(t, tc.request.RefCode, resp.CreateControl.Control.RefCode)
+			assert.Check(t, is.Equal(tc.request.RefCode, resp.CreateControl.Control.RefCode))
 
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {
 				assert.Check(t, is.Len(resp.CreateControl.Control.Programs.Edges, len(tc.request.ProgramIDs)))
 
 				for i, p := range resp.CreateControl.Control.Programs.Edges {
-					assert.Equal(t, tc.request.ProgramIDs[i], p.Node.ID)
+					assert.Check(t, is.Equal(tc.request.ProgramIDs[i], p.Node.ID))
 				}
 			} else {
 				assert.Check(t, is.Len(resp.CreateControl.Control.Programs.Edges, 0))
 			}
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.CreateControl.Control.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateControl.Control.Description))
 			} else {
-				assert.Equal(t, *resp.CreateControl.Control.Description, "")
+				assert.Check(t, is.Equal(*resp.CreateControl.Control.Description, ""))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.CreateControl.Control.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.CreateControl.Control.Status))
 			} else {
-				assert.Equal(t, enums.ControlStatusNotImplemented, *resp.CreateControl.Control.Status)
+				assert.Check(t, is.Equal(enums.ControlStatusNotImplemented, *resp.CreateControl.Control.Status))
 			}
 
 			if tc.request.ControlType != nil {
-				assert.Equal(t, *tc.request.ControlType, *resp.CreateControl.Control.ControlType)
+				assert.Check(t, is.Equal(*tc.request.ControlType, *resp.CreateControl.Control.ControlType))
 			} else {
-				assert.Equal(t, enums.ControlTypePreventative, *resp.CreateControl.Control.ControlType) // default value
+				assert.Check(t, is.Equal(enums.ControlTypePreventative, *resp.CreateControl.Control.ControlType)) // default value
 			}
 
 			if tc.request.Source != nil {
-				assert.Equal(t, *tc.request.Source, *resp.CreateControl.Control.Source)
+				assert.Check(t, is.Equal(*tc.request.Source, *resp.CreateControl.Control.Source))
 			} else {
-				assert.Equal(t, enums.ControlSourceUserDefined, *resp.CreateControl.Control.Source)
+				assert.Check(t, is.Equal(enums.ControlSourceUserDefined, *resp.CreateControl.Control.Source))
 			}
 
 			if tc.request.Category != nil {
-				assert.Equal(t, *tc.request.Category, *resp.CreateControl.Control.Category)
+				assert.Check(t, is.Equal(*tc.request.Category, *resp.CreateControl.Control.Category))
 			} else {
-				assert.Equal(t, *resp.CreateControl.Control.Category, "")
+				assert.Check(t, is.Equal(*resp.CreateControl.Control.Category, ""))
 			}
 
 			if tc.request.CategoryID != nil {
-				assert.Equal(t, *tc.request.CategoryID, *resp.CreateControl.Control.CategoryID)
+				assert.Check(t, is.Equal(*tc.request.CategoryID, *resp.CreateControl.Control.CategoryID))
 			} else {
-				assert.Equal(t, *resp.CreateControl.Control.CategoryID, "")
+				assert.Check(t, is.Equal(*resp.CreateControl.Control.CategoryID, ""))
 			}
 
 			if tc.request.Subcategory != nil {
-				assert.Equal(t, *tc.request.Subcategory, *resp.CreateControl.Control.Subcategory)
+				assert.Check(t, is.Equal(*tc.request.Subcategory, *resp.CreateControl.Control.Subcategory))
 			} else {
-				assert.Equal(t, *resp.CreateControl.Control.Subcategory, "")
+				assert.Check(t, is.Equal(*resp.CreateControl.Control.Subcategory, ""))
 			}
 
 			if tc.request.MappedCategories != nil {
-				assert.DeepEqual(t, tc.request.MappedCategories, resp.CreateControl.Control.MappedCategories)
+				assert.Check(t, is.DeepEqual(tc.request.MappedCategories, resp.CreateControl.Control.MappedCategories))
 			} else {
 				assert.Check(t, is.Len(resp.CreateControl.Control.MappedCategories, 0))
 			}
 
 			if tc.request.ControlQuestions != nil {
-				assert.DeepEqual(t, tc.request.ControlQuestions, resp.CreateControl.Control.ControlQuestions)
+				assert.Check(t, is.DeepEqual(tc.request.ControlQuestions, resp.CreateControl.Control.ControlQuestions))
 			} else {
 				assert.Check(t, is.Len(resp.CreateControl.Control.ControlQuestions, 0))
 			}
 
 			if tc.request.AssessmentObjectives != nil {
 				assert.Check(t, is.Len(resp.CreateControl.Control.AssessmentObjectives, len(tc.request.AssessmentObjectives)))
-				assert.DeepEqual(t, tc.request.AssessmentObjectives, resp.CreateControl.Control.AssessmentObjectives)
+				assert.Check(t, is.DeepEqual(tc.request.AssessmentObjectives, resp.CreateControl.Control.AssessmentObjectives))
 			} else {
 				assert.Check(t, is.Len(resp.CreateControl.Control.AssessmentObjectives, 0))
 			}
 
 			if tc.request.AssessmentMethods != nil {
 				assert.Check(t, is.Len(resp.CreateControl.Control.AssessmentMethods, len(tc.request.AssessmentMethods)))
-				assert.DeepEqual(t, tc.request.AssessmentMethods, resp.CreateControl.Control.AssessmentMethods)
+				assert.Check(t, is.DeepEqual(tc.request.AssessmentMethods, resp.CreateControl.Control.AssessmentMethods))
 			} else {
 				assert.Check(t, is.Len(resp.CreateControl.Control.AssessmentMethods, 0))
 			}
 
 			if tc.request.ImplementationGuidance != nil {
 				assert.Check(t, is.Len(resp.CreateControl.Control.ImplementationGuidance, len(tc.request.ImplementationGuidance)))
-				assert.DeepEqual(t, tc.request.ImplementationGuidance, resp.CreateControl.Control.ImplementationGuidance)
+				assert.Check(t, is.DeepEqual(tc.request.ImplementationGuidance, resp.CreateControl.Control.ImplementationGuidance))
 			} else {
 				assert.Check(t, is.Len(resp.CreateControl.Control.ImplementationGuidance, 0))
 			}
 
 			if tc.request.ExampleEvidence != nil {
 				assert.Check(t, is.Len(resp.CreateControl.Control.ExampleEvidence, len(tc.request.ExampleEvidence)))
-				assert.DeepEqual(t, tc.request.ExampleEvidence, resp.CreateControl.Control.ExampleEvidence)
+				assert.Check(t, is.DeepEqual(tc.request.ExampleEvidence, resp.CreateControl.Control.ExampleEvidence))
 			} else {
 				assert.Check(t, is.Len(resp.CreateControl.Control.ExampleEvidence, 0))
 			}
 
 			if tc.request.References != nil {
 				assert.Check(t, is.Len(resp.CreateControl.Control.References, len(tc.request.References)))
-				assert.DeepEqual(t, tc.request.References, resp.CreateControl.Control.References)
+				assert.Check(t, is.DeepEqual(tc.request.References, resp.CreateControl.Control.References))
 			} else {
 				assert.Check(t, is.Len(resp.CreateControl.Control.References, 0))
 			}
 
 			if tc.request.ControlOwnerID != nil {
-				assert.Equal(t, *tc.request.ControlOwnerID, resp.CreateControl.Control.ControlOwner.ID)
+				assert.Check(t, is.Equal(*tc.request.ControlOwnerID, resp.CreateControl.Control.ControlOwner.ID))
 			} else {
 				assert.Check(t, resp.CreateControl.Control.ControlOwner == nil)
 			}
 
 			if tc.request.DelegateID != nil {
-				assert.Equal(t, *tc.request.DelegateID, resp.CreateControl.Control.Delegate.ID)
+				assert.Check(t, is.Equal(*tc.request.DelegateID, resp.CreateControl.Control.Delegate.ID))
 			} else {
 				assert.Check(t, resp.CreateControl.Control.Delegate == nil)
 			}
@@ -567,23 +567,24 @@ func TestMutationCreateControl(t *testing.T) {
 			if len(tc.request.EditorIDs) > 0 {
 				assert.Check(t, is.Len(resp.CreateControl.Control.Editors.Edges, 1))
 				for _, edge := range resp.CreateControl.Control.Editors.Edges {
-					assert.Equal(t, testUser1.GroupID, edge.Node.ID)
+					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
 				}
 			}
 
 			if len(tc.request.BlockedGroupIDs) > 0 {
 				assert.Check(t, is.Len(resp.CreateControl.Control.BlockedGroups.Edges, 1))
 				for _, edge := range resp.CreateControl.Control.BlockedGroups.Edges {
-					assert.Equal(t, blockedGroup.ID, edge.Node.ID)
+					assert.Check(t, is.Equal(blockedGroup.ID, edge.Node.ID))
 				}
 			}
 
 			if tc.request.ControlImplementationIDs != nil {
-				assert.Assert(t, is.Len(resp.CreateControl.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs)))
+				assert.Check(t, is.Len(resp.CreateControl.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs)))
 			}
 
 			if tc.request.StandardID != nil {
-				assert.Equal(t, standard.ShortName, *resp.CreateControl.Control.ReferenceFramework)
+				assert.Check(t, is.Equal(*resp.CreateControl.Control.ReferenceFramework, standard.ShortName))
+				assert.Check(t, is.Equal(*resp.CreateControl.Control.StandardID, standard.ID))
 			} else {
 				assert.Check(t, resp.CreateControl.Control.ReferenceFramework == nil)
 			}
@@ -592,7 +593,7 @@ func TestMutationCreateControl(t *testing.T) {
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetControlByID(testUser1.UserCtx, resp.CreateControl.Control.ID)
 				assert.NilError(t, err)
-				assert.Equal(t, resp.CreateControl.Control.ID, res.Control.ID)
+				assert.Check(t, is.Equal(resp.CreateControl.Control.ID, res.Control.ID))
 
 				if tc.request.ControlImplementationIDs != nil {
 					assert.Check(t, is.Len(res.Control.ControlImplementations.Edges, len(tc.request.ControlImplementationIDs)))
@@ -837,7 +838,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 
 				if tc.request.ProgramID != nil {
 					assert.Check(t, is.Len(control.Programs.Edges, 1))
-					assert.Equal(t, *tc.request.ProgramID, control.Programs.Edges[0].Node.ID)
+					assert.Check(t, is.Equal(*tc.request.ProgramID, control.Programs.Edges[0].Node.ID))
 				} else {
 					assert.Check(t, is.Len(control.Programs.Edges, tc.expectedNumProgram))
 				}
@@ -933,9 +934,13 @@ func TestMutationUpdateControl(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	control := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
+	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(testUser1.UserCtx, t)
 
 	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standardUpdate := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// create control implementation to be associated with the control
 	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -962,8 +967,8 @@ func TestMutationUpdateControl(t *testing.T) {
 		request              openlaneclient.UpdateControlInput
 		client               *openlaneclient.OpenlaneClient
 		ctx                  context.Context
-		expectedRefFramework *string
 		expectedErr          string
+		expectedRefFramework string
 	}{
 		{
 			name: "happy path, update field",
@@ -974,14 +979,17 @@ func TestMutationUpdateControl(t *testing.T) {
 				AddControlImplementationIDs: []string{
 					controlImplementation.ID,
 				},
+				StandardID: &standard.ID,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedRefFramework: standard.ShortName,
 		},
 		{
 			name: "happy path, update multiple fields",
 			request: openlaneclient.UpdateControlInput{
 				Status:      &enums.ControlStatusPreparing,
+				StandardID:  &standardUpdate.ID,
 				Tags:        []string{"tag1", "tag2"},
 				ControlType: &enums.ControlTypeDetective,
 				Category:    lo.ToPtr("Availability"),
@@ -1028,18 +1036,19 @@ func TestMutationUpdateControl(t *testing.T) {
 				DelegateID:     &delegateGroup.ID,
 				Source:         &enums.ControlSourceFramework,
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client:               suite.client.apiWithPAT,
+			ctx:                  context.Background(),
+			expectedRefFramework: standardUpdate.ShortName,
 		},
 		{
 			name: "happy path, remove some things",
 			request: openlaneclient.UpdateControlInput{
 				ClearReferences:       lo.ToPtr(true),
 				ClearMappedCategories: lo.ToPtr(true),
+				ClearStandard:         lo.ToPtr(true),
 			},
-			client:               suite.client.apiWithPAT,
-			ctx:                  context.Background(),
-			expectedRefFramework: nil,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "update ref code to empty",
@@ -1093,73 +1102,73 @@ func TestMutationUpdateControl(t *testing.T) {
 			assert.Assert(t, resp != nil)
 
 			if tc.request.Description != nil {
-				assert.Equal(t, *tc.request.Description, *resp.UpdateControl.Control.Description)
+				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateControl.Control.Description))
 			}
 
 			if tc.request.Status != nil {
-				assert.Equal(t, *tc.request.Status, *resp.UpdateControl.Control.Status)
+				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateControl.Control.Status))
 			}
 
 			if tc.request.Tags != nil {
-				assert.DeepEqual(t, tc.request.Tags, resp.UpdateControl.Control.Tags)
+				assert.Check(t, is.DeepEqual(tc.request.Tags, resp.UpdateControl.Control.Tags))
 			}
 
 			if tc.request.Source != nil {
-				assert.Equal(t, *tc.request.Source, *resp.UpdateControl.Control.Source)
+				assert.Check(t, is.Equal(*tc.request.Source, *resp.UpdateControl.Control.Source))
 			}
 
 			if tc.request.ControlType != nil {
-				assert.Equal(t, *tc.request.ControlType, *resp.UpdateControl.Control.ControlType)
+				assert.Check(t, is.Equal(*tc.request.ControlType, *resp.UpdateControl.Control.ControlType))
 			}
 
 			if tc.request.Category != nil {
-				assert.Equal(t, *tc.request.Category, *resp.UpdateControl.Control.Category)
+				assert.Check(t, is.Equal(*tc.request.Category, *resp.UpdateControl.Control.Category))
 			}
 
 			if tc.request.CategoryID != nil {
-				assert.Equal(t, *tc.request.CategoryID, *resp.UpdateControl.Control.CategoryID)
+				assert.Check(t, is.Equal(*tc.request.CategoryID, *resp.UpdateControl.Control.CategoryID))
 			}
 
 			if tc.request.Subcategory != nil {
-				assert.Equal(t, *tc.request.Subcategory, *resp.UpdateControl.Control.Subcategory)
+				assert.Check(t, is.Equal(*tc.request.Subcategory, *resp.UpdateControl.Control.Subcategory))
 			}
 
 			if tc.request.AppendMappedCategories != nil {
-				assert.DeepEqual(t, tc.request.AppendMappedCategories, resp.UpdateControl.Control.MappedCategories)
+				assert.Check(t, is.DeepEqual(tc.request.AppendMappedCategories, resp.UpdateControl.Control.MappedCategories))
 			}
 
 			if tc.request.AppendControlQuestions != nil {
-				assert.DeepEqual(t, tc.request.AppendControlQuestions, resp.UpdateControl.Control.ControlQuestions)
+				assert.Check(t, is.DeepEqual(tc.request.AppendControlQuestions, resp.UpdateControl.Control.ControlQuestions))
 			}
 
 			if tc.request.AppendAssessmentObjectives != nil {
-				assert.DeepEqual(t, tc.request.AppendAssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives)
+				assert.Check(t, is.DeepEqual(tc.request.AppendAssessmentObjectives, resp.UpdateControl.Control.AssessmentObjectives))
 			}
 
 			if tc.request.AppendAssessmentMethods != nil {
-				assert.DeepEqual(t, tc.request.AppendAssessmentMethods, resp.UpdateControl.Control.AssessmentMethods)
+				assert.Check(t, is.DeepEqual(tc.request.AppendAssessmentMethods, resp.UpdateControl.Control.AssessmentMethods))
 			}
 
 			if tc.request.AppendImplementationGuidance != nil {
-				assert.DeepEqual(t, tc.request.AppendImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance)
+				assert.Check(t, is.DeepEqual(tc.request.AppendImplementationGuidance, resp.UpdateControl.Control.ImplementationGuidance))
 			}
 
 			if tc.request.AppendExampleEvidence != nil {
-				assert.DeepEqual(t, tc.request.AppendExampleEvidence, resp.UpdateControl.Control.ExampleEvidence)
+				assert.Check(t, is.DeepEqual(tc.request.AppendExampleEvidence, resp.UpdateControl.Control.ExampleEvidence))
 			}
 
 			if tc.request.ControlOwnerID != nil {
-				assert.Assert(t, resp.UpdateControl.Control.ControlOwner != nil)
-				assert.Equal(t, *tc.request.ControlOwnerID, resp.UpdateControl.Control.ControlOwner.ID)
+				assert.Check(t, resp.UpdateControl.Control.ControlOwner != nil)
+				assert.Check(t, is.Equal(*tc.request.ControlOwnerID, resp.UpdateControl.Control.ControlOwner.ID))
 			}
 
 			if tc.request.DelegateID != nil {
-				assert.Assert(t, resp.UpdateControl.Control.Delegate != nil)
-				assert.Equal(t, *tc.request.DelegateID, resp.UpdateControl.Control.Delegate.ID)
+				assert.Check(t, resp.UpdateControl.Control.Delegate != nil)
+				assert.Check(t, is.Equal(*tc.request.DelegateID, resp.UpdateControl.Control.Delegate.ID))
 			}
 
 			if tc.request.AppendReferences != nil {
-				assert.DeepEqual(t, tc.request.AppendReferences, resp.UpdateControl.Control.References)
+				assert.Check(t, is.DeepEqual(tc.request.AppendReferences, resp.UpdateControl.Control.References))
 			}
 
 			if tc.request.ClearReferences != nil && *tc.request.ClearReferences {
@@ -1171,24 +1180,27 @@ func TestMutationUpdateControl(t *testing.T) {
 			}
 
 			if tc.request.AddControlImplementationIDs != nil {
-				assert.Assert(t, is.Len(resp.UpdateControl.Control.ControlImplementations.Edges, len(tc.request.AddControlImplementationIDs)))
+				assert.Check(t, is.Len(resp.UpdateControl.Control.ControlImplementations.Edges, len(tc.request.AddControlImplementationIDs)))
 			}
 
-			// if tc.request.StandardID != nil {
-			// 	assert.Check(t, is.Equal(*tc.expectedRefFramework, *resp.UpdateControl.Control.ReferenceFramework))
-			// }
+			if tc.request.StandardID != nil {
+				assert.Check(t, is.Equal(tc.expectedRefFramework, *resp.UpdateControl.Control.ReferenceFramework))
+				assert.Check(t, is.Equal(*tc.request.StandardID, *resp.UpdateControl.Control.StandardID))
+				assert.Check(t, is.Equal(tc.expectedRefFramework, *resp.UpdateControl.Control.Subcontrols.Edges[0].Node.ReferenceFramework))
+			}
 
-			// if tc.request.ClearStandard != nil && *tc.request.ClearStandard {
-			// 	assert.Check(t, resp.UpdateControl.Control.ReferenceFramework == nil)
-			// }
+			if tc.request.ClearStandard != nil && *tc.request.ClearStandard {
+				assert.Check(t, resp.UpdateControl.Control.ReferenceFramework == nil)
+				assert.Check(t, resp.UpdateControl.Control.Subcontrols.Edges[0].Node.ReferenceFramework == nil)
+			}
 
 			// ensure the program is set
 			if len(tc.request.AddProgramIDs) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateControl.Control.Programs.Edges, len(tc.request.AddProgramIDs)))
+				assert.Check(t, is.Len(resp.UpdateControl.Control.Programs.Edges, len(tc.request.AddProgramIDs)))
 			}
 
 			if len(tc.request.AddEditorIDs) > 0 {
-				assert.Assert(t, is.Len(resp.UpdateControl.Control.Editors.Edges, 1))
+				assert.Check(t, is.Len(resp.UpdateControl.Control.Editors.Edges, 1))
 				found := false
 				for _, edge := range resp.UpdateControl.Control.Editors.Edges {
 					if edge.Node.ID == tc.request.AddEditorIDs[0] {
@@ -1204,17 +1216,18 @@ func TestMutationUpdateControl(t *testing.T) {
 					Tags: []string{"tag1"},
 				})
 				assert.NilError(t, err)
-				assert.Assert(t, res != nil)
-				assert.Equal(t, control.ID, res.UpdateControl.Control.ID)
+				assert.Check(t, res != nil)
+				assert.Check(t, is.Equal(control.ID, res.UpdateControl.Control.ID))
 				assert.Check(t, slices.Contains(res.UpdateControl.Control.Tags, "tag1"))
 			}
 		})
 	}
-
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID, standardUpdate.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteControl(t *testing.T) {
@@ -1277,7 +1290,7 @@ func TestMutationDeleteControl(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-			assert.Equal(t, tc.idToDelete, resp.DeleteControl.DeletedID)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteControl.DeletedID))
 		})
 	}
 }
