@@ -1270,7 +1270,7 @@ func TestMutationDeleteControl(t *testing.T) {
 }
 
 func TestQueryControlCategories(t *testing.T) {
-	// create objects to be deleted
+	// create controls with categories and subcategories
 	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
 
@@ -1337,7 +1337,7 @@ func TestQueryControlCategories(t *testing.T) {
 }
 
 func TestQueryControlSubcategories(t *testing.T) {
-	// create objects to be deleted
+	// create controls with categories and subcategories
 	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
 
