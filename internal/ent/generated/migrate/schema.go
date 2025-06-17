@@ -51,6 +51,14 @@ var (
 				Columns: []*schema.Column{APITokensColumns[0]},
 			},
 			{
+				Name:    "apitoken_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{APITokensColumns[18]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
 				Name:    "apitoken_token",
 				Unique:  false,
 				Columns: []*schema.Column{APITokensColumns[9]},
@@ -120,6 +128,14 @@ var (
 				Name:    "actionplan_id",
 				Unique:  true,
 				Columns: []*schema.Column{ActionPlansColumns[0]},
+			},
+			{
+				Name:    "actionplan_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ActionPlansColumns[22]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -202,6 +218,14 @@ var (
 				Name:    "contact_id",
 				Unique:  true,
 				Columns: []*schema.Column{ContactsColumns[0]},
+			},
+			{
+				Name:    "contact_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ContactsColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -317,6 +341,14 @@ var (
 				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[29]},
 			},
 			{
+				Name:    "control_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ControlsColumns[29]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
 				Name:    "control_standard_id_ref_code",
 				Unique:  true,
 				Columns: []*schema.Column{ControlsColumns[30], ControlsColumns[26]},
@@ -428,6 +460,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{ControlImplementationsColumns[0]},
 			},
+			{
+				Name:    "controlimplementation_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ControlImplementationsColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// ControlImplementationHistoryColumns holds the columns for the "control_implementation_history" table.
@@ -507,6 +547,14 @@ var (
 				Name:    "controlobjective_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ControlObjectivesColumns[7], ControlObjectivesColumns[17]},
+			},
+			{
+				Name:    "controlobjective_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ControlObjectivesColumns[17]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -593,6 +641,14 @@ var (
 				Name:    "controlscheduledjob_id",
 				Unique:  true,
 				Columns: []*schema.Column{ControlScheduledJobsColumns[0]},
+			},
+			{
+				Name:    "controlscheduledjob_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ControlScheduledJobsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -689,17 +745,17 @@ var (
 				Columns: []*schema.Column{CustomDomainsColumns[0]},
 			},
 			{
-				Name:    "customdomain_cname_record",
-				Unique:  true,
-				Columns: []*schema.Column{CustomDomainsColumns[8]},
+				Name:    "customdomain_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{CustomDomainsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
 			},
 			{
-				Name:    "customdomain_owner_id",
-				Unique:  false,
-				Columns: []*schema.Column{CustomDomainsColumns[13]},
+				Name:    "customdomain_cname_record",
+				Unique:  true,
+				Columns: []*schema.Column{CustomDomainsColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -776,6 +832,14 @@ var (
 				Name:    "dnsverification_id",
 				Unique:  true,
 				Columns: []*schema.Column{DNSVerificationsColumns[0]},
+			},
+			{
+				Name:    "dnsverification_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{DNSVerificationsColumns[17]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "dnsverification_cloudflare_hostname_id",
@@ -862,6 +926,14 @@ var (
 				Name:    "documentdata_id",
 				Unique:  true,
 				Columns: []*schema.Column{DocumentDataColumns[0]},
+			},
+			{
+				Name:    "documentdata_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{DocumentDataColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -990,6 +1062,14 @@ var (
 				Columns: []*schema.Column{EntitiesColumns[0]},
 			},
 			{
+				Name:    "entity_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{EntitiesColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{EntitiesColumns[8], EntitiesColumns[15]},
@@ -1064,6 +1144,14 @@ var (
 				Name:    "entitytype_id",
 				Unique:  true,
 				Columns: []*schema.Column{EntityTypesColumns[0]},
+			},
+			{
+				Name:    "entitytype_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{EntityTypesColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "entitytype_name_owner_id",
@@ -1175,6 +1263,14 @@ var (
 				Name:    "evidence_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{EvidencesColumns[7], EvidencesColumns[18]},
+			},
+			{
+				Name:    "evidence_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{EvidencesColumns[18]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -1446,6 +1542,14 @@ var (
 				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[29]},
 			},
 			{
+				Name:    "group_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{GroupsColumns[29]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[29]},
@@ -1669,6 +1773,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{HushesColumns[0]},
 			},
+			{
+				Name:    "hush_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{HushesColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// HushHistoryColumns holds the columns for the "hush_history" table.
@@ -1743,6 +1855,14 @@ var (
 				Name:    "integration_id",
 				Unique:  true,
 				Columns: []*schema.Column{IntegrationsColumns[0]},
+			},
+			{
+				Name:    "integration_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrationsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -1837,6 +1957,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[20]},
 			},
+			{
+				Name:    "internalpolicy_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{InternalPoliciesColumns[20]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// InternalPolicyHistoryColumns holds the columns for the "internal_policy_history" table.
@@ -1918,6 +2046,14 @@ var (
 				Columns: []*schema.Column{InvitesColumns[0]},
 			},
 			{
+				Name:    "invite_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{InvitesColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
 				Name:    "invite_recipient_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{InvitesColumns[9], InvitesColumns[15]},
@@ -1975,6 +2111,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{JobResultsColumns[0]},
 			},
+			{
+				Name:    "jobresult_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{JobResultsColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// JobRunnersColumns holds the columns for the "job_runners" table.
@@ -2017,6 +2161,14 @@ var (
 				Name:    "jobrunner_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[13]},
+			},
+			{
+				Name:    "jobrunner_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{JobRunnersColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -2061,6 +2213,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{JobRunnerRegistrationTokensColumns[0]},
 			},
+			{
+				Name:    "jobrunnerregistrationtoken_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{JobRunnerRegistrationTokensColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// JobRunnerTokensColumns holds the columns for the "job_runner_tokens" table.
@@ -2100,6 +2260,14 @@ var (
 				Name:    "jobrunnertoken_id",
 				Unique:  true,
 				Columns: []*schema.Column{JobRunnerTokensColumns[0]},
+			},
+			{
+				Name:    "jobrunnertoken_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{JobRunnerTokensColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "jobrunnertoken_token_expires_at_is_active",
@@ -2206,6 +2374,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{MappedControlsColumns[0]},
 			},
+			{
+				Name:    "mappedcontrol_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{MappedControlsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// MappedControlHistoryColumns holds the columns for the "mapped_control_history" table.
@@ -2293,6 +2469,14 @@ var (
 				Name:    "narrative_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{NarrativesColumns[7], NarrativesColumns[13]},
+			},
+			{
+				Name:    "narrative_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{NarrativesColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -2385,6 +2569,14 @@ var (
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{NotesColumns[7], NotesColumns[10]},
+			},
+			{
+				Name:    "note_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{NotesColumns[10]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -2563,6 +2755,14 @@ var (
 				Name:    "orgsubscription_id",
 				Unique:  true,
 				Columns: []*schema.Column{OrgSubscriptionsColumns[0]},
+			},
+			{
+				Name:    "orgsubscription_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrgSubscriptionsColumns[21]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -2936,6 +3136,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[19]},
 			},
+			{
+				Name:    "procedure_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ProceduresColumns[19]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// ProcedureHistoryColumns holds the columns for the "procedure_history" table.
@@ -3027,6 +3235,14 @@ var (
 				Name:    "program_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ProgramsColumns[7], ProgramsColumns[22]},
+			},
+			{
+				Name:    "program_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ProgramsColumns[22]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -3217,6 +3433,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{RisksColumns[7], RisksColumns[20]},
 			},
+			{
+				Name:    "risk_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{RisksColumns[20]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// RiskHistoryColumns holds the columns for the "risk_history" table.
@@ -3305,6 +3529,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[17]},
 			},
+			{
+				Name:    "scheduledjob_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduledJobsColumns[17]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// ScheduledJobHistoryColumns holds the columns for the "scheduled_job_history" table.
@@ -3391,6 +3623,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{ScheduledJobRunsColumns[0]},
 			},
+			{
+				Name:    "scheduledjobrun_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduledJobRunsColumns[10]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// StandardsColumns holds the columns for the "standards" table.
@@ -3438,6 +3678,14 @@ var (
 				Name:    "standard_id",
 				Unique:  true,
 				Columns: []*schema.Column{StandardsColumns[0]},
+			},
+			{
+				Name:    "standard_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{StandardsColumns[23]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -3575,6 +3823,14 @@ var (
 				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[28]},
 			},
 			{
+				Name:    "subcontrol_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{SubcontrolsColumns[28]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
 				Name:    "subcontrol_control_id_ref_code",
 				Unique:  true,
 				Columns: []*schema.Column{SubcontrolsColumns[27], SubcontrolsColumns[26]},
@@ -3674,6 +3930,14 @@ var (
 				Name:    "subscriber_id",
 				Unique:  true,
 				Columns: []*schema.Column{SubscribersColumns[0]},
+			},
+			{
+				Name:    "subscriber_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{SubscribersColumns[18]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "subscriber_email_owner_id",
@@ -3788,6 +4052,14 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{TasksColumns[7], TasksColumns[15]},
 			},
+			{
+				Name:    "task_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{TasksColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// TaskHistoryColumns holds the columns for the "task_history" table.
@@ -3862,6 +4134,14 @@ var (
 				Name:    "template_id",
 				Unique:  true,
 				Columns: []*schema.Column{TemplatesColumns[0]},
+			},
+			{
+				Name:    "template_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{TemplatesColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "template_name_owner_id_template_type",

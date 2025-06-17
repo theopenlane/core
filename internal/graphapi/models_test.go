@@ -241,15 +241,19 @@ type ControlBuilder struct {
 	ControlEditorGroupID    string
 	ControlImplementationID string
 	// AllFields will set all direct fields on the control with random data
-	AllFields bool
+	AllFields   bool
+	Category    string
+	Subcategory string
 }
 
 type SubcontrolBuilder struct {
 	client *client
 
 	// Fields
-	Name      string
-	ControlID string
+	Name        string
+	ControlID   string
+	Category    string
+	Subcategory string
 }
 
 type MappedControlBuilder struct {
@@ -1071,6 +1075,14 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			})
 	}
 
+	if c.Category != "" {
+		mutation.SetCategory(c.Category)
+	}
+
+	if c.Subcategory != "" {
+		mutation.SetSubcategory(c.Subcategory)
+	}
+
 	control, err := mutation.
 		Save(ctx)
 	assert.NilError(t, err)
@@ -1095,6 +1107,14 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 	}
 
 	mutation.SetControlID(s.ControlID)
+
+	if s.Category != "" {
+		mutation.SetCategory(s.Category)
+	}
+
+	if s.Subcategory != "" {
+		mutation.SetSubcategory(s.Subcategory)
+	}
 
 	sc, err := mutation.
 		Save(ctx)

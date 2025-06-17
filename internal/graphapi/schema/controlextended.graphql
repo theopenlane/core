@@ -29,3 +29,14 @@ extend type Mutation{
       input: CloneControlInput
   ): ControlBulkCreatePayload!
 }
+
+extend type Query {
+    """
+    Existing categories or domains for controls used in the organization
+    """
+    controlCategories: [String!]
+    """
+    Existing subcategories or subdomains for controls used in the organization
+    """
+    controlSubcategories: [String!]
+}

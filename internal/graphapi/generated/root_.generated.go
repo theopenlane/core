@@ -3176,6 +3176,7 @@ type ComplexityRoot struct {
 		ContactSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		Control                               func(childComplexity int, id string) int
+		ControlCategories                     func(childComplexity int) int
 		ControlHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) int
 		ControlImplementation                 func(childComplexity int, id string) int
 		ControlImplementationHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) int
@@ -3189,6 +3190,7 @@ type ComplexityRoot struct {
 		ControlScheduledJobHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlScheduledJobHistoryOrder, where *generated.ControlScheduledJobHistoryWhereInput) int
 		ControlScheduledJobs                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
 		ControlSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ControlSubcategories                  func(childComplexity int) int
 		Controls                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CustomDomain                          func(childComplexity int, id string) int
 		CustomDomainHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) int
@@ -21191,6 +21193,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Control(childComplexity, args["id"].(string)), true
 
+	case "Query.controlCategories":
+		if e.complexity.Query.ControlCategories == nil {
+			break
+		}
+
+		return e.complexity.Query.ControlCategories(childComplexity), true
+
 	case "Query.controlHistories":
 		if e.complexity.Query.ControlHistories == nil {
 			break
@@ -21346,6 +21355,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.ControlSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.controlSubcategories":
+		if e.complexity.Query.ControlSubcategories == nil {
+			break
+		}
+
+		return e.complexity.Query.ControlSubcategories(childComplexity), true
 
 	case "Query.controls":
 		if e.complexity.Query.Controls == nil {
@@ -29753,6 +29769,17 @@ extend type Mutation{
   createControlsByClone(
       input: CloneControlInput
   ): ControlBulkCreatePayload!
+}
+
+extend type Query {
+    """
+    Existing categories or domains for controls used in the organization
+    """
+    controlCategories: [String!]
+    """
+    Existing subcategories or subdomains for controls used in the organization
+    """
+    controlSubcategories: [String!]
 }`, BuiltIn: false},
 	{Name: "../schema/controlimplementation.graphql", Input: `extend type Query {
     """

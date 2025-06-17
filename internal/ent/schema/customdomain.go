@@ -103,8 +103,6 @@ func (CustomDomain) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("cname_record").
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields(ownerFieldName).
-			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

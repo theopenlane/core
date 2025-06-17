@@ -19866,6 +19866,83 @@ func (_c *MockOpenlaneGraphClient_GetControlByID_Call) RunAndReturn(run func(ctx
 	return _c
 }
 
+// GetControlCategories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetControlCategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControlCategories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetControlCategories")
+	}
+
+	var r0 *openlaneclient.GetControlCategories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetControlCategories, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetControlCategories); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetControlCategories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetControlCategories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetControlCategories'
+type MockOpenlaneGraphClient_GetControlCategories_Call struct {
+	*mock.Call
+}
+
+// GetControlCategories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetControlCategories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlCategories_Call {
+	return &MockOpenlaneGraphClient_GetControlCategories_Call{Call: _e.mock.On("GetControlCategories",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetControlCategories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlCategories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetControlCategories_Call) Return(getControlCategories *openlaneclient.GetControlCategories, err error) *MockOpenlaneGraphClient_GetControlCategories_Call {
+	_c.Call.Return(getControlCategories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetControlCategories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControlCategories, error)) *MockOpenlaneGraphClient_GetControlCategories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetControlHistories provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) GetControlHistories(ctx context.Context, where *openlaneclient.ControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControlHistories, error) {
 	var tmpRet mock.Arguments
@@ -20716,6 +20793,83 @@ func (_c *MockOpenlaneGraphClient_GetControlScheduledJobs_Call) Return(getContro
 }
 
 func (_c *MockOpenlaneGraphClient_GetControlScheduledJobs_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.ControlScheduledJobWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControlScheduledJobs, error)) *MockOpenlaneGraphClient_GetControlScheduledJobs_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetControlSubcategories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControlSubcategories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetControlSubcategories")
+	}
+
+	var r0 *openlaneclient.GetControlSubcategories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetControlSubcategories, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetControlSubcategories); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetControlSubcategories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetControlSubcategories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetControlSubcategories'
+type MockOpenlaneGraphClient_GetControlSubcategories_Call struct {
+	*mock.Call
+}
+
+// GetControlSubcategories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetControlSubcategories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControlSubcategories_Call {
+	return &MockOpenlaneGraphClient_GetControlSubcategories_Call{Call: _e.mock.On("GetControlSubcategories",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetControlSubcategories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControlSubcategories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetControlSubcategories_Call) Return(getControlSubcategories *openlaneclient.GetControlSubcategories, err error) *MockOpenlaneGraphClient_GetControlSubcategories_Call {
+	_c.Call.Return(getControlSubcategories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetControlSubcategories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControlSubcategories, error)) *MockOpenlaneGraphClient_GetControlSubcategories_Call {
 	_c.Call.Return(run)
 	return _c
 }
