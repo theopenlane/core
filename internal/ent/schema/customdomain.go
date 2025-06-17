@@ -134,7 +134,7 @@ func (CustomDomain) Hooks() []ent.Hook {
 	}
 }
 
-// Annotations of the DNSVerification
+// Annotations of the CustomDomain
 func (CustomDomain) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("trust-center"),
