@@ -46,3 +46,11 @@ mutation CreateControlsByClone($input: CloneControlInput!) {
     }
   }
 }
+
+query GetControlCategories {
+  controlCategories
+}
+
+query GetControlSubcategories {
+  controlSubcategories
+}

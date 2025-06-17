@@ -38705,6 +38705,14 @@ type Query {
 		id: ID!
 	): Control!
 	"""
+	Existing categories or domains for controls used in the organization
+	"""
+	controlCategories: [String!]
+	"""
+	Existing subcategories or subdomains for controls used in the organization
+	"""
+	controlSubcategories: [String!]
+	"""
 	Look up controlImplementation by ID
 	"""
 	controlImplementation(

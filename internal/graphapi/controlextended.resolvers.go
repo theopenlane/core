@@ -6,6 +6,7 @@ package graphapi
 
 import (
 	"context"
+	"slices"
 
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -55,4 +56,62 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 	return &model.ControlBulkCreatePayload{
 		Controls: createdControls,
 	}, nil
+}
+
+// ControlCategories is the resolver for the controlCategories field.
+func (r *queryResolver) ControlCategories(ctx context.Context) ([]string, error) {
+	query, err := withTransactionalMutation(ctx).Control.Query().Select(control.FieldCategory).
+		WithSubcontrols().
+		All(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "string"})
+	}
+
+	categories := []string{}
+
+	for _, c := range query {
+		if !slices.Contains(categories, c.Category) && c.Category != "" {
+			categories = append(categories, c.Category)
+		}
+
+		for _, sc := range c.Edges.Subcontrols {
+			if !slices.Contains(categories, sc.Category) && sc.Category != "" {
+				categories = append(categories, sc.Category)
+			}
+		}
+	}
+
+	// sort the categories to ensure consistent order
+	slices.Sort(categories)
+
+	return categories, nil
+}
+
+// ControlSubcategories is the resolver for the controlSubcategories field.
+func (r *queryResolver) ControlSubcategories(ctx context.Context) ([]string, error) {
+	query, err := withTransactionalMutation(ctx).Control.Query().Select(control.FieldSubcategory).
+		WithSubcontrols().
+		All(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "string"})
+	}
+
+	subcategories := []string{}
+
+	for _, c := range query {
+		if !slices.Contains(subcategories, c.Subcategory) && c.Subcategory != "" {
+			subcategories = append(subcategories, c.Subcategory)
+		}
+
+		for _, sc := range c.Edges.Subcontrols {
+			if !slices.Contains(subcategories, sc.Subcategory) && sc.Subcategory != "" {
+				subcategories = append(subcategories, sc.Subcategory)
+			}
+		}
+	}
+
+	// sort the subcategories to ensure consistent order
+	slices.Sort(subcategories)
+
+	return subcategories, nil
 }

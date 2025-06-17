@@ -1268,3 +1268,137 @@ func TestMutationDeleteControl(t *testing.T) {
 		})
 	}
 }
+
+func TestQueryControlCategories(t *testing.T) {
+	// create objects to be deleted
+	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+
+	// create one without a category
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a duplicate category
+	control4 := (&ControlBuilder{client: suite.client, Category: control1.Category}).MustNew(testUser1.UserCtx, t)
+
+	// create a subcontrol with a different category
+	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID, Category: "New Category"}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		client         *openlaneclient.OpenlaneClient
+		ctx            context.Context
+		expectedErr    string
+		expectedResult []string
+	}{
+		{
+			name:           "happy path, get control categories",
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedResult: []string{control1.Category, control2.Category, subcontrol.Category},
+		},
+		{
+			name:           "no controls, no results",
+			client:         suite.client.api,
+			ctx:            testUser2.UserCtx,
+			expectedResult: []string{},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetControlCategories(tc.ctx)
+			if tc.expectedErr != "" {
+
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.ControlCategories, len(tc.expectedResult)))
+
+			// sort the categories so they are consistent
+			slices.Sort(tc.expectedResult)
+			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlCategories))
+
+			for _, category := range resp.ControlCategories {
+				// check for empty categories
+				assert.Check(t, category != "")
+			}
+		})
+	}
+
+	// cleanup created controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestQueryControlSubcategories(t *testing.T) {
+	// create objects to be deleted
+	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+
+	// create one without a subcategory
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a duplicate subcategory
+	control4 := (&ControlBuilder{client: suite.client, Subcategory: control1.Subcategory}).MustNew(testUser1.UserCtx, t)
+
+	// create a subcontrol with a different category
+	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID, Subcategory: "New Subcategory"}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		client         *openlaneclient.OpenlaneClient
+		ctx            context.Context
+		expectedErr    string
+		expectedResult []string
+	}{
+		{
+			name:           "happy path, get control subcategories",
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedResult: []string{control1.Subcategory, control2.Subcategory, subcontrol.Subcategory},
+		},
+		{
+			name:           "no controls, no results",
+			client:         suite.client.api,
+			ctx:            testUser2.UserCtx,
+			expectedResult: []string{},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetControlSubcategories(tc.ctx)
+			if tc.expectedErr != "" {
+
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.ControlSubcategories, len(tc.expectedResult)))
+
+			// sort the categories so they are consistent
+			slices.Sort(tc.expectedResult)
+			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlSubcategories))
+
+			for _, category := range resp.ControlSubcategories {
+				// check for empty categories
+				assert.Check(t, category != "")
+			}
+		})
+	}
+
+	// cleanup created controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
+}

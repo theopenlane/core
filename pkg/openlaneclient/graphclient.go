@@ -51,6 +51,8 @@ type OpenlaneGraphClient interface {
 	GetControls(ctx context.Context, first *int64, last *int64, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error)
 	UpdateControl(ctx context.Context, updateControlID string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControl, error)
 	CreateControlsByClone(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByClone, error)
+	GetControlCategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlCategories, error)
+	GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategories, error)
 	GetAllControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlHistories, error)
 	GetControlHistories(ctx context.Context, where *ControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlHistories, error)
 	CreateBulkControlImplementation(ctx context.Context, input []*CreateControlImplementationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControlImplementation, error)
@@ -78466,6 +78468,28 @@ func (t *CreateControlsByClone) GetCreateControlsByClone() *CreateControlsByClon
 	return &t.CreateControlsByClone
 }
 
+type GetControlCategories struct {
+	ControlCategories []string "json:\"controlCategories,omitempty\" graphql:\"controlCategories\""
+}
+
+func (t *GetControlCategories) GetControlCategories() []string {
+	if t == nil {
+		t = &GetControlCategories{}
+	}
+	return t.ControlCategories
+}
+
+type GetControlSubcategories struct {
+	ControlSubcategories []string "json:\"controlSubcategories,omitempty\" graphql:\"controlSubcategories\""
+}
+
+func (t *GetControlSubcategories) GetControlSubcategories() []string {
+	if t == nil {
+		t = &GetControlSubcategories{}
+	}
+	return t.ControlSubcategories
+}
+
 type GetAllControlHistories struct {
 	ControlHistories GetAllControlHistories_ControlHistories "json:\"controlHistories\" graphql:\"controlHistories\""
 }
@@ -85253,6 +85277,46 @@ func (c *Client) CreateControlsByClone(ctx context.Context, input CloneControlIn
 
 	var res CreateControlsByClone
 	if err := c.Client.Post(ctx, "CreateControlsByClone", CreateControlsByCloneDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlCategoriesDocument = `query GetControlCategories {
+	controlCategories
+}
+`
+
+func (c *Client) GetControlCategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlCategories, error) {
+	vars := map[string]any{}
+
+	var res GetControlCategories
+	if err := c.Client.Post(ctx, "GetControlCategories", GetControlCategoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlSubcategoriesDocument = `query GetControlSubcategories {
+	controlSubcategories
+}
+`
+
+func (c *Client) GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategories, error) {
+	vars := map[string]any{}
+
+	var res GetControlSubcategories
+	if err := c.Client.Post(ctx, "GetControlSubcategories", GetControlSubcategoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -103873,6 +103937,8 @@ var DocumentOperationNames = map[string]string{
 	GetControlsDocument:                          "GetControls",
 	UpdateControlDocument:                        "UpdateControl",
 	CreateControlsByCloneDocument:                "CreateControlsByClone",
+	GetControlCategoriesDocument:                 "GetControlCategories",
+	GetControlSubcategoriesDocument:              "GetControlSubcategories",
 	GetAllControlHistoriesDocument:               "GetAllControlHistories",
 	GetControlHistoriesDocument:                  "GetControlHistories",
 	CreateBulkControlImplementationDocument:      "CreateBulkControlImplementation",
