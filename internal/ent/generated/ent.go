@@ -73,6 +73,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -220,6 +223,9 @@ func checkColumn(table, column string) error {
 			onboarding.Table:                   onboarding.ValidColumn,
 			orgmembership.Table:                orgmembership.ValidColumn,
 			orgmembershiphistory.Table:         orgmembershiphistory.ValidColumn,
+			orgmodule.Table:                    orgmodule.ValidColumn,
+			orgprice.Table:                     orgprice.ValidColumn,
+			orgproduct.Table:                   orgproduct.ValidColumn,
 			orgsubscription.Table:              orgsubscription.ValidColumn,
 			orgsubscriptionhistory.Table:       orgsubscriptionhistory.ValidColumn,
 			organization.Table:                 organization.ValidColumn,

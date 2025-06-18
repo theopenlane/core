@@ -1,0 +1,99 @@
+package schema
+
+import (
+	"entgo.io/contrib/entgql"
+	"entgo.io/ent"
+	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/field"
+
+	"github.com/gertd/go-pluralize"
+
+	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
+)
+
+// OrgPrice represents a price attached to a subscription product
+type OrgPrice struct {
+	SchemaFuncs
+
+	ent.Schema
+}
+
+const SchemaOrgPrice = "org_price"
+
+// Name returns the name of the OrgPrice schema
+func (OrgPrice) Name() string {
+	return SchemaOrgPrice
+}
+
+// GetType returns the type of the OrgPrice schema
+func (OrgPrice) GetType() any {
+	return OrgPrice.Type
+}
+
+// PluralName returns the plural name of the OrgPrice schema
+func (OrgPrice) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaOrgPrice)
+}
+
+// Fields of the OrgPrice
+func (OrgPrice) Fields() []ent.Field {
+	return []ent.Field{
+		field.JSON("price", models.Price{}).
+			Optional(),
+		field.String("stripe_price_id").
+			Optional(),
+		field.String("status").
+			Optional(),
+		field.Bool("active").
+			Default(true),
+		field.Time("trial_expires_at").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("trial_expires_at"),
+			),
+		field.Time("expires_at").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("expires_at"),
+			),
+		field.String("product_id").Optional(),
+	}
+}
+
+// Edges of the OrgPrice
+func (o OrgPrice) Edges() []ent.Edge {
+	return []ent.Edge{
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: o,
+			edgeSchema: OrgProduct{},
+			field:      "product_id",
+			ref:        "prices",
+		}),
+	}
+}
+
+// Mixin returns the mixins for the OrgPrice schema
+func (o OrgPrice) Mixin() []ent.Mixin {
+	return mixinConfig{
+		excludeAnnotations: true,
+		additionalMixins: []ent.Mixin{
+			newOrgOwnedMixin(o),
+		},
+	}.getMixins()
+}
+
+// Annotations returns the annotations for the OrgPrice schema
+func (OrgPrice) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entgql.Skip(entgql.SkipAll),
+		entx.SchemaGenSkip(true),
+		entx.QueryGenSkip(true),
+		history.Annotations{
+			Exclude: true,
+		},
+	}
+}

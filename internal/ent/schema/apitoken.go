@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/utils/keygen"
@@ -128,6 +129,7 @@ func (a APIToken) Mixin() []ent.Mixin {
 // Annotations of the APIToken
 func (APIToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		history.Annotations{
 			Exclude: true,
 		},

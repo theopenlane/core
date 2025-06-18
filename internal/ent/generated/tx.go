@@ -126,6 +126,12 @@ type Tx struct {
 	OrgMembership *OrgMembershipClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
+	// OrgModule is the client for interacting with the OrgModule builders.
+	OrgModule *OrgModuleClient
+	// OrgPrice is the client for interacting with the OrgPrice builders.
+	OrgPrice *OrgPriceClient
+	// OrgProduct is the client for interacting with the OrgProduct builders.
+	OrgProduct *OrgProductClient
 	// OrgSubscription is the client for interacting with the OrgSubscription builders.
 	OrgSubscription *OrgSubscriptionClient
 	// OrgSubscriptionHistory is the client for interacting with the OrgSubscriptionHistory builders.
@@ -382,6 +388,9 @@ func (tx *Tx) init() {
 	tx.Onboarding = NewOnboardingClient(tx.config)
 	tx.OrgMembership = NewOrgMembershipClient(tx.config)
 	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
+	tx.OrgModule = NewOrgModuleClient(tx.config)
+	tx.OrgPrice = NewOrgPriceClient(tx.config)
+	tx.OrgProduct = NewOrgProductClient(tx.config)
 	tx.OrgSubscription = NewOrgSubscriptionClient(tx.config)
 	tx.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)

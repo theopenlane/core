@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -77,6 +78,7 @@ func (p Procedure) Mixin() []ent.Mixin {
 // Annotations of the Procedure
 func (Procedure) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }

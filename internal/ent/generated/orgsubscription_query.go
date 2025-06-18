@@ -14,6 +14,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
@@ -23,15 +25,19 @@ import (
 // OrgSubscriptionQuery is the builder for querying OrgSubscription entities.
 type OrgSubscriptionQuery struct {
 	config
-	ctx             *QueryContext
-	order           []orgsubscription.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.OrgSubscription
-	withOwner       *OrganizationQuery
-	withEvents      *EventQuery
-	loadTotal       []func(context.Context, []*OrgSubscription) error
-	modifiers       []func(*sql.Selector)
-	withNamedEvents map[string]*EventQuery
+	ctx               *QueryContext
+	order             []orgsubscription.OrderOption
+	inters            []Interceptor
+	predicates        []predicate.OrgSubscription
+	withOwner         *OrganizationQuery
+	withEvents        *EventQuery
+	withModules       *OrgModuleQuery
+	withProducts      *OrgProductQuery
+	loadTotal         []func(context.Context, []*OrgSubscription) error
+	modifiers         []func(*sql.Selector)
+	withNamedEvents   map[string]*EventQuery
+	withNamedModules  map[string]*OrgModuleQuery
+	withNamedProducts map[string]*OrgProductQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -112,6 +118,56 @@ func (osq *OrgSubscriptionQuery) QueryEvents() *EventQuery {
 		schemaConfig := osq.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryModules chains the current query on the "modules" edge.
+func (osq *OrgSubscriptionQuery) QueryModules() *OrgModuleQuery {
+	query := (&OrgModuleClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
+			sqlgraph.To(orgmodule.Table, orgmodule.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.ModulesTable, orgsubscription.ModulesColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.OrgModule
+		step.Edge.Schema = schemaConfig.OrgModule
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProducts chains the current query on the "products" edge.
+func (osq *OrgSubscriptionQuery) QueryProducts() *OrgProductQuery {
+	query := (&OrgProductClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
+			sqlgraph.To(orgproduct.Table, orgproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.ProductsTable, orgsubscription.ProductsColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgProduct
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -305,13 +361,15 @@ func (osq *OrgSubscriptionQuery) Clone() *OrgSubscriptionQuery {
 		return nil
 	}
 	return &OrgSubscriptionQuery{
-		config:     osq.config,
-		ctx:        osq.ctx.Clone(),
-		order:      append([]orgsubscription.OrderOption{}, osq.order...),
-		inters:     append([]Interceptor{}, osq.inters...),
-		predicates: append([]predicate.OrgSubscription{}, osq.predicates...),
-		withOwner:  osq.withOwner.Clone(),
-		withEvents: osq.withEvents.Clone(),
+		config:       osq.config,
+		ctx:          osq.ctx.Clone(),
+		order:        append([]orgsubscription.OrderOption{}, osq.order...),
+		inters:       append([]Interceptor{}, osq.inters...),
+		predicates:   append([]predicate.OrgSubscription{}, osq.predicates...),
+		withOwner:    osq.withOwner.Clone(),
+		withEvents:   osq.withEvents.Clone(),
+		withModules:  osq.withModules.Clone(),
+		withProducts: osq.withProducts.Clone(),
 		// clone intermediate query.
 		sql:       osq.sql.Clone(),
 		path:      osq.path,
@@ -338,6 +396,28 @@ func (osq *OrgSubscriptionQuery) WithEvents(opts ...func(*EventQuery)) *OrgSubsc
 		opt(query)
 	}
 	osq.withEvents = query
+	return osq
+}
+
+// WithModules tells the query-builder to eager-load the nodes that are connected to
+// the "modules" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithModules(opts ...func(*OrgModuleQuery)) *OrgSubscriptionQuery {
+	query := (&OrgModuleClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withModules = query
+	return osq
+}
+
+// WithProducts tells the query-builder to eager-load the nodes that are connected to
+// the "products" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithProducts(opts ...func(*OrgProductQuery)) *OrgSubscriptionQuery {
+	query := (&OrgProductClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withProducts = query
 	return osq
 }
 
@@ -419,9 +499,11 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	var (
 		nodes       = []*OrgSubscription{}
 		_spec       = osq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [4]bool{
 			osq.withOwner != nil,
 			osq.withEvents != nil,
+			osq.withModules != nil,
+			osq.withProducts != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -460,10 +542,38 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			return nil, err
 		}
 	}
+	if query := osq.withModules; query != nil {
+		if err := osq.loadModules(ctx, query, nodes,
+			func(n *OrgSubscription) { n.Edges.Modules = []*OrgModule{} },
+			func(n *OrgSubscription, e *OrgModule) { n.Edges.Modules = append(n.Edges.Modules, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := osq.withProducts; query != nil {
+		if err := osq.loadProducts(ctx, query, nodes,
+			func(n *OrgSubscription) { n.Edges.Products = []*OrgProduct{} },
+			func(n *OrgSubscription, e *OrgProduct) { n.Edges.Products = append(n.Edges.Products, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range osq.withNamedEvents {
 		if err := osq.loadEvents(ctx, query, nodes,
 			func(n *OrgSubscription) { n.appendNamedEvents(name) },
 			func(n *OrgSubscription, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range osq.withNamedModules {
+		if err := osq.loadModules(ctx, query, nodes,
+			func(n *OrgSubscription) { n.appendNamedModules(name) },
+			func(n *OrgSubscription, e *OrgModule) { n.appendNamedModules(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range osq.withNamedProducts {
+		if err := osq.loadProducts(ctx, query, nodes,
+			func(n *OrgSubscription) { n.appendNamedProducts(name) },
+			func(n *OrgSubscription, e *OrgProduct) { n.appendNamedProducts(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -563,6 +673,66 @@ func (osq *OrgSubscriptionQuery) loadEvents(ctx context.Context, query *EventQue
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (osq *OrgSubscriptionQuery) loadModules(ctx context.Context, query *OrgModuleQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *OrgModule)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*OrgSubscription)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(orgmodule.FieldSubscriptionID)
+	}
+	query.Where(predicate.OrgModule(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(orgsubscription.ModulesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.SubscriptionID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subscription_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (osq *OrgSubscriptionQuery) loadProducts(ctx context.Context, query *OrgProductQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *OrgProduct)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*OrgSubscription)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(orgproduct.FieldSubscriptionID)
+	}
+	query.Where(predicate.OrgProduct(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(orgsubscription.ProductsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.SubscriptionID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subscription_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -679,6 +849,34 @@ func (osq *OrgSubscriptionQuery) WithNamedEvents(name string, opts ...func(*Even
 		osq.withNamedEvents = make(map[string]*EventQuery)
 	}
 	osq.withNamedEvents[name] = query
+	return osq
+}
+
+// WithNamedModules tells the query-builder to eager-load the nodes that are connected to the "modules"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithNamedModules(name string, opts ...func(*OrgModuleQuery)) *OrgSubscriptionQuery {
+	query := (&OrgModuleClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if osq.withNamedModules == nil {
+		osq.withNamedModules = make(map[string]*OrgModuleQuery)
+	}
+	osq.withNamedModules[name] = query
+	return osq
+}
+
+// WithNamedProducts tells the query-builder to eager-load the nodes that are connected to the "products"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithNamedProducts(name string, opts ...func(*OrgProductQuery)) *OrgSubscriptionQuery {
+	query := (&OrgProductClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if osq.withNamedProducts == nil {
+		osq.withNamedProducts = make(map[string]*OrgProductQuery)
+	}
+	osq.withNamedProducts[name] = query
 	return osq
 }
 

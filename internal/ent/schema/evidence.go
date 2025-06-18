@@ -125,6 +125,7 @@ func (e Evidence) Edges() []ent.Edge {
 // Annotations of the Evidence
 func (Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }

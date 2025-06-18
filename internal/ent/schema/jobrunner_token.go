@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/keygen"
 )
@@ -118,6 +119,7 @@ func (JobRunnerToken) Indexes() []ent.Index {
 // Annotations of the JobRunnerToken
 func (JobRunnerToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},

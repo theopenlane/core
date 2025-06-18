@@ -39,6 +39,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
@@ -438,6 +441,24 @@ func OrgMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func OrgModuleEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmodule edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func OrgPriceEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgprice edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func OrgProductEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgproduct edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func OrgSubscriptionEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscription edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -519,6 +540,27 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).OrgSubscription.Query().Where((orgsubscription.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgsubscriptionCount, err := FromContext(ctx).OrgSubscription.Delete().Where(orgsubscription.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgsubscriptionCount).Msg("deleting orgsubscription")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).OrgProduct.Query().Where((orgproduct.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if orgproductCount, err := FromContext(ctx).OrgProduct.Delete().Where(orgproduct.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", orgproductCount).Msg("deleting orgproduct")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).OrgPrice.Query().Where((orgprice.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if orgpriceCount, err := FromContext(ctx).OrgPrice.Delete().Where(orgprice.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", orgpriceCount).Msg("deleting orgprice")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).OrgModule.Query().Where((orgmodule.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if orgmoduleCount, err := FromContext(ctx).OrgModule.Delete().Where(orgmodule.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", orgmoduleCount).Msg("deleting orgmodule")
 			return err
 		}
 	}

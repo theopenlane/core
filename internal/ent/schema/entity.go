@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -140,4 +141,11 @@ func (Entity) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+// Annotations of the Entity
+func (Entity) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("entity-management"),
+	}
 }

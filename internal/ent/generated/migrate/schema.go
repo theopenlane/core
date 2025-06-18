@@ -2712,6 +2712,169 @@ var (
 			},
 		},
 	}
+	// OrgModulesColumns holds the columns for the "org_modules" table.
+	OrgModulesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "module", Type: field.TypeString},
+		{Name: "price", Type: field.TypeJSON, Nullable: true},
+		{Name: "stripe_price_id", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "subscription_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// OrgModulesTable holds the schema information for the "org_modules" table.
+	OrgModulesTable = &schema.Table{
+		Name:       "org_modules",
+		Columns:    OrgModulesColumns,
+		PrimaryKey: []*schema.Column{OrgModulesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_modules_org_subscriptions_modules",
+				Columns:    []*schema.Column{OrgModulesColumns[15]},
+				RefColumns: []*schema.Column{OrgSubscriptionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "org_modules_organizations_org_modules",
+				Columns:    []*schema.Column{OrgModulesColumns[16]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orgmodule_id",
+				Unique:  true,
+				Columns: []*schema.Column{OrgModulesColumns[0]},
+			},
+			{
+				Name:    "orgmodule_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrgModulesColumns[16]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// OrgPricesColumns holds the columns for the "org_prices" table.
+	OrgPricesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "price", Type: field.TypeJSON, Nullable: true},
+		{Name: "stripe_price_id", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "product_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// OrgPricesTable holds the schema information for the "org_prices" table.
+	OrgPricesTable = &schema.Table{
+		Name:       "org_prices",
+		Columns:    OrgPricesColumns,
+		PrimaryKey: []*schema.Column{OrgPricesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_prices_org_products_prices",
+				Columns:    []*schema.Column{OrgPricesColumns[14]},
+				RefColumns: []*schema.Column{OrgProductsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "org_prices_organizations_org_prices",
+				Columns:    []*schema.Column{OrgPricesColumns[15]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orgprice_id",
+				Unique:  true,
+				Columns: []*schema.Column{OrgPricesColumns[0]},
+			},
+			{
+				Name:    "orgprice_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrgPricesColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// OrgProductsColumns holds the columns for the "org_products" table.
+	OrgProductsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "module", Type: field.TypeString},
+		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "subscription_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// OrgProductsTable holds the schema information for the "org_products" table.
+	OrgProductsTable = &schema.Table{
+		Name:       "org_products",
+		Columns:    OrgProductsColumns,
+		PrimaryKey: []*schema.Column{OrgProductsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_products_org_subscriptions_products",
+				Columns:    []*schema.Column{OrgProductsColumns[14]},
+				RefColumns: []*schema.Column{OrgSubscriptionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "org_products_organizations_org_products",
+				Columns:    []*schema.Column{OrgProductsColumns[15]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "orgproduct_id",
+				Unique:  true,
+				Columns: []*schema.Column{OrgProductsColumns[0]},
+			},
+			{
+				Name:    "orgproduct_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{OrgProductsColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
 	// OrgSubscriptionsColumns holds the columns for the "org_subscriptions" table.
 	OrgSubscriptionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -6890,6 +7053,9 @@ var (
 		OnboardingsTable,
 		OrgMembershipsTable,
 		OrgMembershipHistoryTable,
+		OrgModulesTable,
+		OrgPricesTable,
+		OrgProductsTable,
 		OrgSubscriptionsTable,
 		OrgSubscriptionHistoryTable,
 		OrganizationsTable,
@@ -7171,6 +7337,12 @@ func init() {
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
 	}
+	OrgModulesTable.ForeignKeys[0].RefTable = OrgSubscriptionsTable
+	OrgModulesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	OrgPricesTable.ForeignKeys[0].RefTable = OrgProductsTable
+	OrgPricesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	OrgProductsTable.ForeignKeys[0].RefTable = OrgSubscriptionsTable
+	OrgProductsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	OrgSubscriptionsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrgSubscriptionHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_subscription_history",

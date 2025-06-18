@@ -14,6 +14,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/models"
@@ -415,6 +417,36 @@ func (osu *OrgSubscriptionUpdate) AddEvents(e ...*Event) *OrgSubscriptionUpdate 
 	return osu.AddEventIDs(ids...)
 }
 
+// AddModuleIDs adds the "modules" edge to the OrgModule entity by IDs.
+func (osu *OrgSubscriptionUpdate) AddModuleIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.AddModuleIDs(ids...)
+	return osu
+}
+
+// AddModules adds the "modules" edges to the OrgModule entity.
+func (osu *OrgSubscriptionUpdate) AddModules(o ...*OrgModule) *OrgSubscriptionUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osu.AddModuleIDs(ids...)
+}
+
+// AddProductIDs adds the "products" edge to the OrgProduct entity by IDs.
+func (osu *OrgSubscriptionUpdate) AddProductIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.AddProductIDs(ids...)
+	return osu
+}
+
+// AddProducts adds the "products" edges to the OrgProduct entity.
+func (osu *OrgSubscriptionUpdate) AddProducts(o ...*OrgProduct) *OrgSubscriptionUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osu.AddProductIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osu *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
 	return osu.mutation
@@ -445,6 +477,48 @@ func (osu *OrgSubscriptionUpdate) RemoveEvents(e ...*Event) *OrgSubscriptionUpda
 		ids[i] = e[i].ID
 	}
 	return osu.RemoveEventIDs(ids...)
+}
+
+// ClearModules clears all "modules" edges to the OrgModule entity.
+func (osu *OrgSubscriptionUpdate) ClearModules() *OrgSubscriptionUpdate {
+	osu.mutation.ClearModules()
+	return osu
+}
+
+// RemoveModuleIDs removes the "modules" edge to OrgModule entities by IDs.
+func (osu *OrgSubscriptionUpdate) RemoveModuleIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.RemoveModuleIDs(ids...)
+	return osu
+}
+
+// RemoveModules removes "modules" edges to OrgModule entities.
+func (osu *OrgSubscriptionUpdate) RemoveModules(o ...*OrgModule) *OrgSubscriptionUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osu.RemoveModuleIDs(ids...)
+}
+
+// ClearProducts clears all "products" edges to the OrgProduct entity.
+func (osu *OrgSubscriptionUpdate) ClearProducts() *OrgSubscriptionUpdate {
+	osu.mutation.ClearProducts()
+	return osu
+}
+
+// RemoveProductIDs removes the "products" edge to OrgProduct entities by IDs.
+func (osu *OrgSubscriptionUpdate) RemoveProductIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.RemoveProductIDs(ids...)
+	return osu
+}
+
+// RemoveProducts removes "products" edges to OrgProduct entities.
+func (osu *OrgSubscriptionUpdate) RemoveProducts(o ...*OrgProduct) *OrgSubscriptionUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osu.RemoveProductIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -717,6 +791,102 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osu.mutation.ModulesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ModulesTable,
+			Columns: []string{orgsubscription.ModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgModule
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.RemovedModulesIDs(); len(nodes) > 0 && !osu.mutation.ModulesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ModulesTable,
+			Columns: []string{orgsubscription.ModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgModule
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.ModulesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ModulesTable,
+			Columns: []string{orgsubscription.ModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgModule
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osu.mutation.ProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ProductsTable,
+			Columns: []string{orgsubscription.ProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgProduct
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.RemovedProductsIDs(); len(nodes) > 0 && !osu.mutation.ProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ProductsTable,
+			Columns: []string{orgsubscription.ProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgProduct
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ProductsTable,
+			Columns: []string{orgsubscription.ProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1126,6 +1296,36 @@ func (osuo *OrgSubscriptionUpdateOne) AddEvents(e ...*Event) *OrgSubscriptionUpd
 	return osuo.AddEventIDs(ids...)
 }
 
+// AddModuleIDs adds the "modules" edge to the OrgModule entity by IDs.
+func (osuo *OrgSubscriptionUpdateOne) AddModuleIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.AddModuleIDs(ids...)
+	return osuo
+}
+
+// AddModules adds the "modules" edges to the OrgModule entity.
+func (osuo *OrgSubscriptionUpdateOne) AddModules(o ...*OrgModule) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osuo.AddModuleIDs(ids...)
+}
+
+// AddProductIDs adds the "products" edge to the OrgProduct entity by IDs.
+func (osuo *OrgSubscriptionUpdateOne) AddProductIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.AddProductIDs(ids...)
+	return osuo
+}
+
+// AddProducts adds the "products" edges to the OrgProduct entity.
+func (osuo *OrgSubscriptionUpdateOne) AddProducts(o ...*OrgProduct) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osuo.AddProductIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osuo *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
 	return osuo.mutation
@@ -1156,6 +1356,48 @@ func (osuo *OrgSubscriptionUpdateOne) RemoveEvents(e ...*Event) *OrgSubscription
 		ids[i] = e[i].ID
 	}
 	return osuo.RemoveEventIDs(ids...)
+}
+
+// ClearModules clears all "modules" edges to the OrgModule entity.
+func (osuo *OrgSubscriptionUpdateOne) ClearModules() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearModules()
+	return osuo
+}
+
+// RemoveModuleIDs removes the "modules" edge to OrgModule entities by IDs.
+func (osuo *OrgSubscriptionUpdateOne) RemoveModuleIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.RemoveModuleIDs(ids...)
+	return osuo
+}
+
+// RemoveModules removes "modules" edges to OrgModule entities.
+func (osuo *OrgSubscriptionUpdateOne) RemoveModules(o ...*OrgModule) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osuo.RemoveModuleIDs(ids...)
+}
+
+// ClearProducts clears all "products" edges to the OrgProduct entity.
+func (osuo *OrgSubscriptionUpdateOne) ClearProducts() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearProducts()
+	return osuo
+}
+
+// RemoveProductIDs removes the "products" edge to OrgProduct entities by IDs.
+func (osuo *OrgSubscriptionUpdateOne) RemoveProductIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.RemoveProductIDs(ids...)
+	return osuo
+}
+
+// RemoveProducts removes "products" edges to OrgProduct entities.
+func (osuo *OrgSubscriptionUpdateOne) RemoveProducts(o ...*OrgProduct) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osuo.RemoveProductIDs(ids...)
 }
 
 // Where appends a list predicates to the OrgSubscriptionUpdate builder.
@@ -1458,6 +1700,102 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrgSubscriptionEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osuo.mutation.ModulesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ModulesTable,
+			Columns: []string{orgsubscription.ModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgModule
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.RemovedModulesIDs(); len(nodes) > 0 && !osuo.mutation.ModulesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ModulesTable,
+			Columns: []string{orgsubscription.ModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgModule
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.ModulesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ModulesTable,
+			Columns: []string{orgsubscription.ModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgModule
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osuo.mutation.ProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ProductsTable,
+			Columns: []string{orgsubscription.ProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgProduct
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.RemovedProductsIDs(); len(nodes) > 0 && !osuo.mutation.ProductsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ProductsTable,
+			Columns: []string{orgsubscription.ProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgProduct
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.ProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.ProductsTable,
+			Columns: []string{orgsubscription.ProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

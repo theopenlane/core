@@ -94,6 +94,7 @@ func (n Narrative) Mixin() []ent.Mixin {
 // Annotations of the Narrative
 func (Narrative) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "policy-management"),
 		entfga.SelfAccessChecks(),
 	}
 }

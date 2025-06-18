@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -13,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/entx"
 )
 
 // CustomDomain holds the schema definition for the CustomDomain
@@ -124,9 +126,17 @@ func (CustomDomain) Policy() ent.Policy {
 	)
 }
 
+// Hooks of the CustomDomain
 func (CustomDomain) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookCreateCustomDomain(),
 		hooks.HookDeleteCustomDomain(),
+	}
+}
+
+// Annotations of the CustomDomain
+func (CustomDomain) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.Features("trust-center"),
 	}
 }

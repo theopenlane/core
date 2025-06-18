@@ -1280,6 +1280,64 @@ func HasEventsWith(preds ...predicate.Event) predicate.OrgSubscription {
 	})
 }
 
+// HasModules applies the HasEdge predicate on the "modules" edge.
+func HasModules() predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ModulesTable, ModulesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgModule
+		step.Edge.Schema = schemaConfig.OrgModule
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasModulesWith applies the HasEdge predicate on the "modules" edge with a given conditions (other predicates).
+func HasModulesWith(preds ...predicate.OrgModule) predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := newModulesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgModule
+		step.Edge.Schema = schemaConfig.OrgModule
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProducts applies the HasEdge predicate on the "products" edge.
+func HasProducts() predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProductsTable, ProductsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgProduct
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProductsWith applies the HasEdge predicate on the "products" edge with a given conditions (other predicates).
+func HasProductsWith(preds ...predicate.OrgProduct) predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := newProductsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgProduct
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.OrgSubscription) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.AndPredicates(predicates...))

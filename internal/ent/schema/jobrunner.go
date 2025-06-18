@@ -100,6 +100,7 @@ func (JobRunner) Indexes() []ent.Index {
 // Annotations of the JobRunner
 func (JobRunner) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},

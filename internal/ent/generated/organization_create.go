@@ -40,6 +40,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -729,6 +732,51 @@ func (oc *OrganizationCreate) AddOrgSubscriptions(o ...*OrgSubscription) *Organi
 		ids[i] = o[i].ID
 	}
 	return oc.AddOrgSubscriptionIDs(ids...)
+}
+
+// AddOrgProductIDs adds the "org_products" edge to the OrgProduct entity by IDs.
+func (oc *OrganizationCreate) AddOrgProductIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddOrgProductIDs(ids...)
+	return oc
+}
+
+// AddOrgProducts adds the "org_products" edges to the OrgProduct entity.
+func (oc *OrganizationCreate) AddOrgProducts(o ...*OrgProduct) *OrganizationCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return oc.AddOrgProductIDs(ids...)
+}
+
+// AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
+func (oc *OrganizationCreate) AddOrgPriceIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddOrgPriceIDs(ids...)
+	return oc
+}
+
+// AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
+func (oc *OrganizationCreate) AddOrgPrices(o ...*OrgPrice) *OrganizationCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return oc.AddOrgPriceIDs(ids...)
+}
+
+// AddOrgModuleIDs adds the "org_modules" edge to the OrgModule entity by IDs.
+func (oc *OrganizationCreate) AddOrgModuleIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddOrgModuleIDs(ids...)
+	return oc
+}
+
+// AddOrgModules adds the "org_modules" edges to the OrgModule entity.
+func (oc *OrganizationCreate) AddOrgModules(o ...*OrgModule) *OrganizationCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return oc.AddOrgModuleIDs(ids...)
 }
 
 // AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
@@ -1880,6 +1928,57 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.OrgSubscription
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.OrgProductsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgProductsTable,
+			Columns: []string{organization.OrgProductsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.OrgProduct
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.OrgPricesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgPricesTable,
+			Columns: []string{organization.OrgPricesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.OrgPrice
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.OrgModulesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgModulesTable,
+			Columns: []string{organization.OrgModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

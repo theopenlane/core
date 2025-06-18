@@ -130,6 +130,7 @@ func (c ControlObjective) Mixin() []ent.Mixin {
 // Annotations of the ControlObjective
 func (ControlObjective) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }

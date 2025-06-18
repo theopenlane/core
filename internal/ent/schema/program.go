@@ -177,6 +177,7 @@ func (p Program) Edges() []ent.Edge {
 // Annotations of the Program
 func (Program) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance"),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

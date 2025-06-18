@@ -7913,6 +7913,9 @@ input CreateOrganizationInput {
 	integrationIDs: [ID!]
 	documentIDs: [ID!]
 	orgSubscriptionIDs: [ID!]
+	orgProductIDs: [ID!]
+	orgPriceIDs: [ID!]
+	orgModuleIDs: [ID!]
 	inviteIDs: [ID!]
 	subscriberIDs: [ID!]
 	entityIDs: [ID!]
@@ -49152,6 +49155,15 @@ input UpdateOrganizationInput {
 	addOrgSubscriptionIDs: [ID!]
 	removeOrgSubscriptionIDs: [ID!]
 	clearOrgSubscriptions: Boolean
+	addOrgProductIDs: [ID!]
+	removeOrgProductIDs: [ID!]
+	clearOrgProducts: Boolean
+	addOrgPriceIDs: [ID!]
+	removeOrgPriceIDs: [ID!]
+	clearOrgPrices: Boolean
+	addOrgModuleIDs: [ID!]
+	removeOrgModuleIDs: [ID!]
+	clearOrgModules: Boolean
 	addInviteIDs: [ID!]
 	removeInviteIDs: [ID!]
 	clearInvites: Boolean

@@ -5740,6 +5740,9 @@ type CreateOrganizationInput struct {
 	IntegrationIDs                  []string
 	DocumentIDs                     []string
 	OrgSubscriptionIDs              []string
+	OrgProductIDs                   []string
+	OrgPriceIDs                     []string
+	OrgModuleIDs                    []string
 	InviteIDs                       []string
 	SubscriberIDs                   []string
 	EntityIDs                       []string
@@ -5875,6 +5878,15 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.OrgSubscriptionIDs; len(v) > 0 {
 		m.AddOrgSubscriptionIDs(v...)
+	}
+	if v := i.OrgProductIDs; len(v) > 0 {
+		m.AddOrgProductIDs(v...)
+	}
+	if v := i.OrgPriceIDs; len(v) > 0 {
+		m.AddOrgPriceIDs(v...)
+	}
+	if v := i.OrgModuleIDs; len(v) > 0 {
+		m.AddOrgModuleIDs(v...)
 	}
 	if v := i.InviteIDs; len(v) > 0 {
 		m.AddInviteIDs(v...)
@@ -6060,6 +6072,15 @@ type UpdateOrganizationInput struct {
 	ClearOrgSubscriptions                 bool
 	AddOrgSubscriptionIDs                 []string
 	RemoveOrgSubscriptionIDs              []string
+	ClearOrgProducts                      bool
+	AddOrgProductIDs                      []string
+	RemoveOrgProductIDs                   []string
+	ClearOrgPrices                        bool
+	AddOrgPriceIDs                        []string
+	RemoveOrgPriceIDs                     []string
+	ClearOrgModules                       bool
+	AddOrgModuleIDs                       []string
+	RemoveOrgModuleIDs                    []string
 	ClearInvites                          bool
 	AddInviteIDs                          []string
 	RemoveInviteIDs                       []string
@@ -6411,6 +6432,33 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveOrgSubscriptionIDs; len(v) > 0 {
 		m.RemoveOrgSubscriptionIDs(v...)
+	}
+	if i.ClearOrgProducts {
+		m.ClearOrgProducts()
+	}
+	if v := i.AddOrgProductIDs; len(v) > 0 {
+		m.AddOrgProductIDs(v...)
+	}
+	if v := i.RemoveOrgProductIDs; len(v) > 0 {
+		m.RemoveOrgProductIDs(v...)
+	}
+	if i.ClearOrgPrices {
+		m.ClearOrgPrices()
+	}
+	if v := i.AddOrgPriceIDs; len(v) > 0 {
+		m.AddOrgPriceIDs(v...)
+	}
+	if v := i.RemoveOrgPriceIDs; len(v) > 0 {
+		m.RemoveOrgPriceIDs(v...)
+	}
+	if i.ClearOrgModules {
+		m.ClearOrgModules()
+	}
+	if v := i.AddOrgModuleIDs; len(v) > 0 {
+		m.AddOrgModuleIDs(v...)
+	}
+	if v := i.RemoveOrgModuleIDs; len(v) > 0 {
+		m.RemoveOrgModuleIDs(v...)
 	}
 	if i.ClearInvites {
 		m.ClearInvites()

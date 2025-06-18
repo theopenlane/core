@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -80,6 +81,7 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 // Annotations of the InternalPolicy
 func (InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "policy-management"),
 		entfga.SelfAccessChecks(),
 	}
 }

@@ -79,13 +79,19 @@ type OrgSubscriptionEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
+	// Modules holds the value of the modules edge.
+	Modules []*OrgModule `json:"modules,omitempty"`
+	// Products holds the value of the products edge.
+	Products []*OrgProduct `json:"products,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
 	totalCount [2]map[string]int
 
-	namedEvents map[string][]*Event
+	namedEvents   map[string][]*Event
+	namedModules  map[string][]*OrgModule
+	namedProducts map[string][]*OrgProduct
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -106,6 +112,24 @@ func (e OrgSubscriptionEdges) EventsOrErr() ([]*Event, error) {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
+}
+
+// ModulesOrErr returns the Modules value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrgSubscriptionEdges) ModulesOrErr() ([]*OrgModule, error) {
+	if e.loadedTypes[2] {
+		return e.Modules, nil
+	}
+	return nil, &NotLoadedError{edge: "modules"}
+}
+
+// ProductsOrErr returns the Products value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrgSubscriptionEdges) ProductsOrErr() ([]*OrgProduct, error) {
+	if e.loadedTypes[3] {
+		return e.Products, nil
+	}
+	return nil, &NotLoadedError{edge: "products"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -303,6 +327,16 @@ func (os *OrgSubscription) QueryEvents() *EventQuery {
 	return NewOrgSubscriptionClient(os.config).QueryEvents(os)
 }
 
+// QueryModules queries the "modules" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryModules() *OrgModuleQuery {
+	return NewOrgSubscriptionClient(os.config).QueryModules(os)
+}
+
+// QueryProducts queries the "products" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryProducts() *OrgProductQuery {
+	return NewOrgSubscriptionClient(os.config).QueryProducts(os)
+}
+
 // Update returns a builder for updating this OrgSubscription.
 // Note that you need to call OrgSubscription.Unwrap() before calling this method if this OrgSubscription
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -421,6 +455,54 @@ func (os *OrgSubscription) appendNamedEvents(name string, edges ...*Event) {
 		os.Edges.namedEvents[name] = []*Event{}
 	} else {
 		os.Edges.namedEvents[name] = append(os.Edges.namedEvents[name], edges...)
+	}
+}
+
+// NamedModules returns the Modules named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (os *OrgSubscription) NamedModules(name string) ([]*OrgModule, error) {
+	if os.Edges.namedModules == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := os.Edges.namedModules[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (os *OrgSubscription) appendNamedModules(name string, edges ...*OrgModule) {
+	if os.Edges.namedModules == nil {
+		os.Edges.namedModules = make(map[string][]*OrgModule)
+	}
+	if len(edges) == 0 {
+		os.Edges.namedModules[name] = []*OrgModule{}
+	} else {
+		os.Edges.namedModules[name] = append(os.Edges.namedModules[name], edges...)
+	}
+}
+
+// NamedProducts returns the Products named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (os *OrgSubscription) NamedProducts(name string) ([]*OrgProduct, error) {
+	if os.Edges.namedProducts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := os.Edges.namedProducts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (os *OrgSubscription) appendNamedProducts(name string, edges ...*OrgProduct) {
+	if os.Edges.namedProducts == nil {
+		os.Edges.namedProducts = make(map[string][]*OrgProduct)
+	}
+	if len(edges) == 0 {
+		os.Edges.namedProducts[name] = []*OrgProduct{}
+	} else {
+		os.Edges.namedProducts[name] = append(os.Edges.namedProducts[name], edges...)
 	}
 }
 

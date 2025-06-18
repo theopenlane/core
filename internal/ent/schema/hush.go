@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/entx"
 )
 
 // Hush maps configured integrations (github, slack, etc.) to organizations
@@ -87,7 +88,9 @@ func (h Hush) Edges() []ent.Edge {
 
 // Annotations of the Hushhh
 func (Hush) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
+	return []schema.Annotation{
+		entx.Features("base"),
+	}
 }
 
 // Mixin of the Hush shhhh

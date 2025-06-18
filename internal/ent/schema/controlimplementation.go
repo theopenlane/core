@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -109,6 +110,7 @@ func (ControlImplementation) Hooks() []ent.Hook {
 // Annotations of the ControlImplementation
 func (ControlImplementation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("compliance", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }

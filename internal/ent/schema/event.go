@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
@@ -69,6 +70,7 @@ func (e Event) Edges() []ent.Edge {
 // Annotations of the Event
 func (Event) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		history.Annotations{
 			Exclude: true,
 		},

@@ -103,6 +103,7 @@ func (EmailVerificationToken) Indexes() []ent.Index {
 // Annotations of the EmailVerificationToken
 func (EmailVerificationToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.Features("base"),
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
