@@ -4793,9 +4793,6 @@ type CreateOrganizationInput struct {
 	IntegrationIDs                  []string                        `json:"integrationIDs,omitempty"`
 	DocumentIDs                     []string                        `json:"documentIDs,omitempty"`
 	OrgSubscriptionIDs              []string                        `json:"orgSubscriptionIDs,omitempty"`
-	OrgProductIDs                   []string                        `json:"orgProductIDs,omitempty"`
-	OrgPriceIDs                     []string                        `json:"orgPriceIDs,omitempty"`
-	OrgModuleIDs                    []string                        `json:"orgModuleIDs,omitempty"`
 	InviteIDs                       []string                        `json:"inviteIDs,omitempty"`
 	SubscriberIDs                   []string                        `json:"subscriberIDs,omitempty"`
 	EntityIDs                       []string                        `json:"entityIDs,omitempty"`
@@ -5239,23 +5236,21 @@ type CreateUserInput struct {
 	// auth provider used to register the account
 	AuthProvider *enums.AuthProvider `json:"authProvider,omitempty"`
 	// the user's role
-	Role                      *enums.Role `json:"role,omitempty"`
-	PersonalAccessTokenIDs    []string    `json:"personalAccessTokenIDs,omitempty"`
-	TfaSettingIDs             []string    `json:"tfaSettingIDs,omitempty"`
-	SettingID                 string      `json:"settingID"`
-	EmailVerificationTokenIDs []string    `json:"emailVerificationTokenIDs,omitempty"`
-	PasswordResetTokenIDs     []string    `json:"passwordResetTokenIDs,omitempty"`
-	GroupIDs                  []string    `json:"groupIDs,omitempty"`
-	OrganizationIDs           []string    `json:"organizationIDs,omitempty"`
-	WebauthnIDs               []string    `json:"webauthnIDs,omitempty"`
-	FileIDs                   []string    `json:"fileIDs,omitempty"`
-	AvatarFileID              *string     `json:"avatarFileID,omitempty"`
-	EventIDs                  []string    `json:"eventIDs,omitempty"`
-	ActionPlanIDs             []string    `json:"actionPlanIDs,omitempty"`
-	SubcontrolIDs             []string    `json:"subcontrolIDs,omitempty"`
-	AssignerTaskIDs           []string    `json:"assignerTaskIDs,omitempty"`
-	AssigneeTaskIDs           []string    `json:"assigneeTaskIDs,omitempty"`
-	ProgramIDs                []string    `json:"programIDs,omitempty"`
+	Role                   *enums.Role `json:"role,omitempty"`
+	PersonalAccessTokenIDs []string    `json:"personalAccessTokenIDs,omitempty"`
+	TfaSettingIDs          []string    `json:"tfaSettingIDs,omitempty"`
+	SettingID              string      `json:"settingID"`
+	GroupIDs               []string    `json:"groupIDs,omitempty"`
+	OrganizationIDs        []string    `json:"organizationIDs,omitempty"`
+	WebauthnIDs            []string    `json:"webauthnIDs,omitempty"`
+	FileIDs                []string    `json:"fileIDs,omitempty"`
+	AvatarFileID           *string     `json:"avatarFileID,omitempty"`
+	EventIDs               []string    `json:"eventIDs,omitempty"`
+	ActionPlanIDs          []string    `json:"actionPlanIDs,omitempty"`
+	SubcontrolIDs          []string    `json:"subcontrolIDs,omitempty"`
+	AssignerTaskIDs        []string    `json:"assignerTaskIDs,omitempty"`
+	AssigneeTaskIDs        []string    `json:"assigneeTaskIDs,omitempty"`
+	ProgramIDs             []string    `json:"programIDs,omitempty"`
 }
 
 // CreateUserSettingInput is used for create UserSetting object.
@@ -24695,15 +24690,6 @@ type UpdateOrganizationInput struct {
 	AddOrgSubscriptionIDs                 []string                        `json:"addOrgSubscriptionIDs,omitempty"`
 	RemoveOrgSubscriptionIDs              []string                        `json:"removeOrgSubscriptionIDs,omitempty"`
 	ClearOrgSubscriptions                 *bool                           `json:"clearOrgSubscriptions,omitempty"`
-	AddOrgProductIDs                      []string                        `json:"addOrgProductIDs,omitempty"`
-	RemoveOrgProductIDs                   []string                        `json:"removeOrgProductIDs,omitempty"`
-	ClearOrgProducts                      *bool                           `json:"clearOrgProducts,omitempty"`
-	AddOrgPriceIDs                        []string                        `json:"addOrgPriceIDs,omitempty"`
-	RemoveOrgPriceIDs                     []string                        `json:"removeOrgPriceIDs,omitempty"`
-	ClearOrgPrices                        *bool                           `json:"clearOrgPrices,omitempty"`
-	AddOrgModuleIDs                       []string                        `json:"addOrgModuleIDs,omitempty"`
-	RemoveOrgModuleIDs                    []string                        `json:"removeOrgModuleIDs,omitempty"`
-	ClearOrgModules                       *bool                           `json:"clearOrgModules,omitempty"`
 	AddInviteIDs                          []string                        `json:"addInviteIDs,omitempty"`
 	RemoveInviteIDs                       []string                        `json:"removeInviteIDs,omitempty"`
 	ClearInvites                          *bool                           `json:"clearInvites,omitempty"`
@@ -25458,53 +25444,47 @@ type UpdateUserInput struct {
 	// auth provider used to register the account
 	AuthProvider *enums.AuthProvider `json:"authProvider,omitempty"`
 	// the user's role
-	Role                            *enums.Role `json:"role,omitempty"`
-	ClearRole                       *bool       `json:"clearRole,omitempty"`
-	AddPersonalAccessTokenIDs       []string    `json:"addPersonalAccessTokenIDs,omitempty"`
-	RemovePersonalAccessTokenIDs    []string    `json:"removePersonalAccessTokenIDs,omitempty"`
-	ClearPersonalAccessTokens       *bool       `json:"clearPersonalAccessTokens,omitempty"`
-	AddTfaSettingIDs                []string    `json:"addTfaSettingIDs,omitempty"`
-	RemoveTfaSettingIDs             []string    `json:"removeTfaSettingIDs,omitempty"`
-	ClearTfaSettings                *bool       `json:"clearTfaSettings,omitempty"`
-	SettingID                       *string     `json:"settingID,omitempty"`
-	AddEmailVerificationTokenIDs    []string    `json:"addEmailVerificationTokenIDs,omitempty"`
-	RemoveEmailVerificationTokenIDs []string    `json:"removeEmailVerificationTokenIDs,omitempty"`
-	ClearEmailVerificationTokens    *bool       `json:"clearEmailVerificationTokens,omitempty"`
-	AddPasswordResetTokenIDs        []string    `json:"addPasswordResetTokenIDs,omitempty"`
-	RemovePasswordResetTokenIDs     []string    `json:"removePasswordResetTokenIDs,omitempty"`
-	ClearPasswordResetTokens        *bool       `json:"clearPasswordResetTokens,omitempty"`
-	AddGroupIDs                     []string    `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs                  []string    `json:"removeGroupIDs,omitempty"`
-	ClearGroups                     *bool       `json:"clearGroups,omitempty"`
-	AddOrganizationIDs              []string    `json:"addOrganizationIDs,omitempty"`
-	RemoveOrganizationIDs           []string    `json:"removeOrganizationIDs,omitempty"`
-	ClearOrganizations              *bool       `json:"clearOrganizations,omitempty"`
-	AddWebauthnIDs                  []string    `json:"addWebauthnIDs,omitempty"`
-	RemoveWebauthnIDs               []string    `json:"removeWebauthnIDs,omitempty"`
-	ClearWebauthns                  *bool       `json:"clearWebauthns,omitempty"`
-	AddFileIDs                      []string    `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                   []string    `json:"removeFileIDs,omitempty"`
-	ClearFiles                      *bool       `json:"clearFiles,omitempty"`
-	AvatarFileID                    *string     `json:"avatarFileID,omitempty"`
-	ClearAvatarFile                 *bool       `json:"clearAvatarFile,omitempty"`
-	AddEventIDs                     []string    `json:"addEventIDs,omitempty"`
-	RemoveEventIDs                  []string    `json:"removeEventIDs,omitempty"`
-	ClearEvents                     *bool       `json:"clearEvents,omitempty"`
-	AddActionPlanIDs                []string    `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs             []string    `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans                *bool       `json:"clearActionPlans,omitempty"`
-	AddSubcontrolIDs                []string    `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs             []string    `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols                *bool       `json:"clearSubcontrols,omitempty"`
-	AddAssignerTaskIDs              []string    `json:"addAssignerTaskIDs,omitempty"`
-	RemoveAssignerTaskIDs           []string    `json:"removeAssignerTaskIDs,omitempty"`
-	ClearAssignerTasks              *bool       `json:"clearAssignerTasks,omitempty"`
-	AddAssigneeTaskIDs              []string    `json:"addAssigneeTaskIDs,omitempty"`
-	RemoveAssigneeTaskIDs           []string    `json:"removeAssigneeTaskIDs,omitempty"`
-	ClearAssigneeTasks              *bool       `json:"clearAssigneeTasks,omitempty"`
-	AddProgramIDs                   []string    `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs                []string    `json:"removeProgramIDs,omitempty"`
-	ClearPrograms                   *bool       `json:"clearPrograms,omitempty"`
+	Role                         *enums.Role `json:"role,omitempty"`
+	ClearRole                    *bool       `json:"clearRole,omitempty"`
+	AddPersonalAccessTokenIDs    []string    `json:"addPersonalAccessTokenIDs,omitempty"`
+	RemovePersonalAccessTokenIDs []string    `json:"removePersonalAccessTokenIDs,omitempty"`
+	ClearPersonalAccessTokens    *bool       `json:"clearPersonalAccessTokens,omitempty"`
+	AddTfaSettingIDs             []string    `json:"addTfaSettingIDs,omitempty"`
+	RemoveTfaSettingIDs          []string    `json:"removeTfaSettingIDs,omitempty"`
+	ClearTfaSettings             *bool       `json:"clearTfaSettings,omitempty"`
+	SettingID                    *string     `json:"settingID,omitempty"`
+	AddGroupIDs                  []string    `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs               []string    `json:"removeGroupIDs,omitempty"`
+	ClearGroups                  *bool       `json:"clearGroups,omitempty"`
+	AddOrganizationIDs           []string    `json:"addOrganizationIDs,omitempty"`
+	RemoveOrganizationIDs        []string    `json:"removeOrganizationIDs,omitempty"`
+	ClearOrganizations           *bool       `json:"clearOrganizations,omitempty"`
+	AddWebauthnIDs               []string    `json:"addWebauthnIDs,omitempty"`
+	RemoveWebauthnIDs            []string    `json:"removeWebauthnIDs,omitempty"`
+	ClearWebauthns               *bool       `json:"clearWebauthns,omitempty"`
+	AddFileIDs                   []string    `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                []string    `json:"removeFileIDs,omitempty"`
+	ClearFiles                   *bool       `json:"clearFiles,omitempty"`
+	AvatarFileID                 *string     `json:"avatarFileID,omitempty"`
+	ClearAvatarFile              *bool       `json:"clearAvatarFile,omitempty"`
+	AddEventIDs                  []string    `json:"addEventIDs,omitempty"`
+	RemoveEventIDs               []string    `json:"removeEventIDs,omitempty"`
+	ClearEvents                  *bool       `json:"clearEvents,omitempty"`
+	AddActionPlanIDs             []string    `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs          []string    `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans             *bool       `json:"clearActionPlans,omitempty"`
+	AddSubcontrolIDs             []string    `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs          []string    `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols             *bool       `json:"clearSubcontrols,omitempty"`
+	AddAssignerTaskIDs           []string    `json:"addAssignerTaskIDs,omitempty"`
+	RemoveAssignerTaskIDs        []string    `json:"removeAssignerTaskIDs,omitempty"`
+	ClearAssignerTasks           *bool       `json:"clearAssignerTasks,omitempty"`
+	AddAssigneeTaskIDs           []string    `json:"addAssigneeTaskIDs,omitempty"`
+	RemoveAssigneeTaskIDs        []string    `json:"removeAssigneeTaskIDs,omitempty"`
+	ClearAssigneeTasks           *bool       `json:"clearAssigneeTasks,omitempty"`
+	AddProgramIDs                []string    `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs             []string    `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                *bool       `json:"clearPrograms,omitempty"`
 }
 
 // UpdateUserSettingInput is used for update UserSetting object.

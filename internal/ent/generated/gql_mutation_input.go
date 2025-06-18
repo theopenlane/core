@@ -5740,9 +5740,6 @@ type CreateOrganizationInput struct {
 	IntegrationIDs                  []string
 	DocumentIDs                     []string
 	OrgSubscriptionIDs              []string
-	OrgProductIDs                   []string
-	OrgPriceIDs                     []string
-	OrgModuleIDs                    []string
 	InviteIDs                       []string
 	SubscriberIDs                   []string
 	EntityIDs                       []string
@@ -5878,15 +5875,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.OrgSubscriptionIDs; len(v) > 0 {
 		m.AddOrgSubscriptionIDs(v...)
-	}
-	if v := i.OrgProductIDs; len(v) > 0 {
-		m.AddOrgProductIDs(v...)
-	}
-	if v := i.OrgPriceIDs; len(v) > 0 {
-		m.AddOrgPriceIDs(v...)
-	}
-	if v := i.OrgModuleIDs; len(v) > 0 {
-		m.AddOrgModuleIDs(v...)
 	}
 	if v := i.InviteIDs; len(v) > 0 {
 		m.AddInviteIDs(v...)
@@ -6072,15 +6060,6 @@ type UpdateOrganizationInput struct {
 	ClearOrgSubscriptions                 bool
 	AddOrgSubscriptionIDs                 []string
 	RemoveOrgSubscriptionIDs              []string
-	ClearOrgProducts                      bool
-	AddOrgProductIDs                      []string
-	RemoveOrgProductIDs                   []string
-	ClearOrgPrices                        bool
-	AddOrgPriceIDs                        []string
-	RemoveOrgPriceIDs                     []string
-	ClearOrgModules                       bool
-	AddOrgModuleIDs                       []string
-	RemoveOrgModuleIDs                    []string
 	ClearInvites                          bool
 	AddInviteIDs                          []string
 	RemoveInviteIDs                       []string
@@ -6432,33 +6411,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveOrgSubscriptionIDs; len(v) > 0 {
 		m.RemoveOrgSubscriptionIDs(v...)
-	}
-	if i.ClearOrgProducts {
-		m.ClearOrgProducts()
-	}
-	if v := i.AddOrgProductIDs; len(v) > 0 {
-		m.AddOrgProductIDs(v...)
-	}
-	if v := i.RemoveOrgProductIDs; len(v) > 0 {
-		m.RemoveOrgProductIDs(v...)
-	}
-	if i.ClearOrgPrices {
-		m.ClearOrgPrices()
-	}
-	if v := i.AddOrgPriceIDs; len(v) > 0 {
-		m.AddOrgPriceIDs(v...)
-	}
-	if v := i.RemoveOrgPriceIDs; len(v) > 0 {
-		m.RemoveOrgPriceIDs(v...)
-	}
-	if i.ClearOrgModules {
-		m.ClearOrgModules()
-	}
-	if v := i.AddOrgModuleIDs; len(v) > 0 {
-		m.AddOrgModuleIDs(v...)
-	}
-	if v := i.RemoveOrgModuleIDs; len(v) > 0 {
-		m.RemoveOrgModuleIDs(v...)
 	}
 	if i.ClearInvites {
 		m.ClearInvites()
@@ -9725,35 +9677,33 @@ func (c *TemplateUpdateOne) SetInput(i UpdateTemplateInput) *TemplateUpdateOne {
 
 // CreateUserInput represents a mutation input for creating users.
 type CreateUserInput struct {
-	Tags                      []string
-	Email                     string
-	FirstName                 *string
-	LastName                  *string
-	DisplayName               string
-	AvatarRemoteURL           *string
-	AvatarUpdatedAt           *time.Time
-	LastSeen                  *time.Time
-	LastLoginProvider         *enums.AuthProvider
-	Password                  *string
-	Sub                       *string
-	AuthProvider              *enums.AuthProvider
-	Role                      *enums.Role
-	PersonalAccessTokenIDs    []string
-	TfaSettingIDs             []string
-	SettingID                 string
-	EmailVerificationTokenIDs []string
-	PasswordResetTokenIDs     []string
-	GroupIDs                  []string
-	OrganizationIDs           []string
-	WebauthnIDs               []string
-	FileIDs                   []string
-	AvatarFileID              *string
-	EventIDs                  []string
-	ActionPlanIDs             []string
-	SubcontrolIDs             []string
-	AssignerTaskIDs           []string
-	AssigneeTaskIDs           []string
-	ProgramIDs                []string
+	Tags                   []string
+	Email                  string
+	FirstName              *string
+	LastName               *string
+	DisplayName            string
+	AvatarRemoteURL        *string
+	AvatarUpdatedAt        *time.Time
+	LastSeen               *time.Time
+	LastLoginProvider      *enums.AuthProvider
+	Password               *string
+	Sub                    *string
+	AuthProvider           *enums.AuthProvider
+	Role                   *enums.Role
+	PersonalAccessTokenIDs []string
+	TfaSettingIDs          []string
+	SettingID              string
+	GroupIDs               []string
+	OrganizationIDs        []string
+	WebauthnIDs            []string
+	FileIDs                []string
+	AvatarFileID           *string
+	EventIDs               []string
+	ActionPlanIDs          []string
+	SubcontrolIDs          []string
+	AssignerTaskIDs        []string
+	AssigneeTaskIDs        []string
+	ProgramIDs             []string
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
@@ -9800,12 +9750,6 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 		m.AddTfaSettingIDs(v...)
 	}
 	m.SetSettingID(i.SettingID)
-	if v := i.EmailVerificationTokenIDs; len(v) > 0 {
-		m.AddEmailVerificationTokenIDs(v...)
-	}
-	if v := i.PasswordResetTokenIDs; len(v) > 0 {
-		m.AddPasswordResetTokenIDs(v...)
-	}
 	if v := i.GroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
 	}
@@ -9849,75 +9793,69 @@ func (c *UserCreate) SetInput(i CreateUserInput) *UserCreate {
 
 // UpdateUserInput represents a mutation input for updating users.
 type UpdateUserInput struct {
-	ClearTags                       bool
-	Tags                            []string
-	AppendTags                      []string
-	Email                           *string
-	ClearFirstName                  bool
-	FirstName                       *string
-	ClearLastName                   bool
-	LastName                        *string
-	DisplayName                     *string
-	ClearAvatarRemoteURL            bool
-	AvatarRemoteURL                 *string
-	ClearAvatarUpdatedAt            bool
-	AvatarUpdatedAt                 *time.Time
-	ClearLastSeen                   bool
-	LastSeen                        *time.Time
-	ClearLastLoginProvider          bool
-	LastLoginProvider               *enums.AuthProvider
-	ClearPassword                   bool
-	Password                        *string
-	ClearSub                        bool
-	Sub                             *string
-	AuthProvider                    *enums.AuthProvider
-	ClearRole                       bool
-	Role                            *enums.Role
-	ClearPersonalAccessTokens       bool
-	AddPersonalAccessTokenIDs       []string
-	RemovePersonalAccessTokenIDs    []string
-	ClearTfaSettings                bool
-	AddTfaSettingIDs                []string
-	RemoveTfaSettingIDs             []string
-	SettingID                       *string
-	ClearEmailVerificationTokens    bool
-	AddEmailVerificationTokenIDs    []string
-	RemoveEmailVerificationTokenIDs []string
-	ClearPasswordResetTokens        bool
-	AddPasswordResetTokenIDs        []string
-	RemovePasswordResetTokenIDs     []string
-	ClearGroups                     bool
-	AddGroupIDs                     []string
-	RemoveGroupIDs                  []string
-	ClearOrganizations              bool
-	AddOrganizationIDs              []string
-	RemoveOrganizationIDs           []string
-	ClearWebauthns                  bool
-	AddWebauthnIDs                  []string
-	RemoveWebauthnIDs               []string
-	ClearFiles                      bool
-	AddFileIDs                      []string
-	RemoveFileIDs                   []string
-	ClearAvatarFile                 bool
-	AvatarFileID                    *string
-	ClearEvents                     bool
-	AddEventIDs                     []string
-	RemoveEventIDs                  []string
-	ClearActionPlans                bool
-	AddActionPlanIDs                []string
-	RemoveActionPlanIDs             []string
-	ClearSubcontrols                bool
-	AddSubcontrolIDs                []string
-	RemoveSubcontrolIDs             []string
-	ClearAssignerTasks              bool
-	AddAssignerTaskIDs              []string
-	RemoveAssignerTaskIDs           []string
-	ClearAssigneeTasks              bool
-	AddAssigneeTaskIDs              []string
-	RemoveAssigneeTaskIDs           []string
-	ClearPrograms                   bool
-	AddProgramIDs                   []string
-	RemoveProgramIDs                []string
+	ClearTags                    bool
+	Tags                         []string
+	AppendTags                   []string
+	Email                        *string
+	ClearFirstName               bool
+	FirstName                    *string
+	ClearLastName                bool
+	LastName                     *string
+	DisplayName                  *string
+	ClearAvatarRemoteURL         bool
+	AvatarRemoteURL              *string
+	ClearAvatarUpdatedAt         bool
+	AvatarUpdatedAt              *time.Time
+	ClearLastSeen                bool
+	LastSeen                     *time.Time
+	ClearLastLoginProvider       bool
+	LastLoginProvider            *enums.AuthProvider
+	ClearPassword                bool
+	Password                     *string
+	ClearSub                     bool
+	Sub                          *string
+	AuthProvider                 *enums.AuthProvider
+	ClearRole                    bool
+	Role                         *enums.Role
+	ClearPersonalAccessTokens    bool
+	AddPersonalAccessTokenIDs    []string
+	RemovePersonalAccessTokenIDs []string
+	ClearTfaSettings             bool
+	AddTfaSettingIDs             []string
+	RemoveTfaSettingIDs          []string
+	SettingID                    *string
+	ClearGroups                  bool
+	AddGroupIDs                  []string
+	RemoveGroupIDs               []string
+	ClearOrganizations           bool
+	AddOrganizationIDs           []string
+	RemoveOrganizationIDs        []string
+	ClearWebauthns               bool
+	AddWebauthnIDs               []string
+	RemoveWebauthnIDs            []string
+	ClearFiles                   bool
+	AddFileIDs                   []string
+	RemoveFileIDs                []string
+	ClearAvatarFile              bool
+	AvatarFileID                 *string
+	ClearEvents                  bool
+	AddEventIDs                  []string
+	RemoveEventIDs               []string
+	ClearActionPlans             bool
+	AddActionPlanIDs             []string
+	RemoveActionPlanIDs          []string
+	ClearSubcontrols             bool
+	AddSubcontrolIDs             []string
+	RemoveSubcontrolIDs          []string
+	ClearAssignerTasks           bool
+	AddAssignerTaskIDs           []string
+	RemoveAssignerTaskIDs        []string
+	ClearAssigneeTasks           bool
+	AddAssigneeTaskIDs           []string
+	RemoveAssigneeTaskIDs        []string
+	ClearPrograms                bool
+	AddProgramIDs                []string
+	RemoveProgramIDs             []string
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
@@ -10014,24 +9952,6 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
-	}
-	if i.ClearEmailVerificationTokens {
-		m.ClearEmailVerificationTokens()
-	}
-	if v := i.AddEmailVerificationTokenIDs; len(v) > 0 {
-		m.AddEmailVerificationTokenIDs(v...)
-	}
-	if v := i.RemoveEmailVerificationTokenIDs; len(v) > 0 {
-		m.RemoveEmailVerificationTokenIDs(v...)
-	}
-	if i.ClearPasswordResetTokens {
-		m.ClearPasswordResetTokens()
-	}
-	if v := i.AddPasswordResetTokenIDs; len(v) > 0 {
-		m.AddPasswordResetTokenIDs(v...)
-	}
-	if v := i.RemovePasswordResetTokenIDs; len(v) > 0 {
-		m.RemovePasswordResetTokenIDs(v...)
 	}
 	if i.ClearGroups {
 		m.ClearGroups()

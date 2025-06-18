@@ -37909,9 +37909,6 @@ input CreateOrganizationInput {
   integrationIDs: [ID!]
   documentIDs: [ID!]
   orgSubscriptionIDs: [ID!]
-  orgProductIDs: [ID!]
-  orgPriceIDs: [ID!]
-  orgModuleIDs: [ID!]
   inviteIDs: [ID!]
   subscriberIDs: [ID!]
   entityIDs: [ID!]
@@ -38607,8 +38604,6 @@ input CreateUserInput {
   personalAccessTokenIDs: [ID!]
   tfaSettingIDs: [ID!]
   settingID: ID!
-  emailVerificationTokenIDs: [ID!]
-  passwordResetTokenIDs: [ID!]
   groupIDs: [ID!]
   organizationIDs: [ID!]
   webauthnIDs: [ID!]
@@ -72645,15 +72640,6 @@ input UpdateOrganizationInput {
   addOrgSubscriptionIDs: [ID!]
   removeOrgSubscriptionIDs: [ID!]
   clearOrgSubscriptions: Boolean
-  addOrgProductIDs: [ID!]
-  removeOrgProductIDs: [ID!]
-  clearOrgProducts: Boolean
-  addOrgPriceIDs: [ID!]
-  removeOrgPriceIDs: [ID!]
-  clearOrgPrices: Boolean
-  addOrgModuleIDs: [ID!]
-  removeOrgModuleIDs: [ID!]
-  clearOrgModules: Boolean
   addInviteIDs: [ID!]
   removeInviteIDs: [ID!]
   clearInvites: Boolean
@@ -73659,12 +73645,6 @@ input UpdateUserInput {
   removeTfaSettingIDs: [ID!]
   clearTfaSettings: Boolean
   settingID: ID
-  addEmailVerificationTokenIDs: [ID!]
-  removeEmailVerificationTokenIDs: [ID!]
-  clearEmailVerificationTokens: Boolean
-  addPasswordResetTokenIDs: [ID!]
-  removePasswordResetTokenIDs: [ID!]
-  clearPasswordResetTokens: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
