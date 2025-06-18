@@ -71,6 +71,8 @@ type Config struct {
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
 	// Keywatcher contains the configuration for the key watcher that manages JWT signing keys
 	Keywatcher KeyWatcher `json:"keywatcher" koanf:"keywatcher"`
+	// Scanner contains the configuration for the external scanning service
+	Scanner Scanner `json:"scanner" koanf:"scanner"`
 }
 
 // Server settings for the echo server
@@ -161,6 +163,12 @@ type TLS struct {
 type PondPool struct {
 	// MaxWorkers is the maximum number of workers in the pool
 	MaxWorkers int `json:"maxWorkers" koanf:"maxWorkers" default:"100"`
+}
+
+// Scanner holds configuration for the remote scanner service
+type Scanner struct {
+	// Endpoint is the base URL for the scanner service
+	Endpoint string `json:"endpoint" koanf:"endpoint" default:"http://localhost:17700"`
 }
 
 var (

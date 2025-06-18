@@ -218,7 +218,44 @@ integration also creates comments with any issues related to the schema changes
 ## Deploying
 
 The only "supported" method of deploying today is locally, but we have a WIP
-Helm chart which can be found [here](https://github.com/theopenlane/helm-charts)
+Helm chart which can be found [here](https://github.com/theopenlane/openlane-infra)
+
+### Running Scans Locally
+
+Build and launch the scanner container (bundles the Nuclei CLI):
+
+```bash
+task docker:scanner
+```
+
+Stop it with `task docker:scanner:down` when done.
+
+By default the task detects your host architecture and builds the image for
+`amd64` or `arm64` accordingly. If you need to override this (for example to
+build on one platform and run on another) set the `TARGETARCH` variable:
+
+```bash
+TARGETARCH=amd64 task docker:scanner
+```
+
+You can mount custom [Nuclei](https://github.com/projectdiscovery/nuclei)
+templates by volume and specify `NUCLEI_TEMPLATE_DIR` so the scanner uses them:
+
+```bash
+docker run -v $(pwd)/templates:/custom-templates \
+  -e NUCLEI_TEMPLATE_DIR=/custom-templates \
+  -p 17700:17700 scansrv:dev
+```
+
+The service listens on port `17700`. Update the `-p` flag (or the compose file)
+if you need to expose a different port.
+
+Execute scans against a domain with the provided tasks (replace the domain as needed):
+
+```bash
+task scan:domain DOMAIN=example.com
+task scan:vuln DOMAIN=example.com
+```
 
 ## Contributing
 

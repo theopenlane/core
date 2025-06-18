@@ -115,3 +115,44 @@ tasks:
     desc: brings up the compose environment for redis
     cmds:
       - "docker compose -f ./docker/docker-compose-prometheus.yml up -d"
+
+  build:scanner:
+    dir: ..
+    desc: builds the scanner service image
+    vars:
+      GOOS: 'GOOS=linux'
+      GOARCH:
+        sh: |
+          arch=$(uname -m);
+          if [ "$arch" = "arm64" ] || [ "$arch" = "aarch64" ]; then
+            echo 'GOARCH=arm64';
+          else
+            echo 'GOARCH=amd64';
+          fi
+      TARGETARCH:
+        sh: |
+          arch=$(uname -m);
+          if [ "$arch" = "arm64" ] || [ "$arch" = "aarch64" ]; then
+            echo 'arm64';
+          else
+            echo 'amd64';
+          fi
+    cmds:
+      - task: :go:build-scanner
+        vars:
+          GOOS: '{{.GOOS}}'
+          GOARCH: '{{.GOARCH}}'
+      - "docker build --build-arg TARGETARCH={{.TARGETARCH}} -f docker/Dockerfile.scanner . -t scansrv:dev"
+
+  scanner:
+    dir: ..
+    desc: brings up the scanner service container
+    deps: ['build:scanner']
+    cmds:
+      - "docker compose -f ./docker/docker-compose-scanner.yml up -d scanner"
+
+  scanner:down:
+    dir: ..
+    desc: stops the scanner service container
+    cmds:
+      - docker compose -f ./docker/docker-compose-scanner.yml stop scanner

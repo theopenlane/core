@@ -1,0 +1,101 @@
+package enums
+
+import (
+	"fmt"
+	"io"
+	"strings"
+)
+
+// ScanType represents the type of scan being performed
+type ScanType string
+
+var (
+	ScanTypeDomain        ScanType = "DOMAIN"
+	ScanTypeVulnerability ScanType = "VULNERABILITY"
+	ScanTypeVendor        ScanType = "VENDOR"
+	ScanTypeProvider      ScanType = "PROVIDER"
+	ScanTypeInvalid       ScanType = "INVALID"
+)
+
+func (ScanType) Values() []string {
+	return []string{
+		string(ScanTypeDomain),
+		string(ScanTypeVulnerability),
+		string(ScanTypeVendor),
+		string(ScanTypeProvider),
+	}
+}
+
+func (s ScanType) String() string { return string(s) }
+
+func ToScanType(str string) *ScanType {
+	switch strings.ToUpper(str) {
+	case ScanTypeDomain.String():
+		return &ScanTypeDomain
+	case ScanTypeVulnerability.String():
+		return &ScanTypeVulnerability
+	case ScanTypeVendor.String():
+		return &ScanTypeVendor
+	case ScanTypeProvider.String():
+		return &ScanTypeProvider
+	default:
+		return &ScanTypeInvalid
+	}
+}
+
+func (s ScanType) MarshalGQL(w io.Writer) { _, _ = w.Write([]byte(`"` + s.String() + `"`)) }
+
+func (s *ScanType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("wrong type for ScanType, got: %T", v)
+	}
+	*s = ScanType(str)
+	return nil
+}
+
+// ScanStatus represents the status of a scan operation
+type ScanStatus string
+
+var (
+	ScanStatusPending    ScanStatus = "PENDING"
+	ScanStatusProcessing ScanStatus = "PROCESSING"
+	ScanStatusCompleted  ScanStatus = "COMPLETED"
+	ScanStatusFailed     ScanStatus = "FAILED"
+	ScanStatusInvalid    ScanStatus = "INVALID"
+)
+
+func (ScanStatus) Values() (kinds []string) {
+	for _, s := range []ScanStatus{ScanStatusPending, ScanStatusProcessing, ScanStatusCompleted, ScanStatusFailed} {
+		kinds = append(kinds, string(s))
+	}
+	return
+}
+
+func (s ScanStatus) String() string { return string(s) }
+
+func ToScanStatus(str string) *ScanStatus {
+	switch strings.ToUpper(str) {
+	case ScanStatusPending.String():
+		return &ScanStatusPending
+	case ScanStatusProcessing.String():
+		return &ScanStatusProcessing
+	case ScanStatusCompleted.String():
+		return &ScanStatusCompleted
+	case ScanStatusFailed.String():
+		return &ScanStatusFailed
+	default:
+		return &ScanStatusInvalid
+	}
+}
+
+func (s ScanStatus) MarshalGQL(w io.Writer) { _, _ = w.Write([]byte(`"` + s.String() + `"`)) }
+
+func (s *ScanStatus) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("wrong type for ScanStatus, got: %T", v)
+	}
+	*s = ScanStatus(str)
+	return nil
+}

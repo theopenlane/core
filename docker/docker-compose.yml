@@ -3,6 +3,7 @@ services:
     image: core:dev
     depends_on:
       - openfga
+      - scanner
     command:
       - serve
       - --debug
@@ -18,5 +19,14 @@ services:
     environment:
       - CORE_REDIS_ADDRESS=redis:6379
       - CORE_AUTHZ_HOST_URL=openfga:8080
+      - CORE_SCANNER_ENDPOINT=http://scanner:17700
+    networks:
+      - default
+
+  scanner:
+    image: scansrv:dev
+    ports:
+      - "17700:17700"
+    restart: unless-stopped
     networks:
       - default

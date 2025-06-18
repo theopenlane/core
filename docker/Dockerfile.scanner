@@ -1,0 +1,16 @@
+FROM alpine:3.20 AS downloader
+ARG TARGETARCH=amd64
+ARG NUCLEI_VERSION=v3.4.4
+RUN apk add --no-cache curl unzip \
+    && NUCLEI_VER=${NUCLEI_VERSION#v} \
+    && curl -Ls https://github.com/projectdiscovery/nuclei/releases/download/${NUCLEI_VERSION}/nuclei_${NUCLEI_VER}_linux_${TARGETARCH}.zip -o nuclei.zip \
+    && unzip nuclei.zip -d /tmp \
+    && mv /tmp/nuclei /usr/local/bin/nuclei \
+    && chmod +x /usr/local/bin/nuclei
+
+FROM gcr.io/distroless/static:nonroot
+USER 65532:65532
+COPY --from=downloader /usr/local/bin/nuclei /usr/local/bin/nuclei
+COPY scansrv /bin/scansrv
+
+ENTRYPOINT ["/bin/scansrv"]

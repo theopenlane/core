@@ -390,3 +390,43 @@ tasks:
     cmds:
       - rover install --plugin supergraph@v2.8.2
       - rover install --plugin router@v1.50.0
+
+  go:build-scanner:
+    desc: Builds the scanner service binary
+    env:
+      CGO_ENABLED: "0"
+    cmds:
+      - go build -mod=mod -o scansrv ./cmd/scansrv
+
+  scanner:run:
+    desc: Starts the scanner service container
+    cmds:
+      - task docker:scanner
+
+  scan:domain:
+    desc: Executes a domain scan using the scanner container
+    vars:
+      DOMAIN: ""
+    cmds:
+      - |
+        if [ -z "{{.DOMAIN}}" ]; then
+          echo "usage: task scan:domain DOMAIN=example.com" && exit 1
+        fi
+        docker compose -f ./docker/docker-compose-scanner.yml exec scanner \
+          curl -s -X POST http://localhost:17700/scan/domain \
+            -H 'Content-Type: application/json' \
+            -d '{"domain":"{{.DOMAIN}}"}' | jq .
+
+  scan:vuln:
+    desc: Executes a vulnerability scan using the scanner container
+    vars:
+      DOMAIN: ""
+    cmds:
+      - |
+        if [ -z "{{.DOMAIN}}" ]; then
+          echo "usage: task scan:vuln DOMAIN=example.com" && exit 1
+        fi
+        docker compose -f ./docker/docker-compose-scanner.yml exec scanner \
+          curl -s -X POST http://localhost:17700/scan/vulnerability \
+            -H 'Content-Type: application/json' \
+            -d '{"domain":"{{.DOMAIN}}"}' | jq .

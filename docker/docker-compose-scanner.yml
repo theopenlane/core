@@ -1,0 +1,11 @@
+services:
+  scanner:
+    image: scansrv:dev
+    ports:
+      - "17700:17700"
+    restart: unless-stopped
+    networks:
+      - default
+
+networks:
+  default:

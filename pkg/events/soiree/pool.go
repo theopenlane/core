@@ -27,7 +27,12 @@ type Pool interface {
 	FailedTasks() int
 	// CompletedTasks returns the number of tasks that completed either successfully or with a panic
 	CompletedTasks() int
+	// RegisterMetricsHandler registers a metrics handler with the pool
+	RegisterMetricsHandler(handler MetricsHandler)
 }
+
+// MetricsHandler is a function type that takes a Pool and can be used to handle metrics for the pool
+type MetricsHandler func(pool Pool)
 
 // PondPool is a worker pool implementation using the pond library
 type PondPool struct {
@@ -39,6 +44,8 @@ type PondPool struct {
 	MaxWorkers int `json:"maxWorkers" koanf:"maxWorkers" default:"100"`
 	// opts are the options for the pool
 	opts []pond.Option
+	// metricsHandler registers metrics for the pool
+	metricsHandler MetricsHandler
 }
 
 // NewPondPool creates a new worker pool using the pond library
@@ -51,11 +58,22 @@ func NewPondPool(opts ...PoolOptions) *PondPool {
 
 	p.pool = pond.NewPool(p.MaxWorkers, p.opts...)
 
+	if p.metricsHandler != nil {
+		p.metricsHandler(p)
+	}
+
 	return p
 }
 
 // PoolOptions is a type for setting options on the pool
 type PoolOptions func(*PondPool)
+
+// WithMetricsHandler registers a metrics handler for the pool
+func WithMetricsHandler(handler MetricsHandler) PoolOptions {
+	return func(p *PondPool) {
+		p.metricsHandler = handler
+	}
+}
 
 // WithName sets the name of the pool
 func WithName(name string) PoolOptions {
@@ -176,4 +194,12 @@ func (p *PondPool) CompletedTasks() int {
 	}
 
 	return int(completedTasks) // nolint:gosec
+}
+
+// RegisterMetricsHandler registers a metrics handler with the pool
+func (p *PondPool) RegisterMetricsHandler(handler MetricsHandler) {
+	p.metricsHandler = handler
+	if handler != nil {
+		handler(p)
+	}
 }
