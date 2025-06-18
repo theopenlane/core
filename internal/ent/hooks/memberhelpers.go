@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"fmt"
 	"slices"
 	"strings"
 
@@ -11,7 +10,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -64,56 +62,13 @@ func HookMembershipSelf(table string) ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			id, ok := mutationMember.ID()
-			if !ok {
-				return nil, fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
-			}
-
 			if err := updateMembershipCheck(ctx, mutationMember, table, userID); err != nil {
 				return nil, err
 			}
 
-			orgMembership, err := mutationMember.Client().OrgMembership.Get(ctx, id)
-			if err != nil {
-				return nil, err
-			}
-
-			retVal, err := next.Mutate(ctx, m)
-			if err != nil {
-				return nil, err
-			}
-
-			if table == "org_memberships" && (m.Op().Is(ent.OpDelete | ent.OpDeleteOne)) {
-				if err := deleteOrgMembershipFGATuples(ctx, orgMembership, mutationMember.Client()); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete FGA tuples after successful DB deletion")
-					return nil, err
-				}
-			}
-
-			return retVal, err
+			return next.Mutate(ctx, m)
 		})
 	}
-}
-
-func deleteOrgMembershipFGATuples(ctx context.Context, orgMembership *generated.OrgMembership,
-	client *generated.Client) error {
-
-	req := fgax.TupleRequest{
-		SubjectID:   orgMembership.UserID,
-		SubjectType: generated.TypeUser,
-		ObjectID:    orgMembership.OrganizationID,
-		ObjectType:  generated.TypeOrganization,
-		Relation:    orgMembership.Role.String(),
-	}
-
-	tuple := fgax.GetTupleKey(req)
-
-	if _, err := client.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tuple}); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Interface("delete_tuple", tuple).Msg("failed to delete relationship tuple")
-		return err
-	}
-
-	return nil
 }
 
 // createMembershipCheck is a helper function to check if a user is trying to add themselves to a membership

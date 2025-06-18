@@ -180,18 +180,22 @@ func TestQueryOrgMembers(t *testing.T) {
 }
 
 func TestMutationCreateOrgMembers(t *testing.T) {
-	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
 
-	userCtx := auth.NewTestContextWithOrgID(testUser1.ID, org1.ID)
+	testUser := suite.userBuilder(context.Background(), t)
 
-	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
-	userWithValidDomain := (&UserBuilder{client: suite.client, Email: "matt@anderson.net"}).MustNew(testUser1.UserCtx, t)
-	userWithInvalidDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(testUser1.UserCtx, t)
+	userCtx := auth.NewTestContextWithOrgID(testUser.ID, org1.ID)
 
-	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(testUser1.UserCtx, t)
-	otherOrgCtx := auth.NewTestContextWithOrgID(testUser1.ID, orgWithRestrictions.ID)
+	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	userWithValidDomain := (&UserBuilder{client: suite.client, Email: "matt@anderson.net"}).MustNew(testUser.UserCtx, t)
+	userWithInvalidDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(testUser.UserCtx, t)
+
+	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(testUser.UserCtx, t)
+	otherOrgCtx := auth.NewTestContextWithOrgID(testUser.ID, orgWithRestrictions.ID)
 
 	testCases := []struct {
 		name   string
@@ -248,7 +252,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 		},
 		{
 			name:   "add user to personal org not allowed",
-			orgID:  testUser1.PersonalOrgID,
+			orgID:  testUser.PersonalOrgID,
 			userID: user1.ID,
 			role:   enums.RoleMember,
 			ctx:    userCtx,
@@ -395,22 +399,27 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 }
 
 func TestMutationDeleteOrgMembers(t *testing.T) {
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+
+	testUser := suite.userBuilder(context.Background(), t)
+	testUserAgain := suite.userBuilder(context.Background(), t)
+
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// get orgs status before adding user
-	orgs, err := suite.client.api.GetAllOrganizations(testUser2.UserCtx)
+	orgs, err := suite.client.api.GetAllOrganizations(testUserAgain.UserCtx)
 	assert.NilError(t, err)
 
 	// add user 2 to the new org
-	_, err = suite.client.api.AddUserToOrgWithRole(testUser1.UserCtx, openlaneclient.CreateOrgMembershipInput{
+	_, err = suite.client.api.AddUserToOrgWithRole(testUser.UserCtx, openlaneclient.CreateOrgMembershipInput{
 		OrganizationID: om.OrganizationID,
-		UserID:         testUser2.ID,
+		UserID:         testUserAgain.ID,
 		Role:           &enums.RoleMember,
 	})
 
 	assert.NilError(t, err)
 
-	remainingOrgs, err := suite.client.api.GetAllOrganizations(rule.WithInternalContext(testUser2.UserCtx))
+	remainingOrgs, err := suite.client.api.GetAllOrganizations(rule.WithInternalContext(testUserAgain.UserCtx))
 	assert.NilError(t, err)
 
 	// sanity checks for bug fix
@@ -420,36 +429,36 @@ func TestMutationDeleteOrgMembers(t *testing.T) {
 	assert.Assert(t, len(orgs.Organizations.Edges) < len(remainingOrgs.Organizations.Edges))
 
 	// the user removing themself from the org
-	selfOrgs, err := suite.client.api.GetOrgMembersByOrgID(testUser1.UserCtx, &openlaneclient.OrgMembershipWhereInput{
-		OrganizationID: &testUser1.OrganizationID,
+	selfOrgs, err := suite.client.api.GetOrgMembersByOrgID(testUser.UserCtx, &openlaneclient.OrgMembershipWhereInput{
+		OrganizationID: &testUser.OrganizationID,
 	})
 	assert.NilError(t, err)
 
 	for _, v := range selfOrgs.OrgMemberships.Edges {
-		if v.Node.UserID == testUser2.ID {
+		if v.Node.UserID == testUserAgain.ID {
 			// use the admin to remove the testUser2
-			_, err := suite.client.api.RemoveUserFromOrg(testUser1.UserCtx, v.Node.ID)
+			_, err := suite.client.api.RemoveUserFromOrg(testUser.UserCtx, v.Node.ID)
 			assert.NilError(t, err)
 			break
 		}
 	}
 
-	newOrgs, err := suite.client.api.GetAllOrganizations(testUser2.UserCtx)
+	newOrgs, err := suite.client.api.GetAllOrganizations(testUserAgain.UserCtx)
 	assert.NilError(t, err)
 
 	for _, v := range newOrgs.Organizations.Edges {
 		assert.Assert(t, v.Node.ID != om.OrganizationID)
 	}
 
-	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser1.UserCtx, &openlaneclient.OrgMembershipWhereInput{
-		OrganizationID: &testUser1.OrganizationID,
+	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser.UserCtx, &openlaneclient.OrgMembershipWhereInput{
+		OrganizationID: &testUser.OrganizationID,
 	})
 	assert.NilError(t, err)
 
 	for _, edge := range orgMembers.OrgMemberships.Edges {
 		// organization owner cannot be deleted
-		if edge.Node.UserID == testUser1.ID {
-			_, err = suite.client.api.RemoveUserFromOrg(testUser1.UserCtx, edge.Node.ID)
+		if edge.Node.UserID == testUser.ID {
+			_, err = suite.client.api.RemoveUserFromOrg(testUser.UserCtx, edge.Node.ID)
 			assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
 			break
 		}
