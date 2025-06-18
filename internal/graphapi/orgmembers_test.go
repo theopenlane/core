@@ -7,7 +7,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
@@ -402,64 +401,48 @@ func TestMutationDeleteOrgMembers(t *testing.T) {
 	t.Parallel()
 
 	testUser := suite.userBuilder(context.Background(), t)
-	testUserAgain := suite.userBuilder(context.Background(), t)
 
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	adminOrgMember := (&OrgMemberBuilder{client: suite.client, Role: string(enums.RoleAdmin)}).MustNew(testUser.UserCtx, t)
 
-	// get orgs status before adding user
-	orgs, err := suite.client.api.GetAllOrganizations(testUserAgain.UserCtx)
+	// create admin user context
+	adminUserCtx := auth.NewTestContextWithOrgID(adminOrgMember.UserID, testUser.OrganizationID)
+
+	resp, err := suite.client.api.RemoveUserFromOrg(testUser.UserCtx, om.ID)
+
 	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Equal(om.ID, resp.DeleteOrgMembership.DeletedID))
 
-	// add user 2 to the new org
+	// make sure the user default org is not set to the deleted org
+	suite.assertDefaultOrgUpdate(testUser.UserCtx, t, om.UserID, om.OrganizationID, false)
+
+	// test re-adding the user to the org
 	_, err = suite.client.api.AddUserToOrgWithRole(testUser.UserCtx, openlaneclient.CreateOrgMembershipInput{
 		OrganizationID: om.OrganizationID,
-		UserID:         testUserAgain.ID,
-		Role:           &enums.RoleMember,
+		UserID:         om.UserID,
+		Role:           &om.Role,
 	})
 
 	assert.NilError(t, err)
 
-	remainingOrgs, err := suite.client.api.GetAllOrganizations(rule.WithInternalContext(testUserAgain.UserCtx))
-	assert.NilError(t, err)
-
-	// sanity checks for bug fix
-	//
-	// make sure the orgs are not the same
-	// len of previous memberships should be less since we just added the user to the org
-	assert.Assert(t, len(orgs.Organizations.Edges) < len(remainingOrgs.Organizations.Edges))
-
-	// the user removing themself from the org
-	selfOrgs, err := suite.client.api.GetOrgMembersByOrgID(testUser.UserCtx, &openlaneclient.OrgMembershipWhereInput{
-		OrganizationID: &testUser.OrganizationID,
-	})
-	assert.NilError(t, err)
-
-	for _, v := range selfOrgs.OrgMemberships.Edges {
-		if v.Node.UserID == testUserAgain.ID {
-			// use the admin to remove the testUser2
-			_, err := suite.client.api.RemoveUserFromOrg(testUser.UserCtx, v.Node.ID)
-			assert.NilError(t, err)
-			break
-		}
-	}
-
-	newOrgs, err := suite.client.api.GetAllOrganizations(testUserAgain.UserCtx)
-	assert.NilError(t, err)
-
-	for _, v := range newOrgs.Organizations.Edges {
-		assert.Assert(t, v.Node.ID != om.OrganizationID)
-	}
-
+	// cant remove self from org and owners cannot be removed
 	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser.UserCtx, &openlaneclient.OrgMembershipWhereInput{
 		OrganizationID: &testUser.OrganizationID,
 	})
 	assert.NilError(t, err)
 
 	for _, edge := range orgMembers.OrgMemberships.Edges {
+		// cannot delete self
+		if edge.Node.UserID == adminUser.ID {
+			_, err := suite.client.api.RemoveUserFromOrg(adminUserCtx, edge.Node.ID)
+			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+		}
+
 		// organization owner cannot be deleted
 		if edge.Node.UserID == testUser.ID {
-			_, err = suite.client.api.RemoveUserFromOrg(testUser.UserCtx, edge.Node.ID)
-			assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
+			_, err = suite.client.api.RemoveUserFromOrg(adminUserCtx, edge.Node.ID)
+			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 			break
 		}
 	}

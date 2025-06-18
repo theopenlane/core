@@ -3081,8 +3081,6 @@ func init() {
 	orgmembership.Hooks[4] = orgmembershipHooks[2]
 
 	orgmembership.Hooks[5] = orgmembershipHooks[3]
-
-	orgmembership.Hooks[6] = orgmembershipHooks[4]
 	orgmembershipInters := schema.OrgMembership{}.Interceptors()
 	orgmembership.Interceptors[0] = orgmembershipInters[0]
 	orgmembership.Interceptors[1] = orgmembershipInters[1]

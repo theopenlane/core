@@ -155,47 +155,26 @@ func HookOrgMembersDelete() ent.Hook {
 				return nil, err
 			}
 
+			if m.Op().Is(ent.OpDelete | ent.OpDeleteOne) {
+				req := fgax.TupleRequest{
+					SubjectID:   orgMembership.UserID,
+					SubjectType: generated.TypeUser,
+					ObjectID:    orgMembership.OrganizationID,
+					ObjectType:  generated.TypeOrganization,
+					Relation:    orgMembership.Role.String(),
+				}
+
+				tuple := fgax.GetTupleKey(req)
+
+				if _, err := m.Client().Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tuple}); err != nil {
+					zerolog.Ctx(ctx).Error().Err(err).Interface("delete_tuple", tuple).Msg("failed to delete relationship tuple")
+					return nil, err
+				}
+			}
+
 			return retValue, err
 		})
 	}, ent.OpDeleteOne|ent.OpDelete|ent.OpUpdate|ent.OpUpdateOne) // handle soft deletes as well as hard deletes
-}
-
-// HookOrgMembersFGACleanup handles FGA tuple deletion after a successful removal of a member
-// from an org
-func HookOrgMembersFGACleanup() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
-
-			id, _ := m.ID()
-
-			orgMembership, err := m.Client().OrgMembership.Get(ctx, id)
-			if err != nil {
-				return nil, err
-			}
-
-			retValue, err := next.Mutate(ctx, m)
-			if err != nil {
-				return nil, err
-			}
-
-			req := fgax.TupleRequest{
-				SubjectID:   orgMembership.UserID,
-				SubjectType: generated.TypeUser,
-				ObjectID:    orgMembership.OrganizationID,
-				ObjectType:  generated.TypeOrganization,
-				Relation:    orgMembership.Role.String(),
-			}
-
-			tuple := fgax.GetTupleKey(req)
-
-			if _, err := m.Client().Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tuple}); err != nil {
-				zerolog.Ctx(ctx).Error().Err(err).Interface("delete_tuple", tuple).Msg("failed to delete relationship tuple")
-				return nil, err
-			}
-
-			return retValue, nil
-		})
-	}, ent.OpDeleteOne|ent.OpDelete)
 }
 
 // updateOrgMemberDefaultOrgOnCreate updates the user's default org if the user has no default org or

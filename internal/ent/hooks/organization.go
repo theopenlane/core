@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -390,13 +389,6 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 		newDefaultOrgID, err := client.
 			Organization.
 			Query().
-			Where(
-				organization.HasMembersWith(
-					// filter to organizations where the user is a member
-					// not just the first org in the db
-					orgmembership.UserID(userID),
-				),
-			).
 			FirstID(ctx)
 		if err != nil {
 			return "", err

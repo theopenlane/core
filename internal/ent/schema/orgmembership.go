@@ -115,9 +115,9 @@ func (OrgMembership) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookUpdateManagedGroups(),
 		hooks.HookOrgMembers(),
-		hooks.HookOrgMembersDelete(),
 		hooks.HookMembershipSelf("org_memberships"),
-		hooks.HookOrgMembersFGACleanup(),
+		hooks.HookOrgMembersDelete(),
+		// hooks.HookOrgMembersFGACleanup(),
 	}
 }
 
