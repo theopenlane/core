@@ -182,11 +182,17 @@ func (u User) Edges() []ent.Edge {
 			fromSchema:         u,
 			edgeSchema:         EmailVerificationToken{},
 			cascadeDeleteOwner: true,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         u,
 			edgeSchema:         PasswordResetToken{},
 			cascadeDeleteOwner: true,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
 		}),
 
 		edge.To("groups", Group.Type).
