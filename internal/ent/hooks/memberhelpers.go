@@ -78,12 +78,17 @@ func HookMembershipSelf(table string) ent.Hook {
 				return nil, err
 			}
 
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
 			if err := deleteOrgMembershipFGATuples(ctx, orgMembership, mutationMember.Client()); err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete FGA tuples after successful DB deletion")
 				return nil, err
 			}
 
-			return next.Mutate(ctx, m)
+			return retVal, err
 		})
 	}
 }
