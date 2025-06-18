@@ -2,6 +2,8 @@ package hooks
 
 import (
 	"context"
+	"fmt"
+	"slices"
 	"strings"
 
 	"entgo.io/ent"
@@ -9,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -20,6 +23,8 @@ type MutationMember interface {
 	UserID() (string, bool)
 	ID() (string, bool)
 	IDs(ctx context.Context) ([]string, error)
+	Op() ent.Op
+	Client() *generated.Client
 }
 
 // HookMembershipSelf is a hook that runs on membership mutations
@@ -59,15 +64,49 @@ func HookMembershipSelf(table string) ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			// if its not a create, check for updates with the user instead. This includes
-			// update and delete operations
+			id, ok := mutationMember.ID()
+			if !ok {
+				return nil, fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
+			}
+
 			if err := updateMembershipCheck(ctx, mutationMember, table, userID); err != nil {
+				return nil, err
+			}
+
+			orgMembership, err := mutationMember.Client().OrgMembership.Get(ctx, id)
+			if err != nil {
+				return nil, err
+			}
+
+			if err := deleteOrgMembershipFGATuples(ctx, orgMembership, mutationMember.Client()); err != nil {
+				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to delete FGA tuples after successful DB deletion")
 				return nil, err
 			}
 
 			return next.Mutate(ctx, m)
 		})
 	}
+}
+
+func deleteOrgMembershipFGATuples(ctx context.Context, orgMembership *generated.OrgMembership,
+	client *generated.Client) error {
+
+	req := fgax.TupleRequest{
+		SubjectID:   orgMembership.UserID,
+		SubjectType: generated.TypeUser,
+		ObjectID:    orgMembership.OrganizationID,
+		ObjectType:  generated.TypeOrganization,
+		Relation:    orgMembership.Role.String(),
+	}
+
+	tuple := fgax.GetTupleKey(req)
+
+	if _, err := client.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tuple}); err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Interface("delete_tuple", tuple).Msg("failed to delete relationship tuple")
+		return err
+	}
+
+	return nil
 }
 
 // createMembershipCheck is a helper function to check if a user is trying to add themselves to a membership
@@ -82,10 +121,8 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 		userIDs = append(userIDs, userID)
 	}
 
-	for _, userID := range userIDs {
-		if userID == actorID {
-			return generated.ErrPermissionDenied
-		}
+	if slices.Contains(userIDs, actorID) {
+		return generated.ErrPermissionDenied
 	}
 
 	return nil
@@ -95,6 +132,11 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 func updateMembershipCheck(ctx context.Context, m MutationMember, table string, actorID string) error {
 	memberIDs := getMutationMemberIDs(ctx, m)
 	if len(memberIDs) == 0 {
+		return nil
+	}
+
+	// only deletes allowed by a user on the org_memberships table
+	if table == "org_memberships" && (m.Op().Is(ent.OpDelete | ent.OpDeleteOne)) {
 		return nil
 	}
 
@@ -119,6 +161,7 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 		}
 
 		if userID == actorID {
+
 			zerolog.Ctx(ctx).Error().Msg("user cannot update their own membership")
 
 			return generated.ErrPermissionDenied

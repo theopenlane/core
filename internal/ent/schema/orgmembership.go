@@ -134,6 +134,10 @@ func (OrgMembership) Policy() ent.Policy {
 		policy.WithQueryRules(
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
+		policy.WithOnMutationRules(
+			ent.OpDelete|ent.OpDeleteOne,
+			rule.AllowSelfOrgMembershipDelete(),
+		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			entfga.CheckEditAccess[*generated.OrgMembershipMutation](),
