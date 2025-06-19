@@ -13,46 +13,6 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
-// Members is the resolver for the members field.
-func (r *organizationResolver) Members(ctx context.Context, obj *generated.Organization, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
-	// set page limit if nothing was set - this fixes the pagination issue
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = []*generated.OrgMembershipOrder{
-			{
-				Field:     generated.OrgMembershipOrderFieldCreatedAt,
-				Direction: entgql.OrderDirectionDesc,
-			},
-		}
-	}
-
-	// Filter by organization ID
-	if where == nil {
-		where = &generated.OrgMembershipWhereInput{}
-	}
-	where.OrganizationID = &obj.ID
-
-	query, err := withTransactionalMutation(ctx).OrgMembership.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithOrgMembershipOrder(orderBy),
-		generated.WithOrgMembershipFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
-	}
-
-	return res, nil
-}
-
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id string) (generated.Noder, error) {
 	res, err := withTransactionalMutation(ctx).Noder(ctx, id)
@@ -2972,9 +2932,6 @@ func (r *queryResolver) Webauthns(ctx context.Context, after *entgql.Cursor[stri
 // Group returns gqlgenerated.GroupResolver implementation.
 func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r} }
 
-// Organization returns gqlgenerated.OrganizationResolver implementation.
-func (r *Resolver) Organization() gqlgenerated.OrganizationResolver { return &organizationResolver{r} }
-
 // Query returns gqlgenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r} }
 
@@ -3049,7 +3006,6 @@ func (r *Resolver) UpdateTaskInput() gqlgenerated.UpdateTaskInputResolver {
 }
 
 type groupResolver struct{ *Resolver }
-type organizationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
@@ -3065,3 +3021,52 @@ type updateProgramInputResolver struct{ *Resolver }
 type updateStandardInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *organizationResolver) Members(ctx context.Context, obj *generated.Organization, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
+	// set page limit if nothing was set - this fixes the pagination issue
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.OrgMembershipOrder{
+			{
+				Field:     generated.OrgMembershipOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	// Filter by organization ID
+	if where == nil {
+		where = &generated.OrgMembershipWhereInput{}
+	}
+	where.OrganizationID = &obj.ID
+
+	query, err := withTransactionalMutation(ctx).OrgMembership.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrgMembershipOrder(orderBy),
+		generated.WithOrgMembershipFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
+	}
+
+	return res, nil
+}
+func (r *Resolver) Organization() gqlgenerated.OrganizationResolver { return &organizationResolver{r} }
+type organizationResolver struct{ *Resolver }
+*/

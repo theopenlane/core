@@ -38,7 +38,6 @@ type ResolverRoot interface {
 	AuditLog() AuditLogResolver
 	Group() GroupResolver
 	Mutation() MutationResolver
-	Organization() OrganizationResolver
 	Query() QueryResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
