@@ -93,7 +93,7 @@ require (
 	golang.org/x/term v0.32.0
 	golang.org/x/text v0.26.0
 	golang.org/x/tools v0.34.0
-	gotest.tools/gotestsum v1.12.2
+	gotest.tools/gotestsum v1.12.3
 	gotest.tools/v3 v3.5.2
 )
 
