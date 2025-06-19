@@ -54,6 +54,7 @@ omit_gqlgen_version_in_file_notice: true
 autobind:
   - "github.com/theopenlane/core/internal/graphapi"
   - "github.com/theopenlane/core/internal/ent/generated"
+
 # This section declares type mapping between the GraphQL and go type systems
 #
 # The first line in each type will be used as defaults for resolver arguments and
@@ -77,6 +78,10 @@ models:
   Node:
     model:
       - github.com/theopenlane/core/internal/ent/generated.Noder
+  Organization:
+    fields:
+      members:
+        resolver: true
   JSON:
     model:
       - github.com/theopenlane/entx.RawMessage
