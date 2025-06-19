@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/migrate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
@@ -98,7 +99,7 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 	}
 
 	// only deletes allowed by a user on the org_memberships table
-	if table == "org_memberships" && (m.Op().Is(ent.OpDelete | ent.OpDeleteOne)) {
+	if table == migrate.OrgMembershipsTable.Name && (m.Op().Is(ent.OpDelete | ent.OpDeleteOne)) {
 		return nil
 	}
 
