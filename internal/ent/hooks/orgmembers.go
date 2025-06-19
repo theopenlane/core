@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -152,6 +153,23 @@ func HookOrgMembersDelete() ent.Hook {
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			if _, err = checkAndUpdateDefaultOrg(allowCtx, orgMembership.UserID, orgMembership.OrganizationID, m.Client()); err != nil {
 				return nil, err
+			}
+
+			if m.Op().Is(ent.OpDelete | ent.OpDeleteOne) {
+				req := fgax.TupleRequest{
+					SubjectID:   orgMembership.UserID,
+					SubjectType: generated.TypeUser,
+					ObjectID:    orgMembership.OrganizationID,
+					ObjectType:  generated.TypeOrganization,
+					Relation:    orgMembership.Role.String(),
+				}
+
+				tuple := fgax.GetTupleKey(req)
+
+				if _, err := m.Client().Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tuple}); err != nil {
+					zerolog.Ctx(ctx).Error().Err(err).Interface("delete_tuple", tuple).Msg("failed to delete relationship tuple")
+					return nil, err
+				}
 			}
 
 			return retValue, err

@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"slices"
 	"strings"
 
 	"entgo.io/ent"
@@ -11,6 +12,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/migrate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
@@ -20,6 +22,8 @@ type MutationMember interface {
 	UserID() (string, bool)
 	ID() (string, bool)
 	IDs(ctx context.Context) ([]string, error)
+	Op() ent.Op
+	Client() *generated.Client
 }
 
 // HookMembershipSelf is a hook that runs on membership mutations
@@ -59,8 +63,6 @@ func HookMembershipSelf(table string) ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			// if its not a create, check for updates with the user instead. This includes
-			// update and delete operations
 			if err := updateMembershipCheck(ctx, mutationMember, table, userID); err != nil {
 				return nil, err
 			}
@@ -82,10 +84,8 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 		userIDs = append(userIDs, userID)
 	}
 
-	for _, userID := range userIDs {
-		if userID == actorID {
-			return generated.ErrPermissionDenied
-		}
+	if slices.Contains(userIDs, actorID) {
+		return generated.ErrPermissionDenied
 	}
 
 	return nil
@@ -95,6 +95,11 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 func updateMembershipCheck(ctx context.Context, m MutationMember, table string, actorID string) error {
 	memberIDs := getMutationMemberIDs(ctx, m)
 	if len(memberIDs) == 0 {
+		return nil
+	}
+
+	// only deletes allowed by a user on the org_memberships table
+	if table == migrate.OrgMembershipsTable.Name && (m.Op().Is(ent.OpDelete | ent.OpDeleteOne)) {
 		return nil
 	}
 
@@ -119,6 +124,7 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 		}
 
 		if userID == actorID {
+
 			zerolog.Ctx(ctx).Error().Msg("user cannot update their own membership")
 
 			return generated.ErrPermissionDenied

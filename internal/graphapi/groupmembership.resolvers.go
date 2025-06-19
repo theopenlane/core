@@ -12,8 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -83,9 +81,6 @@ func (r *mutationResolver) UpdateGroupMembership(ctx context.Context, id string,
 
 // DeleteGroupMembership is the resolver for the deleteGroupMembership field.
 func (r *mutationResolver) DeleteGroupMembership(ctx context.Context, id string) (*model.GroupMembershipDeletePayload, error) {
-	// org memberships are hard deleted, so we need to delete the tuples first
-	ctx = contextx.With(ctx, entfga.DeleteTuplesFirstKey{})
-
 	if err := withTransactionalMutation(ctx).GroupMembership.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "groupmembership"})
 	}

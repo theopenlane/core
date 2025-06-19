@@ -116,8 +116,8 @@ func (OrgMembership) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookUpdateManagedGroups(),
 		hooks.HookOrgMembers(),
-		hooks.HookOrgMembersDelete(),
 		hooks.HookMembershipSelf("org_memberships"),
+		hooks.HookOrgMembersDelete(),
 	}
 }
 
@@ -134,6 +134,10 @@ func (OrgMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
+		),
+		policy.WithOnMutationRules(
+			ent.OpDelete|ent.OpDeleteOne,
+			rule.AllowSelfOrgMembershipDelete(),
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),

@@ -385,7 +385,7 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 	// if the user's default org was deleted this will now be nil
 	if userSetting.Edges.DefaultOrg == nil || userSetting.Edges.DefaultOrg.ID == oldOrgID {
 		// set the user's default org another org
-		// get the first org that was not the org being deleted
+		// get the first org that was not the org being deleted and where the user is a member
 		newDefaultOrgID, err := client.
 			Organization.
 			Query().
