@@ -1,0 +1,58 @@
+modules:
+  compliance:
+    display_name: Compliance Module
+    description: Core compliance automation
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 10000
+          nickname: price_compliance_month
+          lookup_key: price_compliance_month
+          metadata:
+            tier: base
+        - interval: year
+          unit_amount: 100000
+          nickname: compliance-annual
+          lookup_key: compliance-annual
+          metadata:
+            tier: base
+    usage:
+      evidence_storage_gb: 250
+    audience: public
+  trust_center:
+    display_name: Trust Center
+    description: Public security portal
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 200
+          nickname: price_trust_center_monthly
+          lookup_key: price_trust_center_monthly
+        - interval: year
+          unit_amount: 2000
+          nickname: price_trust_center_yearly
+          lookup_key: price_trust_center_yearly
+    audience: beta
+addons:
+  domain_scanning:
+    display_name: Domain Scanning
+    billing:
+      prices:
+        - interval: year
+          unit_amount: 1000
+          nickname: domain-scan-year
+          lookup_key: domain-scan-year
+    audience: private
+  extra_evidence_storage:
+    display_name: Additional Evidence Storage (100GB)
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 1000
+          nickname: evidence-storage-100gb
+          lookup_key: evidence-storage-100gb
+          metadata:
+            increment_gb: "100"
+    usage:
+      evidence_storage_gb: 100
+    audience: public

@@ -1,0 +1,46 @@
+- product_id: prod_SWmrKGZMuRZI38
+  name: Compliance Module
+  features: []
+  prices:
+    - price_id: price_1RbjHUR7q8Ny5Jw09vtTo1rQ
+      price: 10000
+      currency: ""
+      product_name: ""
+      interval: month
+- product_id: prod_SVjlgMoRpzhKmW
+  name: continuous-compliance-automation
+  features: []
+  prices:
+    - price_id: price_1RaiHhR7q8Ny5Jw0Uv9vVzuK
+      price: 5000
+      currency: ""
+      product_name: ""
+      interval: year
+- product_id: prod_SVjifXUEDuWh5F
+  name: trust-center
+  features: []
+  prices:
+    - price_id: price_1RaiFmR7q8Ny5Jw0PvAVtiGX
+      price: 2000
+      currency: ""
+      product_name: ""
+      interval: year
+    - price_id: price_1RaiEgR7q8Ny5Jw0bGDA8we8
+      price: 200
+      currency: ""
+      product_name: ""
+      interval: month
+- product_id: prod_SVjD6UVMsJNOry
+  name: compliance
+  features: []
+  prices:
+    - price_id: price_1RahklR7q8Ny5Jw0QIuWOGZP
+      price: 5000
+      currency: ""
+      product_name: ""
+      interval: year
+    - price_id: price_1RahklR7q8Ny5Jw0L2qAKBB5
+      price: 400
+      currency: ""
+      product_name: ""
+      interval: month

@@ -12,10 +12,13 @@ func (sc *StripeClient) GetProductByID(ctx context.Context, id string) (*stripe.
 }
 
 // CreateProduct creates a new product in Stripe
-func (sc *StripeClient) CreateProduct(ctx context.Context, name, description string) (*stripe.Product, error) {
+func (sc *StripeClient) CreateProduct(ctx context.Context, name, description string, metadata map[string]string) (*stripe.Product, error) {
 	params := &stripe.ProductCreateParams{
 		Name:        stripe.String(name),
 		Description: stripe.String(description),
+	}
+	if len(metadata) > 0 {
+		params.Metadata = metadata
 	}
 
 	return sc.Client.V1Products.Create(ctx, params)

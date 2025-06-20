@@ -113,6 +113,8 @@ type Product struct {
 	ID            string                `json:"product_id" yaml:"product_id"`
 	Name          string                `json:"name" yaml:"name"`
 	Description   string                `json:"description,omitempty" yaml:"description,omitempty"`
+	Metadata      map[string]string     `json:"metadata" yaml:"metadata"`
+	URL           string                `json:"url" yaml:"url"`
 	Features      []Feature             `json:"features" yaml:"features"`
 	Prices        []Price               `json:"prices" yaml:"prices"`
 	StripeParams  *stripe.ProductParams `json:"stripe_params,omitempty" yaml:"stripe_params,omitempty"`
@@ -127,6 +129,9 @@ type Price struct {
 	ProductID    string              `json:"product_id" yaml:"-"`
 	ProductName  string              `json:"product_name" yaml:"product_name"`
 	Interval     string              `json:"interval" yaml:"interval"`
+	Nickname     string              `json:"nickname" yaml:"nickname"`
+	Lookupkey    string              `json:"lookupkey" yaml:"lookupkey"`
+	Metadata     map[string]string   `json:"metadata" yaml:"metadata"`
 	StripeParams *stripe.PriceParams `json:"stripe_params,omitempty" yaml:"stripe_params,omitempty"`
 	StripePrice  []stripe.Price      `json:"stripe_price,omitempty" yaml:"stripe_price,omitempty"`
 }

@@ -71,6 +71,8 @@ type Config struct {
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
 	// Keywatcher contains the configuration for the key watcher that manages JWT signing keys
 	Keywatcher KeyWatcher `json:"keywatcher" koanf:"keywatcher"`
+	// ModuleCatalogFile specifies the path to the module catalog YAML
+	ModuleCatalogFile string `json:"moduleCatalogFile" koanf:"moduleCatalogFile" default:"./config/catalog.example.yaml"`
 }
 
 // Server settings for the echo server

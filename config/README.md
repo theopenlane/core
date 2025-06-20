@@ -33,3 +33,7 @@ directory for changes and reloads the key set without needing a restart.
 To rotate keys, create a new PEM file with a new ULID in the directory or update
 the `CORE_AUTH_TOKEN_KEYS` variable with the additional entry. Keep the previous
 key until all issued tokens expire.
+
+## Module Catalog
+
+`moduleCatalogFile` defines the YAML file containing module and add-on definitions. Use environment variable `CORE_MODULECATALOGFILE` to override the path. Each feature lists one or more price options in `billing.prices`. The server searches Stripe for a matching price based on interval, amount, nickname, and metadata. If none is found a new product and price are created automatically during startup and catalog reloads. If you want to "dry run" confirm what resources would or would not be created via this process, you can run `go run ./cmd/catalog` and verify the output

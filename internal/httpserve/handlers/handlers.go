@@ -17,7 +17,9 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/features"
 	"github.com/theopenlane/core/pkg/summarizer"
 )
 
@@ -58,6 +60,10 @@ type Handler struct {
 	Entitlements *entitlements.StripeClient
 	// Summarizer contains the summarizing client
 	Summarizer *summarizer.Client
+	// Catalog holds available modules and add-ons
+	Catalog *catalog.Catalog
+	// FeatureCache caches organization features to reduce authz calls
+	FeatureCache *features.Cache
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user

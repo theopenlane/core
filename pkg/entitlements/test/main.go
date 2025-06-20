@@ -31,7 +31,7 @@ func main() {
 	}
 
 	// Write the plans to a YAML file
-	err = entitlements.WritePlansToYAML(plans, "pkg/entitlements/test/plans.yaml")
+	err = entitlements.WritePlansToYAML(plans, "pkg/entitlements/test/testplans.yaml")
 	if err != nil {
 		log.Fatal().Msgf("failed to write plans to YAML file: %v", err)
 	}
