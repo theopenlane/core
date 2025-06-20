@@ -171,6 +171,8 @@ type Slack struct {
 	WebhookURL string `json:"webhookURL" koanf:"webhookURL"`
 	// NewSubscriberMessageFile is the path to the template used for new subscriber notifications
 	NewSubscriberMessageFile string `json:"newSubscriberMessageFile" koanf:"newSubscriberMessageFile" default:"config/new_subscriber.tmpl"`
+	// NewUserMessageFile is the path to the template used for new user notifications
+	NewUserMessageFile string `json:"newUserMessageFile" koanf:"newUserMessageFile" default:"config/new_user.tmpl"`
 }
 
 var (

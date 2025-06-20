@@ -46,6 +46,7 @@ type EventID struct {
 type SlackConfig struct {
 	WebhookURL               string
 	NewSubscriberMessageFile string
+	NewUserMessageFile       string
 }
 
 var slackCfg SlackConfig
@@ -216,6 +217,10 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 			if m.Op().Is(ent.OpCreate) {
 				return true
 			}
+		case entgen.TypeUser:
+			if m.Op().Is(ent.OpCreate) {
+				return true
+			}
 		}
 
 		return false
@@ -228,6 +233,7 @@ var OrgSubscriptionCreate = fmt.Sprintf("%s.%s", entgen.TypeOrgSubscription, ent
 var OrganizationDelete = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDelete.String())
 var OrganizationDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDeleteOne.String())
 var SubscriberCreate = fmt.Sprintf("%s.%s", entgen.TypeSubscriber, entgen.OpCreate.String())
+var UserCreate = fmt.Sprintf("%s.%s", entgen.TypeUser, entgen.OpCreate.String())
 
 // RegisterGlobalHooks registers global event hooks for the entdb client and expects a pointer to an Eventer
 func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
@@ -266,6 +272,12 @@ func RegisterListeners(e *Eventer) error {
 		return err
 	}
 
+	_, err = e.Emitter.On(UserCreate, handleUserCreate)
+	if err != nil {
+		log.Error().Err(ErrFailedToRegisterListener)
+		return err
+	}
+
 	return nil
 }
 
@@ -297,6 +309,49 @@ func handleSubscriberCreate(event soiree.Event) error {
 
 		var buf bytes.Buffer
 
+		if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
+			zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
+
+			return err
+		}
+
+		msg = buf.String()
+	}
+
+	client := slack.New(slackCfg.WebhookURL)
+
+	payload := &slack.Payload{Text: msg}
+
+	return client.Post(event.Context(), payload)
+}
+
+// handleUserCreate sends a Slack notification when a new user is created
+func handleUserCreate(event soiree.Event) error {
+	if slackCfg.WebhookURL == "" {
+		return nil
+	}
+
+	emailVal := event.Properties().GetKey("email")
+	email, _ := emailVal.(string)
+
+	msg := fmt.Sprintf("New user registered: %s", email)
+
+	if slackCfg.NewUserMessageFile != "" {
+		b, err := os.ReadFile(slackCfg.NewUserMessageFile)
+		if err != nil {
+			zerolog.Ctx(event.Context()).Debug().Msg("failed to read slack template")
+
+			return err
+		}
+
+		t, err := template.New("slack").Parse(string(b))
+		if err != nil {
+			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse slack template")
+
+			return err
+		}
+
+		var buf bytes.Buffer
 		if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
 			zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
 
