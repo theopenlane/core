@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -153,6 +154,17 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 			if tc.expectedStatus >= http.StatusOK && tc.expectedStatus <= http.StatusCreated {
 				assert.Contains(t, out.Message, tc.expectedMessage)
+
+				if tc.userConfirmed {
+					// check the claims to ensure the the claims are set correctly
+					token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
+					require.NoError(t, err)
+
+					claims, ok := token.Claims.(jwt.MapClaims)
+					require.True(t, ok)
+
+					assert.NotEmpty(t, claims["org"])
+				}
 			} else {
 				assert.Contains(t, out.Error, tc.expectedMessage)
 			}
