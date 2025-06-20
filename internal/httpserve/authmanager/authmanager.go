@@ -224,10 +224,6 @@ func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 // if the user does not have access to the target organization, the user's default org is used (or falls back)
 // to their personal org
 func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID string) (string, error) {
-	if skip := skipOrgValidation(ctx); skip {
-		return orgID, nil
-	}
-
 	if orgID == "" {
 		// get the default org for the user to check access
 		var err error
@@ -236,6 +232,10 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		if err != nil {
 			return "", err
 		}
+	}
+
+	if skip := skipOrgValidation(ctx); skip {
+		return orgID, nil
 	}
 
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
