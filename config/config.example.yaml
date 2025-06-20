@@ -256,6 +256,7 @@ sessions:
     signingKey: my-signing-secret
 slack:
     newSubscriberMessageFile: config/new_subscriber.tmpl
+    newUserMessageFile: config/new_user.tmpl
     webhookURL: ""
 subscription:
     enabled: false

@@ -70,6 +70,7 @@ func serve(ctx context.Context) error {
 	hooks.SetSlackConfig(hooks.SlackConfig{
 		WebhookURL:               so.Config.Settings.Slack.WebhookURL,
 		NewSubscriberMessageFile: so.Config.Settings.Slack.NewSubscriberMessageFile,
+		NewUserMessageFile:       so.Config.Settings.Slack.NewUserMessageFile,
 	})
 
 	// Create keys for development when no external keys are supplied

@@ -930,6 +930,7 @@ Slack contains settings for Slack notifications
 |----|----|-----------|--------|
 |**webhookURL**|`string`|WebhookURL is the Slack webhook to post messages to<br/>||
 |**newSubscriberMessageFile**|`string`|NewSubscriberMessageFile is the path to the template used for new subscriber notifications<br/>||
+|**newUserMessageFile**|`string`|NewUserMessageFile is the path to the template used for new user notifications<br/>||
 
 **Additional Properties:** not allowed  
 
