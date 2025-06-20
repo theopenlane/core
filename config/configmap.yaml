@@ -212,3 +212,5 @@ data:
   CORE_KEYWATCHER_KEYDIR: {{ .Values.core.keywatcher.keyDir | default "./keys" }}
   CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.core.keywatcher.externalSecretsIntegration | default false }}
   CORE_KEYWATCHER_SECRETMANAGER: {{ .Values.core.keywatcher.secretManager }}
+  CORE_SLACK_WEBHOOKURL: {{ .Values.core.slack.webhookURL }}
+  CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.core.slack.newSubscriberMessageFile | default "config/new_subscriber.tmpl" }}

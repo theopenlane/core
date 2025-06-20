@@ -1,9 +1,12 @@
 package hooks
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"html/template"
+	"os"
 	"reflect"
 	"time"
 
@@ -16,6 +19,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/slack"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -36,6 +40,19 @@ type Eventer struct {
 // EventID is used to marshall and unmarshall the ID out of a ent mutation
 type EventID struct {
 	ID string `json:"id,omitempty"`
+}
+
+// SlackConfig holds configuration for Slack notifications
+type SlackConfig struct {
+	WebhookURL               string
+	NewSubscriberMessageFile string
+}
+
+var slackCfg SlackConfig
+
+// SetSlackConfig sets the Slack configuration for event handlers
+func SetSlackConfig(cfg SlackConfig) {
+	slackCfg = cfg
 }
 
 // EventerOpts is a functional options wrapper
@@ -195,6 +212,10 @@ func emitEventOn() func(context.Context, entgen.Mutation) bool {
 			if m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne) {
 				return true
 			}
+		case entgen.TypeSubscriber:
+			if m.Op().Is(ent.OpCreate) {
+				return true
+			}
 		}
 
 		return false
@@ -206,6 +227,7 @@ var OrganizationSettingUpdateOne = fmt.Sprintf("%s.%s", entgen.TypeOrganizationS
 var OrgSubscriptionCreate = fmt.Sprintf("%s.%s", entgen.TypeOrgSubscription, entgen.OpCreate.String())
 var OrganizationDelete = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDelete.String())
 var OrganizationDeleteOne = fmt.Sprintf("%s.%s", entgen.TypeOrganization, entgen.OpDeleteOne.String())
+var SubscriberCreate = fmt.Sprintf("%s.%s", entgen.TypeSubscriber, entgen.OpCreate.String())
 
 // RegisterGlobalHooks registers global event hooks for the entdb client and expects a pointer to an Eventer
 func RegisterGlobalHooks(client *entgen.Client, e *Eventer) {
@@ -238,7 +260,57 @@ func RegisterListeners(e *Eventer) error {
 		return err
 	}
 
+	_, err = e.Emitter.On(SubscriberCreate, handleSubscriberCreate)
+	if err != nil {
+		log.Error().Err(ErrFailedToRegisterListener)
+		return err
+	}
+
 	return nil
+}
+
+// handleSubscriberCreate sends a Slack notification when a new subscriber is created
+func handleSubscriberCreate(event soiree.Event) error {
+	if slackCfg.WebhookURL == "" {
+		return nil
+	}
+
+	emailVal := event.Properties().GetKey("email")
+	email, _ := emailVal.(string)
+
+	msg := fmt.Sprintf("New waitlist subscriber: %s", email)
+
+	if slackCfg.NewSubscriberMessageFile != "" {
+		b, err := os.ReadFile(slackCfg.NewSubscriberMessageFile)
+		if err != nil {
+			zerolog.Ctx(event.Context()).Debug().Msg("failed to read slack template")
+
+			return err
+		}
+
+		t, err := template.New("slack").Parse(string(b))
+		if err != nil {
+			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse slack template")
+
+			return err
+		}
+
+		var buf bytes.Buffer
+
+		if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
+			zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
+
+			return err
+		}
+
+		msg = buf.String()
+	}
+
+	client := slack.New(slackCfg.WebhookURL)
+
+	payload := &slack.Payload{Text: msg}
+
+	return client.Post(event.Context(), payload)
 }
 
 // handleOrganizationDelete handles the deletion of an organization and deletes the customer in Stripe

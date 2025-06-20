@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/utils/cache"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/config"
@@ -65,6 +66,11 @@ func serve(ctx context.Context) error {
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
+
+	hooks.SetSlackConfig(hooks.SlackConfig{
+		WebhookURL:               so.Config.Settings.Slack.WebhookURL,
+		NewSubscriberMessageFile: so.Config.Settings.Slack.NewSubscriberMessageFile,
+	})
 
 	// Create keys for development when no external keys are supplied
 	if so.Config.Settings.Auth.Token.GenerateKeys && len(so.Config.Settings.Auth.Token.Keys) == 0 {

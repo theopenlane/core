@@ -71,6 +71,8 @@ type Config struct {
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
 	// Keywatcher contains the configuration for the key watcher that manages JWT signing keys
 	Keywatcher KeyWatcher `json:"keywatcher" koanf:"keywatcher"`
+	// Slack contains settings for Slack notifications
+	Slack Slack `json:"slack" koanf:"slack"`
 }
 
 // Server settings for the echo server
@@ -161,6 +163,14 @@ type TLS struct {
 type PondPool struct {
 	// MaxWorkers is the maximum number of workers in the pool
 	MaxWorkers int `json:"maxWorkers" koanf:"maxWorkers" default:"100"`
+}
+
+// Slack contains settings for Slack notifications
+type Slack struct {
+	// WebhookURL is the Slack webhook to post messages to
+	WebhookURL string `json:"webhookURL" koanf:"webhookURL"`
+	// NewSubscriberMessageFile is the path to the template used for new subscriber notifications
+	NewSubscriberMessageFile string `json:"newSubscriberMessageFile" koanf:"newSubscriberMessageFile" default:"config/new_subscriber.tmpl"`
 }
 
 var (
