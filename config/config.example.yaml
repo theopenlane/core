@@ -254,6 +254,9 @@ sessions:
     encryptionKey: encryptionsecret
     maxAge: 3600
     signingKey: my-signing-secret
+slack:
+    newSubscriberMessageFile: config/new_subscriber.tmpl
+    webhookURL: ""
 subscription:
     enabled: false
     features: null

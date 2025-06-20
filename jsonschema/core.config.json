@@ -259,6 +259,21 @@
       ],
       "description": "Server settings for the echo server"
     },
+    "config.Slack": {
+      "properties": {
+        "webhookURL": {
+          "type": "string",
+          "description": "WebhookURL is the Slack webhook to post messages to"
+        },
+        "newSubscriberMessageFile": {
+          "type": "string",
+          "description": "NewSubscriberMessageFile is the path to the template used for new subscriber notifications"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Slack contains settings for Slack notifications"
+    },
     "config.TLS": {
       "properties": {
         "enabled": {
@@ -1443,6 +1458,10 @@
     "keywatcher": {
       "$ref": "#/$defs/config.KeyWatcher",
       "description": "Keywatcher contains the configuration for the key watcher that manages JWT signing keys"
+    },
+    "slack": {
+      "$ref": "#/$defs/config.Slack",
+      "description": "Slack contains settings for Slack notifications"
     }
   },
   "additionalProperties": false,

@@ -23,6 +23,7 @@ Config contains the configuration for the core server
 |[**objectStorage**](#objectstorage)|`object`|Config is the configuration for the object store<br/>||
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
+|[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 
 **Additional Properties:** not allowed  
 <a name="server"></a>
@@ -915,6 +916,20 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**keyDir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>||
 |**externalSecretsIntegration**|`boolean`|ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)<br/>||
 |**secretManager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>||
+
+**Additional Properties:** not allowed  
+<a name="slack"></a>
+## slack: object
+
+Slack contains settings for Slack notifications
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**webhookURL**|`string`|WebhookURL is the Slack webhook to post messages to<br/>||
+|**newSubscriberMessageFile**|`string`|NewSubscriberMessageFile is the path to the template used for new subscriber notifications<br/>||
 
 **Additional Properties:** not allowed  
 
