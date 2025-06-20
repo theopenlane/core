@@ -9,13 +9,14 @@ import (
 	"github.com/theopenlane/core/pkg/catalog"
 )
 
-func Gencatalog() {
+func main() {
 	r := jsonschema.Reflect(&catalog.Catalog{})
 	data, err := json.MarshalIndent(r, "", "  ")
 	if err != nil {
 		panic(err)
 	}
-	if err := os.WriteFile("./jsonschema/catalog.schema.json", data, 0600); err != nil {
+
+	if err := os.WriteFile("./pkg/catalog/catalog.schema.json", data, 0600); err != nil {
 		panic(err)
 	}
 }

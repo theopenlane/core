@@ -1,24 +1,28 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/stripe/stripe-go/v82"
+
+	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/entitlements"
 )
 
-const apiKey = ""
-
 func main() {
 	var catalogFile string
 	var apiKey string
+	var takeover bool
 	flag.StringVar(&catalogFile, "catalog", "./config/catalog.yaml", "catalog file path")
 	flag.StringVar(&apiKey, "stripe-key", "", "stripe API key (or set STRIPE_API_KEY)")
+	flag.BoolVar(&takeover, "takeover", false, "add managed_by metadata when found")
 	flag.Parse()
 
 	if apiKey == "" {
@@ -28,6 +32,10 @@ func main() {
 	cat, err := catalog.LoadCatalog(catalogFile)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "load catalog:", err)
+		os.Exit(1)
+	}
+	if err := cat.Lint(); err != nil {
+		fmt.Fprintln(os.Stderr, "catalog lint:", err)
 		os.Exit(1)
 	}
 
@@ -50,6 +58,13 @@ func main() {
 		prodMap[p.Name] = p
 	}
 
+	type takeoverInfo struct {
+		feature string
+		price   catalog.Price
+		stripe  *stripe.Price
+	}
+	var takeovers []takeoverInfo
+
 	check := func(kind string, fs catalog.FeatureSet) {
 		for name, feat := range fs {
 			prod, ok := prodMap[feat.DisplayName]
@@ -64,6 +79,10 @@ func main() {
 					price, err := sc.FindPriceForProduct(ctx, prod.ID, p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
 					if err != nil || price == nil {
 						missingPrices++
+						continue
+					}
+					if price.Metadata[catalog.ManagedByKey] != catalog.ManagedByValue {
+						takeovers = append(takeovers, takeoverInfo{feature: name, price: p, stripe: price})
 					}
 				}
 			} else {
@@ -75,4 +94,34 @@ func main() {
 
 	check("module", cat.Modules)
 	check("addon", cat.Addons)
+
+	if len(takeovers) > 0 {
+		writer := tables.NewTableWriter(os.Stdout, "Feature", "LookupKey", "PriceID", "Managed")
+		for _, t := range takeovers {
+			managed := t.stripe.Metadata[catalog.ManagedByKey]
+			writer.AddRow(t.feature, t.price.LookupKey, t.stripe.ID, managed)
+		}
+		writer.Render()
+
+		if !takeover {
+			fmt.Print("Take over these prices by adding metadata? (y/N): ")
+			r := bufio.NewReader(os.Stdin)
+			ans, _ := r.ReadString('\n')
+			ans = strings.ToLower(strings.TrimSpace(ans))
+			takeover = ans == "y" || ans == "yes"
+		}
+
+		if takeover {
+			for _, t := range takeovers {
+				md := t.stripe.Metadata
+				if md == nil {
+					md = map[string]string{}
+				}
+				md[catalog.ManagedByKey] = catalog.ManagedByValue
+				if _, err := sc.UpdatePriceMetadata(ctx, t.stripe.ID, md); err != nil {
+					fmt.Fprintln(os.Stderr, "update price:", err)
+				}
+			}
+		}
+	}
 }

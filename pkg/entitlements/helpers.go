@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/goccy/go-yaml"
 	"github.com/stripe/stripe-go/v82"
-	"gopkg.in/yaml.v3"
 )
 
 // GetUpdatedFields checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information

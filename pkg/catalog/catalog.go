@@ -2,16 +2,21 @@ package catalog
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"io/fs"
 	"os"
 
-	"gopkg.in/yaml.v3"
+	"github.com/goccy/go-yaml"
 
 	"github.com/stripe/stripe-go/v82"
+	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/core/pkg/entitlements"
 )
+
+//go:embed catalog.schema.json
+var schemaBytes []byte
 
 // ManagedByKey is the metadata key applied to Stripe resources created via the catalog.
 const ManagedByKey = "managed_by"
@@ -91,7 +96,19 @@ func LoadCatalog(path string) (*Catalog, error) {
 		if !os.IsNotExist(err) {
 			return nil, err
 		}
+
 		return nil, fs.ErrNotExist
+	}
+
+	schema := gojsonschema.NewBytesLoader(schemaBytes)
+	doc := gojsonschema.NewBytesLoader(data)
+
+	res, err := gojsonschema.Validate(schema, doc)
+	if err != nil {
+		return nil, err
+	}
+	if !res.Valid() {
+		return nil, fmt.Errorf("catalog validation failed: %v", res.Errors())
 	}
 
 	var c Catalog

@@ -91,8 +91,12 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID strin
 		return nil, err
 	}
 	for _, p := range prices {
-		if lookupKey != "" && p.LookupKey != lookupKey {
-			continue
+		if lookupKey != "" {
+			if p.LookupKey == lookupKey {
+				return p, nil
+			} else {
+				continue
+			}
 		}
 		if nickname != "" && p.Nickname != nickname {
 			continue
@@ -111,7 +115,7 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID strin
 
 		match := true
 		for k, v := range metadata {
-			if p.Metadata[k] != v {
+			if p.Metadata == nil || p.Metadata[k] != v {
 				match = false
 				break
 			}
@@ -120,5 +124,12 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID strin
 			return p, nil
 		}
 	}
+
 	return nil, nil
+}
+
+// UpdatePriceMetadata updates the metadata for a price.
+func (sc *StripeClient) UpdatePriceMetadata(ctx context.Context, priceID string, metadata map[string]string) (*stripe.Price, error) {
+	params := &stripe.PriceUpdateParams{Metadata: metadata}
+	return sc.Client.V1Prices.Update(ctx, priceID, params)
 }
