@@ -25,6 +25,7 @@ type DNSVerificationHistory struct {
 func (DNSVerificationHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "dns_verification_history",
 		},

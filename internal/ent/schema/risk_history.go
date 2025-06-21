@@ -26,6 +26,7 @@ type RiskHistory struct {
 func (RiskHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "risk_history",
 		},

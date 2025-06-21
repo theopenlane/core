@@ -26,6 +26,7 @@ type OrgMembershipHistory struct {
 func (OrgMembershipHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "org_membership_history",
 		},

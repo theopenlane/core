@@ -26,6 +26,7 @@ type ControlObjectiveHistory struct {
 func (ControlObjectiveHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "control_objective_history",
 		},

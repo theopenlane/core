@@ -26,6 +26,7 @@ type ProcedureHistory struct {
 func (ProcedureHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "procedure_history",
 		},

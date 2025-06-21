@@ -25,6 +25,7 @@ type EntityHistory struct {
 func (EntityHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "entity_history",
 		},

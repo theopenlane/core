@@ -26,6 +26,7 @@ type InternalPolicyHistory struct {
 func (InternalPolicyHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "internal_policy_history",
 		},
