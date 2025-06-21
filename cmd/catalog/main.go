@@ -64,6 +64,7 @@ func main() {
 		stripe  *stripe.Price
 	}
 	var takeovers []takeoverInfo
+	missing := false
 
 	check := func(kind string, fs catalog.FeatureSet) {
 		for name, feat := range fs {
@@ -87,6 +88,9 @@ func main() {
 				}
 			} else {
 				missingPrices = len(feat.Billing.Prices)
+			}
+			if !prodExists || missingPrices > 0 {
+				missing = true
 			}
 			fmt.Printf("%s %-20s product:%v missing_prices:%d\n", kind, name, prodExists, missingPrices)
 		}
@@ -121,6 +125,18 @@ func main() {
 				if _, err := sc.UpdatePriceMetadata(ctx, t.stripe.ID, md); err != nil {
 					fmt.Fprintln(os.Stderr, "update price:", err)
 				}
+			}
+		}
+	}
+
+	if missing {
+		fmt.Print("Create missing products and prices? (y/N): ")
+		r := bufio.NewReader(os.Stdin)
+		ans, _ := r.ReadString('\n')
+		ans = strings.ToLower(strings.TrimSpace(ans))
+		if ans == "y" || ans == "yes" {
+			if err := cat.EnsurePrices(ctx, sc, "usd"); err != nil {
+				fmt.Fprintln(os.Stderr, "create prices:", err)
 			}
 		}
 	}

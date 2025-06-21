@@ -101,7 +101,13 @@ func LoadCatalog(path string) (*Catalog, error) {
 	}
 
 	schema := gojsonschema.NewBytesLoader(schemaBytes)
-	doc := gojsonschema.NewBytesLoader(data)
+
+	jsonData, err := yaml.YAMLToJSON(data)
+	if err != nil {
+		return nil, fmt.Errorf("yaml to json: %w", err)
+	}
+
+	doc := gojsonschema.NewBytesLoader(jsonData)
 
 	res, err := gojsonschema.Validate(schema, doc)
 	if err != nil {
