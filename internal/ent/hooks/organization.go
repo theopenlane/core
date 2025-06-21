@@ -252,7 +252,10 @@ func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organizat
 		SetStripeSubscriptionID(subscriptionPendingUpdate).
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
-		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).Exec(ctx)
+		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).
+		SetFeatures([]string{"base"}).
+		SetFeatureLookupKeys([]string{"base"}).
+		Exec(ctx)
 }
 
 // createEntityTypes creates the default entity types for a new org
