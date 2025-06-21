@@ -11,7 +11,6 @@ metadata:
   {{- end }}
 data:
   CORE_REFRESHINTERVAL: {{ .Values.core.refreshInterval | default "10m" }}
-  CORE_SERVER_DEBUG: {{ .Values.core.server.debug | default false }}
   CORE_SERVER_DEV: {{ .Values.core.server.dev | default false }}
   CORE_SERVER_LISTEN: {{ .Values.core.server.listen | default ":17608" }}
   CORE_SERVER_METRICSPORT: {{ .Values.core.server.metricsPort | default ":17609" }}
