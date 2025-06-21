@@ -217,7 +217,7 @@ require (
 	github.com/firefart/nonamedreturns v1.0.5 // indirect
 	github.com/fzipp/gocyclo v0.6.0 // indirect
 	github.com/gage-technologies/mistral-go v1.1.0 // indirect
-	github.com/gaissmai/bart v0.18.1 // indirect
+	github.com/gaissmai/bart v0.20.4 // indirect
 	github.com/ghostiam/protogetter v0.3.9 // indirect
 	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
 	github.com/go-critic/go-critic v0.12.0 // indirect
@@ -335,16 +335,16 @@ require (
 	github.com/projectdiscovery/blackrock v0.0.1 // indirect
 	github.com/projectdiscovery/chaos-client v0.5.2 // indirect
 	github.com/projectdiscovery/dsl v0.4.1 // indirect
-	github.com/projectdiscovery/fastdialer v0.4.0 // indirect
+	github.com/projectdiscovery/fastdialer v0.4.1 // indirect
 	github.com/projectdiscovery/gologger v1.1.54 // indirect
 	github.com/projectdiscovery/gostruct v0.0.2 // indirect
-	github.com/projectdiscovery/hmap v0.0.87 // indirect
+	github.com/projectdiscovery/hmap v0.0.89 // indirect
 	github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 // indirect
 	github.com/projectdiscovery/mapcidr v1.1.34 // indirect
-	github.com/projectdiscovery/networkpolicy v0.1.12 // indirect
-	github.com/projectdiscovery/ratelimit v0.0.79 // indirect
-	github.com/projectdiscovery/retryabledns v1.0.98 // indirect
-	github.com/projectdiscovery/retryablehttp-go v1.0.109 // indirect
+	github.com/projectdiscovery/networkpolicy v0.1.15 // indirect
+	github.com/projectdiscovery/ratelimit v0.0.81 // indirect
+	github.com/projectdiscovery/retryabledns v1.0.101 // indirect
+	github.com/projectdiscovery/retryablehttp-go v1.0.114 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.4 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
@@ -565,7 +565,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pquerna/otp v1.5.0
 	github.com/projectdiscovery/katana v1.1.3
-	github.com/projectdiscovery/subfinder/v2 v2.7.1
+	github.com/projectdiscovery/subfinder/v2 v2.8.0
 	github.com/projectdiscovery/wappalyzergo v0.2.33
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
