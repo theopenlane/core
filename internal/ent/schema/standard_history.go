@@ -25,6 +25,7 @@ type StandardHistory struct {
 func (StandardHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "standard_history",
 		},

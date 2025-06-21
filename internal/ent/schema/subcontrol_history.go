@@ -26,6 +26,7 @@ type SubcontrolHistory struct {
 func (SubcontrolHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "subcontrol_history",
 		},

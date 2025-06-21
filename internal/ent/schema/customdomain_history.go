@@ -25,6 +25,7 @@ type CustomDomainHistory struct {
 func (CustomDomainHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "custom_domain_history",
 		},

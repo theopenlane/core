@@ -25,6 +25,7 @@ type ControlScheduledJobHistory struct {
 func (ControlScheduledJobHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
+		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
 			Table: "control_scheduled_job_history",
 		},
