@@ -167,10 +167,6 @@
     },
     "config.Server": {
       "properties": {
-        "debug": {
-          "type": "boolean",
-          "description": "Debug enables debug mode for the server"
-        },
         "dev": {
           "type": "boolean",
           "description": "Dev enables echo's dev mode options"

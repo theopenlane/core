@@ -77,8 +77,10 @@ type Config struct {
 
 // Server settings for the echo server
 type Server struct {
-	// Debug enables debug mode for the server
-	Debug bool `json:"debug" koanf:"debug" default:"false"`
+	// Debug enables debug mode for the server, set via the command line flag
+	Debug bool `json:"-" koanf:"-" default:"false"`
+	// Pretty enables pretty logging output, defaults to json format, set via the command line flag
+	Pretty bool `json:"-" koanf:"-" default:"false"`
 	// Dev enables echo's dev mode options
 	Dev bool `json:"dev" koanf:"dev" default:"false"`
 	// Listen sets the listen address to serve the echo server on

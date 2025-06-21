@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"os"
 
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
@@ -28,19 +29,41 @@ type Server struct {
 	Router *route.Router
 }
 
+// LogConfig is a struct that holds the configuration for logging in the echo server
+type LogConfig struct {
+	// PrettyLog enables pretty logging output, defaults to json format
+	PrettyLog bool
+	// LogLevel sets the log level for the server, defaults to INFO
+	LogLevel echo_log.Lvl
+}
+
 // ConfigureEcho sets up the echo server with the default middleware and logging
-func ConfigureEcho() *echo.Echo {
+func ConfigureEcho(c LogConfig) *echo.Echo {
 	e := echo.New()
 	e.HTTPErrorHandler = CustomHTTPErrorHandler
 	e.Use(middleware.Recover())
 
-	output := consolelog.NewConsoleWriter()
-	logger := logx.New(
-		&output,
-		logx.WithLevel(echo_log.DEBUG),
+	var logger *logx.Logger
+	setters := []logx.ConfigSetter{
+		logx.WithLevel(c.LogLevel),
 		logx.WithTimestamp(),
 		logx.WithCaller(),
-	)
+	}
+
+	// if PrettyLog is enabled, use the console writer for pretty logging
+	// otherwise, use the default stdout writer (json format)
+	if c.PrettyLog {
+		cw := consolelog.NewConsoleWriter()
+		logger = logx.New(
+			&cw,
+			setters...,
+		)
+	} else {
+		logger = logx.New(
+			os.Stdout,
+			setters...,
+		)
+	}
 
 	e.Logger = logger
 
@@ -63,14 +86,14 @@ type handler interface {
 }
 
 // NewRouter creates a wrapper router so that the echo server and OAS specification can be generated simultaneously
-func NewRouter() (*route.Router, error) {
+func NewRouter(c LogConfig) (*route.Router, error) {
 	oas, err := NewOpenAPISpec()
 	if err != nil {
 		return nil, err
 	}
 
 	return &route.Router{
-		Echo: ConfigureEcho(),
+		Echo: ConfigureEcho(c),
 		OAS:  oas,
 	}, nil
 }
@@ -84,7 +107,17 @@ func (s *Server) AddHandler(r handler) {
 
 // NewServer returns a new Server configuration
 func NewServer(c config.Config) (*Server, error) {
-	srv, err := NewRouter()
+	logConfig := LogConfig{
+		PrettyLog: c.Settings.Server.Pretty,
+	}
+
+	if c.Settings.Server.Debug {
+		logConfig.LogLevel = echo_log.DEBUG
+	} else {
+		logConfig.LogLevel = echo_log.INFO
+	}
+
+	srv, err := NewRouter(logConfig)
 	if err != nil {
 		return nil, err
 	}

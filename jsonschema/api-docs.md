@@ -36,7 +36,6 @@ Server settings for the echo server
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**debug**|`boolean`|Debug enables debug mode for the server<br/>|no|
 |**dev**|`boolean`|Dev enables echo's dev mode options<br/>|no|
 |**listen**|`string`|Listen sets the listen address to serve the echo server on<br/>|yes|
 |**metricsPort**|`string`|MetricsPort sets the port for the metrics endpoint<br/>|no|

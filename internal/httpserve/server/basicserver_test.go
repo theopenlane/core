@@ -13,7 +13,7 @@ import (
 func TestNewRouter(t *testing.T) {
 	t.Parallel()
 
-	r, err := NewRouter()
+	r, err := NewRouter(LogConfig{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

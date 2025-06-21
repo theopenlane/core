@@ -171,6 +171,10 @@ func serve(ctx context.Context) error {
 	// set dev flag
 	so.Config.Handler.IsDev = so.Config.Settings.Server.Dev
 
+	// set the logging config options based on flags
+	so.Config.Settings.Server.Debug = k.Bool("debug")
+	so.Config.Settings.Server.Pretty = k.Bool("pretty")
+
 	// add ready checks
 	so.AddServerOptions(
 		serveropts.WithReadyChecks(dbClient.Config, fgaClient, redisClient, dbClient.Job),
