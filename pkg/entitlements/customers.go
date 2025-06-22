@@ -113,7 +113,12 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 
 			log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("personal org subscription created")
 		} else {
-			subscription, err = sc.CreateTrialSubscription(ctx, customer)
+			prices := []string{sc.Config.TrialSubscriptionPriceID}
+			if sc.Config.ComplianceModulePriceID != "" {
+				prices = append(prices, sc.Config.ComplianceModulePriceID)
+			}
+
+			subscription, err = sc.CreateTrialSubscriptionWithPrices(ctx, customer, prices)
 			if err != nil {
 				return nil
 			}

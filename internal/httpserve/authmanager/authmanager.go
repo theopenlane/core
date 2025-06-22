@@ -424,20 +424,26 @@ func (a *Client) ensureBaseSubscription(ctx context.Context, orgID string) error
 	if err != nil {
 		return err
 	}
-
 	if !exists {
-		sub, err := a.db.OrgSubscription.Create().SetStripeSubscriptionID(subscriptionPendingUpdate).SetOwnerID(orgID).SetActive(true).SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).SetFeatures([]string{"base"}).SetFeatureLookupKeys([]string{"base"}).Save(ctx)
+		sub, err := a.db.OrgSubscription.Create().
+			SetStripeSubscriptionID(subscriptionPendingUpdate).
+			SetOwnerID(orgID).
+			SetActive(true).
+			SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).
+			SetFeatures([]string{"base"}).
+			SetFeatureLookupKeys([]string{"base"}).
+			Save(ctx)
 		if err != nil {
 			return err
 		}
-
-		if err := a.db.OrgModule.Create().SetModule("base").SetSubscriptionID(sub.ID).SetOwnerID(orgID).SetActive(true).Exec(ctx); err != nil {
-			log.Error().Err(err).Msg("failed to create base org module")
-
-			return err
-		}
+		err = a.db.OrgModule.Create().
+			SetModule("base").
+			SetSubscriptionID(sub.ID).
+			SetOwnerID(orgID).
+			SetActive(true).
+			Exec(ctx)
+		return err
 	}
-
 	sub, err := a.db.OrgSubscription.Query().Where(orgsubscription.OwnerID(orgID)).Only(ctx)
 	if err != nil {
 		return err
@@ -447,12 +453,13 @@ func (a *Client) ensureBaseSubscription(ctx context.Context, orgID string) error
 		return err
 	}
 	if !ok {
-		if err := a.db.OrgModule.Create().SetModule("base").SetSubscriptionID(sub.ID).SetOwnerID(orgID).SetActive(true).Exec(ctx); err != nil {
-			log.Error().Err(err).Msg("failed to create base org module")
-
-			return err
-		}
+		err = a.db.OrgModule.Create().
+			SetModule("base").
+			SetSubscriptionID(sub.ID).
+			SetOwnerID(orgID).
+			SetActive(true).
+			Exec(ctx)
+		return err
 	}
-
 	return nil
 }

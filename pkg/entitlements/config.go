@@ -23,6 +23,8 @@ type Config struct {
 	SaaSPricingTiers []PricingTier `json:"saasPricingTiers" koanf:"saasPricingTiers"`
 	// Features are the features for the SaaS product
 	Features []Feature `json:"features" koanf:"features"`
+	// ComplianceModulePriceID is the price ID for the compliance module monthly price
+	ComplianceModulePriceID string `json:"complianceModulePriceID" koanf:"complianceModulePriceID" default:""`
 }
 
 type ConfigOpts func(*Config)
@@ -87,6 +89,13 @@ func WithPersonalOrgSubscriptionPriceID(personalOrgSubscriptionPriceID string) C
 func WithStripeCancellationReturnURL(stripeCancellationReturnURL string) ConfigOpts {
 	return func(c *Config) {
 		c.StripeCancellationReturnURL = stripeCancellationReturnURL
+	}
+}
+
+// WithComplianceModulePriceID sets the compliance module price ID used for trials
+func WithComplianceModulePriceID(complianceModulePriceID string) ConfigOpts {
+	return func(c *Config) {
+		c.ComplianceModulePriceID = complianceModulePriceID
 	}
 }
 

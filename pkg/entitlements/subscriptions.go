@@ -116,6 +116,17 @@ func (sc *StripeClient) UpdateSubscription(ctx context.Context, id string, param
 	return subscription, nil
 }
 
+// AddPricesToSubscription attaches additional prices to an existing subscription
+func (sc *StripeClient) AddPricesToSubscription(ctx context.Context, id string, priceIDs []string) (*stripe.Subscription, error) {
+	params := &stripe.SubscriptionUpdateParams{}
+	for _, pid := range priceIDs {
+		p := pid
+		params.Items = append(params.Items, &stripe.SubscriptionUpdateItemParams{Price: &p})
+	}
+
+	return sc.UpdateSubscription(ctx, id, params)
+}
+
 // CancelSubscription cancels a subscription
 func (sc *StripeClient) CancelSubscription(ctx context.Context, id string, params *stripe.SubscriptionCancelParams) (*stripe.Subscription, error) {
 	subscription, err := sc.Client.V1Subscriptions.Cancel(ctx, id, params)
@@ -128,8 +139,8 @@ func (sc *StripeClient) CancelSubscription(ctx context.Context, id string, param
 
 var trialdays int64 = 30
 
-// CreateTrialSubscription creates a trial subscription with the configured price
-func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *stripe.Customer) (*Subscription, error) {
+// CreateTrialSubscriptionWithPrices creates a trial subscription using the provided prices
+func (sc *StripeClient) CreateTrialSubscriptionWithPrices(ctx context.Context, cust *stripe.Customer, priceIDs []string) (*Subscription, error) {
 	subsMetadata := make(map[string]string)
 	if cust.Metadata != nil {
 		maps.Copy(subsMetadata, cust.Metadata)
@@ -137,13 +148,15 @@ func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *strip
 		subsMetadata["organization_id"] = cust.ID
 	}
 
+	items := make([]*stripe.SubscriptionCreateItemParams, 0, len(priceIDs))
+	for _, id := range priceIDs {
+		pid := id
+		items = append(items, &stripe.SubscriptionCreateItemParams{Price: &pid})
+	}
+
 	params := &stripe.SubscriptionCreateParams{
-		Customer: stripe.String(cust.ID),
-		Items: []*stripe.SubscriptionCreateItemParams{
-			{
-				Price: &sc.Config.TrialSubscriptionPriceID,
-			},
-		},
+		Customer:        stripe.String(cust.ID),
+		Items:           items,
 		TrialPeriodDays: stripe.Int64(trialdays),
 		PaymentSettings: &stripe.SubscriptionCreatePaymentSettingsParams{
 			SaveDefaultPaymentMethod: stripe.String(string(stripe.SubscriptionPaymentSettingsSaveDefaultPaymentMethodOnSubscription)),
@@ -165,9 +178,12 @@ func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *strip
 
 	log.Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
 
-	mappedsubscription := sc.MapStripeSubscription(ctx, subs)
+	return sc.MapStripeSubscription(ctx, subs), nil
+}
 
-	return mappedsubscription, nil
+// CreateTrialSubscription creates a trial subscription with the configured price
+func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *stripe.Customer) (*Subscription, error) {
+	return sc.CreateTrialSubscriptionWithPrices(ctx, cust, []string{sc.Config.TrialSubscriptionPriceID})
 }
 
 // CreatePersonalOrgFreeTierSubs creates a subscription with the configured $0 price used for personal organizations only
@@ -275,4 +291,19 @@ func IsSubscriptionActive(status stripe.SubscriptionStatus) bool {
 	default:
 		return false
 	}
+}
+
+// GetCustomerModulePriceIDs returns the price IDs for all modules attached to a customer's subscription
+func (sc *StripeClient) GetCustomerModulePriceIDs(ctx context.Context, customerID string) ([]string, error) {
+	subs, err := sc.ListOrCreateSubscriptions(ctx, customerID)
+	if err != nil {
+		return nil, err
+	}
+
+	ids := make([]string, 0, len(subs.Prices))
+	for _, p := range subs.Prices {
+		ids = append(ids, p.ID)
+	}
+
+	return ids, nil
 }

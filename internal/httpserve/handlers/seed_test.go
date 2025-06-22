@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 )
 
 var (
@@ -87,7 +88,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 
 	// use an authenticated context so hooks that depend on the authenticated
 	// user (e.g. creating the personal organization) can run successfully
-	createCtx := auth.NewTestContextWithOrgID(gofakeit.UUID(), gofakeit.UUID())
+	createCtx := auth.NewTestContextWithOrgID(ulids.New().String(), ulids.New().String())
 	createCtx = privacy.DecisionContext(createCtx, privacy.Allow)
 	createCtx = ent.NewContext(createCtx, suite.db)
 

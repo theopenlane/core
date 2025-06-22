@@ -19,7 +19,7 @@ type OrganizationCustomer struct {
 	PaymentMethodAdded         bool   `json:"payment_method_added"`
 	Features                   []string
 	FeatureNames               []string
-
+	ModulePriceIDs             []string
 	Subscription
 	ContactInfo
 }

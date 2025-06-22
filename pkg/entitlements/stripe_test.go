@@ -62,6 +62,7 @@ func TestNewConfig(t *testing.T) {
 				entitlements.WithPrivateStripeKey("private_key"),
 				entitlements.WithStripeWebhookSecret("webhook_secret"),
 				entitlements.WithTrialSubscriptionPriceID("trial_price_id"),
+				entitlements.WithComplianceModulePriceID("compliance_price_id"),
 				entitlements.WithPersonalOrgSubscriptionPriceID("personal_price_id"),
 				entitlements.WithStripeWebhookURL("https://custom.webhook.url"),
 				entitlements.WithStripeBillingPortalSuccessURL("https://custom.billing.success.url"),
@@ -73,6 +74,7 @@ func TestNewConfig(t *testing.T) {
 				PrivateStripeKey:               "private_key",
 				StripeWebhookSecret:            "webhook_secret",
 				TrialSubscriptionPriceID:       "trial_price_id",
+				ComplianceModulePriceID:        "compliance_price_id",
 				PersonalOrgSubscriptionPriceID: "personal_price_id",
 				StripeWebhookURL:               "https://custom.webhook.url",
 				StripeBillingPortalSuccessURL:  "https://custom.billing.success.url",
@@ -404,4 +406,125 @@ func TestMapStripeSubscription(t *testing.T) {
 
 	subscription := service.MapStripeSubscription(context.Background(), stripeSubscription)
 	c.Equal(expectedSubscription, subscription)
+}
+
+func TestAddPricesToSubscription(t *testing.T) {
+	c := require.New(t)
+
+	expectedSubscription := &stripe.Subscription{ID: "sub_123"}
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{API: stripeBackendMock, Connect: stripeBackendMock, Uploads: stripeBackendMock}
+
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		mockSubscriptionResult := args.Get(4).(*stripe.Subscription)
+		*mockSubscriptionResult = *expectedSubscription
+	}).Return(nil)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{Client: mockStripeClient}
+
+	subscription, err := service.AddPricesToSubscription(context.Background(), "sub_123", []string{"price_a", "price_b"})
+	c.NoError(err)
+	c.Equal(expectedSubscription, subscription)
+}
+
+func TestCreateBillingPortalAddModuleSession(t *testing.T) {
+	c := require.New(t)
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{API: stripeBackendMock, Connect: stripeBackendMock, Uploads: stripeBackendMock}
+
+	expectedURL := "https://portal.test/session"
+
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		sess := args.Get(4).(*stripe.BillingPortalSession)
+		*sess = stripe.BillingPortalSession{URL: expectedURL}
+	}).Return(nil)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{Client: mockStripeClient}
+
+	session, err := service.CreateBillingPortalAddModuleSession(context.Background(), "sub_123", "cus_123", "price_123")
+	c.NoError(err)
+	c.Equal(expectedURL, session.ManageSubscription)
+}
+
+func TestGetCustomerModulePriceIDs(t *testing.T) {
+	c := require.New(t)
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{API: stripeBackendMock, Connect: stripeBackendMock, Uploads: stripeBackendMock}
+
+	expectedSubscription := stripe.Subscription{
+		ID: "sub_123",
+		Items: &stripe.SubscriptionItemList{Data: []*stripe.SubscriptionItem{
+			{
+				Price: &stripe.Price{
+					ID:         "price_base",
+					UnitAmount: 1000,
+					Recurring:  &stripe.PriceRecurring{Interval: "month"},
+					Currency:   "usd",
+					Product:    &stripe.Product{ID: "prod_base"},
+				},
+			},
+			{
+				Price: &stripe.Price{
+					ID:         "price_compliance",
+					UnitAmount: 2000,
+					Recurring:  &stripe.PriceRecurring{Interval: "month"},
+					Currency:   "usd",
+					Product:    &stripe.Product{ID: "prod_compliance"},
+				},
+			},
+		}},
+		Status:   stripe.SubscriptionStatusTrialing,
+		Customer: &stripe.Customer{ID: "cus_123"},
+		Metadata: map[string]string{"organization_id": "org_123"},
+	}
+
+	handler := func(args mock.Arguments) {
+		switch v := args.Get(4).(type) {
+		case *stripe.Subscription:
+			*v = expectedSubscription
+		case *stripe.SubscriptionList:
+			*v = stripe.SubscriptionList{}
+		case *stripe.Product:
+			if v.ID == "prod_base" {
+				*v = stripe.Product{ID: "prod_base", Name: "Base"}
+			} else if v.ID == "prod_compliance" {
+				*v = stripe.Product{ID: "prod_compliance", Name: "Compliance"}
+			}
+		}
+	}
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(handler).Return(nil)
+	stripeBackendMock.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(handler).Return(nil)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{Client: mockStripeClient, Config: entitlements.Config{TrialSubscriptionPriceID: "price_base"}}
+
+	ids, err := service.GetCustomerModulePriceIDs(context.Background(), "cus_123")
+	c.NoError(err)
+	c.ElementsMatch([]string{"price_base", "price_compliance"}, ids)
+}
+
+func TestGetCustomerModulePriceIDsError(t *testing.T) {
+	c := require.New(t)
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{API: stripeBackendMock, Connect: stripeBackendMock, Uploads: stripeBackendMock}
+
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(assert.AnError)
+	stripeBackendMock.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(assert.AnError)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{Client: mockStripeClient}
+
+	ids, err := service.GetCustomerModulePriceIDs(context.Background(), "cus_123")
+	c.Error(err)
+	c.Nil(ids)
 }

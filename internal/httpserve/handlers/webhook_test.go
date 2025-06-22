@@ -30,12 +30,12 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 
 	// manually create an org subscription for the org and set it as active since this does not happen automatically
 	// in tests
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	suite.db.OrgSubscription.Create().
 		SetStripeSubscriptionStatus("active").
-		SetStripeSubscriptionID("PENDING_UPDATE").
 		SetOwnerID(testUser1.OrganizationID).
 		SetStripeSubscriptionID(seedStripeSubscriptionID).
-		ExecX(testUser1.UserCtx)
+		ExecX(allowCtx)
 
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
@@ -65,7 +65,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	require.NoError(t, err)
 
 	// create api token and personal access token to ensure they are revoked when subscription is paused
-	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	//	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	apiToken := suite.db.APIToken.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetName(

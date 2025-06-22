@@ -25,6 +25,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/features"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -246,25 +248,48 @@ const (
 	subscriptionPendingUpdate = "PENDING_UPDATE"
 )
 
-// defaultOrgSubscription is the default way to create an org subscription when an organization is first created
 func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
+	trialEnd := time.Now().Add(30 * 24 * time.Hour)
+
 	sub, err := m.Client().OrgSubscription.Create().
 		SetStripeSubscriptionID(subscriptionPendingUpdate).
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
 		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).
-		SetFeatures([]string{"base"}).
-		SetFeatureLookupKeys([]string{"base"}).
+		SetTrialExpiresAt(trialEnd).
+		SetFeatures([]string{"base", "compliance"}).
+		SetFeatureLookupKeys([]string{"base", "compliance"}).
 		Save(ctx)
 	if err != nil {
 		return err
 	}
 
-	return m.Client().OrgModule.Create().
+	if err := m.Client().OrgModule.Create().
 		SetModule("base").
 		SetSubscriptionID(sub.ID).
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
+		Exec(ctx); err != nil {
+		return err
+	}
+
+	compliancePrice := models.Price{}
+	if mod, ok := features.DefaultCatalog.Modules["compliance"]; ok {
+		for _, p := range mod.Billing.Prices {
+			if strings.ToLower(p.Interval) == "month" {
+				compliancePrice = models.Price{Amount: float64(p.UnitAmount), Interval: p.Interval}
+				break
+			}
+		}
+	}
+
+	return m.Client().OrgModule.Create().
+		SetModule("compliance").
+		SetSubscriptionID(sub.ID).
+		SetOwnerID(orgCreated.ID).
+		SetActive(true).
+		SetPrice(compliancePrice).
+		SetTrialExpiresAt(trialEnd).
 		Exec(ctx)
 }
 

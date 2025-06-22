@@ -36,6 +36,7 @@ func TestMapStripeCustomer(t *testing.T) {
 				OrganizationSettingsID:     "settings_123",
 				OrganizationSubscriptionID: "sub_123",
 				PaymentMethodAdded:         true,
+				ModulePriceIDs:             nil,
 			},
 		},
 		{
@@ -54,6 +55,7 @@ func TestMapStripeCustomer(t *testing.T) {
 				OrganizationSettingsID:     "settings_123",
 				OrganizationSubscriptionID: "sub_123",
 				PaymentMethodAdded:         false,
+				ModulePriceIDs:             nil,
 			},
 		},
 		{
@@ -67,6 +69,7 @@ func TestMapStripeCustomer(t *testing.T) {
 				OrganizationSettingsID:     "",
 				OrganizationSubscriptionID: "",
 				PaymentMethodAdded:         false,
+				ModulePriceIDs:             nil,
 			},
 		},
 		{
