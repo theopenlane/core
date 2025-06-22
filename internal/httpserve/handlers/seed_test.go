@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
-	"github.com/theopenlane/utils/ulids"
 )
 
 var (
@@ -87,12 +86,9 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 		builder.SetSetting(userSetting)
 	}
 
-	createCtx := auth.NewTestContextWithOrgID(ulids.New().String(), ulids.New().String())
-	createCtx = contextx.With(createCtx, auth.OrganizationCreationContextKey{})
-	createCtx = privacy.DecisionContext(createCtx, privacy.Allow)
-	createCtx = ent.NewContext(createCtx, suite.db)
+	createCtx := contextx.With(ctx, auth.OrganizationCreationContextKey{})
 
-	testUser.UserInfo, err = builder.Save(ctx)
+	testUser.UserInfo, err = builder.Save(createCtx)
 	require.NoError(t, err)
 
 	testUser.ID = testUser.UserInfo.ID
