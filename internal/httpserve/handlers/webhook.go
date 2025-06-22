@@ -433,6 +433,7 @@ func (h *Handler) moduleForPrice(priceID string) (string, catalog.Billing) {
 	if h.Catalog == nil {
 		return "", catalog.Billing{}
 	}
+
 	search := func(fs catalog.FeatureSet) (string, catalog.Billing) {
 		for key, mod := range fs {
 			for _, p := range mod.Billing.Prices {
@@ -441,11 +442,14 @@ func (h *Handler) moduleForPrice(priceID string) (string, catalog.Billing) {
 				}
 			}
 		}
+
 		return "", catalog.Billing{}
 	}
+
 	if k, b := search(h.Catalog.Modules); k != "" {
 		return k, b
 	}
+
 	return search(h.Catalog.Addons)
 }
 
@@ -456,24 +460,26 @@ func syncFeatureTuples(ctx context.Context, client *fgax.Client, orgID string, o
 	}
 
 	addMap := map[string]struct{}{}
+
 	for _, f := range new {
 		addMap[f] = struct{}{}
 	}
+
 	for _, f := range old {
-		if _, ok := addMap[f]; ok {
-			delete(addMap, f)
-		}
+		delete(addMap, f)
 	}
 
 	delMap := map[string]struct{}{}
 	for _, f := range old {
 		delMap[f] = struct{}{}
 	}
+
 	for _, f := range new {
 		delete(delMap, f)
 	}
 
 	adds := []fgax.TupleKey{}
+
 	for f := range addMap {
 		adds = append(adds, fgax.GetTupleKey(fgax.TupleRequest{
 			SubjectID:   orgID,
@@ -485,6 +491,7 @@ func syncFeatureTuples(ctx context.Context, client *fgax.Client, orgID string, o
 	}
 
 	dels := []fgax.TupleKey{}
+
 	for f := range delMap {
 		dels = append(dels, fgax.GetTupleKey(fgax.TupleRequest{
 			SubjectID:   orgID,

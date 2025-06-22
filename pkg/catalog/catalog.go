@@ -3,8 +3,8 @@ package catalog
 import (
 	"context"
 	_ "embed"
-	"fmt"
 	"io/fs"
+	"maps"
 	"os"
 
 	"github.com/goccy/go-yaml"
@@ -104,7 +104,7 @@ func LoadCatalog(path string) (*Catalog, error) {
 
 	jsonData, err := yaml.YAMLToJSON(data)
 	if err != nil {
-		return nil, fmt.Errorf("yaml to json: %w", err)
+		return nil, ErrYamlToJSONConversion
 	}
 
 	doc := gojsonschema.NewBytesLoader(jsonData)
@@ -113,11 +113,13 @@ func LoadCatalog(path string) (*Catalog, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if !res.Valid() {
-		return nil, fmt.Errorf("catalog validation failed: %v", res.Errors())
+		return nil, ErrCatalogValidationFailed
 	}
 
 	var c Catalog
+
 	if err := yaml.Unmarshal(data, &c); err != nil {
 		return nil, err
 	}
@@ -136,7 +138,9 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 	if err != nil {
 		return err
 	}
+
 	prodMap := map[string]*stripe.Product{}
+
 	for _, p := range products {
 		prodMap[p.Name] = p
 	}
@@ -145,30 +149,36 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 		for name, f := range fs {
 			prod, ok := prodMap[f.DisplayName]
 			if !ok {
-				return fmt.Errorf("product %s missing for feature %s", f.DisplayName, name)
+				return ErrProductMissingFeature
 			}
+
 			for i, p := range f.Billing.Prices {
 				md := map[string]string{ManagedByKey: ManagedByValue}
-				for k, v := range p.Metadata {
-					md[k] = v
-				}
+
+				maps.Copy(md, p.Metadata)
+
 				price, err := sc.FindPriceForProduct(ctx, prod.ID, p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
 				if err != nil {
 					return err
 				}
+
 				if price == nil {
-					return fmt.Errorf("matching price for feature %s not found", name)
+					return ErrMatchingPriceNotFound
 				}
+
 				f.Billing.Prices[i].PriceID = price.ID
 			}
+
 			fs[name] = f
 		}
+
 		return nil
 	}
 
 	if err := check(c.Modules); err != nil {
 		return err
 	}
+
 	return check(c.Addons)
 }
 
@@ -197,45 +207,53 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 		if !ok {
 			prod, err = sc.CreateProduct(ctx, f.DisplayName, f.Description, map[string]string{ManagedByKey: ManagedByValue})
 			if err != nil {
-				return f, fmt.Errorf("create product for %s: %w", name, err)
+				return f, ErrFailedToCreateProduct
 			}
 			prodMap[f.DisplayName] = prod
 		}
 
 		for i, p := range f.Billing.Prices {
 			md := map[string]string{ManagedByKey: ManagedByValue}
-			for k, v := range p.Metadata {
-				md[k] = v
-			}
+
+			maps.Copy(md, p.Metadata)
+
 			price, err := sc.FindPriceForProduct(ctx, prod.ID, p.UnitAmount, currency, p.Interval, p.Nickname, p.LookupKey, md)
 			if err != nil {
 				return f, err
 			}
+
 			if price == nil {
 				price, err = sc.CreatePrice(ctx, prod.ID, p.UnitAmount, currency, p.Interval, p.Nickname, p.LookupKey, md)
 				if err != nil {
-					return f, fmt.Errorf("create price for %s: %w", name, err)
+					return f, ErrFailedToCreatePrice
 				}
 			}
+
 			f.Billing.Prices[i].PriceID = price.ID
 		}
+
 		return f, nil
 	}
 
 	ensure := func(fs FeatureSet) error {
 		for name, feat := range fs {
+
 			var err error
+
 			feat, err = create(name, feat)
 			if err != nil {
 				return err
 			}
+
 			fs[name] = feat
 		}
+
 		return nil
 	}
 
 	if err := ensure(c.Modules); err != nil {
 		return err
 	}
+
 	return ensure(c.Addons)
 }

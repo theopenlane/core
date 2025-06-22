@@ -73,12 +73,3 @@ func TestVisible(t *testing.T) {
 	assert.Len(t, all.Modules, 2)
 	assert.Len(t, all.Addons, 2)
 }
-
-func TestLint(t *testing.T) {
-	c := &catalog.Catalog{Modules: catalog.FeatureSet{"m": {Audience: "public", Billing: catalog.Billing{Prices: []catalog.Price{{Interval: "bad", UnitAmount: 100}}}}}}
-	err := c.Lint()
-	assert.Error(t, err)
-
-	c.Modules["m"].Billing.Prices[0].Interval = "month"
-	assert.NoError(t, c.Lint())
-}

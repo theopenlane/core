@@ -103,7 +103,7 @@ func serve(ctx context.Context) error {
 
 	defer redisClient.Close()
 
-	featureCache := features.NewCache(redisClient, time.Minute*5)
+	featureCache := features.NewCache(redisClient, time.Minute*5) // nolint: mnd
 
 	// add session manager
 	so.AddServerOptions(

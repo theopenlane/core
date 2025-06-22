@@ -51,7 +51,7 @@ func main() {
 		os.Stdout.Write(formatted)
 		return
 	}
-	if err := os.WriteFile(output, formatted, 0644); err != nil {
+	if err := os.WriteFile(output, formatted, 0600); err != nil { // nolint: mnd
 		fmt.Fprintln(os.Stderr, "write output:", err)
 		os.Exit(1)
 	}

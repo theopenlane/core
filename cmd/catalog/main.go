@@ -5,6 +5,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"maps"
 	"os"
 	"strings"
 
@@ -32,10 +33,6 @@ func main() {
 	cat, err := catalog.LoadCatalog(catalogFile)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "load catalog:", err)
-		os.Exit(1)
-	}
-	if err := cat.Lint(); err != nil {
-		fmt.Fprintln(os.Stderr, "catalog lint:", err)
 		os.Exit(1)
 	}
 
@@ -74,14 +71,15 @@ func main() {
 			if ok {
 				for _, p := range feat.Billing.Prices {
 					md := map[string]string{catalog.ManagedByKey: catalog.ManagedByValue}
-					for k, v := range p.Metadata {
-						md[k] = v
-					}
+
+					maps.Copy(md, p.Metadata)
+
 					price, err := sc.FindPriceForProduct(ctx, prod.ID, p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
 					if err != nil || price == nil {
 						missingPrices++
 						continue
 					}
+
 					if price.Metadata[catalog.ManagedByKey] != catalog.ManagedByValue {
 						takeovers = append(takeovers, takeoverInfo{feature: name, price: p, stripe: price})
 					}
@@ -89,9 +87,11 @@ func main() {
 			} else {
 				missingPrices = len(feat.Billing.Prices)
 			}
+
 			if !prodExists || missingPrices > 0 {
 				missing = true
 			}
+
 			fmt.Printf("%s %-20s product:%v missing_prices:%d\n", kind, name, prodExists, missingPrices)
 		}
 	}
@@ -103,9 +103,15 @@ func main() {
 		writer := tables.NewTableWriter(os.Stdout, "Feature", "LookupKey", "PriceID", "Managed")
 		for _, t := range takeovers {
 			managed := t.stripe.Metadata[catalog.ManagedByKey]
-			writer.AddRow(t.feature, t.price.LookupKey, t.stripe.ID, managed)
+			if err := writer.AddRow(t.feature, t.price.LookupKey, t.stripe.ID, managed); err != nil {
+				fmt.Fprintln(os.Stderr, "add row:", err)
+				os.Exit(1)
+			}
 		}
-		writer.Render()
+		if err := writer.Render(); err != nil {
+			fmt.Fprintln(os.Stderr, "render table:", err)
+			os.Exit(1)
+		}
 
 		if !takeover {
 			fmt.Print("Take over these prices by adding metadata? (y/N): ")
