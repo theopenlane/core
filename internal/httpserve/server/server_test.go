@@ -76,7 +76,7 @@ func TestServerCSRF(t *testing.T) {
 	resp.Body.Close()
 	var token string
 	for _, ck := range jar.Cookies(resp.Request.URL) {
-		if ck.Name == "csrf_token" {
+		if ck.Name == "ol.csrf-token" {
 			token = ck.Value
 		}
 	}
@@ -148,7 +148,7 @@ func TestServerDisabledCSRF(t *testing.T) {
 	resp.Body.Close()
 	var token string
 	for _, ck := range jar.Cookies(resp.Request.URL) {
-		if ck.Name == "csrf_token" {
+		if ck.Name == "ol.csrf-token" {
 			token = ck.Value
 		}
 	}

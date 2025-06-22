@@ -9,7 +9,7 @@ server:
   csrfProtection:
     enabled: false
     header: X-CSRF-Token
-    cookie: csrf_token
+    cookie: ol.csrf-token
     secure: false # set to true in production
     sameSite: Lax
   enableGraphExtensions: true
