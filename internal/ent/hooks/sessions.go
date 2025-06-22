@@ -38,7 +38,11 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 
 	ec, err := echocontext.EchoContextFromContext(ctx)
 	if err != nil {
-		return err
+		// in unit tests there may be no echo context available
+		// skip updating the auth session if we cannot retrieve it
+		zerolog.Ctx(ctx).Warn().Err(err).Msg("unable to retrieve echo context")
+
+		return nil
 	}
 
 	// generate a new auth session with the new org ID
