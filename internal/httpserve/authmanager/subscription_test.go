@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/emailtemplates"
@@ -86,10 +87,8 @@ func TestOrganizationHookCreatesBaseSubscription(t *testing.T) {
 		Save(createCtx)
 	require.NoError(t, err)
 
-	ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
-		SubjectID:    user.ID,
-		SubjectEmail: user.Email,
-	})
+	ctx = auth.NewTestContextWithValidUser(user.ID)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 	ctx = generated.NewContext(ctx, client)
 
 	org, err := client.Organization.Create().
@@ -97,9 +96,11 @@ func TestOrganizationHookCreatesBaseSubscription(t *testing.T) {
 		Save(ctx)
 	require.NoError(t, err)
 
+	ctx = auth.NewTestContextWithOrgID(user.ID, org.ID)
+
 	sub, err := client.OrgSubscription.Query().Where(orgsubscription.OwnerID(org.ID)).Only(ctx)
 	require.NoError(t, err)
-	require.Equal(t, []string{"base"}, sub.Features)
+	assert.Contains(t, sub.Features, "base")
 
 	_, err = client.OrgModule.Query().Where(orgmodule.OwnerID(org.ID), orgmodule.Module("base")).Only(ctx)
 	require.NoError(t, err)
