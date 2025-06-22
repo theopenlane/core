@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/features"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -211,10 +212,10 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j
 }
 
 // WithGraphRoute adds the graph handler to the server
-func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
+func WithGraphRoute(srv *server.Server, c *ent.Client, fc *features.Cache) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Setup Graph API Handlers
-		r := graphapi.NewResolver(c, s.Config.ObjectManager).
+		r := graphapi.NewResolver(c, s.Config.ObjectManager, fc).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions).
 			WithDevelopment(s.Config.Settings.Server.Dev).
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).

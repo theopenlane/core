@@ -63,10 +63,11 @@ type Resolver struct {
 }
 
 // NewResolver returns a resolver configured with the given ent client
-func NewResolver(db *ent.Client, u *objects.Objects) *Resolver {
+func NewResolver(db *ent.Client, u *objects.Objects, fc *features.Cache) *Resolver {
 	return &Resolver{
 		db:       db,
 		uploader: u,
+		cache:    fc,
 	}
 }
 
@@ -149,6 +150,7 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 
 	// add context level caching
 	WithContextLevelCache(srv)
+	WithFeatureCache(srv, r.cache)
 
 	// add extensions if enabled
 	if r.extensionsEnabled {

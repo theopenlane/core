@@ -4,11 +4,15 @@ import (
 	"context"
 	"database/sql"
 	"testing"
+	"time"
 
 	"entgo.io/ent/dialect"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
+	"github.com/theopenlane/iam/sessions"
 
 	"github.com/theopenlane/utils/contextx"
 
@@ -19,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/entdb"
+	coretest "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/utils/testutils"
 )
 
@@ -38,9 +43,27 @@ func newPostgresClient(t *testing.T) *generated.Client {
 	fgaClient, err := fgaTF.NewFgaClient(context.Background())
 	require.NoError(t, err)
 
+	tm, err := coretest.CreateTokenManager(15 * time.Minute)
+	require.NoError(t, err)
+	sm := coretest.CreateSessionManager()
+	rc := coretest.NewRedisClient()
+
+	sessionConfig := sessions.NewSessionConfig(
+		sm,
+		sessions.WithPersistence(rc),
+	)
+	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
+
+	opts := []generated.Option{
+		generated.Authz(*fgaClient),
+		generated.TokenManager(tm),
+		generated.SessionConfig(&sessionConfig),
+		generated.Emailer(&emailtemplates.Config{}),
+	}
+
 	client := enttest.Open(t, dialect.Postgres, tf.URI,
 		enttest.WithMigrateOptions(entdb.EnablePostgresOption(db)),
-		enttest.WithOptions(generated.Authz(*fgaClient)))
+		enttest.WithOptions(opts...))
 
 	client.WithAuthz()
 
@@ -51,7 +74,9 @@ func TestOrganizationHookCreatesBaseSubscription(t *testing.T) {
 	client := newPostgresClient(t)
 	defer client.Close()
 
-	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	ec := echocontext.NewTestEchoContext()
+	ctx := privacy.DecisionContext(ec.Request().Context(), privacy.Allow)
+	ctx = generated.NewContext(ctx, client)
 
 	// skip owner hooks when creating the initial user and personal org
 	createCtx := contextx.With(ctx, auth.OrganizationCreationContextKey{})
@@ -65,8 +90,11 @@ func TestOrganizationHookCreatesBaseSubscription(t *testing.T) {
 		SubjectID:    user.ID,
 		SubjectEmail: user.Email,
 	})
+	ctx = generated.NewContext(ctx, client)
 
-	org, err := client.Organization.Create().SetName("MITB").Save(ctx)
+	org, err := client.Organization.Create().
+		SetName("exampleorg").
+		Save(ctx)
 	require.NoError(t, err)
 
 	sub, err := client.OrgSubscription.Query().Where(orgsubscription.OwnerID(org.ID)).Only(ctx)

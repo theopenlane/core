@@ -115,7 +115,7 @@ func createAuthConfig(c *ent.Client) *auth.Options {
 func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
 	srv := handler.New(
 		gqlgenerated.NewExecutableSchema(
-			gqlgenerated.Config{Resolvers: graphapi.NewResolver(c, u).
+			gqlgenerated.Config{Resolvers: graphapi.NewResolver(c, u, nil).
 				WithMaxResultLimit(MaxResultLimit),
 			},
 		))

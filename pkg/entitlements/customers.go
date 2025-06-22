@@ -134,6 +134,11 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 			return ErrCustomerNotFound
 		}
 
+		mods, err := sc.GetCustomerModulePriceIDs(ctx, customer.ID)
+		if err == nil {
+			o.ModulePriceIDs = mods
+		}
+
 		return nil
 	case 1:
 		log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Msg("customer found, not creating a new one")
@@ -154,6 +159,11 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 			log.Debug().Str("organization_id", o.OrganizationID).Str("customer_id", customers[0].ID).Strs("features_names", featNames).Msg("found features for customer")
 
 			o.FeatureNames = featNames
+		}
+
+		mods, err := sc.GetCustomerModulePriceIDs(ctx, customers[0].ID)
+		if err == nil {
+			o.ModulePriceIDs = mods
 		}
 
 		return nil

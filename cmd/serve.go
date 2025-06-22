@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/features"
 )
 
 var serveCmd = &cobra.Command{
@@ -102,6 +103,8 @@ func serve(ctx context.Context) error {
 
 	defer redisClient.Close()
 
+	featureCache := features.NewCache(redisClient, time.Minute*5)
+
 	// add session manager
 	so.AddServerOptions(
 		serveropts.WithSessionManager(redisClient),
@@ -160,6 +163,7 @@ func serve(ctx context.Context) error {
 
 	// Add redis client to Handlers Config
 	so.Config.Handler.RedisClient = redisClient
+	so.Config.Handler.FeatureCache = featureCache
 
 	// set dev flag
 	so.Config.Handler.IsDev = so.Config.Settings.Server.Dev
@@ -190,7 +194,7 @@ func serve(ctx context.Context) error {
 	}
 
 	// Setup Graph API Handlers
-	so.AddServerOptions(serveropts.WithGraphRoute(srv, dbClient))
+	so.AddServerOptions(serveropts.WithGraphRoute(srv, dbClient, featureCache))
 
 	if err := srv.StartEchoServer(ctx); err != nil {
 		log.Error().Err(err).Msg("failed to run server")

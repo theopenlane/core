@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -86,19 +87,19 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 		builder.SetSetting(userSetting)
 	}
 
-	// use an authenticated context so hooks that depend on the authenticated
-	// user (e.g. creating the personal organization) can run successfully
 	createCtx := auth.NewTestContextWithOrgID(ulids.New().String(), ulids.New().String())
+	createCtx = contextx.With(createCtx, auth.OrganizationCreationContextKey{})
 	createCtx = privacy.DecisionContext(createCtx, privacy.Allow)
 	createCtx = ent.NewContext(createCtx, suite.db)
 
-	testUser.UserInfo, err = builder.Save(createCtx)
+	testUser.UserInfo, err = builder.Save(ctx)
 	require.NoError(t, err)
 
 	testUser.ID = testUser.UserInfo.ID
 
 	// get the personal org for the user
-	testPersonalOrg, err := testUser.UserInfo.Edges.Setting.DefaultOrg(createCtx)
+	testPersonalOrg, err := testUser.UserInfo.Edges.Setting.DefaultOrg(ctx)
+	require.NoError(t, err)
 
 	testUser.PersonalOrgID = testPersonalOrg.ID
 
@@ -135,6 +136,8 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 
 	// setup user context with the org (and not the personal org)
 	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
+	testUser.UserCtx = privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
+	testUser.UserCtx = ent.NewContext(testUser.UserCtx, suite.db)
 
 	return testUser
 }
