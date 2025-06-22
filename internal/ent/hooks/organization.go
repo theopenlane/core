@@ -248,13 +248,23 @@ const (
 
 // defaultOrgSubscription is the default way to create an org subscription when an organization is first created
 func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
-	return m.Client().OrgSubscription.Create().
+	sub, err := m.Client().OrgSubscription.Create().
 		SetStripeSubscriptionID(subscriptionPendingUpdate).
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
 		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).
 		SetFeatures([]string{"base"}).
 		SetFeatureLookupKeys([]string{"base"}).
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+
+	return m.Client().OrgModule.Create().
+		SetModule("base").
+		SetSubscriptionID(sub.ID).
+		SetOwnerID(orgCreated.ID).
+		SetActive(true).
 		Exec(ctx)
 }
 

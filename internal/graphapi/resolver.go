@@ -26,6 +26,7 @@ import (
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/features"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -58,6 +59,7 @@ type Resolver struct {
 	isDevelopment     bool
 	complexityLimit   int
 	maxResultLimit    *int
+	cache             *features.Cache
 }
 
 // NewResolver returns a resolver configured with the given ent client
@@ -305,4 +307,17 @@ func (h *Handler) Routes(e *echo.Group) {
 			})
 		}
 	}
+}
+
+// WithFeatureCache injects the feature cache into the request context.
+func WithFeatureCache(h *handler.Server, c *features.Cache) {
+	if c == nil {
+		return
+	}
+
+	h.AroundOperations(func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
+		ctx = features.WithCache(ctx, c)
+
+		return next(ctx)
+	})
 }

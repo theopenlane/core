@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/models"
@@ -43,23 +44,42 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	// TODO: get this from FGA instead of org subscriptions once that work is done
-	// so the backend and frontend are in sync
-	org, err := h.DBClient.Organization.Query().WithOrgSubscriptions().Where(organization.ID(in.ID)).Only(reqCtx)
-	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting organization")
-
-		return h.BadRequest(ctx, err)
+	var features []string
+	if h.FeatureCache != nil {
+		features, err = h.FeatureCache.Get(reqCtx, in.ID)
+		if err != nil {
+			zerolog.Ctx(reqCtx).Error().Err(err).Msg("feature cache get")
+		}
 	}
+	if len(features) == 0 {
+		req := fgax.ListRequest{
+			SubjectID:   in.ID,
+			SubjectType: organization.Table,
+			ObjectType:  "feature",
+			Relation:    "enabled",
+		}
 
-	if len(org.Edges.OrgSubscriptions) != 1 {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error getting organization subscription")
+		resp, err := h.DBClient.Authz.ListObjectsRequest(reqCtx, req)
+		if err != nil {
+			zerolog.Ctx(reqCtx).Error().Err(err).Msg("error listing features from FGA")
 
-		return h.BadRequest(ctx, ErrInvalidInput)
+			return h.InternalServerError(ctx, err)
+		}
+
+		features = make([]string, 0, len(resp.Objects))
+		for _, obj := range resp.Objects {
+			ent, parseErr := fgax.ParseEntity(obj)
+			if parseErr != nil {
+				continue
+			}
+
+			features = append(features, ent.Identifier)
+		}
+
+		if h.FeatureCache != nil {
+			_ = h.FeatureCache.Set(reqCtx, in.ID, features)
+		}
 	}
-
-	// get the features from the subscription
-	features := org.Edges.OrgSubscriptions[0].FeatureLookupKeys
 
 	return h.Success(ctx, models.AccountFeaturesReply{
 		Reply:          rout.Reply{Success: true},

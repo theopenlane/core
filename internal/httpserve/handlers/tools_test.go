@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
+	"github.com/theopenlane/core/pkg/features"
 	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
@@ -210,6 +211,7 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 		SessionConfig: db.SessionConfig,
 		AuthManager:   as,
 		Entitlements:  db.EntitlementManager,
+		FeatureCache:  features.NewCache(db.SessionConfig.RedisClient, time.Minute),
 	}
 
 	return h

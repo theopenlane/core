@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"slices"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -15,14 +14,17 @@ import (
 	"github.com/stripe/stripe-go/v82/webhook"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
@@ -248,7 +250,7 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return err
 	}
 
-	ownerID, err := syncOrgSubscriptionWithStripe(ctx, s, customer)
+	ownerID, err := h.syncOrgSubscriptionWithStripe(ctx, s, customer)
 	if err != nil {
 		return
 	}
@@ -274,7 +276,7 @@ func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subsc
 		return err
 	}
 
-	_, err = syncOrgSubscriptionWithStripe(ctx, s, customer)
+	_, err = h.syncOrgSubscriptionWithStripe(ctx, s, customer)
 	if err != nil {
 		return err
 	}
@@ -317,119 +319,84 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 
 // syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe and
 // returns the owner (organization) ID of the OrgSubscription to be used for further operations if needed
-func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
+func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
 	orgSubscription, err := getOrgSubscription(ctx, subscription)
 	if err != nil {
 		return nil, err
 	}
 
-	// map stripe data to internal OrgSubscription
 	stripeOrgSubscription := mapStripeToOrgSubscription(subscription, entitlements.MapStripeCustomer(customer))
 
-	// Check if any fields have changed before saving the updated OrgSubscription
 	changed := false
 	mutation := transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSubscription)
 
 	if orgSubscription.StripeSubscriptionStatus != stripeOrgSubscription.StripeSubscriptionStatus {
 		mutation.SetStripeSubscriptionStatus(stripeOrgSubscription.StripeSubscriptionStatus)
-
 		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("status", orgSubscription.StripeSubscriptionStatus).Msg("stripe subscription status changed")
-	}
-
-	if !slices.Equal(orgSubscription.Features, stripeOrgSubscription.Features) {
-		mutation.SetFeatures(stripeOrgSubscription.Features)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Strs("features", orgSubscription.Features).Msg("features changes")
-	}
-
-	if orgSubscription.ProductTier != stripeOrgSubscription.ProductTier {
-		mutation.SetProductTier(stripeOrgSubscription.ProductTier)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("tier", orgSubscription.ProductTier).Msg("tier changed")
-	}
-
-	if orgSubscription.ProductPrice != stripeOrgSubscription.ProductPrice {
-		productPriceCopy := stripeOrgSubscription.ProductPrice
-
-		productPriceCopy.Amount /= 100 // convert to dollars from cents
-
-		mutation.SetProductPrice(productPriceCopy)
-
-		mutation.SetProductPrice(stripeOrgSubscription.ProductPrice)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("price", orgSubscription.ProductPrice.String()).Msgf("product price changed")
 	}
 
 	if stripeOrgSubscription.TrialExpiresAt != nil && orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
 		mutation.SetTrialExpiresAt(*stripeOrgSubscription.TrialExpiresAt)
-
 		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("trial_expires_at", stripeOrgSubscription.TrialExpiresAt.String()).Msg("subscription trial expiration changed")
-	}
-
-	if !slices.Equal(orgSubscription.FeatureLookupKeys, stripeOrgSubscription.FeatureLookupKeys) {
-		mutation.SetFeatureLookupKeys(stripeOrgSubscription.FeatureLookupKeys)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Strs("feature_lookup_keys", orgSubscription.FeatureLookupKeys).Msg("feature lookup keys changed")
-	}
-
-	if orgSubscription.TrialExpiresAt != nil && orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
-		mutation.SetTrialExpiresAt(*stripeOrgSubscription.TrialExpiresAt)
-
-		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("expires_at", orgSubscription.TrialExpiresAt.String()).Msg("trial expiration changed")
 	}
 
 	if stripeOrgSubscription.DaysUntilDue != nil && orgSubscription.DaysUntilDue != stripeOrgSubscription.DaysUntilDue {
 		mutation.SetDaysUntilDue(*stripeOrgSubscription.DaysUntilDue)
-
 		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("days_until_due", *stripeOrgSubscription.DaysUntilDue).Msg("days until due changed")
 	}
 
 	if stripeOrgSubscription.PaymentMethodAdded != nil && orgSubscription.PaymentMethodAdded != stripeOrgSubscription.PaymentMethodAdded {
 		mutation.SetPaymentMethodAdded(*stripeOrgSubscription.PaymentMethodAdded)
-
 		changed = true
-
-		if orgSubscription.PaymentMethodAdded != nil {
-			log.Debug().Str("subscription_id", orgSubscription.ID).Bool("payment_method_added", *orgSubscription.PaymentMethodAdded).Msg("payment method added changed")
-		} else {
-			log.Debug().Str("subscription_id", orgSubscription.ID).Msg("payment method added changed but was previously nil")
-		}
 	}
 
 	if orgSubscription.Active != stripeOrgSubscription.Active {
 		mutation.SetActive(stripeOrgSubscription.Active)
-
 		changed = true
-
-		log.Debug().Str("subscription_id", orgSubscription.ID).Bool("active", orgSubscription.Active).Msg("active status changed")
 	}
 
 	if changed {
-		// Collect all changes and execute the mutation once
-		err = mutation.Exec(ctx)
-		if err != nil {
-			log.Error().Err(err).Msg("failed to update OrgSubscription")
-
+		if err = mutation.Exec(ctx); err != nil {
 			return nil, err
 		}
+	}
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Msg("OrgSubscription updated successfully")
+	// update org modules based on subscription items
+	oldMods, _ := orgSubscription.QueryModules().All(ctx)
+	oldKeys := make([]string, 0, len(oldMods))
+	for _, m := range oldMods {
+		oldKeys = append(oldKeys, m.Module)
+	}
+	if len(oldMods) > 0 {
+		if _, err := h.DBClient.OrgModule.Delete().Where(orgmodule.SubscriptionID(orgSubscription.ID)).Exec(ctx); err != nil {
+			return nil, err
+		}
+	}
+
+	newKeys := []string{}
+	if subscription.Items != nil {
+		for _, item := range subscription.Items.Data {
+			modKey, _ := h.moduleForPrice(item.Price.ID)
+			if modKey == "" {
+				continue
+			}
+			newKeys = append(newKeys, modKey)
+			_, err = h.DBClient.OrgModule.Create().
+				SetOwnerID(orgSubscription.OwnerID).
+				SetSubscriptionID(orgSubscription.ID).
+				SetModule(modKey).
+				SetStripePriceID(item.Price.ID).
+				SetPrice(models.Price{Amount: item.Price.UnitAmountDecimal, Currency: string(item.Price.Currency), Interval: string(item.Price.Recurring.Interval)}).
+				SetActive(true).
+				Save(ctx)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	if err := syncFeatureTuples(ctx, &h.DBClient.Authz, orgSubscription.OwnerID, oldKeys, newKeys); err != nil {
+		log.Error().Err(err).Msg("sync feature tuples")
 	}
 
 	return &orgSubscription.OwnerID, nil
@@ -441,31 +408,11 @@ func mapStripeToOrgSubscription(subscription *stripe.Subscription, customer *ent
 		return nil
 	}
 
-	productName := ""
-	productPrice := models.Price{}
-
-	if subscription.Items != nil && len(subscription.Items.Data) == 1 {
-		item := subscription.Items.Data[0]
-		if item.Price != nil {
-			if item.Price.Product != nil {
-				productName = item.Price.Product.Name
-			}
-
-			productPrice.Amount = subscription.Items.Data[0].Price.UnitAmountDecimal
-			productPrice.Currency = string(subscription.Items.Data[0].Price.Currency)
-			productPrice.Interval = string(subscription.Items.Data[0].Price.Recurring.Interval)
-		}
-	}
-
 	return &ent.OrgSubscription{
 		StripeSubscriptionID:     subscription.ID,
 		TrialExpiresAt:           timePtr(time.Unix(subscription.TrialEnd, 0)),
 		StripeSubscriptionStatus: string(subscription.Status),
 		Active:                   entitlements.IsSubscriptionActive(subscription.Status),
-		ProductTier:              productName,
-		ProductPrice:             productPrice,
-		Features:                 customer.Features,
-		FeatureLookupKeys:        customer.FeatureNames,
 		DaysUntilDue:             int64ToStringPtr(subscription.DaysUntilDue),
 	}
 }
@@ -479,4 +426,79 @@ func int64ToStringPtr(i int64) *string {
 // timePtr returns a pointer to the given time.Time value
 func timePtr(t time.Time) *time.Time {
 	return &t
+}
+
+// moduleForPrice returns the module key for a given Stripe price ID
+func (h *Handler) moduleForPrice(priceID string) (string, catalog.Billing) {
+	if h.Catalog == nil {
+		return "", catalog.Billing{}
+	}
+	search := func(fs catalog.FeatureSet) (string, catalog.Billing) {
+		for key, mod := range fs {
+			for _, p := range mod.Billing.Prices {
+				if p.PriceID == priceID {
+					return key, catalog.Billing{Prices: []catalog.Price{p}}
+				}
+			}
+		}
+		return "", catalog.Billing{}
+	}
+	if k, b := search(h.Catalog.Modules); k != "" {
+		return k, b
+	}
+	return search(h.Catalog.Addons)
+}
+
+// syncFeatureTuples updates openFGA tuples for organization feature access
+func syncFeatureTuples(ctx context.Context, client *fgax.Client, orgID string, old, new []string) error {
+	if client == nil {
+		return nil
+	}
+
+	addMap := map[string]struct{}{}
+	for _, f := range new {
+		addMap[f] = struct{}{}
+	}
+	for _, f := range old {
+		if _, ok := addMap[f]; ok {
+			delete(addMap, f)
+		}
+	}
+
+	delMap := map[string]struct{}{}
+	for _, f := range old {
+		delMap[f] = struct{}{}
+	}
+	for _, f := range new {
+		delete(delMap, f)
+	}
+
+	adds := []fgax.TupleKey{}
+	for f := range addMap {
+		adds = append(adds, fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   orgID,
+			SubjectType: "organization",
+			ObjectID:    f,
+			ObjectType:  "feature",
+			Relation:    "enabled",
+		}))
+	}
+
+	dels := []fgax.TupleKey{}
+	for f := range delMap {
+		dels = append(dels, fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   orgID,
+			SubjectType: "organization",
+			ObjectID:    f,
+			ObjectType:  "feature",
+			Relation:    "enabled",
+		}))
+	}
+
+	if len(adds) == 0 && len(dels) == 0 {
+		return nil
+	}
+
+	_, err := client.WriteTupleKeys(ctx, adds, dels)
+	return err
 }

@@ -33,6 +33,18 @@ var DefaultCatalog = catalog.Catalog{
 		},
 	},
 	Modules: map[string]catalog.Feature{
+		"base": catalog.Feature{
+			Audience: "public",
+			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+				Interval:   "year",
+				LookupKey:  "base_free",
+				Nickname:   "base_free",
+				UnitAmount: int64(0),
+			}}},
+			Description: "Core system access",
+			DisplayName: "Base Module",
+			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
+		},
 		"compliance": catalog.Feature{
 			Audience: "public",
 			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{

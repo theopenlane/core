@@ -8,6 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -17,6 +18,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -27,7 +29,8 @@ import (
 )
 
 const (
-	bearerScheme = "Bearer"
+	bearerScheme              = "Bearer"
+	subscriptionPendingUpdate = "PENDING_UPDATE"
 )
 
 // Client holds the necessary clients and configuration for the auth manager
@@ -121,6 +124,12 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 	// allow to skip the org interceptor middleware before a user could potentially be authenticated
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
+
+	if err := a.ensureBaseSubscription(allowCtx, orgID); err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to ensure base subscription")
+
+		return false, err
+	}
 
 	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
 	if err != nil {
@@ -408,4 +417,42 @@ func skipOrgValidation(ctx context.Context) bool {
 	}
 
 	return rule.SkipTokenInContext(ctx, skipTokenType)
+}
+
+func (a *Client) ensureBaseSubscription(ctx context.Context, orgID string) error {
+	exists, err := a.db.OrgSubscription.Query().Where(orgsubscription.OwnerID(orgID)).Exist(ctx)
+	if err != nil {
+		return err
+	}
+
+	if !exists {
+		sub, err := a.db.OrgSubscription.Create().SetStripeSubscriptionID(subscriptionPendingUpdate).SetOwnerID(orgID).SetActive(true).SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).SetFeatures([]string{"base"}).SetFeatureLookupKeys([]string{"base"}).Save(ctx)
+		if err != nil {
+			return err
+		}
+
+		if err := a.db.OrgModule.Create().SetModule("base").SetSubscriptionID(sub.ID).SetOwnerID(orgID).SetActive(true).Exec(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to create base org module")
+
+			return err
+		}
+	}
+
+	sub, err := a.db.OrgSubscription.Query().Where(orgsubscription.OwnerID(orgID)).Only(ctx)
+	if err != nil {
+		return err
+	}
+	ok, err := a.db.OrgModule.Query().Where(orgmodule.OwnerID(orgID), orgmodule.Module("base")).Exist(ctx)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		if err := a.db.OrgModule.Create().SetModule("base").SetSubscriptionID(sub.ID).SetOwnerID(orgID).SetActive(true).Exec(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to create base org module")
+
+			return err
+		}
+	}
+
+	return nil
 }

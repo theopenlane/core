@@ -85,14 +85,19 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 		builder.SetSetting(userSetting)
 	}
 
-	testUser.UserInfo, err = builder.Save(ctx)
+	// use an authenticated context so hooks that depend on the authenticated
+	// user (e.g. creating the personal organization) can run successfully
+	createCtx := auth.NewTestContextWithOrgID(gofakeit.UUID(), gofakeit.UUID())
+	createCtx = privacy.DecisionContext(createCtx, privacy.Allow)
+	createCtx = ent.NewContext(createCtx, suite.db)
+
+	testUser.UserInfo, err = builder.Save(createCtx)
 	require.NoError(t, err)
 
 	testUser.ID = testUser.UserInfo.ID
 
 	// get the personal org for the user
-	testPersonalOrg, err := testUser.UserInfo.Edges.Setting.DefaultOrg(ctx)
-	require.NoError(t, err)
+	testPersonalOrg, err := testUser.UserInfo.Edges.Setting.DefaultOrg(createCtx)
 
 	testUser.PersonalOrgID = testPersonalOrg.ID
 
