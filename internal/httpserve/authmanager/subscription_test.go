@@ -100,9 +100,9 @@ func TestOrganizationHookCreatesBaseSubscription(t *testing.T) {
 
 	sub, err := client.OrgSubscription.Query().Where(orgsubscription.OwnerID(org.ID)).Only(ctx)
 	require.NoError(t, err)
-	// ensure we always get the base module back
-	assert.Contains(t, sub.Features, "base")
+	assert.Equal(t, sub.Active, true)
 
-	_, err = client.OrgModule.Query().Where(orgmodule.OwnerID(org.ID), orgmodule.Module("base")).Only(ctx)
+	module, err := client.OrgModule.Query().Where(orgmodule.OwnerID(org.ID), orgmodule.Module("base")).Only(ctx)
 	require.NoError(t, err)
+	assert.Contains(t, module.Module, "base")
 }

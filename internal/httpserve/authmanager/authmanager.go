@@ -6,9 +6,7 @@ import (
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -125,16 +123,8 @@ func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (act
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
 
-	if err := a.ensureBaseSubscription(allowCtx, orgID); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("failed to ensure base subscription")
-
-		return false, err
-	}
-
-	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
+	subscription, err := a.db.OrgSubscription.Query().Where(orgsubscription.OwnerID(orgID), orgsubscription.HasModulesWith(orgmodule.Module("base"))).Only(allowCtx)
 	if err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Str("organization_id", orgID).Msg("failed to find org subscription for organization")
-
 		return false, err
 	}
 
@@ -260,9 +250,8 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	}
 
 	// Only perform subscription/module checks if entitlements are enabled
-	entitlementsEnabled := a.db.EntitlementManager != nil
 	active := true
-	if entitlementsEnabled {
+	if a.db.EntitlementManager != nil {
 		active, err = a.checkActiveSubscription(ctx, orgID)
 		if err != nil {
 			log.Error().Err(err).Msg("failed to find org subscription for organization")
@@ -422,49 +411,4 @@ func skipOrgValidation(ctx context.Context) bool {
 	}
 
 	return rule.SkipTokenInContext(ctx, skipTokenType)
-}
-
-func (a *Client) ensureBaseSubscription(ctx context.Context, orgID string) error {
-	exists, err := a.db.OrgSubscription.Query().Where(orgsubscription.OwnerID(orgID)).Exist(ctx)
-	if err != nil {
-		return err
-	}
-	if !exists {
-		sub, err := a.db.OrgSubscription.Create().
-			SetStripeSubscriptionID(subscriptionPendingUpdate).
-			SetOwnerID(orgID).
-			SetActive(true).
-			SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).
-			SetFeatures([]string{"base"}).
-			SetFeatureLookupKeys([]string{"base"}).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-		err = a.db.OrgModule.Create().
-			SetModule("base").
-			SetSubscriptionID(sub.ID).
-			SetOwnerID(orgID).
-			SetActive(true).
-			Exec(ctx)
-		return err
-	}
-	sub, err := a.db.OrgSubscription.Query().Where(orgsubscription.OwnerID(orgID)).Only(ctx)
-	if err != nil {
-		return err
-	}
-	ok, err := a.db.OrgModule.Query().Where(orgmodule.OwnerID(orgID), orgmodule.Module("base")).Exist(ctx)
-	if err != nil {
-		return err
-	}
-	if !ok {
-		err = a.db.OrgModule.Create().
-			SetModule("base").
-			SetSubscriptionID(sub.ID).
-			SetOwnerID(orgID).
-			SetActive(true).
-			Exec(ctx)
-		return err
-	}
-	return nil
 }

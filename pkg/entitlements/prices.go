@@ -74,14 +74,18 @@ func (sc *StripeClient) GetPricesMapped(ctx context.Context) (prices []Price) {
 // ListPricesForProduct returns all prices for a given product.
 func (sc *StripeClient) ListPricesForProduct(ctx context.Context, productID string) ([]*stripe.Price, error) {
 	params := &stripe.PriceListParams{Product: stripe.String(productID)}
+
 	var prices []*stripe.Price
+
 	it := sc.Client.V1Prices.List(ctx, params)
+
 	for price, err := range it {
 		if err != nil {
 			return nil, err
 		}
 		prices = append(prices, price)
 	}
+
 	return prices, nil
 }
 
@@ -132,5 +136,6 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID strin
 // UpdatePriceMetadata updates the metadata for a price.
 func (sc *StripeClient) UpdatePriceMetadata(ctx context.Context, priceID string, metadata map[string]string) (*stripe.Price, error) {
 	params := &stripe.PriceUpdateParams{Metadata: metadata}
+
 	return sc.Client.V1Prices.Update(ctx, priceID, params)
 }
