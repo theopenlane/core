@@ -23,10 +23,13 @@ func TestLoadCatalog(t *testing.T) {
 	yaml := `modules:
   mod1:
     display_name: M1
+	description: This is a module
     billing:
       prices:
       - interval: month
         unit_amount: 100
+		nickname: mod1_monthly
+		lookup_key: mod1_monthly
     audience: public
 addons:
   add1:

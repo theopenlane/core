@@ -28,7 +28,9 @@ func main() {
 		fmt.Fprintln(os.Stderr, "read catalog:", err)
 		os.Exit(1)
 	}
+
 	var c catalog.Catalog
+
 	if err := yaml.Unmarshal(data, &c); err != nil {
 		fmt.Fprintln(os.Stderr, "parse catalog:", err)
 		os.Exit(1)
@@ -43,6 +45,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, "render source:", err)
 		os.Exit(1)
 	}
+
 	formatted, err := format.Source(buf.Bytes())
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "format source:", err)
@@ -53,6 +56,7 @@ func main() {
 		os.Stdout.Write(formatted)
 		return
 	}
+
 	if err := os.WriteFile(output, formatted, 0600); err != nil { // nolint: mnd
 		fmt.Fprintln(os.Stderr, "write output:", err)
 		os.Exit(1)
@@ -68,14 +72,18 @@ func catalogLit(c catalog.Catalog) *jen.Statement {
 
 func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
 	keys := make([]string, 0, len(fs))
+
 	for k := range fs {
 		keys = append(keys, k)
 	}
+
 	sort.Strings(keys)
 	dict := jen.Dict{}
+
 	for _, k := range keys {
 		dict[jen.Lit(k)] = featureLit(fs[k])
 	}
+
 	return jen.Map(jen.String()).Qual("github.com/theopenlane/core/pkg/catalog", "Feature").Values(dict)
 }
 
@@ -83,18 +91,33 @@ func featureLit(f catalog.Feature) *jen.Statement {
 	dict := jen.Dict{
 		jen.Id("DisplayName"): jen.Lit(f.DisplayName),
 		jen.Id("Description"): jen.Lit(f.Description),
-		jen.Id("Billing"):     billingLit(f.Billing),
 		jen.Id("Audience"):    jen.Lit(f.Audience),
-		jen.Id("Usage"):       usageLit(f.Usage),
 	}
+	// Only emit Billing if not zero value
+	if !isBillingEmpty(f.Billing) {
+		// Make Billing a pointer in the generated struct
+		dict[jen.Id("Billing")] = billingLit(f.Billing)
+	}
+	// Only emit Usage if non-nil
+	if f.Usage != nil {
+		dict[jen.Id("Usage")] = jen.Op("&").Add(usageLit(*f.Usage))
+	}
+
 	return jen.Qual("github.com/theopenlane/core/pkg/catalog", "Feature").Values(dict)
+}
+
+// isBillingEmpty checks if all fields in Billing are zero values.
+func isBillingEmpty(b catalog.Billing) bool {
+	return len(b.Prices) == 0
 }
 
 func billingLit(b catalog.Billing) *jen.Statement {
 	items := make([]jen.Code, len(b.Prices))
+
 	for i, p := range b.Prices {
 		items[i] = priceLit(p)
 	}
+
 	return jen.Qual("github.com/theopenlane/core/pkg/catalog", "Billing").Values(jen.Dict{
 		jen.Id("Prices"): jen.Index().Qual("github.com/theopenlane/core/pkg/catalog", "Price").Values(items...)})
 }
@@ -110,23 +133,30 @@ func priceLit(p catalog.Price) *jen.Statement {
 		jen.Id("Interval"):   jen.Lit(p.Interval),
 		jen.Id("UnitAmount"): jen.Lit(p.UnitAmount),
 	}
+
 	if p.Nickname != "" {
 		dict[jen.Id("Nickname")] = jen.Lit(p.Nickname)
 	}
+
 	if p.LookupKey != "" {
 		dict[jen.Id("LookupKey")] = jen.Lit(p.LookupKey)
 	}
+
 	if len(p.Metadata) > 0 {
 		mkeys := make([]string, 0, len(p.Metadata))
 		for k := range p.Metadata {
 			mkeys = append(mkeys, k)
 		}
+
 		sort.Strings(mkeys)
 		mdict := jen.Dict{}
+
 		for _, k := range mkeys {
 			mdict[jen.Lit(k)] = jen.Lit(p.Metadata[k])
 		}
+
 		dict[jen.Id("Metadata")] = jen.Map(jen.String()).String().Values(mdict)
 	}
+
 	return jen.Qual("github.com/theopenlane/core/pkg/catalog", "Price").Values(dict)
 }

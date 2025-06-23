@@ -46,6 +46,9 @@ type Options struct {
 
 	// Used to check other auth types like personal access tokens
 	DBClient *ent.Client
+
+	// EnableEntitlementChecks controls whether entitlement/module checks are performed for API tokens.
+	EnableEntitlementChecks bool
 }
 
 // Reauthenticator generates new access and refresh pair given a valid refresh token.
@@ -55,12 +58,13 @@ type Reauthenticator interface {
 
 // DefaultAuthOptions is the default auth options used by the middleware.
 var DefaultAuthOptions = Options{
-	KeysURL:            "http://localhost:17608/.well-known/jwks.json",
-	Audience:           "http://localhost:17608",
-	Issuer:             "http://localhost:17608",
-	MinRefreshInterval: 5 * time.Minute, //nolint:mnd
-	Skipper:            middleware.DefaultSkipper,
-	CookieConfig:       sessions.DefaultCookieConfig,
+	KeysURL:                 "http://localhost:17608/.well-known/jwks.json",
+	Audience:                "http://localhost:17608",
+	Issuer:                  "http://localhost:17608",
+	MinRefreshInterval:      5 * time.Minute, //nolint:mnd
+	Skipper:                 middleware.DefaultSkipper,
+	CookieConfig:            sessions.DefaultCookieConfig,
+	EnableEntitlementChecks: true,
 }
 
 // NewAuthOptions creates an AuthOptions object with reasonable defaults and any user
@@ -243,5 +247,12 @@ func WithDBClient(client *ent.Client) Option {
 func WithCookieConfig(cookieConfig *sessions.CookieConfig) Option {
 	return func(opts *Options) {
 		opts.CookieConfig = cookieConfig
+	}
+}
+
+// WithEntitlementChecks allows the user to enable or disable entitlement/module checks for API tokens.
+func WithEntitlementChecks(enabled bool) Option {
+	return func(opts *Options) {
+		opts.EnableEntitlementChecks = enabled
 	}
 }

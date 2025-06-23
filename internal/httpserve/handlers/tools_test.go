@@ -86,7 +86,6 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 func (suite *HandlerTestSuite) SetupTest() {
 	t := suite.T()
-
 	ctx := context.Background()
 
 	// setup fga client

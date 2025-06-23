@@ -20,6 +20,10 @@ import (
 
 // AccountFeaturesHandler lists all features the authenticated user has access to in relation to an organization
 func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
+	if h.Entitlements == nil {
+		return h.InternalServerError(ctx, ErrEntitlementsNotConfigured)
+	}
+
 	var in models.AccountFeaturesRequest
 	if err := ctx.Bind(&in); err != nil {
 		return h.InvalidInput(ctx, err)
@@ -51,6 +55,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 			zerolog.Ctx(reqCtx).Error().Err(err).Msg("feature cache get")
 		}
 	}
+
 	if len(features) == 0 {
 		req := fgax.ListRequest{
 			SubjectID:   in.ID,
@@ -67,6 +72,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context) error {
 		}
 
 		features = make([]string, 0, len(resp.Objects))
+
 		for _, obj := range resp.Objects {
 			ent, parseErr := fgax.ParseEntity(obj)
 			if parseErr != nil {

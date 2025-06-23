@@ -5,65 +5,23 @@ package features
 import catalog "github.com/theopenlane/core/pkg/catalog"
 
 var DefaultCatalog = catalog.Catalog{
-	Addons: map[string]catalog.Feature{
-		"domain_scanning": catalog.Feature{
-			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "year",
-				LookupKey:  "domain-scan-year",
-				Nickname:   "domain-scan-year",
-				UnitAmount: int64(1000),
-			}, catalog.Price{
-				Interval:   "month",
-				LookupKey:  "domain-scan-year",
-				Nickname:   "domain-scan-year",
-				UnitAmount: int64(1000),
-			}}},
-			Description: "",
-			DisplayName: "Domain Scanning",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
-		},
-		"extra_evidence_storage": catalog.Feature{
-			Audience: "public",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "month",
-				LookupKey:  "evidence-storage-100gb",
-				Metadata:   map[string]string{"increment_gb": "100"},
-				Nickname:   "evidence-storage-100gb",
-				UnitAmount: int64(1000),
-			}}},
-			Description: "",
-			DisplayName: "Additional Evidence Storage (100GB)",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(100)},
-		},
-		"repo_scanning": catalog.Feature{
-			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "month",
-				UnitAmount: int64(0),
-			}, catalog.Price{
-				Interval:   "",
-				UnitAmount: int64(0),
-			}}},
-			Description: "",
-			DisplayName: "Repo Scanning",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
-		},
-	},
+	Addons: map[string]catalog.Feature{"domain_scanning": catalog.Feature{
+		Audience: "private",
+		Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+			Interval:   "year",
+			LookupKey:  "domain-scan-year",
+			Nickname:   "domain-scan-year",
+			UnitAmount: int64(1000),
+		}, catalog.Price{
+			Interval:   "month",
+			LookupKey:  "domain-scan-year",
+			Nickname:   "domain-scan-year",
+			UnitAmount: int64(1000),
+		}}},
+		Description: "",
+		DisplayName: "Domain Scanning",
+	}},
 	Modules: map[string]catalog.Feature{
-		"asset-management": catalog.Feature{
-			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "month",
-				UnitAmount: int64(0),
-			}, catalog.Price{
-				Interval:   "",
-				UnitAmount: int64(0),
-			}}},
-			Description: "",
-			DisplayName: "Asset Management",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
-		},
 		"base": catalog.Feature{
 			Audience: "public",
 			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
@@ -74,20 +32,6 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "Core system access",
 			DisplayName: "Base Module",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
-		},
-		"cloud-compliance-manager": catalog.Feature{
-			Audience: "",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "month",
-				UnitAmount: int64(0),
-			}, catalog.Price{
-				Interval:   "",
-				UnitAmount: int64(0),
-			}}},
-			Description: "Integration into GCP (Security Command Center)",
-			DisplayName: "Cloud Compliance Manager",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
 		},
 		"compliance": catalog.Feature{
 			Audience: "public",
@@ -106,59 +50,7 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "Core compliance automation",
 			DisplayName: "Compliance Module",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(250)},
-		},
-		"continuous-compliance-automation": catalog.Feature{
-			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "month",
-				UnitAmount: int64(0),
-			}, catalog.Price{
-				Interval:   "",
-				UnitAmount: int64(0),
-			}}},
-			Description: "",
-			DisplayName: "Continuous Compliance Automation",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
-		},
-		"entity-management": catalog.Feature{
-			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "month",
-				UnitAmount: int64(0),
-			}, catalog.Price{
-				Interval:   "",
-				UnitAmount: int64(0),
-			}}},
-			Description: "",
-			DisplayName: "Entity Management",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
-		},
-		"policy-management": catalog.Feature{
-			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "month",
-				UnitAmount: int64(0),
-			}, catalog.Price{
-				Interval:   "",
-				UnitAmount: int64(0),
-			}}},
-			Description: "",
-			DisplayName: "Policy Management",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
-		},
-		"risk-management": catalog.Feature{
-			Audience: "private",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "month",
-				UnitAmount: int64(0),
-			}, catalog.Price{
-				Interval:   "",
-				UnitAmount: int64(0),
-			}}},
-			Description: "",
-			DisplayName: "Risk Management",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
+			Usage:       &catalog.Usage{EvidenceStorageGB: int64(250)},
 		},
 		"trust_center": catalog.Feature{
 			Audience: "beta",
@@ -175,20 +67,6 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "Public security portal",
 			DisplayName: "Trust Center",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
-		},
-		"vulnerability-management": catalog.Feature{
-			Audience: "",
-			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
-				Interval:   "month",
-				UnitAmount: int64(0),
-			}, catalog.Price{
-				Interval:   "",
-				UnitAmount: int64(0),
-			}}},
-			Description: "",
-			DisplayName: "Vulnerability Management",
-			Usage:       catalog.Usage{EvidenceStorageGB: int64(0)},
 		},
 	},
 }

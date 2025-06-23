@@ -8,6 +8,10 @@ import (
 
 // registerWebhookHandler registers a webhook endpoint handler behind the /stripe/ path for handling inbound event receivers from stripe
 func registerWebhookHandler(router *Router) (err error) {
+	if router.Handler == nil || router.Handler.Entitlements == nil {
+		return nil
+	}
+
 	path := "/stripe/webhook"
 	method := http.MethodPost
 	name := "StripeWebhook"

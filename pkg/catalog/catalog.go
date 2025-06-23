@@ -18,14 +18,13 @@ import (
 //go:embed genjsonschema/catalog.schema.json
 var schemaBytes []byte
 
-// ManagedByKey is the metadata key applied to Stripe resources created via the catalog.
+// ManagedByKey is the metadata key applied to Stripe resources created via the catalog
 const ManagedByKey = "managed_by"
 
-// ManagedByValue identifies objects managed by the catalog automation.
+// ManagedByValue identifies objects managed by the catalog automation
 const ManagedByValue = "module-manager"
 
-// Billing describes pricing details for a module or addon.
-// Price describes a single price option for a module or addon.
+// Price describes a single price option for a module or addon
 type Price struct {
 	Interval   string            `json:"interval" yaml:"interval" jsonschema:"enum=year,enum=month,description=Billing interval for the price,example=month"`
 	UnitAmount int64             `json:"unit_amount" yaml:"unit_amount" jsonschema:"description=Amount to be charged per interval,example=1000"`
@@ -35,18 +34,18 @@ type Price struct {
 	PriceID    string            `json:"-" yaml:"-" jsonschema:"description=Stripe price ID (internal use only),example=price_1N2Yw2A1b2c3d4e5"`
 }
 
-// Billing contains one or more price options for a module or addon.
+// Billing contains one or more price options for a module or addon
 type Billing struct {
 	Prices []Price `json:"prices" yaml:"prices" jsonschema:"description=List of price options for this feature"`
 }
 
-// Feature defines a purchasable module or addon feature.
+// Feature defines a purchasable module or addon feature
 type Feature struct {
 	DisplayName string  `json:"display_name" yaml:"display_name" jsonschema:"description=Human-readable name for the feature,example=Advanced Reporting"`
 	Description string  `json:"description,omitempty" yaml:"description,omitempty" jsonschema:"description=Optional description of the feature,example=Provides advanced analytics and reporting capabilities"`
 	Billing     Billing `json:"billing" yaml:"billing" jsonschema:"description=Billing information for the feature"`
 	Audience    string  `json:"audience" yaml:"audience" jsonschema:"enum=public,enum=private,enum=beta,description=Intended audience for the feature,example=public"`
-	Usage       Usage   `json:"usage" yaml:"usage" jsonschema:"description=Usage limits granted by the feature"`
+	Usage       *Usage  `json:"usage,omitempty" yaml:"usage" jsonschema:"description=Usage limits granted by the feature"`
 }
 
 // Usage defines usage limits granted by a feature.
@@ -209,7 +208,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 		prod, ok := prodMap[f.DisplayName]
 		var err error
 		if !ok {
-			prod, err = sc.CreateProduct(ctx, f.DisplayName, f.Description, map[string]string{ManagedByKey: ManagedByValue})
+			prod, err = sc.CreateProduct(ctx, name, f.DisplayName, f.Description, map[string]string{ManagedByKey: ManagedByValue})
 			if err != nil {
 				return f, ErrFailedToCreateProduct
 			}

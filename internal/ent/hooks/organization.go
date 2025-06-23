@@ -24,8 +24,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	features "github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/features"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -230,8 +230,15 @@ func createOrgSubscription(ctx context.Context, orgCreated *generated.Organizati
 
 	// if this is empty generate a default org setting schema
 	if len(orgSubscriptions) == 0 {
-		if err := defaultOrgSubscription(ctx, orgCreated, m); err != nil {
+		subs, err := defaultOrgSubscription(allowCtx, orgCreated, m)
+		if err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default org subscription")
+
+			return err
+		}
+
+		if err := createDefaultOrgModulesProductsPrices(allowCtx, orgCreated, m, subs); err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default org modules, products, and prices")
 
 			return err
 		}
@@ -242,55 +249,76 @@ func createOrgSubscription(ctx context.Context, orgCreated *generated.Organizati
 	return nil
 }
 
+// createDefaultOrgModulesProductsPrices creates default OrgModule, OrgProduct, and OrgPrice for base and compliance modules
+func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *generated.Organization, m GenericMutation, orgSubs *generated.OrgSubscription) error {
+	modulesToEntitle := []string{"base", "compliance"}
+
+	for _, moduleName := range modulesToEntitle {
+		mod, ok := features.DefaultCatalog.Modules[moduleName]
+		if !ok {
+			continue // skip if not in catalog
+		}
+
+		// Create OrgModule
+		_, err := m.Client().OrgModule.Create().
+			SetModule(moduleName).
+			SetSubscriptionID(orgSubs.ID).
+			SetOwnerID(orgCreated.ID).
+			SetActive(true).
+			SetPrice(models.Price{Amount: float64(mod.Billing.Prices[0].UnitAmount), Interval: mod.Billing.Prices[0].Interval}).
+			Save(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to create OrgModule for %s: %w", moduleName, err)
+		}
+
+		// Create OrgProduct for this module
+		orgProduct, err := m.Client().OrgProduct.Create().
+			SetModule(moduleName).
+			SetOwnerID(orgCreated.ID).
+			SetSubscriptionID(orgSubs.ID).
+			SetActive(true).
+			Save(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to create OrgProduct for %s: %w", moduleName, err)
+		}
+
+		// Create OrgPrice(s) for this product and set edge to OrgProduct
+		for _, price := range mod.Billing.Prices {
+			_, err := m.Client().OrgPrice.Create().
+				SetProductID(orgProduct.ID).
+				SetPrice(models.Price{Amount: float64(price.UnitAmount), Interval: price.Interval}).
+				SetActive(true).
+				SetOrgProductID(orgProduct.ID).
+				Save(ctx)
+			if err != nil {
+				return fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
+			}
+		}
+	}
+
+	return nil
+}
+
 const (
 	// subscriptionPendingUpdate is the status for a pending subscription update
 	// when the object is initially created in our database
 	subscriptionPendingUpdate = "PENDING_UPDATE"
 )
 
-func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
-	trialEnd := time.Now().Add(30 * 24 * time.Hour)
-
-	sub, err := m.Client().OrgSubscription.Create().
+// defaultOrgSubscription is the default way to create an org subscription when an organization is first created
+func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) (*generated.OrgSubscription, error) {
+	subs, err := m.Client().OrgSubscription.Create().
 		SetStripeSubscriptionID(subscriptionPendingUpdate).
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
-		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).
-		SetTrialExpiresAt(trialEnd).
-		SetFeatures([]string{"base", "compliance"}).
-		SetFeatureLookupKeys([]string{"base", "compliance"}).
-		Save(ctx)
+		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).Save(ctx)
 	if err != nil {
-		return err
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default orgsubscription")
+
+		return nil, err
 	}
 
-	if err := m.Client().OrgModule.Create().
-		SetModule("base").
-		SetSubscriptionID(sub.ID).
-		SetOwnerID(orgCreated.ID).
-		SetActive(true).
-		Exec(ctx); err != nil {
-		return err
-	}
-
-	compliancePrice := models.Price{}
-	if mod, ok := features.DefaultCatalog.Modules["compliance"]; ok {
-		for _, p := range mod.Billing.Prices {
-			if strings.ToLower(p.Interval) == "month" {
-				compliancePrice = models.Price{Amount: float64(p.UnitAmount), Interval: p.Interval}
-				break
-			}
-		}
-	}
-
-	return m.Client().OrgModule.Create().
-		SetModule("compliance").
-		SetSubscriptionID(sub.ID).
-		SetOwnerID(orgCreated.ID).
-		SetActive(true).
-		SetPrice(compliancePrice).
-		SetTrialExpiresAt(trialEnd).
-		Exec(ctx)
+	return subs, nil
 }
 
 // createEntityTypes creates the default entity types for a new org

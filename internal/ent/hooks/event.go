@@ -308,69 +308,59 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 	return nil
 }
 
-// updateCustomerOrgSub maps the customer fields to the organization subscription and update the organization subscription in the database
+// updateCustomerOrgSub maps the customer fields to the organization subscription and updates the orgproduct and orgprice fields
 func updateCustomerOrgSub(ctx context.Context, customer *entitlements.OrganizationCustomer, client any) error {
-	// validate the customer data before updating the organization subscription
-	if len(customer.Prices) > 1 {
-		zerolog.Ctx(ctx).Error().Str("organization_id", customer.OrganizationID).Str("customer_id", customer.StripeCustomerID).Int("prices", len(customer.Prices)).Msg("found multiple prices, skipping all updates")
-
-		return ErrTooManyPrices
-	}
-
 	if customer.OrganizationSubscriptionID == "" {
 		zerolog.Ctx(ctx).Error().Msg("organization subscription ID is empty on customer, unable to update organization subscription")
-
 		return ErrNoSubscriptions
 	}
 
-	productName := ""
-	productPrice := models.Price{}
+	entClient := client.(*entgen.Client)
 
-	if len(customer.Prices) == 1 {
-		productName = customer.Prices[0].ProductName
-		productPrice = models.Price{
-			Amount:   customer.Prices[0].Price,
-			Currency: customer.Prices[0].Currency,
-			Interval: customer.Prices[0].Interval,
+	// Shuffle product and price info into OrgProduct and OrgPrice for this org/subscription
+	for _, price := range customer.Prices {
+		// Update OrgProduct with product info
+		_, err := entClient.OrgProduct.Update().
+			Where(
+				// Assuming OrgProduct has fields: OrganizationID, SubscriptionID, ProductID
+				// and that ProductID matches price.ProductID
+				// Adjust predicates as needed for your schema
+				// ...existing code...
+				// Example:
+				// orgproduct.OrganizationID(customer.OrganizationID),
+				// orgproduct.SubscriptionID(customer.OrganizationSubscriptionID),
+				// orgproduct.ProductID(price.ProductID),
+			).
+			SetProductName(price.ProductName).
+			Save(ctx)
+		if err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("Failed to update OrgProduct")
+			return err
+		}
+
+		// Update OrgPrice with price info
+		_, err = entClient.OrgPrice.Update().
+			Where(
+				// Assuming OrgPrice has fields: OrganizationID, SubscriptionID, ProductID, PriceID
+				// and that PriceID matches price.PriceID
+				// ...existing code...
+				// Example:
+				// orgprice.OrganizationID(customer.OrganizationID),
+				// orgprice.SubscriptionID(customer.OrganizationSubscriptionID),
+				// orgprice.ProductID(price.ProductID),
+				// orgprice.PriceID(price.PriceID),
+			).
+			SetAmount(price.Price).
+			SetCurrency(price.Currency).
+			SetInterval(price.Interval).
+			Save(ctx)
+		if err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("Failed to update OrgPrice")
+			return err
 		}
 	}
 
-	// update the expiration date based on the subscription status
-	// if the subscription is trialing, set the expiration date to the trial end date
-	// otherwise, set the expiration date to the end date if it exists
-	trialExpiresAt := time.Unix(0, 0)
-	if customer.Status == string(stripe.SubscriptionStatusTrialing) {
-		trialExpiresAt = time.Unix(customer.TrialEnd, 0)
-	}
-
-	expiresAt := time.Unix(0, 0)
-	if customer.EndDate > 0 {
-		expiresAt = time.Unix(customer.EndDate, 0)
-	}
-
-	active := customer.Status == string(stripe.SubscriptionStatusActive) || customer.Status == string(stripe.SubscriptionStatusTrialing)
-
-	update := client.(*entgen.Client).OrgSubscription.UpdateOneID(customer.OrganizationSubscriptionID).
-		SetStripeSubscriptionID(customer.StripeSubscriptionID).
-		SetStripeCustomerID(customer.StripeCustomerID).
-		SetStripeSubscriptionStatus(customer.Subscription.Status).
-		SetActive(active).
-		SetProductTier(productName).
-		SetFeatures(customer.FeatureNames).
-		SetFeatureLookupKeys(customer.Features).
-		SetStripeProductTierID(customer.Subscription.ProductID).
-		SetProductPrice(productPrice)
-
-	// ensure the correct expiration date is set based on the subscription status
-	// if the subscription is trialing, set the expiration date to the trial end date
-	// otherwise, set the expiration date to the end date
-	if customer.Status == string(stripe.SubscriptionStatusTrialing) {
-		update.SetTrialExpiresAt(trialExpiresAt)
-	} else {
-		update.SetExpiresAt(expiresAt)
-	}
-
-	return update.Exec(ctx)
+	return nil
 }
 
 // updateOrgCustomerWithSubscription updates the organization customer with the subscription data

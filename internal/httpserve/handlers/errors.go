@@ -75,6 +75,8 @@ var (
 	ErrJobRunnerRegistrationTokenExpired = errors.New("job runner registration token expired")
 	// ErrJobRunnerAlreadyRegistered is returned when we hit the ip address unique constraint
 	ErrJobRunnerAlreadyRegistered = errors.New("this job runner node exists and cannot be registered twice")
+	// ErrEntitlementsNotConfigured is returned when the entitlements are not configured
+	ErrEntitlementsNotConfigured = errors.New("entitlements not configured")
 )
 
 var (

@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/features"
+	gen "github.com/theopenlane/core/pkg/catalog/gencatalog"
 )
 
 // WithModuleCatalog loads the module catalog from the configured path
@@ -19,16 +19,19 @@ func WithModuleCatalog(path string) ServerOption {
 		if err != nil {
 			if errors.Is(err, fs.ErrNotExist) {
 				log.Warn().Str("path", path).Msg("module catalog not found, using defaults")
-				cat = &features.DefaultCatalog
+
+				cat = &gen.DefaultCatalog
 			} else {
 				log.Panic().Err(err).Str("path", path).Msg("failed to load module catalog")
 			}
 		}
+
 		if s.Config.Handler.Entitlements != nil {
 			if err := cat.EnsurePrices(context.Background(), s.Config.Handler.Entitlements, "usd"); err != nil {
 				log.Panic().Err(err).Msg("invalid catalog pricing")
 			}
 		}
+
 		s.Config.Handler.Catalog = cat
 	})
 }
@@ -60,7 +63,7 @@ func WithModuleCatalogWatcher(path string) ServerOption {
 						cat, err := catalog.LoadCatalog(path)
 						if err != nil {
 							if errors.Is(err, fs.ErrNotExist) {
-								cat = &features.DefaultCatalog
+								cat = &gen.DefaultCatalog
 								log.Warn().Err(err).Msg("catalog file missing, using defaults")
 							} else {
 								log.Error().Err(err).Msg("failed to reload module catalog")

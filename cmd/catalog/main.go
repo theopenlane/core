@@ -21,7 +21,7 @@ func main() {
 	var catalogFile string
 	var apiKey string
 	var takeover bool
-	flag.StringVar(&catalogFile, "catalog", "./config/catalog.yaml", "catalog file path")
+	flag.StringVar(&catalogFile, "catalog", "./pkg/catalog/catalog.yaml", "catalog file path")
 	flag.StringVar(&apiKey, "stripe-key", "", "stripe API key (or set STRIPE_API_KEY)")
 	flag.BoolVar(&takeover, "takeover", false, "add managed_by metadata when found")
 	flag.Parse()

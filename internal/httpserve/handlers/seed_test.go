@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 )
 
 var (
@@ -86,9 +85,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 		builder.SetSetting(userSetting)
 	}
 
-	createCtx := contextx.With(ctx, auth.OrganizationCreationContextKey{})
-
-	testUser.UserInfo, err = builder.Save(createCtx)
+	testUser.UserInfo, err = builder.Save(ctx)
 	require.NoError(t, err)
 
 	testUser.ID = testUser.UserInfo.ID
@@ -132,8 +129,6 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 
 	// setup user context with the org (and not the personal org)
 	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
-	testUser.UserCtx = privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
-	testUser.UserCtx = ent.NewContext(testUser.UserCtx, suite.db)
 
 	return testUser
 }

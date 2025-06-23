@@ -259,11 +259,16 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		orgID = au.OrganizationID
 	}
 
-	active, err := a.checkActiveSubscription(ctx, orgID)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to find org subscription for organization")
+	// Only perform subscription/module checks if entitlements are enabled
+	entitlementsEnabled := a.db.EntitlementManager != nil
+	active := true
+	if entitlementsEnabled {
+		active, err = a.checkActiveSubscription(ctx, orgID)
+		if err != nil {
+			log.Error().Err(err).Msg("failed to find org subscription for organization")
 
-		return "", err
+			return "", err
+		}
 	}
 
 	// ensure user is already a member of the destination organization

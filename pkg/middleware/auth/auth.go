@@ -234,7 +234,7 @@ func checkToken(ctx context.Context, conf *Options, token, method string) (*auth
 	}
 
 	// check if the token is an API token
-	au, id, err = isValidAPIToken(ctx, *conf.DBClient, token, method)
+	au, id, err = isValidAPIToken(ctx, *conf.DBClient, token, method, conf.EnableEntitlementChecks)
 	if err == nil {
 		return au, id, nil
 	}
@@ -282,9 +282,8 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token 
 	}, pat.ID, nil
 }
 
-func isValidAPIToken(ctx context.Context, dbClient ent.Client, token, method string) (*auth.AuthenticatedUser, string, error) {
+func isValidAPIToken(ctx context.Context, dbClient ent.Client, token, method string, entitlementChecks bool) (*auth.AuthenticatedUser, string, error) {
 	// query for the token before the user is authorized
-	// allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	t, err := dbClient.APIToken.Query().Where(apitoken.Token(token)).
 		Only(ctx)
 	if err != nil {
@@ -296,19 +295,21 @@ func isValidAPIToken(ctx context.Context, dbClient ent.Client, token, method str
 		return nil, "", rout.ErrExpiredCredentials
 	}
 
-	// verify the organization still has an active base module
-	ok, err := dbClient.OrgModule.Query().
-		Where(
-			orgmodule.OwnerID(t.OwnerID),
-			orgmodule.Module("base"),
-			orgmodule.Active(true),
-		).
-		Exist(ctx)
-	if err != nil {
-		return nil, "", err
-	}
-	if !ok {
-		return nil, "", rout.ErrInvalidCredentials
+	if entitlementChecks {
+		// verify the organization still has an active base module
+		ok, err := dbClient.OrgModule.Query().
+			Where(
+				orgmodule.OwnerID(t.OwnerID),
+				orgmodule.Module("base"),
+				orgmodule.Active(true),
+			).
+			Exist(ctx)
+		if err != nil {
+			return nil, "", err
+		}
+		if !ok {
+			return nil, "", rout.ErrInvalidCredentials
+		}
 	}
 
 	// check that the token scopes allow the request method

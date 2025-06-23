@@ -69,9 +69,8 @@
             "public"
           ]
         },
-        "usage": {
-          "$ref": "#/$defs/Usage",
-          "description": "Usage limits granted by the feature"
+        "Usage": {
+          "$ref": "#/$defs/Usage"
         }
       },
       "additionalProperties": false,
@@ -80,7 +79,7 @@
         "display_name",
         "billing",
         "audience",
-        "usage"
+        "Usage"
       ]
     },
     "FeatureSet": {
