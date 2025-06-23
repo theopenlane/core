@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 )
 
-//go:embed catalog.schema.json
+//go:embed genjsonschema/catalog.schema.json
 var schemaBytes []byte
 
 // ManagedByKey is the metadata key applied to Stripe resources created via the catalog.
@@ -27,31 +27,32 @@ const ManagedByValue = "module-manager"
 // Billing describes pricing details for a module or addon.
 // Price describes a single price option for a module or addon.
 type Price struct {
-	Interval   string            `json:"interval" yaml:"interval"`
-	UnitAmount int64             `json:"unit_amount" yaml:"unit_amount"`
-	Nickname   string            `json:"nickname,omitempty" yaml:"nickname,omitempty"`
-	LookupKey  string            `json:"lookup_key,omitempty" yaml:"lookup_key,omitempty"`
-	Metadata   map[string]string `json:"metadata,omitempty" yaml:"metadata,omitempty"`
-	PriceID    string            `json:"-" yaml:"-"`
+	Interval   string            `json:"interval" yaml:"interval" jsonschema:"enum=year,enum=month,description=Billing interval for the price,example=month"`
+	UnitAmount int64             `json:"unit_amount" yaml:"unit_amount" jsonschema:"description=Amount to be charged per interval,example=1000"`
+	Nickname   string            `json:"nickname,omitempty" yaml:"nickname,omitempty" jsonschema:"description=Optional nickname for the price,example=price_compliance_monthly"`
+	LookupKey  string            `json:"lookup_key,omitempty" yaml:"lookup_key,omitempty" jsonschema:"description=Optional lookup key for referencing the price,example=price_compliance_monthly"`
+	Metadata   map[string]string `json:"metadata,omitempty" yaml:"metadata,omitempty" jsonschema:"description=Additional metadata for the price,example={\"tier\":\"premium\"}"`
+	PriceID    string            `json:"-" yaml:"-" jsonschema:"description=Stripe price ID (internal use only),example=price_1N2Yw2A1b2c3d4e5"`
 }
 
 // Billing contains one or more price options for a module or addon.
 type Billing struct {
-	Prices []Price `json:"prices" yaml:"prices"`
+	Prices []Price `json:"prices" yaml:"prices" jsonschema:"description=List of price options for this feature"`
 }
 
 // Feature defines a purchasable module or addon feature.
 type Feature struct {
-	DisplayName string  `json:"display_name" yaml:"display_name"`
-	Description string  `json:"description,omitempty" yaml:"description,omitempty"`
-	Billing     Billing `json:"billing" yaml:"billing"`
-	Audience    string  `json:"audience" yaml:"audience"`
-	Usage       Usage   `json:"usage,omitempty" yaml:"usage,omitempty"`
+	DisplayName string  `json:"display_name" yaml:"display_name" jsonschema:"description=Human-readable name for the feature,example=Advanced Reporting"`
+	Description string  `json:"description,omitempty" yaml:"description,omitempty" jsonschema:"description=Optional description of the feature,example=Provides advanced analytics and reporting capabilities"`
+	Billing     Billing `json:"billing" yaml:"billing" jsonschema:"description=Billing information for the feature"`
+	Audience    string  `json:"audience" yaml:"audience" jsonschema:"enum=public,enum=private,enum=beta,description=Intended audience for the feature,example=public"`
+	Usage       Usage   `json:"usage" yaml:"usage" jsonschema:"description=Usage limits granted by the feature"`
 }
 
 // Usage defines usage limits granted by a feature.
 type Usage struct {
-	EvidenceStorageGB int64 `json:"evidence_storage_gb,omitempty" yaml:"evidence_storage_gb,omitempty"`
+	EvidenceStorageGB int64 `json:"evidence_storage_gb,omitempty" yaml:"evidence_storage_gb,omitempty" jsonschema:"description=Storage limit in GB for evidence,example=10"`
+	RecordCount       int64 `json:"record_count,omitempty" yaml:"record_count,omitempty" jsonschema:"description=Maximum number of records allowed,example=1000"`
 }
 
 // FeatureSet is a mapping of feature identifiers to metadata.
@@ -59,8 +60,8 @@ type FeatureSet map[string]Feature
 
 // Catalog contains all modules and addons offered by Openlane.
 type Catalog struct {
-	Modules FeatureSet `json:"modules" yaml:"modules"`
-	Addons  FeatureSet `json:"addons" yaml:"addons"`
+	Modules FeatureSet `json:"modules" yaml:"modules" jsonschema:"description=Set of modules available in the catalog"`
+	Addons  FeatureSet `json:"addons" yaml:"addons" jsonschema:"description=Set of addons available in the catalog"`
 }
 
 // Visible returns modules and addons filtered by audience.
@@ -74,12 +75,15 @@ func (c *Catalog) Visible(audience string) *Catalog {
 		if audience == "" {
 			return in
 		}
+
 		out := FeatureSet{}
+
 		for k, v := range in {
 			if v.Audience == audience || v.Audience == "public" {
 				out[k] = v
 			}
 		}
+
 		return out
 	}
 

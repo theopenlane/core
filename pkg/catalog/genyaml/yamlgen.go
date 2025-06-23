@@ -1,3 +1,5 @@
+//go:build ignore
+
 package main
 
 import (
@@ -17,8 +19,8 @@ import (
 func main() {
 	var input string
 	var output string
-	flag.StringVar(&input, "in", "config/catalog.yaml", "path to catalog yaml")
-	flag.StringVar(&output, "out", "pkg/features/gencatalog.go", "output go file (stdout if empty)")
+	flag.StringVar(&input, "in", "pkg/catalog/catalog.yaml", "path to catalog yaml")
+	flag.StringVar(&output, "out", "pkg/catalog/gencatalog/gencatalog.go", "output go file (stdout if empty)")
 	flag.Parse()
 
 	data, err := os.ReadFile(input)

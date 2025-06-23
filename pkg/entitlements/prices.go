@@ -18,6 +18,7 @@ func (sc *StripeClient) CreatePrice(ctx context.Context, productID string, unitA
 		Nickname:  stripe.String(nickname),
 		LookupKey: stripe.String(lookupKey),
 	}
+
 	if len(metadata) > 0 {
 		params.Metadata = metadata
 	}

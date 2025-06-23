@@ -318,7 +318,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 	stripeOrgSubscription := mapStripeToOrgSubscription(subscription)
 
 	changed := false
-
 	mutation := transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSubscription)
 
 	if orgSubscription.StripeSubscriptionStatus != stripeOrgSubscription.StripeSubscriptionStatus {
