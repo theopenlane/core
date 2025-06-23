@@ -2843,6 +2843,9 @@ func (th *TemplateHistory) changes(new *TemplateHistory) []Change {
 	if !reflect.DeepEqual(th.Uischema, new.Uischema) {
 		changes = append(changes, NewChange(templatehistory.FieldUischema, th.Uischema, new.Uischema))
 	}
+	if !reflect.DeepEqual(th.Kind, new.Kind) {
+		changes = append(changes, NewChange(templatehistory.FieldKind, th.Kind, new.Kind))
+	}
 	return changes
 }
 

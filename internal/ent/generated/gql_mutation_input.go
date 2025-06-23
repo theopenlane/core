@@ -9543,6 +9543,7 @@ type CreateTemplateInput struct {
 	Description  *string
 	Jsonconfig   map[string]interface{}
 	Uischema     map[string]interface{}
+	Kind         *enums.TemplateKind
 	OwnerID      *string
 	DocumentIDs  []string
 	FileIDs      []string
@@ -9565,6 +9566,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
+	}
+	if v := i.Kind; v != nil {
+		m.SetKind(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)

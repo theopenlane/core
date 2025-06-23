@@ -212,6 +212,20 @@ func (tu *TemplateUpdate) ClearUischema() *TemplateUpdate {
 	return tu
 }
 
+// SetKind sets the "kind" field.
+func (tu *TemplateUpdate) SetKind(ek enums.TemplateKind) *TemplateUpdate {
+	tu.mutation.SetKind(ek)
+	return tu
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (tu *TemplateUpdate) SetNillableKind(ek *enums.TemplateKind) *TemplateUpdate {
+	if ek != nil {
+		tu.SetKind(*ek)
+	}
+	return tu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (tu *TemplateUpdate) SetOwner(o *Organization) *TemplateUpdate {
 	return tu.SetOwnerID(o.ID)
@@ -359,6 +373,11 @@ func (tu *TemplateUpdate) check() error {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "Template.template_type": %w`, err)}
 		}
 	}
+	if v, ok := tu.mutation.Kind(); ok {
+		if err := template.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "Template.kind": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -444,6 +463,9 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := tu.mutation.Kind(); ok {
+		_spec.SetField(template.FieldKind, field.TypeEnum, value)
 	}
 	if tu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -772,6 +794,20 @@ func (tuo *TemplateUpdateOne) ClearUischema() *TemplateUpdateOne {
 	return tuo
 }
 
+// SetKind sets the "kind" field.
+func (tuo *TemplateUpdateOne) SetKind(ek enums.TemplateKind) *TemplateUpdateOne {
+	tuo.mutation.SetKind(ek)
+	return tuo
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (tuo *TemplateUpdateOne) SetNillableKind(ek *enums.TemplateKind) *TemplateUpdateOne {
+	if ek != nil {
+		tuo.SetKind(*ek)
+	}
+	return tuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (tuo *TemplateUpdateOne) SetOwner(o *Organization) *TemplateUpdateOne {
 	return tuo.SetOwnerID(o.ID)
@@ -932,6 +968,11 @@ func (tuo *TemplateUpdateOne) check() error {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "Template.template_type": %w`, err)}
 		}
 	}
+	if v, ok := tuo.mutation.Kind(); ok {
+		if err := template.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "Template.kind": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1034,6 +1075,9 @@ func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err
 	}
 	if tuo.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := tuo.mutation.Kind(); ok {
+		_spec.SetField(template.FieldKind, field.TypeEnum, value)
 	}
 	if tuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

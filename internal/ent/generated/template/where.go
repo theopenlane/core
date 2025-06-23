@@ -778,6 +778,36 @@ func UischemaNotNil() predicate.Template {
 	return predicate.Template(sql.FieldNotNull(FieldUischema))
 }
 
+// KindEQ applies the EQ predicate on the "kind" field.
+func KindEQ(v enums.TemplateKind) predicate.Template {
+	vc := v
+	return predicate.Template(sql.FieldEQ(FieldKind, vc))
+}
+
+// KindNEQ applies the NEQ predicate on the "kind" field.
+func KindNEQ(v enums.TemplateKind) predicate.Template {
+	vc := v
+	return predicate.Template(sql.FieldNEQ(FieldKind, vc))
+}
+
+// KindIn applies the In predicate on the "kind" field.
+func KindIn(vs ...enums.TemplateKind) predicate.Template {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Template(sql.FieldIn(FieldKind, v...))
+}
+
+// KindNotIn applies the NotIn predicate on the "kind" field.
+func KindNotIn(vs ...enums.TemplateKind) predicate.Template {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Template(sql.FieldNotIn(FieldKind, v...))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Template {
 	return predicate.Template(func(s *sql.Selector) {

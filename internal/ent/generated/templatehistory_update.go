@@ -209,6 +209,20 @@ func (thu *TemplateHistoryUpdate) ClearUischema() *TemplateHistoryUpdate {
 	return thu
 }
 
+// SetKind sets the "kind" field.
+func (thu *TemplateHistoryUpdate) SetKind(ek enums.TemplateKind) *TemplateHistoryUpdate {
+	thu.mutation.SetKind(ek)
+	return thu
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (thu *TemplateHistoryUpdate) SetNillableKind(ek *enums.TemplateKind) *TemplateHistoryUpdate {
+	if ek != nil {
+		thu.SetKind(*ek)
+	}
+	return thu
+}
+
 // Mutation returns the TemplateHistoryMutation object of the builder.
 func (thu *TemplateHistoryUpdate) Mutation() *TemplateHistoryMutation {
 	return thu.mutation
@@ -255,6 +269,11 @@ func (thu *TemplateHistoryUpdate) check() error {
 	if v, ok := thu.mutation.TemplateType(); ok {
 		if err := templatehistory.TemplateTypeValidator(v); err != nil {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.template_type": %w`, err)}
+		}
+	}
+	if v, ok := thu.mutation.Kind(); ok {
+		if err := templatehistory.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.kind": %w`, err)}
 		}
 	}
 	return nil
@@ -351,6 +370,9 @@ func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if thu.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := thu.mutation.Kind(); ok {
+		_spec.SetField(templatehistory.FieldKind, field.TypeEnum, value)
 	}
 	_spec.Node.Schema = thu.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thu.schemaConfig)
@@ -552,6 +574,20 @@ func (thuo *TemplateHistoryUpdateOne) ClearUischema() *TemplateHistoryUpdateOne 
 	return thuo
 }
 
+// SetKind sets the "kind" field.
+func (thuo *TemplateHistoryUpdateOne) SetKind(ek enums.TemplateKind) *TemplateHistoryUpdateOne {
+	thuo.mutation.SetKind(ek)
+	return thuo
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (thuo *TemplateHistoryUpdateOne) SetNillableKind(ek *enums.TemplateKind) *TemplateHistoryUpdateOne {
+	if ek != nil {
+		thuo.SetKind(*ek)
+	}
+	return thuo
+}
+
 // Mutation returns the TemplateHistoryMutation object of the builder.
 func (thuo *TemplateHistoryUpdateOne) Mutation() *TemplateHistoryMutation {
 	return thuo.mutation
@@ -611,6 +647,11 @@ func (thuo *TemplateHistoryUpdateOne) check() error {
 	if v, ok := thuo.mutation.TemplateType(); ok {
 		if err := templatehistory.TemplateTypeValidator(v); err != nil {
 			return &ValidationError{Name: "template_type", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.template_type": %w`, err)}
+		}
+	}
+	if v, ok := thuo.mutation.Kind(); ok {
+		if err := templatehistory.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.kind": %w`, err)}
 		}
 	}
 	return nil
@@ -724,6 +765,9 @@ func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templ
 	}
 	if thuo.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := thuo.mutation.Kind(); ok {
+		_spec.SetField(templatehistory.FieldKind, field.TypeEnum, value)
 	}
 	_spec.Node.Schema = thuo.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thuo.schemaConfig)

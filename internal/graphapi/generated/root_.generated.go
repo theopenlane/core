@@ -3995,6 +3995,7 @@ type ComplexityRoot struct {
 		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID           func(childComplexity int) int
 		Jsonconfig   func(childComplexity int) int
+		Kind         func(childComplexity int) int
 		Name         func(childComplexity int) int
 		Owner        func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
@@ -4036,6 +4037,7 @@ type ComplexityRoot struct {
 		HistoryTime  func(childComplexity int) int
 		ID           func(childComplexity int) int
 		Jsonconfig   func(childComplexity int) int
+		Kind         func(childComplexity int) int
 		Name         func(childComplexity int) int
 		Operation    func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
@@ -26531,6 +26533,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Template.Jsonconfig(childComplexity), true
 
+	case "Template.kind":
+		if e.complexity.Template.Kind == nil {
+			break
+		}
+
+		return e.complexity.Template.Kind(childComplexity), true
+
 	case "Template.name":
 		if e.complexity.Template.Name == nil {
 			break
@@ -26691,6 +26700,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TemplateHistory.Jsonconfig(childComplexity), true
+
+	case "TemplateHistory.kind":
+		if e.complexity.TemplateHistory.Kind == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.Kind(childComplexity), true
 
 	case "TemplateHistory.name":
 		if e.complexity.TemplateHistory.Name == nil {
@@ -38565,6 +38581,10 @@ input CreateTemplateInput {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the template kind
+  """
+  kind: TemplateTemplateKind
   ownerID: ID
   documentIDs: [ID!]
   fileIDs: [ID!]
@@ -70526,6 +70546,10 @@ type Template implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the template kind
+  """
+  kind: TemplateTemplateKind!
   owner: Organization
   documents(
     """
@@ -70668,6 +70692,10 @@ type TemplateHistory implements Node {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  the template kind
+  """
+  kind: TemplateHistoryTemplateKind!
 }
 """
 A connection to a list of items.
@@ -70736,6 +70764,12 @@ enum TemplateHistoryOrderField {
   updated_at
   name
   TEMPLATE_TYPE
+}
+"""
+TemplateHistoryTemplateKind is enum for the field kind
+"""
+enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+  QUESTIONNAIRE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -70922,6 +70956,13 @@ input TemplateHistoryWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """
+  kind field predicates
+  """
+  kind: TemplateHistoryTemplateKind
+  kindNEQ: TemplateHistoryTemplateKind
+  kindIn: [TemplateHistoryTemplateKind!]
+  kindNotIn: [TemplateHistoryTemplateKind!]
 }
 """
 Ordering options for Template connections
@@ -70944,6 +70985,12 @@ enum TemplateOrderField {
   updated_at
   name
   TEMPLATE_TYPE
+}
+"""
+TemplateTemplateKind is enum for the field kind
+"""
+enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+  QUESTIONNAIRE
 }
 """
 TemplateWhereInput is used for filtering Template objects.
@@ -71094,6 +71141,13 @@ input TemplateWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """
+  kind field predicates
+  """
+  kind: TemplateTemplateKind
+  kindNEQ: TemplateTemplateKind
+  kindIn: [TemplateTemplateKind!]
+  kindNotIn: [TemplateTemplateKind!]
   """
   owner edge predicates
   """

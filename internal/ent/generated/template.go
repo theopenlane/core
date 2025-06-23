@@ -48,6 +48,8 @@ type Template struct {
 	Jsonconfig map[string]interface{} `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
 	Uischema map[string]interface{} `json:"uischema,omitempty"`
+	// the template kind
+	Kind enums.TemplateKind `json:"kind,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TemplateQuery when eager-loading is set.
 	Edges        TemplateEdges `json:"edges"`
@@ -110,7 +112,7 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case template.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription:
+		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind:
 			values[i] = new(sql.NullString)
 		case template.FieldCreatedAt, template.FieldUpdatedAt, template.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -225,6 +227,12 @@ func (t *Template) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field uischema: %w", err)
 				}
 			}
+		case template.FieldKind:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field kind", values[i])
+			} else if value.Valid {
+				t.Kind = enums.TemplateKind(value.String)
+			}
 		default:
 			t.selectValues.Set(columns[i], values[i])
 		}
@@ -317,6 +325,9 @@ func (t *Template) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("uischema=")
 	builder.WriteString(fmt.Sprintf("%v", t.Uischema))
+	builder.WriteString(", ")
+	builder.WriteString("kind=")
+	builder.WriteString(fmt.Sprintf("%v", t.Kind))
 	builder.WriteByte(')')
 	return builder.String()
 }

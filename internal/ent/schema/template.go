@@ -68,6 +68,14 @@ func (Template) Fields() []ent.Field {
 		field.JSON("uischema", map[string]any{}).
 			Comment("the uischema for the template to render in the UI").
 			Optional(),
+
+		field.Enum("kind").
+			GoType(enums.TemplateKind("")).
+			Default(enums.TemplateKindQuestionnaire.String()).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationUpdateInput),
+			).
+			Comment("the template kind"),
 	}
 }
 

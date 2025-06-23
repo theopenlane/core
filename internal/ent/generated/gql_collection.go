@@ -37471,6 +37471,11 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, template.FieldUischema)
 				fieldSeen[template.FieldUischema] = struct{}{}
 			}
+		case "kind":
+			if _, ok := fieldSeen[template.FieldKind]; !ok {
+				selectedFields = append(selectedFields, template.FieldKind)
+				fieldSeen[template.FieldKind] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -37635,6 +37640,11 @@ func (th *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[templatehistory.FieldUischema]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldUischema)
 				fieldSeen[templatehistory.FieldUischema] = struct{}{}
+			}
+		case "kind":
+			if _, ok := fieldSeen[templatehistory.FieldKind]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldKind)
+				fieldSeen[templatehistory.FieldKind] = struct{}{}
 			}
 		case "id":
 		case "__typename":

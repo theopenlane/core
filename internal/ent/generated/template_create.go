@@ -188,6 +188,20 @@ func (tc *TemplateCreate) SetUischema(m map[string]interface{}) *TemplateCreate 
 	return tc
 }
 
+// SetKind sets the "kind" field.
+func (tc *TemplateCreate) SetKind(ek enums.TemplateKind) *TemplateCreate {
+	tc.mutation.SetKind(ek)
+	return tc
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (tc *TemplateCreate) SetNillableKind(ek *enums.TemplateKind) *TemplateCreate {
+	if ek != nil {
+		tc.SetKind(*ek)
+	}
+	return tc
+}
+
 // SetID sets the "id" field.
 func (tc *TemplateCreate) SetID(s string) *TemplateCreate {
 	tc.mutation.SetID(s)
@@ -300,6 +314,10 @@ func (tc *TemplateCreate) defaults() error {
 		v := template.DefaultTemplateType
 		tc.mutation.SetTemplateType(v)
 	}
+	if _, ok := tc.mutation.Kind(); !ok {
+		v := template.DefaultKind
+		tc.mutation.SetKind(v)
+	}
 	if _, ok := tc.mutation.ID(); !ok {
 		if template.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized template.DefaultID (forgotten import generated/runtime?)")
@@ -335,6 +353,14 @@ func (tc *TemplateCreate) check() error {
 	}
 	if _, ok := tc.mutation.Jsonconfig(); !ok {
 		return &ValidationError{Name: "jsonconfig", err: errors.New(`generated: missing required field "Template.jsonconfig"`)}
+	}
+	if _, ok := tc.mutation.Kind(); !ok {
+		return &ValidationError{Name: "kind", err: errors.New(`generated: missing required field "Template.kind"`)}
+	}
+	if v, ok := tc.mutation.Kind(); ok {
+		if err := template.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "Template.kind": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -423,6 +449,10 @@ func (tc *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Uischema(); ok {
 		_spec.SetField(template.FieldUischema, field.TypeJSON, value)
 		_node.Uischema = value
+	}
+	if value, ok := tc.mutation.Kind(); ok {
+		_spec.SetField(template.FieldKind, field.TypeEnum, value)
+		_node.Kind = value
 	}
 	if nodes := tc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

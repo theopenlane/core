@@ -9106,6 +9106,10 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUischema(uischema)
 	}
 
+	if kind, exists := m.Kind(); exists {
+		create = create.SetKind(kind)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -9220,6 +9224,12 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUischema(template.Uischema)
 		}
 
+		if kind, exists := m.Kind(); exists {
+			create = create.SetKind(kind)
+		} else {
+			create = create.SetKind(template.Kind)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -9266,6 +9276,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDescription(template.Description).
 			SetJsonconfig(template.Jsonconfig).
 			SetUischema(template.Uischema).
+			SetKind(template.Kind).
 			Save(ctx)
 		if err != nil {
 			return err

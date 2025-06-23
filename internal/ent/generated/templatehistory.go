@@ -53,7 +53,9 @@ type TemplateHistory struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]interface{} `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
-	Uischema     map[string]interface{} `json:"uischema,omitempty"`
+	Uischema map[string]interface{} `json:"uischema,omitempty"`
+	// the template kind
+	Kind         enums.TemplateKind `json:"kind,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -68,7 +70,7 @@ func (*TemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case templatehistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldCreatedBy, templatehistory.FieldUpdatedBy, templatehistory.FieldDeletedBy, templatehistory.FieldOwnerID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription:
+		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldCreatedBy, templatehistory.FieldUpdatedBy, templatehistory.FieldDeletedBy, templatehistory.FieldOwnerID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription, templatehistory.FieldKind:
 			values[i] = new(sql.NullString)
 		case templatehistory.FieldHistoryTime, templatehistory.FieldCreatedAt, templatehistory.FieldUpdatedAt, templatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -201,6 +203,12 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field uischema: %w", err)
 				}
 			}
+		case templatehistory.FieldKind:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field kind", values[i])
+			} else if value.Valid {
+				th.Kind = enums.TemplateKind(value.String)
+			}
 		default:
 			th.selectValues.Set(columns[i], values[i])
 		}
@@ -287,6 +295,9 @@ func (th *TemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("uischema=")
 	builder.WriteString(fmt.Sprintf("%v", th.Uischema))
+	builder.WriteString(", ")
+	builder.WriteString("kind=")
+	builder.WriteString(fmt.Sprintf("%v", th.Kind))
 	builder.WriteByte(')')
 	return builder.String()
 }

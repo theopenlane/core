@@ -220,6 +220,20 @@ func (thc *TemplateHistoryCreate) SetUischema(m map[string]interface{}) *Templat
 	return thc
 }
 
+// SetKind sets the "kind" field.
+func (thc *TemplateHistoryCreate) SetKind(ek enums.TemplateKind) *TemplateHistoryCreate {
+	thc.mutation.SetKind(ek)
+	return thc
+}
+
+// SetNillableKind sets the "kind" field if the given value is not nil.
+func (thc *TemplateHistoryCreate) SetNillableKind(ek *enums.TemplateKind) *TemplateHistoryCreate {
+	if ek != nil {
+		thc.SetKind(*ek)
+	}
+	return thc
+}
+
 // SetID sets the "id" field.
 func (thc *TemplateHistoryCreate) SetID(s string) *TemplateHistoryCreate {
 	thc.mutation.SetID(s)
@@ -293,6 +307,10 @@ func (thc *TemplateHistoryCreate) defaults() {
 		v := templatehistory.DefaultTemplateType
 		thc.mutation.SetTemplateType(v)
 	}
+	if _, ok := thc.mutation.Kind(); !ok {
+		v := templatehistory.DefaultKind
+		thc.mutation.SetKind(v)
+	}
 	if _, ok := thc.mutation.ID(); !ok {
 		v := templatehistory.DefaultID()
 		thc.mutation.SetID(v)
@@ -325,6 +343,14 @@ func (thc *TemplateHistoryCreate) check() error {
 	}
 	if _, ok := thc.mutation.Jsonconfig(); !ok {
 		return &ValidationError{Name: "jsonconfig", err: errors.New(`generated: missing required field "TemplateHistory.jsonconfig"`)}
+	}
+	if _, ok := thc.mutation.Kind(); !ok {
+		return &ValidationError{Name: "kind", err: errors.New(`generated: missing required field "TemplateHistory.kind"`)}
+	}
+	if v, ok := thc.mutation.Kind(); ok {
+		if err := templatehistory.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "TemplateHistory.kind": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -429,6 +455,10 @@ func (thc *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Crea
 	if value, ok := thc.mutation.Uischema(); ok {
 		_spec.SetField(templatehistory.FieldUischema, field.TypeJSON, value)
 		_node.Uischema = value
+	}
+	if value, ok := thc.mutation.Kind(); ok {
+		_spec.SetField(templatehistory.FieldKind, field.TypeEnum, value)
+		_node.Kind = value
 	}
 	return _node, _spec
 }

@@ -2691,6 +2691,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldDescription:  {Type: field.TypeString, Column: template.FieldDescription},
 			template.FieldJsonconfig:   {Type: field.TypeJSON, Column: template.FieldJsonconfig},
 			template.FieldUischema:     {Type: field.TypeJSON, Column: template.FieldUischema},
+			template.FieldKind:         {Type: field.TypeEnum, Column: template.FieldKind},
 		},
 	}
 	graph.Nodes[88] = &sqlgraph.Node{
@@ -2721,6 +2722,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldDescription:  {Type: field.TypeString, Column: templatehistory.FieldDescription},
 			templatehistory.FieldJsonconfig:   {Type: field.TypeJSON, Column: templatehistory.FieldJsonconfig},
 			templatehistory.FieldUischema:     {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
+			templatehistory.FieldKind:         {Type: field.TypeEnum, Column: templatehistory.FieldKind},
 		},
 	}
 	graph.Nodes[89] = &sqlgraph.Node{
@@ -23186,6 +23188,11 @@ func (f *TemplateFilter) WhereUischema(p entql.BytesP) {
 	f.Where(p.Field(template.FieldUischema))
 }
 
+// WhereKind applies the entql string predicate on the kind field.
+func (f *TemplateFilter) WhereKind(p entql.StringP) {
+	f.Where(p.Field(template.FieldKind))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *TemplateFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -23351,6 +23358,11 @@ func (f *TemplateHistoryFilter) WhereJsonconfig(p entql.BytesP) {
 // WhereUischema applies the entql json.RawMessage predicate on the uischema field.
 func (f *TemplateHistoryFilter) WhereUischema(p entql.BytesP) {
 	f.Where(p.Field(templatehistory.FieldUischema))
+}
+
+// WhereKind applies the entql string predicate on the kind field.
+func (f *TemplateHistoryFilter) WhereKind(p entql.StringP) {
+	f.Where(p.Field(templatehistory.FieldKind))
 }
 
 // addPredicate implements the predicateAdder interface.

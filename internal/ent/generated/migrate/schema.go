@@ -4278,6 +4278,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "kind", Type: field.TypeEnum, Enums: []string{"QUESTIONNAIRE"}, Default: "QUESTIONNAIRE"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// TemplatesTable holds the schema information for the "templates" table.
@@ -4288,7 +4289,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "templates_organizations_templates",
-				Columns:    []*schema.Column{TemplatesColumns[14]},
+				Columns:    []*schema.Column{TemplatesColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4302,7 +4303,7 @@ var (
 			{
 				Name:    "template_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TemplatesColumns[14]},
+				Columns: []*schema.Column{TemplatesColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4310,7 +4311,7 @@ var (
 			{
 				Name:    "template_name_owner_id_template_type",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[9], TemplatesColumns[14], TemplatesColumns[10]},
+				Columns: []*schema.Column{TemplatesColumns[9], TemplatesColumns[15], TemplatesColumns[10]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4337,6 +4338,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "kind", Type: field.TypeEnum, Enums: []string{"QUESTIONNAIRE"}, Default: "QUESTIONNAIRE"},
 	}
 	// TemplateHistoryTable holds the schema information for the "template_history" table.
 	TemplateHistoryTable = &schema.Table{

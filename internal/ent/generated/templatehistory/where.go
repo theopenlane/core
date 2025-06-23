@@ -921,6 +921,36 @@ func UischemaNotNil() predicate.TemplateHistory {
 	return predicate.TemplateHistory(sql.FieldNotNull(FieldUischema))
 }
 
+// KindEQ applies the EQ predicate on the "kind" field.
+func KindEQ(v enums.TemplateKind) predicate.TemplateHistory {
+	vc := v
+	return predicate.TemplateHistory(sql.FieldEQ(FieldKind, vc))
+}
+
+// KindNEQ applies the NEQ predicate on the "kind" field.
+func KindNEQ(v enums.TemplateKind) predicate.TemplateHistory {
+	vc := v
+	return predicate.TemplateHistory(sql.FieldNEQ(FieldKind, vc))
+}
+
+// KindIn applies the In predicate on the "kind" field.
+func KindIn(vs ...enums.TemplateKind) predicate.TemplateHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TemplateHistory(sql.FieldIn(FieldKind, v...))
+}
+
+// KindNotIn applies the NotIn predicate on the "kind" field.
+func KindNotIn(vs ...enums.TemplateKind) predicate.TemplateHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TemplateHistory(sql.FieldNotIn(FieldKind, v...))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.TemplateHistory) predicate.TemplateHistory {
 	return predicate.TemplateHistory(sql.AndPredicates(predicates...))

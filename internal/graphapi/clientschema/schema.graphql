@@ -8559,6 +8559,10 @@ input CreateTemplateInput {
 	the uischema for the template to render in the UI
 	"""
 	uischema: Map
+	"""
+	the template kind
+	"""
+	kind: TemplateTemplateKind
 	ownerID: ID
 	documentIDs: [ID!]
 	fileIDs: [ID!]
@@ -46972,6 +46976,10 @@ type Template implements Node {
 	the uischema for the template to render in the UI
 	"""
 	uischema: Map
+	"""
+	the template kind
+	"""
+	kind: TemplateTemplateKind!
 	owner: Organization
 	documents(
 		"""
@@ -47141,6 +47149,10 @@ type TemplateHistory implements Node {
 	the uischema for the template to render in the UI
 	"""
 	uischema: Map
+	"""
+	the template kind
+	"""
+	kind: TemplateHistoryTemplateKind!
 }
 """
 A connection to a list of items.
@@ -47209,6 +47221,12 @@ enum TemplateHistoryOrderField {
 	updated_at
 	name
 	TEMPLATE_TYPE
+}
+"""
+TemplateHistoryTemplateKind is enum for the field kind
+"""
+enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+	QUESTIONNAIRE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -47395,6 +47413,13 @@ input TemplateHistoryWhereInput {
 	descriptionNotNil: Boolean
 	descriptionEqualFold: String
 	descriptionContainsFold: String
+	"""
+	kind field predicates
+	"""
+	kind: TemplateHistoryTemplateKind
+	kindNEQ: TemplateHistoryTemplateKind
+	kindIn: [TemplateHistoryTemplateKind!]
+	kindNotIn: [TemplateHistoryTemplateKind!]
 }
 """
 Ordering options for Template connections
@@ -47417,6 +47442,12 @@ enum TemplateOrderField {
 	updated_at
 	name
 	TEMPLATE_TYPE
+}
+"""
+TemplateTemplateKind is enum for the field kind
+"""
+enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+	QUESTIONNAIRE
 }
 """
 Return response for updateTemplate mutation
@@ -47576,6 +47607,13 @@ input TemplateWhereInput {
 	descriptionNotNil: Boolean
 	descriptionEqualFold: String
 	descriptionContainsFold: String
+	"""
+	kind field predicates
+	"""
+	kind: TemplateTemplateKind
+	kindNEQ: TemplateTemplateKind
+	kindIn: [TemplateTemplateKind!]
+	kindNotIn: [TemplateTemplateKind!]
 	"""
 	owner edge predicates
 	"""

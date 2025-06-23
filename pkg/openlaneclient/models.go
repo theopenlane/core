@@ -5205,10 +5205,12 @@ type CreateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema    map[string]any `json:"uischema,omitempty"`
-	OwnerID     *string        `json:"ownerID,omitempty"`
-	DocumentIDs []string       `json:"documentIDs,omitempty"`
-	FileIDs     []string       `json:"fileIDs,omitempty"`
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// the template kind
+	Kind        *enums.TemplateKind `json:"kind,omitempty"`
+	OwnerID     *string             `json:"ownerID,omitempty"`
+	DocumentIDs []string            `json:"documentIDs,omitempty"`
+	FileIDs     []string            `json:"fileIDs,omitempty"`
 }
 
 // CreateUserInput is used for create User object.
@@ -23073,7 +23075,9 @@ type Template struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema  map[string]any          `json:"uischema,omitempty"`
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// the template kind
+	Kind      enums.TemplateKind      `json:"kind"`
 	Owner     *Organization           `json:"owner,omitempty"`
 	Documents *DocumentDataConnection `json:"documents"`
 	Files     *FileConnection         `json:"files"`
@@ -23142,6 +23146,8 @@ type TemplateHistory struct {
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
 	Uischema map[string]any `json:"uischema,omitempty"`
+	// the template kind
+	Kind enums.TemplateKind `json:"kind"`
 }
 
 func (TemplateHistory) IsNode() {}
@@ -23329,6 +23335,11 @@ type TemplateHistoryWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// kind field predicates
+	Kind      *enums.TemplateKind  `json:"kind,omitempty"`
+	KindNeq   *enums.TemplateKind  `json:"kindNEQ,omitempty"`
+	KindIn    []enums.TemplateKind `json:"kindIn,omitempty"`
+	KindNotIn []enums.TemplateKind `json:"kindNotIn,omitempty"`
 }
 
 // Ordering options for Template connections
@@ -23472,6 +23483,11 @@ type TemplateWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// kind field predicates
+	Kind      *enums.TemplateKind  `json:"kind,omitempty"`
+	KindNeq   *enums.TemplateKind  `json:"kindNEQ,omitempty"`
+	KindIn    []enums.TemplateKind `json:"kindIn,omitempty"`
+	KindNotIn []enums.TemplateKind `json:"kindNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
