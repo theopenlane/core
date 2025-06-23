@@ -20,7 +20,9 @@ import (
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	features "github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/models"
@@ -310,6 +312,7 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 
 // updateCustomerOrgSub maps the customer fields to the organization subscription and update the organization subscription in the database
 func updateCustomerOrgSub(ctx context.Context, customer *entitlements.OrganizationCustomer, client any) error {
+	entClient := client.(*entgen.Client)
 	// validate the customer data before updating the organization subscription
 	if len(customer.Prices) > 1 {
 		zerolog.Ctx(ctx).Error().Str("organization_id", customer.OrganizationID).Str("customer_id", customer.StripeCustomerID).Int("prices", len(customer.Prices)).Msg("found multiple prices, skipping all updates")
@@ -350,7 +353,25 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 
 	active := customer.Status == string(stripe.SubscriptionStatusActive) || customer.Status == string(stripe.SubscriptionStatusTrialing)
 
-	update := client.(*entgen.Client).OrgSubscription.UpdateOneID(customer.OrganizationSubscriptionID).
+	_, err := entClient.OrgModule.Query().Where(orgmodule.SubscriptionID(customer.OrganizationSubscriptionID)).All(ctx)
+	if err != nil {
+		zerolog.Ctx(ctx).Err(err).Msg("Failed to query organization module")
+
+		return err
+	}
+
+	//	for _, price := range customer.Subscription.Prices {
+	//		module := moduleFromProductName(price.ProductName)
+	//		if module == "" {
+	//			module = price.ProductName
+	//		}
+	//
+	//	if len(orgModule) > 1 {
+	//	for _, module := range orgModule {
+	//		entClient.OrgModule.Update().Where(orgmodule.Module("")).Exec(ctx)
+	//	}}
+
+	update := entClient.OrgSubscription.UpdateOneID(customer.OrganizationSubscriptionID).
 		SetStripeSubscriptionID(customer.StripeSubscriptionID).
 		SetStripeCustomerID(customer.StripeCustomerID).
 		SetStripeSubscriptionStatus(customer.Subscription.Status).
@@ -359,6 +380,12 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 		SetStripeProductTierID(customer.Subscription.ProductID).
 		SetProductPrice(productPrice).
 		SetPaymentMethodAdded(customer.PaymentMethodAdded)
+
+	if err := update.Exec(ctx); err != nil {
+		zerolog.Ctx(ctx).Err(err).Msg("Failed to update organization subscription")
+
+		return err
+	}
 
 	// ensure the correct expiration date is set based on the subscription status
 	// if the subscription is trialing, set the expiration date to the trial end date
@@ -369,7 +396,111 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 		update.SetExpiresAt(expiresAt)
 	}
 
-	return update.Exec(ctx)
+	for _, price := range customer.Subscription.Prices {
+		module := moduleFromProductName(price.ProductName)
+		if module == "" {
+			module = price.ProductName
+		}
+
+		// Update OrgModule if exists, else create
+		orgModule, err := entClient.OrgModule.Query().Where(orgmodule.SubscriptionID(customer.OrganizationSubscriptionID)).Only(ctx)
+		if err == nil {
+			_, err = entClient.OrgModule.UpdateOneID(orgModule.ID).
+				SetModule(module).
+				SetSubscriptionID(customer.OrganizationSubscriptionID).
+				SetOwnerID(customer.OrganizationID).
+				SetStripePriceID(price.ID).
+				SetActive(true).
+				Save(ctx)
+			if err != nil {
+				return err
+			}
+		} else {
+			_, err = entClient.OrgModule.Create().
+				SetModule(module).
+				SetSubscriptionID(customer.OrganizationSubscriptionID).
+				SetOwnerID(customer.OrganizationID).
+				SetStripePriceID(price.ID).
+				SetActive(true).
+				Save(ctx)
+			if err != nil {
+				return err
+			}
+		}
+
+		// Update OrgProduct if exists, else create
+		orgProduct, err := entClient.OrgProduct.Query().Where().Only(ctx)
+		if err == nil {
+			orgProduct, err = entClient.OrgProduct.UpdateOneID(orgProduct.ID).
+				SetModule(module).
+				SetSubscriptionID(customer.OrganizationSubscriptionID).
+				SetOwnerID(customer.OrganizationID).
+				SetStripeProductID(price.ProductID).
+				SetActive(true).
+				Save(ctx)
+			if err != nil {
+				return err
+			}
+		} else {
+			orgProduct, err = entClient.OrgProduct.Create().
+				SetModule(module).
+				SetSubscriptionID(customer.OrganizationSubscriptionID).
+				SetOwnerID(customer.OrganizationID).
+				SetStripeProductID(price.ProductID).
+				SetActive(true).
+				Save(ctx)
+			if err != nil {
+				return err
+			}
+		}
+
+		// Update OrgPrice if exists, else create
+		orgPrice, err := entClient.OrgPrice.Query().Where().Only(ctx)
+		if err == nil {
+			_, err = entClient.OrgPrice.UpdateOneID(orgPrice.ID).
+				SetOrgProductID(orgProduct.ID).
+				SetProductID(orgProduct.ID).
+				SetStripePriceID(price.ID).
+				SetOwnerID(customer.OrganizationID).
+				SetPrice(models.Price{Amount: price.Price, Currency: price.Currency, Interval: price.Interval}).
+				SetActive(true).
+				Save(ctx)
+			if err != nil {
+				return err
+			}
+		} else {
+			_, err = entClient.OrgPrice.Create().
+				SetOrgProductID(orgProduct.ID).
+				SetProductID(orgProduct.ID).
+				SetStripePriceID(price.ID).
+				SetOwnerID(customer.OrganizationID).
+				SetPrice(models.Price{Amount: price.Price, Currency: price.Currency, Interval: price.Interval}).
+				SetActive(true).
+				Save(ctx)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// moduleFromProductName maps a Stripe product name to the catalog module key
+func moduleFromProductName(name string) string {
+	for key, mod := range features.DefaultCatalog.Modules {
+		if mod.DisplayName == name {
+			return key
+		}
+	}
+
+	for key, mod := range features.DefaultCatalog.Addons {
+		if mod.DisplayName == name {
+			return key
+		}
+	}
+
+	return ""
 }
 
 // updateOrgCustomerWithSubscription updates the organization customer with the subscription data
