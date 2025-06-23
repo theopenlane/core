@@ -9082,6 +9082,10 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -9180,6 +9184,12 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(template.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(template.SystemOwned)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -9250,6 +9260,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(template.DeletedBy).
 			SetTags(template.Tags).
 			SetOwnerID(template.OwnerID).
+			SetSystemOwned(template.SystemOwned).
 			SetName(template.Name).
 			SetTemplateType(template.TemplateType).
 			SetDescription(template.Description).

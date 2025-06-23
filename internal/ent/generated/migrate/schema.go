@@ -4272,6 +4272,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "name", Type: field.TypeString},
 		{Name: "template_type", Type: field.TypeEnum, Enums: []string{"ROOTTEMPLATE", "DOCUMENT"}, Default: "DOCUMENT"},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -4287,7 +4288,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "templates_organizations_templates",
-				Columns:    []*schema.Column{TemplatesColumns[13]},
+				Columns:    []*schema.Column{TemplatesColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4301,7 +4302,7 @@ var (
 			{
 				Name:    "template_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TemplatesColumns[13]},
+				Columns: []*schema.Column{TemplatesColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4309,7 +4310,7 @@ var (
 			{
 				Name:    "template_name_owner_id_template_type",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[8], TemplatesColumns[13], TemplatesColumns[9]},
+				Columns: []*schema.Column{TemplatesColumns[9], TemplatesColumns[14], TemplatesColumns[10]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4330,6 +4331,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "name", Type: field.TypeString},
 		{Name: "template_type", Type: field.TypeEnum, Enums: []string{"ROOTTEMPLATE", "DOCUMENT"}, Default: "DOCUMENT"},
 		{Name: "description", Type: field.TypeString, Nullable: true},

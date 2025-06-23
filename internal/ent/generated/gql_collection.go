@@ -37441,6 +37441,11 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, template.FieldOwnerID)
 				fieldSeen[template.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[template.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, template.FieldSystemOwned)
+				fieldSeen[template.FieldSystemOwned] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[template.FieldName]; !ok {
 				selectedFields = append(selectedFields, template.FieldName)
@@ -37600,6 +37605,11 @@ func (th *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[templatehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldOwnerID)
 				fieldSeen[templatehistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[templatehistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldSystemOwned)
+				fieldSeen[templatehistory.FieldSystemOwned] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[templatehistory.FieldName]; !ok {

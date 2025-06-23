@@ -36,6 +36,8 @@ type Template struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
 	// the name of the template
 	Name string `json:"name,omitempty"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -106,6 +108,8 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case template.FieldTags, template.FieldJsonconfig, template.FieldUischema:
 			values[i] = new([]byte)
+		case template.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
 		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldDeletedBy, template.FieldOwnerID, template.FieldName, template.FieldTemplateType, template.FieldDescription:
 			values[i] = new(sql.NullString)
 		case template.FieldCreatedAt, template.FieldUpdatedAt, template.FieldDeletedAt:
@@ -180,6 +184,12 @@ func (t *Template) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				t.OwnerID = value.String
+			}
+		case template.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				t.SystemOwned = value.Bool
 			}
 		case template.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -289,6 +299,9 @@ func (t *Template) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(t.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", t.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(t.Name)

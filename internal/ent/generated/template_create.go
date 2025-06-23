@@ -128,6 +128,20 @@ func (tc *TemplateCreate) SetNillableOwnerID(s *string) *TemplateCreate {
 	return tc
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (tc *TemplateCreate) SetSystemOwned(b bool) *TemplateCreate {
+	tc.mutation.SetSystemOwned(b)
+	return tc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (tc *TemplateCreate) SetNillableSystemOwned(b *bool) *TemplateCreate {
+	if b != nil {
+		tc.SetSystemOwned(*b)
+	}
+	return tc
+}
+
 // SetName sets the "name" field.
 func (tc *TemplateCreate) SetName(s string) *TemplateCreate {
 	tc.mutation.SetName(s)
@@ -278,6 +292,10 @@ func (tc *TemplateCreate) defaults() error {
 		v := template.DefaultTags
 		tc.mutation.SetTags(v)
 	}
+	if _, ok := tc.mutation.SystemOwned(); !ok {
+		v := template.DefaultSystemOwned
+		tc.mutation.SetSystemOwned(v)
+	}
 	if _, ok := tc.mutation.TemplateType(); !ok {
 		v := template.DefaultTemplateType
 		tc.mutation.SetTemplateType(v)
@@ -381,6 +399,10 @@ func (tc *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Tags(); ok {
 		_spec.SetField(template.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := tc.mutation.SystemOwned(); ok {
+		_spec.SetField(template.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
 	}
 	if value, ok := tc.mutation.Name(); ok {
 		_spec.SetField(template.FieldName, field.TypeString, value)

@@ -421,6 +421,9 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.TagsCleared() {
 		_spec.ClearField(template.FieldTags, field.TypeJSON)
 	}
+	if tu.mutation.SystemOwnedCleared() {
+		_spec.ClearField(template.FieldSystemOwned, field.TypeBool)
+	}
 	if value, ok := tu.mutation.Name(); ok {
 		_spec.SetField(template.FieldName, field.TypeString, value)
 	}
@@ -1007,6 +1010,9 @@ func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err
 	}
 	if tuo.mutation.TagsCleared() {
 		_spec.ClearField(template.FieldTags, field.TypeJSON)
+	}
+	if tuo.mutation.SystemOwnedCleared() {
+		_spec.ClearField(template.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := tuo.mutation.Name(); ok {
 		_spec.SetField(template.FieldName, field.TypeString, value)

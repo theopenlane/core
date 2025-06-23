@@ -69322,6 +69322,12 @@ type TemplateWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -69669,6 +69675,18 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, template.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, template.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, template.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, template.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, template.SystemOwnedNotNil())
+	}
 	if i.Name != nil {
 		predicates = append(predicates, template.NameEQ(*i.Name))
 	}
@@ -69956,6 +69974,12 @@ type TemplateHistoryWhereInput struct {
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
 
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
@@ -70372,6 +70396,18 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 	}
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, templatehistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, templatehistory.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, templatehistory.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, templatehistory.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, templatehistory.SystemOwnedNotNil())
 	}
 	if i.Name != nil {
 		predicates = append(predicates, templatehistory.NameEQ(*i.Name))

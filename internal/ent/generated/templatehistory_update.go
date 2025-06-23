@@ -328,6 +328,9 @@ func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if thu.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)
 	}
+	if thu.mutation.SystemOwnedCleared() {
+		_spec.ClearField(templatehistory.FieldSystemOwned, field.TypeBool)
+	}
 	if value, ok := thu.mutation.Name(); ok {
 		_spec.SetField(templatehistory.FieldName, field.TypeString, value)
 	}
@@ -697,6 +700,9 @@ func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templ
 	}
 	if thuo.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)
+	}
+	if thuo.mutation.SystemOwnedCleared() {
+		_spec.ClearField(templatehistory.FieldSystemOwned, field.TypeBool)
 	}
 	if value, ok := thuo.mutation.Name(); ok {
 		_spec.SetField(templatehistory.FieldName, field.TypeString, value)

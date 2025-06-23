@@ -3998,6 +3998,7 @@ type ComplexityRoot struct {
 		Name         func(childComplexity int) int
 		Owner        func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
+		SystemOwned  func(childComplexity int) int
 		Tags         func(childComplexity int) int
 		TemplateType func(childComplexity int) int
 		Uischema     func(childComplexity int) int
@@ -4039,6 +4040,7 @@ type ComplexityRoot struct {
 		Operation    func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
 		Ref          func(childComplexity int) int
+		SystemOwned  func(childComplexity int) int
 		Tags         func(childComplexity int) int
 		TemplateType func(childComplexity int) int
 		Uischema     func(childComplexity int) int
@@ -26550,6 +26552,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Template.OwnerID(childComplexity), true
 
+	case "Template.systemOwned":
+		if e.complexity.Template.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Template.SystemOwned(childComplexity), true
+
 	case "Template.tags":
 		if e.complexity.Template.Tags == nil {
 			break
@@ -26710,6 +26719,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TemplateHistory.Ref(childComplexity), true
+
+	case "TemplateHistory.systemOwned":
+		if e.complexity.TemplateHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.TemplateHistory.SystemOwned(childComplexity), true
 
 	case "TemplateHistory.tags":
 		if e.complexity.TemplateHistory.Tags == nil {
@@ -70487,6 +70503,10 @@ type Template implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
   the name of the template
   """
   name: String!
@@ -70624,6 +70644,10 @@ type TemplateHistory implements Node {
   the organization id that owns the object
   """
   ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
   """
   the name of the template
   """
@@ -70851,6 +70875,13 @@ input TemplateHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
   name field predicates
   """
   name: String
@@ -71015,6 +71046,13 @@ input TemplateWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
   """
   name field predicates
   """

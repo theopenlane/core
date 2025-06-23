@@ -23062,6 +23062,8 @@ type Template struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// the name of the template
 	Name string `json:"name"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -23128,6 +23130,8 @@ type TemplateHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// the name of the template
 	Name string `json:"name"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -23285,6 +23289,11 @@ type TemplateHistoryWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -23423,6 +23432,11 @@ type TemplateWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`

@@ -2685,6 +2685,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldDeletedBy:    {Type: field.TypeString, Column: template.FieldDeletedBy},
 			template.FieldTags:         {Type: field.TypeJSON, Column: template.FieldTags},
 			template.FieldOwnerID:      {Type: field.TypeString, Column: template.FieldOwnerID},
+			template.FieldSystemOwned:  {Type: field.TypeBool, Column: template.FieldSystemOwned},
 			template.FieldName:         {Type: field.TypeString, Column: template.FieldName},
 			template.FieldTemplateType: {Type: field.TypeEnum, Column: template.FieldTemplateType},
 			template.FieldDescription:  {Type: field.TypeString, Column: template.FieldDescription},
@@ -2714,6 +2715,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldDeletedBy:    {Type: field.TypeString, Column: templatehistory.FieldDeletedBy},
 			templatehistory.FieldTags:         {Type: field.TypeJSON, Column: templatehistory.FieldTags},
 			templatehistory.FieldOwnerID:      {Type: field.TypeString, Column: templatehistory.FieldOwnerID},
+			templatehistory.FieldSystemOwned:  {Type: field.TypeBool, Column: templatehistory.FieldSystemOwned},
 			templatehistory.FieldName:         {Type: field.TypeString, Column: templatehistory.FieldName},
 			templatehistory.FieldTemplateType: {Type: field.TypeEnum, Column: templatehistory.FieldTemplateType},
 			templatehistory.FieldDescription:  {Type: field.TypeString, Column: templatehistory.FieldDescription},
@@ -23154,6 +23156,11 @@ func (f *TemplateFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(template.FieldOwnerID))
 }
 
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *TemplateFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(template.FieldSystemOwned))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *TemplateFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(template.FieldName))
@@ -23314,6 +23321,11 @@ func (f *TemplateHistoryFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *TemplateHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(templatehistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *TemplateHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(templatehistory.FieldSystemOwned))
 }
 
 // WhereName applies the entql string predicate on the name field.

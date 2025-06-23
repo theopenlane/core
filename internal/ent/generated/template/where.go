@@ -103,6 +103,11 @@ func OwnerID(v string) predicate.Template {
 	return predicate.Template(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldSystemOwned, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Template {
 	return predicate.Template(sql.FieldEQ(FieldName, v))
@@ -571,6 +576,26 @@ func OwnerIDEqualFold(v string) predicate.Template {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.Template {
 	return predicate.Template(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.Template {
+	return predicate.Template(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.Template {
+	return predicate.Template(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.Template {
+	return predicate.Template(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.Template {
+	return predicate.Template(sql.FieldNotNull(FieldSystemOwned))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

@@ -2825,6 +2825,9 @@ func (th *TemplateHistory) changes(new *TemplateHistory) []Change {
 	if !reflect.DeepEqual(th.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(templatehistory.FieldOwnerID, th.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(th.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(templatehistory.FieldSystemOwned, th.SystemOwned, new.SystemOwned))
+	}
 	if !reflect.DeepEqual(th.Name, new.Name) {
 		changes = append(changes, NewChange(templatehistory.FieldName, th.Name, new.Name))
 	}

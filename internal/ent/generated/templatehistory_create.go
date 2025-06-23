@@ -160,6 +160,20 @@ func (thc *TemplateHistoryCreate) SetNillableOwnerID(s *string) *TemplateHistory
 	return thc
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (thc *TemplateHistoryCreate) SetSystemOwned(b bool) *TemplateHistoryCreate {
+	thc.mutation.SetSystemOwned(b)
+	return thc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (thc *TemplateHistoryCreate) SetNillableSystemOwned(b *bool) *TemplateHistoryCreate {
+	if b != nil {
+		thc.SetSystemOwned(*b)
+	}
+	return thc
+}
+
 // SetName sets the "name" field.
 func (thc *TemplateHistoryCreate) SetName(s string) *TemplateHistoryCreate {
 	thc.mutation.SetName(s)
@@ -270,6 +284,10 @@ func (thc *TemplateHistoryCreate) defaults() {
 	if _, ok := thc.mutation.Tags(); !ok {
 		v := templatehistory.DefaultTags
 		thc.mutation.SetTags(v)
+	}
+	if _, ok := thc.mutation.SystemOwned(); !ok {
+		v := templatehistory.DefaultSystemOwned
+		thc.mutation.SetSystemOwned(v)
 	}
 	if _, ok := thc.mutation.TemplateType(); !ok {
 		v := templatehistory.DefaultTemplateType
@@ -387,6 +405,10 @@ func (thc *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Crea
 	if value, ok := thc.mutation.OwnerID(); ok {
 		_spec.SetField(templatehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := thc.mutation.SystemOwned(); ok {
+		_spec.SetField(templatehistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
 	}
 	if value, ok := thc.mutation.Name(); ok {
 		_spec.SetField(templatehistory.FieldName, field.TypeString, value)

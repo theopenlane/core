@@ -42,6 +42,8 @@ type TemplateHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
 	// the name of the template
 	Name string `json:"name,omitempty"`
 	// the type of the template, either a provided template or an implementation (document)
@@ -64,6 +66,8 @@ func (*TemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case templatehistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case templatehistory.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
 		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldCreatedBy, templatehistory.FieldUpdatedBy, templatehistory.FieldDeletedBy, templatehistory.FieldOwnerID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription:
 			values[i] = new(sql.NullString)
 		case templatehistory.FieldHistoryTime, templatehistory.FieldCreatedAt, templatehistory.FieldUpdatedAt, templatehistory.FieldDeletedAt:
@@ -156,6 +160,12 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				th.OwnerID = value.String
+			}
+		case templatehistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				th.SystemOwned = value.Bool
 			}
 		case templatehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -259,6 +269,9 @@ func (th *TemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(th.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", th.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(th.Name)

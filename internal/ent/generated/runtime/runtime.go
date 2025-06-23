@@ -4917,12 +4917,15 @@ func init() {
 	templateMixinHooks0 := templateMixin[0].Hooks()
 	templateMixinHooks1 := templateMixin[1].Hooks()
 	templateMixinHooks5 := templateMixin[5].Hooks()
+	templateMixinHooks6 := templateMixin[6].Hooks()
 
 	template.Hooks[1] = templateMixinHooks0[0]
 
 	template.Hooks[2] = templateMixinHooks1[0]
 
 	template.Hooks[3] = templateMixinHooks5[0]
+
+	template.Hooks[4] = templateMixinHooks6[0]
 	templateMixinInters1 := templateMixin[1].Interceptors()
 	templateMixinInters5 := templateMixin[5].Interceptors()
 	template.Interceptors[0] = templateMixinInters1[0]
@@ -4935,6 +4938,8 @@ func init() {
 	_ = templateMixinFields3
 	templateMixinFields5 := templateMixin[5].Fields()
 	_ = templateMixinFields5
+	templateMixinFields6 := templateMixin[6].Fields()
+	_ = templateMixinFields6
 	templateFields := schema.Template{}.Fields()
 	_ = templateFields
 	// templateDescCreatedAt is the schema descriptor for created_at field.
@@ -4955,6 +4960,10 @@ func init() {
 	templateDescOwnerID := templateMixinFields5[0].Descriptor()
 	// template.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	template.OwnerIDValidator = templateDescOwnerID.Validators[0].(func(string) error)
+	// templateDescSystemOwned is the schema descriptor for system_owned field.
+	templateDescSystemOwned := templateMixinFields6[0].Descriptor()
+	// template.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	template.DefaultSystemOwned = templateDescSystemOwned.Default.(bool)
 	// templateDescName is the schema descriptor for name field.
 	templateDescName := templateFields[0].Descriptor()
 	// template.NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -4985,6 +4994,10 @@ func init() {
 	templatehistoryDescTags := templatehistoryFields[10].Descriptor()
 	// templatehistory.DefaultTags holds the default value on creation for the tags field.
 	templatehistory.DefaultTags = templatehistoryDescTags.Default.([]string)
+	// templatehistoryDescSystemOwned is the schema descriptor for system_owned field.
+	templatehistoryDescSystemOwned := templatehistoryFields[12].Descriptor()
+	// templatehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	templatehistory.DefaultSystemOwned = templatehistoryDescSystemOwned.Default.(bool)
 	// templatehistoryDescID is the schema descriptor for id field.
 	templatehistoryDescID := templatehistoryFields[9].Descriptor()
 	// templatehistory.DefaultID holds the default value on creation for the id field.
