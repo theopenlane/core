@@ -16,7 +16,7 @@ type Config struct {
 	// Header specifies the header name to look for the CSRF token.
 	Header string `json:"header" koanf:"header" default:"X-CSRF-Token"`
 	// Cookie specifies the cookie name used to store the CSRF token.
-	Cookie string `json:"cookie" koanf:"cookie" default:"csrf_token"`
+	Cookie string `json:"cookie" koanf:"cookie" default:"ol.csrf-token"`
 	// Secure sets the Secure flag on the CSRF cookie.
 	Secure bool `json:"secure" koanf:"secure" default:"true"`
 	// SameSite configures the SameSite attribute on the CSRF cookie. Valid
@@ -29,7 +29,7 @@ func NewConfig() *Config {
 	return &Config{
 		Enabled:  false,
 		Header:   "X-CSRF-Token",
-		Cookie:   "csrf_token",
+		Cookie:   "ol.csrf-token",
 		Secure:   true,
 		SameSite: "Lax",
 	}

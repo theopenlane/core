@@ -8,7 +8,7 @@ import (
 
 const (
 	csrfHeader = "X-CSRF-Token"
-	csrfCookie = "csrf_token"
+	csrfCookie = "ol.csrf-token" // this should match the cookie name in the server config
 	csrfPath   = "/livez"
 )
 
