@@ -149,7 +149,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context) error {
 }
 
 // unmarshalEventData is used to unmarshal event data from a stripe.Event object into a specific type T
-func unmarshalEventData[T interface{}](e *stripe.Event) (*T, error) {
+func unmarshalEventData[T any](e *stripe.Event) (*T, error) {
 	var data T
 
 	err := json.Unmarshal(e.Data.Raw, &data)
@@ -245,12 +245,7 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return ErrSubscriberNotFound
 	}
 
-	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
-	if err != nil {
-		return err
-	}
-
-	ownerID, err := h.syncOrgSubscriptionWithStripe(ctx, s, customer)
+	ownerID, err := h.syncOrgSubscriptionWithStripe(ctx, s)
 	if err != nil {
 		return
 	}
@@ -271,12 +266,7 @@ func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subsc
 		return ErrSubscriberNotFound
 	}
 
-	customer, err := h.Entitlements.GetCustomerByStripeID(ctx, s.Customer.ID)
-	if err != nil {
-		return err
-	}
-
-	_, err = h.syncOrgSubscriptionWithStripe(ctx, s, customer)
+	_, err := h.syncOrgSubscriptionWithStripe(ctx, s)
 	if err != nil {
 		return err
 	}
@@ -319,15 +309,16 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 
 // syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe and
 // returns the owner (organization) ID of the OrgSubscription to be used for further operations if needed
-func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
+func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription) (*string, error) {
 	orgSubscription, err := getOrgSubscription(ctx, subscription)
 	if err != nil {
 		return nil, err
 	}
 
-	stripeOrgSubscription := mapStripeToOrgSubscription(subscription, entitlements.MapStripeCustomer(customer))
+	stripeOrgSubscription := mapStripeToOrgSubscription(subscription)
 
 	changed := false
+
 	mutation := transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSubscription)
 
 	if orgSubscription.StripeSubscriptionStatus != stripeOrgSubscription.StripeSubscriptionStatus {
@@ -403,7 +394,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 }
 
 // mapStripeToOrgSubscription maps a stripe.Subscription and OrganizationCustomer to an ent.OrgSubscription
-func mapStripeToOrgSubscription(subscription *stripe.Subscription, customer *entitlements.OrganizationCustomer) *ent.OrgSubscription {
+func mapStripeToOrgSubscription(subscription *stripe.Subscription) *ent.OrgSubscription {
 	if subscription == nil {
 		return nil
 	}

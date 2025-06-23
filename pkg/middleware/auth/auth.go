@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"strings"
 	"time"
 
@@ -19,6 +20,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	api "github.com/theopenlane/core/pkg/models"
@@ -73,9 +75,11 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 			reqCtx := c.Request().Context()
 
+			method := c.Request().Method
+
 			switch getTokenType(bearerToken) {
 			case auth.PATAuthentication, auth.APITokenAuthentication:
-				au, id, err = checkToken(reqCtx, conf, bearerToken)
+				au, id, err = checkToken(reqCtx, conf, bearerToken, method)
 				if err != nil {
 					return unauthorized(c, err)
 				}
@@ -219,7 +223,7 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 // checkToken checks the bearer authorization token against the database to see if the provided
 // token is an active personal access token or api token.
 // If the token is valid, the authenticated user is returned
-func checkToken(ctx context.Context, conf *Options, token string) (*auth.AuthenticatedUser, string, error) {
+func checkToken(ctx context.Context, conf *Options, token, method string) (*auth.AuthenticatedUser, string, error) {
 	// allow check to bypass privacy rules
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -230,7 +234,7 @@ func checkToken(ctx context.Context, conf *Options, token string) (*auth.Authent
 	}
 
 	// check if the token is an API token
-	au, id, err = isValidAPIToken(ctx, *conf.DBClient, token)
+	au, id, err = isValidAPIToken(ctx, *conf.DBClient, token, method)
 	if err == nil {
 		return au, id, nil
 	}
@@ -278,7 +282,7 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token 
 	}, pat.ID, nil
 }
 
-func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
+func isValidAPIToken(ctx context.Context, dbClient ent.Client, token, method string) (*auth.AuthenticatedUser, string, error) {
 	// query for the token before the user is authorized
 	// allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	t, err := dbClient.APIToken.Query().Where(apitoken.Token(token)).
@@ -290,6 +294,27 @@ func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*a
 	// check if the token has expired
 	if t.ExpiresAt != nil && t.ExpiresAt.Before(time.Now()) {
 		return nil, "", rout.ErrExpiredCredentials
+	}
+
+	// verify the organization still has an active base module
+	ok, err := dbClient.OrgModule.Query().
+		Where(
+			orgmodule.OwnerID(t.OwnerID),
+			orgmodule.Module("base"),
+			orgmodule.Active(true),
+		).
+		Exist(ctx)
+	if err != nil {
+		return nil, "", err
+	}
+	if !ok {
+		return nil, "", rout.ErrInvalidCredentials
+	}
+
+	// check that the token scopes allow the request method
+	requiredScope := scopeForMethod(method)
+	if requiredScope != "" && !slices.Contains(t.Scopes, requiredScope) {
+		return nil, "", rout.ErrPermissionDenied
 	}
 
 	return &auth.AuthenticatedUser{
@@ -323,4 +348,18 @@ func unauthorized(c echo.Context, err error) error {
 	}
 
 	return err
+}
+
+// scopeForMethod returns the required token scope for the http method.
+func scopeForMethod(method string) string {
+	switch method {
+	case http.MethodGet, http.MethodHead, http.MethodOptions:
+		return "read"
+	case http.MethodDelete:
+		return "delete"
+	case http.MethodPost, http.MethodPut, http.MethodPatch:
+		return "write"
+	}
+
+	return ""
 }
