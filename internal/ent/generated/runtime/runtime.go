@@ -94,6 +94,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
@@ -5002,6 +5003,70 @@ func init() {
 	templatehistoryDescID := templatehistoryFields[9].Descriptor()
 	// templatehistory.DefaultID holds the default value on creation for the id field.
 	templatehistory.DefaultID = templatehistoryDescID.Default.(func() string)
+	templaterecipientMixin := schema.TemplateRecipient{}.Mixin()
+	templaterecipient.Policy = privacy.NewPolicies(schema.TemplateRecipient{})
+	templaterecipient.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := templaterecipient.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	templaterecipientMixinHooks0 := templaterecipientMixin[0].Hooks()
+	templaterecipientMixinHooks2 := templaterecipientMixin[2].Hooks()
+
+	templaterecipient.Hooks[1] = templaterecipientMixinHooks0[0]
+
+	templaterecipient.Hooks[2] = templaterecipientMixinHooks2[0]
+	templaterecipientMixinInters2 := templaterecipientMixin[2].Interceptors()
+	templaterecipient.Interceptors[0] = templaterecipientMixinInters2[0]
+	templaterecipientMixinFields0 := templaterecipientMixin[0].Fields()
+	_ = templaterecipientMixinFields0
+	templaterecipientMixinFields1 := templaterecipientMixin[1].Fields()
+	_ = templaterecipientMixinFields1
+	templaterecipientFields := schema.TemplateRecipient{}.Fields()
+	_ = templaterecipientFields
+	// templaterecipientDescCreatedAt is the schema descriptor for created_at field.
+	templaterecipientDescCreatedAt := templaterecipientMixinFields0[0].Descriptor()
+	// templaterecipient.DefaultCreatedAt holds the default value on creation for the created_at field.
+	templaterecipient.DefaultCreatedAt = templaterecipientDescCreatedAt.Default.(func() time.Time)
+	// templaterecipientDescUpdatedAt is the schema descriptor for updated_at field.
+	templaterecipientDescUpdatedAt := templaterecipientMixinFields0[1].Descriptor()
+	// templaterecipient.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	templaterecipient.DefaultUpdatedAt = templaterecipientDescUpdatedAt.Default.(func() time.Time)
+	// templaterecipient.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	templaterecipient.UpdateDefaultUpdatedAt = templaterecipientDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// templaterecipientDescToken is the schema descriptor for token field.
+	templaterecipientDescToken := templaterecipientFields[0].Descriptor()
+	// templaterecipient.TokenValidator is a validator for the "token" field. It is called by the builders before save.
+	templaterecipient.TokenValidator = templaterecipientDescToken.Validators[0].(func(string) error)
+	// templaterecipientDescEmail is the schema descriptor for email field.
+	templaterecipientDescEmail := templaterecipientFields[2].Descriptor()
+	// templaterecipient.EmailValidator is a validator for the "email" field. It is called by the builders before save.
+	templaterecipient.EmailValidator = func() func(string) error {
+		validators := templaterecipientDescEmail.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(email string) error {
+			for _, fn := range fns {
+				if err := fn(email); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// templaterecipientDescSendAttempts is the schema descriptor for send_attempts field.
+	templaterecipientDescSendAttempts := templaterecipientFields[5].Descriptor()
+	// templaterecipient.DefaultSendAttempts holds the default value on creation for the send_attempts field.
+	templaterecipient.DefaultSendAttempts = templaterecipientDescSendAttempts.Default.(int)
+	// templaterecipientDescID is the schema descriptor for id field.
+	templaterecipientDescID := templaterecipientMixinFields1[0].Descriptor()
+	// templaterecipient.DefaultID holds the default value on creation for the id field.
+	templaterecipient.DefaultID = templaterecipientDescID.Default.(func() string)
 	userMixin := schema.User{}.Mixin()
 	user.Policy = privacy.NewPolicies(schema.User{})
 	user.Hooks[0] = func(next ent.Mutator) ent.Mutator {

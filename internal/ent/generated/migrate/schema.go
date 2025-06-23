@@ -4353,6 +4353,59 @@ var (
 			},
 		},
 	}
+	// TemplateRecipientsColumns holds the columns for the "template_recipients" table.
+	TemplateRecipientsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "token", Type: field.TypeString, Unique: true},
+		{Name: "ttl", Type: field.TypeTime},
+		{Name: "email", Type: field.TypeString},
+		{Name: "secret", Type: field.TypeBytes},
+		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "EXPIRED", "USED", "REVOKED"}, Default: "ACTIVE"},
+		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
+		{Name: "template_id", Type: field.TypeString},
+	}
+	// TemplateRecipientsTable holds the schema information for the "template_recipients" table.
+	TemplateRecipientsTable = &schema.Table{
+		Name:       "template_recipients",
+		Columns:    TemplateRecipientsColumns,
+		PrimaryKey: []*schema.Column{TemplateRecipientsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "template_recipients_document_data_document",
+				Columns:    []*schema.Column{TemplateRecipientsColumns[13]},
+				RefColumns: []*schema.Column{DocumentDataColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "template_recipients_templates_template",
+				Columns:    []*schema.Column{TemplateRecipientsColumns[14]},
+				RefColumns: []*schema.Column{TemplatesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "templaterecipient_id",
+				Unique:  true,
+				Columns: []*schema.Column{TemplateRecipientsColumns[0]},
+			},
+			{
+				Name:    "templaterecipient_token",
+				Unique:  true,
+				Columns: []*schema.Column{TemplateRecipientsColumns[7]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -7089,6 +7142,7 @@ var (
 		TaskHistoryTable,
 		TemplatesTable,
 		TemplateHistoryTable,
+		TemplateRecipientsTable,
 		UsersTable,
 		UserHistoryTable,
 		UserSettingsTable,
@@ -7418,6 +7472,8 @@ func init() {
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
 	}
+	TemplateRecipientsTable.ForeignKeys[0].RefTable = DocumentDataTable
+	TemplateRecipientsTable.ForeignKeys[1].RefTable = TemplatesTable
 	UsersTable.ForeignKeys[0].RefTable = FilesTable
 	UserHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_history",

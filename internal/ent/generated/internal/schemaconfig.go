@@ -189,6 +189,7 @@ type SchemaConfig struct {
 	Template                           string // Template table.
 	TemplateFiles                      string // Template-files->File table.
 	TemplateHistory                    string // TemplateHistory table.
+	TemplateRecipient                  string // TemplateRecipient table.
 	User                               string // User table.
 	UserFiles                          string // User-files->File table.
 	UserEvents                         string // User-events->Event table.

@@ -107,6 +107,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
@@ -313,6 +314,8 @@ type Client struct {
 	Template *TemplateClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
 	TemplateHistory *TemplateHistoryClient
+	// TemplateRecipient is the client for interacting with the TemplateRecipient builders.
+	TemplateRecipient *TemplateRecipientClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// UserHistory is the client for interacting with the UserHistory builders.
@@ -432,6 +435,7 @@ func (c *Client) init() {
 	c.TaskHistory = NewTaskHistoryClient(c.config)
 	c.Template = NewTemplateClient(c.config)
 	c.TemplateHistory = NewTemplateHistoryClient(c.config)
+	c.TemplateRecipient = NewTemplateRecipientClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.UserHistory = NewUserHistoryClient(c.config)
 	c.UserSetting = NewUserSettingClient(c.config)
@@ -703,6 +707,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TaskHistory:                  NewTaskHistoryClient(cfg),
 		Template:                     NewTemplateClient(cfg),
 		TemplateHistory:              NewTemplateHistoryClient(cfg),
+		TemplateRecipient:            NewTemplateRecipientClient(cfg),
 		User:                         NewUserClient(cfg),
 		UserHistory:                  NewUserHistoryClient(cfg),
 		UserSetting:                  NewUserSettingClient(cfg),
@@ -816,6 +821,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TaskHistory:                  NewTaskHistoryClient(cfg),
 		Template:                     NewTemplateClient(cfg),
 		TemplateHistory:              NewTemplateHistoryClient(cfg),
+		TemplateRecipient:            NewTemplateRecipientClient(cfg),
 		User:                         NewUserClient(cfg),
 		UserHistory:                  NewUserHistoryClient(cfg),
 		UserSetting:                  NewUserSettingClient(cfg),
@@ -872,8 +878,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.Template, c.TemplateHistory, c.TemplateRecipient, c.User, c.UserHistory,
+		c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -905,8 +911,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.Template, c.TemplateHistory, c.TemplateRecipient, c.User, c.UserHistory,
+		c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1165,6 +1171,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Template.mutate(ctx, m)
 	case *TemplateHistoryMutation:
 		return c.TemplateHistory.mutate(ctx, m)
+	case *TemplateRecipientMutation:
+		return c.TemplateRecipient.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	case *UserHistoryMutation:
@@ -19977,6 +19985,179 @@ func (c *TemplateHistoryClient) mutate(ctx context.Context, m *TemplateHistoryMu
 	}
 }
 
+// TemplateRecipientClient is a client for the TemplateRecipient schema.
+type TemplateRecipientClient struct {
+	config
+}
+
+// NewTemplateRecipientClient returns a client for the TemplateRecipient from the given config.
+func NewTemplateRecipientClient(c config) *TemplateRecipientClient {
+	return &TemplateRecipientClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `templaterecipient.Hooks(f(g(h())))`.
+func (c *TemplateRecipientClient) Use(hooks ...Hook) {
+	c.hooks.TemplateRecipient = append(c.hooks.TemplateRecipient, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `templaterecipient.Intercept(f(g(h())))`.
+func (c *TemplateRecipientClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TemplateRecipient = append(c.inters.TemplateRecipient, interceptors...)
+}
+
+// Create returns a builder for creating a TemplateRecipient entity.
+func (c *TemplateRecipientClient) Create() *TemplateRecipientCreate {
+	mutation := newTemplateRecipientMutation(c.config, OpCreate)
+	return &TemplateRecipientCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TemplateRecipient entities.
+func (c *TemplateRecipientClient) CreateBulk(builders ...*TemplateRecipientCreate) *TemplateRecipientCreateBulk {
+	return &TemplateRecipientCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TemplateRecipientClient) MapCreateBulk(slice any, setFunc func(*TemplateRecipientCreate, int)) *TemplateRecipientCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TemplateRecipientCreateBulk{err: fmt.Errorf("calling to TemplateRecipientClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TemplateRecipientCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TemplateRecipientCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TemplateRecipient.
+func (c *TemplateRecipientClient) Update() *TemplateRecipientUpdate {
+	mutation := newTemplateRecipientMutation(c.config, OpUpdate)
+	return &TemplateRecipientUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TemplateRecipientClient) UpdateOne(tr *TemplateRecipient) *TemplateRecipientUpdateOne {
+	mutation := newTemplateRecipientMutation(c.config, OpUpdateOne, withTemplateRecipient(tr))
+	return &TemplateRecipientUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TemplateRecipientClient) UpdateOneID(id string) *TemplateRecipientUpdateOne {
+	mutation := newTemplateRecipientMutation(c.config, OpUpdateOne, withTemplateRecipientID(id))
+	return &TemplateRecipientUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TemplateRecipient.
+func (c *TemplateRecipientClient) Delete() *TemplateRecipientDelete {
+	mutation := newTemplateRecipientMutation(c.config, OpDelete)
+	return &TemplateRecipientDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TemplateRecipientClient) DeleteOne(tr *TemplateRecipient) *TemplateRecipientDeleteOne {
+	return c.DeleteOneID(tr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TemplateRecipientClient) DeleteOneID(id string) *TemplateRecipientDeleteOne {
+	builder := c.Delete().Where(templaterecipient.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TemplateRecipientDeleteOne{builder}
+}
+
+// Query returns a query builder for TemplateRecipient.
+func (c *TemplateRecipientClient) Query() *TemplateRecipientQuery {
+	return &TemplateRecipientQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTemplateRecipient},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TemplateRecipient entity by its id.
+func (c *TemplateRecipientClient) Get(ctx context.Context, id string) (*TemplateRecipient, error) {
+	return c.Query().Where(templaterecipient.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TemplateRecipientClient) GetX(ctx context.Context, id string) *TemplateRecipient {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryDocument queries the document edge of a TemplateRecipient.
+func (c *TemplateRecipientClient) QueryDocument(tr *TemplateRecipient) *DocumentDataQuery {
+	query := (&DocumentDataClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(templaterecipient.Table, templaterecipient.FieldID, id),
+			sqlgraph.To(documentdata.Table, documentdata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, templaterecipient.DocumentTable, templaterecipient.DocumentColumn),
+		)
+		schemaConfig := tr.schemaConfig
+		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.TemplateRecipient
+		fromV = sqlgraph.Neighbors(tr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplate queries the template edge of a TemplateRecipient.
+func (c *TemplateRecipientClient) QueryTemplate(tr *TemplateRecipient) *TemplateQuery {
+	query := (&TemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(templaterecipient.Table, templaterecipient.FieldID, id),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, templaterecipient.TemplateTable, templaterecipient.TemplateColumn),
+		)
+		schemaConfig := tr.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.TemplateRecipient
+		fromV = sqlgraph.Neighbors(tr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TemplateRecipientClient) Hooks() []Hook {
+	hooks := c.hooks.TemplateRecipient
+	return append(hooks[:len(hooks):len(hooks)], templaterecipient.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TemplateRecipientClient) Interceptors() []Interceptor {
+	inters := c.inters.TemplateRecipient
+	return append(inters[:len(inters):len(inters)], templaterecipient.Interceptors[:]...)
+}
+
+func (c *TemplateRecipientClient) mutate(ctx context.Context, m *TemplateRecipientMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TemplateRecipientCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TemplateRecipientUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TemplateRecipientUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TemplateRecipientDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TemplateRecipient mutation op: %q", m.Op())
+	}
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -21109,8 +21290,9 @@ type (
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
 		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
 		ScheduledJobRun, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
-		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory,
+		TemplateRecipient, User, UserHistory, UserSetting, UserSettingHistory,
+		Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
@@ -21132,8 +21314,9 @@ type (
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
 		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
 		ScheduledJobRun, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
-		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory,
+		TemplateRecipient, User, UserHistory, UserSetting, UserSettingHistory,
+		Webauthn []ent.Interceptor
 	}
 )
 

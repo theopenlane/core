@@ -100,6 +100,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
@@ -255,6 +256,7 @@ func checkColumn(table, column string) error {
 			taskhistory.Table:                  taskhistory.ValidColumn,
 			template.Table:                     template.ValidColumn,
 			templatehistory.Table:              templatehistory.ValidColumn,
+			templaterecipient.Table:            templaterecipient.ValidColumn,
 			user.Table:                         user.ValidColumn,
 			userhistory.Table:                  userhistory.ValidColumn,
 			usersetting.Table:                  usersetting.ValidColumn,

@@ -97,6 +97,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
@@ -2564,6 +2565,33 @@ func (f TraverseTemplateHistory) Traverse(ctx context.Context, q generated.Query
 	return fmt.Errorf("unexpected query type %T. expect *generated.TemplateHistoryQuery", q)
 }
 
+// The TemplateRecipientFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TemplateRecipientFunc func(context.Context, *generated.TemplateRecipientQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TemplateRecipientFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TemplateRecipientQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TemplateRecipientQuery", q)
+}
+
+// The TraverseTemplateRecipient type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTemplateRecipient func(context.Context, *generated.TemplateRecipientQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTemplateRecipient) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTemplateRecipient) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TemplateRecipientQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TemplateRecipientQuery", q)
+}
+
 // The UserFunc type is an adapter to allow the use of ordinary function as a Querier.
 type UserFunc func(context.Context, *generated.UserQuery) (generated.Value, error)
 
@@ -2880,6 +2908,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.TemplateQuery, predicate.Template, template.OrderOption]{typ: generated.TypeTemplate, tq: q}, nil
 	case *generated.TemplateHistoryQuery:
 		return &query[*generated.TemplateHistoryQuery, predicate.TemplateHistory, templatehistory.OrderOption]{typ: generated.TypeTemplateHistory, tq: q}, nil
+	case *generated.TemplateRecipientQuery:
+		return &query[*generated.TemplateRecipientQuery, predicate.TemplateRecipient, templaterecipient.OrderOption]{typ: generated.TypeTemplateRecipient, tq: q}, nil
 	case *generated.UserQuery:
 		return &query[*generated.UserQuery, predicate.User, user.OrderOption]{typ: generated.TypeUser, tq: q}, nil
 	case *generated.UserHistoryQuery:

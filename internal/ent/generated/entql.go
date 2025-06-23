@@ -92,6 +92,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
@@ -107,7 +108,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 94)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 95)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -2727,6 +2728,33 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[89] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   templaterecipient.Table,
+			Columns: templaterecipient.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: templaterecipient.FieldID,
+			},
+		},
+		Type: "TemplateRecipient",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			templaterecipient.FieldCreatedAt:      {Type: field.TypeTime, Column: templaterecipient.FieldCreatedAt},
+			templaterecipient.FieldUpdatedAt:      {Type: field.TypeTime, Column: templaterecipient.FieldUpdatedAt},
+			templaterecipient.FieldCreatedBy:      {Type: field.TypeString, Column: templaterecipient.FieldCreatedBy},
+			templaterecipient.FieldUpdatedBy:      {Type: field.TypeString, Column: templaterecipient.FieldUpdatedBy},
+			templaterecipient.FieldDeletedAt:      {Type: field.TypeTime, Column: templaterecipient.FieldDeletedAt},
+			templaterecipient.FieldDeletedBy:      {Type: field.TypeString, Column: templaterecipient.FieldDeletedBy},
+			templaterecipient.FieldToken:          {Type: field.TypeString, Column: templaterecipient.FieldToken},
+			templaterecipient.FieldTTL:            {Type: field.TypeTime, Column: templaterecipient.FieldTTL},
+			templaterecipient.FieldEmail:          {Type: field.TypeString, Column: templaterecipient.FieldEmail},
+			templaterecipient.FieldSecret:         {Type: field.TypeBytes, Column: templaterecipient.FieldSecret},
+			templaterecipient.FieldTemplateID:     {Type: field.TypeString, Column: templaterecipient.FieldTemplateID},
+			templaterecipient.FieldSendAttempts:   {Type: field.TypeInt, Column: templaterecipient.FieldSendAttempts},
+			templaterecipient.FieldStatus:         {Type: field.TypeEnum, Column: templaterecipient.FieldStatus},
+			templaterecipient.FieldDocumentDataID: {Type: field.TypeString, Column: templaterecipient.FieldDocumentDataID},
+		},
+	}
+	graph.Nodes[90] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -2759,7 +2787,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
-	graph.Nodes[90] = &sqlgraph.Node{
+	graph.Nodes[91] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -2796,7 +2824,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
-	graph.Nodes[91] = &sqlgraph.Node{
+	graph.Nodes[92] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -2825,7 +2853,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[92] = &sqlgraph.Node{
+	graph.Nodes[93] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -2857,7 +2885,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[93] = &sqlgraph.Node{
+	graph.Nodes[94] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -7193,6 +7221,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Template",
 		"File",
+	)
+	graph.MustAddE(
+		"document",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   templaterecipient.DocumentTable,
+			Columns: []string{templaterecipient.DocumentColumn},
+			Bidi:    false,
+		},
+		"TemplateRecipient",
+		"DocumentData",
+	)
+	graph.MustAddE(
+		"template",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   templaterecipient.TemplateTable,
+			Columns: []string{templaterecipient.TemplateColumn},
+			Bidi:    false,
+		},
+		"TemplateRecipient",
+		"Template",
 	)
 	graph.MustAddE(
 		"personal_access_tokens",
@@ -23366,6 +23418,144 @@ func (f *TemplateHistoryFilter) WhereKind(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (trq *TemplateRecipientQuery) addPredicate(pred func(s *sql.Selector)) {
+	trq.predicates = append(trq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TemplateRecipientQuery builder.
+func (trq *TemplateRecipientQuery) Filter() *TemplateRecipientFilter {
+	return &TemplateRecipientFilter{config: trq.config, predicateAdder: trq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TemplateRecipientMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TemplateRecipientMutation builder.
+func (m *TemplateRecipientMutation) Filter() *TemplateRecipientFilter {
+	return &TemplateRecipientFilter{config: m.config, predicateAdder: m}
+}
+
+// TemplateRecipientFilter provides a generic filtering capability at runtime for TemplateRecipientQuery.
+type TemplateRecipientFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TemplateRecipientFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TemplateRecipientFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TemplateRecipientFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(templaterecipient.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TemplateRecipientFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(templaterecipient.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TemplateRecipientFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TemplateRecipientFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TemplateRecipientFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(templaterecipient.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TemplateRecipientFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldDeletedBy))
+}
+
+// WhereToken applies the entql string predicate on the token field.
+func (f *TemplateRecipientFilter) WhereToken(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldToken))
+}
+
+// WhereTTL applies the entql time.Time predicate on the ttl field.
+func (f *TemplateRecipientFilter) WhereTTL(p entql.TimeP) {
+	f.Where(p.Field(templaterecipient.FieldTTL))
+}
+
+// WhereEmail applies the entql string predicate on the email field.
+func (f *TemplateRecipientFilter) WhereEmail(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldEmail))
+}
+
+// WhereSecret applies the entql []byte predicate on the secret field.
+func (f *TemplateRecipientFilter) WhereSecret(p entql.BytesP) {
+	f.Where(p.Field(templaterecipient.FieldSecret))
+}
+
+// WhereTemplateID applies the entql string predicate on the template_id field.
+func (f *TemplateRecipientFilter) WhereTemplateID(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldTemplateID))
+}
+
+// WhereSendAttempts applies the entql int predicate on the send_attempts field.
+func (f *TemplateRecipientFilter) WhereSendAttempts(p entql.IntP) {
+	f.Where(p.Field(templaterecipient.FieldSendAttempts))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *TemplateRecipientFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldStatus))
+}
+
+// WhereDocumentDataID applies the entql string predicate on the document_data_id field.
+func (f *TemplateRecipientFilter) WhereDocumentDataID(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldDocumentDataID))
+}
+
+// WhereHasDocument applies a predicate to check if query has an edge document.
+func (f *TemplateRecipientFilter) WhereHasDocument() {
+	f.Where(entql.HasEdge("document"))
+}
+
+// WhereHasDocumentWith applies a predicate to check if query has an edge document with a given conditions (other predicates).
+func (f *TemplateRecipientFilter) WhereHasDocumentWith(preds ...predicate.DocumentData) {
+	f.Where(entql.HasEdgeWith("document", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTemplate applies a predicate to check if query has an edge template.
+func (f *TemplateRecipientFilter) WhereHasTemplate() {
+	f.Where(entql.HasEdge("template"))
+}
+
+// WhereHasTemplateWith applies a predicate to check if query has an edge template with a given conditions (other predicates).
+func (f *TemplateRecipientFilter) WhereHasTemplateWith(preds ...predicate.Template) {
+	f.Where(entql.HasEdgeWith("template", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (uq *UserQuery) addPredicate(pred func(s *sql.Selector)) {
 	uq.predicates = append(uq.predicates, pred)
 }
@@ -23394,7 +23584,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23805,7 +23995,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23965,7 +24155,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24127,7 +24317,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24262,7 +24452,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

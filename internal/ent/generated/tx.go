@@ -190,6 +190,8 @@ type Tx struct {
 	Template *TemplateClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
 	TemplateHistory *TemplateHistoryClient
+	// TemplateRecipient is the client for interacting with the TemplateRecipient builders.
+	TemplateRecipient *TemplateRecipientClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// UserHistory is the client for interacting with the UserHistory builders.
@@ -420,6 +422,7 @@ func (tx *Tx) init() {
 	tx.TaskHistory = NewTaskHistoryClient(tx.config)
 	tx.Template = NewTemplateClient(tx.config)
 	tx.TemplateHistory = NewTemplateHistoryClient(tx.config)
+	tx.TemplateRecipient = NewTemplateRecipientClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.UserHistory = NewUserHistoryClient(tx.config)
 	tx.UserSetting = NewUserSettingClient(tx.config)

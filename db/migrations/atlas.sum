@@ -1,4 +1,4 @@
-h1:qeHPD0pfajQixjzBVDTd4oCAidmylD7930a9n5d/Qko=
+h1:yTjZyj5lUgsz/uKS5wYIVsv3GwdOIw3dicbiXsvSLuI=
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
@@ -23,3 +23,4 @@ h1:qeHPD0pfajQixjzBVDTd4oCAidmylD7930a9n5d/Qko=
 20250617170843_modulebasedentitlements.sql h1:6rLVbQUpCJW2Y5f84TrdvSZsbNP6runQ5uNjS1bApps=
 20250623172243_add_system_admin.sql h1:FjdT9QO/4SH8Rc9WEV/OwBIE0B7/PqLW3Qp8BCGAbOQ=
 20250623174356_add_kind.sql h1:qNT4x+lIpO6gjtfRtPg29p9wE3LGZRzvAA4azQ3kLf4=
+20250623195007_add_template_recipient.sql h1:AO9+pYXvjfvM1vt9RPLxK3z29dST+rpQkB9qo2CGUD4=

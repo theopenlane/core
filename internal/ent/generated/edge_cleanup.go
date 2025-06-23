@@ -948,6 +948,12 @@ func TemplateHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func TemplateRecipientEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup templaterecipient edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func UserEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup user edge")), entfga.DeleteTuplesFirstKey{})
 
