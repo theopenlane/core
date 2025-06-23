@@ -182,13 +182,15 @@ type OrganizationEdges struct {
 	JobResults []*JobResult `json:"job_results,omitempty"`
 	// ScheduledJobRuns holds the value of the scheduled_job_runs edge.
 	ScheduledJobRuns []*ScheduledJobRun `json:"scheduled_job_runs,omitempty"`
+	// TemplateRecipients holds the value of the template_recipients edge.
+	TemplateRecipients []*TemplateRecipient `json:"template_recipients,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [62]bool
+	loadedTypes [63]bool
 	// totalCount holds the count of the edges above.
-	totalCount [59]map[string]int
+	totalCount [60]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -248,6 +250,7 @@ type OrganizationEdges struct {
 	namedScheduledJobs                 map[string][]*ControlScheduledJob
 	namedJobResults                    map[string][]*JobResult
 	namedScheduledJobRuns              map[string][]*ScheduledJobRun
+	namedTemplateRecipients            map[string][]*TemplateRecipient
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -806,10 +809,19 @@ func (e OrganizationEdges) ScheduledJobRunsOrErr() ([]*ScheduledJobRun, error) {
 	return nil, &NotLoadedError{edge: "scheduled_job_runs"}
 }
 
+// TemplateRecipientsOrErr returns the TemplateRecipients value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) TemplateRecipientsOrErr() ([]*TemplateRecipient, error) {
+	if e.loadedTypes[61] {
+		return e.TemplateRecipients, nil
+	}
+	return nil, &NotLoadedError{edge: "template_recipients"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[61] {
+	if e.loadedTypes[62] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1266,6 +1278,11 @@ func (o *Organization) QueryJobResults() *JobResultQuery {
 // QueryScheduledJobRuns queries the "scheduled_job_runs" edge of the Organization entity.
 func (o *Organization) QueryScheduledJobRuns() *ScheduledJobRunQuery {
 	return NewOrganizationClient(o.config).QueryScheduledJobRuns(o)
+}
+
+// QueryTemplateRecipients queries the "template_recipients" edge of the Organization entity.
+func (o *Organization) QueryTemplateRecipients() *TemplateRecipientQuery {
+	return NewOrganizationClient(o.config).QueryTemplateRecipients(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2742,6 +2759,30 @@ func (o *Organization) appendNamedScheduledJobRuns(name string, edges ...*Schedu
 		o.Edges.namedScheduledJobRuns[name] = []*ScheduledJobRun{}
 	} else {
 		o.Edges.namedScheduledJobRuns[name] = append(o.Edges.namedScheduledJobRuns[name], edges...)
+	}
+}
+
+// NamedTemplateRecipients returns the TemplateRecipients named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedTemplateRecipients(name string) ([]*TemplateRecipient, error) {
+	if o.Edges.namedTemplateRecipients == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedTemplateRecipients[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedTemplateRecipients(name string, edges ...*TemplateRecipient) {
+	if o.Edges.namedTemplateRecipients == nil {
+		o.Edges.namedTemplateRecipients = make(map[string][]*TemplateRecipient)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedTemplateRecipients[name] = []*TemplateRecipient{}
+	} else {
+		o.Edges.namedTemplateRecipients[name] = append(o.Edges.namedTemplateRecipients[name], edges...)
 	}
 }
 

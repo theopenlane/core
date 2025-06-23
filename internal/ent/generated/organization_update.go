@@ -58,6 +58,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -1187,6 +1188,21 @@ func (ou *OrganizationUpdate) AddScheduledJobRuns(s ...*ScheduledJobRun) *Organi
 		ids[i] = s[i].ID
 	}
 	return ou.AddScheduledJobRunIDs(ids...)
+}
+
+// AddTemplateRecipientIDs adds the "template_recipients" edge to the TemplateRecipient entity by IDs.
+func (ou *OrganizationUpdate) AddTemplateRecipientIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddTemplateRecipientIDs(ids...)
+	return ou
+}
+
+// AddTemplateRecipients adds the "template_recipients" edges to the TemplateRecipient entity.
+func (ou *OrganizationUpdate) AddTemplateRecipients(t ...*TemplateRecipient) *OrganizationUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ou.AddTemplateRecipientIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2437,6 +2453,27 @@ func (ou *OrganizationUpdate) RemoveScheduledJobRuns(s ...*ScheduledJobRun) *Org
 		ids[i] = s[i].ID
 	}
 	return ou.RemoveScheduledJobRunIDs(ids...)
+}
+
+// ClearTemplateRecipients clears all "template_recipients" edges to the TemplateRecipient entity.
+func (ou *OrganizationUpdate) ClearTemplateRecipients() *OrganizationUpdate {
+	ou.mutation.ClearTemplateRecipients()
+	return ou
+}
+
+// RemoveTemplateRecipientIDs removes the "template_recipients" edge to TemplateRecipient entities by IDs.
+func (ou *OrganizationUpdate) RemoveTemplateRecipientIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveTemplateRecipientIDs(ids...)
+	return ou
+}
+
+// RemoveTemplateRecipients removes "template_recipients" edges to TemplateRecipient entities.
+func (ou *OrganizationUpdate) RemoveTemplateRecipients(t ...*TemplateRecipient) *OrganizationUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ou.RemoveTemplateRecipientIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5485,6 +5522,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.TemplateRecipientsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateRecipientsTable,
+			Columns: []string{organization.TemplateRecipientsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(templaterecipient.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.TemplateRecipient
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedTemplateRecipientsIDs(); len(nodes) > 0 && !ou.mutation.TemplateRecipientsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateRecipientsTable,
+			Columns: []string{organization.TemplateRecipientsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(templaterecipient.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.TemplateRecipient
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.TemplateRecipientsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateRecipientsTable,
+			Columns: []string{organization.TemplateRecipientsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(templaterecipient.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.TemplateRecipient
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -6667,6 +6752,21 @@ func (ouo *OrganizationUpdateOne) AddScheduledJobRuns(s ...*ScheduledJobRun) *Or
 		ids[i] = s[i].ID
 	}
 	return ouo.AddScheduledJobRunIDs(ids...)
+}
+
+// AddTemplateRecipientIDs adds the "template_recipients" edge to the TemplateRecipient entity by IDs.
+func (ouo *OrganizationUpdateOne) AddTemplateRecipientIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddTemplateRecipientIDs(ids...)
+	return ouo
+}
+
+// AddTemplateRecipients adds the "template_recipients" edges to the TemplateRecipient entity.
+func (ouo *OrganizationUpdateOne) AddTemplateRecipients(t ...*TemplateRecipient) *OrganizationUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ouo.AddTemplateRecipientIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -7917,6 +8017,27 @@ func (ouo *OrganizationUpdateOne) RemoveScheduledJobRuns(s ...*ScheduledJobRun) 
 		ids[i] = s[i].ID
 	}
 	return ouo.RemoveScheduledJobRunIDs(ids...)
+}
+
+// ClearTemplateRecipients clears all "template_recipients" edges to the TemplateRecipient entity.
+func (ouo *OrganizationUpdateOne) ClearTemplateRecipients() *OrganizationUpdateOne {
+	ouo.mutation.ClearTemplateRecipients()
+	return ouo
+}
+
+// RemoveTemplateRecipientIDs removes the "template_recipients" edge to TemplateRecipient entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveTemplateRecipientIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveTemplateRecipientIDs(ids...)
+	return ouo
+}
+
+// RemoveTemplateRecipients removes "template_recipients" edges to TemplateRecipient entities.
+func (ouo *OrganizationUpdateOne) RemoveTemplateRecipients(t ...*TemplateRecipient) *OrganizationUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ouo.RemoveTemplateRecipientIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -10990,6 +11111,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.ScheduledJobRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.TemplateRecipientsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateRecipientsTable,
+			Columns: []string{organization.TemplateRecipientsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(templaterecipient.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.TemplateRecipient
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedTemplateRecipientsIDs(); len(nodes) > 0 && !ouo.mutation.TemplateRecipientsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateRecipientsTable,
+			Columns: []string{organization.TemplateRecipientsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(templaterecipient.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.TemplateRecipient
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.TemplateRecipientsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateRecipientsTable,
+			Columns: []string{organization.TemplateRecipientsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(templaterecipient.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.TemplateRecipient
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

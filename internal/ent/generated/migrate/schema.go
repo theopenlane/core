@@ -1204,12 +1204,21 @@ var (
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_type", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "template_recipient_events", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
 		Name:       "events",
 		Columns:    EventsColumns,
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "events_template_recipients_events",
+				Columns:    []*schema.Column{EventsColumns[10]},
+				RefColumns: []*schema.Column{TemplateRecipientsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "event_id",
@@ -4363,11 +4372,12 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "token", Type: field.TypeString, Unique: true},
-		{Name: "ttl", Type: field.TypeTime},
+		{Name: "expires_at", Type: field.TypeTime},
 		{Name: "email", Type: field.TypeString},
-		{Name: "secret", Type: field.TypeBytes},
+		{Name: "secret", Type: field.TypeString},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "EXPIRED", "USED", "REVOKED"}, Default: "ACTIVE"},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
 		{Name: "template_id", Type: field.TypeString},
 	}
@@ -4378,14 +4388,20 @@ var (
 		PrimaryKey: []*schema.Column{TemplateRecipientsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "template_recipients_document_data_document",
+				Symbol:     "template_recipients_organizations_template_recipients",
 				Columns:    []*schema.Column{TemplateRecipientsColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "template_recipients_document_data_document",
+				Columns:    []*schema.Column{TemplateRecipientsColumns[14]},
 				RefColumns: []*schema.Column{DocumentDataColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "template_recipients_templates_template",
-				Columns:    []*schema.Column{TemplateRecipientsColumns[14]},
+				Columns:    []*schema.Column{TemplateRecipientsColumns[15]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -4395,6 +4411,14 @@ var (
 				Name:    "templaterecipient_id",
 				Unique:  true,
 				Columns: []*schema.Column{TemplateRecipientsColumns[0]},
+			},
+			{
+				Name:    "templaterecipient_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{TemplateRecipientsColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "templaterecipient_token",
@@ -7310,6 +7334,7 @@ func init() {
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
+	EventsTable.ForeignKeys[0].RefTable = TemplateRecipientsTable
 	EvidencesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EvidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "evidence_history",
@@ -7472,8 +7497,9 @@ func init() {
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
 	}
-	TemplateRecipientsTable.ForeignKeys[0].RefTable = DocumentDataTable
-	TemplateRecipientsTable.ForeignKeys[1].RefTable = TemplatesTable
+	TemplateRecipientsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	TemplateRecipientsTable.ForeignKeys[1].RefTable = DocumentDataTable
+	TemplateRecipientsTable.ForeignKeys[2].RefTable = TemplatesTable
 	UsersTable.ForeignKeys[0].RefTable = FilesTable
 	UserHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_history",

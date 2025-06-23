@@ -169,6 +169,8 @@ const (
 	EdgeJobResults = "job_results"
 	// EdgeScheduledJobRuns holds the string denoting the scheduled_job_runs edge name in mutations.
 	EdgeScheduledJobRuns = "scheduled_job_runs"
+	// EdgeTemplateRecipients holds the string denoting the template_recipients edge name in mutations.
+	EdgeTemplateRecipients = "template_recipients"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -586,6 +588,13 @@ const (
 	ScheduledJobRunsInverseTable = "scheduled_job_runs"
 	// ScheduledJobRunsColumn is the table column denoting the scheduled_job_runs relation/edge.
 	ScheduledJobRunsColumn = "owner_id"
+	// TemplateRecipientsTable is the table that holds the template_recipients relation/edge.
+	TemplateRecipientsTable = "template_recipients"
+	// TemplateRecipientsInverseTable is the table name for the TemplateRecipient entity.
+	// It exists in this package in order to avoid circular dependency with the "templaterecipient" package.
+	TemplateRecipientsInverseTable = "template_recipients"
+	// TemplateRecipientsColumn is the table column denoting the template_recipients relation/edge.
+	TemplateRecipientsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1594,6 +1603,20 @@ func ByScheduledJobRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByTemplateRecipientsCount orders the results by template_recipients count.
+func ByTemplateRecipientsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTemplateRecipientsStep(), opts...)
+	}
+}
+
+// ByTemplateRecipients orders the results by template_recipients terms.
+func ByTemplateRecipients(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTemplateRecipientsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2032,6 +2055,13 @@ func newScheduledJobRunsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScheduledJobRunsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobRunsTable, ScheduledJobRunsColumn),
+	)
+}
+func newTemplateRecipientsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TemplateRecipientsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TemplateRecipientsTable, TemplateRecipientsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

@@ -14673,6 +14673,25 @@ func (c *OrganizationClient) QueryScheduledJobRuns(o *Organization) *ScheduledJo
 	return query
 }
 
+// QueryTemplateRecipients queries the template_recipients edge of a Organization.
+func (c *OrganizationClient) QueryTemplateRecipients(o *Organization) *TemplateRecipientQuery {
+	query := (&TemplateRecipientClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(templaterecipient.Table, templaterecipient.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplateRecipientsTable, organization.TemplateRecipientsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.TemplateRecipient
+		step.Edge.Schema = schemaConfig.TemplateRecipient
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -20093,6 +20112,25 @@ func (c *TemplateRecipientClient) GetX(ctx context.Context, id string) *Template
 	return obj
 }
 
+// QueryOwner queries the owner edge of a TemplateRecipient.
+func (c *TemplateRecipientClient) QueryOwner(tr *TemplateRecipient) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(templaterecipient.Table, templaterecipient.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, templaterecipient.OwnerTable, templaterecipient.OwnerColumn),
+		)
+		schemaConfig := tr.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TemplateRecipient
+		fromV = sqlgraph.Neighbors(tr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryDocument queries the document edge of a TemplateRecipient.
 func (c *TemplateRecipientClient) QueryDocument(tr *TemplateRecipient) *DocumentDataQuery {
 	query := (&DocumentDataClient{config: c.config}).Query()
@@ -20125,6 +20163,25 @@ func (c *TemplateRecipientClient) QueryTemplate(tr *TemplateRecipient) *Template
 		schemaConfig := tr.schemaConfig
 		step.To.Schema = schemaConfig.Template
 		step.Edge.Schema = schemaConfig.TemplateRecipient
+		fromV = sqlgraph.Neighbors(tr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a TemplateRecipient.
+func (c *TemplateRecipientClient) QueryEvents(tr *TemplateRecipient) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(templaterecipient.Table, templaterecipient.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, templaterecipient.EventsTable, templaterecipient.EventsColumn),
+		)
+		schemaConfig := tr.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
 		fromV = sqlgraph.Neighbors(tr.driver.Dialect(), step)
 		return fromV, nil
 	}

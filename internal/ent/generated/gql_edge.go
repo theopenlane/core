@@ -4449,6 +4449,27 @@ func (o *Organization) ScheduledJobRuns(
 	return o.QueryScheduledJobRuns().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) TemplateRecipients(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TemplateRecipientOrder, where *TemplateRecipientWhereInput,
+) (*TemplateRecipientConnection, error) {
+	opts := []TemplateRecipientPaginateOption{
+		WithTemplateRecipientOrder(orderBy),
+		WithTemplateRecipientFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[58][alias]
+	if nodes, err := o.NamedTemplateRecipients(alias); err == nil || hasTotalCount {
+		pager, err := newTemplateRecipientPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TemplateRecipientConnection{Edges: []*TemplateRecipientEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryTemplateRecipients().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -4457,7 +4478,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[58][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[59][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -5999,6 +6020,51 @@ func (t *Template) Files(
 		return conn, nil
 	}
 	return t.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (tr *TemplateRecipient) Owner(ctx context.Context) (*Organization, error) {
+	result, err := tr.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = tr.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tr *TemplateRecipient) Document(ctx context.Context) (*DocumentData, error) {
+	result, err := tr.Edges.DocumentOrErr()
+	if IsNotLoaded(err) {
+		result, err = tr.QueryDocument().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tr *TemplateRecipient) Template(ctx context.Context) (*Template, error) {
+	result, err := tr.Edges.TemplateOrErr()
+	if IsNotLoaded(err) {
+		result, err = tr.QueryTemplate().Only(ctx)
+	}
+	return result, err
+}
+
+func (tr *TemplateRecipient) Events(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EventOrder, where *EventWhereInput,
+) (*EventConnection, error) {
+	opts := []EventPaginateOption{
+		WithEventOrder(orderBy),
+		WithEventFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := tr.Edges.totalCount[3][alias]
+	if nodes, err := tr.NamedEvents(alias); err == nil || hasTotalCount {
+		pager, err := newEventPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EventConnection{Edges: []*EventEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return tr.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (u *User) PersonalAccessTokens(

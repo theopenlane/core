@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/pkg/enums"
@@ -32,14 +33,16 @@ type TemplateRecipient struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the verification token sent to the user via email
 	Token string `json:"token,omitempty"`
-	// the ttl for the template
-	TTL *time.Time `json:"ttl,omitempty"`
+	// when the token expires
+	ExpiresAt time.Time `json:"expires_at,omitempty"`
 	// the recipient email for the questionairre
 	Email string `json:"email,omitempty"`
 	// the comparison secret to verify the token's signature
-	Secret []byte `json:"secret,omitempty"`
+	Secret string `json:"secret,omitempty"`
 	// the ID of the template this token belongs to
 	TemplateID string `json:"template_id,omitempty"`
 	// the number of attempts made to send the questionairre to the user, maximum of 5
@@ -56,15 +59,32 @@ type TemplateRecipient struct {
 
 // TemplateRecipientEdges holds the relations/edges for other nodes in the graph.
 type TemplateRecipientEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// Document holds the value of the document edge.
 	Document *DocumentData `json:"document,omitempty"`
 	// Template holds the value of the template edge.
 	Template *Template `json:"template,omitempty"`
+	// Events holds the value of the events edge.
+	Events []*Event `json:"events,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [4]map[string]int
+
+	namedEvents map[string][]*Event
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TemplateRecipientEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // DocumentOrErr returns the Document value or an error if the edge
@@ -72,7 +92,7 @@ type TemplateRecipientEdges struct {
 func (e TemplateRecipientEdges) DocumentOrErr() (*DocumentData, error) {
 	if e.Document != nil {
 		return e.Document, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: documentdata.Label}
 	}
 	return nil, &NotLoadedError{edge: "document"}
@@ -83,10 +103,19 @@ func (e TemplateRecipientEdges) DocumentOrErr() (*DocumentData, error) {
 func (e TemplateRecipientEdges) TemplateOrErr() (*Template, error) {
 	if e.Template != nil {
 		return e.Template, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: template.Label}
 	}
 	return nil, &NotLoadedError{edge: "template"}
+}
+
+// EventsOrErr returns the Events value or an error if the edge
+// was not loaded in eager-loading.
+func (e TemplateRecipientEdges) EventsOrErr() ([]*Event, error) {
+	if e.loadedTypes[3] {
+		return e.Events, nil
+	}
+	return nil, &NotLoadedError{edge: "events"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -94,13 +123,11 @@ func (*TemplateRecipient) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case templaterecipient.FieldSecret:
-			values[i] = new([]byte)
 		case templaterecipient.FieldSendAttempts:
 			values[i] = new(sql.NullInt64)
-		case templaterecipient.FieldID, templaterecipient.FieldCreatedBy, templaterecipient.FieldUpdatedBy, templaterecipient.FieldDeletedBy, templaterecipient.FieldToken, templaterecipient.FieldEmail, templaterecipient.FieldTemplateID, templaterecipient.FieldStatus, templaterecipient.FieldDocumentDataID:
+		case templaterecipient.FieldID, templaterecipient.FieldCreatedBy, templaterecipient.FieldUpdatedBy, templaterecipient.FieldDeletedBy, templaterecipient.FieldOwnerID, templaterecipient.FieldToken, templaterecipient.FieldEmail, templaterecipient.FieldSecret, templaterecipient.FieldTemplateID, templaterecipient.FieldStatus, templaterecipient.FieldDocumentDataID:
 			values[i] = new(sql.NullString)
-		case templaterecipient.FieldCreatedAt, templaterecipient.FieldUpdatedAt, templaterecipient.FieldDeletedAt, templaterecipient.FieldTTL:
+		case templaterecipient.FieldCreatedAt, templaterecipient.FieldUpdatedAt, templaterecipient.FieldDeletedAt, templaterecipient.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -159,18 +186,23 @@ func (tr *TemplateRecipient) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				tr.DeletedBy = value.String
 			}
+		case templaterecipient.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				tr.OwnerID = value.String
+			}
 		case templaterecipient.FieldToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
 				tr.Token = value.String
 			}
-		case templaterecipient.FieldTTL:
+		case templaterecipient.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field ttl", values[i])
+				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				tr.TTL = new(time.Time)
-				*tr.TTL = value.Time
+				tr.ExpiresAt = value.Time
 			}
 		case templaterecipient.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -179,10 +211,10 @@ func (tr *TemplateRecipient) assignValues(columns []string, values []any) error 
 				tr.Email = value.String
 			}
 		case templaterecipient.FieldSecret:
-			if value, ok := values[i].(*[]byte); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field secret", values[i])
-			} else if value != nil {
-				tr.Secret = *value
+			} else if value.Valid {
+				tr.Secret = value.String
 			}
 		case templaterecipient.FieldTemplateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -221,6 +253,11 @@ func (tr *TemplateRecipient) Value(name string) (ent.Value, error) {
 	return tr.selectValues.Get(name)
 }
 
+// QueryOwner queries the "owner" edge of the TemplateRecipient entity.
+func (tr *TemplateRecipient) QueryOwner() *OrganizationQuery {
+	return NewTemplateRecipientClient(tr.config).QueryOwner(tr)
+}
+
 // QueryDocument queries the "document" edge of the TemplateRecipient entity.
 func (tr *TemplateRecipient) QueryDocument() *DocumentDataQuery {
 	return NewTemplateRecipientClient(tr.config).QueryDocument(tr)
@@ -229,6 +266,11 @@ func (tr *TemplateRecipient) QueryDocument() *DocumentDataQuery {
 // QueryTemplate queries the "template" edge of the TemplateRecipient entity.
 func (tr *TemplateRecipient) QueryTemplate() *TemplateQuery {
 	return NewTemplateRecipientClient(tr.config).QueryTemplate(tr)
+}
+
+// QueryEvents queries the "events" edge of the TemplateRecipient entity.
+func (tr *TemplateRecipient) QueryEvents() *EventQuery {
+	return NewTemplateRecipientClient(tr.config).QueryEvents(tr)
 }
 
 // Update returns a builder for updating this TemplateRecipient.
@@ -272,19 +314,20 @@ func (tr *TemplateRecipient) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(tr.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(tr.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("token=")
 	builder.WriteString(tr.Token)
 	builder.WriteString(", ")
-	if v := tr.TTL; v != nil {
-		builder.WriteString("ttl=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
+	builder.WriteString("expires_at=")
+	builder.WriteString(tr.ExpiresAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(tr.Email)
 	builder.WriteString(", ")
 	builder.WriteString("secret=")
-	builder.WriteString(fmt.Sprintf("%v", tr.Secret))
+	builder.WriteString(tr.Secret)
 	builder.WriteString(", ")
 	builder.WriteString("template_id=")
 	builder.WriteString(tr.TemplateID)
@@ -299,6 +342,30 @@ func (tr *TemplateRecipient) String() string {
 	builder.WriteString(tr.DocumentDataID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedEvents returns the Events named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (tr *TemplateRecipient) NamedEvents(name string) ([]*Event, error) {
+	if tr.Edges.namedEvents == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := tr.Edges.namedEvents[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (tr *TemplateRecipient) appendNamedEvents(name string, edges ...*Event) {
+	if tr.Edges.namedEvents == nil {
+		tr.Edges.namedEvents = make(map[string][]*Event)
+	}
+	if len(edges) == 0 {
+		tr.Edges.namedEvents[name] = []*Event{}
+	} else {
+		tr.Edges.namedEvents[name] = append(tr.Edges.namedEvents[name], edges...)
+	}
 }
 
 // TemplateRecipients is a parsable slice of TemplateRecipient.

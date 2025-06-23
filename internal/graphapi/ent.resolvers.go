@@ -2765,6 +2765,40 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// TemplateRecipients is the resolver for the templateRecipients field.
+func (r *queryResolver) TemplateRecipients(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateRecipientOrder, where *generated.TemplateRecipientWhereInput) (*generated.TemplateRecipientConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TemplateRecipientOrder{
+			{
+				Field:     generated.TemplateRecipientOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TemplateRecipient.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "templaterecipient"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTemplateRecipientOrder(orderBy),
+		generated.WithTemplateRecipientFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "templaterecipient"})
+	}
+
+	return res, err
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
 	// set page limit if nothing was set

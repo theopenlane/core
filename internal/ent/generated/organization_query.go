@@ -59,6 +59,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -132,6 +133,7 @@ type OrganizationQuery struct {
 	withScheduledJobs                      *ControlScheduledJobQuery
 	withJobResults                         *JobResultQuery
 	withScheduledJobRuns                   *ScheduledJobRunQuery
+	withTemplateRecipients                 *TemplateRecipientQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -193,6 +195,7 @@ type OrganizationQuery struct {
 	withNamedScheduledJobs                 map[string]*ControlScheduledJobQuery
 	withNamedJobResults                    map[string]*JobResultQuery
 	withNamedScheduledJobRuns              map[string]*ScheduledJobRunQuery
+	withNamedTemplateRecipients            map[string]*TemplateRecipientQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1755,6 +1758,31 @@ func (oq *OrganizationQuery) QueryScheduledJobRuns() *ScheduledJobRunQuery {
 	return query
 }
 
+// QueryTemplateRecipients chains the current query on the "template_recipients" edge.
+func (oq *OrganizationQuery) QueryTemplateRecipients() *TemplateRecipientQuery {
+	query := (&TemplateRecipientClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(templaterecipient.Table, templaterecipient.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplateRecipientsTable, organization.TemplateRecipientsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.TemplateRecipient
+		step.Edge.Schema = schemaConfig.TemplateRecipient
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -2033,6 +2061,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withScheduledJobs:                 oq.withScheduledJobs.Clone(),
 		withJobResults:                    oq.withJobResults.Clone(),
 		withScheduledJobRuns:              oq.withScheduledJobRuns.Clone(),
+		withTemplateRecipients:            oq.withTemplateRecipients.Clone(),
 		withMembers:                       oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -2712,6 +2741,17 @@ func (oq *OrganizationQuery) WithScheduledJobRuns(opts ...func(*ScheduledJobRunQ
 	return oq
 }
 
+// WithTemplateRecipients tells the query-builder to eager-load the nodes that are connected to
+// the "template_recipients" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithTemplateRecipients(opts ...func(*TemplateRecipientQuery)) *OrganizationQuery {
+	query := (&TemplateRecipientClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withTemplateRecipients = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -2807,7 +2847,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [62]bool{
+		loadedTypes = [63]bool{
 			oq.withControlCreators != nil,
 			oq.withControlImplementationCreators != nil,
 			oq.withControlObjectiveCreators != nil,
@@ -2869,6 +2909,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withScheduledJobs != nil,
 			oq.withJobResults != nil,
 			oq.withScheduledJobRuns != nil,
+			oq.withTemplateRecipients != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -3347,6 +3388,15 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withTemplateRecipients; query != nil {
+		if err := oq.loadTemplateRecipients(ctx, query, nodes,
+			func(n *Organization) { n.Edges.TemplateRecipients = []*TemplateRecipient{} },
+			func(n *Organization, e *TemplateRecipient) {
+				n.Edges.TemplateRecipients = append(n.Edges.TemplateRecipients, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -3759,6 +3809,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadScheduledJobRuns(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedScheduledJobRuns(name) },
 			func(n *Organization, e *ScheduledJobRun) { n.appendNamedScheduledJobRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedTemplateRecipients {
+		if err := oq.loadTemplateRecipients(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedTemplateRecipients(name) },
+			func(n *Organization, e *TemplateRecipient) { n.appendNamedTemplateRecipients(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5757,6 +5814,36 @@ func (oq *OrganizationQuery) loadScheduledJobRuns(ctx context.Context, query *Sc
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadTemplateRecipients(ctx context.Context, query *TemplateRecipientQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *TemplateRecipient)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(templaterecipient.FieldOwnerID)
+	}
+	query.Where(predicate.TemplateRecipient(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.TemplateRecipientsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -6701,6 +6788,20 @@ func (oq *OrganizationQuery) WithNamedScheduledJobRuns(name string, opts ...func
 		oq.withNamedScheduledJobRuns = make(map[string]*ScheduledJobRunQuery)
 	}
 	oq.withNamedScheduledJobRuns[name] = query
+	return oq
+}
+
+// WithNamedTemplateRecipients tells the query-builder to eager-load the nodes that are connected to the "template_recipients"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedTemplateRecipients(name string, opts ...func(*TemplateRecipientQuery)) *OrganizationQuery {
+	query := (&TemplateRecipientClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedTemplateRecipients == nil {
+		oq.withNamedTemplateRecipients = make(map[string]*TemplateRecipientQuery)
+	}
+	oq.withNamedTemplateRecipients[name] = query
 	return oq
 }
 

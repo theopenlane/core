@@ -5769,6 +5769,7 @@ type CreateOrganizationInput struct {
 	ScheduledJobIDs                 []string
 	JobResultIDs                    []string
 	ScheduledJobRunIDs              []string
+	TemplateRecipientIDs            []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -5963,6 +5964,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ScheduledJobRunIDs; len(v) > 0 {
 		m.AddScheduledJobRunIDs(v...)
 	}
+	if v := i.TemplateRecipientIDs; len(v) > 0 {
+		m.AddTemplateRecipientIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -6147,6 +6151,9 @@ type UpdateOrganizationInput struct {
 	ClearScheduledJobRuns                 bool
 	AddScheduledJobRunIDs                 []string
 	RemoveScheduledJobRunIDs              []string
+	ClearTemplateRecipients               bool
+	AddTemplateRecipientIDs               []string
+	RemoveTemplateRecipientIDs            []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -6672,6 +6679,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveScheduledJobRunIDs; len(v) > 0 {
 		m.RemoveScheduledJobRunIDs(v...)
+	}
+	if i.ClearTemplateRecipients {
+		m.ClearTemplateRecipients()
+	}
+	if v := i.AddTemplateRecipientIDs; len(v) > 0 {
+		m.AddTemplateRecipientIDs(v...)
+	}
+	if v := i.RemoveTemplateRecipientIDs; len(v) > 0 {
+		m.RemoveTemplateRecipientIDs(v...)
 	}
 }
 
@@ -9675,6 +9691,84 @@ func (c *TemplateUpdate) SetInput(i UpdateTemplateInput) *TemplateUpdate {
 
 // SetInput applies the change-set in the UpdateTemplateInput on the TemplateUpdateOne builder.
 func (c *TemplateUpdateOne) SetInput(i UpdateTemplateInput) *TemplateUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTemplateRecipientInput represents a mutation input for creating templaterecipients.
+type CreateTemplateRecipientInput struct {
+	Email      string
+	OwnerID    *string
+	DocumentID *string
+	TemplateID string
+	EventIDs   []string
+}
+
+// Mutate applies the CreateTemplateRecipientInput on the TemplateRecipientMutation builder.
+func (i *CreateTemplateRecipientInput) Mutate(m *TemplateRecipientMutation) {
+	m.SetEmail(i.Email)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.DocumentID; v != nil {
+		m.SetDocumentID(*v)
+	}
+	m.SetTemplateID(i.TemplateID)
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateTemplateRecipientInput on the TemplateRecipientCreate builder.
+func (c *TemplateRecipientCreate) SetInput(i CreateTemplateRecipientInput) *TemplateRecipientCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTemplateRecipientInput represents a mutation input for updating templaterecipients.
+type UpdateTemplateRecipientInput struct {
+	ClearOwner     bool
+	OwnerID        *string
+	ClearDocument  bool
+	DocumentID     *string
+	ClearEvents    bool
+	AddEventIDs    []string
+	RemoveEventIDs []string
+}
+
+// Mutate applies the UpdateTemplateRecipientInput on the TemplateRecipientMutation builder.
+func (i *UpdateTemplateRecipientInput) Mutate(m *TemplateRecipientMutation) {
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearDocument {
+		m.ClearDocument()
+	}
+	if v := i.DocumentID; v != nil {
+		m.SetDocumentID(*v)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTemplateRecipientInput on the TemplateRecipientUpdate builder.
+func (c *TemplateRecipientUpdate) SetInput(i UpdateTemplateRecipientInput) *TemplateRecipientUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTemplateRecipientInput on the TemplateRecipientUpdateOne builder.
+func (c *TemplateRecipientUpdateOne) SetInput(i UpdateTemplateRecipientInput) *TemplateRecipientUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

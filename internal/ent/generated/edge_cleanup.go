@@ -56,6 +56,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -764,6 +765,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).ScheduledJobRun.Query().Where((scheduledjobrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if scheduledjobrunCount, err := FromContext(ctx).ScheduledJobRun.Delete().Where(scheduledjobrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", scheduledjobrunCount).Msg("deleting scheduledjobrun")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).TemplateRecipient.Query().Where((templaterecipient.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if templaterecipientCount, err := FromContext(ctx).TemplateRecipient.Delete().Where(templaterecipient.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", templaterecipientCount).Msg("deleting templaterecipient")
 			return err
 		}
 	}

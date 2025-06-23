@@ -2,6 +2,7 @@ package schema
 
 import (
 	"net/mail"
+	"time"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
@@ -11,14 +12,15 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-
 	"github.com/theopenlane/entx/history"
-	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
+)
+
+const (
+	defaultTemplateExpiration = time.Hour * 168
 )
 
 // TemplateRecipient holds the schema definition for the EmailVerificationToken entity
@@ -29,7 +31,7 @@ type TemplateRecipient struct {
 }
 
 // SchemaTemplateRecipient is the name of the EmailVerificationToken schema.
-const SchemaTemplateRecipient = "template_recipient" // nolint:gosec
+const SchemaTemplateRecipient = "template_recipient"
 
 // Name returns the name of the TemplateRecipient schema.
 func (TemplateRecipient) Name() string {
@@ -53,11 +55,20 @@ func (TemplateRecipient) Fields() []ent.Field {
 		field.String("token").
 			Comment("the verification token sent to the user via email").
 			Unique().
-			NotEmpty(),
+			NotEmpty().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			).
+			Immutable(),
 
-		field.Time("ttl").
-			Comment("the ttl for the survey to be filled").
-			Nillable(),
+		field.Time("expires_at").
+			Comment("when the token expires").
+			Annotations(
+				entgql.OrderField("expires_at"),
+				entgql.Skip(entgql.SkipMutationUpdateInput|entgql.SkipMutationCreateInput),
+			).
+			Default(time.Now().Add(defaultTemplateExpiration)).
+			Immutable(),
 
 		field.String("email").
 			Comment("the recipient email for the questionairre").
@@ -65,19 +76,25 @@ func (TemplateRecipient) Fields() []ent.Field {
 				_, err := mail.ParseAddress(email)
 				return err
 			}).
-			NotEmpty(),
+			NotEmpty().
+			Immutable(),
 
-		field.Bytes("secret").
-			Comment("the comparison secret to verify the token's signature"),
+		field.String("secret").
+			Comment("the comparison secret to verify the token's signature").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			).
+			Immutable(),
 
 		field.String("template_id").
-			Comment("the ID of the template this token belongs to"),
+			Comment("the ID of the template this token belongs to").
+			Immutable(),
 
 		field.Int("send_attempts").
 			Comment("the number of attempts made to send the questionairre to the user, maximum of 5").
 			Annotations(
 				entgql.OrderField("send_attempts"),
-				entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
+				entgql.Skip(entgql.SkipMutationUpdateInput|entgql.SkipMutationCreateInput),
 			).
 			Default(1),
 
@@ -91,7 +108,10 @@ func (TemplateRecipient) Fields() []ent.Field {
 
 		field.String("document_data_id").
 			Optional().
-			Comment("the ID of the document this recipient belongs to. This will only be available if the survey was ever filled"),
+			Comment("the ID of the document this recipient belongs to. This will only be available if the survey was ever filled").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			),
 	}
 }
 
@@ -112,17 +132,21 @@ func (e TemplateRecipient) Edges() []ent.Edge {
 			field:      "template_id",
 			name:       "template_id",
 			required:   true,
+			immutable:  true,
 		}),
+
+		defaultEdgeToWithPagination(e, Event{}),
 	}
 }
 
 // Mixin of the TemplateRecipient
 func (e TemplateRecipient) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		emixin.IDMixin{},
-		mixin.SoftDeleteMixin{},
-	}
+	return mixinConfig{
+		excludeTags: true,
+		additionalMixins: []ent.Mixin{
+			newOrgOwnedMixin(e),
+		},
+	}.getMixins()
 }
 
 // Indexes of the TemplateRecipient
@@ -137,9 +161,6 @@ func (TemplateRecipient) Indexes() []ent.Index {
 func (TemplateRecipient) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("base"),
-		entgql.Skip(entgql.SkipAll),
-		entx.SchemaGenSkip(true),
-		entx.QueryGenSkip(true),
 		history.Annotations{
 			Exclude: true,
 		},

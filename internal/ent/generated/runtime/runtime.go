@@ -5014,17 +5014,24 @@ func init() {
 		})
 	}
 	templaterecipientMixinHooks0 := templaterecipientMixin[0].Hooks()
-	templaterecipientMixinHooks2 := templaterecipientMixin[2].Hooks()
+	templaterecipientMixinHooks1 := templaterecipientMixin[1].Hooks()
+	templaterecipientMixinHooks4 := templaterecipientMixin[4].Hooks()
 
 	templaterecipient.Hooks[1] = templaterecipientMixinHooks0[0]
 
-	templaterecipient.Hooks[2] = templaterecipientMixinHooks2[0]
-	templaterecipientMixinInters2 := templaterecipientMixin[2].Interceptors()
-	templaterecipient.Interceptors[0] = templaterecipientMixinInters2[0]
+	templaterecipient.Hooks[2] = templaterecipientMixinHooks1[0]
+
+	templaterecipient.Hooks[3] = templaterecipientMixinHooks4[0]
+	templaterecipientMixinInters1 := templaterecipientMixin[1].Interceptors()
+	templaterecipientMixinInters4 := templaterecipientMixin[4].Interceptors()
+	templaterecipient.Interceptors[0] = templaterecipientMixinInters1[0]
+	templaterecipient.Interceptors[1] = templaterecipientMixinInters4[0]
 	templaterecipientMixinFields0 := templaterecipientMixin[0].Fields()
 	_ = templaterecipientMixinFields0
-	templaterecipientMixinFields1 := templaterecipientMixin[1].Fields()
-	_ = templaterecipientMixinFields1
+	templaterecipientMixinFields2 := templaterecipientMixin[2].Fields()
+	_ = templaterecipientMixinFields2
+	templaterecipientMixinFields4 := templaterecipientMixin[4].Fields()
+	_ = templaterecipientMixinFields4
 	templaterecipientFields := schema.TemplateRecipient{}.Fields()
 	_ = templaterecipientFields
 	// templaterecipientDescCreatedAt is the schema descriptor for created_at field.
@@ -5037,10 +5044,18 @@ func init() {
 	templaterecipient.DefaultUpdatedAt = templaterecipientDescUpdatedAt.Default.(func() time.Time)
 	// templaterecipient.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	templaterecipient.UpdateDefaultUpdatedAt = templaterecipientDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// templaterecipientDescOwnerID is the schema descriptor for owner_id field.
+	templaterecipientDescOwnerID := templaterecipientMixinFields4[0].Descriptor()
+	// templaterecipient.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	templaterecipient.OwnerIDValidator = templaterecipientDescOwnerID.Validators[0].(func(string) error)
 	// templaterecipientDescToken is the schema descriptor for token field.
 	templaterecipientDescToken := templaterecipientFields[0].Descriptor()
 	// templaterecipient.TokenValidator is a validator for the "token" field. It is called by the builders before save.
 	templaterecipient.TokenValidator = templaterecipientDescToken.Validators[0].(func(string) error)
+	// templaterecipientDescExpiresAt is the schema descriptor for expires_at field.
+	templaterecipientDescExpiresAt := templaterecipientFields[1].Descriptor()
+	// templaterecipient.DefaultExpiresAt holds the default value on creation for the expires_at field.
+	templaterecipient.DefaultExpiresAt = templaterecipientDescExpiresAt.Default.(time.Time)
 	// templaterecipientDescEmail is the schema descriptor for email field.
 	templaterecipientDescEmail := templaterecipientFields[2].Descriptor()
 	// templaterecipient.EmailValidator is a validator for the "email" field. It is called by the builders before save.
@@ -5064,7 +5079,7 @@ func init() {
 	// templaterecipient.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	templaterecipient.DefaultSendAttempts = templaterecipientDescSendAttempts.Default.(int)
 	// templaterecipientDescID is the schema descriptor for id field.
-	templaterecipientDescID := templaterecipientMixinFields1[0].Descriptor()
+	templaterecipientDescID := templaterecipientMixinFields2[0].Descriptor()
 	// templaterecipient.DefaultID holds the default value on creation for the id field.
 	templaterecipient.DefaultID = templaterecipientDescID.Default.(func() string)
 	userMixin := schema.User{}.Mixin()

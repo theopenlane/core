@@ -91,6 +91,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
@@ -46013,6 +46014,10 @@ type OrganizationWhereInput struct {
 	HasScheduledJobRuns     *bool                        `json:"hasScheduledJobRuns,omitempty"`
 	HasScheduledJobRunsWith []*ScheduledJobRunWhereInput `json:"hasScheduledJobRunsWith,omitempty"`
 
+	// "template_recipients" edge predicates.
+	HasTemplateRecipients     *bool                          `json:"hasTemplateRecipients,omitempty"`
+	HasTemplateRecipientsWith []*TemplateRecipientWhereInput `json:"hasTemplateRecipientsWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -47529,6 +47534,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasScheduledJobRunsWith(with...))
+	}
+	if i.HasTemplateRecipients != nil {
+		p := organization.HasTemplateRecipients()
+		if !*i.HasTemplateRecipients {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTemplateRecipientsWith) > 0 {
+		with := make([]predicate.TemplateRecipient, 0, len(i.HasTemplateRecipientsWith))
+		for _, w := range i.HasTemplateRecipientsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTemplateRecipientsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasTemplateRecipientsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()
@@ -70549,6 +70572,860 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 		return predicates[0], nil
 	default:
 		return templatehistory.And(predicates...), nil
+	}
+}
+
+// TemplateRecipientWhereInput represents a where input for filtering TemplateRecipient queries.
+type TemplateRecipientWhereInput struct {
+	Predicates []predicate.TemplateRecipient  `json:"-"`
+	Not        *TemplateRecipientWhereInput   `json:"not,omitempty"`
+	Or         []*TemplateRecipientWhereInput `json:"or,omitempty"`
+	And        []*TemplateRecipientWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "token" field predicates.
+	Token             *string  `json:"token,omitempty"`
+	TokenNEQ          *string  `json:"tokenNEQ,omitempty"`
+	TokenIn           []string `json:"tokenIn,omitempty"`
+	TokenNotIn        []string `json:"tokenNotIn,omitempty"`
+	TokenGT           *string  `json:"tokenGT,omitempty"`
+	TokenGTE          *string  `json:"tokenGTE,omitempty"`
+	TokenLT           *string  `json:"tokenLT,omitempty"`
+	TokenLTE          *string  `json:"tokenLTE,omitempty"`
+	TokenContains     *string  `json:"tokenContains,omitempty"`
+	TokenHasPrefix    *string  `json:"tokenHasPrefix,omitempty"`
+	TokenHasSuffix    *string  `json:"tokenHasSuffix,omitempty"`
+	TokenEqualFold    *string  `json:"tokenEqualFold,omitempty"`
+	TokenContainsFold *string  `json:"tokenContainsFold,omitempty"`
+
+	// "expires_at" field predicates.
+	ExpiresAt      *time.Time  `json:"expiresAt,omitempty"`
+	ExpiresAtNEQ   *time.Time  `json:"expiresAtNEQ,omitempty"`
+	ExpiresAtIn    []time.Time `json:"expiresAtIn,omitempty"`
+	ExpiresAtNotIn []time.Time `json:"expiresAtNotIn,omitempty"`
+	ExpiresAtGT    *time.Time  `json:"expiresAtGT,omitempty"`
+	ExpiresAtGTE   *time.Time  `json:"expiresAtGTE,omitempty"`
+	ExpiresAtLT    *time.Time  `json:"expiresAtLT,omitempty"`
+	ExpiresAtLTE   *time.Time  `json:"expiresAtLTE,omitempty"`
+
+	// "email" field predicates.
+	Email             *string  `json:"email,omitempty"`
+	EmailNEQ          *string  `json:"emailNEQ,omitempty"`
+	EmailIn           []string `json:"emailIn,omitempty"`
+	EmailNotIn        []string `json:"emailNotIn,omitempty"`
+	EmailGT           *string  `json:"emailGT,omitempty"`
+	EmailGTE          *string  `json:"emailGTE,omitempty"`
+	EmailLT           *string  `json:"emailLT,omitempty"`
+	EmailLTE          *string  `json:"emailLTE,omitempty"`
+	EmailContains     *string  `json:"emailContains,omitempty"`
+	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
+	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
+	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
+	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
+
+	// "secret" field predicates.
+	Secret             *string  `json:"secret,omitempty"`
+	SecretNEQ          *string  `json:"secretNEQ,omitempty"`
+	SecretIn           []string `json:"secretIn,omitempty"`
+	SecretNotIn        []string `json:"secretNotIn,omitempty"`
+	SecretGT           *string  `json:"secretGT,omitempty"`
+	SecretGTE          *string  `json:"secretGTE,omitempty"`
+	SecretLT           *string  `json:"secretLT,omitempty"`
+	SecretLTE          *string  `json:"secretLTE,omitempty"`
+	SecretContains     *string  `json:"secretContains,omitempty"`
+	SecretHasPrefix    *string  `json:"secretHasPrefix,omitempty"`
+	SecretHasSuffix    *string  `json:"secretHasSuffix,omitempty"`
+	SecretEqualFold    *string  `json:"secretEqualFold,omitempty"`
+	SecretContainsFold *string  `json:"secretContainsFold,omitempty"`
+
+	// "template_id" field predicates.
+	TemplateID             *string  `json:"templateID,omitempty"`
+	TemplateIDNEQ          *string  `json:"templateIDNEQ,omitempty"`
+	TemplateIDIn           []string `json:"templateIDIn,omitempty"`
+	TemplateIDNotIn        []string `json:"templateIDNotIn,omitempty"`
+	TemplateIDGT           *string  `json:"templateIDGT,omitempty"`
+	TemplateIDGTE          *string  `json:"templateIDGTE,omitempty"`
+	TemplateIDLT           *string  `json:"templateIDLT,omitempty"`
+	TemplateIDLTE          *string  `json:"templateIDLTE,omitempty"`
+	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
+	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
+	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
+	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
+
+	// "send_attempts" field predicates.
+	SendAttempts      *int  `json:"sendAttempts,omitempty"`
+	SendAttemptsNEQ   *int  `json:"sendAttemptsNEQ,omitempty"`
+	SendAttemptsIn    []int `json:"sendAttemptsIn,omitempty"`
+	SendAttemptsNotIn []int `json:"sendAttemptsNotIn,omitempty"`
+	SendAttemptsGT    *int  `json:"sendAttemptsGT,omitempty"`
+	SendAttemptsGTE   *int  `json:"sendAttemptsGTE,omitempty"`
+	SendAttemptsLT    *int  `json:"sendAttemptsLT,omitempty"`
+	SendAttemptsLTE   *int  `json:"sendAttemptsLTE,omitempty"`
+
+	// "status" field predicates.
+	Status      *enums.TemplateRecipientStatus  `json:"status,omitempty"`
+	StatusNEQ   *enums.TemplateRecipientStatus  `json:"statusNEQ,omitempty"`
+	StatusIn    []enums.TemplateRecipientStatus `json:"statusIn,omitempty"`
+	StatusNotIn []enums.TemplateRecipientStatus `json:"statusNotIn,omitempty"`
+
+	// "document_data_id" field predicates.
+	DocumentDataID             *string  `json:"documentDataID,omitempty"`
+	DocumentDataIDNEQ          *string  `json:"documentDataIDNEQ,omitempty"`
+	DocumentDataIDIn           []string `json:"documentDataIDIn,omitempty"`
+	DocumentDataIDNotIn        []string `json:"documentDataIDNotIn,omitempty"`
+	DocumentDataIDGT           *string  `json:"documentDataIDGT,omitempty"`
+	DocumentDataIDGTE          *string  `json:"documentDataIDGTE,omitempty"`
+	DocumentDataIDLT           *string  `json:"documentDataIDLT,omitempty"`
+	DocumentDataIDLTE          *string  `json:"documentDataIDLTE,omitempty"`
+	DocumentDataIDContains     *string  `json:"documentDataIDContains,omitempty"`
+	DocumentDataIDHasPrefix    *string  `json:"documentDataIDHasPrefix,omitempty"`
+	DocumentDataIDHasSuffix    *string  `json:"documentDataIDHasSuffix,omitempty"`
+	DocumentDataIDIsNil        bool     `json:"documentDataIDIsNil,omitempty"`
+	DocumentDataIDNotNil       bool     `json:"documentDataIDNotNil,omitempty"`
+	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
+	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "document" edge predicates.
+	HasDocument     *bool                     `json:"hasDocument,omitempty"`
+	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
+
+	// "template" edge predicates.
+	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
+	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
+
+	// "events" edge predicates.
+	HasEvents     *bool              `json:"hasEvents,omitempty"`
+	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *TemplateRecipientWhereInput) AddPredicates(predicates ...predicate.TemplateRecipient) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the TemplateRecipientWhereInput filter on the TemplateRecipientQuery builder.
+func (i *TemplateRecipientWhereInput) Filter(q *TemplateRecipientQuery) (*TemplateRecipientQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyTemplateRecipientWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyTemplateRecipientWhereInput is returned in case the TemplateRecipientWhereInput is empty.
+var ErrEmptyTemplateRecipientWhereInput = errors.New("generated: empty predicate TemplateRecipientWhereInput")
+
+// P returns a predicate for filtering templaterecipients.
+// An error is returned if the input is empty or invalid.
+func (i *TemplateRecipientWhereInput) P() (predicate.TemplateRecipient, error) {
+	var predicates []predicate.TemplateRecipient
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, templaterecipient.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.TemplateRecipient, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, templaterecipient.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.TemplateRecipient, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, templaterecipient.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, templaterecipient.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, templaterecipient.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, templaterecipient.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, templaterecipient.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, templaterecipient.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, templaterecipient.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, templaterecipient.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, templaterecipient.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, templaterecipient.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, templaterecipient.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, templaterecipient.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, templaterecipient.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, templaterecipient.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, templaterecipient.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, templaterecipient.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, templaterecipient.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, templaterecipient.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, templaterecipient.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, templaterecipient.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, templaterecipient.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, templaterecipient.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, templaterecipient.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, templaterecipient.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, templaterecipient.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, templaterecipient.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, templaterecipient.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, templaterecipient.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, templaterecipient.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, templaterecipient.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, templaterecipient.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, templaterecipient.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, templaterecipient.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, templaterecipient.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, templaterecipient.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, templaterecipient.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, templaterecipient.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, templaterecipient.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, templaterecipient.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, templaterecipient.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, templaterecipient.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, templaterecipient.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, templaterecipient.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, templaterecipient.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, templaterecipient.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, templaterecipient.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, templaterecipient.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, templaterecipient.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, templaterecipient.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, templaterecipient.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.Token != nil {
+		predicates = append(predicates, templaterecipient.TokenEQ(*i.Token))
+	}
+	if i.TokenNEQ != nil {
+		predicates = append(predicates, templaterecipient.TokenNEQ(*i.TokenNEQ))
+	}
+	if len(i.TokenIn) > 0 {
+		predicates = append(predicates, templaterecipient.TokenIn(i.TokenIn...))
+	}
+	if len(i.TokenNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.TokenNotIn(i.TokenNotIn...))
+	}
+	if i.TokenGT != nil {
+		predicates = append(predicates, templaterecipient.TokenGT(*i.TokenGT))
+	}
+	if i.TokenGTE != nil {
+		predicates = append(predicates, templaterecipient.TokenGTE(*i.TokenGTE))
+	}
+	if i.TokenLT != nil {
+		predicates = append(predicates, templaterecipient.TokenLT(*i.TokenLT))
+	}
+	if i.TokenLTE != nil {
+		predicates = append(predicates, templaterecipient.TokenLTE(*i.TokenLTE))
+	}
+	if i.TokenContains != nil {
+		predicates = append(predicates, templaterecipient.TokenContains(*i.TokenContains))
+	}
+	if i.TokenHasPrefix != nil {
+		predicates = append(predicates, templaterecipient.TokenHasPrefix(*i.TokenHasPrefix))
+	}
+	if i.TokenHasSuffix != nil {
+		predicates = append(predicates, templaterecipient.TokenHasSuffix(*i.TokenHasSuffix))
+	}
+	if i.TokenEqualFold != nil {
+		predicates = append(predicates, templaterecipient.TokenEqualFold(*i.TokenEqualFold))
+	}
+	if i.TokenContainsFold != nil {
+		predicates = append(predicates, templaterecipient.TokenContainsFold(*i.TokenContainsFold))
+	}
+	if i.ExpiresAt != nil {
+		predicates = append(predicates, templaterecipient.ExpiresAtEQ(*i.ExpiresAt))
+	}
+	if i.ExpiresAtNEQ != nil {
+		predicates = append(predicates, templaterecipient.ExpiresAtNEQ(*i.ExpiresAtNEQ))
+	}
+	if len(i.ExpiresAtIn) > 0 {
+		predicates = append(predicates, templaterecipient.ExpiresAtIn(i.ExpiresAtIn...))
+	}
+	if len(i.ExpiresAtNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.ExpiresAtNotIn(i.ExpiresAtNotIn...))
+	}
+	if i.ExpiresAtGT != nil {
+		predicates = append(predicates, templaterecipient.ExpiresAtGT(*i.ExpiresAtGT))
+	}
+	if i.ExpiresAtGTE != nil {
+		predicates = append(predicates, templaterecipient.ExpiresAtGTE(*i.ExpiresAtGTE))
+	}
+	if i.ExpiresAtLT != nil {
+		predicates = append(predicates, templaterecipient.ExpiresAtLT(*i.ExpiresAtLT))
+	}
+	if i.ExpiresAtLTE != nil {
+		predicates = append(predicates, templaterecipient.ExpiresAtLTE(*i.ExpiresAtLTE))
+	}
+	if i.Email != nil {
+		predicates = append(predicates, templaterecipient.EmailEQ(*i.Email))
+	}
+	if i.EmailNEQ != nil {
+		predicates = append(predicates, templaterecipient.EmailNEQ(*i.EmailNEQ))
+	}
+	if len(i.EmailIn) > 0 {
+		predicates = append(predicates, templaterecipient.EmailIn(i.EmailIn...))
+	}
+	if len(i.EmailNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.EmailNotIn(i.EmailNotIn...))
+	}
+	if i.EmailGT != nil {
+		predicates = append(predicates, templaterecipient.EmailGT(*i.EmailGT))
+	}
+	if i.EmailGTE != nil {
+		predicates = append(predicates, templaterecipient.EmailGTE(*i.EmailGTE))
+	}
+	if i.EmailLT != nil {
+		predicates = append(predicates, templaterecipient.EmailLT(*i.EmailLT))
+	}
+	if i.EmailLTE != nil {
+		predicates = append(predicates, templaterecipient.EmailLTE(*i.EmailLTE))
+	}
+	if i.EmailContains != nil {
+		predicates = append(predicates, templaterecipient.EmailContains(*i.EmailContains))
+	}
+	if i.EmailHasPrefix != nil {
+		predicates = append(predicates, templaterecipient.EmailHasPrefix(*i.EmailHasPrefix))
+	}
+	if i.EmailHasSuffix != nil {
+		predicates = append(predicates, templaterecipient.EmailHasSuffix(*i.EmailHasSuffix))
+	}
+	if i.EmailEqualFold != nil {
+		predicates = append(predicates, templaterecipient.EmailEqualFold(*i.EmailEqualFold))
+	}
+	if i.EmailContainsFold != nil {
+		predicates = append(predicates, templaterecipient.EmailContainsFold(*i.EmailContainsFold))
+	}
+	if i.Secret != nil {
+		predicates = append(predicates, templaterecipient.SecretEQ(*i.Secret))
+	}
+	if i.SecretNEQ != nil {
+		predicates = append(predicates, templaterecipient.SecretNEQ(*i.SecretNEQ))
+	}
+	if len(i.SecretIn) > 0 {
+		predicates = append(predicates, templaterecipient.SecretIn(i.SecretIn...))
+	}
+	if len(i.SecretNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.SecretNotIn(i.SecretNotIn...))
+	}
+	if i.SecretGT != nil {
+		predicates = append(predicates, templaterecipient.SecretGT(*i.SecretGT))
+	}
+	if i.SecretGTE != nil {
+		predicates = append(predicates, templaterecipient.SecretGTE(*i.SecretGTE))
+	}
+	if i.SecretLT != nil {
+		predicates = append(predicates, templaterecipient.SecretLT(*i.SecretLT))
+	}
+	if i.SecretLTE != nil {
+		predicates = append(predicates, templaterecipient.SecretLTE(*i.SecretLTE))
+	}
+	if i.SecretContains != nil {
+		predicates = append(predicates, templaterecipient.SecretContains(*i.SecretContains))
+	}
+	if i.SecretHasPrefix != nil {
+		predicates = append(predicates, templaterecipient.SecretHasPrefix(*i.SecretHasPrefix))
+	}
+	if i.SecretHasSuffix != nil {
+		predicates = append(predicates, templaterecipient.SecretHasSuffix(*i.SecretHasSuffix))
+	}
+	if i.SecretEqualFold != nil {
+		predicates = append(predicates, templaterecipient.SecretEqualFold(*i.SecretEqualFold))
+	}
+	if i.SecretContainsFold != nil {
+		predicates = append(predicates, templaterecipient.SecretContainsFold(*i.SecretContainsFold))
+	}
+	if i.TemplateID != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDEQ(*i.TemplateID))
+	}
+	if i.TemplateIDNEQ != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDNEQ(*i.TemplateIDNEQ))
+	}
+	if len(i.TemplateIDIn) > 0 {
+		predicates = append(predicates, templaterecipient.TemplateIDIn(i.TemplateIDIn...))
+	}
+	if len(i.TemplateIDNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.TemplateIDNotIn(i.TemplateIDNotIn...))
+	}
+	if i.TemplateIDGT != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDGT(*i.TemplateIDGT))
+	}
+	if i.TemplateIDGTE != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDGTE(*i.TemplateIDGTE))
+	}
+	if i.TemplateIDLT != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDLT(*i.TemplateIDLT))
+	}
+	if i.TemplateIDLTE != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDLTE(*i.TemplateIDLTE))
+	}
+	if i.TemplateIDContains != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDContains(*i.TemplateIDContains))
+	}
+	if i.TemplateIDHasPrefix != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDHasPrefix(*i.TemplateIDHasPrefix))
+	}
+	if i.TemplateIDHasSuffix != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDHasSuffix(*i.TemplateIDHasSuffix))
+	}
+	if i.TemplateIDEqualFold != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDEqualFold(*i.TemplateIDEqualFold))
+	}
+	if i.TemplateIDContainsFold != nil {
+		predicates = append(predicates, templaterecipient.TemplateIDContainsFold(*i.TemplateIDContainsFold))
+	}
+	if i.SendAttempts != nil {
+		predicates = append(predicates, templaterecipient.SendAttemptsEQ(*i.SendAttempts))
+	}
+	if i.SendAttemptsNEQ != nil {
+		predicates = append(predicates, templaterecipient.SendAttemptsNEQ(*i.SendAttemptsNEQ))
+	}
+	if len(i.SendAttemptsIn) > 0 {
+		predicates = append(predicates, templaterecipient.SendAttemptsIn(i.SendAttemptsIn...))
+	}
+	if len(i.SendAttemptsNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.SendAttemptsNotIn(i.SendAttemptsNotIn...))
+	}
+	if i.SendAttemptsGT != nil {
+		predicates = append(predicates, templaterecipient.SendAttemptsGT(*i.SendAttemptsGT))
+	}
+	if i.SendAttemptsGTE != nil {
+		predicates = append(predicates, templaterecipient.SendAttemptsGTE(*i.SendAttemptsGTE))
+	}
+	if i.SendAttemptsLT != nil {
+		predicates = append(predicates, templaterecipient.SendAttemptsLT(*i.SendAttemptsLT))
+	}
+	if i.SendAttemptsLTE != nil {
+		predicates = append(predicates, templaterecipient.SendAttemptsLTE(*i.SendAttemptsLTE))
+	}
+	if i.Status != nil {
+		predicates = append(predicates, templaterecipient.StatusEQ(*i.Status))
+	}
+	if i.StatusNEQ != nil {
+		predicates = append(predicates, templaterecipient.StatusNEQ(*i.StatusNEQ))
+	}
+	if len(i.StatusIn) > 0 {
+		predicates = append(predicates, templaterecipient.StatusIn(i.StatusIn...))
+	}
+	if len(i.StatusNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.DocumentDataID != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDEQ(*i.DocumentDataID))
+	}
+	if i.DocumentDataIDNEQ != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDNEQ(*i.DocumentDataIDNEQ))
+	}
+	if len(i.DocumentDataIDIn) > 0 {
+		predicates = append(predicates, templaterecipient.DocumentDataIDIn(i.DocumentDataIDIn...))
+	}
+	if len(i.DocumentDataIDNotIn) > 0 {
+		predicates = append(predicates, templaterecipient.DocumentDataIDNotIn(i.DocumentDataIDNotIn...))
+	}
+	if i.DocumentDataIDGT != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDGT(*i.DocumentDataIDGT))
+	}
+	if i.DocumentDataIDGTE != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDGTE(*i.DocumentDataIDGTE))
+	}
+	if i.DocumentDataIDLT != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDLT(*i.DocumentDataIDLT))
+	}
+	if i.DocumentDataIDLTE != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDLTE(*i.DocumentDataIDLTE))
+	}
+	if i.DocumentDataIDContains != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDContains(*i.DocumentDataIDContains))
+	}
+	if i.DocumentDataIDHasPrefix != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDHasPrefix(*i.DocumentDataIDHasPrefix))
+	}
+	if i.DocumentDataIDHasSuffix != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDHasSuffix(*i.DocumentDataIDHasSuffix))
+	}
+	if i.DocumentDataIDIsNil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDIsNil())
+	}
+	if i.DocumentDataIDNotNil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDNotNil())
+	}
+	if i.DocumentDataIDEqualFold != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDEqualFold(*i.DocumentDataIDEqualFold))
+	}
+	if i.DocumentDataIDContainsFold != nil {
+		predicates = append(predicates, templaterecipient.DocumentDataIDContainsFold(*i.DocumentDataIDContainsFold))
+	}
+
+	if i.HasOwner != nil {
+		p := templaterecipient.HasOwner()
+		if !*i.HasOwner {
+			p = templaterecipient.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, templaterecipient.HasOwnerWith(with...))
+	}
+	if i.HasDocument != nil {
+		p := templaterecipient.HasDocument()
+		if !*i.HasDocument {
+			p = templaterecipient.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDocumentWith) > 0 {
+		with := make([]predicate.DocumentData, 0, len(i.HasDocumentWith))
+		for _, w := range i.HasDocumentWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDocumentWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, templaterecipient.HasDocumentWith(with...))
+	}
+	if i.HasTemplate != nil {
+		p := templaterecipient.HasTemplate()
+		if !*i.HasTemplate {
+			p = templaterecipient.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTemplateWith) > 0 {
+		with := make([]predicate.Template, 0, len(i.HasTemplateWith))
+		for _, w := range i.HasTemplateWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTemplateWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, templaterecipient.HasTemplateWith(with...))
+	}
+	if i.HasEvents != nil {
+		p := templaterecipient.HasEvents()
+		if !*i.HasEvents {
+			p = templaterecipient.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEventsWith) > 0 {
+		with := make([]predicate.Event, 0, len(i.HasEventsWith))
+		for _, w := range i.HasEventsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEventsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, templaterecipient.HasEventsWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyTemplateRecipientWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return templaterecipient.And(predicates...), nil
 	}
 }
 

@@ -1,0 +1,119 @@
+mutation CreateTemplateRecipient($input: CreateTemplateRecipientInput!) {
+  createTemplateRecipient(input: $input) {
+    templateRecipient {
+      createdAt
+      createdBy
+      documentDataID
+      email
+      expiresAt
+      id
+      secret
+      sendAttempts
+      status
+      templateID
+      token
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteTemplateRecipient($deleteTemplateRecipientId: ID!) {
+  deleteTemplateRecipient(id: $deleteTemplateRecipientId) {
+    deletedID
+  }
+}
+
+query GetAllTemplateRecipients {
+  templateRecipients {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        documentDataID
+        email
+        expiresAt
+        id
+        secret
+        sendAttempts
+        status
+        templateID
+        token
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetTemplateRecipientByID($templateRecipientId: ID!) {
+  templateRecipient(id: $templateRecipientId) {
+    createdAt
+    createdBy
+    documentDataID
+    email
+    expiresAt
+    id
+    secret
+    sendAttempts
+    status
+    templateID
+    token
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetTemplateRecipients($first: Int, $last: Int, $where: TemplateRecipientWhereInput) {
+  templateRecipients(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        documentDataID
+        email
+        expiresAt
+        id
+        secret
+        sendAttempts
+        status
+        templateID
+        token
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateTemplateRecipient($updateTemplateRecipientId: ID!, $input: UpdateTemplateRecipientInput!) {
+  updateTemplateRecipient(id: $updateTemplateRecipientId, input: $input) {
+    templateRecipient {
+      createdAt
+      createdBy
+      documentDataID
+      email
+      expiresAt
+      id
+      secret
+      sendAttempts
+      status
+      templateID
+      token
+      updatedAt
+      updatedBy
+    }
+  }
+}

@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -13,6 +14,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
@@ -23,14 +26,17 @@ import (
 // TemplateRecipientQuery is the builder for querying TemplateRecipient entities.
 type TemplateRecipientQuery struct {
 	config
-	ctx          *QueryContext
-	order        []templaterecipient.OrderOption
-	inters       []Interceptor
-	predicates   []predicate.TemplateRecipient
-	withDocument *DocumentDataQuery
-	withTemplate *TemplateQuery
-	loadTotal    []func(context.Context, []*TemplateRecipient) error
-	modifiers    []func(*sql.Selector)
+	ctx             *QueryContext
+	order           []templaterecipient.OrderOption
+	inters          []Interceptor
+	predicates      []predicate.TemplateRecipient
+	withOwner       *OrganizationQuery
+	withDocument    *DocumentDataQuery
+	withTemplate    *TemplateQuery
+	withEvents      *EventQuery
+	loadTotal       []func(context.Context, []*TemplateRecipient) error
+	modifiers       []func(*sql.Selector)
+	withNamedEvents map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -65,6 +71,31 @@ func (trq *TemplateRecipientQuery) Unique(unique bool) *TemplateRecipientQuery {
 func (trq *TemplateRecipientQuery) Order(o ...templaterecipient.OrderOption) *TemplateRecipientQuery {
 	trq.order = append(trq.order, o...)
 	return trq
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (trq *TemplateRecipientQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: trq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := trq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := trq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(templaterecipient.Table, templaterecipient.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, templaterecipient.OwnerTable, templaterecipient.OwnerColumn),
+		)
+		schemaConfig := trq.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TemplateRecipient
+		fromU = sqlgraph.SetNeighbors(trq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryDocument chains the current query on the "document" edge.
@@ -111,6 +142,31 @@ func (trq *TemplateRecipientQuery) QueryTemplate() *TemplateQuery {
 		schemaConfig := trq.schemaConfig
 		step.To.Schema = schemaConfig.Template
 		step.Edge.Schema = schemaConfig.TemplateRecipient
+		fromU = sqlgraph.SetNeighbors(trq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvents chains the current query on the "events" edge.
+func (trq *TemplateRecipientQuery) QueryEvents() *EventQuery {
+	query := (&EventClient{config: trq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := trq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := trq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(templaterecipient.Table, templaterecipient.FieldID, selector),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, templaterecipient.EventsTable, templaterecipient.EventsColumn),
+		)
+		schemaConfig := trq.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
 		fromU = sqlgraph.SetNeighbors(trq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -309,13 +365,26 @@ func (trq *TemplateRecipientQuery) Clone() *TemplateRecipientQuery {
 		order:        append([]templaterecipient.OrderOption{}, trq.order...),
 		inters:       append([]Interceptor{}, trq.inters...),
 		predicates:   append([]predicate.TemplateRecipient{}, trq.predicates...),
+		withOwner:    trq.withOwner.Clone(),
 		withDocument: trq.withDocument.Clone(),
 		withTemplate: trq.withTemplate.Clone(),
+		withEvents:   trq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       trq.sql.Clone(),
 		path:      trq.path,
 		modifiers: append([]func(*sql.Selector){}, trq.modifiers...),
 	}
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (trq *TemplateRecipientQuery) WithOwner(opts ...func(*OrganizationQuery)) *TemplateRecipientQuery {
+	query := (&OrganizationClient{config: trq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	trq.withOwner = query
+	return trq
 }
 
 // WithDocument tells the query-builder to eager-load the nodes that are connected to
@@ -337,6 +406,17 @@ func (trq *TemplateRecipientQuery) WithTemplate(opts ...func(*TemplateQuery)) *T
 		opt(query)
 	}
 	trq.withTemplate = query
+	return trq
+}
+
+// WithEvents tells the query-builder to eager-load the nodes that are connected to
+// the "events" edge. The optional arguments are used to configure the query builder of the edge.
+func (trq *TemplateRecipientQuery) WithEvents(opts ...func(*EventQuery)) *TemplateRecipientQuery {
+	query := (&EventClient{config: trq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	trq.withEvents = query
 	return trq
 }
 
@@ -424,9 +504,11 @@ func (trq *TemplateRecipientQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*TemplateRecipient{}
 		_spec       = trq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [4]bool{
+			trq.withOwner != nil,
 			trq.withDocument != nil,
 			trq.withTemplate != nil,
+			trq.withEvents != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -452,6 +534,12 @@ func (trq *TemplateRecipientQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := trq.withOwner; query != nil {
+		if err := trq.loadOwner(ctx, query, nodes, nil,
+			func(n *TemplateRecipient, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := trq.withDocument; query != nil {
 		if err := trq.loadDocument(ctx, query, nodes, nil,
 			func(n *TemplateRecipient, e *DocumentData) { n.Edges.Document = e }); err != nil {
@@ -464,6 +552,20 @@ func (trq *TemplateRecipientQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 			return nil, err
 		}
 	}
+	if query := trq.withEvents; query != nil {
+		if err := trq.loadEvents(ctx, query, nodes,
+			func(n *TemplateRecipient) { n.Edges.Events = []*Event{} },
+			func(n *TemplateRecipient, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range trq.withNamedEvents {
+		if err := trq.loadEvents(ctx, query, nodes,
+			func(n *TemplateRecipient) { n.appendNamedEvents(name) },
+			func(n *TemplateRecipient, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range trq.loadTotal {
 		if err := trq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
@@ -472,6 +574,35 @@ func (trq *TemplateRecipientQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	return nodes, nil
 }
 
+func (trq *TemplateRecipientQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*TemplateRecipient, init func(*TemplateRecipient), assign func(*TemplateRecipient, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TemplateRecipient)
+	for i := range nodes {
+		fk := nodes[i].OwnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (trq *TemplateRecipientQuery) loadDocument(ctx context.Context, query *DocumentDataQuery, nodes []*TemplateRecipient, init func(*TemplateRecipient), assign func(*TemplateRecipient, *DocumentData)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TemplateRecipient)
@@ -530,6 +661,37 @@ func (trq *TemplateRecipientQuery) loadTemplate(ctx context.Context, query *Temp
 	}
 	return nil
 }
+func (trq *TemplateRecipientQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*TemplateRecipient, init func(*TemplateRecipient), assign func(*TemplateRecipient, *Event)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TemplateRecipient)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Event(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(templaterecipient.EventsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.template_recipient_events
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "template_recipient_events" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "template_recipient_events" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (trq *TemplateRecipientQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := trq.querySpec()
@@ -560,6 +722,9 @@ func (trq *TemplateRecipientQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != templaterecipient.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if trq.withOwner != nil {
+			_spec.Node.AddColumnOnce(templaterecipient.FieldOwnerID)
 		}
 		if trq.withDocument != nil {
 			_spec.Node.AddColumnOnce(templaterecipient.FieldDocumentDataID)
@@ -633,6 +798,20 @@ func (trq *TemplateRecipientQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (trq *TemplateRecipientQuery) Modify(modifiers ...func(s *sql.Selector)) *TemplateRecipientSelect {
 	trq.modifiers = append(trq.modifiers, modifiers...)
 	return trq.Select()
+}
+
+// WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (trq *TemplateRecipientQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *TemplateRecipientQuery {
+	query := (&EventClient{config: trq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if trq.withNamedEvents == nil {
+		trq.withNamedEvents = make(map[string]*EventQuery)
+	}
+	trq.withNamedEvents[name] = query
+	return trq
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs

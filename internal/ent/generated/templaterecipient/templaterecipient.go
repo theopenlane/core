@@ -30,10 +30,12 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldToken holds the string denoting the token field in the database.
 	FieldToken = "token"
-	// FieldTTL holds the string denoting the ttl field in the database.
-	FieldTTL = "ttl"
+	// FieldExpiresAt holds the string denoting the expires_at field in the database.
+	FieldExpiresAt = "expires_at"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
 	// FieldSecret holds the string denoting the secret field in the database.
@@ -46,12 +48,23 @@ const (
 	FieldStatus = "status"
 	// FieldDocumentDataID holds the string denoting the document_data_id field in the database.
 	FieldDocumentDataID = "document_data_id"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeDocument holds the string denoting the document edge name in mutations.
 	EdgeDocument = "document"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
 	EdgeTemplate = "template"
+	// EdgeEvents holds the string denoting the events edge name in mutations.
+	EdgeEvents = "events"
 	// Table holds the table name of the templaterecipient in the database.
 	Table = "template_recipients"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "template_recipients"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
 	// DocumentTable is the table that holds the document relation/edge.
 	DocumentTable = "template_recipients"
 	// DocumentInverseTable is the table name for the DocumentData entity.
@@ -66,6 +79,13 @@ const (
 	TemplateInverseTable = "templates"
 	// TemplateColumn is the table column denoting the template relation/edge.
 	TemplateColumn = "template_id"
+	// EventsTable is the table that holds the events relation/edge.
+	EventsTable = "events"
+	// EventsInverseTable is the table name for the Event entity.
+	// It exists in this package in order to avoid circular dependency with the "event" package.
+	EventsInverseTable = "events"
+	// EventsColumn is the table column denoting the events relation/edge.
+	EventsColumn = "template_recipient_events"
 )
 
 // Columns holds all SQL columns for templaterecipient fields.
@@ -77,8 +97,9 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldOwnerID,
 	FieldToken,
-	FieldTTL,
+	FieldExpiresAt,
 	FieldEmail,
 	FieldSecret,
 	FieldTemplateID,
@@ -103,8 +124,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [3]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Hooks        [4]ent.Hook
+	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -112,8 +133,12 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
 	// TokenValidator is a validator for the "token" field. It is called by the builders before save.
 	TokenValidator func(string) error
+	// DefaultExpiresAt holds the default value on creation for the "expires_at" field.
+	DefaultExpiresAt time.Time
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	EmailValidator func(string) error
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
@@ -172,19 +197,29 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByToken orders the results by the token field.
 func ByToken(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldToken, opts...).ToFunc()
 }
 
-// ByTTL orders the results by the ttl field.
-func ByTTL(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTTL, opts...).ToFunc()
+// ByExpiresAt orders the results by the expires_at field.
+func ByExpiresAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpiresAt, opts...).ToFunc()
 }
 
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+}
+
+// BySecret orders the results by the secret field.
+func BySecret(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecret, opts...).ToFunc()
 }
 
 // ByTemplateID orders the results by the template_id field.
@@ -207,6 +242,13 @@ func ByDocumentDataID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDocumentDataID, opts...).ToFunc()
 }
 
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByDocumentField orders the results by document field.
 func ByDocumentField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -220,6 +262,27 @@ func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTemplateStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByEventsCount orders the results by events count.
+func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEventsStep(), opts...)
+	}
+}
+
+// ByEvents orders the results by events terms.
+func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
 func newDocumentStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -232,6 +295,13 @@ func newTemplateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TemplateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, TemplateTable, TemplateColumn),
+	)
+}
+func newEventsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EventsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EventsTable, EventsColumn),
 	)
 }
 

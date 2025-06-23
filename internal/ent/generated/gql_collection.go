@@ -93,6 +93,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
@@ -26926,6 +26927,95 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "templateRecipients":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TemplateRecipientClient{config: o.config}).Query()
+			)
+			args := newTemplateRecipientPaginateArgs(fieldArgs(ctx, new(TemplateRecipientWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTemplateRecipientPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					o.loadTotal = append(o.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.TemplateRecipientsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.TemplateRecipientsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[58] == nil {
+								nodes[i].Edges.totalCount[58] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[58][alias] = n
+						}
+						return nil
+					})
+				} else {
+					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TemplateRecipients)
+							if nodes[i].Edges.totalCount[58] == nil {
+								nodes[i].Edges.totalCount[58] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[58][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, templaterecipientImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.TemplateRecipientsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			o.WithNamedTemplateRecipients(alias, func(wq *TemplateRecipientQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -26969,10 +27059,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[58] == nil {
-								nodes[i].Edges.totalCount[58] = make(map[string]int)
+							if nodes[i].Edges.totalCount[59] == nil {
+								nodes[i].Edges.totalCount[59] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[58][alias] = n
+							nodes[i].Edges.totalCount[59][alias] = n
 						}
 						return nil
 					})
@@ -26980,10 +27070,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[58] == nil {
-								nodes[i].Edges.totalCount[58] = make(map[string]int)
+							if nodes[i].Edges.totalCount[59] == nil {
+								nodes[i].Edges.totalCount[59] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[58][alias] = n
+							nodes[i].Edges.totalCount[59][alias] = n
 						}
 						return nil
 					})
@@ -37705,6 +37795,295 @@ func newTemplateHistoryPaginateArgs(rv map[string]any) *templatehistoryPaginateA
 	}
 	if v, ok := rv[whereField].(*TemplateHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithTemplateHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (tr *TemplateRecipientQuery) CollectFields(ctx context.Context, satisfies ...string) (*TemplateRecipientQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return tr, nil
+	}
+	if err := tr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return tr, nil
+}
+
+func (tr *TemplateRecipientQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(templaterecipient.Columns))
+		selectedFields = []string{templaterecipient.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: tr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			tr.withOwner = query
+			if _, ok := fieldSeen[templaterecipient.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldOwnerID)
+				fieldSeen[templaterecipient.FieldOwnerID] = struct{}{}
+			}
+
+		case "document":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DocumentDataClient{config: tr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
+				return err
+			}
+			tr.withDocument = query
+			if _, ok := fieldSeen[templaterecipient.FieldDocumentDataID]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldDocumentDataID)
+				fieldSeen[templaterecipient.FieldDocumentDataID] = struct{}{}
+			}
+
+		case "template":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TemplateClient{config: tr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, templateImplementors)...); err != nil {
+				return err
+			}
+			tr.withTemplate = query
+			if _, ok := fieldSeen[templaterecipient.FieldTemplateID]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldTemplateID)
+				fieldSeen[templaterecipient.FieldTemplateID] = struct{}{}
+			}
+
+		case "events":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EventClient{config: tr.config}).Query()
+			)
+			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newEventPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					tr.loadTotal = append(tr.loadTotal, func(ctx context.Context, nodes []*TemplateRecipient) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"template_recipient_events"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(templaterecipient.EventsColumn), ids...))
+						})
+						if err := query.GroupBy(templaterecipient.EventsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				} else {
+					tr.loadTotal = append(tr.loadTotal, func(_ context.Context, nodes []*TemplateRecipient) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Events)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, eventImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(templaterecipient.EventsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			tr.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[templaterecipient.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldCreatedAt)
+				fieldSeen[templaterecipient.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[templaterecipient.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldUpdatedAt)
+				fieldSeen[templaterecipient.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[templaterecipient.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldCreatedBy)
+				fieldSeen[templaterecipient.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[templaterecipient.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldUpdatedBy)
+				fieldSeen[templaterecipient.FieldUpdatedBy] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[templaterecipient.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldOwnerID)
+				fieldSeen[templaterecipient.FieldOwnerID] = struct{}{}
+			}
+		case "token":
+			if _, ok := fieldSeen[templaterecipient.FieldToken]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldToken)
+				fieldSeen[templaterecipient.FieldToken] = struct{}{}
+			}
+		case "expiresAt":
+			if _, ok := fieldSeen[templaterecipient.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldExpiresAt)
+				fieldSeen[templaterecipient.FieldExpiresAt] = struct{}{}
+			}
+		case "email":
+			if _, ok := fieldSeen[templaterecipient.FieldEmail]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldEmail)
+				fieldSeen[templaterecipient.FieldEmail] = struct{}{}
+			}
+		case "secret":
+			if _, ok := fieldSeen[templaterecipient.FieldSecret]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldSecret)
+				fieldSeen[templaterecipient.FieldSecret] = struct{}{}
+			}
+		case "templateID":
+			if _, ok := fieldSeen[templaterecipient.FieldTemplateID]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldTemplateID)
+				fieldSeen[templaterecipient.FieldTemplateID] = struct{}{}
+			}
+		case "sendAttempts":
+			if _, ok := fieldSeen[templaterecipient.FieldSendAttempts]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldSendAttempts)
+				fieldSeen[templaterecipient.FieldSendAttempts] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[templaterecipient.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldStatus)
+				fieldSeen[templaterecipient.FieldStatus] = struct{}{}
+			}
+		case "documentDataID":
+			if _, ok := fieldSeen[templaterecipient.FieldDocumentDataID]; !ok {
+				selectedFields = append(selectedFields, templaterecipient.FieldDocumentDataID)
+				fieldSeen[templaterecipient.FieldDocumentDataID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		tr.Select(selectedFields...)
+	}
+	return nil
+}
+
+type templaterecipientPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []TemplateRecipientPaginateOption
+}
+
+func newTemplateRecipientPaginateArgs(rv map[string]any) *templaterecipientPaginateArgs {
+	args := &templaterecipientPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*TemplateRecipientOrder:
+			args.opts = append(args.opts, WithTemplateRecipientOrder(v))
+		case []any:
+			var orders []*TemplateRecipientOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &TemplateRecipientOrder{Field: &TemplateRecipientOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithTemplateRecipientOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*TemplateRecipientWhereInput); ok {
+		args.opts = append(args.opts, WithTemplateRecipientFilter(v.Filter))
 	}
 	return args
 }

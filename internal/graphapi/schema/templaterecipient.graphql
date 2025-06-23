@@ -1,0 +1,85 @@
+extend type Query {
+    """
+    Look up templateRecipient by ID
+    """
+     templateRecipient(
+        """
+        ID of the templateRecipient
+        """
+        id: ID!
+    ):  TemplateRecipient!
+}
+
+extend type Mutation{
+    """
+    Create a new templateRecipient
+    """
+    createTemplateRecipient(
+        """
+        values of the templateRecipient
+        """
+        input: CreateTemplateRecipientInput!
+    ): TemplateRecipientCreatePayload!
+    """
+    Update an existing templateRecipient
+    """
+    updateTemplateRecipient(
+        """
+        ID of the templateRecipient
+        """
+        id: ID!
+        """
+        New values for the templateRecipient
+        """
+        input: UpdateTemplateRecipientInput!
+    ): TemplateRecipientUpdatePayload!
+    """
+    Delete an existing templateRecipient
+    """
+    deleteTemplateRecipient(
+        """
+        ID of the templateRecipient
+        """
+        id: ID!
+    ): TemplateRecipientDeletePayload!
+}
+
+"""
+Return response for createTemplateRecipient mutation
+"""
+type TemplateRecipientCreatePayload {
+    """
+    Created templateRecipient
+    """
+    templateRecipient: TemplateRecipient!
+}
+
+"""
+Return response for updateTemplateRecipient mutation
+"""
+type TemplateRecipientUpdatePayload {
+    """
+    Updated templateRecipient
+    """
+    templateRecipient: TemplateRecipient!
+}
+
+"""
+Return response for deleteTemplateRecipient mutation
+"""
+type TemplateRecipientDeletePayload {
+    """
+    Deleted templateRecipient ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTemplateRecipient mutation
+"""
+type TemplateRecipientBulkCreatePayload {
+    """
+    Created templateRecipients
+    """
+    templateRecipients: [TemplateRecipient!]
+}

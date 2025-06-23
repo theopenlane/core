@@ -55,6 +55,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -1212,6 +1213,21 @@ func (oc *OrganizationCreate) AddScheduledJobRuns(s ...*ScheduledJobRun) *Organi
 		ids[i] = s[i].ID
 	}
 	return oc.AddScheduledJobRunIDs(ids...)
+}
+
+// AddTemplateRecipientIDs adds the "template_recipients" edge to the TemplateRecipient entity by IDs.
+func (oc *OrganizationCreate) AddTemplateRecipientIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddTemplateRecipientIDs(ids...)
+	return oc
+}
+
+// AddTemplateRecipients adds the "template_recipients" edges to the TemplateRecipient entity.
+func (oc *OrganizationCreate) AddTemplateRecipients(t ...*TemplateRecipient) *OrganizationCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return oc.AddTemplateRecipientIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2472,6 +2488,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.ScheduledJobRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.TemplateRecipientsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateRecipientsTable,
+			Columns: []string{organization.TemplateRecipientsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(templaterecipient.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.TemplateRecipient
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

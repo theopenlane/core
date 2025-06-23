@@ -2743,10 +2743,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templaterecipient.FieldUpdatedBy:      {Type: field.TypeString, Column: templaterecipient.FieldUpdatedBy},
 			templaterecipient.FieldDeletedAt:      {Type: field.TypeTime, Column: templaterecipient.FieldDeletedAt},
 			templaterecipient.FieldDeletedBy:      {Type: field.TypeString, Column: templaterecipient.FieldDeletedBy},
+			templaterecipient.FieldOwnerID:        {Type: field.TypeString, Column: templaterecipient.FieldOwnerID},
 			templaterecipient.FieldToken:          {Type: field.TypeString, Column: templaterecipient.FieldToken},
-			templaterecipient.FieldTTL:            {Type: field.TypeTime, Column: templaterecipient.FieldTTL},
+			templaterecipient.FieldExpiresAt:      {Type: field.TypeTime, Column: templaterecipient.FieldExpiresAt},
 			templaterecipient.FieldEmail:          {Type: field.TypeString, Column: templaterecipient.FieldEmail},
-			templaterecipient.FieldSecret:         {Type: field.TypeBytes, Column: templaterecipient.FieldSecret},
+			templaterecipient.FieldSecret:         {Type: field.TypeString, Column: templaterecipient.FieldSecret},
 			templaterecipient.FieldTemplateID:     {Type: field.TypeString, Column: templaterecipient.FieldTemplateID},
 			templaterecipient.FieldSendAttempts:   {Type: field.TypeInt, Column: templaterecipient.FieldSendAttempts},
 			templaterecipient.FieldStatus:         {Type: field.TypeEnum, Column: templaterecipient.FieldStatus},
@@ -6095,6 +6096,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"ScheduledJobRun",
 	)
 	graph.MustAddE(
+		"template_recipients",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateRecipientsTable,
+			Columns: []string{organization.TemplateRecipientsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"TemplateRecipient",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7223,6 +7236,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   templaterecipient.OwnerTable,
+			Columns: []string{templaterecipient.OwnerColumn},
+			Bidi:    false,
+		},
+		"TemplateRecipient",
+		"Organization",
+	)
+	graph.MustAddE(
 		"document",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -7245,6 +7270,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TemplateRecipient",
 		"Template",
+	)
+	graph.MustAddE(
+		"events",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   templaterecipient.EventsTable,
+			Columns: []string{templaterecipient.EventsColumn},
+			Bidi:    false,
+		},
+		"TemplateRecipient",
+		"Event",
 	)
 	graph.MustAddE(
 		"personal_access_tokens",
@@ -18566,6 +18603,20 @@ func (f *OrganizationFilter) WhereHasScheduledJobRunsWith(preds ...predicate.Sch
 	})))
 }
 
+// WhereHasTemplateRecipients applies a predicate to check if query has an edge template_recipients.
+func (f *OrganizationFilter) WhereHasTemplateRecipients() {
+	f.Where(entql.HasEdge("template_recipients"))
+}
+
+// WhereHasTemplateRecipientsWith applies a predicate to check if query has an edge template_recipients with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasTemplateRecipientsWith(preds ...predicate.TemplateRecipient) {
+	f.Where(entql.HasEdgeWith("template_recipients", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -23487,14 +23538,19 @@ func (f *TemplateRecipientFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(templaterecipient.FieldDeletedBy))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *TemplateRecipientFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(templaterecipient.FieldOwnerID))
+}
+
 // WhereToken applies the entql string predicate on the token field.
 func (f *TemplateRecipientFilter) WhereToken(p entql.StringP) {
 	f.Where(p.Field(templaterecipient.FieldToken))
 }
 
-// WhereTTL applies the entql time.Time predicate on the ttl field.
-func (f *TemplateRecipientFilter) WhereTTL(p entql.TimeP) {
-	f.Where(p.Field(templaterecipient.FieldTTL))
+// WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
+func (f *TemplateRecipientFilter) WhereExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(templaterecipient.FieldExpiresAt))
 }
 
 // WhereEmail applies the entql string predicate on the email field.
@@ -23502,8 +23558,8 @@ func (f *TemplateRecipientFilter) WhereEmail(p entql.StringP) {
 	f.Where(p.Field(templaterecipient.FieldEmail))
 }
 
-// WhereSecret applies the entql []byte predicate on the secret field.
-func (f *TemplateRecipientFilter) WhereSecret(p entql.BytesP) {
+// WhereSecret applies the entql string predicate on the secret field.
+func (f *TemplateRecipientFilter) WhereSecret(p entql.StringP) {
 	f.Where(p.Field(templaterecipient.FieldSecret))
 }
 
@@ -23525,6 +23581,20 @@ func (f *TemplateRecipientFilter) WhereStatus(p entql.StringP) {
 // WhereDocumentDataID applies the entql string predicate on the document_data_id field.
 func (f *TemplateRecipientFilter) WhereDocumentDataID(p entql.StringP) {
 	f.Where(p.Field(templaterecipient.FieldDocumentDataID))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *TemplateRecipientFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *TemplateRecipientFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasDocument applies a predicate to check if query has an edge document.
@@ -23549,6 +23619,20 @@ func (f *TemplateRecipientFilter) WhereHasTemplate() {
 // WhereHasTemplateWith applies a predicate to check if query has an edge template with a given conditions (other predicates).
 func (f *TemplateRecipientFilter) WhereHasTemplateWith(preds ...predicate.Template) {
 	f.Where(entql.HasEdgeWith("template", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvents applies a predicate to check if query has an edge events.
+func (f *TemplateRecipientFilter) WhereHasEvents() {
+	f.Where(entql.HasEdge("events"))
+}
+
+// WhereHasEventsWith applies a predicate to check if query has an edge events with a given conditions (other predicates).
+func (f *TemplateRecipientFilter) WhereHasEventsWith(preds ...predicate.Event) {
+	f.Where(entql.HasEdgeWith("events", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

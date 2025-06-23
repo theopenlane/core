@@ -12,8 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/pkg/enums"
 
@@ -106,65 +107,23 @@ func (tru *TemplateRecipientUpdate) ClearDeletedBy() *TemplateRecipientUpdate {
 	return tru
 }
 
-// SetToken sets the "token" field.
-func (tru *TemplateRecipientUpdate) SetToken(s string) *TemplateRecipientUpdate {
-	tru.mutation.SetToken(s)
+// SetOwnerID sets the "owner_id" field.
+func (tru *TemplateRecipientUpdate) SetOwnerID(s string) *TemplateRecipientUpdate {
+	tru.mutation.SetOwnerID(s)
 	return tru
 }
 
-// SetNillableToken sets the "token" field if the given value is not nil.
-func (tru *TemplateRecipientUpdate) SetNillableToken(s *string) *TemplateRecipientUpdate {
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (tru *TemplateRecipientUpdate) SetNillableOwnerID(s *string) *TemplateRecipientUpdate {
 	if s != nil {
-		tru.SetToken(*s)
+		tru.SetOwnerID(*s)
 	}
 	return tru
 }
 
-// SetTTL sets the "ttl" field.
-func (tru *TemplateRecipientUpdate) SetTTL(t time.Time) *TemplateRecipientUpdate {
-	tru.mutation.SetTTL(t)
-	return tru
-}
-
-// SetNillableTTL sets the "ttl" field if the given value is not nil.
-func (tru *TemplateRecipientUpdate) SetNillableTTL(t *time.Time) *TemplateRecipientUpdate {
-	if t != nil {
-		tru.SetTTL(*t)
-	}
-	return tru
-}
-
-// SetEmail sets the "email" field.
-func (tru *TemplateRecipientUpdate) SetEmail(s string) *TemplateRecipientUpdate {
-	tru.mutation.SetEmail(s)
-	return tru
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (tru *TemplateRecipientUpdate) SetNillableEmail(s *string) *TemplateRecipientUpdate {
-	if s != nil {
-		tru.SetEmail(*s)
-	}
-	return tru
-}
-
-// SetSecret sets the "secret" field.
-func (tru *TemplateRecipientUpdate) SetSecret(b []byte) *TemplateRecipientUpdate {
-	tru.mutation.SetSecret(b)
-	return tru
-}
-
-// SetTemplateID sets the "template_id" field.
-func (tru *TemplateRecipientUpdate) SetTemplateID(s string) *TemplateRecipientUpdate {
-	tru.mutation.SetTemplateID(s)
-	return tru
-}
-
-// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (tru *TemplateRecipientUpdate) SetNillableTemplateID(s *string) *TemplateRecipientUpdate {
-	if s != nil {
-		tru.SetTemplateID(*s)
-	}
+// ClearOwnerID clears the value of the "owner_id" field.
+func (tru *TemplateRecipientUpdate) ClearOwnerID() *TemplateRecipientUpdate {
+	tru.mutation.ClearOwnerID()
 	return tru
 }
 
@@ -223,6 +182,11 @@ func (tru *TemplateRecipientUpdate) ClearDocumentDataID() *TemplateRecipientUpda
 	return tru
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (tru *TemplateRecipientUpdate) SetOwner(o *Organization) *TemplateRecipientUpdate {
+	return tru.SetOwnerID(o.ID)
+}
+
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (tru *TemplateRecipientUpdate) SetDocumentID(id string) *TemplateRecipientUpdate {
 	tru.mutation.SetDocumentID(id)
@@ -242,14 +206,30 @@ func (tru *TemplateRecipientUpdate) SetDocument(d *DocumentData) *TemplateRecipi
 	return tru.SetDocumentID(d.ID)
 }
 
-// SetTemplate sets the "template" edge to the Template entity.
-func (tru *TemplateRecipientUpdate) SetTemplate(t *Template) *TemplateRecipientUpdate {
-	return tru.SetTemplateID(t.ID)
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (tru *TemplateRecipientUpdate) AddEventIDs(ids ...string) *TemplateRecipientUpdate {
+	tru.mutation.AddEventIDs(ids...)
+	return tru
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (tru *TemplateRecipientUpdate) AddEvents(e ...*Event) *TemplateRecipientUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return tru.AddEventIDs(ids...)
 }
 
 // Mutation returns the TemplateRecipientMutation object of the builder.
 func (tru *TemplateRecipientUpdate) Mutation() *TemplateRecipientMutation {
 	return tru.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (tru *TemplateRecipientUpdate) ClearOwner() *TemplateRecipientUpdate {
+	tru.mutation.ClearOwner()
+	return tru
 }
 
 // ClearDocument clears the "document" edge to the DocumentData entity.
@@ -258,10 +238,25 @@ func (tru *TemplateRecipientUpdate) ClearDocument() *TemplateRecipientUpdate {
 	return tru
 }
 
-// ClearTemplate clears the "template" edge to the Template entity.
-func (tru *TemplateRecipientUpdate) ClearTemplate() *TemplateRecipientUpdate {
-	tru.mutation.ClearTemplate()
+// ClearEvents clears all "events" edges to the Event entity.
+func (tru *TemplateRecipientUpdate) ClearEvents() *TemplateRecipientUpdate {
+	tru.mutation.ClearEvents()
 	return tru
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (tru *TemplateRecipientUpdate) RemoveEventIDs(ids ...string) *TemplateRecipientUpdate {
+	tru.mutation.RemoveEventIDs(ids...)
+	return tru
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (tru *TemplateRecipientUpdate) RemoveEvents(e ...*Event) *TemplateRecipientUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return tru.RemoveEventIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -308,14 +303,9 @@ func (tru *TemplateRecipientUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (tru *TemplateRecipientUpdate) check() error {
-	if v, ok := tru.mutation.Token(); ok {
-		if err := templaterecipient.TokenValidator(v); err != nil {
-			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "TemplateRecipient.token": %w`, err)}
-		}
-	}
-	if v, ok := tru.mutation.Email(); ok {
-		if err := templaterecipient.EmailValidator(v); err != nil {
-			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "TemplateRecipient.email": %w`, err)}
+	if v, ok := tru.mutation.OwnerID(); ok {
+		if err := templaterecipient.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "TemplateRecipient.owner_id": %w`, err)}
 		}
 	}
 	if v, ok := tru.mutation.Status(); ok {
@@ -377,18 +367,6 @@ func (tru *TemplateRecipientUpdate) sqlSave(ctx context.Context) (n int, err err
 	if tru.mutation.DeletedByCleared() {
 		_spec.ClearField(templaterecipient.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tru.mutation.Token(); ok {
-		_spec.SetField(templaterecipient.FieldToken, field.TypeString, value)
-	}
-	if value, ok := tru.mutation.TTL(); ok {
-		_spec.SetField(templaterecipient.FieldTTL, field.TypeTime, value)
-	}
-	if value, ok := tru.mutation.Email(); ok {
-		_spec.SetField(templaterecipient.FieldEmail, field.TypeString, value)
-	}
-	if value, ok := tru.mutation.Secret(); ok {
-		_spec.SetField(templaterecipient.FieldSecret, field.TypeBytes, value)
-	}
 	if value, ok := tru.mutation.SendAttempts(); ok {
 		_spec.SetField(templaterecipient.FieldSendAttempts, field.TypeInt, value)
 	}
@@ -397,6 +375,37 @@ func (tru *TemplateRecipientUpdate) sqlSave(ctx context.Context) (n int, err err
 	}
 	if value, ok := tru.mutation.Status(); ok {
 		_spec.SetField(templaterecipient.FieldStatus, field.TypeEnum, value)
+	}
+	if tru.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   templaterecipient.OwnerTable,
+			Columns: []string{templaterecipient.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tru.schemaConfig.TemplateRecipient
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tru.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   templaterecipient.OwnerTable,
+			Columns: []string{templaterecipient.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tru.schemaConfig.TemplateRecipient
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tru.mutation.DocumentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -429,32 +438,49 @@ func (tru *TemplateRecipientUpdate) sqlSave(ctx context.Context) (n int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tru.mutation.TemplateCleared() {
+	if tru.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   templaterecipient.TemplateTable,
-			Columns: []string{templaterecipient.TemplateColumn},
+			Table:   templaterecipient.EventsTable,
+			Columns: []string{templaterecipient.EventsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tru.schemaConfig.TemplateRecipient
+		edge.Schema = tru.schemaConfig.Event
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tru.mutation.TemplateIDs(); len(nodes) > 0 {
+	if nodes := tru.mutation.RemovedEventsIDs(); len(nodes) > 0 && !tru.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   templaterecipient.TemplateTable,
-			Columns: []string{templaterecipient.TemplateColumn},
+			Table:   templaterecipient.EventsTable,
+			Columns: []string{templaterecipient.EventsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = tru.schemaConfig.TemplateRecipient
+		edge.Schema = tru.schemaConfig.Event
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tru.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   templaterecipient.EventsTable,
+			Columns: []string{templaterecipient.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tru.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -556,65 +582,23 @@ func (truo *TemplateRecipientUpdateOne) ClearDeletedBy() *TemplateRecipientUpdat
 	return truo
 }
 
-// SetToken sets the "token" field.
-func (truo *TemplateRecipientUpdateOne) SetToken(s string) *TemplateRecipientUpdateOne {
-	truo.mutation.SetToken(s)
+// SetOwnerID sets the "owner_id" field.
+func (truo *TemplateRecipientUpdateOne) SetOwnerID(s string) *TemplateRecipientUpdateOne {
+	truo.mutation.SetOwnerID(s)
 	return truo
 }
 
-// SetNillableToken sets the "token" field if the given value is not nil.
-func (truo *TemplateRecipientUpdateOne) SetNillableToken(s *string) *TemplateRecipientUpdateOne {
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (truo *TemplateRecipientUpdateOne) SetNillableOwnerID(s *string) *TemplateRecipientUpdateOne {
 	if s != nil {
-		truo.SetToken(*s)
+		truo.SetOwnerID(*s)
 	}
 	return truo
 }
 
-// SetTTL sets the "ttl" field.
-func (truo *TemplateRecipientUpdateOne) SetTTL(t time.Time) *TemplateRecipientUpdateOne {
-	truo.mutation.SetTTL(t)
-	return truo
-}
-
-// SetNillableTTL sets the "ttl" field if the given value is not nil.
-func (truo *TemplateRecipientUpdateOne) SetNillableTTL(t *time.Time) *TemplateRecipientUpdateOne {
-	if t != nil {
-		truo.SetTTL(*t)
-	}
-	return truo
-}
-
-// SetEmail sets the "email" field.
-func (truo *TemplateRecipientUpdateOne) SetEmail(s string) *TemplateRecipientUpdateOne {
-	truo.mutation.SetEmail(s)
-	return truo
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (truo *TemplateRecipientUpdateOne) SetNillableEmail(s *string) *TemplateRecipientUpdateOne {
-	if s != nil {
-		truo.SetEmail(*s)
-	}
-	return truo
-}
-
-// SetSecret sets the "secret" field.
-func (truo *TemplateRecipientUpdateOne) SetSecret(b []byte) *TemplateRecipientUpdateOne {
-	truo.mutation.SetSecret(b)
-	return truo
-}
-
-// SetTemplateID sets the "template_id" field.
-func (truo *TemplateRecipientUpdateOne) SetTemplateID(s string) *TemplateRecipientUpdateOne {
-	truo.mutation.SetTemplateID(s)
-	return truo
-}
-
-// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (truo *TemplateRecipientUpdateOne) SetNillableTemplateID(s *string) *TemplateRecipientUpdateOne {
-	if s != nil {
-		truo.SetTemplateID(*s)
-	}
+// ClearOwnerID clears the value of the "owner_id" field.
+func (truo *TemplateRecipientUpdateOne) ClearOwnerID() *TemplateRecipientUpdateOne {
+	truo.mutation.ClearOwnerID()
 	return truo
 }
 
@@ -673,6 +657,11 @@ func (truo *TemplateRecipientUpdateOne) ClearDocumentDataID() *TemplateRecipient
 	return truo
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (truo *TemplateRecipientUpdateOne) SetOwner(o *Organization) *TemplateRecipientUpdateOne {
+	return truo.SetOwnerID(o.ID)
+}
+
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (truo *TemplateRecipientUpdateOne) SetDocumentID(id string) *TemplateRecipientUpdateOne {
 	truo.mutation.SetDocumentID(id)
@@ -692,14 +681,30 @@ func (truo *TemplateRecipientUpdateOne) SetDocument(d *DocumentData) *TemplateRe
 	return truo.SetDocumentID(d.ID)
 }
 
-// SetTemplate sets the "template" edge to the Template entity.
-func (truo *TemplateRecipientUpdateOne) SetTemplate(t *Template) *TemplateRecipientUpdateOne {
-	return truo.SetTemplateID(t.ID)
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (truo *TemplateRecipientUpdateOne) AddEventIDs(ids ...string) *TemplateRecipientUpdateOne {
+	truo.mutation.AddEventIDs(ids...)
+	return truo
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (truo *TemplateRecipientUpdateOne) AddEvents(e ...*Event) *TemplateRecipientUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return truo.AddEventIDs(ids...)
 }
 
 // Mutation returns the TemplateRecipientMutation object of the builder.
 func (truo *TemplateRecipientUpdateOne) Mutation() *TemplateRecipientMutation {
 	return truo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (truo *TemplateRecipientUpdateOne) ClearOwner() *TemplateRecipientUpdateOne {
+	truo.mutation.ClearOwner()
+	return truo
 }
 
 // ClearDocument clears the "document" edge to the DocumentData entity.
@@ -708,10 +713,25 @@ func (truo *TemplateRecipientUpdateOne) ClearDocument() *TemplateRecipientUpdate
 	return truo
 }
 
-// ClearTemplate clears the "template" edge to the Template entity.
-func (truo *TemplateRecipientUpdateOne) ClearTemplate() *TemplateRecipientUpdateOne {
-	truo.mutation.ClearTemplate()
+// ClearEvents clears all "events" edges to the Event entity.
+func (truo *TemplateRecipientUpdateOne) ClearEvents() *TemplateRecipientUpdateOne {
+	truo.mutation.ClearEvents()
 	return truo
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (truo *TemplateRecipientUpdateOne) RemoveEventIDs(ids ...string) *TemplateRecipientUpdateOne {
+	truo.mutation.RemoveEventIDs(ids...)
+	return truo
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (truo *TemplateRecipientUpdateOne) RemoveEvents(e ...*Event) *TemplateRecipientUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return truo.RemoveEventIDs(ids...)
 }
 
 // Where appends a list predicates to the TemplateRecipientUpdate builder.
@@ -771,14 +791,9 @@ func (truo *TemplateRecipientUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (truo *TemplateRecipientUpdateOne) check() error {
-	if v, ok := truo.mutation.Token(); ok {
-		if err := templaterecipient.TokenValidator(v); err != nil {
-			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "TemplateRecipient.token": %w`, err)}
-		}
-	}
-	if v, ok := truo.mutation.Email(); ok {
-		if err := templaterecipient.EmailValidator(v); err != nil {
-			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "TemplateRecipient.email": %w`, err)}
+	if v, ok := truo.mutation.OwnerID(); ok {
+		if err := templaterecipient.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "TemplateRecipient.owner_id": %w`, err)}
 		}
 	}
 	if v, ok := truo.mutation.Status(); ok {
@@ -857,18 +872,6 @@ func (truo *TemplateRecipientUpdateOne) sqlSave(ctx context.Context) (_node *Tem
 	if truo.mutation.DeletedByCleared() {
 		_spec.ClearField(templaterecipient.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := truo.mutation.Token(); ok {
-		_spec.SetField(templaterecipient.FieldToken, field.TypeString, value)
-	}
-	if value, ok := truo.mutation.TTL(); ok {
-		_spec.SetField(templaterecipient.FieldTTL, field.TypeTime, value)
-	}
-	if value, ok := truo.mutation.Email(); ok {
-		_spec.SetField(templaterecipient.FieldEmail, field.TypeString, value)
-	}
-	if value, ok := truo.mutation.Secret(); ok {
-		_spec.SetField(templaterecipient.FieldSecret, field.TypeBytes, value)
-	}
 	if value, ok := truo.mutation.SendAttempts(); ok {
 		_spec.SetField(templaterecipient.FieldSendAttempts, field.TypeInt, value)
 	}
@@ -877,6 +880,37 @@ func (truo *TemplateRecipientUpdateOne) sqlSave(ctx context.Context) (_node *Tem
 	}
 	if value, ok := truo.mutation.Status(); ok {
 		_spec.SetField(templaterecipient.FieldStatus, field.TypeEnum, value)
+	}
+	if truo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   templaterecipient.OwnerTable,
+			Columns: []string{templaterecipient.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = truo.schemaConfig.TemplateRecipient
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := truo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   templaterecipient.OwnerTable,
+			Columns: []string{templaterecipient.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = truo.schemaConfig.TemplateRecipient
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if truo.mutation.DocumentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -909,32 +943,49 @@ func (truo *TemplateRecipientUpdateOne) sqlSave(ctx context.Context) (_node *Tem
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if truo.mutation.TemplateCleared() {
+	if truo.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   templaterecipient.TemplateTable,
-			Columns: []string{templaterecipient.TemplateColumn},
+			Table:   templaterecipient.EventsTable,
+			Columns: []string{templaterecipient.EventsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = truo.schemaConfig.TemplateRecipient
+		edge.Schema = truo.schemaConfig.Event
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := truo.mutation.TemplateIDs(); len(nodes) > 0 {
+	if nodes := truo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !truo.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   templaterecipient.TemplateTable,
-			Columns: []string{templaterecipient.TemplateColumn},
+			Table:   templaterecipient.EventsTable,
+			Columns: []string{templaterecipient.EventsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = truo.schemaConfig.TemplateRecipient
+		edge.Schema = truo.schemaConfig.Event
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := truo.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   templaterecipient.EventsTable,
+			Columns: []string{templaterecipient.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = truo.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

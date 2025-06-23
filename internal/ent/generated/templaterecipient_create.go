@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templaterecipient"
 	"github.com/theopenlane/core/pkg/enums"
@@ -107,15 +109,37 @@ func (trc *TemplateRecipientCreate) SetNillableDeletedBy(s *string) *TemplateRec
 	return trc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (trc *TemplateRecipientCreate) SetOwnerID(s string) *TemplateRecipientCreate {
+	trc.mutation.SetOwnerID(s)
+	return trc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (trc *TemplateRecipientCreate) SetNillableOwnerID(s *string) *TemplateRecipientCreate {
+	if s != nil {
+		trc.SetOwnerID(*s)
+	}
+	return trc
+}
+
 // SetToken sets the "token" field.
 func (trc *TemplateRecipientCreate) SetToken(s string) *TemplateRecipientCreate {
 	trc.mutation.SetToken(s)
 	return trc
 }
 
-// SetTTL sets the "ttl" field.
-func (trc *TemplateRecipientCreate) SetTTL(t time.Time) *TemplateRecipientCreate {
-	trc.mutation.SetTTL(t)
+// SetExpiresAt sets the "expires_at" field.
+func (trc *TemplateRecipientCreate) SetExpiresAt(t time.Time) *TemplateRecipientCreate {
+	trc.mutation.SetExpiresAt(t)
+	return trc
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (trc *TemplateRecipientCreate) SetNillableExpiresAt(t *time.Time) *TemplateRecipientCreate {
+	if t != nil {
+		trc.SetExpiresAt(*t)
+	}
 	return trc
 }
 
@@ -126,8 +150,8 @@ func (trc *TemplateRecipientCreate) SetEmail(s string) *TemplateRecipientCreate 
 }
 
 // SetSecret sets the "secret" field.
-func (trc *TemplateRecipientCreate) SetSecret(b []byte) *TemplateRecipientCreate {
-	trc.mutation.SetSecret(b)
+func (trc *TemplateRecipientCreate) SetSecret(s string) *TemplateRecipientCreate {
+	trc.mutation.SetSecret(s)
 	return trc
 }
 
@@ -193,6 +217,11 @@ func (trc *TemplateRecipientCreate) SetNillableID(s *string) *TemplateRecipientC
 	return trc
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (trc *TemplateRecipientCreate) SetOwner(o *Organization) *TemplateRecipientCreate {
+	return trc.SetOwnerID(o.ID)
+}
+
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (trc *TemplateRecipientCreate) SetDocumentID(id string) *TemplateRecipientCreate {
 	trc.mutation.SetDocumentID(id)
@@ -215,6 +244,21 @@ func (trc *TemplateRecipientCreate) SetDocument(d *DocumentData) *TemplateRecipi
 // SetTemplate sets the "template" edge to the Template entity.
 func (trc *TemplateRecipientCreate) SetTemplate(t *Template) *TemplateRecipientCreate {
 	return trc.SetTemplateID(t.ID)
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (trc *TemplateRecipientCreate) AddEventIDs(ids ...string) *TemplateRecipientCreate {
+	trc.mutation.AddEventIDs(ids...)
+	return trc
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (trc *TemplateRecipientCreate) AddEvents(e ...*Event) *TemplateRecipientCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return trc.AddEventIDs(ids...)
 }
 
 // Mutation returns the TemplateRecipientMutation object of the builder.
@@ -268,6 +312,10 @@ func (trc *TemplateRecipientCreate) defaults() error {
 		v := templaterecipient.DefaultUpdatedAt()
 		trc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := trc.mutation.ExpiresAt(); !ok {
+		v := templaterecipient.DefaultExpiresAt
+		trc.mutation.SetExpiresAt(v)
+	}
 	if _, ok := trc.mutation.SendAttempts(); !ok {
 		v := templaterecipient.DefaultSendAttempts
 		trc.mutation.SetSendAttempts(v)
@@ -288,6 +336,11 @@ func (trc *TemplateRecipientCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (trc *TemplateRecipientCreate) check() error {
+	if v, ok := trc.mutation.OwnerID(); ok {
+		if err := templaterecipient.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "TemplateRecipient.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := trc.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "TemplateRecipient.token"`)}
 	}
@@ -296,8 +349,8 @@ func (trc *TemplateRecipientCreate) check() error {
 			return &ValidationError{Name: "token", err: fmt.Errorf(`generated: validator failed for field "TemplateRecipient.token": %w`, err)}
 		}
 	}
-	if _, ok := trc.mutation.TTL(); !ok {
-		return &ValidationError{Name: "ttl", err: errors.New(`generated: missing required field "TemplateRecipient.ttl"`)}
+	if _, ok := trc.mutation.ExpiresAt(); !ok {
+		return &ValidationError{Name: "expires_at", err: errors.New(`generated: missing required field "TemplateRecipient.expires_at"`)}
 	}
 	if _, ok := trc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "TemplateRecipient.email"`)}
@@ -391,16 +444,16 @@ func (trc *TemplateRecipientCreate) createSpec() (*TemplateRecipient, *sqlgraph.
 		_spec.SetField(templaterecipient.FieldToken, field.TypeString, value)
 		_node.Token = value
 	}
-	if value, ok := trc.mutation.TTL(); ok {
-		_spec.SetField(templaterecipient.FieldTTL, field.TypeTime, value)
-		_node.TTL = &value
+	if value, ok := trc.mutation.ExpiresAt(); ok {
+		_spec.SetField(templaterecipient.FieldExpiresAt, field.TypeTime, value)
+		_node.ExpiresAt = value
 	}
 	if value, ok := trc.mutation.Email(); ok {
 		_spec.SetField(templaterecipient.FieldEmail, field.TypeString, value)
 		_node.Email = value
 	}
 	if value, ok := trc.mutation.Secret(); ok {
-		_spec.SetField(templaterecipient.FieldSecret, field.TypeBytes, value)
+		_spec.SetField(templaterecipient.FieldSecret, field.TypeString, value)
 		_node.Secret = value
 	}
 	if value, ok := trc.mutation.SendAttempts(); ok {
@@ -410,6 +463,24 @@ func (trc *TemplateRecipientCreate) createSpec() (*TemplateRecipient, *sqlgraph.
 	if value, ok := trc.mutation.Status(); ok {
 		_spec.SetField(templaterecipient.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if nodes := trc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   templaterecipient.OwnerTable,
+			Columns: []string{templaterecipient.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = trc.schemaConfig.TemplateRecipient
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := trc.mutation.DocumentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -445,6 +516,23 @@ func (trc *TemplateRecipientCreate) createSpec() (*TemplateRecipient, *sqlgraph.
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.TemplateID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := trc.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   templaterecipient.EventsTable,
+			Columns: []string{templaterecipient.EventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = trc.schemaConfig.Event
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -410,6 +410,12 @@ type OpenlaneGraphClient interface {
 	UpdateTemplate(ctx context.Context, updateTemplateID string, input UpdateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplate, error)
 	GetAllTemplateHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTemplateHistories, error)
 	GetTemplateHistories(ctx context.Context, where *TemplateHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTemplateHistories, error)
+	CreateTemplateRecipient(ctx context.Context, input CreateTemplateRecipientInput, interceptors ...clientv2.RequestInterceptor) (*CreateTemplateRecipient, error)
+	DeleteTemplateRecipient(ctx context.Context, deleteTemplateRecipientID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTemplateRecipient, error)
+	GetAllTemplateRecipients(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTemplateRecipients, error)
+	GetTemplateRecipientByID(ctx context.Context, templateRecipientID string, interceptors ...clientv2.RequestInterceptor) (*GetTemplateRecipientByID, error)
+	GetTemplateRecipients(ctx context.Context, first *int64, last *int64, where *TemplateRecipientWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTemplateRecipients, error)
+	UpdateTemplateRecipient(ctx context.Context, updateTemplateRecipientID string, input UpdateTemplateRecipientInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplateRecipient, error)
 	CreateTFASetting(ctx context.Context, input CreateTFASettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTFASetting, error)
 	GetAllTFASettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTFASettings, error)
 	GetTFASetting(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetTFASetting, error)
@@ -75084,6 +75090,650 @@ func (t *GetTemplateHistories_TemplateHistories) GetEdges() []*GetTemplateHistor
 	return t.Edges
 }
 
+type CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient struct {
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ExpiresAt      time.Time                     "json:\"expiresAt\" graphql:\"expiresAt\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	Secret         string                        "json:\"secret\" graphql:\"secret\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status         enums.TemplateRecipientStatus "json:\"status\" graphql:\"status\""
+	TemplateID     string                        "json:\"templateID\" graphql:\"templateID\""
+	Token          string                        "json:\"token\" graphql:\"token\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetDocumentDataID() *string {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.DocumentDataID
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetEmail() string {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.Email
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return &t.ExpiresAt
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetID() string {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.ID
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetSecret() string {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.Secret
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetSendAttempts() int64 {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.SendAttempts
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetStatus() *enums.TemplateRecipientStatus {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return &t.Status
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetTemplateID() string {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.TemplateID
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetToken() string {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.Token
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTemplateRecipient_CreateTemplateRecipient struct {
+	TemplateRecipient CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient "json:\"templateRecipient\" graphql:\"templateRecipient\""
+}
+
+func (t *CreateTemplateRecipient_CreateTemplateRecipient) GetTemplateRecipient() *CreateTemplateRecipient_CreateTemplateRecipient_TemplateRecipient {
+	if t == nil {
+		t = &CreateTemplateRecipient_CreateTemplateRecipient{}
+	}
+	return &t.TemplateRecipient
+}
+
+type DeleteTemplateRecipient_DeleteTemplateRecipient struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTemplateRecipient_DeleteTemplateRecipient) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTemplateRecipient_DeleteTemplateRecipient{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTemplateRecipients_TemplateRecipients_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTemplateRecipients_TemplateRecipients_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTemplateRecipients_TemplateRecipients_Edges_Node struct {
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ExpiresAt      time.Time                     "json:\"expiresAt\" graphql:\"expiresAt\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	Secret         string                        "json:\"secret\" graphql:\"secret\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status         enums.TemplateRecipientStatus "json:\"status\" graphql:\"status\""
+	TemplateID     string                        "json:\"templateID\" graphql:\"templateID\""
+	Token          string                        "json:\"token\" graphql:\"token\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return &t.ExpiresAt
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetSecret() string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.Secret
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetStatus() *enums.TemplateRecipientStatus {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetToken() string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.Token
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTemplateRecipients_TemplateRecipients_Edges struct {
+	Node *GetAllTemplateRecipients_TemplateRecipients_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTemplateRecipients_TemplateRecipients_Edges) GetNode() *GetAllTemplateRecipients_TemplateRecipients_Edges_Node {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTemplateRecipients_TemplateRecipients struct {
+	Edges      []*GetAllTemplateRecipients_TemplateRecipients_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTemplateRecipients_TemplateRecipients_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTemplateRecipients_TemplateRecipients) GetEdges() []*GetAllTemplateRecipients_TemplateRecipients_Edges {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients{}
+	}
+	return t.Edges
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients) GetPageInfo() *GetAllTemplateRecipients_TemplateRecipients_PageInfo {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTemplateRecipients_TemplateRecipients) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTemplateRecipients_TemplateRecipients{}
+	}
+	return t.TotalCount
+}
+
+type GetTemplateRecipientByID_TemplateRecipient struct {
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ExpiresAt      time.Time                     "json:\"expiresAt\" graphql:\"expiresAt\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	Secret         string                        "json:\"secret\" graphql:\"secret\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status         enums.TemplateRecipientStatus "json:\"status\" graphql:\"status\""
+	TemplateID     string                        "json:\"templateID\" graphql:\"templateID\""
+	Token          string                        "json:\"token\" graphql:\"token\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetEmail() string {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.Email
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return &t.ExpiresAt
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetID() string {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.ID
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetSecret() string {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.Secret
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.SendAttempts
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetStatus() *enums.TemplateRecipientStatus {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return &t.Status
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetTemplateID() string {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.TemplateID
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetToken() string {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.Token
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTemplateRecipientByID_TemplateRecipient) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTemplateRecipientByID_TemplateRecipient{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTemplateRecipients_TemplateRecipients_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTemplateRecipients_TemplateRecipients_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTemplateRecipients_TemplateRecipients_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTemplateRecipients_TemplateRecipients_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTemplateRecipients_TemplateRecipients_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTemplateRecipients_TemplateRecipients_Edges_Node struct {
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ExpiresAt      time.Time                     "json:\"expiresAt\" graphql:\"expiresAt\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	Secret         string                        "json:\"secret\" graphql:\"secret\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status         enums.TemplateRecipientStatus "json:\"status\" graphql:\"status\""
+	TemplateID     string                        "json:\"templateID\" graphql:\"templateID\""
+	Token          string                        "json:\"token\" graphql:\"token\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetDocumentDataID() *string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.DocumentDataID
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return &t.ExpiresAt
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetSecret() string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.Secret
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetSendAttempts() int64 {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.SendAttempts
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetStatus() *enums.TemplateRecipientStatus {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.TemplateID
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetToken() string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.Token
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTemplateRecipients_TemplateRecipients_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTemplateRecipients_TemplateRecipients_Edges struct {
+	Node *GetTemplateRecipients_TemplateRecipients_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTemplateRecipients_TemplateRecipients_Edges) GetNode() *GetTemplateRecipients_TemplateRecipients_Edges_Node {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients_Edges{}
+	}
+	return t.Node
+}
+
+type GetTemplateRecipients_TemplateRecipients struct {
+	Edges      []*GetTemplateRecipients_TemplateRecipients_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTemplateRecipients_TemplateRecipients_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                             "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTemplateRecipients_TemplateRecipients) GetEdges() []*GetTemplateRecipients_TemplateRecipients_Edges {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients{}
+	}
+	return t.Edges
+}
+func (t *GetTemplateRecipients_TemplateRecipients) GetPageInfo() *GetTemplateRecipients_TemplateRecipients_PageInfo {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTemplateRecipients_TemplateRecipients) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTemplateRecipients_TemplateRecipients{}
+	}
+	return t.TotalCount
+}
+
+type UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient struct {
+	CreatedAt      *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DocumentDataID *string                       "json:\"documentDataID,omitempty\" graphql:\"documentDataID\""
+	Email          string                        "json:\"email\" graphql:\"email\""
+	ExpiresAt      time.Time                     "json:\"expiresAt\" graphql:\"expiresAt\""
+	ID             string                        "json:\"id\" graphql:\"id\""
+	Secret         string                        "json:\"secret\" graphql:\"secret\""
+	SendAttempts   int64                         "json:\"sendAttempts\" graphql:\"sendAttempts\""
+	Status         enums.TemplateRecipientStatus "json:\"status\" graphql:\"status\""
+	TemplateID     string                        "json:\"templateID\" graphql:\"templateID\""
+	Token          string                        "json:\"token\" graphql:\"token\""
+	UpdatedAt      *time.Time                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetDocumentDataID() *string {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.DocumentDataID
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetEmail() string {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.Email
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return &t.ExpiresAt
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetID() string {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.ID
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetSecret() string {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.Secret
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetSendAttempts() int64 {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.SendAttempts
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetStatus() *enums.TemplateRecipientStatus {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return &t.Status
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetTemplateID() string {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.TemplateID
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetToken() string {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.Token
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTemplateRecipient_UpdateTemplateRecipient struct {
+	TemplateRecipient UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient "json:\"templateRecipient\" graphql:\"templateRecipient\""
+}
+
+func (t *UpdateTemplateRecipient_UpdateTemplateRecipient) GetTemplateRecipient() *UpdateTemplateRecipient_UpdateTemplateRecipient_TemplateRecipient {
+	if t == nil {
+		t = &UpdateTemplateRecipient_UpdateTemplateRecipient{}
+	}
+	return &t.TemplateRecipient
+}
+
 type CreateTFASetting_CreateTFASetting_TfaSetting_Owner struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -82680,6 +83330,72 @@ func (t *GetTemplateHistories) GetTemplateHistories() *GetTemplateHistories_Temp
 		t = &GetTemplateHistories{}
 	}
 	return &t.TemplateHistories
+}
+
+type CreateTemplateRecipient struct {
+	CreateTemplateRecipient CreateTemplateRecipient_CreateTemplateRecipient "json:\"createTemplateRecipient\" graphql:\"createTemplateRecipient\""
+}
+
+func (t *CreateTemplateRecipient) GetCreateTemplateRecipient() *CreateTemplateRecipient_CreateTemplateRecipient {
+	if t == nil {
+		t = &CreateTemplateRecipient{}
+	}
+	return &t.CreateTemplateRecipient
+}
+
+type DeleteTemplateRecipient struct {
+	DeleteTemplateRecipient DeleteTemplateRecipient_DeleteTemplateRecipient "json:\"deleteTemplateRecipient\" graphql:\"deleteTemplateRecipient\""
+}
+
+func (t *DeleteTemplateRecipient) GetDeleteTemplateRecipient() *DeleteTemplateRecipient_DeleteTemplateRecipient {
+	if t == nil {
+		t = &DeleteTemplateRecipient{}
+	}
+	return &t.DeleteTemplateRecipient
+}
+
+type GetAllTemplateRecipients struct {
+	TemplateRecipients GetAllTemplateRecipients_TemplateRecipients "json:\"templateRecipients\" graphql:\"templateRecipients\""
+}
+
+func (t *GetAllTemplateRecipients) GetTemplateRecipients() *GetAllTemplateRecipients_TemplateRecipients {
+	if t == nil {
+		t = &GetAllTemplateRecipients{}
+	}
+	return &t.TemplateRecipients
+}
+
+type GetTemplateRecipientByID struct {
+	TemplateRecipient GetTemplateRecipientByID_TemplateRecipient "json:\"templateRecipient\" graphql:\"templateRecipient\""
+}
+
+func (t *GetTemplateRecipientByID) GetTemplateRecipient() *GetTemplateRecipientByID_TemplateRecipient {
+	if t == nil {
+		t = &GetTemplateRecipientByID{}
+	}
+	return &t.TemplateRecipient
+}
+
+type GetTemplateRecipients struct {
+	TemplateRecipients GetTemplateRecipients_TemplateRecipients "json:\"templateRecipients\" graphql:\"templateRecipients\""
+}
+
+func (t *GetTemplateRecipients) GetTemplateRecipients() *GetTemplateRecipients_TemplateRecipients {
+	if t == nil {
+		t = &GetTemplateRecipients{}
+	}
+	return &t.TemplateRecipients
+}
+
+type UpdateTemplateRecipient struct {
+	UpdateTemplateRecipient UpdateTemplateRecipient_UpdateTemplateRecipient "json:\"updateTemplateRecipient\" graphql:\"updateTemplateRecipient\""
+}
+
+func (t *UpdateTemplateRecipient) GetUpdateTemplateRecipient() *UpdateTemplateRecipient_UpdateTemplateRecipient {
+	if t == nil {
+		t = &UpdateTemplateRecipient{}
+	}
+	return &t.UpdateTemplateRecipient
 }
 
 type CreateTFASetting struct {
@@ -103254,6 +103970,237 @@ func (c *Client) GetTemplateHistories(ctx context.Context, where *TemplateHistor
 	return &res, nil
 }
 
+const CreateTemplateRecipientDocument = `mutation CreateTemplateRecipient ($input: CreateTemplateRecipientInput!) {
+	createTemplateRecipient(input: $input) {
+		templateRecipient {
+			createdAt
+			createdBy
+			documentDataID
+			email
+			expiresAt
+			id
+			secret
+			sendAttempts
+			status
+			templateID
+			token
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTemplateRecipient(ctx context.Context, input CreateTemplateRecipientInput, interceptors ...clientv2.RequestInterceptor) (*CreateTemplateRecipient, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTemplateRecipient
+	if err := c.Client.Post(ctx, "CreateTemplateRecipient", CreateTemplateRecipientDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTemplateRecipientDocument = `mutation DeleteTemplateRecipient ($deleteTemplateRecipientId: ID!) {
+	deleteTemplateRecipient(id: $deleteTemplateRecipientId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTemplateRecipient(ctx context.Context, deleteTemplateRecipientID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTemplateRecipient, error) {
+	vars := map[string]any{
+		"deleteTemplateRecipientId": deleteTemplateRecipientID,
+	}
+
+	var res DeleteTemplateRecipient
+	if err := c.Client.Post(ctx, "DeleteTemplateRecipient", DeleteTemplateRecipientDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTemplateRecipientsDocument = `query GetAllTemplateRecipients {
+	templateRecipients {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				documentDataID
+				email
+				expiresAt
+				id
+				secret
+				sendAttempts
+				status
+				templateID
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTemplateRecipients(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTemplateRecipients, error) {
+	vars := map[string]any{}
+
+	var res GetAllTemplateRecipients
+	if err := c.Client.Post(ctx, "GetAllTemplateRecipients", GetAllTemplateRecipientsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTemplateRecipientByIDDocument = `query GetTemplateRecipientByID ($templateRecipientId: ID!) {
+	templateRecipient(id: $templateRecipientId) {
+		createdAt
+		createdBy
+		documentDataID
+		email
+		expiresAt
+		id
+		secret
+		sendAttempts
+		status
+		templateID
+		token
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetTemplateRecipientByID(ctx context.Context, templateRecipientID string, interceptors ...clientv2.RequestInterceptor) (*GetTemplateRecipientByID, error) {
+	vars := map[string]any{
+		"templateRecipientId": templateRecipientID,
+	}
+
+	var res GetTemplateRecipientByID
+	if err := c.Client.Post(ctx, "GetTemplateRecipientByID", GetTemplateRecipientByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTemplateRecipientsDocument = `query GetTemplateRecipients ($first: Int, $last: Int, $where: TemplateRecipientWhereInput) {
+	templateRecipients(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				documentDataID
+				email
+				expiresAt
+				id
+				secret
+				sendAttempts
+				status
+				templateID
+				token
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTemplateRecipients(ctx context.Context, first *int64, last *int64, where *TemplateRecipientWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTemplateRecipients, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTemplateRecipients
+	if err := c.Client.Post(ctx, "GetTemplateRecipients", GetTemplateRecipientsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTemplateRecipientDocument = `mutation UpdateTemplateRecipient ($updateTemplateRecipientId: ID!, $input: UpdateTemplateRecipientInput!) {
+	updateTemplateRecipient(id: $updateTemplateRecipientId, input: $input) {
+		templateRecipient {
+			createdAt
+			createdBy
+			documentDataID
+			email
+			expiresAt
+			id
+			secret
+			sendAttempts
+			status
+			templateID
+			token
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTemplateRecipient(ctx context.Context, updateTemplateRecipientID string, input UpdateTemplateRecipientInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTemplateRecipient, error) {
+	vars := map[string]any{
+		"updateTemplateRecipientId": updateTemplateRecipientID,
+		"input":                     input,
+	}
+
+	var res UpdateTemplateRecipient
+	if err := c.Client.Post(ctx, "UpdateTemplateRecipient", UpdateTemplateRecipientDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTFASettingDocument = `mutation CreateTFASetting ($input: CreateTFASettingInput!) {
 	createTFASetting(input: $input) {
 		tfaSetting {
@@ -104604,6 +105551,12 @@ var DocumentOperationNames = map[string]string{
 	UpdateTemplateDocument:                       "UpdateTemplate",
 	GetAllTemplateHistoriesDocument:              "GetAllTemplateHistories",
 	GetTemplateHistoriesDocument:                 "GetTemplateHistories",
+	CreateTemplateRecipientDocument:              "CreateTemplateRecipient",
+	DeleteTemplateRecipientDocument:              "DeleteTemplateRecipient",
+	GetAllTemplateRecipientsDocument:             "GetAllTemplateRecipients",
+	GetTemplateRecipientByIDDocument:             "GetTemplateRecipientByID",
+	GetTemplateRecipientsDocument:                "GetTemplateRecipients",
+	UpdateTemplateRecipientDocument:              "UpdateTemplateRecipient",
 	CreateTFASettingDocument:                     "CreateTFASetting",
 	GetAllTFASettingsDocument:                    "GetAllTFASettings",
 	GetTFASettingDocument:                        "GetTFASetting",

@@ -98,14 +98,19 @@ func DeletedBy(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldEQ(FieldOwnerID, v))
+}
+
 // Token applies equality check predicate on the "token" field. It's identical to TokenEQ.
 func Token(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldEQ(FieldToken, v))
 }
 
-// TTL applies equality check predicate on the "ttl" field. It's identical to TTLEQ.
-func TTL(v time.Time) predicate.TemplateRecipient {
-	return predicate.TemplateRecipient(sql.FieldEQ(FieldTTL, v))
+// ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
+func ExpiresAt(v time.Time) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldEQ(FieldExpiresAt, v))
 }
 
 // Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
@@ -114,7 +119,7 @@ func Email(v string) predicate.TemplateRecipient {
 }
 
 // Secret applies equality check predicate on the "secret" field. It's identical to SecretEQ.
-func Secret(v []byte) predicate.TemplateRecipient {
+func Secret(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldEQ(FieldSecret, v))
 }
 
@@ -508,6 +513,81 @@ func DeletedByContainsFold(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
 // TokenEQ applies the EQ predicate on the "token" field.
 func TokenEQ(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldEQ(FieldToken, v))
@@ -573,44 +653,44 @@ func TokenContainsFold(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldContainsFold(FieldToken, v))
 }
 
-// TTLEQ applies the EQ predicate on the "ttl" field.
-func TTLEQ(v time.Time) predicate.TemplateRecipient {
-	return predicate.TemplateRecipient(sql.FieldEQ(FieldTTL, v))
+// ExpiresAtEQ applies the EQ predicate on the "expires_at" field.
+func ExpiresAtEQ(v time.Time) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldEQ(FieldExpiresAt, v))
 }
 
-// TTLNEQ applies the NEQ predicate on the "ttl" field.
-func TTLNEQ(v time.Time) predicate.TemplateRecipient {
-	return predicate.TemplateRecipient(sql.FieldNEQ(FieldTTL, v))
+// ExpiresAtNEQ applies the NEQ predicate on the "expires_at" field.
+func ExpiresAtNEQ(v time.Time) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldNEQ(FieldExpiresAt, v))
 }
 
-// TTLIn applies the In predicate on the "ttl" field.
-func TTLIn(vs ...time.Time) predicate.TemplateRecipient {
-	return predicate.TemplateRecipient(sql.FieldIn(FieldTTL, vs...))
+// ExpiresAtIn applies the In predicate on the "expires_at" field.
+func ExpiresAtIn(vs ...time.Time) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldIn(FieldExpiresAt, vs...))
 }
 
-// TTLNotIn applies the NotIn predicate on the "ttl" field.
-func TTLNotIn(vs ...time.Time) predicate.TemplateRecipient {
-	return predicate.TemplateRecipient(sql.FieldNotIn(FieldTTL, vs...))
+// ExpiresAtNotIn applies the NotIn predicate on the "expires_at" field.
+func ExpiresAtNotIn(vs ...time.Time) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldNotIn(FieldExpiresAt, vs...))
 }
 
-// TTLGT applies the GT predicate on the "ttl" field.
-func TTLGT(v time.Time) predicate.TemplateRecipient {
-	return predicate.TemplateRecipient(sql.FieldGT(FieldTTL, v))
+// ExpiresAtGT applies the GT predicate on the "expires_at" field.
+func ExpiresAtGT(v time.Time) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldGT(FieldExpiresAt, v))
 }
 
-// TTLGTE applies the GTE predicate on the "ttl" field.
-func TTLGTE(v time.Time) predicate.TemplateRecipient {
-	return predicate.TemplateRecipient(sql.FieldGTE(FieldTTL, v))
+// ExpiresAtGTE applies the GTE predicate on the "expires_at" field.
+func ExpiresAtGTE(v time.Time) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldGTE(FieldExpiresAt, v))
 }
 
-// TTLLT applies the LT predicate on the "ttl" field.
-func TTLLT(v time.Time) predicate.TemplateRecipient {
-	return predicate.TemplateRecipient(sql.FieldLT(FieldTTL, v))
+// ExpiresAtLT applies the LT predicate on the "expires_at" field.
+func ExpiresAtLT(v time.Time) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldLT(FieldExpiresAt, v))
 }
 
-// TTLLTE applies the LTE predicate on the "ttl" field.
-func TTLLTE(v time.Time) predicate.TemplateRecipient {
-	return predicate.TemplateRecipient(sql.FieldLTE(FieldTTL, v))
+// ExpiresAtLTE applies the LTE predicate on the "expires_at" field.
+func ExpiresAtLTE(v time.Time) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldLTE(FieldExpiresAt, v))
 }
 
 // EmailEQ applies the EQ predicate on the "email" field.
@@ -679,43 +759,68 @@ func EmailContainsFold(v string) predicate.TemplateRecipient {
 }
 
 // SecretEQ applies the EQ predicate on the "secret" field.
-func SecretEQ(v []byte) predicate.TemplateRecipient {
+func SecretEQ(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldEQ(FieldSecret, v))
 }
 
 // SecretNEQ applies the NEQ predicate on the "secret" field.
-func SecretNEQ(v []byte) predicate.TemplateRecipient {
+func SecretNEQ(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldNEQ(FieldSecret, v))
 }
 
 // SecretIn applies the In predicate on the "secret" field.
-func SecretIn(vs ...[]byte) predicate.TemplateRecipient {
+func SecretIn(vs ...string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldIn(FieldSecret, vs...))
 }
 
 // SecretNotIn applies the NotIn predicate on the "secret" field.
-func SecretNotIn(vs ...[]byte) predicate.TemplateRecipient {
+func SecretNotIn(vs ...string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldNotIn(FieldSecret, vs...))
 }
 
 // SecretGT applies the GT predicate on the "secret" field.
-func SecretGT(v []byte) predicate.TemplateRecipient {
+func SecretGT(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldGT(FieldSecret, v))
 }
 
 // SecretGTE applies the GTE predicate on the "secret" field.
-func SecretGTE(v []byte) predicate.TemplateRecipient {
+func SecretGTE(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldGTE(FieldSecret, v))
 }
 
 // SecretLT applies the LT predicate on the "secret" field.
-func SecretLT(v []byte) predicate.TemplateRecipient {
+func SecretLT(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldLT(FieldSecret, v))
 }
 
 // SecretLTE applies the LTE predicate on the "secret" field.
-func SecretLTE(v []byte) predicate.TemplateRecipient {
+func SecretLTE(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldLTE(FieldSecret, v))
+}
+
+// SecretContains applies the Contains predicate on the "secret" field.
+func SecretContains(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldContains(FieldSecret, v))
+}
+
+// SecretHasPrefix applies the HasPrefix predicate on the "secret" field.
+func SecretHasPrefix(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldHasPrefix(FieldSecret, v))
+}
+
+// SecretHasSuffix applies the HasSuffix predicate on the "secret" field.
+func SecretHasSuffix(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldHasSuffix(FieldSecret, v))
+}
+
+// SecretEqualFold applies the EqualFold predicate on the "secret" field.
+func SecretEqualFold(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldEqualFold(FieldSecret, v))
+}
+
+// SecretContainsFold applies the ContainsFold predicate on the "secret" field.
+func SecretContainsFold(v string) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(sql.FieldContainsFold(FieldSecret, v))
 }
 
 // TemplateIDEQ applies the EQ predicate on the "template_id" field.
@@ -928,6 +1033,35 @@ func DocumentDataIDContainsFold(v string) predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(sql.FieldContainsFold(FieldDocumentDataID, v))
 }
 
+// HasOwner applies the HasEdge predicate on the "owner" edge.
+func HasOwner() predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TemplateRecipient
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
+func HasOwnerWith(preds ...predicate.Organization) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(func(s *sql.Selector) {
+		step := newOwnerStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TemplateRecipient
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasDocument applies the HasEdge predicate on the "document" edge.
 func HasDocument() predicate.TemplateRecipient {
 	return predicate.TemplateRecipient(func(s *sql.Selector) {
@@ -978,6 +1112,35 @@ func HasTemplateWith(preds ...predicate.Template) predicate.TemplateRecipient {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Template
 		step.Edge.Schema = schemaConfig.TemplateRecipient
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEvents applies the HasEdge predicate on the "events" edge.
+func HasEvents() predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EventsTable, EventsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEventsWith applies the HasEdge predicate on the "events" edge with a given conditions (other predicates).
+func HasEventsWith(preds ...predicate.Event) predicate.TemplateRecipient {
+	return predicate.TemplateRecipient(func(s *sql.Selector) {
+		step := newEventsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

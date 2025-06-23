@@ -2206,6 +2206,7 @@ type ComplexityRoot struct {
 		CreateTFASetting                   func(childComplexity int, input generated.CreateTFASettingInput) int
 		CreateTask                         func(childComplexity int, input generated.CreateTaskInput) int
 		CreateTemplate                     func(childComplexity int, input generated.CreateTemplateInput) int
+		CreateTemplateRecipient            func(childComplexity int, input generated.CreateTemplateRecipientInput) int
 		CreateUser                         func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                  func(childComplexity int, input generated.CreateUserSettingInput) int
 		DeleteAPIToken                     func(childComplexity int, id string) int
@@ -2250,6 +2251,7 @@ type ComplexityRoot struct {
 		DeleteSubscriber                   func(childComplexity int, email string, ownerID *string) int
 		DeleteTask                         func(childComplexity int, id string) int
 		DeleteTemplate                     func(childComplexity int, id string) int
+		DeleteTemplateRecipient            func(childComplexity int, id string) int
 		DeleteUser                         func(childComplexity int, id string) int
 		DeleteWebauthn                     func(childComplexity int, id string) int
 		UpdateAPIToken                     func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
@@ -2293,6 +2295,7 @@ type ComplexityRoot struct {
 		UpdateTask                         func(childComplexity int, id string, input generated.UpdateTaskInput) int
 		UpdateTaskComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTemplate                     func(childComplexity int, id string, input generated.UpdateTemplateInput) int
+		UpdateTemplateRecipient            func(childComplexity int, id string, input generated.UpdateTemplateRecipientInput) int
 		UpdateUser                         func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                  func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 	}
@@ -2651,6 +2654,7 @@ type ComplexityRoot struct {
 		Tags                          func(childComplexity int) int
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		TemplateRecipients            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateRecipientOrder, where *generated.TemplateRecipientWhereInput) int
 		Templates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		UpdatedAt                     func(childComplexity int) int
 		UpdatedBy                     func(childComplexity int) int
@@ -3333,6 +3337,8 @@ type ComplexityRoot struct {
 		Tasks                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		Template                              func(childComplexity int, id string) int
 		TemplateHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) int
+		TemplateRecipient                     func(childComplexity int, id string) int
+		TemplateRecipients                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateRecipientOrder, where *generated.TemplateRecipientWhereInput) int
 		TemplateSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Templates                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TfaSetting                            func(childComplexity int, id *string) int
@@ -4059,6 +4065,54 @@ type ComplexityRoot struct {
 	TemplateHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	TemplateRecipient struct {
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		Document       func(childComplexity int) int
+		DocumentDataID func(childComplexity int) int
+		Email          func(childComplexity int) int
+		Events         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExpiresAt      func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Owner          func(childComplexity int) int
+		OwnerID        func(childComplexity int) int
+		Secret         func(childComplexity int) int
+		SendAttempts   func(childComplexity int) int
+		Status         func(childComplexity int) int
+		Template       func(childComplexity int) int
+		TemplateID     func(childComplexity int) int
+		Token          func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
+	}
+
+	TemplateRecipientBulkCreatePayload struct {
+		TemplateRecipients func(childComplexity int) int
+	}
+
+	TemplateRecipientConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TemplateRecipientCreatePayload struct {
+		TemplateRecipient func(childComplexity int) int
+	}
+
+	TemplateRecipientDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	TemplateRecipientEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TemplateRecipientUpdatePayload struct {
+		TemplateRecipient func(childComplexity int) int
 	}
 
 	TemplateUpdatePayload struct {
@@ -15175,6 +15229,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateTemplate(childComplexity, args["input"].(generated.CreateTemplateInput)), true
 
+	case "Mutation.createTemplateRecipient":
+		if e.complexity.Mutation.CreateTemplateRecipient == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTemplateRecipient_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTemplateRecipient(childComplexity, args["input"].(generated.CreateTemplateRecipientInput)), true
+
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
 			break
@@ -15703,6 +15769,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteTemplate(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteTemplateRecipient":
+		if e.complexity.Mutation.DeleteTemplateRecipient == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteTemplateRecipient_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteTemplateRecipient(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteUser":
 		if e.complexity.Mutation.DeleteUser == nil {
 			break
@@ -16218,6 +16296,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateInput)), true
+
+	case "Mutation.updateTemplateRecipient":
+		if e.complexity.Mutation.UpdateTemplateRecipient == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTemplateRecipient_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTemplateRecipient(childComplexity, args["id"].(string), args["input"].(generated.UpdateTemplateRecipientInput)), true
 
 	case "Mutation.updateUser":
 		if e.complexity.Mutation.UpdateUser == nil {
@@ -18314,6 +18404,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.TemplateCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Organization.templateRecipients":
+		if e.complexity.Organization.TemplateRecipients == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_templateRecipients_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TemplateRecipients(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateRecipientOrder), args["where"].(*generated.TemplateRecipientWhereInput)), true
 
 	case "Organization.templates":
 		if e.complexity.Organization.Templates == nil {
@@ -23066,6 +23168,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TemplateHistoryOrder), args["where"].(*generated.TemplateHistoryWhereInput)), true
 
+	case "Query.templateRecipient":
+		if e.complexity.Query.TemplateRecipient == nil {
+			break
+		}
+
+		args, err := ec.field_Query_templateRecipient_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TemplateRecipient(childComplexity, args["id"].(string)), true
+
+	case "Query.templateRecipients":
+		if e.complexity.Query.TemplateRecipients == nil {
+			break
+		}
+
+		args, err := ec.field_Query_templateRecipients_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TemplateRecipients(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateRecipientOrder), args["where"].(*generated.TemplateRecipientWhereInput)), true
+
 	case "Query.templateSearch":
 		if e.complexity.Query.TemplateSearch == nil {
 			break
@@ -26813,6 +26939,200 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TemplateHistoryEdge.Node(childComplexity), true
 
+	case "TemplateRecipient.createdAt":
+		if e.complexity.TemplateRecipient.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.CreatedAt(childComplexity), true
+
+	case "TemplateRecipient.createdBy":
+		if e.complexity.TemplateRecipient.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.CreatedBy(childComplexity), true
+
+	case "TemplateRecipient.document":
+		if e.complexity.TemplateRecipient.Document == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.Document(childComplexity), true
+
+	case "TemplateRecipient.documentDataID":
+		if e.complexity.TemplateRecipient.DocumentDataID == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.DocumentDataID(childComplexity), true
+
+	case "TemplateRecipient.email":
+		if e.complexity.TemplateRecipient.Email == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.Email(childComplexity), true
+
+	case "TemplateRecipient.events":
+		if e.complexity.TemplateRecipient.Events == nil {
+			break
+		}
+
+		args, err := ec.field_TemplateRecipient_events_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TemplateRecipient.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
+
+	case "TemplateRecipient.expiresAt":
+		if e.complexity.TemplateRecipient.ExpiresAt == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.ExpiresAt(childComplexity), true
+
+	case "TemplateRecipient.id":
+		if e.complexity.TemplateRecipient.ID == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.ID(childComplexity), true
+
+	case "TemplateRecipient.owner":
+		if e.complexity.TemplateRecipient.Owner == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.Owner(childComplexity), true
+
+	case "TemplateRecipient.ownerID":
+		if e.complexity.TemplateRecipient.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.OwnerID(childComplexity), true
+
+	case "TemplateRecipient.secret":
+		if e.complexity.TemplateRecipient.Secret == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.Secret(childComplexity), true
+
+	case "TemplateRecipient.sendAttempts":
+		if e.complexity.TemplateRecipient.SendAttempts == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.SendAttempts(childComplexity), true
+
+	case "TemplateRecipient.status":
+		if e.complexity.TemplateRecipient.Status == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.Status(childComplexity), true
+
+	case "TemplateRecipient.template":
+		if e.complexity.TemplateRecipient.Template == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.Template(childComplexity), true
+
+	case "TemplateRecipient.templateID":
+		if e.complexity.TemplateRecipient.TemplateID == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.TemplateID(childComplexity), true
+
+	case "TemplateRecipient.token":
+		if e.complexity.TemplateRecipient.Token == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.Token(childComplexity), true
+
+	case "TemplateRecipient.updatedAt":
+		if e.complexity.TemplateRecipient.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.UpdatedAt(childComplexity), true
+
+	case "TemplateRecipient.updatedBy":
+		if e.complexity.TemplateRecipient.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipient.UpdatedBy(childComplexity), true
+
+	case "TemplateRecipientBulkCreatePayload.templateRecipients":
+		if e.complexity.TemplateRecipientBulkCreatePayload.TemplateRecipients == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipientBulkCreatePayload.TemplateRecipients(childComplexity), true
+
+	case "TemplateRecipientConnection.edges":
+		if e.complexity.TemplateRecipientConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipientConnection.Edges(childComplexity), true
+
+	case "TemplateRecipientConnection.pageInfo":
+		if e.complexity.TemplateRecipientConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipientConnection.PageInfo(childComplexity), true
+
+	case "TemplateRecipientConnection.totalCount":
+		if e.complexity.TemplateRecipientConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipientConnection.TotalCount(childComplexity), true
+
+	case "TemplateRecipientCreatePayload.templateRecipient":
+		if e.complexity.TemplateRecipientCreatePayload.TemplateRecipient == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipientCreatePayload.TemplateRecipient(childComplexity), true
+
+	case "TemplateRecipientDeletePayload.deletedID":
+		if e.complexity.TemplateRecipientDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipientDeletePayload.DeletedID(childComplexity), true
+
+	case "TemplateRecipientEdge.cursor":
+		if e.complexity.TemplateRecipientEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipientEdge.Cursor(childComplexity), true
+
+	case "TemplateRecipientEdge.node":
+		if e.complexity.TemplateRecipientEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipientEdge.Node(childComplexity), true
+
+	case "TemplateRecipientUpdatePayload.templateRecipient":
+		if e.complexity.TemplateRecipientUpdatePayload.TemplateRecipient == nil {
+			break
+		}
+
+		return e.complexity.TemplateRecipientUpdatePayload.TemplateRecipient(childComplexity), true
+
 	case "TemplateUpdatePayload.template":
 		if e.complexity.TemplateUpdatePayload.Template == nil {
 			break
@@ -27934,6 +28254,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTFASettingInput,
 		ec.unmarshalInputCreateTaskInput,
 		ec.unmarshalInputCreateTemplateInput,
+		ec.unmarshalInputCreateTemplateRecipientInput,
 		ec.unmarshalInputCreateUserInput,
 		ec.unmarshalInputCreateUserSettingInput,
 		ec.unmarshalInputCustomDomainHistoryOrder,
@@ -28080,6 +28401,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTemplateHistoryOrder,
 		ec.unmarshalInputTemplateHistoryWhereInput,
 		ec.unmarshalInputTemplateOrder,
+		ec.unmarshalInputTemplateRecipientOrder,
+		ec.unmarshalInputTemplateRecipientWhereInput,
 		ec.unmarshalInputTemplateWhereInput,
 		ec.unmarshalInputUpdateAPITokenInput,
 		ec.unmarshalInputUpdateActionPlanInput,
@@ -28127,6 +28450,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateTFASettingInput,
 		ec.unmarshalInputUpdateTaskInput,
 		ec.unmarshalInputUpdateTemplateInput,
+		ec.unmarshalInputUpdateTemplateRecipientInput,
 		ec.unmarshalInputUpdateUserInput,
 		ec.unmarshalInputUpdateUserSettingInput,
 		ec.unmarshalInputUserHistoryOrder,
@@ -37970,6 +38294,7 @@ input CreateOrganizationInput {
   scheduledJobIDs: [ID!]
   jobResultIDs: [ID!]
   scheduledJobRunIDs: [ID!]
+  templateRecipientIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -38588,6 +38913,20 @@ input CreateTemplateInput {
   ownerID: ID
   documentIDs: [ID!]
   fileIDs: [ID!]
+}
+"""
+CreateTemplateRecipientInput is used for create TemplateRecipient object.
+Input was generated by ent.
+"""
+input CreateTemplateRecipientInput {
+  """
+  the recipient email for the questionairre
+  """
+  email: String!
+  ownerID: ID
+  documentID: ID
+  templateID: ID!
+  eventIDs: [ID!]
 }
 """
 CreateUserInput is used for create User object.
@@ -56415,6 +56754,37 @@ type Organization implements Node {
     """
     where: ScheduledJobRunWhereInput
   ): ScheduledJobRunConnection!
+  templateRecipients(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TemplateRecipients returned from the connection.
+    """
+    orderBy: [TemplateRecipientOrder!]
+
+    """
+    Filtering options for TemplateRecipients returned from the connection.
+    """
+    where: TemplateRecipientWhereInput
+  ): TemplateRecipientConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -57963,6 +58333,11 @@ input OrganizationWhereInput {
   """
   hasScheduledJobRuns: Boolean
   hasScheduledJobRunsWith: [ScheduledJobRunWhereInput!]
+  """
+  template_recipients edge predicates
+  """
+  hasTemplateRecipients: Boolean
+  hasTemplateRecipientsWith: [TemplateRecipientWhereInput!]
   """
   members edge predicates
   """
@@ -64043,6 +64418,37 @@ type Query {
     """
     where: TemplateHistoryWhereInput
   ): TemplateHistoryConnection!
+  templateRecipients(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TemplateRecipients returned from the connection.
+    """
+    orderBy: [TemplateRecipientOrder!]
+
+    """
+    Filtering options for TemplateRecipients returned from the connection.
+    """
+    where: TemplateRecipientWhereInput
+  ): TemplateRecipientConnection!
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -70986,6 +71392,377 @@ enum TemplateOrderField {
   name
   TEMPLATE_TYPE
 }
+type TemplateRecipient implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the verification token sent to the user via email
+  """
+  token: String!
+  """
+  when the token expires
+  """
+  expiresAt: Time!
+  """
+  the recipient email for the questionairre
+  """
+  email: String!
+  """
+  the comparison secret to verify the token's signature
+  """
+  secret: String!
+  """
+  the ID of the template this token belongs to
+  """
+  templateID: ID!
+  """
+  the number of attempts made to send the questionairre to the user, maximum of 5
+  """
+  sendAttempts: Int!
+  """
+  the status of this token. Defaults to active
+  """
+  status: TemplateRecipientTemplateRecipientStatus!
+  """
+  the ID of the document this recipient belongs to. This will only be available if the survey was ever filled
+  """
+  documentDataID: ID
+  owner: Organization
+  document: DocumentData
+  template: Template!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Events returned from the connection.
+    """
+    orderBy: [EventOrder!]
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+}
+"""
+A connection to a list of items.
+"""
+type TemplateRecipientConnection {
+  """
+  A list of edges.
+  """
+  edges: [TemplateRecipientEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TemplateRecipientEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TemplateRecipient
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for TemplateRecipient connections
+"""
+input TemplateRecipientOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TemplateRecipients.
+  """
+  field: TemplateRecipientOrderField!
+}
+"""
+Properties by which TemplateRecipient connections can be ordered.
+"""
+enum TemplateRecipientOrderField {
+  created_at
+  updated_at
+  expires_at
+  send_attempts
+}
+"""
+TemplateRecipientTemplateRecipientStatus is enum for the field status
+"""
+enum TemplateRecipientTemplateRecipientStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateRecipientStatus") {
+  ACTIVE
+  EXPIRED
+  USED
+  REVOKED
+}
+"""
+TemplateRecipientWhereInput is used for filtering TemplateRecipient objects.
+Input was generated by ent.
+"""
+input TemplateRecipientWhereInput {
+  not: TemplateRecipientWhereInput
+  and: [TemplateRecipientWhereInput!]
+  or: [TemplateRecipientWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  token field predicates
+  """
+  token: String
+  tokenNEQ: String
+  tokenIn: [String!]
+  tokenNotIn: [String!]
+  tokenGT: String
+  tokenGTE: String
+  tokenLT: String
+  tokenLTE: String
+  tokenContains: String
+  tokenHasPrefix: String
+  tokenHasSuffix: String
+  tokenEqualFold: String
+  tokenContainsFold: String
+  """
+  expires_at field predicates
+  """
+  expiresAt: Time
+  expiresAtNEQ: Time
+  expiresAtIn: [Time!]
+  expiresAtNotIn: [Time!]
+  expiresAtGT: Time
+  expiresAtGTE: Time
+  expiresAtLT: Time
+  expiresAtLTE: Time
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  secret field predicates
+  """
+  secret: String
+  secretNEQ: String
+  secretIn: [String!]
+  secretNotIn: [String!]
+  secretGT: String
+  secretGTE: String
+  secretLT: String
+  secretLTE: String
+  secretContains: String
+  secretHasPrefix: String
+  secretHasSuffix: String
+  secretEqualFold: String
+  secretContainsFold: String
+  """
+  template_id field predicates
+  """
+  templateID: ID
+  templateIDNEQ: ID
+  templateIDIn: [ID!]
+  templateIDNotIn: [ID!]
+  templateIDGT: ID
+  templateIDGTE: ID
+  templateIDLT: ID
+  templateIDLTE: ID
+  templateIDContains: ID
+  templateIDHasPrefix: ID
+  templateIDHasSuffix: ID
+  templateIDEqualFold: ID
+  templateIDContainsFold: ID
+  """
+  send_attempts field predicates
+  """
+  sendAttempts: Int
+  sendAttemptsNEQ: Int
+  sendAttemptsIn: [Int!]
+  sendAttemptsNotIn: [Int!]
+  sendAttemptsGT: Int
+  sendAttemptsGTE: Int
+  sendAttemptsLT: Int
+  sendAttemptsLTE: Int
+  """
+  status field predicates
+  """
+  status: TemplateRecipientTemplateRecipientStatus
+  statusNEQ: TemplateRecipientTemplateRecipientStatus
+  statusIn: [TemplateRecipientTemplateRecipientStatus!]
+  statusNotIn: [TemplateRecipientTemplateRecipientStatus!]
+  """
+  document_data_id field predicates
+  """
+  documentDataID: ID
+  documentDataIDNEQ: ID
+  documentDataIDIn: [ID!]
+  documentDataIDNotIn: [ID!]
+  documentDataIDGT: ID
+  documentDataIDGTE: ID
+  documentDataIDLT: ID
+  documentDataIDLTE: ID
+  documentDataIDContains: ID
+  documentDataIDHasPrefix: ID
+  documentDataIDHasSuffix: ID
+  documentDataIDIsNil: Boolean
+  documentDataIDNotNil: Boolean
+  documentDataIDEqualFold: ID
+  documentDataIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  document edge predicates
+  """
+  hasDocument: Boolean
+  hasDocumentWith: [DocumentDataWhereInput!]
+  """
+  template edge predicates
+  """
+  hasTemplate: Boolean
+  hasTemplateWith: [TemplateWhereInput!]
+  """
+  events edge predicates
+  """
+  hasEvents: Boolean
+  hasEventsWith: [EventWhereInput!]
+}
 """
 TemplateTemplateKind is enum for the field kind
 """
@@ -72819,6 +73596,9 @@ input UpdateOrganizationInput {
   addScheduledJobRunIDs: [ID!]
   removeScheduledJobRunIDs: [ID!]
   clearScheduledJobRuns: Boolean
+  addTemplateRecipientIDs: [ID!]
+  removeTemplateRecipientIDs: [ID!]
+  clearTemplateRecipients: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -73670,6 +74450,19 @@ input UpdateTemplateInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+}
+"""
+UpdateTemplateRecipientInput is used for update TemplateRecipient object.
+Input was generated by ent.
+"""
+input UpdateTemplateRecipientInput {
+  ownerID: ID
+  clearOwner: Boolean
+  documentID: ID
+  clearDocument: Boolean
+  addEventIDs: [ID!]
+  removeEventIDs: [ID!]
+  clearEvents: Boolean
 }
 """
 UpdateUserInput is used for update User object.
@@ -80690,6 +81483,92 @@ type TemplateBulkCreatePayload {
     """
     templates: [Template!]
 }`, BuiltIn: false},
+	{Name: "../schema/templaterecipient.graphql", Input: `extend type Query {
+    """
+    Look up templateRecipient by ID
+    """
+     templateRecipient(
+        """
+        ID of the templateRecipient
+        """
+        id: ID!
+    ):  TemplateRecipient!
+}
+
+extend type Mutation{
+    """
+    Create a new templateRecipient
+    """
+    createTemplateRecipient(
+        """
+        values of the templateRecipient
+        """
+        input: CreateTemplateRecipientInput!
+    ): TemplateRecipientCreatePayload!
+    """
+    Update an existing templateRecipient
+    """
+    updateTemplateRecipient(
+        """
+        ID of the templateRecipient
+        """
+        id: ID!
+        """
+        New values for the templateRecipient
+        """
+        input: UpdateTemplateRecipientInput!
+    ): TemplateRecipientUpdatePayload!
+    """
+    Delete an existing templateRecipient
+    """
+    deleteTemplateRecipient(
+        """
+        ID of the templateRecipient
+        """
+        id: ID!
+    ): TemplateRecipientDeletePayload!
+}
+
+"""
+Return response for createTemplateRecipient mutation
+"""
+type TemplateRecipientCreatePayload {
+    """
+    Created templateRecipient
+    """
+    templateRecipient: TemplateRecipient!
+}
+
+"""
+Return response for updateTemplateRecipient mutation
+"""
+type TemplateRecipientUpdatePayload {
+    """
+    Updated templateRecipient
+    """
+    templateRecipient: TemplateRecipient!
+}
+
+"""
+Return response for deleteTemplateRecipient mutation
+"""
+type TemplateRecipientDeletePayload {
+    """
+    Deleted templateRecipient ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTemplateRecipient mutation
+"""
+type TemplateRecipientBulkCreatePayload {
+    """
+    Created templateRecipients
+    """
+    templateRecipients: [TemplateRecipient!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {
     tfaSecret: String
     qrCode: String

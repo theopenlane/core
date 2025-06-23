@@ -1199,6 +1199,30 @@ type TemplateDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createBulkTemplateRecipient mutation
+type TemplateRecipientBulkCreatePayload struct {
+	// Created templateRecipients
+	TemplateRecipients []*generated.TemplateRecipient `json:"templateRecipients,omitempty"`
+}
+
+// Return response for createTemplateRecipient mutation
+type TemplateRecipientCreatePayload struct {
+	// Created templateRecipient
+	TemplateRecipient *generated.TemplateRecipient `json:"templateRecipient"`
+}
+
+// Return response for deleteTemplateRecipient mutation
+type TemplateRecipientDeletePayload struct {
+	// Deleted templateRecipient ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTemplateRecipient mutation
+type TemplateRecipientUpdatePayload struct {
+	// Updated templateRecipient
+	TemplateRecipient *generated.TemplateRecipient `json:"templateRecipient"`
+}
+
 // Return response for updateTemplate mutation
 type TemplateUpdatePayload struct {
 	// Updated template
