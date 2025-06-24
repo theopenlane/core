@@ -291,10 +291,12 @@ func handleSubscriberCreate(event soiree.Event) error {
 	emailVal := event.Properties().GetKey("email")
 	email, _ := emailVal.(string)
 
-	msg := fmt.Sprintf("New waitlist subscriber: %s", email)
+	var (
+		t   *template.Template
+		err error
+		msg string
+	)
 
-	var t *template.Template
-	var err error
 	if slackCfg.NewSubscriberMessageFile != "" {
 		b, err := os.ReadFile(slackCfg.NewSubscriberMessageFile)
 		if err != nil {
@@ -304,6 +306,7 @@ func handleSubscriberCreate(event soiree.Event) error {
 		}
 
 		t, err = template.New("slack").Parse(string(b))
+
 		if err != nil {
 			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse slack template")
 
@@ -344,10 +347,11 @@ func handleUserCreate(event soiree.Event) error {
 	emailVal := event.Properties().GetKey("email")
 	email, _ := emailVal.(string)
 
-	msg := fmt.Sprintf("New user registered: %s", email)
-
-	var t *template.Template
-	var err error
+	var (
+		t   *template.Template
+		err error
+		msg string
+	)
 
 	if slackCfg.NewUserMessageFile != "" {
 		b, err := os.ReadFile(slackCfg.NewUserMessageFile)
@@ -373,6 +377,7 @@ func handleUserCreate(event soiree.Event) error {
 	}
 
 	var buf bytes.Buffer
+
 	if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
 		zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
 
