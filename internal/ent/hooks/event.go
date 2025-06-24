@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
 // Eventer is a wrapper struct for having a soiree as well as a list of listeners
@@ -292,6 +293,8 @@ func handleSubscriberCreate(event soiree.Event) error {
 
 	msg := fmt.Sprintf("New waitlist subscriber: %s", email)
 
+	var t *template.Template
+	var err error
 	if slackCfg.NewSubscriberMessageFile != "" {
 		b, err := os.ReadFile(slackCfg.NewSubscriberMessageFile)
 		if err != nil {
@@ -300,23 +303,30 @@ func handleSubscriberCreate(event soiree.Event) error {
 			return err
 		}
 
-		t, err := template.New("slack").Parse(string(b))
+		t, err = template.New("slack").Parse(string(b))
 		if err != nil {
 			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse slack template")
 
 			return err
 		}
-
-		var buf bytes.Buffer
-
-		if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
-			zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
+	} else {
+		t, err = template.New("slack").ParseFS(slacktemplates.Templates, slacktemplates.SubscriberTemplateName)
+		if err != nil {
+			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse embedded slack template")
 
 			return err
 		}
-
-		msg = buf.String()
 	}
+
+	var buf bytes.Buffer
+
+	if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
+		zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
+
+		return err
+	}
+
+	msg = buf.String()
 
 	client := slack.New(slackCfg.WebhookURL)
 
@@ -336,6 +346,9 @@ func handleUserCreate(event soiree.Event) error {
 
 	msg := fmt.Sprintf("New user registered: %s", email)
 
+	var t *template.Template
+	var err error
+
 	if slackCfg.NewUserMessageFile != "" {
 		b, err := os.ReadFile(slackCfg.NewUserMessageFile)
 		if err != nil {
@@ -344,22 +357,29 @@ func handleUserCreate(event soiree.Event) error {
 			return err
 		}
 
-		t, err := template.New("slack").Parse(string(b))
+		t, err = template.New("slack").Parse(string(b))
 		if err != nil {
 			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse slack template")
 
 			return err
 		}
-
-		var buf bytes.Buffer
-		if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
-			zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
+	} else {
+		t, err = template.New("slack").ParseFS(slacktemplates.Templates, slacktemplates.UserTemplateName)
+		if err != nil {
+			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse embedded slack template")
 
 			return err
 		}
-
-		msg = buf.String()
 	}
+
+	var buf bytes.Buffer
+	if err := t.Execute(&buf, struct{ Email string }{Email: email}); err != nil {
+		zerolog.Ctx(event.Context()).Debug().Msg("failed to execute slack template")
+
+		return err
+	}
+
+	msg = buf.String()
 
 	client := slack.New(slackCfg.WebhookURL)
 

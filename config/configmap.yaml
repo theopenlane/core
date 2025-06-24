@@ -212,5 +212,5 @@ data:
   CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.core.keywatcher.externalSecretsIntegration | default false }}
   CORE_KEYWATCHER_SECRETMANAGER: {{ .Values.core.keywatcher.secretManager }}
   CORE_SLACK_WEBHOOKURL: {{ .Values.core.slack.webhookURL }}
-  CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.core.slack.newSubscriberMessageFile | default "config/new_subscriber.tmpl" }}
-  CORE_SLACK_NEWUSERMESSAGEFILE: {{ .Values.core.slack.newUserMessageFile | default "config/new_user.tmpl" }}
+  CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.core.slack.newSubscriberMessageFile }}
+  CORE_SLACK_NEWUSERMESSAGEFILE: {{ .Values.core.slack.newUserMessageFile }}
