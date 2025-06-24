@@ -45,7 +45,7 @@ func (s ScanStatus) MarshalGQL(w io.Writer) { _, _ = w.Write([]byte(`"` + s.Stri
 func (s *ScanStatus) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for ScanStatus, got: %T", v)
+		return fmt.Errorf("wrong type for ScanStatus, got: %T", v) //nolint:err113
 	}
 	*s = ScanStatus(str)
 	return nil

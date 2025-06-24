@@ -52,7 +52,7 @@ func (p SSOProvider) MarshalGQL(w io.Writer) { _, _ = w.Write([]byte(`"` + p.Str
 func (p *SSOProvider) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for SSOProvider, got: %T", v)
+		return fmt.Errorf("wrong type for SSOProvider, got: %T", v) //nolint:err113
 	}
 	*p = SSOProvider(str)
 	return nil
