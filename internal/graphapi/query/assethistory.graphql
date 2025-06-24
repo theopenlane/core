@@ -1,5 +1,3 @@
-
-
 query GetAllAssetHistories {
   assetHistories {
     totalCount

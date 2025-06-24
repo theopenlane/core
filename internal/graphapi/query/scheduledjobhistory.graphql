@@ -1,5 +1,3 @@
-
-
 query GetAllScheduledJobHistories {
   scheduledJobHistories {
     totalCount
