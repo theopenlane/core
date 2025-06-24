@@ -39,11 +39,18 @@ func (Asset) Fields() []ent.Field {
 	}
 }
 
-func (Asset) Mixin() []ent.Mixin { return getDefaultMixins() }
+func (a Asset) Mixin() []ent.Mixin {
+	return mixinConfig{
+		additionalMixins: []ent.Mixin{
+			newOrgOwnedMixin(a),
+		},
+	}.getMixins()
+}
 
 func (a Asset) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeFromWithPagination(a, Scan{}),
+		defaultEdgeFromWithPagination(a, Risk{}),
 	}
 }
 
