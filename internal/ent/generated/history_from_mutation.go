@@ -6842,7 +6842,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 	}
 
 	if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
-		create = create.SetNillableComplianceWebhookToken(&complianceWebhookToken)
+		create = create.SetComplianceWebhookToken(complianceWebhookToken)
 	}
 
 	_, err := create.Save(ctx)
@@ -7020,9 +7020,9 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 		}
 
 		if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
-			create = create.SetNillableComplianceWebhookToken(&complianceWebhookToken)
+			create = create.SetComplianceWebhookToken(complianceWebhookToken)
 		} else {
-			create = create.SetNillableComplianceWebhookToken(organizationsetting.ComplianceWebhookToken)
+			create = create.SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -7081,7 +7081,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetIdentityProviderEntityID(organizationsetting.IdentityProviderEntityID).
 			SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint).
 			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
-			SetNillableComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
+			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			Save(ctx)
 		if err != nil {
 			return err

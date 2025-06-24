@@ -7454,6 +7454,7 @@ type UpdateOrganizationSettingInput struct {
 	ClearOidcDiscoveryEndpoint            bool
 	OidcDiscoveryEndpoint                 *string
 	IdentityProviderLoginEnforced         *bool
+	ClearComplianceWebhookToken           bool
 	ComplianceWebhookToken                *string
 	ClearOrganization                     bool
 	OrganizationID                        *string
@@ -7568,6 +7569,9 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.IdentityProviderLoginEnforced; v != nil {
 		m.SetIdentityProviderLoginEnforced(*v)
+	}
+	if i.ClearComplianceWebhookToken {
+		m.ClearComplianceWebhookToken()
 	}
 	if v := i.ComplianceWebhookToken; v != nil {
 		m.SetComplianceWebhookToken(*v)

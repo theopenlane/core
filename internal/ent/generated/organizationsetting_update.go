@@ -464,6 +464,12 @@ func (osu *OrganizationSettingUpdate) SetNillableComplianceWebhookToken(s *strin
 	return osu
 }
 
+// ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
+func (osu *OrganizationSettingUpdate) ClearComplianceWebhookToken() *OrganizationSettingUpdate {
+	osu.mutation.ClearComplianceWebhookToken()
+	return osu
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osu *OrganizationSettingUpdate) SetOrganization(o *Organization) *OrganizationSettingUpdate {
 	return osu.SetOrganizationID(o.ID)
@@ -754,6 +760,9 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if value, ok := osu.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
+	}
+	if osu.mutation.ComplianceWebhookTokenCleared() {
+		_spec.ClearField(organizationsetting.FieldComplianceWebhookToken, field.TypeString)
 	}
 	if osu.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1286,6 +1295,12 @@ func (osuo *OrganizationSettingUpdateOne) SetNillableComplianceWebhookToken(s *s
 	return osuo
 }
 
+// ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
+func (osuo *OrganizationSettingUpdateOne) ClearComplianceWebhookToken() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearComplianceWebhookToken()
+	return osuo
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osuo *OrganizationSettingUpdateOne) SetOrganization(o *Organization) *OrganizationSettingUpdateOne {
 	return osuo.SetOrganizationID(o.ID)
@@ -1606,6 +1621,9 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if value, ok := osuo.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
+	}
+	if osuo.mutation.ComplianceWebhookTokenCleared() {
+		_spec.ClearField(organizationsetting.FieldComplianceWebhookToken, field.TypeString)
 	}
 	if osuo.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{

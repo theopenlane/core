@@ -16859,7 +16859,7 @@ type OrganizationSetting struct {
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identityProviderLoginEnforced"`
 	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken string          `json:"complianceWebhookToken"`
+	ComplianceWebhookToken *string         `json:"complianceWebhookToken,omitempty"`
 	Organization           *Organization   `json:"organization,omitempty"`
 	Files                  *FileConnection `json:"files"`
 }
@@ -16944,7 +16944,7 @@ type OrganizationSettingHistory struct {
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identityProviderLoginEnforced"`
 	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken string `json:"complianceWebhookToken"`
+	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
 }
 
 func (OrganizationSettingHistory) IsNode() {}
@@ -17236,6 +17236,8 @@ type OrganizationSettingHistoryWhereInput struct {
 	ComplianceWebhookTokenContains     *string  `json:"complianceWebhookTokenContains,omitempty"`
 	ComplianceWebhookTokenHasPrefix    *string  `json:"complianceWebhookTokenHasPrefix,omitempty"`
 	ComplianceWebhookTokenHasSuffix    *string  `json:"complianceWebhookTokenHasSuffix,omitempty"`
+	ComplianceWebhookTokenIsNil        *bool    `json:"complianceWebhookTokenIsNil,omitempty"`
+	ComplianceWebhookTokenNotNil       *bool    `json:"complianceWebhookTokenNotNil,omitempty"`
 	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
 	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
 }
@@ -17485,6 +17487,8 @@ type OrganizationSettingWhereInput struct {
 	ComplianceWebhookTokenContains     *string  `json:"complianceWebhookTokenContains,omitempty"`
 	ComplianceWebhookTokenHasPrefix    *string  `json:"complianceWebhookTokenHasPrefix,omitempty"`
 	ComplianceWebhookTokenHasSuffix    *string  `json:"complianceWebhookTokenHasSuffix,omitempty"`
+	ComplianceWebhookTokenIsNil        *bool    `json:"complianceWebhookTokenIsNil,omitempty"`
+	ComplianceWebhookTokenNotNil       *bool    `json:"complianceWebhookTokenNotNil,omitempty"`
 	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
 	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
 	// organization edge predicates
@@ -27141,12 +27145,13 @@ type UpdateOrganizationSettingInput struct {
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced *bool `json:"identityProviderLoginEnforced,omitempty"`
 	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken *string  `json:"complianceWebhookToken,omitempty"`
-	OrganizationID         *string  `json:"organizationID,omitempty"`
-	ClearOrganization      *bool    `json:"clearOrganization,omitempty"`
-	AddFileIDs             []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs          []string `json:"removeFileIDs,omitempty"`
-	ClearFiles             *bool    `json:"clearFiles,omitempty"`
+	ComplianceWebhookToken      *string  `json:"complianceWebhookToken,omitempty"`
+	ClearComplianceWebhookToken *bool    `json:"clearComplianceWebhookToken,omitempty"`
+	OrganizationID              *string  `json:"organizationID,omitempty"`
+	ClearOrganization           *bool    `json:"clearOrganization,omitempty"`
+	AddFileIDs                  []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs               []string `json:"removeFileIDs,omitempty"`
+	ClearFiles                  *bool    `json:"clearFiles,omitempty"`
 }
 
 // UpdatePersonalAccessTokenInput is used for update PersonalAccessToken object.

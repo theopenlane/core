@@ -510,9 +510,6 @@ func (osc *OrganizationSettingCreate) check() error {
 	if _, ok := osc.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_login_enforced"`)}
 	}
-	if _, ok := osc.mutation.ComplianceWebhookToken(); !ok {
-		return &ValidationError{Name: "compliance_webhook_token", err: errors.New(`generated: missing required field "OrganizationSetting.compliance_webhook_token"`)}
-	}
 	return nil
 }
 
@@ -643,7 +640,7 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 	}
 	if value, ok := osc.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
-		_node.ComplianceWebhookToken = &value
+		_node.ComplianceWebhookToken = value
 	}
 	if nodes := osc.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
